@@ -1,5 +1,6 @@
 # adapted from
 # https://github.com/VICO-UoE/DatasetCondensation
+
 import random
 import time
 import torch
@@ -15,6 +16,29 @@ from PIL import Image
 from more_dataset import Aircraft, Cub2011, Dogs
 from torchvision import transforms
 from torchvision import datasets as torchvision_datasets
+
+# --- COBRA dataset handlers ---------------------------------------------------
+from data_handler.colour_mnist import get_biased_mnist_dataloader
+from data_handler.FashionMNIST import get_biased_fashionmnist_dataloader
+from data_handler import cifar10 as cobra_cifar10
+from data_handler.celeba import CelebA
+from data_handler.utkface import UTKFaceDataset
+from data_handler.bffhq import BFFHQ
+
+COBRA_KEYS = [
+    "CIFAR10_S_90",
+    "Colored_MNIST_foreground",
+    "Colored_MNIST_background",
+    "Colored_FashionMNIST_foreground",
+    "Colored_FashionMNIST_background",
+    "UTKface",
+    "CelebA",
+    "BFFHQ",
+]
+# Run these with --model ConvNetD4; all other COBRA keys with --model ConvNet.
+COBRA_64PX_KEYS = {"UTKface", "CelebA", "BFFHQ"}
+# -----------------------------------------------------------------------------
+
 
 class ImageNet(torch.utils.data.Dataset):
     def __init__(self, root: str, split: str, transform=None):
@@ -34,20 +58,96 @@ class ImageNet(torch.utils.data.Dataset):
         label = self.labels[idx]
         return image, label
 
+
+class DropSensitive(Dataset):
+    """COBRA datasets yield (img, label, sensitive[, ...]). MKDT expects
+    (img, label). This drops the extra fields for the MKDT pipeline while
+    keeping the sensitive attribute retrievable for fairness metrics."""
+
+    def __init__(self, base):
+        self.base = base
+
+    def __len__(self):
+        return len(self.base)
+
+    def __getitem__(self, index):
+        item = self.base[index]
+        return item[0], item[1]
+
+    def get_sensitive(self, index):
+        return self.base[index][2]
+
+
+def get_cobra_dataset(dataset, data_path, skew_ratio=0.9, severity=0):
+    """Returns (channel, im_size, num_classes, dst_train, dst_test),
+    both datasets wrapped so they yield (img, label)."""
+    channel = 3
+
+    if dataset == "CIFAR10_S_90":
+        im_size, num_classes = (32, 32), 10
+        dst_train, dst_test, _, _ = cobra_cifar10.CIFAR_10s(
+            data_path, skew_ratio=skew_ratio, severity=severity)
+
+    elif dataset in ("Colored_MNIST_foreground", "Colored_MNIST_background"):
+        im_size, num_classes = (32, 32), 10
+        fg = dataset.endswith("foreground")
+        dst_train, _ = get_biased_mnist_dataloader(
+            data_path, batch_size=256, data_label_correlation=0.9,
+            is_foreground=fg, n_confusing_labels=9, train=True)
+        dst_test, _ = get_biased_mnist_dataloader(
+            data_path, batch_size=256, data_label_correlation=0.1,
+            is_foreground=fg, n_confusing_labels=9, train=False)
+
+    elif dataset in ("Colored_FashionMNIST_foreground",
+                     "Colored_FashionMNIST_background"):
+        im_size, num_classes = (32, 32), 10
+        fg = dataset.endswith("foreground")
+        dst_train, _ = get_biased_fashionmnist_dataloader(
+            data_path, batch_size=256, data_label_correlation=0.9,
+            is_foreground=fg, n_confusing_labels=9, train=True)
+        dst_test, _ = get_biased_fashionmnist_dataloader(
+            data_path, batch_size=256, data_label_correlation=0.1,
+            is_foreground=fg, n_confusing_labels=9, train=False)
+
+    elif dataset == "UTKface":
+        im_size, num_classes = (64, 64), 3
+        dst_train, dst_test, _, _ = UTKFaceDataset(data_dir=os.path.join(data_path, "UTKFace"))
+
+    elif dataset == "CelebA":
+        im_size, num_classes = (64, 64), 2
+        # target=attractive(2), sensitive=male(20); matches COBRA defaults.
+        dst_train, dst_test, _, _ = CelebA(2, 20)
+
+    elif dataset == "BFFHQ":
+        im_size, num_classes = (64, 64), 2
+        dst_train, dst_test, _, _ = BFFHQ()
+
+    else:
+        raise ValueError("unknown COBRA dataset: %s" % dataset)
+
+    return channel, im_size, num_classes, \
+        DropSensitive(dst_train), DropSensitive(dst_test)
+
+
 def get_dataset(dataset, data_path, subset_size=None, epc=None, seed=None):
-    if seed is not None:    
+    if seed is not None:
         random.seed(seed)
 
-    if dataset == 'CIFAR10':
+    # COBRA datasets are checked first so their keys never fall through
+    # into the image-folder branches below.
+    if dataset in COBRA_KEYS:
+        channel, im_size, num_classes, dst_train, dst_test = \
+            get_cobra_dataset(dataset, data_path)
+
+    elif dataset == 'CIFAR10':
         channel = 3
         im_size = (32, 32)
         num_classes = 10
         mean = [0.4914, 0.4822, 0.4465]
         std = [0.2023, 0.1994, 0.2010]
         transform = transforms.Compose([transforms.ToTensor(), transforms.Normalize(mean=mean, std=std)])
-        dst_train = torchvision_datasets.CIFAR10(data_path, train=True, download=True, transform=transform) # no augmentation
+        dst_train = torchvision_datasets.CIFAR10(data_path, train=True, download=True, transform=transform)  # no augmentation
         dst_test = torchvision_datasets.CIFAR10(data_path, train=False, download=True, transform=transform)
-
 
     elif dataset == 'Tiny':
         channel = 3
@@ -56,9 +156,8 @@ def get_dataset(dataset, data_path, subset_size=None, epc=None, seed=None):
         mean = [0.485, 0.456, 0.406]
         std = [0.229, 0.224, 0.225]
         transform = transforms.Compose([transforms.ToTensor(), transforms.Normalize(mean=mean, std=std)])
-        dst_train = torchvision_datasets.ImageFolder(os.path.join(data_path + "/tiny_imagenet", "train"), transform=transform) # no augmentation
+        dst_train = torchvision_datasets.ImageFolder(os.path.join(data_path + "/tiny_imagenet", "train"), transform=transform)  # no augmentation
         dst_test = torchvision_datasets.ImageFolder(os.path.join(data_path + "/tiny_imagenet", "val"), transform=transform)
-
 
     elif dataset == 'ImageNet':
         channel = 3
@@ -72,7 +171,7 @@ def get_dataset(dataset, data_path, subset_size=None, epc=None, seed=None):
                                         transforms.Resize(im_size),
                                         transforms.CenterCrop(im_size)])
         data_path = "/home/data/ILSVRC"
-        dst_train = ImageNet(data_path, split="train_full", transform=transform) # no augmentation
+        dst_train = ImageNet(data_path, split="train_full", transform=transform)  # no augmentation
         dst_test = ImageNet(data_path, split="test", transform=transform)
 
     elif dataset.startswith('CIFAR100'):
@@ -84,46 +183,41 @@ def get_dataset(dataset, data_path, subset_size=None, epc=None, seed=None):
         transform = transforms.Compose([transforms.ToTensor(), transforms.Normalize(mean=mean, std=std)])
         dst_train = torchvision_datasets.CIFAR100(data_path, train=True, download=True, transform=transform)  # no augmentation
         dst_test = torchvision_datasets.CIFAR100(data_path, train=False, download=True, transform=transform)
-    
+
     elif dataset.startswith('aircraft'):
         channel = 3
         im_size = (32, 32)
         num_classes = 100
         mean = [0.4804, 0.5116, 0.5349]
         std = [0.2021, 0.1953, 0.2297]
-
         # consistent with KRRST
-        resize = lambda x: x if x.size[0] == 32 and x.size[1] == 32 else x.resize((32,32), Image.Resampling.LANCZOS)
+        resize = lambda x: x if x.size[0] == 32 and x.size[1] == 32 else x.resize((32, 32), Image.Resampling.LANCZOS)
         transform = transforms.Compose([resize, transforms.ToTensor(), transforms.Normalize(mean=mean, std=std)])
-        dst_train = Aircraft(data_path, train=True, download=True, transform=transform) 
+        dst_train = Aircraft(data_path, train=True, download=True, transform=transform)
         dst_test = Aircraft(data_path, train=False, download=True, transform=transform)
-       
+
     elif dataset.startswith('cub2011'):
         channel = 3
         im_size = (32, 32)
         num_classes = 200
         mean = [0.4857, 0.4995, 0.4324]
         std = [0.2145, 0.2098, 0.2496]
-
         # consistent with KRRST
-        resize = lambda x: x if x.size[0] == 32 and x.size[1] == 32 else x.resize((32,32), Image.Resampling.LANCZOS)
+        resize = lambda x: x if x.size[0] == 32 and x.size[1] == 32 else x.resize((32, 32), Image.Resampling.LANCZOS)
         transform = transforms.Compose([resize, transforms.ToTensor(), transforms.Normalize(mean=mean, std=std)])
-        
-        dst_train = Cub2011(data_path, train=True, download=True, transform=transform)  
+        dst_train = Cub2011(data_path, train=True, download=True, transform=transform)
         dst_test = Cub2011(data_path, train=False, download=True, transform=transform)
-    
+
     elif dataset.startswith('dogs'):
         channel = 3
         im_size = (32, 32)
         num_classes = 120
         mean = [0.4765, 0.4516, 0.3911]
         std = [0.2490, 0.2435, 0.2479]
-
         # consistent with KRRST
-        resize = lambda x: x if x.size[0] == 32 and x.size[1] == 32 else x.resize((32,32), Image.Resampling.LANCZOS)
+        resize = lambda x: x if x.size[0] == 32 and x.size[1] == 32 else x.resize((32, 32), Image.Resampling.LANCZOS)
         transform = transforms.Compose([resize, transforms.ToTensor(), transforms.Normalize(mean=mean, std=std)])
-
-        dst_train = Dogs(data_path, train=True, download=True, transform=transform) 
+        dst_train = Dogs(data_path, train=True, download=True, transform=transform)
         dst_test = Dogs(data_path, train=False, download=True, transform=transform)
 
     elif dataset.startswith('flowers'):
@@ -132,17 +226,18 @@ def get_dataset(dataset, data_path, subset_size=None, epc=None, seed=None):
         num_classes = 102
         mean = [0.4329, 0.3820, 0.2965]
         std = [0.2828, 0.2333, 0.2615]
-
         # consistent with KRRST
-        resize = lambda x: x if x.size[0] == 32 and x.size[1] == 32 else x.resize((32,32), Image.Resampling.LANCZOS)
+        resize = lambda x: x if x.size[0] == 32 and x.size[1] == 32 else x.resize((32, 32), Image.Resampling.LANCZOS)
         transform = transforms.Compose([resize, transforms.ToTensor(), transforms.Normalize(mean=mean, std=std)])
+        dst_train = torchvision_datasets.Flowers102(data_path, split='train', download=True, transform=transform)
+        dst_test = torchvision_datasets.Flowers102(data_path, split='test', download=True, transform=transform)
 
-        dst_train = torchvision_datasets.Flowers102(data_path, split = 'train', download=True, transform=transform)
-        dst_test = torchvision_datasets.Flowers102(data_path, split = 'test', download=True, transform=transform)
-    
+    else:
+        raise ValueError("unknown dataset: %s" % dataset)
+
     if subset_size is not None and epc is not None:
         raise ValueError("Can only set one of subset size and epc")
-    
+
     # handle the subsets
     if subset_size is not None:
         random_subset = list(random.sample(range(len(dst_train)), int(len(dst_train) * subset_size)))
@@ -151,67 +246,64 @@ def get_dataset(dataset, data_path, subset_size=None, epc=None, seed=None):
     if epc is not None:
         indices = get_indices_per_class(dst_train, epc)
         dst_train = torch.utils.data.Subset(dst_train, indices)
-        
 
     return channel, im_size, num_classes, dst_train, dst_test
 
+
 def get_indices_per_class(dataset, epc):
     class_indices = {}
-    
     for idx, (_, label) in enumerate(dataset):
         if label in class_indices:
             class_indices[label].append(idx)
         else:
             class_indices[label] = [idx]
-    
+
     sampled_indices = []
     for indices in class_indices.values():
         if len(indices) > epc:
             sampled_indices.extend(random.sample(indices, epc))
         else:
             sampled_indices.extend(indices)
-    
+
     return sampled_indices
+
 
 def build_trainset(dataset, dst_train, train_labels_path, channel, batch_train, distill_idx=None, shuffle=False):
     # Organize real datasets (images and the target representation)
     images_all = None
-    
     print("BUILDING TRAINSET")
-    
     if dataset != "ImageNet":
         images_all = []
         for i in tqdm.tqdm(range(len(dst_train))):
             sample = dst_train[i]
             images_all.append(torch.unsqueeze(sample[0], dim=0))
-
         images_all = torch.cat(images_all, dim=0).to("cpu")
 
     labels_all = torch.load(train_labels_path, map_location="cpu").to("cpu")
     print("train label shape", labels_all.shape)
-    
-    for ch in range(channel):
-        print('real images channel %d, mean = %.4f, std = %.4f'%(ch, torch.mean(images_all[:, ch]), torch.std(images_all[:, ch])))
-        
+
+    if images_all is not None:
+        for ch in range(channel):
+            print('real images channel %d, mean = %.4f, std = %.4f' % (ch, torch.mean(images_all[:, ch]), torch.std(images_all[:, ch])))
+
     if dataset != "ImageNet":
         dst_train = TensorDataset(copy.deepcopy(images_all.detach()), copy.deepcopy(labels_all.detach()))
     else:
         dst_train = TensorDatasetWrapper(dst_train, copy.deepcopy(labels_all.detach()))
-    
-    # Subset using Distill idx if specified 
+
+    # Subset using Distill idx if specified
     if distill_idx is not None:
         with open(distill_idx, "rb") as f:
             distill_idx = pickle.load(f)
-            dst_train = Subset(dst_train, indices=distill_idx)
+        dst_train = Subset(dst_train, indices=distill_idx)
 
     trainloader = torch.utils.data.DataLoader(dst_train, batch_size=batch_train, shuffle=shuffle, num_workers=4, pin_memory=True)
-    
     print("Dataset creation complete")
-
     return trainloader, labels_all
 
+
 class TensorDataset(Dataset):
-    def __init__(self, images, labels): # images: n x c x h x w tensor
+    def __init__(self, images, labels):  # images: n x c x h x w tensor
         self.images = images.detach().float()
         self.labels = labels.detach().float()
 
@@ -221,8 +313,9 @@ class TensorDataset(Dataset):
     def __len__(self):
         return self.images.shape[0]
 
+
 class TensorDatasetWrapper(Dataset):
-    def __init__(self, img_dataset, labels): # images: n x c x h x w tensor
+    def __init__(self, img_dataset, labels):  # images: n x c x h x w tensor
         self.img_dataset = img_dataset
         self.labels = labels.detach().float()
 
@@ -242,11 +335,11 @@ class SoftLabelDataset(torch.utils.data.Dataset):
         self.subset_idx = subset_idx
         if self.subset_idx is None:
             self.subset_idx = range(len(self.img_dataset))
-        
+
     def __getitem__(self, i):
         idx = self.subset_idx[i]
         return (self.img_dataset[idx][0], self.label_tensor[idx])
-    
+
     def __len__(self):
         return len(self.subset_idx)
 
@@ -270,7 +363,7 @@ def get_network(model, channel, num_classes, im_size=(32, 32), dist=False, fix_n
     elif model == 'AlexNet':
         net = AlexNet(channel=channel, num_classes=num_classes)
     elif model == 'VGG11':
-        net = VGG11( channel=channel, num_classes=num_classes)
+        net = VGG11(channel=channel, num_classes=num_classes)
     elif model == 'VGG11BN':
         net = VGG11BN(channel=channel, num_classes=num_classes)
     elif model == 'ResNet10':
@@ -281,7 +374,6 @@ def get_network(model, channel, num_classes, im_size=(32, 32), dist=False, fix_n
         net = ResNet18BN_AP(channel=channel, num_classes=num_classes)
     elif model == 'ResNet18_AP':
         net = ResNet18_AP(channel=channel, num_classes=num_classes)
-
     elif model == 'ConvNetD1':
         net = ConvNet(channel=channel, num_classes=num_classes, net_width=net_width, net_depth=1, net_act=net_act, net_norm=net_norm, net_pooling=net_pooling, im_size=im_size)
     elif model == 'ConvNetD2':
@@ -298,8 +390,6 @@ def get_network(model, channel, num_classes, im_size=(32, 32), dist=False, fix_n
         net = ConvNet(channel=channel, num_classes=num_classes, net_width=net_width, net_depth=7, net_act=net_act, net_norm=net_norm, net_pooling=net_pooling, im_size=im_size)
     elif model == 'ConvNetD8':
         net = ConvNet(channel=channel, num_classes=num_classes, net_width=net_width, net_depth=8, net_act=net_act, net_norm=net_norm, net_pooling=net_pooling, im_size=im_size)
-
-
     elif model == 'ConvNetW32':
         net = ConvNet(channel=channel, num_classes=num_classes, net_width=32, net_depth=net_depth, net_act=net_act, net_norm=net_norm, net_pooling=net_pooling)
     elif model == 'ConvNetW64':
@@ -312,18 +402,15 @@ def get_network(model, channel, num_classes, im_size=(32, 32), dist=False, fix_n
         net = ConvNet(channel=channel, num_classes=num_classes, net_width=512, net_depth=net_depth, net_act=net_act, net_norm=net_norm, net_pooling=net_pooling)
     elif model == 'ConvNetW1024':
         net = ConvNet(channel=channel, num_classes=num_classes, net_width=1024, net_depth=net_depth, net_act=net_act, net_norm=net_norm, net_pooling=net_pooling)
-
     elif model == "ConvNetKIP":
         net = ConvNet(channel=channel, num_classes=num_classes, net_width=1024, net_depth=net_depth, net_act=net_act,
                       net_norm="none", net_pooling=net_pooling)
-
     elif model == 'ConvNetAS':
         net = ConvNet(channel=channel, num_classes=num_classes, net_width=net_width, net_depth=net_depth, net_act='sigmoid', net_norm=net_norm, net_pooling=net_pooling)
     elif model == 'ConvNetAR':
         net = ConvNet(channel=channel, num_classes=num_classes, net_width=net_width, net_depth=net_depth, net_act='relu', net_norm=net_norm, net_pooling=net_pooling)
     elif model == 'ConvNetAL':
         net = ConvNet(channel=channel, num_classes=num_classes, net_width=net_width, net_depth=net_depth, net_act='leakyrelu', net_norm=net_norm, net_pooling=net_pooling)
-
     elif model == 'ConvNetNN':
         net = ConvNet(channel=channel, num_classes=num_classes, net_width=net_width, net_depth=net_depth, net_act=net_act, net_norm='none', net_pooling=net_pooling)
     elif model == 'ConvNetBN':
@@ -334,30 +421,28 @@ def get_network(model, channel, num_classes, im_size=(32, 32), dist=False, fix_n
         net = ConvNet(channel=channel, num_classes=num_classes, net_width=net_width, net_depth=net_depth, net_act=net_act, net_norm='instancenorm', net_pooling=net_pooling)
     elif model == 'ConvNetGN':
         net = ConvNet(channel=channel, num_classes=num_classes, net_width=net_width, net_depth=net_depth, net_act=net_act, net_norm='groupnorm', net_pooling=net_pooling)
-
     elif model == 'ConvNetNP':
         net = ConvNet(channel=channel, num_classes=num_classes, net_width=net_width, net_depth=net_depth, net_act=net_act, net_norm=net_norm, net_pooling='none')
     elif model == 'ConvNetMP':
         net = ConvNet(channel=channel, num_classes=num_classes, net_width=net_width, net_depth=net_depth, net_act=net_act, net_norm=net_norm, net_pooling='maxpooling')
     elif model == 'ConvNetAP':
         net = ConvNet(channel=channel, num_classes=num_classes, net_width=net_width, net_depth=net_depth, net_act=net_act, net_norm=net_norm, net_pooling='avgpooling')
-
-
     else:
         net = None
         exit('Error: unknown model')
 
     if dist:
         gpu_num = torch.cuda.device_count()
-        if gpu_num>0:
+        if gpu_num > 0:
             device = 'cuda'
-            if gpu_num>1:
+            if gpu_num > 1:
                 net = nn.DataParallel(net)
         else:
             device = 'cpu'
         net = net.to(device)
 
     return net
+
 
 def get_time():
     return str(time.strftime("[%Y-%m-%d %H:%M:%S]", time.localtime()))
@@ -366,7 +451,7 @@ def get_time():
 def epoch(mode, dataloader, net, optimizer, criterion, device):
     loss_avg, num_exp = 0, 0
     net = net.to(device)
-    
+
     desc = "Training"
     if mode == 'train':
         net.train()
@@ -382,7 +467,7 @@ def epoch(mode, dataloader, net, optimizer, criterion, device):
         output = net(img)
         loss = criterion(output, lab)
 
-        loss_avg += loss.item()*n_b
+        loss_avg += loss.item() * n_b
         num_exp += n_b
 
         if mode == 'train':
