@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH --account=aip-boyuwang
 #SBATCH --job-name=mkdt_teacher_cifar10
-#SBATCH --time=0-12:41:40
+#SBATCH --time=0-0:41:40
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=1
@@ -28,6 +28,5 @@ srun --unbuffered bash teacher.sh \
   --device 0 \
   --epochs 1000 \
   --num-workers 1 \
-  --resume
 
 echo "Finished CIFAR-10 teacher at $(date)"

@@ -28,6 +28,4 @@ srun --unbuffered bash teacher.sh \
   --device 0 \
   --epochs 1000 \
   --num-workers 1 \
-  --resume
-
 echo "Finished CIFAR-100 teacher at $(date)"

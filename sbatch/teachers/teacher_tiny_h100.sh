@@ -27,6 +27,5 @@ srun --unbuffered bash teacher_tiny.sh \
   --device 0 \
   --epochs 2000 \
   --num-workers 1 \
-  --resume
 
 echo "Finished Tiny ImageNet teacher at $(date)"
