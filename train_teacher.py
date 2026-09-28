@@ -164,6 +164,7 @@ def image_source_from_payload(payload):
             "image",
             "x",
             "data",
+            "images_train",
             "train_images",
             "train_data",
             "dataset",
