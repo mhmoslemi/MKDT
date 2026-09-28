@@ -27,10 +27,10 @@ KRRST_TEACHER = {
 
 
 def build_barlow_twins_teacher(device):
-    # ResNet18 backbone with the CIFAR-style stem used by KRRST's teachers.
+    # Match the paper-aligned CIFAR stem used by train_teacher.py.
     model = resnet18()
     model.fc = nn.Identity()
-    model.conv1 = nn.Conv2d(3, 64, kernel_size=3, stride=1, padding=2, bias=False)
+    model.conv1 = nn.Conv2d(3, 64, kernel_size=3, stride=1, padding=1, bias=False)
     model.maxpool = nn.Identity()
     return model.to(device)
 
