@@ -11,7 +11,6 @@ from torchvision import datasets, transforms
 from torchvision.transforms import InterpolationMode
 from torchvision.transforms import functional as TF
 from torchvision.models import resnet18
-from tqdm import tqdm
 
 PAPER_DEFAULTS = {
     "epochs": 1000,
@@ -435,6 +434,8 @@ def main(args):
         raise ValueError("--warmup_epochs must be at least 0 and less than --epochs")
     if args.checkpoint_every <= 0:
         raise ValueError("--checkpoint_every must be positive")
+    if args.log_every <= 0:
+        raise ValueError("--log_every must be positive")
 
     random.seed(args.seed)
     torch.manual_seed(args.seed)
@@ -506,6 +507,7 @@ def main(args):
     print(f"  projection dim:   {args.proj_dim}")
     print("  representation:   512")
     print(f"  Barlow lambda:    {args.lambd}")
+    print(f"  log every:        {args.log_every} iterations")
 
     if start_epoch >= args.epochs:
         print(
@@ -522,9 +524,8 @@ def main(args):
     for epoch in range(start_epoch, args.epochs):
         running_loss = 0.0
         seen = 0
-        progress = tqdm(loader, desc=f"{args.dataset} epoch {epoch + 1}/{args.epochs}")
 
-        for batch_index, (view_1, view_2) in enumerate(progress):
+        for batch_index, (view_1, view_2) in enumerate(loader):
             global_step = epoch * len(loader) + batch_index + 1
             current_lr = learning_rate_at_step(
                 global_step,
@@ -546,10 +547,15 @@ def main(args):
             batch_examples = view_1.shape[0]
             running_loss += loss.item() * batch_examples
             seen += batch_examples
-            progress.set_postfix(
-                loss=f"{running_loss / max(seen, 1):.4f}",
-                lr=f"{current_lr:.6g}",
-            )
+            iteration = batch_index + 1
+            if iteration % args.log_every == 0 or iteration == len(loader):
+                print(
+                    f"{args.dataset} epoch {epoch + 1}/{args.epochs} "
+                    f"iteration {iteration}/{len(loader)} "
+                    f"loss={running_loss / max(seen, 1):.4f} "
+                    f"lr={current_lr:.6g}",
+                    flush=True,
+                )
 
         completed_epoch = epoch + 1
         should_save = (
@@ -624,4 +630,5 @@ if __name__ == "__main__":
     parser.add_argument("--num_workers", type=int, default=8)
     parser.add_argument("--seed", type=int, default=0)
     parser.add_argument("--checkpoint_every", type=int, default=10)
+    parser.add_argument("--log_every", type=int, default=50)
     main(parser.parse_args())

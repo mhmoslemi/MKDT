@@ -36,6 +36,7 @@ EPOCHS="${EPOCHS:-2000}"
 NUM_WORKERS="${NUM_WORKERS:-16}"
 SEED="${SEED:-0}"
 CHECKPOINT_EVERY="${CHECKPOINT_EVERY:-10}"
+LOG_EVERY="${LOG_EVERY:-50}"
 TINY_INPUT_FORMAT="${TINY_INPUT_FORMAT:-auto}"
 RESUME=0
 DRY_RUN=0
@@ -160,6 +161,7 @@ command=(
   --num_workers "$NUM_WORKERS"
   --seed "$SEED"
   --checkpoint_every "$CHECKPOINT_EVERY"
+  --log_every "$LOG_EVERY"
 )
 
 if [[ "$RESUME" -eq 1 ]]; then
@@ -179,6 +181,7 @@ echo "  projection dim:     $PROJECTOR_DIM"
 echo "  representation dim: 512"
 echo "  Barlow lambda:      $BARLOW_LAMBDA"
 echo "  input format:       $TINY_INPUT_FORMAT"
+echo "  log every:          $LOG_EVERY iterations"
 printf 'Command:'
 printf ' %q' "${command[@]}"
 printf '\n'

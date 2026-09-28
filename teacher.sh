@@ -40,6 +40,7 @@ EPOCHS="${EPOCHS:-1000}"
 NUM_WORKERS="${NUM_WORKERS:-8}"
 SEED="${SEED:-0}"
 CHECKPOINT_EVERY="${CHECKPOINT_EVERY:-10}"
+LOG_EVERY="${LOG_EVERY:-50}"
 RESUME=0
 DRY_RUN=0
 
@@ -170,6 +171,7 @@ run_teacher() {
     --num_workers "$NUM_WORKERS"
     --seed "$SEED"
     --checkpoint_every "$CHECKPOINT_EVERY"
+    --log_every "$LOG_EVERY"
   )
 
   if [[ "$RESUME" -eq 1 ]]; then
@@ -200,6 +202,7 @@ echo "  weight decay:       $WEIGHT_DECAY"
 echo "  projection dim:     $PROJECTOR_DIM"
 echo "  representation dim: 512"
 echo "  Barlow lambda:      $BARLOW_LAMBDA"
+echo "  log every:          $LOG_EVERY iterations"
 
 for dataset in "${DATASETS[@]}"; do
   run_teacher "$dataset"
