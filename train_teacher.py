@@ -8,6 +8,8 @@ import torch.nn as nn
 import torch.nn.functional as F
 from torch.utils.data import DataLoader
 from torchvision import datasets, transforms
+from torchvision.transforms import InterpolationMode
+from torchvision.transforms import functional as TF
 from torchvision.models import resnet18
 from tqdm import tqdm
 
@@ -22,14 +24,17 @@ PAPER_DEFAULTS = {
 }
 
 
-def build_backbone():
-    """ResNet-18 with the CIFAR stem used by the referenced SSL setup."""
+def build_backbone(dataset="CIFAR10"):
+    """ResNet-18 with the small-image stem used by the SSL setup."""
     model = resnet18()
     model.fc = nn.Identity()
     model.conv1 = nn.Conv2d(
         3, 64, kernel_size=3, stride=1, padding=1, bias=False
     )
-    model.maxpool = nn.Identity()
+    # The referenced setup removes max-pooling for 32x32 CIFAR images but
+    # retains torchvision's max-pool for 64x64 Tiny ImageNet images.
+    if dataset != "Tiny":
+        model.maxpool = nn.Identity()
     return model
 
 
@@ -57,9 +62,9 @@ def off_diagonal(x):
 
 
 class BarlowTwins(nn.Module):
-    def __init__(self, proj_dim=1024, lambd=0.0078125):
+    def __init__(self, dataset="CIFAR10", proj_dim=1024, lambd=0.0078125):
         super().__init__()
-        self.backbone = build_backbone()
+        self.backbone = build_backbone(dataset)
         self.projector = Projector(512, proj_dim)
         self.lambd = lambd
 
@@ -137,8 +142,218 @@ class TensorTwoCrops(torch.utils.data.Dataset):
         return self.augmentation(image), self.augmentation(image)
 
 
-def build_ssl_dataset(dataset, data_path):
-    """Build paper-aligned CIFAR input data without using class labels."""
+TINY_IMAGENET_INPUT_MEAN = (0.485, 0.456, 0.406)
+TINY_IMAGENET_INPUT_STD = (0.229, 0.224, 0.225)
+TINY_IMAGENET_TRAIN_MEAN = (0.480, 0.448, 0.398)
+TINY_IMAGENET_TRAIN_STD = (0.277, 0.269, 0.282)
+
+
+def load_torch_file(path):
+    """Load a trusted local dataset file across PyTorch versions."""
+    try:
+        return torch.load(path, map_location="cpu", weights_only=False)
+    except TypeError:
+        return torch.load(path, map_location="cpu")
+
+
+def image_source_from_payload(payload):
+    """Find an image collection or Dataset inside a common .pt payload."""
+    if isinstance(payload, dict):
+        for key in (
+            "images",
+            "image",
+            "x",
+            "data",
+            "train_images",
+            "train_data",
+            "dataset",
+            "train",
+        ):
+            if key in payload:
+                return image_source_from_payload(payload[key])
+        if len(payload) == 1:
+            return next(iter(payload.values()))
+        raise ValueError(
+            "could not find images in Tiny ImageNet .pt dictionary; "
+            f"available keys: {sorted(map(str, payload.keys()))}"
+        )
+
+    # A common saved format is (images, labels). Do not mistake a list of
+    # individual (image, label) samples for that container format.
+    if isinstance(payload, tuple) and len(payload) >= 1:
+        return payload[0]
+    if (
+        isinstance(payload, list)
+        and len(payload) == 2
+        and not isinstance(payload[0], (tuple, dict))
+    ):
+        return payload[0]
+    return payload
+
+
+def image_from_sample(sample):
+    """Discard a class label or other sample metadata."""
+    if isinstance(sample, dict):
+        for key in ("image", "images", "img", "x", "data"):
+            if key in sample:
+                return sample[key]
+        raise ValueError(
+            "could not find an image in Tiny ImageNet sample dictionary; "
+            f"available keys: {sorted(map(str, sample.keys()))}"
+        )
+    if isinstance(sample, (tuple, list)):
+        if not sample:
+            raise ValueError("encountered an empty Tiny ImageNet sample")
+        return sample[0]
+    return sample
+
+
+def as_chw_tensor(image):
+    """Convert PIL, NumPy, or tensor images to an unscaled CHW tensor."""
+    if isinstance(image, torch.Tensor):
+        tensor = image.detach().cpu()
+    else:
+        try:
+            tensor = torch.as_tensor(image)
+        except (TypeError, RuntimeError):
+            tensor = TF.pil_to_tensor(image)
+
+    if tensor.ndim == 4 and tensor.shape[0] == 1:
+        tensor = tensor.squeeze(0)
+    if tensor.ndim == 2:
+        tensor = tensor.unsqueeze(0)
+    if tensor.ndim != 3:
+        raise ValueError(
+            "Tiny ImageNet images must have 2 or 3 dimensions; "
+            f"got shape {tuple(tensor.shape)}"
+        )
+    if tensor.shape[0] not in (1, 3, 4) and tensor.shape[-1] in (1, 3, 4):
+        tensor = tensor.permute(2, 0, 1)
+    if tensor.shape[0] == 1:
+        tensor = tensor.repeat(3, 1, 1)
+    elif tensor.shape[0] == 4:
+        tensor = tensor[:3]
+    if tensor.shape[0] != 3:
+        raise ValueError(
+            "Tiny ImageNet images must have 1, 3, or 4 channels; "
+            f"got shape {tuple(tensor.shape)}"
+        )
+    return tensor.contiguous()
+
+
+class TinyImageNetTwoViewDataset(torch.utils.data.Dataset):
+    """Two-view Tiny ImageNet loader for ImageFolder or serialized .pt data."""
+
+    INPUT_FORMATS = {"auto", "uint8", "zero_one", "zero_255", "normalized"}
+
+    def __init__(self, source, description, input_format="auto"):
+        self.source = source
+        self.description = description
+        if input_format not in self.INPUT_FORMATS:
+            raise ValueError(
+                f"Tiny ImageNet input format must be one of "
+                f"{sorted(self.INPUT_FORMATS)}; got {input_format}"
+            )
+        if not hasattr(source, "__len__") or not hasattr(source, "__getitem__"):
+            raise TypeError(
+                "Tiny ImageNet .pt must contain an image tensor, an "
+                "(images, labels) pair, or an indexable Dataset"
+            )
+        if len(source) == 0:
+            raise ValueError("Tiny ImageNet dataset is empty")
+
+        self.input_format = (
+            self._infer_input_format() if input_format == "auto" else input_format
+        )
+        self.augmentation = transforms.Compose(
+            [
+                transforms.RandomApply(
+                    [transforms.ColorJitter(0.4, 0.4, 0.4, 0.1)], p=0.8
+                ),
+                transforms.RandomGrayscale(p=0.1),
+                transforms.RandomResizedCrop(
+                    64,
+                    scale=(0.2, 1.0),
+                    ratio=(0.75, 4.0 / 3.0),
+                    interpolation=InterpolationMode.BICUBIC,
+                    antialias=True,
+                ),
+                transforms.RandomHorizontalFlip(p=0.5),
+                transforms.Normalize(
+                    TINY_IMAGENET_TRAIN_MEAN, TINY_IMAGENET_TRAIN_STD
+                ),
+            ]
+        )
+
+    def __len__(self):
+        return len(self.source)
+
+    def _raw_image(self, index):
+        return image_from_sample(self.source[index])
+
+    def _infer_input_format(self):
+        minimum = float("inf")
+        maximum = float("-inf")
+        saw_float = False
+        for index in range(min(len(self.source), 8)):
+            tensor = as_chw_tensor(self._raw_image(index))
+            saw_float = saw_float or torch.is_floating_point(tensor)
+            values = tensor.float()
+            minimum = min(minimum, float(values.min()))
+            maximum = max(maximum, float(values.max()))
+
+        if not saw_float:
+            return "uint8"
+        if minimum >= 0.0 and maximum <= 1.01:
+            return "zero_one"
+        if minimum >= 0.0 and maximum <= 255.01:
+            return "zero_255"
+        return "normalized"
+
+    def _to_zero_one(self, image):
+        tensor = as_chw_tensor(image).float()
+        if self.input_format in ("uint8", "zero_255"):
+            tensor = tensor / 255.0
+        elif self.input_format == "normalized":
+            mean = tensor.new_tensor(TINY_IMAGENET_INPUT_MEAN).view(3, 1, 1)
+            std = tensor.new_tensor(TINY_IMAGENET_INPUT_STD).view(3, 1, 1)
+            tensor = tensor * std + mean
+        return tensor.clamp_(0.0, 1.0)
+
+    def __getitem__(self, index):
+        image = self._to_zero_one(self._raw_image(index))
+        return self.augmentation(image), self.augmentation(image)
+
+
+def build_tiny_imagenet_dataset(data_path, data_file, input_format):
+    if data_file is not None:
+        data_file = os.path.abspath(os.path.expanduser(data_file))
+        if not os.path.isfile(data_file):
+            raise FileNotFoundError(
+                f"Tiny ImageNet .pt file not found: {data_file}\n"
+                "Pass the correct path with --data_file."
+            )
+        payload = load_torch_file(data_file)
+        source = image_source_from_payload(payload)
+        return TinyImageNetTwoViewDataset(source, data_file, input_format)
+
+    candidate_roots = (
+        os.path.join(data_path, "tiny_imagenet", "train"),
+        os.path.join(data_path, "tiny-imagenet-200", "train"),
+        os.path.join(data_path, "train"),
+    )
+    for train_root in candidate_roots:
+        if os.path.isdir(train_root):
+            source = datasets.ImageFolder(train_root)
+            return TinyImageNetTwoViewDataset(source, train_root, "uint8")
+    raise FileNotFoundError(
+        "Tiny ImageNet data not found. Pass --data_file /path/to/tinyimagenet.pt "
+        "or --data_path pointing to an extracted Tiny ImageNet directory."
+    )
+
+
+def build_ssl_dataset(dataset, data_path, data_file=None, tiny_input_format="auto"):
+    """Build paper-aligned SSL input data without using class labels."""
     if dataset == "CIFAR10":
         mean = (0.4914, 0.4822, 0.4465)
         std = (0.2023, 0.1994, 0.2010)
@@ -163,8 +378,13 @@ def build_ssl_dataset(dataset, data_path):
             )
         )
 
+    if dataset == "Tiny":
+        return build_tiny_imagenet_dataset(
+            data_path, data_file, tiny_input_format
+        )
+
     # Preserve support for the repository's other/custom dataset keys. The
-    # paper-aligned teacher.sh intentionally launches only CIFAR10/CIFAR100.
+    # paper-aligned launchers intentionally use CIFAR10/CIFAR100/Tiny.
     from utils import get_dataset
 
     _, image_size, _, train_data, _ = get_dataset(dataset, data_path)
@@ -224,7 +444,12 @@ def main(args):
     else:
         device = torch.device("cpu")
 
-    ssl_dataset = build_ssl_dataset(args.dataset, args.data_path)
+    ssl_dataset = build_ssl_dataset(
+        args.dataset,
+        args.data_path,
+        data_file=args.data_file,
+        tiny_input_format=args.tiny_input_format,
+    )
     loader = DataLoader(
         ssl_dataset,
         batch_size=args.batch_size,
@@ -239,7 +464,9 @@ def main(args):
             f"dataset has fewer than batch_size={args.batch_size} examples"
         )
 
-    model = BarlowTwins(proj_dim=args.proj_dim, lambd=args.lambd).to(device)
+    model = BarlowTwins(
+        dataset=args.dataset, proj_dim=args.proj_dim, lambd=args.lambd
+    ).to(device)
     scaled_learning_rate = args.lr * args.batch_size / 256
     optimizer = torch.optim.Adam(
         model.parameters(), lr=scaled_learning_rate, weight_decay=args.weight_decay
@@ -264,6 +491,9 @@ def main(args):
 
     print("Resolved teacher configuration:")
     print(f"  dataset:          {args.dataset}")
+    if args.dataset == "Tiny":
+        print(f"  data source:      {ssl_dataset.description}")
+        print(f"  input format:     {ssl_dataset.input_format}")
     print(f"  examples:         {len(ssl_dataset)}")
     print(f"  device:           {device}")
     print(f"  epochs:           {args.epochs}")
@@ -356,6 +586,20 @@ if __name__ == "__main__":
     )
     parser.add_argument("--dataset", default="CIFAR10")
     parser.add_argument("--data_path", default="./data")
+    parser.add_argument(
+        "--data_file",
+        default=None,
+        help="Tiny ImageNet .pt file; overrides --data_path for dataset Tiny",
+    )
+    parser.add_argument(
+        "--tiny_input_format",
+        default="auto",
+        choices=sorted(TinyImageNetTwoViewDataset.INPUT_FORMATS),
+        help=(
+            "encoding of images in a Tiny ImageNet .pt file; normalized means "
+            "ImageNet mean/std normalization"
+        ),
+    )
     parser.add_argument("--ckpt_dir", default="./krrst_teacher_ckpt")
     parser.add_argument("--resume", action="store_true")
     parser.add_argument("--device", type=int, default=0)

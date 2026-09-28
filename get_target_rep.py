@@ -26,12 +26,13 @@ KRRST_TEACHER = {
 }
 
 
-def build_barlow_twins_teacher(device):
-    # Match the paper-aligned CIFAR stem used by train_teacher.py.
+def build_barlow_twins_teacher(device, dataset):
+    # Match the paper-aligned small-image stem used by train_teacher.py.
     model = resnet18()
     model.fc = nn.Identity()
     model.conv1 = nn.Conv2d(3, 64, kernel_size=3, stride=1, padding=1, bias=False)
-    model.maxpool = nn.Identity()
+    if dataset != 'Tiny':
+        model.maxpool = nn.Identity()
     return model.to(device)
 
 
@@ -86,7 +87,7 @@ def main(args):
 
     ''' Build the teacher and load its weights '''
     if args.ssl_algorithm == "barlow_twins":
-        target_model = build_barlow_twins_teacher(args.device)
+        target_model = build_barlow_twins_teacher(args.device, args.dataset)
         if args.teacher_ckpt is not None:
             ckpt_path = args.teacher_ckpt
         else:
