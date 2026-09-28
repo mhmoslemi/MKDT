@@ -15,6 +15,10 @@
 set -euo pipefail
 
 cd /home/mmoslem3/scratch/MKDT
+source /home/mmoslem3/ENV/bin/activate
+export PYTHONUNBUFFERED=1
+
+python3 -c 'import torch; print("PyTorch:", torch.__version__, "CUDA:", torch.cuda.is_available())'
 
 echo "Starting CIFAR-10 teacher on $(hostname) at $(date)"
 echo "CUDA_VISIBLE_DEVICES=${CUDA_VISIBLE_DEVICES:-not-set}"
