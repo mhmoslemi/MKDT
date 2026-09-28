@@ -33,7 +33,7 @@ WARMUP_EPOCHS=10
 # Operational settings. Override these with command-line flags or environment
 # variables where noted.
 DATASET="both"
-DATA_PATH="${DATA_PATH:-$SCRIPT_DIR/data}"
+DATA_PATH="${DATA_PATH:-/home/mmoslem3/scratch/data}"
 CKPT_DIR="${CKPT_DIR:-$SCRIPT_DIR/krrst_teacher_ckpt}"
 DEVICE="${DEVICE:-0}"
 EPOCHS="${EPOCHS:-1000}"

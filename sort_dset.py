@@ -11,12 +11,14 @@ import numpy as np
 
 def main(args):
     channel, im_size, _, dst_train, _ = get_dataset(dataset=args.dataset, data_path=args.data_path)
-    train_labels_path = f"/home/jennyni/MKDT/target_rep/{args.ssl_algo}/{args.dataset}_target_rep_train.pt"
+    train_labels_path = args.train_labels_path or os.path.join(
+        args.result_dir, args.ssl_algo, f"{args.dataset}_target_rep_train.pt")
+    buffer_dir = args.buffer_dir or os.path.join(args.buffer_path, args.dataset, args.model)
 
     trainloader, labels_all = build_trainset(dataset=args.dataset,
                                  dst_train=dst_train,
-                                 train_labels_path=train_labels_path, 
-                                 channel=channel, 
+                                 train_labels_path=train_labels_path,
+                                 channel=channel,
                                  batch_train=args.batch_train,
                                  shuffle=False
                                 )
@@ -24,11 +26,23 @@ def main(args):
 
     num_examples = len(trainloader.dataset)
     print(num_examples)
+
+    # Clamp to the number of trajectories actually on disk.
+    available = 0
+    while os.path.exists(os.path.join(buffer_dir, f'replay_buffer_{available}.pt')):
+        available += 1
+    if available == 0:
+        raise FileNotFoundError(f"No expert trajectories found in {buffer_dir}")
+    if args.num_buffers > available:
+        print(f"warning: requested {args.num_buffers} buffers but only {available} available in "
+              f"{buffer_dir}; using {available}")
+        args.num_buffers = available
+
     # [each example's loss in the first epoch, averaged over all the buffers]
     epoch_losses = np.zeros(num_examples)
 
     for num_buffer in range(1, args.num_buffers + 1):
-        checkpoint_path = f'/home/jennyni/MKDT/buffers_{args.ssl_algo}/{args.dataset}/{args.model}/replay_buffer_{num_buffer-1}.pt'
+        checkpoint_path = os.path.join(buffer_dir, f'replay_buffer_{num_buffer-1}.pt')
         param_all = torch.load(checkpoint_path)
         first_epoch_checkpoint = param_all[0][1] # Load the checkpoint from the first epoch
         first_epoch_checkpoint = torch.cat([p.data.to(args.device).reshape(-1) for p in first_epoch_checkpoint], 0)
@@ -55,8 +69,8 @@ def main(args):
     if args.dataset != "ImageNet":
         top_2_percent_idx = sorted_indices[:int(0.02 * num_examples)]
         top_5_percent_idx = sorted_indices[:int(0.05 * num_examples)]
-        
-        output_dir = f'/home/jennyni/MKDT/init/{dset_name}'
+
+        output_dir = args.output_dir or os.path.join('init', dset_name)
         os.makedirs(output_dir, exist_ok=True)
 
         with open(f'{output_dir}/{args.dataset}_{args.ssl_algo}_2_high_loss_indices.pkl', 'wb') as f:
@@ -66,9 +80,9 @@ def main(args):
         
     else:
         top_1000 = sorted_indices[:1000]
-        
+
         # Create the directory if it doesn't exist
-        output_dir = f'/home/jennyni/MKDT/init/{dset_name}'
+        output_dir = args.output_dir or os.path.join('init', dset_name)
         os.makedirs(output_dir, exist_ok=True)
 
         with open(f'{output_dir}/{args.dataset}_{args.ssl_algo}_1000_high_loss_indices.pkl', 'wb') as f:
@@ -83,5 +97,10 @@ if __name__ == '__main__':
     parser.add_argument('--batch_train', type=int, default=256, help='batch size for training networks')
     parser.add_argument('--data_path', type=str, default='/home/data', help='dataset path')
     parser.add_argument('--device', type=int, default=0, help='gpu number')
+    parser.add_argument('--train_labels_path', type=str, default=None, help='path to the target representation; defaults to {result_dir}/{ssl_algo}/{dataset}_target_rep_train.pt')
+    parser.add_argument('--result_dir', type=str, default='./results', help='root dir holding target representations (used when --train_labels_path is not given)')
+    parser.add_argument('--buffer_dir', type=str, default=None, help='dir holding replay_buffer_*.pt; defaults to {buffer_path}/{dataset}/{model}')
+    parser.add_argument('--buffer_path', type=str, default='./buffers_barlow_twins', help='root dir holding expert trajectories (used when --buffer_dir is not given)')
+    parser.add_argument('--output_dir', type=str, default=None, help='where to save the high-loss-index pkl files; defaults to ./init/{dataset_lower}')
     args = parser.parse_args()
     main(args)

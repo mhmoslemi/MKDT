@@ -102,12 +102,15 @@ def main(args):
     buffer = torch.load(expert_files[file_idx], map_location="cpu")
     random.shuffle(buffer) # Only necessary when max_experts (as in MTT is used). We do not use max_experts here. 
 
-    # Get the current date and time
-    current_datetime = datetime.now()
-    RUN_ID = current_datetime.strftime("%Y-%m-%d_%H:%M:%S") + str(args.run_id)
-    save_dir = os.path.join(".", "logged_files", args.dataset, RUN_ID)
-    if not os.path.exists(save_dir):
-        os.makedirs(save_dir)
+    # A deterministic save_dir lets callers detect a completed/partial run and
+    # decide whether to skip or resume; without it, fall back to a timestamped dir.
+    if args.save_dir:
+        save_dir = args.save_dir
+    else:
+        current_datetime = datetime.now()
+        RUN_ID = current_datetime.strftime("%Y-%m-%d_%H:%M:%S") + str(args.run_id)
+        save_dir = os.path.join(".", "logged_files", args.dataset, RUN_ID)
+    os.makedirs(save_dir, exist_ok=True)
     with open(os.path.join(save_dir, "hparams.txt"), "w") as f:
         f.write(pprint.pformat(vars(args), indent=4))
         
@@ -246,6 +249,7 @@ if __name__ == '__main__':
     parser.add_argument('--image_init_idx_path', type=str, help='path to the initial images')
     parser.add_argument('--train_labels_path', type=str, required=True, help='path to the target representation')
     parser.add_argument('--run_id', type=str, default=None, help='id for run')
+    parser.add_argument('--save_dir', type=str, default=None, help='deterministic output dir (enables detecting a completed/partial run to resume); default is a timestamped dir under ./logged_files/{dataset}')
     parser.add_argument('--expert_dir', type=str, help='dir for expert trajectories')
     parser.add_argument('--criterion', type=str, default="mse") # Should always use MSE
 
