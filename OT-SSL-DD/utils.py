@@ -458,8 +458,8 @@ def transport_contrastive_loss(output_real, output_syn, transport_plan, args):
     output_real = F.normalize(output_real, dim=1)
     output_syn = F.normalize(output_syn, dim=1)
     logits = torch.mm(output_real, output_syn.t()) / args.temperature
-    log_probability = F.log_softmax(logits, dim=1)
-    loss = -torch.sum(transport_plan * log_probability)
+    positive_syn = torch.argmax(transport_plan, dim=1)
+    loss = F.cross_entropy(logits, positive_syn)
 
     return loss
 
