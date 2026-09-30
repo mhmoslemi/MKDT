@@ -135,9 +135,10 @@ def main():
         for il in range(args.epoch_ssl_train):
             epoch_ssl(trainloader_ssl, net, projector, optimizer_net, args)
 
-        for param in list(net.parameters()):
+        for param in list(net.parameters()) + list(projector.parameters()):
             param.requires_grad = False
         net.eval()
+        projector.eval()
 
         embed = net.module.embed if torch.cuda.device_count() > 1 else net.embed # for GPU parallel
 
@@ -148,8 +149,8 @@ def main():
         img_syn = image_syn.reshape((num_syn, channel, im_size[0], im_size[1]))
 
 
-        output_real = embed(img_real).detach()
-        output_syn = embed(img_syn)
+        output_real = projector(embed(img_real)).detach()
+        output_syn = projector(embed(img_syn))
         transport_plan = get_transport_plan(output_real, output_syn.detach(), args)
         loss = transport_contrastive_loss(output_real, output_syn, transport_plan, args)
 
