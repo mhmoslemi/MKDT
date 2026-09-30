@@ -22,7 +22,7 @@ def main():
 
     # -------------------- Distillation --------------------
     parser.add_argument('--Iteration', type=int, default=10, help='training iterations')
-    parser.add_argument('--lr_img', type=float, default=1000.0, help='learning rate for updating synthetic images')
+    parser.add_argument('--lr_img', type=float, default=1.0, help='learning rate for updating synthetic images')
     parser.add_argument('--batch_real', type=int, default=256, help='batch size for real data')
 
     # -------------------- Network --------------------
@@ -32,8 +32,8 @@ def main():
 
     # -------------------- Self-Supervised Learning --------------------
     parser.add_argument('--ssl_method', type=str, default='simclr', help='simclr/barlowtwins')
-    parser.add_argument('--ssl_train_data', type=str, default='real', help='real/synthetic')
-    parser.add_argument('--epoch_ssl_train', type=int, default=2, help='epochs to train the temporary SSL network')
+    parser.add_argument('--ssl_train_data', type=str, default='synthetic', help='real/synthetic')
+    parser.add_argument('--epoch_ssl_train', type=int, default=20, help='epochs to train the temporary SSL network')
     parser.add_argument('--ssl_aug_strategy', type=str, default='color_crop_cutout_flip_scale_rotate', help='augmentation strategy for SSL training')
     parser.add_argument('--projection_dim', type=int, default=64, help='projection dimension for SSL training')
     parser.add_argument('--temperature', type=float, default=0.5, help='temperature for SimCLR')
@@ -41,7 +41,7 @@ def main():
 
     # -------------------- Optimal Transport --------------------
     parser.add_argument('--ot_lambda', type=float, default=0.1, help='entropy regularization for the transport plan')
-    parser.add_argument('--sinkhorn_iterations', type=int, default=10, help='number of Sinkhorn iterations')
+    parser.add_argument('--sinkhorn_iterations', type=int, default=25, help='number of Sinkhorn iterations')
 
     # -------------------- Evaluation --------------------
     parser.add_argument('--eval_mode', type=str, default='S', help='eval_mode') # S: the same to training model, M: multi architectures,  W: net width, D: net depth, A: activation function, P: pooling layer, N: normalization layer,
