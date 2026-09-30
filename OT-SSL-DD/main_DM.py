@@ -6,24 +6,29 @@ import numpy as np
 import torch
 import torch.nn as nn
 from torchvision.utils import save_image
-from utils import get_loops, get_dataset, get_network, get_eval_pool, evaluate_synset, evaluate_synset_SSL, get_daparam, match_loss, get_time, TensorDataset, epoch, init_ssl, epoch_ssl, get_transport_plan, DiffAugment, ParamDiffAug
+from utils import get_loops, get_dataset, get_network, get_eval_pool, evaluate_synset, evaluate_synset_SSL, get_daparam, match_loss, get_time, TensorDataset, epoch, init_ssl, epoch_ssl, get_transport_plan, transport_contrastive_loss, DiffAugment, ParamDiffAug
 
 
 def main():
 
     parser = argparse.ArgumentParser(description='Parameter Processing')
+
+    # -------------------- Data --------------------
     parser.add_argument('--dataset', type=str, default='CIFAR10', help='dataset')
-    parser.add_argument('--model', type=str, default='ConvNet', help='model')
-    parser.add_argument('--percentage', type=int, default=1, help='percentage of total data size')
-    parser.add_argument('--eval_mode', type=str, default='S', help='eval_mode') # S: the same to training model, M: multi architectures,  W: net width, D: net depth, A: activation function, P: pooling layer, N: normalization layer,
-    parser.add_argument('--num_exp', type=int, default=5, help='the number of experiments')
-    parser.add_argument('--num_eval', type=int, default=20, help='the number of evaluating randomly initialized models')
-    parser.add_argument('--epoch_eval_train', type=int, default=1000, help='epochs to train a model with synthetic data') # it can be small for speeding up with little performance drop
-    parser.add_argument('--Iteration', type=int, default=20000, help='training iterations')
+    parser.add_argument('--percentage', type=int, default=2, help='percentage of total data size')
+    parser.add_argument('--data_path', type=str, default='/home/mmoslem3/scratch/data', help='dataset path')
+
+    # -------------------- Distillation --------------------
+    parser.add_argument('--Iteration', type=int, default=10, help='training iterations')
     parser.add_argument('--lr_img', type=float, default=1.0, help='learning rate for updating synthetic images')
-    parser.add_argument('--lr_net', type=float, default=0.01, help='learning rate for updating network parameters')
     parser.add_argument('--batch_real', type=int, default=256, help='batch size for real data')
+
+    # -------------------- Network --------------------
+    parser.add_argument('--model', type=str, default='ConvNet', help='model')
+    parser.add_argument('--lr_net', type=float, default=0.01, help='learning rate for updating network parameters')
     parser.add_argument('--batch_train', type=int, default=256, help='batch size for training networks')
+
+    # -------------------- Self-Supervised Learning --------------------
     parser.add_argument('--ssl_method', type=str, default='simclr', help='simclr/barlowtwins')
     parser.add_argument('--ssl_train_data', type=str, default='real', help='real/synthetic')
     parser.add_argument('--epoch_ssl_train', type=int, default=5, help='epochs to train the temporary SSL network')
@@ -31,17 +36,22 @@ def main():
     parser.add_argument('--projection_dim', type=int, default=128, help='projection dimension for SSL training')
     parser.add_argument('--temperature', type=float, default=0.5, help='temperature for SimCLR')
     parser.add_argument('--barlow_lambda', type=float, default=0.005, help='off-diagonal weight for Barlow Twins')
-    parser.add_argument('--ot_sigmas', type=float, nargs='+', default=[1.0, 5.0, 10.0, 20.0], help='Gaussian kernel scales for the transport plan')
+
+    # -------------------- Optimal Transport --------------------
     parser.add_argument('--ot_lambda', type=float, default=0.1, help='entropy regularization for the transport plan')
     parser.add_argument('--sinkhorn_iterations', type=int, default=20, help='number of Sinkhorn iterations')
-    parser.add_argument('--label_percentage', type=float, default=10.0, help='percentage of labeled data for linear probing')
+
+    # -------------------- Evaluation --------------------
+    parser.add_argument('--eval_mode', type=str, default='S', help='eval_mode') # S: the same to training model, M: multi architectures,  W: net width, D: net depth, A: activation function, P: pooling layer, N: normalization layer,
+    parser.add_argument('--num_eval', type=int, default=5, help='the number of evaluating randomly initialized models')
+    parser.add_argument('--epoch_eval_train', type=int, default=1000, help='epochs to train a model with synthetic data') # it can be small for speeding up with little performance drop
+    parser.add_argument('--label_percentage', type=float, default=5.0, help='percentage of labeled data for linear probing')
     parser.add_argument('--epoch_linear_train', type=int, default=100, help='epochs to train the linear probe')
     parser.add_argument('--lr_linear', type=float, default=0.1, help='learning rate for the linear probe')
     parser.add_argument('--batch_linear', type=int, default=256, help='batch size for the linear probe')
-    parser.add_argument('--dsa_strategy', type=str, default='None', help='differentiable Siamese augmentation strategy')
-    parser.add_argument('--data_path', type=str, default='data', help='dataset path')
+
+    # -------------------- Output --------------------
     parser.add_argument('--save_path', type=str, default='result', help='path to save results')
-    parser.add_argument('--dis_metric', type=str, default='ours', help='distance metric')
 
     args = parser.parse_args()
     args.method = 'DM'
@@ -120,7 +130,6 @@ def main():
         loss_avg = 0
 
         ''' update synthetic data '''
-        loss = torch.tensor(0.0).to(args.device)
         img_real = get_images(args.batch_real)
         img_syn = image_syn.reshape((num_syn, channel, im_size[0], im_size[1]))
 
@@ -128,8 +137,7 @@ def main():
         output_real = embed(img_real).detach()
         output_syn = embed(img_syn)
         transport_plan = get_transport_plan(output_real, output_syn.detach(), args)
-
-        loss += torch.sum((torch.mean(output_real, dim=0) - torch.mean(output_syn, dim=0))**2)
+        loss = transport_contrastive_loss(output_real, output_syn, transport_plan, args)
 
 
 
@@ -150,8 +158,6 @@ def main():
     ''' Evaluate synthetic data '''
     for model_eval in model_eval_pool:
         print('-------------------------\nEvaluation\nmodel_train = %s, model_eval = %s, iteration = %d'%(args.model, model_eval, it))
-
-        print('DSA augmentation strategy: \n', args.dsa_strategy)
 
         accs = []
         for it_eval in range(args.num_eval):
@@ -178,7 +184,7 @@ def main():
     print('\n==================== Final Results ====================\n')
     for key in model_eval_pool:
         accs = accs_all_exps[key]
-        print('Run %d experiments, train on %s, evaluate %d random %s, mean  = %.2f%%  std = %.2f%%'%(args.num_exp, args.model, len(accs), key, np.mean(accs)*100, np.std(accs)*100))
+        print('Train on %s, evaluate %d random %s, mean  = %.2f%%  std = %.2f%%'%(args.model, len(accs), key, np.mean(accs)*100, np.std(accs)*100))
 
 
 

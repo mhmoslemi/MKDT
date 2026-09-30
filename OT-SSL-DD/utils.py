@@ -432,24 +432,36 @@ def epoch_ssl(trainloader, net, projector, optimizer, args):
 
 def get_transport_plan(output_real, output_syn, args):
     with torch.no_grad():
-        distance = torch.cdist(output_real, output_syn, p=2)**2
-
-        relevance = torch.zeros_like(distance)
-        for sigma in args.ot_sigmas:
-            relevance += torch.exp(-distance / (2 * sigma**2))
-        relevance /= len(args.ot_sigmas)
-
-        cost = 1 - relevance
-        transport_plan = torch.exp(-cost / args.ot_lambda)
+        output_real = F.normalize(output_real, dim=1)
+        output_syn = F.normalize(output_syn, dim=1)
+        cost = 1 - torch.mm(output_real, output_syn.t())
 
         num_real = output_real.shape[0]
         num_syn = output_syn.shape[0]
+        log_a = torch.full((num_real,), -np.log(num_real), device=cost.device, dtype=cost.dtype)
+        log_b = torch.full((num_syn,), -np.log(num_syn), device=cost.device, dtype=cost.dtype)
+        log_kernel = -cost / args.ot_lambda
+        log_u = torch.zeros_like(log_a)
+        log_v = torch.zeros_like(log_b)
 
         for t in range(args.sinkhorn_iterations):
-            transport_plan = num_syn * transport_plan / (torch.sum(transport_plan, dim=1, keepdim=True) + 1e-8)
-            transport_plan = num_real * transport_plan / (torch.sum(transport_plan, dim=0, keepdim=True) + 1e-8)
+            log_u = log_a - torch.logsumexp(log_kernel + log_v.unsqueeze(0), dim=1)
+            log_v = log_b - torch.logsumexp(log_kernel + log_u.unsqueeze(1), dim=0)
+
+        transport_plan = torch.exp(log_u.unsqueeze(1) + log_kernel + log_v.unsqueeze(0))
 
     return transport_plan
+
+
+
+def transport_contrastive_loss(output_real, output_syn, transport_plan, args):
+    output_real = F.normalize(output_real, dim=1)
+    output_syn = F.normalize(output_syn, dim=1)
+    logits = torch.mm(output_real, output_syn.t()) / args.temperature
+    log_probability = F.log_softmax(logits, dim=1)
+    loss = -torch.sum(transport_plan * log_probability)
+
+    return loss
 
 
 

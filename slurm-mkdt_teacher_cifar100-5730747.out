@@ -1,0 +1,23 @@
+Starting CIFAR-100 teacher on kn169 at Mon Sep 28 01:24:27 PM EDT 2026
+CUDA_VISIBLE_DEVICES=0
+MKDT Barlow Twins teacher settings
+  datasets:           CIFAR100
+  data path:          /home/mmoslem3/scratch/data
+  checkpoint dir:     /home/mmoslem3/scratch/MKDT/krrst_teacher_ckpt
+  device:             0
+  epochs:             1000
+  batch size:         256
+  learning rate:      0.01
+  schedule:           10-epoch warmup + cosine decay
+  weight decay:       1e-6
+  projection dim:     1024
+  representation dim: 512
+  Barlow lambda:      0.0078125
+
+Training CIFAR100 teacher
+Command: python3 train_teacher.py --dataset CIFAR100 --data_path /home/mmoslem3/scratch/data --ckpt_dir /home/mmoslem3/scratch/MKDT/krrst_teacher_ckpt --device 0 --epochs 1000 --batch_size 256 --lr 0.01 --weight_decay 1e-6 --proj_dim 1024 --lambd 0.0078125 --warmup_epochs 10 --num_workers 1 --seed 0 --checkpoint_every 10 --resume
+Traceback (most recent call last):
+  File "/scratch/mmoslem3/MKDT/train_teacher.py", line 6, in <module>
+    import torch
+ModuleNotFoundError: No module named 'torch'
+srun: error: kn169: task 0: Exited with exit code 1
