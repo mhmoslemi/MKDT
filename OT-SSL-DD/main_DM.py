@@ -21,7 +21,7 @@ def main():
     parser.add_argument('--data_path', type=str, default='/home/mmoslem3/scratch/data', help='dataset path')
 
     # -------------------- Distillation --------------------
-    parser.add_argument('--Iteration', type=int, default=50, help='training iterations')
+    parser.add_argument('--Iteration', type=int, default=10, help='training iterations')
     parser.add_argument('--lr_img', type=float, default=1000.0, help='learning rate for updating synthetic images')
     parser.add_argument('--batch_real', type=int, default=256, help='batch size for real data')
 
@@ -32,8 +32,8 @@ def main():
 
     # -------------------- Self-Supervised Learning --------------------
     parser.add_argument('--ssl_method', type=str, default='simclr', help='simclr/barlowtwins')
-    parser.add_argument('--ssl_train_data', type=str, default='synthetic', help='real/synthetic')
-    parser.add_argument('--epoch_ssl_train', type=int, default=5, help='epochs to train the temporary SSL network')
+    parser.add_argument('--ssl_train_data', type=str, default='real', help='real/synthetic')
+    parser.add_argument('--epoch_ssl_train', type=int, default=2, help='epochs to train the temporary SSL network')
     parser.add_argument('--ssl_aug_strategy', type=str, default='color_crop_cutout_flip_scale_rotate', help='augmentation strategy for SSL training')
     parser.add_argument('--projection_dim', type=int, default=64, help='projection dimension for SSL training')
     parser.add_argument('--temperature', type=float, default=0.5, help='temperature for SimCLR')
