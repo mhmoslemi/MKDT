@@ -45,7 +45,7 @@ def main():
     parser.add_argument('--eval_mode', type=str, default='S', help='eval_mode') # S: the same to training model, M: multi architectures,  W: net width, D: net depth, A: activation function, P: pooling layer, N: normalization layer,
     parser.add_argument('--num_eval', type=int, default=2, help='the number of evaluating randomly initialized models')
     parser.add_argument('--epoch_eval_train', type=int, default=1000, help='epochs to train a model with synthetic data') # it can be small for speeding up with little performance drop
-    parser.add_argument('--label_percentage', type=float, default=5.0, help='percentage of labeled data for linear probing')
+    parser.add_argument('--label_percentage', type=float, default=1.0, help='percentage of labeled data for linear probing')
     parser.add_argument('--epoch_linear_train', type=int, default=100, help='epochs to train the linear probe')
     parser.add_argument('--lr_linear', type=float, default=0.1, help='learning rate for the linear probe')
     parser.add_argument('--batch_linear', type=int, default=256, help='batch size for the linear probe')
