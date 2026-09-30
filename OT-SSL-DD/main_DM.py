@@ -23,7 +23,7 @@ def main():
 
     # -------------------- Distillation --------------------
     parser.add_argument('--Iteration', type=int, default=10, help='training iterations')
-    parser.add_argument('--lr_img', type=float, default=1.0, help='learning rate for updating synthetic images')
+    parser.add_argument('--lr_img', type=float, default=0.01, help='learning rate for updating synthetic images')
     parser.add_argument('--batch_real', type=int, default=256, help='batch size for real data')
 
     # -------------------- Network --------------------
@@ -101,7 +101,7 @@ def main():
 
 
     ''' training '''
-    optimizer_img = torch.optim.SGD([image_syn, ], lr=args.lr_img, momentum=0.5) # optimizer_img for synthetic data
+    optimizer_img = torch.optim.Adam([image_syn, ], lr=args.lr_img) # optimizer_img for synthetic data
     optimizer_img.zero_grad()
     print('%s training begins'%get_time())
     print('synthetic images = %d, uniform contrastive loss = %.8f, image leaf = %s, requires_grad = %s, optimizer owns image = %s' % (num_syn, np.log(num_syn), image_syn.is_leaf, image_syn.requires_grad, optimizer_img.param_groups[0]['params'][0] is image_syn))
