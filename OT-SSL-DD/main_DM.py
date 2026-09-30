@@ -9,6 +9,8 @@ from torchvision.utils import save_image
 from utils import get_loops, get_dataset, get_network, get_eval_pool, evaluate_synset, evaluate_synset_SSL, get_daparam, match_loss, get_time, TensorDataset, epoch, init_ssl, epoch_ssl, get_transport_plan, transport_contrastive_loss, DiffAugment, ParamDiffAug
 
 
+# random , test acc = 0.3993
+
 def main():
 
     parser = argparse.ArgumentParser(description='Parameter Processing')
