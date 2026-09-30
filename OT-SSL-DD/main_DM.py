@@ -43,7 +43,7 @@ def main():
 
     # -------------------- Evaluation --------------------
     parser.add_argument('--eval_mode', type=str, default='S', help='eval_mode') # S: the same to training model, M: multi architectures,  W: net width, D: net depth, A: activation function, P: pooling layer, N: normalization layer,
-    parser.add_argument('--num_eval', type=int, default=5, help='the number of evaluating randomly initialized models')
+    parser.add_argument('--num_eval', type=int, default=2, help='the number of evaluating randomly initialized models')
     parser.add_argument('--epoch_eval_train', type=int, default=1000, help='epochs to train a model with synthetic data') # it can be small for speeding up with little performance drop
     parser.add_argument('--label_percentage', type=float, default=5.0, help='percentage of labeled data for linear probing')
     parser.add_argument('--epoch_linear_train', type=int, default=100, help='epochs to train the linear probe')
@@ -100,7 +100,19 @@ def main():
 
     
     
-    
+    ''' Evaluate synthetic data '''
+    for model_eval in model_eval_pool:
+        print('-------------------------\nEvaluation\nmodel_train = %s, model_eval = %s, iteration = %d'%(args.model, model_eval, 0))
+
+        accs = []
+        for it_eval in range(1):
+            net_eval = get_network(model_eval, channel, num_classes, im_size).to(args.device) # get a random model
+            image_syn_eval = copy.deepcopy(image_syn.detach()) # avoid any unaware modification
+            _, acc_train, acc_test = evaluate_synset_SSL(it_eval, net_eval, image_syn_eval, dst_train, testloader, args)
+            accs.append(acc_test)
+        print('Evaluate %d random %s, mean = %.4f std = %.4f\n-------------------------'%(len(accs), model_eval, np.mean(accs), np.std(accs)))
+
+
     
     for it in range(args.Iteration+1):
 
@@ -152,7 +164,7 @@ def main():
 
         if it == args.Iteration: # only record the final results
             data_save = copy.deepcopy(image_syn.detach().cpu())
-            torch.save({'data': data_save, }, os.path.join(args.save_path, 'res_%s_%s_%s_%dpercent.pt'%(args.method, args.dataset, args.model, args.percentage)))
+            torch.save({'data': data_save, }, os.path.join(args.save_path, 'res_OT-SSL_%s_%s_%dpercent.pt'%(args.dataset, args.model, args.percentage)))
 
 
     ''' Evaluate synthetic data '''
