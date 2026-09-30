@@ -147,7 +147,7 @@ def main():
         loss_avg += loss.item()
 
 
-        if it%10 == 0:
+        if it%1 == 0:
             print('%s iter = %05d, loss = %.4f' % (get_time(), it, loss_avg))
 
         if it == args.Iteration: # only record the final results

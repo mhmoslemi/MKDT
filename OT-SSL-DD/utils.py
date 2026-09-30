@@ -777,8 +777,8 @@ def rand_scale(x, param):
     theta = torch.tensor(theta, dtype=torch.float)
     if param.Siamese: # Siamese augmentation:
         theta[:] = theta[0]
-    grid = F.affine_grid(theta, x.shape).to(x.device)
-    x = F.grid_sample(x, grid)
+    grid = F.affine_grid(theta, x.shape, align_corners=False).to(x.device)
+    x = F.grid_sample(x, grid, align_corners=False)
     return x
 
 
@@ -791,8 +791,8 @@ def rand_rotate(x, param): # [-180, 180], 90: anticlockwise 90 degree
     theta = torch.tensor(theta, dtype=torch.float)
     if param.Siamese: # Siamese augmentation:
         theta[:] = theta[0]
-    grid = F.affine_grid(theta, x.shape).to(x.device)
-    x = F.grid_sample(x, grid)
+    grid = F.affine_grid(theta, x.shape, align_corners=False).to(x.device)
+    x = F.grid_sample(x, grid, align_corners=False)
     return x
 
 
@@ -852,6 +852,7 @@ def rand_crop(x, param):
         torch.arange(x.size(0), dtype=torch.long, device=x.device),
         torch.arange(x.size(2), dtype=torch.long, device=x.device),
         torch.arange(x.size(3), dtype=torch.long, device=x.device),
+        indexing='ij',
     )
     grid_x = torch.clamp(grid_x + translation_x + 1, 0, x.size(2) + 1)
     grid_y = torch.clamp(grid_y + translation_y + 1, 0, x.size(3) + 1)
@@ -874,6 +875,7 @@ def rand_cutout(x, param):
         torch.arange(x.size(0), dtype=torch.long, device=x.device),
         torch.arange(cutout_size[0], dtype=torch.long, device=x.device),
         torch.arange(cutout_size[1], dtype=torch.long, device=x.device),
+        indexing='ij',
     )
     grid_x = torch.clamp(grid_x + offset_x - cutout_size[0] // 2, min=0, max=x.size(2) - 1)
     grid_y = torch.clamp(grid_y + offset_y - cutout_size[1] // 2, min=0, max=x.size(3) - 1)
