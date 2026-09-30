@@ -362,6 +362,146 @@ def evaluate_synset(it_eval, net, images_train, labels_train, testloader, args):
 
 
 
+def evaluate_synset_SSL(it_eval, net, images_train, dst_train, testloader, args):
+    net = net.to(args.device)
+    images_train = images_train.to(args.device)
+    lr = float(args.lr_net)
+    Epoch = int(args.epoch_eval_train)
+    lr_schedule = [Epoch//2+1]
+    ssl_method = args.ssl_method.lower()
+
+    net.eval()
+    embed = net.module.embed if torch.cuda.device_count() > 1 else net.embed
+    with torch.no_grad():
+        feature_dim = embed(images_train[:1]).shape[1]
+
+    projector = nn.Sequential(
+        nn.Linear(feature_dim, args.projection_dim),
+        nn.ReLU(inplace=True),
+        nn.Linear(args.projection_dim, args.projection_dim),
+    ).to(args.device)
+
+    parameters = list(net.parameters()) + list(projector.parameters())
+    optimizer = torch.optim.SGD(parameters, lr=lr, momentum=0.9, weight_decay=0.0005)
+
+    dst_ssl = torch.utils.data.TensorDataset(images_train.detach().cpu())
+    trainloader_ssl = torch.utils.data.DataLoader(dst_ssl, batch_size=args.batch_train, shuffle=True, num_workers=0)
+
+    start = time.time()
+    for ep in range(Epoch+1):
+        net.train()
+        projector.train()
+        loss_ssl, num_exp = 0, 0
+
+        for i_batch, datum in enumerate(trainloader_ssl):
+            img = datum[0].float().to(args.device)
+            img_1 = DiffAugment(img.clone(), args.ssl_aug_strategy, param=args.dsa_param)
+            img_2 = DiffAugment(img.clone(), args.ssl_aug_strategy, param=args.dsa_param)
+
+            z_1 = projector(embed(img_1))
+            z_2 = projector(embed(img_2))
+
+            if ssl_method == 'simclr':
+                z_1 = F.normalize(z_1, dim=1)
+                z_2 = F.normalize(z_2, dim=1)
+                z = torch.cat([z_1, z_2], dim=0)
+                logits = torch.mm(z, z.t()) / args.temperature
+                mask = torch.eye(logits.shape[0], dtype=torch.bool, device=args.device)
+                logits = logits.masked_fill(mask, -1e9)
+                targets = (torch.arange(logits.shape[0], device=args.device) + img.shape[0]) % logits.shape[0]
+                loss = F.cross_entropy(logits, targets)
+
+            elif ssl_method in ['barlowtwins', 'barlow_twins']:
+                z_1 = (z_1 - torch.mean(z_1, dim=0)) / (torch.std(z_1, dim=0, unbiased=False) + 1e-5)
+                z_2 = (z_2 - torch.mean(z_2, dim=0)) / (torch.std(z_2, dim=0, unbiased=False) + 1e-5)
+                cross_correlation = torch.mm(z_1.t(), z_2) / img.shape[0]
+                diagonal = torch.diagonal(cross_correlation)
+                on_diagonal = torch.sum((diagonal - 1)**2)
+                off_diagonal = torch.sum((cross_correlation - torch.diag(diagonal))**2)
+                loss = on_diagonal + args.barlow_lambda * off_diagonal
+
+            else:
+                exit('unknown SSL method: %s'%args.ssl_method)
+
+            optimizer.zero_grad()
+            loss.backward()
+            optimizer.step()
+
+            loss_ssl += loss.item() * img.shape[0]
+            num_exp += img.shape[0]
+
+        loss_ssl /= num_exp
+
+        if ep in lr_schedule:
+            lr *= 0.1
+            optimizer = torch.optim.SGD(parameters, lr=lr, momentum=0.9, weight_decay=0.0005)
+
+    for param in net.parameters():
+        param.requires_grad = False
+    net.eval()
+
+    with torch.no_grad():
+        num_classes = net(images_train[:1]).shape[1]
+
+    num_labeled = max(1, int(len(dst_train) * args.label_percentage / 100))
+    indices_labeled = np.random.RandomState(it_eval).permutation(len(dst_train))[:num_labeled]
+    dst_labeled = torch.utils.data.Subset(dst_train, indices_labeled)
+    trainloader_linear = torch.utils.data.DataLoader(dst_labeled, batch_size=args.batch_linear, shuffle=True, num_workers=0)
+
+    linear = nn.Linear(feature_dim, num_classes).to(args.device)
+    lr_linear = float(args.lr_linear)
+    Epoch_linear = int(args.epoch_linear_train)
+    lr_schedule_linear = [Epoch_linear//2+1]
+    optimizer_linear = torch.optim.SGD(linear.parameters(), lr=lr_linear, momentum=0.9, weight_decay=0.0005)
+    criterion = nn.CrossEntropyLoss().to(args.device)
+
+    def epoch_linear(mode, dataloader):
+        loss_avg, acc_avg, num_exp = 0, 0, 0
+
+        if mode == 'train':
+            linear.train()
+        else:
+            linear.eval()
+
+        for i_batch, datum in enumerate(dataloader):
+            img = datum[0].float().to(args.device)
+            lab = datum[1].long().to(args.device)
+            n_b = lab.shape[0]
+
+            with torch.no_grad():
+                feature = embed(img)
+            output = linear(feature.detach())
+            loss = criterion(output, lab)
+            acc = np.sum(np.equal(np.argmax(output.cpu().data.numpy(), axis=-1), lab.cpu().data.numpy()))
+
+            loss_avg += loss.item() * n_b
+            acc_avg += acc
+            num_exp += n_b
+
+            if mode == 'train':
+                optimizer_linear.zero_grad()
+                loss.backward()
+                optimizer_linear.step()
+
+        loss_avg /= num_exp
+        acc_avg /= num_exp
+
+        return loss_avg, acc_avg
+
+    for ep in range(Epoch_linear+1):
+        loss_train, acc_train = epoch_linear('train', trainloader_linear)
+        if ep in lr_schedule_linear:
+            lr_linear *= 0.1
+            optimizer_linear = torch.optim.SGD(linear.parameters(), lr=lr_linear, momentum=0.9, weight_decay=0.0005)
+
+    time_train = time.time() - start
+    loss_test, acc_test = epoch_linear('test', testloader)
+    print('%s Evaluate_SSL_%02d: method = %s ssl epoch = %04d linear epoch = %04d labeled = %.2f%% train time = %d s ssl loss = %.6f train loss = %.6f train acc = %.4f, test acc = %.4f' % (get_time(), it_eval, args.ssl_method, Epoch, Epoch_linear, args.label_percentage, int(time_train), loss_ssl, loss_train, acc_train, acc_test))
+
+    return net, acc_train, acc_test
+
+
+
 def augment(images, dc_aug_param, device):
     # This can be sped up in the future.
 
