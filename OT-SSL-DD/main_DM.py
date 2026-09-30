@@ -21,8 +21,8 @@ def main():
     parser.add_argument('--data_path', type=str, default='/home/mmoslem3/scratch/data', help='dataset path')
 
     # -------------------- Distillation --------------------
-    parser.add_argument('--Iteration', type=int, default=10, help='training iterations')
-    parser.add_argument('--lr_img', type=float, default=1.0, help='learning rate for updating synthetic images')
+    parser.add_argument('--Iteration', type=int, default=50, help='training iterations')
+    parser.add_argument('--lr_img', type=float, default=1000.0, help='learning rate for updating synthetic images')
     parser.add_argument('--batch_real', type=int, default=256, help='batch size for real data')
 
     # -------------------- Network --------------------
@@ -32,20 +32,20 @@ def main():
 
     # -------------------- Self-Supervised Learning --------------------
     parser.add_argument('--ssl_method', type=str, default='simclr', help='simclr/barlowtwins')
-    parser.add_argument('--ssl_train_data', type=str, default='real', help='real/synthetic')
+    parser.add_argument('--ssl_train_data', type=str, default='synthetic', help='real/synthetic')
     parser.add_argument('--epoch_ssl_train', type=int, default=5, help='epochs to train the temporary SSL network')
     parser.add_argument('--ssl_aug_strategy', type=str, default='color_crop_cutout_flip_scale_rotate', help='augmentation strategy for SSL training')
-    parser.add_argument('--projection_dim', type=int, default=128, help='projection dimension for SSL training')
+    parser.add_argument('--projection_dim', type=int, default=64, help='projection dimension for SSL training')
     parser.add_argument('--temperature', type=float, default=0.5, help='temperature for SimCLR')
     parser.add_argument('--barlow_lambda', type=float, default=0.005, help='off-diagonal weight for Barlow Twins')
 
     # -------------------- Optimal Transport --------------------
     parser.add_argument('--ot_lambda', type=float, default=0.1, help='entropy regularization for the transport plan')
-    parser.add_argument('--sinkhorn_iterations', type=int, default=20, help='number of Sinkhorn iterations')
+    parser.add_argument('--sinkhorn_iterations', type=int, default=10, help='number of Sinkhorn iterations')
 
     # -------------------- Evaluation --------------------
     parser.add_argument('--eval_mode', type=str, default='S', help='eval_mode') # S: the same to training model, M: multi architectures,  W: net width, D: net depth, A: activation function, P: pooling layer, N: normalization layer,
-    parser.add_argument('--num_eval', type=int, default=2, help='the number of evaluating randomly initialized models')
+    parser.add_argument('--num_eval', type=int, default=1, help='the number of evaluating randomly initialized models')
     parser.add_argument('--epoch_eval_train', type=int, default=1000, help='epochs to train a model with synthetic data') # it can be small for speeding up with little performance drop
     parser.add_argument('--label_percentage', type=float, default=1.0, help='percentage of labeled data for linear probing')
     parser.add_argument('--epoch_linear_train', type=int, default=100, help='epochs to train the linear probe')
@@ -102,17 +102,17 @@ def main():
 
     
     
-    ''' Evaluate synthetic data '''
-    for model_eval in model_eval_pool:
-        print('-------------------------\nEvaluation\nmodel_train = %s, model_eval = %s, iteration = %d'%(args.model, model_eval, 0))
+    # ''' Evaluate synthetic data '''
+    # for model_eval in model_eval_pool:
+    #     print('-------------------------\nEvaluation\nmodel_train = %s, model_eval = %s, iteration = %d'%(args.model, model_eval, 0))
 
-        accs = []
-        for it_eval in range(1):
-            net_eval = get_network(model_eval, channel, num_classes, im_size).to(args.device) # get a random model
-            image_syn_eval = copy.deepcopy(image_syn.detach()) # avoid any unaware modification
-            _, acc_train, acc_test = evaluate_synset_SSL(it_eval, net_eval, image_syn_eval, dst_train, testloader, args)
-            accs.append(acc_test)
-        print('Evaluate %d random %s, mean = %.4f std = %.4f\n-------------------------'%(len(accs), model_eval, np.mean(accs), np.std(accs)))
+    #     accs = []
+    #     for it_eval in range(1):
+    #         net_eval = get_network(model_eval, channel, num_classes, im_size).to(args.device) # get a random model
+    #         image_syn_eval = copy.deepcopy(image_syn.detach()) # avoid any unaware modification
+    #         _, acc_train, acc_test = evaluate_synset_SSL(it_eval, net_eval, image_syn_eval, dst_train, testloader, args)
+    #         accs.append(acc_test)
+    #     print('Evaluate %d random %s, mean = %.4f std = %.4f\n-------------------------'%(len(accs), model_eval, np.mean(accs), np.std(accs)))
 
 
     
