@@ -6,7 +6,7 @@ import numpy as np
 import torch
 import torch.nn as nn
 from torchvision.utils import save_image
-from utils import get_loops, get_dataset, get_network, get_eval_pool, evaluate_synset, evaluate_synset_SSL, get_daparam, match_loss, get_time, TensorDataset, epoch, DiffAugment, ParamDiffAug
+from utils import get_loops, get_dataset, get_network, get_eval_pool, evaluate_synset, evaluate_synset_SSL, get_daparam, match_loss, get_time, TensorDataset, epoch, init_ssl, epoch_ssl, get_transport_plan, DiffAugment, ParamDiffAug
 
 
 def main():
@@ -25,10 +25,15 @@ def main():
     parser.add_argument('--batch_real', type=int, default=256, help='batch size for real data')
     parser.add_argument('--batch_train', type=int, default=256, help='batch size for training networks')
     parser.add_argument('--ssl_method', type=str, default='simclr', help='simclr/barlowtwins')
+    parser.add_argument('--ssl_train_data', type=str, default='real', help='real/synthetic')
+    parser.add_argument('--epoch_ssl_train', type=int, default=5, help='epochs to train the temporary SSL network')
     parser.add_argument('--ssl_aug_strategy', type=str, default='color_crop_cutout_flip_scale_rotate', help='augmentation strategy for SSL training')
     parser.add_argument('--projection_dim', type=int, default=128, help='projection dimension for SSL training')
     parser.add_argument('--temperature', type=float, default=0.5, help='temperature for SimCLR')
     parser.add_argument('--barlow_lambda', type=float, default=0.005, help='off-diagonal weight for Barlow Twins')
+    parser.add_argument('--ot_sigmas', type=float, nargs='+', default=[1.0, 5.0, 10.0, 20.0], help='Gaussian kernel scales for the transport plan')
+    parser.add_argument('--ot_lambda', type=float, default=0.1, help='entropy regularization for the transport plan')
+    parser.add_argument('--sinkhorn_iterations', type=int, default=20, help='number of Sinkhorn iterations')
     parser.add_argument('--label_percentage', type=float, default=10.0, help='percentage of labeled data for linear probing')
     parser.add_argument('--epoch_linear_train', type=int, default=100, help='epochs to train the linear probe')
     parser.add_argument('--lr_linear', type=float, default=0.1, help='learning rate for the linear probe')
@@ -92,8 +97,23 @@ def main():
         ''' Train synthetic data '''
         net = get_network(args.model, channel, num_classes, im_size).to(args.device) # get a random model
         net.train()
+
+        if args.ssl_train_data == 'real':
+            images_ssl_train = copy.deepcopy(images_all.detach())
+        elif args.ssl_train_data == 'synthetic':
+            images_ssl_train = copy.deepcopy(image_syn.detach())
+        else:
+            exit('unknown SSL training data: %s'%args.ssl_train_data)
+
+        dst_ssl_train = torch.utils.data.TensorDataset(images_ssl_train)
+        trainloader_ssl = torch.utils.data.DataLoader(dst_ssl_train, batch_size=args.batch_train, shuffle=True, num_workers=0)
+        projector, optimizer_net = init_ssl(net, images_ssl_train, args)
+        for il in range(args.epoch_ssl_train):
+            epoch_ssl(trainloader_ssl, net, projector, optimizer_net, args)
+
         for param in list(net.parameters()):
             param.requires_grad = False
+        net.eval()
 
         embed = net.module.embed if torch.cuda.device_count() > 1 else net.embed # for GPU parallel
 
@@ -107,6 +127,7 @@ def main():
 
         output_real = embed(img_real).detach()
         output_syn = embed(img_syn)
+        transport_plan = get_transport_plan(output_real, output_syn.detach(), args)
 
         loss += torch.sum((torch.mean(output_real, dim=0) - torch.mean(output_syn, dim=0))**2)
 

@@ -362,6 +362,97 @@ def evaluate_synset(it_eval, net, images_train, labels_train, testloader, args):
 
 
 
+def init_ssl(net, images_train, args):
+    embed = net.module.embed if torch.cuda.device_count() > 1 else net.embed
+    with torch.no_grad():
+        feature_dim = embed(images_train[:1]).shape[1]
+
+    projector = nn.Sequential(
+        nn.Linear(feature_dim, args.projection_dim),
+        nn.ReLU(inplace=True),
+        nn.Linear(args.projection_dim, args.projection_dim),
+    ).to(args.device)
+
+    parameters = list(net.parameters()) + list(projector.parameters())
+    optimizer = torch.optim.SGD(parameters, lr=args.lr_net, momentum=0.9, weight_decay=0.0005)
+
+    return projector, optimizer
+
+
+
+def epoch_ssl(trainloader, net, projector, optimizer, args):
+    loss_avg, num_exp = 0, 0
+    net.train()
+    projector.train()
+    embed = net.module.embed if torch.cuda.device_count() > 1 else net.embed
+    ssl_method = args.ssl_method.lower()
+
+    for i_batch, datum in enumerate(trainloader):
+        img = datum[0].float().to(args.device)
+        img_1 = DiffAugment(img.clone(), args.ssl_aug_strategy, param=args.dsa_param)
+        img_2 = DiffAugment(img.clone(), args.ssl_aug_strategy, param=args.dsa_param)
+
+        z_1 = projector(embed(img_1))
+        z_2 = projector(embed(img_2))
+
+        if ssl_method == 'simclr':
+            z_1 = F.normalize(z_1, dim=1)
+            z_2 = F.normalize(z_2, dim=1)
+            z = torch.cat([z_1, z_2], dim=0)
+            logits = torch.mm(z, z.t()) / args.temperature
+            mask = torch.eye(logits.shape[0], dtype=torch.bool, device=args.device)
+            logits = logits.masked_fill(mask, -1e9)
+            targets = (torch.arange(logits.shape[0], device=args.device) + img.shape[0]) % logits.shape[0]
+            loss = F.cross_entropy(logits, targets)
+
+        elif ssl_method in ['barlowtwins', 'barlow_twins']:
+            z_1 = (z_1 - torch.mean(z_1, dim=0)) / (torch.std(z_1, dim=0, unbiased=False) + 1e-5)
+            z_2 = (z_2 - torch.mean(z_2, dim=0)) / (torch.std(z_2, dim=0, unbiased=False) + 1e-5)
+            cross_correlation = torch.mm(z_1.t(), z_2) / img.shape[0]
+            diagonal = torch.diagonal(cross_correlation)
+            on_diagonal = torch.sum((diagonal - 1)**2)
+            off_diagonal = torch.sum((cross_correlation - torch.diag(diagonal))**2)
+            loss = on_diagonal + args.barlow_lambda * off_diagonal
+
+        else:
+            exit('unknown SSL method: %s'%args.ssl_method)
+
+        optimizer.zero_grad()
+        loss.backward()
+        optimizer.step()
+
+        loss_avg += loss.item() * img.shape[0]
+        num_exp += img.shape[0]
+
+    loss_avg /= num_exp
+
+    return loss_avg
+
+
+
+def get_transport_plan(output_real, output_syn, args):
+    with torch.no_grad():
+        distance = torch.cdist(output_real, output_syn, p=2)**2
+
+        relevance = torch.zeros_like(distance)
+        for sigma in args.ot_sigmas:
+            relevance += torch.exp(-distance / (2 * sigma**2))
+        relevance /= len(args.ot_sigmas)
+
+        cost = 1 - relevance
+        transport_plan = torch.exp(-cost / args.ot_lambda)
+
+        num_real = output_real.shape[0]
+        num_syn = output_syn.shape[0]
+
+        for t in range(args.sinkhorn_iterations):
+            transport_plan = num_syn * transport_plan / (torch.sum(transport_plan, dim=1, keepdim=True) + 1e-8)
+            transport_plan = num_real * transport_plan / (torch.sum(transport_plan, dim=0, keepdim=True) + 1e-8)
+
+    return transport_plan
+
+
+
 def evaluate_synset_SSL(it_eval, net, images_train, dst_train, testloader, args):
     net = net.to(args.device)
     images_train = images_train.to(args.device)
