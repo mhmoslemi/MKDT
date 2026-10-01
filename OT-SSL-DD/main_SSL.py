@@ -35,7 +35,7 @@ def main():
     # -------------------- Self-Supervised Learning --------------------
     parser.add_argument('--ssl_method', type=str, default='simclr', help='simclr/barlowtwins')
     parser.add_argument('--ssl_train_data', type=str, default='real', help='real/synthetic')
-    parser.add_argument('--epoch_ssl_train', type=int, default=10, help='epochs to train the temporary SSL network')
+    parser.add_argument('--epoch_ssl_train', type=int, default=5, help='epochs to train the temporary SSL network')
     parser.add_argument('--ssl_aug_strategy', type=str, default='color_crop_cutout_flip_scale_rotate', help='augmentation strategy for SSL training')
     parser.add_argument('--projection_dim', type=int, default=128, help='projection dimension for SSL training')
     parser.add_argument('--temperature', type=float, default=0.5, help='temperature for SimCLR')
@@ -188,7 +188,7 @@ def main():
             torch.save({'data': data_save, }, os.path.join(args.save_path, 'res_OT-SSL_%s_%s_%dpercent.pt'%(args.dataset, args.model, args.percentage)))
 
 
-        if it%10==0:
+        if it%10==0 and it!=0:
             ''' Evaluate synthetic data '''
             for model_eval in model_eval_pool:
                 print('-------------------------\nEvaluation\nmodel_train = %s, model_eval = %s, iteration = %d'%(args.model, model_eval, it))
@@ -205,14 +205,14 @@ def main():
                     accs_all_exps[model_eval] += accs
 
 
-    ''' visualize and save '''
-    save_name = os.path.join(args.save_path, 'vis_%s_%s_%s_%dpercent_iter%d.png'%(args.method, args.dataset, args.model, args.percentage, it))
-    image_syn_vis = copy.deepcopy(image_syn.detach().cpu())
-    for ch in range(channel):
-        image_syn_vis[:, ch] = image_syn_vis[:, ch]  * std[ch] + mean[ch]
-    image_syn_vis[image_syn_vis<0] = 0.0
-    image_syn_vis[image_syn_vis>1] = 1.0
-    save_image(image_syn_vis, save_name, nrow=int(np.ceil(np.sqrt(num_syn))))
+        ''' visualize and save '''
+        save_name = os.path.join(args.save_path, 'vis_%s_%s_%s_%dpercent_iter%d.png'%(args.method, args.dataset, args.model, args.percentage, it))
+        image_syn_vis = copy.deepcopy(image_syn.detach().cpu())
+        for ch in range(channel):
+            image_syn_vis[:, ch] = image_syn_vis[:, ch]  * std[ch] + mean[ch]
+        image_syn_vis[image_syn_vis<0] = 0.0
+        image_syn_vis[image_syn_vis>1] = 1.0
+        save_image(image_syn_vis, save_name, nrow=int(np.ceil(np.sqrt(num_syn))))
 
 
     print('\n==================== Final Results ====================\n')
