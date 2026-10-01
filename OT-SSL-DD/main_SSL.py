@@ -23,8 +23,8 @@ def main():
     parser.add_argument('--data_path', type=str, default='/home/mmoslem3/scratch/data', help='dataset path')
 
     # -------------------- Distillation --------------------
-    parser.add_argument('--Iteration', type=int, default=100, help='training iterations')
-    parser.add_argument('--lr_img', type=float, default=0.01, help='learning rate for updating synthetic images')
+    parser.add_argument('--Iteration', type=int, default=400, help='training iterations')
+    parser.add_argument('--lr_img', type=float, default=0.05, help='learning rate for updating synthetic images')
     parser.add_argument('--batch_real', type=int, default=256, help='batch size for real data')
 
     # -------------------- Network --------------------
@@ -34,8 +34,8 @@ def main():
 
     # -------------------- Self-Supervised Learning --------------------
     parser.add_argument('--ssl_method', type=str, default='simclr', help='simclr/barlowtwins')
-    parser.add_argument('--ssl_train_data', type=str, default='real', help='real/synthetic')
-    parser.add_argument('--epoch_ssl_train', type=int, default=5, help='epochs to train the temporary SSL network')
+    parser.add_argument('--ssl_train_data', type=str, default='synthetic', help='real/synthetic')
+    parser.add_argument('--epoch_ssl_train', type=int, default=25, help='epochs to train the temporary SSL network')
     parser.add_argument('--ssl_aug_strategy', type=str, default='color_crop_cutout_flip_scale_rotate', help='augmentation strategy for SSL training')
     parser.add_argument('--projection_dim', type=int, default=128, help='projection dimension for SSL training')
     parser.add_argument('--temperature', type=float, default=0.5, help='temperature for SimCLR')
@@ -177,10 +177,10 @@ def main():
         optimizer_img.step()
 
 
-        if it%1 == 0:
+        if it%5 == 0:
             with torch.no_grad():
                 image_syn_uint8 = ((image_syn * diag_std + diag_mean) * 255 + 0.5).clamp(0, 255).to(torch.uint8)
-                print('%s iter = %05d, loss = %.10f' % (get_time(), it, loss.item()))
+                print('%s iter = %05d, loss = %.10f' % (get_time(), it, loss.item()),end = '\t/\t')
                 print('PNG values changed = %.5f%%' % ( (image_syn_uint8 != image_syn_init_uint8).float().mean().item() * 100), flush=True)
 
         if it == args.Iteration: # only record the final results
@@ -188,7 +188,8 @@ def main():
             torch.save({'data': data_save, }, os.path.join(args.save_path, 'res_OT-SSL_%s_%s_%dpercent.pt'%(args.dataset, args.model, args.percentage)))
 
 
-        if it%10==0 and it!=0:
+        
+        if it%50==0 and it!=0:
             ''' Evaluate synthetic data '''
             for model_eval in model_eval_pool:
                 print('-------------------------\nEvaluation\nmodel_train = %s, model_eval = %s, iteration = %d'%(args.model, model_eval, it))
@@ -204,15 +205,15 @@ def main():
                 if it == args.Iteration: # record the final results
                     accs_all_exps[model_eval] += accs
 
-
-        ''' visualize and save '''
-        save_name = os.path.join(args.save_path, 'vis_%s_%s_%s_%dpercent_iter%d.png'%(args.method, args.dataset, args.model, args.percentage, it))
-        image_syn_vis = copy.deepcopy(image_syn.detach().cpu())
-        for ch in range(channel):
-            image_syn_vis[:, ch] = image_syn_vis[:, ch]  * std[ch] + mean[ch]
-        image_syn_vis[image_syn_vis<0] = 0.0
-        image_syn_vis[image_syn_vis>1] = 1.0
-        save_image(image_syn_vis, save_name, nrow=int(np.ceil(np.sqrt(num_syn))))
+        if it%25==0 and it!=0:
+            ''' visualize and save '''
+            save_name = os.path.join(args.save_path, 'vis_%s_%s_%s_%dpercent_iter%d.png'%(args.method, args.dataset, args.model, args.percentage, it))
+            image_syn_vis = copy.deepcopy(image_syn.detach().cpu())
+            for ch in range(channel):
+                image_syn_vis[:, ch] = image_syn_vis[:, ch]  * std[ch] + mean[ch]
+            image_syn_vis[image_syn_vis<0] = 0.0
+            image_syn_vis[image_syn_vis>1] = 1.0
+            save_image(image_syn_vis, save_name, nrow=int(np.ceil(np.sqrt(num_syn))))
 
 
     print('\n==================== Final Results ====================\n')
