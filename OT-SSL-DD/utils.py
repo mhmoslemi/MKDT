@@ -471,24 +471,15 @@ def get_transport_plan(output_real, output_syn, args):
 
 def transport_contrastive_loss(output_real, output_syn, transport_plan, args):
 
-    output_real = F.normalize(output_real, dim=1)
+    barycenter_real = torch.mm(transport_plan.t(), output_real)
+    barycenter_real = barycenter_real / transport_plan.sum(dim=0).unsqueeze(1).clamp_min(1e-12)
+
     output_syn = F.normalize(output_syn, dim=1)
+    barycenter_real = F.normalize(barycenter_real, dim=1)
 
-    # p(j | x_i)
-    logits = torch.mm(output_real, output_syn.t()) / args.temperature
-    log_probability = F.log_softmax(logits, dim=1)
-
-    # Convert OT mass into a probability distribution over
-    # synthetic samples for every real example.
-    target_probability = transport_plan / (
-        transport_plan.sum(dim=1, keepdim=True).clamp_min(1e-12)
-    )
-
-    # Cross-entropy between OT assignment q(j|x_i)
-    # and similarity-induced distribution p(j|x_i).
-    loss = -(
-        target_probability.detach() * log_probability
-    ).sum(dim=1).mean()
+    logits = torch.mm(output_syn, barycenter_real.t()) / args.temperature
+    targets = torch.arange(output_syn.shape[0], device=output_syn.device)
+    loss = F.cross_entropy(logits, targets)
 
     return loss
 
