@@ -147,12 +147,12 @@ def main():
         with torch.no_grad():
             for start in range(0, len(images_all), args.batch_train):
                 end = min(start + args.batch_train, len(images_all))
-                real_features.append(projector(embed(images_all[start:end])))
+                real_features.append(embed(images_all[start:end]))
 
         output_real = torch.cat(real_features, dim=0)   # [N, D]
 
         # Synthetic side must keep gradient.
-        output_syn = projector(embed(img_syn))          # [M, D]
+        output_syn = embed(img_syn)                     # [M, D]
 
         # OT between ALL real examples and ALL synthetic examples.
         transport_plan = get_transport_plan(
@@ -161,11 +161,13 @@ def main():
             args
         )                                              # [N, M]
 
+        projection_real = projector(output_real)
+        projection_syn = projector(output_syn)
 
 
         loss = transport_contrastive_loss(
-            output_real,
-            output_syn,
+            projection_real,
+            projection_syn,
             transport_plan,
             args
         )
