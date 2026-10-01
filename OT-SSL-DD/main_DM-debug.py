@@ -147,21 +147,9 @@ def main():
             param.requires_grad = False
         net.eval()
 
-        embed = net.mo  dule.embed if torch.cuda.device_count() > 1 else net.embed # for GPU parallel
+        embed = net.module.embed if torch.cuda.device_count() > 1 else net.embed # for GPU parallel
 
         loss_avg = 0
-
-        # ''' update synthetic data '''
-        # img_real = get_images(args.batch_real)
-        # img_syn = image_syn.reshape((num_syn, channel, im_size[0], im_size[1]))
-
-
-        # output_real = embed(img_real).detach()
-        # output_syn = embed(img_syn)
-        # if output_syn.requires_grad:
-        #     output_syn.retain_grad()
-        # transport_plan = get_transport_plan(output_real, output_syn.detach(), args)
-        # loss = transport_contrastive_loss(output_real, output_syn, transport_plan, args)
 
 
         ''' update synthetic data '''
@@ -188,50 +176,45 @@ def main():
             args
         )                                              # [N, M]
 
-        for _ in range(10):
+            # for _ in range(10):
 
-            net2 = get_network(args.model, channel, num_classes, im_size).to(args.device) # get a random model
-            net2.eval()
-            embed2 = net2.module.embed if torch.cuda.device_count() > 1 else net2.embed # for GPU parallel
-            real_features2 = []
-            with torch.no_grad():
-                for start in range(0, len(images_all), args.batch_train):
-                    end = min(start + args.batch_train, len(images_all))
-                    real_features2.append(embed2(images_all[start:end]))
-            output_real2 = torch.cat(real_features2, dim=0)   # [N, D]
-            output_syn2 = embed2(img_syn)    
-
-
-            loss = transport_contrastive_loss(
-                output_real2,
-                output_syn2,
-                transport_plan,
-                args
-            )
+            #     net2 = get_network(args.model, channel, num_classes, im_size).to(args.device) # get a random model
+            #     net2.eval()
+            #     embed2 = net2.module.embed if torch.cuda.device_count() > 1 else net2.embed # for GPU parallel
+            #     real_features2 = []
+            #     with torch.no_grad():
+            #         for start in range(0, len(images_all), args.batch_train):
+            #             end = min(start + args.batch_train, len(images_all))
+            #             real_features2.append(embed2(images_all[start:end]))
+            #     output_real2 = torch.cat(real_features2, dim=0)   # [N, D]
+            #     output_syn2 = embed2(img_syn)    
 
 
+        loss = transport_contrastive_loss(
+            output_real,
+            output_syn,
+            transport_plan,
+            args
+        )
 
 
 
+        # image_syn_before = image_syn.detach().clone()
+        optimizer_img.zero_grad()
+        loss.backward()
 
+        # per_image_grad = image_syn.grad.flatten(1).norm(dim=1)
+        # print(
+        #     'images with nonzero grad: %d/%d, min grad = %.3e, max grad = %.3e'
+        #     % (
+        #         (per_image_grad > 0).sum().item(),
+        #         num_syn,
+        #         per_image_grad.min().item(),
+        #         per_image_grad.max().item()
+        #     )
+        # )
 
-
-            # image_syn_before = image_syn.detach().clone()
-            optimizer_img.zero_grad()
-            loss.backward()
-
-            # per_image_grad = image_syn.grad.flatten(1).norm(dim=1)
-            # print(
-            #     'images with nonzero grad: %d/%d, min grad = %.3e, max grad = %.3e'
-            #     % (
-            #         (per_image_grad > 0).sum().item(),
-            #         num_syn,
-            #         per_image_grad.min().item(),
-            #         per_image_grad.max().item()
-            #     )
-            # )
-
-            optimizer_img.step()
+        optimizer_img.step()
 
 
         # per_image_step = (image_syn.detach() - image_syn_before).flatten(1).norm(dim=1)
@@ -246,7 +229,7 @@ def main():
         #     )
         # )
 
-            loss_avg += loss.item()
+        loss_avg += loss.item()
 
 
         if it%1 == 0:
@@ -289,7 +272,7 @@ def main():
                 #     print('  pixel grad: mean abs = %.3e, max abs = %.3e, L2 = %.3e, zero-grad images = %d/%d, finite = %s' % (image_syn.grad.abs().mean().item(), image_syn.grad.abs().max().item(), image_syn.grad.norm().item(), (image_syn.grad.flatten(1).abs().max(dim=1).values == 0).sum().item(), num_syn, torch.isfinite(image_syn.grad).all().item()))
                 # print('  pixel step: mean abs = %.3e, max abs = %.3e, changed = %.4f%%, lr = %.3e' % (step_delta.mean().item(), step_delta.max().item(), (step_delta > 0).float().mean().item() * 100, optimizer_img.param_groups[0]['lr']))
                 # print('  pixels from init: mean abs = %.3e, max abs = %.3e, mean abs in 0-255 units = %.3e, PNG values changed = %.4f%%' % (total_delta.mean().item(), total_delta.max().item(), (total_delta * diag_std * 255).mean().item(), (image_syn_uint8 != image_syn_init_uint8).float().mean().item() * 100), flush=True)
-                print('  pixels from init: mean abs = %.3e, max abs = %.3e, mean abs in 0-255 units = %.3e, PNG values changed = %.4f%%' % (total_delta.mean().item(), total_delta.max().item(), (total_delta * diag_std * 255).mean().item(), (image_syn_uint8 != image_syn_init_uint8).float().mean().item() * 100), flush=True)
+                print('PNG values changed = %.5f%%' % ( (image_syn_uint8 != image_syn_init_uint8).float().mean().item() * 100), flush=True)
 
         if it == args.Iteration: # only record the final results
             data_save = copy.deepcopy(image_syn.detach().cpu())
