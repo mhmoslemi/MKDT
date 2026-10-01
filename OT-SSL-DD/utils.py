@@ -454,15 +454,43 @@ def get_transport_plan(output_real, output_syn, args):
 
 
 
+
+
+
+
+# def transport_contrastive_loss(output_real, output_syn, transport_plan, args):
+#     output_real = F.normalize(output_real, dim=1)
+#     output_syn = F.normalize(output_syn, dim=1)
+#     logits = torch.mm(output_real, output_syn.t()) / args.temperature
+#     log_probability = F.log_softmax(logits, dim=1)
+#     loss = -torch.sum(transport_plan * log_probability)
+
+#     return loss
+
+
+
 def transport_contrastive_loss(output_real, output_syn, transport_plan, args):
+
     output_real = F.normalize(output_real, dim=1)
     output_syn = F.normalize(output_syn, dim=1)
+
+    # p(j | x_i)
     logits = torch.mm(output_real, output_syn.t()) / args.temperature
     log_probability = F.log_softmax(logits, dim=1)
-    loss = -torch.sum(transport_plan * log_probability)
+
+    # Convert OT mass into a probability distribution over
+    # synthetic samples for every real example.
+    target_probability = transport_plan / (
+        transport_plan.sum(dim=1, keepdim=True).clamp_min(1e-12)
+    )
+
+    # Cross-entropy between OT assignment q(j|x_i)
+    # and similarity-induced distribution p(j|x_i).
+    loss = -(
+        target_probability.detach() * log_probability
+    ).sum(dim=1).mean()
 
     return loss
-
 
 
 def evaluate_synset_SSL(it_eval, net, images_train, dst_train, testloader, args):
