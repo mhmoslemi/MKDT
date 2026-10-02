@@ -1,260 +1,878 @@
 import os
-import time
 import copy
 import argparse
 import numpy as np
+
 import torch
-import torch.nn as nn
 import torch.nn.functional as F
 from torchvision.utils import save_image
-from utils import get_loops, get_dataset, get_network, get_eval_pool, evaluate_synset, evaluate_synset_SSL, get_daparam, match_loss, get_time, TensorDataset, epoch, init_ssl, epoch_ssl, get_transport_plan, transport_contrastive_loss, DiffAugment, ParamDiffAug
+
+from utils import (
+    get_dataset,
+    get_network,
+    get_eval_pool,
+    evaluate_synset_SSL,
+    get_time,
+    init_ssl,
+    epoch_ssl,
+    get_transport_plan,
+    ParamDiffAug,
+)
 
 
-# random , test acc = 0.3993 2%
-# random , test acc = 0.3895 1%
+# random subset baseline:
+# 2%: test acc ~ 0.3993
+# 1%: test acc ~ 0.3895
+
+
+def transport_soft_assignment_loss(
+    output_real,
+    output_syn,
+    transport_plan,
+    args
+):
+    """
+    Match the OT-induced soft assignment distribution q(s_j | x_i)
+    with the similarity-induced distribution p(s_j | x_i).
+
+    OT is treated as a fixed target during each synthetic-image update.
+    """
+
+    # ---------------------------------------------------------
+    # Fixed OT target
+    # ---------------------------------------------------------
+    q = transport_plan.detach()
+
+    # Each real image gets a probability distribution
+    # over ALL synthetic images.
+    #
+    # q_ij = P(s_j | x_i)
+    q = q / q.sum(dim=1, keepdim=True).clamp_min(1e-12)
+
+    # ---------------------------------------------------------
+    # Representations
+    # ---------------------------------------------------------
+    # Real features should never receive gradients.
+    output_real = F.normalize(
+        output_real.detach(),
+        dim=1
+    )
+
+    # Synthetic features DO receive gradients.
+    output_syn = F.normalize(
+        output_syn,
+        dim=1
+    )
+
+    # ---------------------------------------------------------
+    # Similarity-induced distribution
+    #
+    # p_ij = softmax(sim(x_i, s_j) / tau)
+    # ---------------------------------------------------------
+    logits = torch.mm(
+        output_real,
+        output_syn.t()
+    )
+
+    logits = logits / args.temperature
+
+    log_p = F.log_softmax(
+        logits,
+        dim=1
+    )
+
+    # ---------------------------------------------------------
+    # Cross entropy between OT assignments q
+    # and similarity assignments p.
+    #
+    # This does NOT force one synthetic image to be
+    # the only positive for a real image.
+    #
+    # A real image can distribute its mass over several
+    # synthetic images.
+    # ---------------------------------------------------------
+    loss_per_real = -(q * log_p).sum(dim=1)
+
+    loss = loss_per_real.mean()
+
+    return loss
+
 
 def main():
 
-    parser = argparse.ArgumentParser(description='Parameter Processing')
+    parser = argparse.ArgumentParser(
+        description='OT-based SSL Dataset Distillation'
+    )
 
-    # -------------------- Data --------------------
-    parser.add_argument('--dataset', type=str, default='CIFAR10', help='dataset')
-    parser.add_argument('--percentage', type=int, default=1, help='percentage of total data size')
-    parser.add_argument('--data_path', type=str, default='/home/mmoslem3/scratch/data', help='dataset path')
+    # =========================================================
+    # Data
+    # =========================================================
+    parser.add_argument(
+        '--dataset',
+        type=str,
+        default='CIFAR10'
+    )
 
-    # -------------------- Distillation --------------------
-    parser.add_argument('--Iteration', type=int, default=100, help='training iterations')
-    parser.add_argument('--lr_img', type=float, default=0.01, help='learning rate for updating synthetic images')
-    parser.add_argument('--batch_real', type=int, default=256, help='batch size for real data')
+    parser.add_argument(
+        '--percentage',
+        type=int,
+        default=1,
+        help='percentage of total dataset used as synthetic set'
+    )
 
-    # -------------------- Network --------------------
-    parser.add_argument('--model', type=str, default='ConvNet', help='model')
-    parser.add_argument('--lr_net', type=float, default=0.01, help='learning rate for updating network parameters')
-    parser.add_argument('--batch_train', type=int, default=256, help='batch size for training networks')
+    parser.add_argument(
+        '--data_path',
+        type=str,
+        default='/home/mmoslem3/scratch/data'
+    )
 
-    # -------------------- Self-Supervised Learning --------------------
-    parser.add_argument('--ssl_method', type=str, default='simclr', help='simclr/barlowtwins')
-    parser.add_argument('--ssl_train_data', type=str, default='real', help='real/synthetic')
-    parser.add_argument('--epoch_ssl_train', type=int, default=10, help='epochs to train the temporary SSL network')
-    parser.add_argument('--ssl_aug_strategy', type=str, default='color_crop_cutout_flip_scale_rotate', help='augmentation strategy for SSL training')
-    parser.add_argument('--projection_dim', type=int, default=128, help='projection dimension for SSL training')
-    parser.add_argument('--temperature', type=float, default=0.5, help='temperature for SimCLR')
-    parser.add_argument('--barlow_lambda', type=float, default=0.005, help='off-diagonal weight for Barlow Twins')
+    # =========================================================
+    # Distillation
+    # =========================================================
+    parser.add_argument(
+        '--Iteration',
+        type=int,
+        default=100,
+        help='number of fresh temporary encoders'
+    )
 
-    # -------------------- Optimal Transport --------------------
-    parser.add_argument('--ot_lambda', type=float, default=0.01, help='entropy regularization for the transport plan')
-    parser.add_argument('--sinkhorn_iterations', type=int, default=100, help='number of Sinkhorn iterations')
+    parser.add_argument(
+        '--lr_img',
+        type=float,
+        default=0.01
+    )
 
-    # -------------------- Evaluation --------------------
-    parser.add_argument('--eval_mode', type=str, default='S', help='eval_mode') # S: the same to training model, M: multi architectures,  W: net width, D: net depth, A: activation function, P: pooling layer, N: normalization layer,
-    parser.add_argument('--num_eval', type=int, default=1, help='the number of evaluating randomly initialized models')
-    parser.add_argument('--epoch_eval_train', type=int, default=1000, help='epochs to train a model with synthetic data') # it can be small for speeding up with little performance drop
-    parser.add_argument('--label_percentage', type=float, default=1.0, help='percentage of labeled data for linear probing')
-    parser.add_argument('--epoch_linear_train', type=int, default=100, help='epochs to train the linear probe')
-    parser.add_argument('--lr_linear', type=float, default=0.1, help='learning rate for the linear probe')
-    parser.add_argument('--batch_linear', type=int, default=256, help='batch size for the linear probe')
+    parser.add_argument(
+        '--syn_steps_per_encoder',
+        type=int,
+        default=1,
+        help='number of synthetic updates for each temporary encoder'
+    )
 
-    # -------------------- Output --------------------
-    parser.add_argument('--save_path', type=str, default='result', help='path to save results')
+    # =========================================================
+    # Network
+    # =========================================================
+    parser.add_argument(
+        '--model',
+        type=str,
+        default='ConvNet'
+    )
+
+    parser.add_argument(
+        '--lr_net',
+        type=float,
+        default=0.01
+    )
+
+    parser.add_argument(
+        '--batch_train',
+        type=int,
+        default=256
+    )
+
+    # =========================================================
+    # SSL
+    # =========================================================
+    parser.add_argument(
+        '--ssl_method',
+        type=str,
+        default='simclr',
+        help='simclr/barlowtwins'
+    )
+
+    parser.add_argument(
+        '--epoch_ssl_train',
+        type=int,
+        default=1,
+        help='SSL epochs on real data for each temporary encoder'
+    )
+
+    parser.add_argument(
+        '--ssl_aug_strategy',
+        type=str,
+        default='color_crop_cutout_flip_scale_rotate'
+    )
+
+    parser.add_argument(
+        '--projection_dim',
+        type=int,
+        default=128
+    )
+
+    parser.add_argument(
+        '--temperature',
+        type=float,
+        default=0.5
+    )
+
+    parser.add_argument(
+        '--barlow_lambda',
+        type=float,
+        default=0.005
+    )
+
+    # =========================================================
+    # Optimal Transport
+    # =========================================================
+    parser.add_argument(
+        '--ot_lambda',
+        type=float,
+        default=0.01
+    )
+
+    parser.add_argument(
+        '--sinkhorn_iterations',
+        type=int,
+        default=100
+    )
+
+    # =========================================================
+    # Evaluation
+    # =========================================================
+    parser.add_argument(
+        '--eval_mode',
+        type=str,
+        default='S'
+    )
+
+    parser.add_argument(
+        '--num_eval',
+        type=int,
+        default=1
+    )
+
+    parser.add_argument(
+        '--epoch_eval_train',
+        type=int,
+        default=1000
+    )
+
+    parser.add_argument(
+        '--label_percentage',
+        type=float,
+        default=1.0
+    )
+
+    parser.add_argument(
+        '--epoch_linear_train',
+        type=int,
+        default=100
+    )
+
+    parser.add_argument(
+        '--lr_linear',
+        type=float,
+        default=0.1
+    )
+
+    parser.add_argument(
+        '--batch_linear',
+        type=int,
+        default=256
+    )
+
+    parser.add_argument(
+        '--eval_interval',
+        type=int,
+        default=5
+    )
+
+    # =========================================================
+    # Output
+    # =========================================================
+    parser.add_argument(
+        '--save_path',
+        type=str,
+        default='result'
+    )
 
     args = parser.parse_args()
-    args.method = 'DM'
+
+    args.method = 'OT_Soft'
     args.device = 'cuda'
     args.dsa_param = ParamDiffAug()
     args.dsa = False
 
-    if not os.path.exists(args.data_path):
-        os.mkdir(args.data_path)
+    os.makedirs(
+        args.data_path,
+        exist_ok=True
+    )
 
-    if not os.path.exists(args.save_path):
-        os.mkdir(args.save_path)
+    os.makedirs(
+        args.save_path,
+        exist_ok=True
+    )
 
-    
-    channel, im_size, num_classes, class_names, mean, std, dst_train, dst_test, testloader = get_dataset(args.dataset, args.data_path)
-    num_syn = int(len(dst_train) * args.percentage / 100)
-    model_eval_pool = get_eval_pool(args.eval_mode, args.model, args.model)
+    # =========================================================
+    # Dataset
+    # =========================================================
+    (
+        channel,
+        im_size,
+        num_classes,
+        class_names,
+        mean,
+        std,
+        dst_train,
+        dst_test,
+        testloader
+    ) = get_dataset(
+        args.dataset,
+        args.data_path
+    )
 
+    num_syn = int(
+        len(dst_train)
+        * args.percentage
+        / 100
+    )
 
-    accs_all_exps = dict() # record performances of all experiments
-    for key in model_eval_pool:
-        accs_all_exps[key] = []
+    model_eval_pool = get_eval_pool(
+        args.eval_mode,
+        args.model,
+        args.model
+    )
 
+    accs_all_exps = {
+        key: []
+        for key in model_eval_pool
+    }
 
+    print(
+        'Hyper-parameters:\n',
+        args.__dict__
+    )
 
-    print('Hyper-parameters: \n', args.__dict__)
+    # =========================================================
+    # Load real dataset into memory
+    # =========================================================
+    images_all = [
+        torch.unsqueeze(
+            dst_train[i][0],
+            dim=0
+        )
+        for i in range(len(dst_train))
+    ]
 
-    ''' organize the real dataset '''
-    images_all = [torch.unsqueeze(dst_train[i][0], dim=0) for i in range(len(dst_train))]
-    images_all = torch.cat(images_all, dim=0).to(args.device)
+    images_all = torch.cat(
+        images_all,
+        dim=0
+    ).to(args.device)
 
     def get_images(n):
-        idx_shuffle = np.random.permutation(len(images_all))[:n]
-        return images_all[idx_shuffle]
 
-    
-    ''' initialize the synthetic data '''
-    image_syn = torch.randn(size=(num_syn, channel, im_size[0], im_size[1]), dtype=torch.float, requires_grad=True, device=args.device)
-    image_syn.data = get_images(num_syn).detach().data
-    image_syn_init = image_syn.detach().clone()
-    diag_mean = torch.tensor(mean, device=args.device).view(1, channel, 1, 1)
-    diag_std = torch.tensor(std, device=args.device).view(1, channel, 1, 1)
-    image_syn_init_uint8 = ((image_syn_init * diag_std + diag_mean) * 255 + 0.5).clamp(0, 255).to(torch.uint8)
+        idx_shuffle = np.random.permutation(
+            len(images_all)
+        )[:n]
 
+        return images_all[
+            idx_shuffle
+        ]
 
-    ''' training '''
-    print('%s training begins'%get_time())
+    # =========================================================
+    # Initialize synthetic images from real images
+    # =========================================================
+    image_syn = torch.randn(
+        size=(
+            num_syn,
+            channel,
+            im_size[0],
+            im_size[1]
+        ),
+        dtype=torch.float,
+        requires_grad=True,
+        device=args.device
+    )
 
-    
+    image_syn.data = get_images(
+        num_syn
+    ).detach().data
 
+    image_syn_init = (
+        image_syn
+        .detach()
+        .clone()
+    )
 
-    optimizer_img = torch.optim.Adam([image_syn, ], lr=args.lr_img) # optimizer_img for synthetic data
-    optimizer_img.zero_grad()
-    for it in range(args.Iteration+1):
+    diag_mean = torch.tensor(
+        mean,
+        device=args.device
+    ).view(
+        1,
+        channel,
+        1,
+        1
+    )
 
+    diag_std = torch.tensor(
+        std,
+        device=args.device
+    ).view(
+        1,
+        channel,
+        1,
+        1
+    )
 
-        ''' Train synthetic data '''
-        net = get_network(args.model, channel, num_classes, im_size).to(args.device) # get a random model
+    image_syn_init_uint8 = (
+        (
+            (
+                image_syn_init
+                * diag_std
+                + diag_mean
+            )
+            * 255
+            + 0.5
+        )
+        .clamp(0, 255)
+        .to(torch.uint8)
+    )
+
+    # =========================================================
+    # Synthetic-image optimizer
+    # =========================================================
+    optimizer_img = torch.optim.Adam(
+        [image_syn],
+        lr=args.lr_img
+    )
+
+    # =========================================================
+    # Evaluation helper
+    # =========================================================
+    def evaluate_current_synthetic(iteration, record_final=False):
+
+        print(
+            '-------------------------\n'
+            'Evaluation\n'
+            'model_train = %s, iteration = %d'
+            % (
+                args.model,
+                iteration
+            )
+        )
+
+        for model_eval in model_eval_pool:
+
+            print(
+                'model_eval = %s'
+                % model_eval
+            )
+
+            accs = []
+
+            for it_eval in range(args.num_eval):
+
+                net_eval = get_network(
+                    model_eval,
+                    channel,
+                    num_classes,
+                    im_size
+                ).to(args.device)
+
+                image_syn_eval = (
+                    image_syn
+                    .detach()
+                    .clone()
+                )
+
+                _, acc_train, acc_test = evaluate_synset_SSL(
+                    it_eval,
+                    net_eval,
+                    image_syn_eval,
+                    dst_train,
+                    testloader,
+                    args
+                )
+
+                accs.append(
+                    acc_test
+                )
+
+            print(
+                'Evaluate %d random %s, '
+                'mean = %.4f std = %.4f\n'
+                '-------------------------'
+                % (
+                    len(accs),
+                    model_eval,
+                    np.mean(accs),
+                    np.std(accs)
+                )
+            )
+
+            if record_final:
+                accs_all_exps[
+                    model_eval
+                ] += accs
+
+    # =========================================================
+    # IMPORTANT:
+    # Evaluate untouched initialization first.
+    # =========================================================
+    print(
+        '\n========================================'
+    )
+
+    print(
+        'INITIAL RANDOM-SUBSET EVALUATION'
+    )
+
+    print(
+        '========================================\n'
+    )
+
+    evaluate_current_synthetic(
+        iteration=0,
+        record_final=False
+    )
+
+    # =========================================================
+    # Distillation
+    # =========================================================
+    print(
+        '%s training begins'
+        % get_time()
+    )
+
+    for it in range(
+        1,
+        args.Iteration + 1
+    ):
+
+        # =====================================================
+        # Fresh temporary encoder
+        # =====================================================
+        net = get_network(
+            args.model,
+            channel,
+            num_classes,
+            im_size
+        ).to(args.device)
+
         net.train()
 
-        if args.ssl_train_data == 'real':
-            images_ssl_train = copy.deepcopy(images_all.detach())
-        elif args.ssl_train_data == 'synthetic':
-            images_ssl_train = copy.deepcopy(image_syn.detach())
-        else:
-            exit('unknown SSL training data: %s'%args.ssl_train_data)
+        # =====================================================
+        # Train temporary encoder briefly on REAL DATA
+        # =====================================================
+        dst_ssl_train = (
+            torch.utils.data.TensorDataset(
+                images_all.detach()
+            )
+        )
 
-        dst_ssl_train = torch.utils.data.TensorDataset(images_ssl_train)
-        trainloader_ssl = torch.utils.data.DataLoader(dst_ssl_train, batch_size=args.batch_train, shuffle=True, num_workers=0)
-        projector, optimizer_net = init_ssl(net, images_ssl_train, args)
-        losses_ssl = []
-        for il in range(args.epoch_ssl_train):
-            losses_ssl.append(epoch_ssl(trainloader_ssl, net, projector, optimizer_net, args))
+        trainloader_ssl = (
+            torch.utils.data.DataLoader(
+                dst_ssl_train,
+                batch_size=args.batch_train,
+                shuffle=True,
+                num_workers=0
+            )
+        )
 
-        for param in list(net.parameters()) + list(projector.parameters()):
+        projector, optimizer_net = init_ssl(
+            net,
+            images_all.detach(),
+            args
+        )
+
+        ssl_losses = []
+
+        for _ in range(
+            args.epoch_ssl_train
+        ):
+
+            ssl_loss = epoch_ssl(
+                trainloader_ssl,
+                net,
+                projector,
+                optimizer_net,
+                args
+            )
+
+            ssl_losses.append(
+                ssl_loss
+            )
+
+        # =====================================================
+        # Freeze this representation space
+        # =====================================================
+        for param in (
+            list(net.parameters())
+            +
+            list(projector.parameters())
+        ):
             param.requires_grad = False
+
         net.eval()
         projector.eval()
 
-        embed = net.module.embed if torch.cuda.device_count() > 1 else net.embed # for GPU parallel
+        embed = (
+            net.module.embed
+            if torch.cuda.device_count() > 1
+            else net.embed
+        )
 
-        ''' update synthetic data '''
-        img_syn = image_syn
-
-        # Encode the WHOLE real dataset.
-        # Do forward passes in chunks only to avoid memory problems.
+        # =====================================================
+        # Encode all REAL data once
+        # =====================================================
         real_features = []
 
         with torch.no_grad():
-            for start in range(0, len(images_all), args.batch_train):
-                end = min(start + args.batch_train, len(images_all))
-                real_features.append(embed(images_all[start:end]))
 
-        output_real = torch.cat(real_features, dim=0)   # [N, D]
+            for start in range(
+                0,
+                len(images_all),
+                args.batch_train
+            ):
 
-        # Synthetic side must keep gradient.
-        output_syn = embed(img_syn)                     # [M, D]
+                end = min(
+                    start + args.batch_train,
+                    len(images_all)
+                )
 
-        # OT between ALL real examples and ALL synthetic examples.
-        transport_plan = get_transport_plan(
-            output_real,
-            output_syn.detach(),
-            args
-        )                                              # [N, M]
+                real_features.append(
+                    embed(
+                        images_all[start:end]
+                    )
+                )
 
+        output_real = torch.cat(
+            real_features,
+            dim=0
+        )
 
+        # =====================================================
+        # Synthetic update(s)
+        # =====================================================
+        loss_avg = 0.0
 
-        loass_avg = 0 
-        for _ in range(50):
+        for syn_step in range(
+            args.syn_steps_per_encoder
+        ):
 
+            # ---------------------------------------------
+            # Synthetic representations with gradients
+            # ---------------------------------------------
+            output_syn = embed(
+                image_syn
+            )
 
-            net2 = get_network(args.model, channel, num_classes, im_size).to(args.device) # get a random model
-            images_ssl_train = copy.deepcopy(images_all.detach())
-            projector2, _ = init_ssl(net2, images_ssl_train, args)
-            for param in list(net2.parameters()) + list(projector2.parameters()):
-                param.requires_grad = False
-            net2.eval()
-            projector2.eval()
-            embed2 = net2.module.embed if torch.cuda.device_count() > 1 else net2.embed # for GPU parallel
-            real_features2 = []
-            with torch.no_grad():
-                for start in range(0, len(images_all), args.batch_train):
-                    end = min(start + args.batch_train, len(images_all))
-                    real_features2.append(embed2(images_all[start:end]))
+            # ---------------------------------------------
+            # OT target.
+            #
+            # output_syn is detached here because the OT
+            # plan is treated as a fixed pseudo-target.
+            # ---------------------------------------------
+            transport_plan = get_transport_plan(
+                output_real,
+                output_syn.detach(),
+                args
+            )
 
-            output_real2 = torch.cat(real_features2, dim=0)   # [N, D]
-            output_syn2 = embed2(image_syn)                     # [M, D]
+            # ---------------------------------------------
+            # New soft-assignment loss
+            # ---------------------------------------------
+            loss = transport_soft_assignment_loss(
+                output_real,
+                output_syn,
+                transport_plan,
+                args
+            )
 
-
-
-
-
-            # projection_real2 = projector2(output_real2)
-            # projection_syn2 = projector2(output_syn2)
-
-
-            # loss = transport_contrastive_loss(
-            #     output_real2,
-            #     output_syn2,
-            #     transport_plan,
-            #     args
-            # )
-
-            args.geometry_weight = 1.0
-            from utils import transport_barycentric_loss
-            loss = transport_barycentric_loss(output_real2, output_syn2, transport_plan, args)
-
-
-
-            # image_syn_before = image_syn.detach().clone()
             optimizer_img.zero_grad()
+
             loss.backward()
+
             optimizer_img.step()
-            loass_avg += loss.item()
 
-        if it%1 == 0:
-            with torch.no_grad():
-                image_syn_uint8 = ((image_syn * diag_std + diag_mean) * 255 + 0.5).clamp(0, 255).to(torch.uint8)
-                print('%s iter = %05d, loss = %.10f' % (get_time(), it, loass_avg),end = '\t/\t')
-                print('PNG values changed = %.5f%%' % ( (image_syn_uint8 != image_syn_init_uint8).float().mean().item() * 100), flush=True)
+            loss_avg += loss.item()
 
-        if it == args.Iteration: # only record the final results
-            data_save = copy.deepcopy(image_syn.detach().cpu())
-            torch.save({'data': data_save, }, os.path.join(args.save_path, 'res_OT-SSL_%s_%s_%dpercent.pt'%(args.dataset, args.model, args.percentage)))
+        loss_avg /= (
+            args.syn_steps_per_encoder
+        )
 
+        # =====================================================
+        # Diagnostics
+        # =====================================================
+        with torch.no_grad():
 
-        
-        if it%5==0 and it!=0:
-            ''' Evaluate synthetic data '''
-            for model_eval in model_eval_pool:
-                print('-------------------------\nEvaluation\nmodel_train = %s, model_eval = %s, iteration = %d'%(args.model, model_eval, it))
+            image_syn_uint8 = (
+                (
+                    (
+                        image_syn
+                        * diag_std
+                        + diag_mean
+                    )
+                    * 255
+                    + 0.5
+                )
+                .clamp(0, 255)
+                .to(torch.uint8)
+            )
 
-                accs = []
-                for it_eval in range(args.num_eval):
-                    net_eval = get_network(model_eval, channel, num_classes, im_size).to(args.device) # get a random model
-                    image_syn_eval = copy.deepcopy(image_syn.detach()) # avoid any unaware modification
-                    _, acc_train, acc_test = evaluate_synset_SSL(it_eval, net_eval, image_syn_eval, dst_train, testloader, args)
-                    accs.append(acc_test)
-                print('Evaluate %d random %s, mean = %.4f std = %.4f\n-------------------------'%(len(accs), model_eval, np.mean(accs), np.std(accs)))
+            pixel_changed = (
+                (
+                    image_syn_uint8
+                    != image_syn_init_uint8
+                )
+                .float()
+                .mean()
+                .item()
+                * 100
+            )
 
-                if it == args.Iteration: # record the final results
-                    accs_all_exps[model_eval] += accs
+        print(
+            '%s iter = %05d, '
+            'ssl loss = %.6f, '
+            'distill loss = %.6f, '
+            'PNG values changed = %.5f%%'
+            % (
+                get_time(),
+                it,
+                np.mean(ssl_losses),
+                loss_avg,
+                pixel_changed
+            ),
+            flush=True
+        )
 
-        if it%5==0 and it!=0:
-            ''' visualize and save '''
-            save_name = os.path.join(args.save_path, 'vis_%s_%s_%s_%dpercent_iter%d.png'%(args.method, args.dataset, args.model, args.percentage, it))
-            image_syn_vis = copy.deepcopy(image_syn.detach().cpu())
+        # =====================================================
+        # Free temporary encoder before evaluation
+        # =====================================================
+        del output_real
+        del output_syn
+        del transport_plan
+        del real_features
+        del embed
+        del projector
+        del optimizer_net
+        del trainloader_ssl
+        del dst_ssl_train
+        del net
+
+        torch.cuda.empty_cache()
+
+        # =====================================================
+        # Evaluation
+        # =====================================================
+        if (
+            it % args.eval_interval == 0
+            or it == args.Iteration
+        ):
+
+            evaluate_current_synthetic(
+                iteration=it,
+                record_final=(
+                    it == args.Iteration
+                )
+            )
+
+        # =====================================================
+        # Visualization
+        # =====================================================
+        if (
+            it % args.eval_interval == 0
+            or it == args.Iteration
+        ):
+
+            save_name = os.path.join(
+                args.save_path,
+                'vis_%s_%s_%s_%dpercent_iter%d.png'
+                % (
+                    args.method,
+                    args.dataset,
+                    args.model,
+                    args.percentage,
+                    it
+                )
+            )
+
+            image_syn_vis = (
+                image_syn
+                .detach()
+                .cpu()
+                .clone()
+            )
+
             for ch in range(channel):
-                image_syn_vis[:, ch] = image_syn_vis[:, ch]  * std[ch] + mean[ch]
-            image_syn_vis[image_syn_vis<0] = 0.0
-            image_syn_vis[image_syn_vis>1] = 1.0
-            save_image(image_syn_vis, save_name, nrow=int(np.ceil(np.sqrt(num_syn))))
 
+                image_syn_vis[:, ch] = (
+                    image_syn_vis[:, ch]
+                    * std[ch]
+                    + mean[ch]
+                )
 
-    print('\n==================== Final Results ====================\n')
+            image_syn_vis[
+                image_syn_vis < 0
+            ] = 0.0
+
+            image_syn_vis[
+                image_syn_vis > 1
+            ] = 1.0
+
+            save_image(
+                image_syn_vis,
+                save_name,
+                nrow=int(
+                    np.ceil(
+                        np.sqrt(num_syn)
+                    )
+                )
+            )
+
+        # =====================================================
+        # Final save
+        # =====================================================
+        if it == args.Iteration:
+
+            data_save = (
+                image_syn
+                .detach()
+                .cpu()
+                .clone()
+            )
+
+            torch.save(
+                {
+                    'data': data_save
+                },
+                os.path.join(
+                    args.save_path,
+                    'res_OT-SSL_%s_%s_%dpercent.pt'
+                    % (
+                        args.dataset,
+                        args.model,
+                        args.percentage
+                    )
+                )
+            )
+
+    # =========================================================
+    # Final results
+    # =========================================================
+    print(
+        '\n==================== '
+        'Final Results '
+        '====================\n'
+    )
+
     for key in model_eval_pool:
-        accs = accs_all_exps[key]
-        print('Train on %s, evaluate %d random %s, mean  = %.2f%%  std = %.2f%%'%(args.model, len(accs), key, np.mean(accs)*100, np.std(accs)*100))
 
+        accs = accs_all_exps[
+            key
+        ]
+
+        print(
+            'Train on %s, evaluate %d random %s, '
+            'mean = %.2f%% std = %.2f%%'
+            % (
+                args.model,
+                len(accs),
+                key,
+                np.mean(accs) * 100,
+                np.std(accs) * 100
+            )
+        )
 
 
 if __name__ == '__main__':

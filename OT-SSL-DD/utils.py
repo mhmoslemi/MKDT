@@ -962,3 +962,36 @@ AUGMENT_FNS = {
     'rotate': [rand_rotate],
 }
 
+
+
+
+def transport_soft_assignment_loss(
+    output_real,
+    output_syn,
+    transport_plan,
+    args
+):
+    # OT is a fixed target during this image update
+    q = transport_plan.detach()
+
+    # Normalize features
+    output_real = F.normalize(output_real.detach(), dim=1)
+    output_syn = F.normalize(output_syn, dim=1)
+
+    # ---------------------------------------------------------
+    # q_ij = OT assignment distribution over synthetic images
+    # for each real image i
+    # ---------------------------------------------------------
+    q = q / q.sum(dim=1, keepdim=True).clamp_min(1e-12)
+
+    # ---------------------------------------------------------
+    # p_ij = similarity-induced distribution
+    # ---------------------------------------------------------
+    logits = torch.mm(output_real, output_syn.t()) / args.temperature
+
+    log_p = F.log_softmax(logits, dim=1)
+
+    # Match p(s_j | x_i) to OT assignment q(s_j | x_i)
+    loss = -(q * log_p).sum(dim=1).mean()
+
+    return loss
