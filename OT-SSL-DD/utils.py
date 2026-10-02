@@ -468,6 +468,55 @@ def get_transport_plan(output_real, output_syn, args):
 #     return loss
 
 
+def transport_barycentric_loss(output_real, output_syn, transport_plan, args):
+    # OT assignments are treated as fixed targets during the synthetic update
+    transport_plan = transport_plan.detach()
+
+    # Real representations should not receive gradients
+    output_real = F.normalize(output_real.detach(), dim=1)
+    output_syn = F.normalize(output_syn, dim=1)
+
+    # ---------------------------------------------------------
+    # 1. OT-weighted real barycenter for each synthetic sample
+    # ---------------------------------------------------------
+    weights = transport_plan / (
+        transport_plan.sum(dim=0, keepdim=True).clamp_min(1e-12)
+    )
+
+    # [num_syn, dim]
+    barycenter_real = torch.mm(weights.t(), output_real)
+    barycenter_real = F.normalize(barycenter_real, dim=1)
+
+    # ---------------------------------------------------------
+    # 2. Each synthetic representation matches ITS barycenter
+    # ---------------------------------------------------------
+    bary_loss = (
+        1.0 - (output_syn * barycenter_real).sum(dim=1)
+    ).mean()
+
+    # ---------------------------------------------------------
+    # 3. Preserve relations between barycenters
+    #
+    # If two real barycenters are similar, their corresponding
+    # synthetic samples should also be similar.
+    # If they are far apart, synthetic samples should be too.
+    # ---------------------------------------------------------
+    sim_syn = torch.mm(output_syn, output_syn.t())
+    sim_real = torch.mm(barycenter_real, barycenter_real.t())
+
+    # Ignore diagonal since self-similarity is always ~1
+    M = output_syn.shape[0]
+    mask = ~torch.eye(M, dtype=torch.bool, device=output_syn.device)
+
+    geom_loss = ((sim_syn - sim_real) ** 2)[mask].mean()
+
+    # ---------------------------------------------------------
+    # Final distillation loss
+    # ---------------------------------------------------------
+    loss = bary_loss + args.geometry_weight * geom_loss
+
+    return loss
+
 
 def transport_contrastive_loss(output_real, output_syn, transport_plan, args):
 
