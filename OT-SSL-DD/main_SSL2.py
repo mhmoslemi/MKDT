@@ -51,7 +51,7 @@ def main():
     # -------------------- Self-Supervised Learning --------------------
     parser.add_argument('--ssl_method', type=str, default='simclr', help='simclr/barlowtwins')
     parser.add_argument('--ssl_train_data', type=str, default='synthetic', help='real/synthetic')
-    parser.add_argument('--epoch_ssl_train', type=int, default=25, help='epochs to train the temporary SSL network')
+    parser.add_argument('--epoch_ssl_train', type=int, default=15, help='epochs to train the temporary SSL network')
     parser.add_argument('--ssl_aug_strategy', type=str, default='color_crop_cutout_flip_scale_rotate', help='augmentation strategy for SSL training')
     parser.add_argument('--projection_dim', type=int, default=128, help='projection dimension for SSL training')
     parser.add_argument('--temperature', type=float, default=0.5, help='temperature for SimCLR')
