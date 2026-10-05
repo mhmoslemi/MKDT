@@ -20,6 +20,19 @@ from scattering_moments import (
 from utils import get_dataset, get_network, get_eval_pool, evaluate_synset_SSL, get_time, ParamDiffAug
 
 
+def clear_directory(directory):
+    """Remove everything inside directory while keeping directory itself."""
+    for root, directories, files in os.walk(directory, topdown=False):
+        for filename in files:
+            os.remove(os.path.join(root, filename))
+        for dirname in directories:
+            path = os.path.join(root, dirname)
+            if os.path.islink(path):
+                os.remove(path)
+            else:
+                os.rmdir(path)
+
+
 def main():
     parser = argparse.ArgumentParser(description='Wavelet scattering moment distillation')
 
@@ -74,8 +87,10 @@ def main():
     args.dsa_param = ParamDiffAug()
     args.dsa = False
 
-    os.makedirs(args.data_path, exist_ok=True)
     os.makedirs(args.save_path, exist_ok=True)
+    clear_directory(args.save_path)
+    print('Cleared all previous files from %s' % args.save_path, flush=True)
+    os.makedirs(args.data_path, exist_ok=True)
 
     channel, im_size, num_classes, _, mean, std, dst_train, _, testloader = get_dataset(args.dataset, args.data_path)
     num_syn = int(len(dst_train) * args.percentage / 100)
