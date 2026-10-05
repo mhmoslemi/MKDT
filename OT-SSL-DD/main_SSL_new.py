@@ -30,12 +30,12 @@ def main():
     parser.add_argument('--device', choices=['cpu', 'cuda'], default='cuda' if torch.cuda.is_available() else 'cpu')
 
     # -------------------- Distillation --------------------
-    parser.add_argument('--Iteration', type=int, default=100, help='number of synthetic pixel updates')
+    parser.add_argument('--Iteration', type=int, default=101, help='number of synthetic pixel updates')
     parser.add_argument('--lr_img', type=float, default=0.01, help='SGD step size for synthetic pixels')
     parser.add_argument('--batch_real', type=int, default=256, help='batch size for caching full real moments')
-    parser.add_argument('--batch_syn', type=int, default=32, help='synthetic scattering batch size; moments use all images')
+    parser.add_argument('--batch_syn', type=int, default=256, help='synthetic scattering batch size; moments use all images')
     parser.add_argument('--scattering_J', type=int, default=3, help='log2 scattering scale (at least 2)')
-    parser.add_argument('--scattering_L', type=int, default=8, help='number of wavelet orientations')
+    parser.add_argument('--scattering_L', type=int, default=5, help='number of wavelet orientations')
     parser.add_argument('--gamma', type=float, default=1.0, help='weight of squared mean distance; covariance weight is 1')
     parser.add_argument('--covariance_block_size', type=int, default=1024, help='rows per exact covariance-loss block')
 
@@ -113,7 +113,7 @@ def main():
             if record:
                 accs_all_exps[model_eval].extend(accs)
 
-    evaluate(0, record=args.Iteration == 0)
+    # evaluate(0, record=args.Iteration == 0)
 
     # Phi is fixed, so the full-dataset real statistics are computed only once.
     # Inputs use the same dataset normalization as the downstream SSL evaluator.
@@ -130,7 +130,11 @@ def main():
 
     print('%s distillation begins' % get_time(), flush=True)
     # Plain SGD implements S_{t+1} = S_t - lr_img * grad_S L exactly.
-    optimizer_img = torch.optim.SGD([image_syn], lr=args.lr_img)
+    # optimizer_img = torch.optim.SGD([image_syn], lr=args.lr_img)
+    optimizer_img = torch.optim.Adam([image_syn, ], lr=args.lr_img) # optimizer_img for synthetic data
+    # optimizer_img.zero_grad()
+
+
     for it in range(1, args.Iteration + 1):
         optimizer_img.zero_grad(set_to_none=True)
         loss, mean_loss, covariance_loss = backward_scattering_moments(
@@ -147,9 +151,9 @@ def main():
             get_time(), it, loss.item(), covariance_loss.item(), mean_loss.item(), changed
         ), flush=True)
 
-        if it % 50 == 0 and it != args.Iteration:
+        if it % 10 == 0 and it != args.Iteration:
             evaluate(it)
-        if it % 20 == 0 or it == args.Iteration:
+        if it % 10 == 0 or it == args.Iteration:
             save_name = os.path.join(args.save_path, 'vis_%s_%s_%s_%dpercent_iter%d.png' % (
                 args.method, args.dataset, args.model, args.percentage, it
             ))
