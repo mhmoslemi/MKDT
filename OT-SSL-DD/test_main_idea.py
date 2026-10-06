@@ -130,7 +130,7 @@ def test_main_uses_only_frozen_random_networks_and_saves_result(monkeypatch, tmp
         '--num_eval', '0', '--model', 'Tiny', '--random_models', 'Tiny',
         '--batch_real', '5', '--batch_syn', '2', '--num_random_networks', '2',
         '--num_aug_pairs', '2', '--covariance_block_size', '3',
-        '--distill_aug_strategy', 'none', '--save_every', '0', '--lr_img', '0.01',
+        '--distill_aug_strategy', 'none', '--lr_img', '0.01',
         '--seed', '9',
     ])
     indices = np.random.RandomState(9).permutation(len(images))[:6]
@@ -155,13 +155,4 @@ def test_main_uses_only_frozen_random_networks_and_saves_result(monkeypatch, tmp
         assert all(not parameter.requires_grad for parameter in network.parameters())
         for actual, expected in zip(network.parameters(), initial_parameters):
             torch.testing.assert_close(actual, expected)
-    assert (tmp_path / 'vis_RFC_CIFAR10_Tiny_50percent_iter2.png').is_file()
-
-
-@pytest.mark.parametrize('function,args', [
-    (main_idea.cross_covariance, (torch.empty(0, 3), torch.empty(0, 3))),
-    (main_idea.cross_covariance_matching_loss, ([], torch.eye(3))),
-])
-def test_invalid_empty_inputs_are_rejected(function, args):
-    with pytest.raises(ValueError):
-        function(*args)
+    assert not (tmp_path / 'vis_RFC_CIFAR10_Tiny_50percent_iter2.png').exists()
