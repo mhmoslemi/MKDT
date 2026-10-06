@@ -1,4 +1,5 @@
 import os
+import math
 import copy
 import argparse
 import numpy as np
@@ -50,9 +51,6 @@ def cross_moment_loss_and_backward(
     gradient. This is the chain rule for the sampled objective, with graph memory
     independent of A. The caller must freeze the network and put it in eval mode.
     No division by the feature matrix's d^2 entries is applied to loss or gradient.
-    For a fixed gradient history, scaling by 1/d^2 makes Adam's denominator
-    equivalent to sqrt(v_hat) + eps*d^2 in unscaled units. With d=2048 and
-    eps=1e-8, that effective epsilon is 0.04194304 instead of 1e-8.
     """
     num_pairs = len(view_pairs)
     real_mean = None
@@ -81,7 +79,77 @@ def cross_moment_loss_and_backward(
         synthetic_moment = augmented_cross_moment(embed, synthetic_images, seeds, strategy, aug_param)
         synthetic_moment.backward(moment_gradient)
 
-    return loss_f2, target_f2
+    return loss_f2, target_f2, real_mean
+
+
+@torch.no_grad()
+def sampled_cross_moment_loss(images, sampled_targets, strategy, aug_param, reject_above):
+    """Evaluate a trial on the SAME targets and views used for its gradient.
+
+    Targets are cached on the CPU to avoid keeping K dense matrices on the GPU.
+    All loss contributions are nonnegative, so a partial sum above the acceptance
+    threshold proves rejection without evaluating the remaining networks.
+    """
+    if reject_above < 0:
+        return math.inf
+    total = torch.zeros((), device=images.device)
+    for embed, real_mean_cpu, view_pairs in sampled_targets:
+        synthetic_mean = None
+        for seeds in view_pairs:
+            moment = augmented_cross_moment(embed, images, seeds, strategy, aug_param)
+            if synthetic_mean is None:
+                synthetic_mean = moment
+            else:
+                synthetic_mean.add_(moment)
+        synthetic_mean.div_(len(view_pairs))
+        residual = synthetic_mean - real_mean_cpu.to(images.device)
+        total.add_(residual.square().sum() / len(sampled_targets))
+        value = total.item()
+        if not math.isfinite(value) or value > reject_above:
+            return math.inf
+    return total.item()
+
+
+@torch.no_grad()
+def projected_backtracking_step(
+    images, sampled_targets, strategy, aug_param, pixel_min, pixel_max,
+    loss_before, initial_step, max_trials=20,
+):
+    """Commit only a projected gradient step satisfying Armijo decrease.
+
+    Set y = projection_box(x - alpha*g), d = y-x. For feasible x, projection
+    gives <g,d> <= -||d||^2/alpha. Accept only if
+        f(y) <= f(x) + 1e-4 * <g,d> < f(x).
+    Otherwise halve alpha and retry. Trials never modify x; if no candidate
+    passes, leave x unchanged. Reuse all real targets and augmentation seeds:
+    resampling during the search would invalidate this comparison.
+
+    This enforces decrease of the current sampled surrogate, not a guarantee
+    about a fresh sample, the population objective, or downstream SSL accuracy.
+    """
+    gradient = images.grad.detach()
+    original = images.detach()
+    step_size = initial_step
+    for trial in range(1, max_trials + 1):
+        candidate = original - step_size * gradient
+        candidate = torch.maximum(torch.minimum(candidate, pixel_max), pixel_min)
+        displacement = candidate - original
+        slope = (gradient * displacement).sum(dtype=torch.float64).item()
+        if not math.isfinite(slope):
+            step_size *= 0.5
+            continue
+        if slope >= 0:
+            # No representable feasible descent step at this point/step size.
+            return loss_before, 0.0, trial, False
+        acceptance_bound = loss_before + 1e-4 * slope
+        loss_after = sampled_cross_moment_loss(
+            candidate, sampled_targets, strategy, aug_param, acceptance_bound
+        )
+        if math.isfinite(loss_after) and loss_after <= acceptance_bound and loss_after < loss_before:
+            images.copy_(candidate)
+            return loss_after, step_size, trial, True
+        step_size *= 0.5
+    return loss_before, 0.0, max_trials, False
 
 
 def main():
@@ -94,7 +162,7 @@ def main():
 
     # -------------------- Distillation --------------------
     parser.add_argument('--Iteration', type=int, default=1000, help='training iterations')
-    parser.add_argument('--lr_img', type=float, default=0.5, help='learning rate for updating synthetic images')
+    parser.add_argument('--lr_img', type=float, default=0.5, help='initial trial step for projected gradient with backtracking')
     parser.add_argument('--batch_real', type=int, default=256, help='batch size for real data')
     parser.add_argument('--num_random_nets', type=int, default=25, help='number of fixed random feature networks')
     parser.add_argument('--num_aug_pairs', type=int, default=10, help='view pairs averaged inside the cross-moment distance')
@@ -128,7 +196,10 @@ def main():
     args = parser.parse_args()
     if args.num_random_nets < 1 or args.num_aug_pairs < 1 or args.batch_real < 1:
         parser.error('num_random_nets, num_aug_pairs, and batch_real must be positive')
+    if not math.isfinite(args.lr_img) or args.lr_img <= 0:
+        parser.error('lr_img must be finite and positive')
     args.method = 'GraphEigenspace'
+    args.image_optimizer = 'projected_gradient_armijo'
     args.device = 'cuda' if torch.cuda.is_available() else 'cpu'
     args.dsa_param = ParamDiffAug()
     args.dsa = False
@@ -199,7 +270,7 @@ def main():
     ''' training '''
     print('%s training begins' % get_time())
 
-    optimizer_img = torch.optim.Adam([image_syn], lr=args.lr_img)
+    trial_step = args.lr_img
     dsa_strategy = args.ssl_aug_strategy
     augmentation_rng = np.random.default_rng()
 
@@ -215,11 +286,13 @@ def main():
         random_feature_nets.append(net)
 
     print('Objective: mean_network ||mean_view C_syn - mean_view C_real||_F^2 (SUM over matrix entries)', flush=True)
+    print('Image updates: projected gradient with Armijo backtracking; loss_before/after use identical samples and views', flush=True)
 
     for it in range(1, args.Iteration + 1):
-        optimizer_img.zero_grad(set_to_none=True)
+        image_syn.grad = None
         loss_avg = torch.zeros((), device=args.device)
         target_f2_avg = torch.zeros((), device=args.device)
+        sampled_targets = []
 
         for net in random_feature_nets:
             embed = net.module.embed if hasattr(net, 'module') else net.embed
@@ -229,51 +302,51 @@ def main():
             view_pairs = augmentation_rng.integers(
                 0, 2**31 - 1, size=(args.num_aug_pairs, 2)
             ).tolist()
-            loss_f2, target_f2 = cross_moment_loss_and_backward(
+            loss_f2, target_f2, real_mean = cross_moment_loss_and_backward(
                 embed, real_batch, image_syn, view_pairs, dsa_strategy,
                 args.dsa_param, args.num_random_nets,
             )
             loss_avg.add_(loss_f2 / args.num_random_nets)
             target_f2_avg.add_(target_f2 / args.num_random_nets)
+            sampled_targets.append((embed, real_mean.cpu(), view_pairs))
 
         if not torch.isfinite(loss_avg).item() or not torch.isfinite(image_syn.grad).all().item():
             raise FloatingPointError('Non-finite cross-moment loss or image gradient; image update aborted')
 
-        log_iteration = it == 1 or it % 2 == 0
-        if log_iteration:
-            image_before_step = image_syn.detach().clone()
-            gradient_rms = image_syn.grad.square().mean().sqrt().item()
+        image_before_step = image_syn.detach().clone()
+        gradient_rms = image_syn.grad.square().mean().sqrt().item()
+        loss_before = loss_avg.item()
+        loss_after, accepted_step, trials, accepted = projected_backtracking_step(
+            image_syn, sampled_targets, dsa_strategy, args.dsa_param,
+            pixel_min, pixel_max, loss_before, trial_step,
+        )
+        sampled_targets.clear()
+        if accepted:
+            # Try growing the last successful step; every trial must still pass
+            # the same sufficient-decrease check, so growth cannot bypass it.
+            trial_step = min(2.0 * accepted_step, math.sqrt(torch.finfo(image_syn.dtype).max))
 
-        optimizer_img.step()
-        with torch.no_grad():
-            image_syn.copy_(torch.maximum(torch.minimum(image_syn, pixel_max), pixel_min))
-
-        if log_iteration:
+        if it == 1 or it % 2 == 0 or not accepted:
             with torch.no_grad():
                 # Diagnostic normalization only; the optimized loss is the SUM.
-                relative_f = (loss_avg / target_f2_avg.clamp_min(torch.finfo(loss_avg.dtype).tiny)).sqrt().item()
+                target_norm_squared = max(target_f2_avg.item(), torch.finfo(loss_avg.dtype).tiny)
+                relative_before = math.sqrt(loss_before / target_norm_squared)
+                relative_after = math.sqrt(loss_after / target_norm_squared)
                 pixel_step = (image_syn - image_before_step) * diag_std * 255
                 pixel_drift = (image_syn - image_syn_init) * diag_std * 255
                 step_rms_255 = pixel_step.square().mean().sqrt().item()
                 drift_rms_255 = pixel_drift.square().mean().sqrt().item()
-                # Adam's epsilon can dominate a small gradient denominator.
-                # Measure the actual bias-corrected denominator, not loss size.
-                adam_state = optimizer_img.state[image_syn]
-                adam_group = optimizer_img.param_groups[0]
-                adam_step = adam_state['step'].item()
-                bias_correction_2 = 1 - adam_group['betas'][1] ** adam_step
-                denominator = (adam_state['exp_avg_sq'] / bias_correction_2).sqrt()
-                epsilon_limited_pct = (denominator <= adam_group['eps']).float().mean().item() * 100
                 image_syn_uint8 = ((image_syn * diag_std + diag_mean) * 255 + 0.5).clamp(0, 255).to(torch.uint8)
                 changed_pct = (image_syn_uint8 != image_syn_init_uint8).float().mean().item() * 100
                 print(
-                    f'{get_time()} iter = {it:05d}, loss_F2 = {loss_avg.item():.6f}, '
-                    f'rel_F = {relative_f:.6f}, grad_RMS = {gradient_rms:.3e}, '
+                    f'{get_time()} iter = {it:05d}, loss_F2_before = {loss_before:.6f}, loss_F2_after = {loss_after:.6f}, '
+                    f'rel_F = {relative_before:.6f} -> {relative_after:.6f}, grad_RMS = {gradient_rms:.3e}, '
                     f'step_RMS_255 = {step_rms_255:.4f}, drift_RMS_255 = {drift_rms_255:.4f}, '
-                    f'Adam_eps_limited = {epsilon_limited_pct:.2f}%, PNG values changed = {changed_pct:.5f}%',
+                    f'step_size = {accepted_step:.3e}, trials = {trials}, accepted = {accepted}, '
+                    f'PNG values changed = {changed_pct:.5f}%',
                     flush=True,
                 )
-                del image_before_step
+        del image_before_step
 
         if it == args.Iteration:
             data_save = copy.deepcopy(image_syn.detach().cpu())
