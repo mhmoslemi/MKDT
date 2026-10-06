@@ -67,7 +67,7 @@ def compute_real_moments(feature_extractor, loader, device):
 
 @torch.no_grad()
 def moment_loss_and_gradient(features, real_mean, real_covariance, gamma=1.0,
-                             covariance_block_size=1024):
+                             covariance_block_size=1024, real_features=None):
     """Return the exact loss, its components, and d(loss)/d(features).
 
     L = ||C_syn - C_real||_F^2 + gamma * ||mu_syn - mu_real||_2^2,
@@ -75,6 +75,9 @@ def moment_loss_and_gradient(features, real_mean, real_covariance, gamma=1.0,
 
     The covariance gradient is 4 * Z @ (C_syn - C_real) / (M - 1).
     Row blocks bound temporary memory without changing the full objective.
+    For fresh augmented views, real_features supplies the real batch instead
+    of a cached covariance. Its covariance is computed in the same row blocks,
+    avoiding another full feature_dim-by-feature_dim allocation per view.
     """
     if features.ndim != 2 or len(features) < 2:
         raise ValueError('Synthetic covariance requires at least two feature vectors.')
@@ -83,8 +86,18 @@ def moment_loss_and_gradient(features, real_mean, real_covariance, gamma=1.0,
     if covariance_block_size < 1:
         raise ValueError('covariance_block_size must be positive.')
     count, feature_dim = features.shape
-    if real_mean.shape != (feature_dim,) or real_covariance.shape != (feature_dim, feature_dim):
+    if real_mean.shape != (feature_dim,):
         raise ValueError('Real and synthetic feature dimensions must match.')
+    real_centered = None
+    if real_features is not None:
+        if real_covariance is not None:
+            raise ValueError('Provide either real_features or real_covariance, not both.')
+        if real_features.ndim != 2 or len(real_features) < 2 or real_features.shape[1] != feature_dim:
+            raise ValueError('Real features need at least two rows and matching feature dimensions.')
+        real_mean = real_features.mean(dim=0)
+        real_centered = real_features - real_mean
+    elif real_covariance is None or real_covariance.shape != (feature_dim, feature_dim):
+        raise ValueError('Real and synthetic covariance dimensions must match.')
 
     mean = features.mean(dim=0)
     centered = features - mean
@@ -95,7 +108,12 @@ def moment_loss_and_gradient(features, real_mean, real_covariance, gamma=1.0,
     for start in range(0, feature_dim, covariance_block_size):
         end = min(start + covariance_block_size, feature_dim)
         error = centered[:, start:end].T @ centered
-        error.div_(count - 1).sub_(real_covariance[start:end])
+        error.div_(count - 1)
+        if real_centered is None:
+            error.sub_(real_covariance[start:end])
+        else:
+            error.addmm_(real_centered[:, start:end].T, real_centered,
+                         alpha=-1.0 / (len(real_centered) - 1))
         covariance_loss.add_(error.square().sum())
         # Covariance matrices are symmetric; these rows give gradient columns.
         feature_gradient[:, start:end] = (centered @ error.T) * (4.0 / (count - 1))
@@ -109,12 +127,16 @@ def moment_loss_and_gradient(features, real_mean, real_covariance, gamma=1.0,
 
 def backward_scattering_moments(images, feature_extractor, real_mean,
                                 real_covariance, gamma=1.0, batch_size=32,
-                                covariance_block_size=1024):
+                                covariance_block_size=1024, real_features=None,
+                                accumulate=False):
     """Set image gradients for the full synthetic set with bounded activations.
 
     First calculate global synthetic moments without a scattering graph. Then
     recompute one image batch at a time and apply the exact feature gradient by
     the chain rule. No pixels change until every batch gradient is available.
+    An augmented feature_extractor must replay the same sampled transform on
+    both passes. accumulate=True adds this view's pixel gradient to earlier
+    views so the caller can take one optimizer step for their summed loss.
     """
     if batch_size < 1:
         raise ValueError('batch_size must be positive.')
@@ -125,7 +147,8 @@ def backward_scattering_moments(images, feature_extractor, real_mean,
             feature_extractor(batch) for batch in images.split(batch_size)
         ], dim=0)
     loss, mean_loss, covariance_loss, feature_gradient = moment_loss_and_gradient(
-        features, real_mean, real_covariance, gamma, covariance_block_size
+        features, real_mean, real_covariance, gamma, covariance_block_size,
+        real_features=real_features,
     )
     del features
     if not torch.isfinite(loss).item() or not torch.isfinite(feature_gradient).all().item():
@@ -141,5 +164,8 @@ def backward_scattering_moments(images, feature_extractor, real_mean,
         )[0]
     if not torch.isfinite(image_gradient).all().item():
         raise FloatingPointError('Non-finite synthetic pixel gradient.')
-    images.grad = image_gradient
+    if accumulate and images.grad is not None:
+        images.grad.add_(image_gradient)
+    else:
+        images.grad = image_gradient
     return loss, mean_loss, covariance_loss

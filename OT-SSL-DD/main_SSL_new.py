@@ -1,4 +1,4 @@
-"""Distill images by matching mean and covariance of fixed order-2 scattering.
+"""Match scattering moments of clean images and fresh DSA-augmented views.
 
 Additional dependency: python -m pip install kymatio==0.3.0
 SSL networks are trained only for downstream evaluation, never for distillation.
@@ -18,7 +18,10 @@ from scattering_moments import (
     backward_scattering_moments,
     compute_real_moments,
 )
-from utils import get_dataset, get_network, get_eval_pool, evaluate_synset_SSL, get_time, ParamDiffAug
+from utils import (
+    get_dataset, get_network, get_eval_pool, evaluate_synset_SSL, get_time,
+    ParamDiffAug, DiffAugment, AUGMENT_FNS,
+)
 
 
 
@@ -55,6 +58,32 @@ def configure_determinism(seed):
     torch.use_deterministic_algorithms(True)
 
 
+class AugmentedScattering(torch.nn.Module):
+    """One sampled Siamese DSA transform, replayed through the pixel gradient."""
+
+    def __init__(self, scattering, strategy, mode, replay_seed):
+        super().__init__()
+        self.scattering = scattering
+        self.strategy = strategy
+        self.replay_seed = replay_seed
+        self.param = ParamDiffAug()
+        self.param.aug_mode = mode
+        self.cuda_devices = list(range(torch.cuda.device_count()))
+
+    def forward(self, images):
+        # The replay seed is freshly sampled for each view, not fixed by --seed.
+        # DSA's Siamese mode shares its parameters across real/synthetic images
+        # and across chunks. Preserve the surrounding training/evaluation RNGs.
+        with torch.random.fork_rng(devices=self.cuda_devices):
+            # CPU augmentation permits scale/rotate pixel backpropagation under
+            # strict deterministic algorithms (CUDA grid_sample backward does
+            # not). Device copies retain the gradient to the original pixels.
+            augmented = DiffAugment(
+                images.cpu(), self.strategy, seed=self.replay_seed, param=self.param
+            )
+        return self.scattering(augmented.to(images.device))
+
+
 def main():
     parser = argparse.ArgumentParser(description='Wavelet scattering moment distillation')
 
@@ -74,6 +103,9 @@ def main():
     parser.add_argument('--scattering_L', type=int, default=16, help='number of wavelet orientations')
     parser.add_argument('--gamma', type=float, default=20.0, help='weight of squared mean distance; covariance weight is 1')
     parser.add_argument('--covariance_block_size', type=int, default=2048, help='rows per exact covariance-loss block')
+    parser.add_argument('--distill_aug_views', type=int, default=2, help='fresh augmented loss terms per update, in addition to the clean loss; 0 disables')
+    parser.add_argument('--distill_aug_strategy', type=str, default='color_crop_cutout_flip_scale_rotate', help='DSA operations for distillation views')
+    parser.add_argument('--distill_aug_mode', choices=['S', 'M'], default='S', help='S: sample one operation group per view; M: compose all listed groups')
 
     # -------------------- SSL evaluation --------------------
     parser.add_argument('--model', type=str, default='ConvNet', help='evaluation model')
@@ -108,6 +140,13 @@ def main():
         parser.error('--lr_img must be finite and positive.')
     if args.seed < 0:
         parser.error('--seed must be nonnegative.')
+    if args.distill_aug_views < 0:
+        parser.error('--distill_aug_views must be nonnegative.')
+    if args.distill_aug_views:
+        if args.batch_real < 2:
+            parser.error('Augmented covariance needs --batch_real >= 2.')
+        if set(args.distill_aug_strategy.split('_')) - set(AUGMENT_FNS):
+            parser.error('--distill_aug_strategy must contain groups from: ' + ', '.join(AUGMENT_FNS))
     args.method = 'Scattering'
     args.dsa_param = ParamDiffAug()
     args.dsa = False
@@ -175,6 +214,12 @@ def main():
     )
     real_mean, real_covariance = compute_real_moments(scattering, real_loader, args.device)
 
+    # This generator intentionally has no fixed seed: augmented batches and
+    # transforms are freshly sampled independently of initialization/evaluation.
+    augmentation_rng = np.random.default_rng()
+    print('Loss = clean full-dataset loss + sum of %d fresh DSA view losses (real batch size %d)' % (
+        args.distill_aug_views, min(args.batch_real, len(dst_train))
+    ), flush=True)
     print('%s distillation begins' % get_time(), flush=True)
     # Plain SGD implements S_{t+1} = S_t - lr_img * grad_S L exactly.
     # optimizer_img = torch.optim.SGD([image_syn], lr=args.lr_img)
@@ -189,14 +234,46 @@ def main():
             gamma=args.gamma, batch_size=args.batch_syn,
             covariance_block_size=args.covariance_block_size,
         )
+        clean_loss = loss.item()
+        view_losses = []
+        if args.distill_aug_views:
+            real_indices = augmentation_rng.choice(
+                len(dst_train), size=min(args.batch_real, len(dst_train)), replace=False
+            )
+            real_batch = torch.stack([dst_train[int(i)][0] for i in real_indices]).to(args.device)
+            for _ in range(args.distill_aug_views):
+                # Reuse this sampled transform only within this view's real,
+                # synthetic, and backward passes. Resample on the next view.
+                view = AugmentedScattering(
+                    scattering, args.distill_aug_strategy, args.distill_aug_mode,
+                    replay_seed=int(augmentation_rng.integers(0, 2 ** 31)),
+                )
+                with torch.no_grad():
+                    real_view_features = torch.cat([
+                        view(batch) for batch in real_batch.split(args.batch_syn)
+                    ], dim=0)
+                    real_view_mean = real_view_features.mean(dim=0)
+                view_loss, view_mean_loss, view_covariance_loss = backward_scattering_moments(
+                    image_syn, view, real_view_mean, None,
+                    gamma=args.gamma, batch_size=args.batch_syn,
+                    covariance_block_size=args.covariance_block_size,
+                    real_features=real_view_features, accumulate=True,
+                )
+                loss = loss + view_loss
+                mean_loss = mean_loss + view_mean_loss
+                covariance_loss = covariance_loss + view_covariance_loss
+                view_losses.append(view_loss.item())
+                del real_view_features, real_view_mean, view
+            del real_batch
         optimizer_img.step()
         with torch.no_grad():
             if not torch.isfinite(image_syn).all().item():
                 raise FloatingPointError('Synthetic pixel update is non-finite; reduce --lr_img.')
             changed = (to_uint8(image_syn) != image_syn_init_uint8).float().mean().item() * 100
         if it%50 == 0 or it ==1:
-            print('%s iter = %05d, loss = %.10f, covariance = %.10f, mean = %.10f, PNG values changed = %.5f%%' % (
-                get_time(), it, loss.item(), covariance_loss.item(), mean_loss.item(), changed
+            print('%s iter = %05d, loss = %.10f, covariance = %.10f, mean = %.10f, clean = %.10f, augmented views = %s, PNG values changed = %.5f%%' % (
+                get_time(), it, loss.item(), covariance_loss.item(), mean_loss.item(),
+                clean_loss, ', '.join('%.10f' % value for value in view_losses), changed
             ), flush=True)
 
         if it % 3000 == 0 and it != args.Iteration:
@@ -219,6 +296,13 @@ def main():
         'scattering': {'J': args.scattering_J, 'L': args.scattering_L, 'max_order': 2},
         'gamma': args.gamma,
         'seed': args.seed,
+        'distill_augmentation': {
+            'views': args.distill_aug_views,
+            'strategy': args.distill_aug_strategy,
+            'mode': args.distill_aug_mode,
+            'batch_real': args.batch_real,
+            'fixed_seed': False,
+        },
     }, save_name)
     print('Saved synthetic data to %s' % save_name)
 
