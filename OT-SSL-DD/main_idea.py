@@ -132,7 +132,7 @@ def main():
     parser.add_argument('--covariance_block_size', type=int, default=256)
     parser.add_argument('--random_models', default=None, help='comma-separated P_net support; defaults to --model')
     parser.add_argument('--distill_aug_strategy', default='color_crop_cutout_flip_scale_rotate')
-    parser.add_argument('--distill_aug_mode', choices=['S', 'M'], default='M')
+    parser.add_argument('--distill_aug_mode', choices=['S', 'M'], default='S')
 
     # Downstream SSL evaluation (not part of distillation).
     parser.add_argument('--model', default='ConvNet')
@@ -196,7 +196,7 @@ def main():
             print('-------------------------\nEvaluation\nmodel_train = %s, model_eval = %s, iteration = %d' % (args.model, model_eval, iteration))
             accuracies = []
             for eval_index in range(args.num_eval):
-                eval_seed = args.seed + 1_000_000 + iteration * 10_000 + model_index * args.num_eval + eval_index
+                eval_seed = args.seed + 20000 + eval_index
                 set_random_seed(eval_seed)
                 network = get_network(model_eval, channel, num_classes, im_size, seed=eval_seed).to(args.device)
                 _, _, accuracy = evaluate_synset_SSL(eval_index, network, image_syn.detach().clone(), dst_train, testloader, args)
