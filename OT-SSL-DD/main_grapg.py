@@ -1,11 +1,8 @@
 import os
-import time
 import copy
 import argparse
 import numpy as np
 import torch
-import torch.nn as nn
-import torch.nn.functional as F
 from torchvision.utils import save_image
 from utils import (
     get_dataset, get_network, get_eval_pool, evaluate_synset_SSL,
@@ -27,8 +24,65 @@ def clear_directory(directory):
 
 
 def compute_cross_moment(z1, z2):
-    """Return the uncentered cross moment E[z1 z2^T] from the paper equation."""
+    """Return the uncentered cross moment E[z1 z2^T] in the supplied equation."""
     return (z1.T @ z2) / z1.size(0)
+
+
+def augmented_cross_moment(embed, images, view_seeds, strategy, aug_param):
+    seed_1, seed_2 = view_seeds
+    features_1 = embed(DiffAugment(images, strategy=strategy, seed=seed_1, param=aug_param))
+    features_2 = embed(DiffAugment(images, strategy=strategy, seed=seed_2, param=aug_param))
+    return compute_cross_moment(features_1, features_2)
+
+
+def cross_moment_loss_and_backward(
+    embed, real_images, synthetic_images, view_pairs, strategy, aug_param, num_networks
+):
+    """Accumulate the image gradient of ||mean_a(C_syn,a - C_real,a)||_F^2 / K.
+
+    For D_a = C_syn,a - C_real,a, the old mean_a ||D_a||_F^2 equals
+    ||mean_a D_a||_F^2 + mean_a ||D_a - mean_a D_a||_F^2. Averaging the
+    moments before squaring removes that extra empirical variance term.
+    Finite view sampling remains a Monte Carlo approximation of the expectation.
+
+    If D = mean_a D_a, then dL/dC_syn,a = 2 D / (K A). Compute D without
+    retaining graphs, then replay each view pair and apply this exact upstream
+    gradient. This is the chain rule for the sampled objective, with graph memory
+    independent of A. The caller must freeze the network and put it in eval mode.
+    No division by the feature matrix's d^2 entries is applied to loss or gradient.
+    For a fixed gradient history, scaling by 1/d^2 makes Adam's denominator
+    equivalent to sqrt(v_hat) + eps*d^2 in unscaled units. With d=2048 and
+    eps=1e-8, that effective epsilon is 0.04194304 instead of 1e-8.
+    """
+    num_pairs = len(view_pairs)
+    real_mean = None
+    synthetic_mean = None
+    with torch.no_grad():
+        for seeds in view_pairs:
+            real_moment = augmented_cross_moment(embed, real_images, seeds, strategy, aug_param)
+            synthetic_moment = augmented_cross_moment(embed, synthetic_images, seeds, strategy, aug_param)
+            if real_mean is None:
+                real_mean = real_moment
+                synthetic_mean = synthetic_moment
+            else:
+                real_mean.add_(real_moment)
+                synthetic_mean.add_(synthetic_moment)
+
+        real_mean.div_(num_pairs)
+        synthetic_mean.div_(num_pairs)
+        residual = synthetic_mean - real_mean
+        loss_f2 = residual.square().sum()
+        target_f2 = real_mean.square().sum()
+        moment_gradient = residual * (2.0 / (num_networks * num_pairs))
+
+    # Seeds are fresh each step, but must be identical between the two passes.
+    # Do not square a separate loss for each replayed pair here.
+    for seeds in view_pairs:
+        synthetic_moment = augmented_cross_moment(embed, synthetic_images, seeds, strategy, aug_param)
+        synthetic_moment.backward(moment_gradient)
+
+    return loss_f2, target_f2
+
 
 def main():
     parser = argparse.ArgumentParser(description='Parameter Processing')
@@ -43,7 +97,7 @@ def main():
     parser.add_argument('--lr_img', type=float, default=0.5, help='learning rate for updating synthetic images')
     parser.add_argument('--batch_real', type=int, default=256, help='batch size for real data')
     parser.add_argument('--num_random_nets', type=int, default=50, help='number of fixed random feature networks')
-    parser.add_argument('--num_aug_pairs', type=int, default=10, help='independent augmented-view pairs per network and step')
+    parser.add_argument('--num_aug_pairs', type=int, default=10, help='view pairs averaged inside the cross-moment distance')
     parser.add_argument('--seed', type=int, default=0, help='seed for initialization, sampling, and evaluation networks')
 
     # -------------------- Network --------------------
@@ -72,6 +126,8 @@ def main():
     parser.add_argument('--save_path', type=str, default='result', help='path to save results')
 
     args = parser.parse_args()
+    if args.num_random_nets < 1 or args.num_aug_pairs < 1 or args.batch_real < 1:
+        parser.error('num_random_nets, num_aug_pairs, and batch_real must be positive')
     args.method = 'GraphEigenspace'
     args.device = 'cuda' if torch.cuda.is_available() else 'cpu'
     args.dsa_param = ParamDiffAug()
@@ -109,8 +165,7 @@ def main():
         return images_all[idx_shuffle]
 
     ''' initialize the synthetic data '''
-    image_syn = torch.randn(size=(num_syn, channel, im_size[0], im_size[1]), dtype=torch.float, requires_grad=True, device=args.device)
-    image_syn.data = get_images(num_syn).detach().data
+    image_syn = get_images(num_syn).detach().clone().requires_grad_(True)
     image_syn_init = image_syn.detach().clone()
     
     diag_mean = torch.tensor(mean, device=args.device).view(1, channel, 1, 1)
@@ -148,8 +203,8 @@ def main():
     dsa_strategy = args.ssl_aug_strategy
     augmentation_rng = np.random.default_rng()
 
-    # A fixed Monte Carlo approximation of E_{phi ~ P_net}. Resampling phi on
-    # every step makes the reported loss a different objective each iteration.
+    # A finite fixed-bank approximation of E_{phi ~ P_net}. Resampling networks
+    # would also be a valid stochastic estimator; the fixed bank is retained here.
     random_feature_nets = []
     for net_index in range(args.num_random_nets):
         net_seed = args.seed + 10000 + net_index
@@ -159,46 +214,66 @@ def main():
             parameter.requires_grad_(False)
         random_feature_nets.append(net)
 
+    print('Objective: mean_network ||mean_view C_syn - mean_view C_real||_F^2 (SUM over matrix entries)', flush=True)
+
     for it in range(1, args.Iteration + 1):
-        optimizer_img.zero_grad()
-        loss_avg = 0.0
+        optimizer_img.zero_grad(set_to_none=True)
+        loss_avg = torch.zeros((), device=args.device)
+        target_f2_avg = torch.zeros((), device=args.device)
 
         for net in random_feature_nets:
             embed = net.module.embed if hasattr(net, 'module') else net.embed
             real_batch = get_images(args.batch_real)
+            # Nondeterministic new augmentations; replay seeds only tie together
+            # real/synthetic views and the moment/gradient computation passes.
+            view_pairs = augmentation_rng.integers(
+                0, 2**31 - 1, size=(args.num_aug_pairs, 2)
+            ).tolist()
+            loss_f2, target_f2 = cross_moment_loss_and_backward(
+                embed, real_batch, image_syn, view_pairs, dsa_strategy,
+                args.dsa_param, args.num_random_nets,
+            )
+            loss_avg.add_(loss_f2 / args.num_random_nets)
+            target_f2_avg.add_(target_f2 / args.num_random_nets)
 
-            for _ in range(args.num_aug_pairs):
-                # Draw fresh t1,t2, then replay exactly the same transformations
-                # on T and S. A seeded DSA call represents one sampled transform;
-                # the seeds themselves intentionally remain nondeterministic.
-                view_seed_1 = int(augmentation_rng.integers(0, 2**31 - 1))
-                view_seed_2 = int(augmentation_rng.integers(0, 2**31 - 1))
+        if not torch.isfinite(loss_avg).item() or not torch.isfinite(image_syn.grad).all().item():
+            raise FloatingPointError('Non-finite cross-moment loss or image gradient; image update aborted')
 
-                with torch.no_grad():
-                    real_aug1 = DiffAugment(real_batch, strategy=dsa_strategy, seed=view_seed_1, param=args.dsa_param)
-                    real_aug2 = DiffAugment(real_batch, strategy=dsa_strategy, seed=view_seed_2, param=args.dsa_param)
-                    C_real = compute_cross_moment(embed(real_aug1), embed(real_aug2))
-
-                syn_aug1 = DiffAugment(image_syn, strategy=dsa_strategy, seed=view_seed_1, param=args.dsa_param)
-                syn_aug2 = DiffAugment(image_syn, strategy=dsa_strategy, seed=view_seed_2, param=args.dsa_param)
-                C_syn = compute_cross_moment(embed(syn_aug1), embed(syn_aug2))
-
-                # This is ||Sigma_T(phi) - Sigma_S(phi)||_F^2 divided by the
-                # constant number of matrix entries; the minimizer is unchanged.
-                loss_cross = F.mse_loss(C_syn, C_real)
-                loss = loss_cross / (args.num_random_nets * args.num_aug_pairs)
-                loss.backward()
-                loss_avg += loss.item()
+        log_iteration = it == 1 or it % 2 == 0
+        if log_iteration:
+            image_before_step = image_syn.detach().clone()
+            gradient_rms = image_syn.grad.square().mean().sqrt().item()
 
         optimizer_img.step()
         with torch.no_grad():
             image_syn.copy_(torch.maximum(torch.minimum(image_syn, pixel_max), pixel_min))
 
-        if it % 2 == 0:
+        if log_iteration:
             with torch.no_grad():
+                # Diagnostic normalization only; the optimized loss is the SUM.
+                relative_f = (loss_avg / target_f2_avg.clamp_min(torch.finfo(loss_avg.dtype).tiny)).sqrt().item()
+                pixel_step = (image_syn - image_before_step) * diag_std * 255
+                pixel_drift = (image_syn - image_syn_init) * diag_std * 255
+                step_rms_255 = pixel_step.square().mean().sqrt().item()
+                drift_rms_255 = pixel_drift.square().mean().sqrt().item()
+                # Adam's epsilon can dominate a small gradient denominator.
+                # Measure the actual bias-corrected denominator, not loss size.
+                adam_state = optimizer_img.state[image_syn]
+                adam_group = optimizer_img.param_groups[0]
+                adam_step = adam_state['step'].item()
+                bias_correction_2 = 1 - adam_group['betas'][1] ** adam_step
+                denominator = (adam_state['exp_avg_sq'] / bias_correction_2).sqrt()
+                epsilon_limited_pct = (denominator <= adam_group['eps']).float().mean().item() * 100
                 image_syn_uint8 = ((image_syn * diag_std + diag_mean) * 255 + 0.5).clamp(0, 255).to(torch.uint8)
-                print('%s iter = %05d, cross-moment loss = %.10f' % (get_time(), it, loss_avg), end='\t/\t')
-                print('PNG values changed = %.5f%%' % ((image_syn_uint8 != image_syn_init_uint8).float().mean().item() * 100), flush=True)
+                changed_pct = (image_syn_uint8 != image_syn_init_uint8).float().mean().item() * 100
+                print(
+                    f'{get_time()} iter = {it:05d}, loss_F2 = {loss_avg.item():.6f}, '
+                    f'rel_F = {relative_f:.6f}, grad_RMS = {gradient_rms:.3e}, '
+                    f'step_RMS_255 = {step_rms_255:.4f}, drift_RMS_255 = {drift_rms_255:.4f}, '
+                    f'Adam_eps_limited = {epsilon_limited_pct:.2f}%, PNG values changed = {changed_pct:.5f}%',
+                    flush=True,
+                )
+                del image_before_step
 
         if it == args.Iteration:
             data_save = copy.deepcopy(image_syn.detach().cpu())
