@@ -7,6 +7,7 @@ SSL networks are trained only for downstream evaluation, never for distillation.
 import argparse
 import math
 import os
+import random
 
 import numpy as np
 import torch
@@ -36,6 +37,24 @@ def clear_directory(directory):
                 os.rmdir(path)
 
 
+def set_random_seed(seed):
+    """Seed every RNG used by distillation and SSL evaluation."""
+    random.seed(seed)
+    np.random.seed(seed)
+    torch.manual_seed(seed)
+    if torch.cuda.is_available():
+        torch.cuda.manual_seed_all(seed)
+
+
+def configure_determinism(seed):
+    os.environ['PYTHONHASHSEED'] = str(seed)
+    os.environ['CUBLAS_WORKSPACE_CONFIG'] = ':4096:8'
+    set_random_seed(seed)
+    torch.backends.cudnn.benchmark = False
+    torch.backends.cudnn.deterministic = True
+    torch.use_deterministic_algorithms(True)
+
+
 def main():
     parser = argparse.ArgumentParser(description='Wavelet scattering moment distillation')
 
@@ -44,6 +63,7 @@ def main():
     parser.add_argument('--percentage', type=int, default=1, help='percentage of total data size')
     parser.add_argument('--data_path', type=str, default='/home/mmoslem3/scratch/data', help='dataset path')
     parser.add_argument('--device', choices=['cpu', 'cuda'], default='cuda' if torch.cuda.is_available() else 'cpu')
+    parser.add_argument('--seed', type=int, default=0, help='seed for distillation initialization and evaluation')
 
     # -------------------- Distillation --------------------
     parser.add_argument('--Iteration', type=int, default=1001, help='number of synthetic pixel updates')
@@ -86,9 +106,12 @@ def main():
         parser.error('--gamma must be finite and nonnegative.')
     if not math.isfinite(args.lr_img) or args.lr_img <= 0:
         parser.error('--lr_img must be finite and positive.')
+    if args.seed < 0:
+        parser.error('--seed must be nonnegative.')
     args.method = 'Scattering'
     args.dsa_param = ParamDiffAug()
     args.dsa = False
+    configure_determinism(args.seed)
 
     os.makedirs(args.save_path, exist_ok=True)
     clear_directory(args.save_path)
@@ -105,7 +128,7 @@ def main():
     print('Hyper-parameters: \n', args.__dict__)
 
     # Keep the real dataset on the host; only scattering batches go to the device.
-    indices = np.random.permutation(len(dst_train))[:num_syn]
+    indices = np.random.RandomState(args.seed).permutation(len(dst_train))[:num_syn]
     image_syn = torch.stack([dst_train[int(i)][0] for i in indices]).to(args.device).detach().requires_grad_(True)
     diag_mean = torch.tensor(mean, device=args.device).view(1, channel, 1, 1)
     diag_std = torch.tensor(std, device=args.device).view(1, channel, 1, 1)
@@ -116,11 +139,17 @@ def main():
     image_syn_init_uint8 = to_uint8(image_syn.detach())
 
     def evaluate(iteration, record=False):
-        for model_eval in model_eval_pool:
+        for model_index, model_eval in enumerate(model_eval_pool):
             print('-------------------------\nEvaluation\nmodel_eval = %s, iteration = %d' % (model_eval, iteration))
             accs = []
             for it_eval in range(args.num_eval):
-                net_eval = get_network(model_eval, channel, num_classes, im_size).to(args.device)
+                eval_index = model_index * args.num_eval + it_eval
+                network_seed = args.seed + eval_index
+                training_seed = args.seed + 1_000_000 + eval_index
+                net_eval = get_network(
+                    model_eval, channel, num_classes, im_size, seed=network_seed
+                ).to(args.device)
+                set_random_seed(training_seed)
                 _, _, acc_test = evaluate_synset_SSL(
                     it_eval, net_eval, image_syn.detach().clone(), dst_train, testloader, args
                 )
@@ -189,6 +218,7 @@ def main():
         'iteration': args.Iteration,
         'scattering': {'J': args.scattering_J, 'L': args.scattering_L, 'max_order': 2},
         'gamma': args.gamma,
+        'seed': args.seed,
     }, save_name)
     print('Saved synthetic data to %s' % save_name)
 

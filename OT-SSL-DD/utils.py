@@ -121,8 +121,12 @@ def get_default_convnet_setting():
 
 
 
-def get_network(model, channel, num_classes, im_size=(32, 32)):
-    torch.random.manual_seed(int(time.time() * 1000) % 100000)
+def get_network(model, channel, num_classes, im_size=(32, 32), seed=None):
+    if seed is None:
+        seed = int(time.time() * 1000) % 100000
+    torch.random.manual_seed(seed)
+    if torch.cuda.is_available():
+        torch.cuda.manual_seed_all(seed)
     net_width, net_depth, net_act, net_norm, net_pooling = get_default_convnet_setting()
 
     if model == 'MLP':
@@ -615,7 +619,7 @@ def evaluate_synset_SSL(it_eval, net, images_train, dst_train, testloader, args)
         num_classes = net(images_train[:1]).shape[1]
 
     num_labeled = max(1, int(len(dst_train) * args.label_percentage / 100))
-    indices_labeled = np.random.RandomState(it_eval).permutation(len(dst_train))[:num_labeled]
+    indices_labeled = np.random.RandomState(getattr(args, 'seed', 0) + it_eval).permutation(len(dst_train))[:num_labeled]
     dst_labeled = torch.utils.data.Subset(dst_train, indices_labeled)
     trainloader_linear = torch.utils.data.DataLoader(dst_labeled, batch_size=args.batch_linear, shuffle=True, num_workers=0)
 
