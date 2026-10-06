@@ -125,6 +125,131 @@ def moment_loss_and_gradient(features, real_mean, real_covariance, gamma=1.0,
     return loss, mean_loss, covariance_loss, feature_gradient
 
 
+@torch.no_grad()
+def cross_view_loss_and_gradients(features_a, features_b, real_a, real_b,
+                                  covariance_block_size=1024):
+    """Match cross-covariance of two views with corresponding image rows.
+
+    C_syn = A.T @ B / (M - 1), C_real = R_a.T @ R_b / (N - 1),
+    where each feature matrix is centered by its own column mean.
+    For E = C_syn - C_real, L_pair = ||E||_F^2 has gradients
+    dL/dA = 2 * B @ E.T / (M - 1), dL/dB = 2 * A @ E / (M - 1).
+    E is generally NOT symmetric: both branches must be differentiated.
+    All matrix entries are included, using row blocks to bound memory.
+    """
+    matrices = (features_a, features_b, real_a, real_b)
+    if any(matrix.ndim != 2 or len(matrix) < 2 for matrix in matrices):
+        raise ValueError('Cross-view covariance requires at least two rows per feature matrix.')
+    if len(features_a) != len(features_b) or len(real_a) != len(real_b):
+        raise ValueError('The two views must contain the same image rows in the same order.')
+    if features_a.shape[1] != real_a.shape[1] or features_b.shape[1] != real_b.shape[1]:
+        raise ValueError('Real and synthetic feature dimensions must match for each view.')
+    if covariance_block_size < 1:
+        raise ValueError('covariance_block_size must be positive.')
+
+    a = features_a - features_a.mean(dim=0)
+    b = features_b - features_b.mean(dim=0)
+    ra = real_a - real_a.mean(dim=0)
+    rb = real_b - real_b.mean(dim=0)
+    syn_denominator = len(a) - 1
+    real_denominator = len(ra) - 1
+    gradient_a = torch.empty_like(a)
+    gradient_b = torch.zeros_like(b)
+    loss = a.new_zeros(())
+    for start in range(0, a.shape[1], covariance_block_size):
+        end = min(start + covariance_block_size, a.shape[1])
+        error = a[:, start:end].T @ b
+        error.div_(syn_denominator)
+        error.addmm_(ra[:, start:end].T, rb, alpha=-1.0 / real_denominator)
+        loss.add_(error.square().sum())
+        gradient_a[:, start:end] = (b @ error.T) * (2.0 / syn_denominator)
+        gradient_b.addmm_(a[:, start:end], error, alpha=2.0 / syn_denominator)
+
+    gradient_a.sub_(gradient_a.mean(dim=0, keepdim=True))
+    gradient_b.sub_(gradient_b.mean(dim=0, keepdim=True))
+    return loss, gradient_a, gradient_b
+
+
+def _backward_feature_gradient(images, feature_extractor, feature_gradient,
+                               batch_size, accumulate):
+    """Replay one view in chunks and propagate its feature gradient to pixels."""
+    if not torch.isfinite(feature_gradient).all().item():
+        raise FloatingPointError('Non-finite scattering feature gradient.')
+    image_gradient = torch.empty_like(images)
+    for start in range(0, len(images), batch_size):
+        end = min(start + batch_size, len(images))
+        batch = images[start:end].detach().requires_grad_(True)
+        output = feature_extractor(batch)
+        image_gradient[start:end] = torch.autograd.grad(
+            output, batch, grad_outputs=feature_gradient[start:end]
+        )[0]
+    if not torch.isfinite(image_gradient).all().item():
+        raise FloatingPointError('Non-finite synthetic pixel gradient.')
+    if accumulate and images.grad is not None:
+        images.grad.add_(image_gradient)
+    else:
+        images.grad = image_gradient
+
+
+def backward_scattering_views(images, feature_extractors, real_features,
+                               gamma=1.0, pair_weight=1.0, batch_size=32,
+                               covariance_block_size=1024):
+    """Accumulate marginal and paired-view losses into existing pixel gradients.
+
+    L_aug = sum_v L_moments(v) + pair_weight * sum_{a<b} L_pair(a, b).
+    Real view matrices share one row order; synthetic views share another.
+    Every view is replayed unchanged when propagating its combined gradient.
+    The returned pair loss is the unweighted sum over unordered view pairs.
+    """
+    if batch_size < 1 or len(images) < 2:
+        raise ValueError('Use a positive batch size and at least two synthetic images.')
+    if not feature_extractors or len(feature_extractors) != len(real_features):
+        raise ValueError('Each augmentation view needs a corresponding real feature matrix.')
+    if not math.isfinite(pair_weight) or pair_weight < 0:
+        raise ValueError('pair_weight must be finite and nonnegative.')
+    if pair_weight > 0 and len(feature_extractors) < 2:
+        raise ValueError('A positive pair_weight requires at least two augmentation views.')
+
+    with torch.no_grad():
+        synthetic_features = [
+            torch.cat([extractor(batch) for batch in images.split(batch_size)], dim=0)
+            for extractor in feature_extractors
+        ]
+    view_losses = []
+    feature_gradients = []
+    mean_loss = images.new_zeros(())
+    covariance_loss = images.new_zeros(())
+    pair_loss = images.new_zeros(())
+    for features, real in zip(synthetic_features, real_features):
+        loss, mean, covariance, gradient = moment_loss_and_gradient(
+            features, real.mean(dim=0), None, gamma, covariance_block_size,
+            real_features=real,
+        )
+        view_losses.append(loss)
+        feature_gradients.append(gradient)
+        mean_loss = mean_loss + mean
+        covariance_loss = covariance_loss + covariance
+
+    if pair_weight > 0:
+        for a in range(len(feature_extractors)):
+            for b in range(a + 1, len(feature_extractors)):
+                loss, gradient_a, gradient_b = cross_view_loss_and_gradients(
+                    synthetic_features[a], synthetic_features[b],
+                    real_features[a], real_features[b], covariance_block_size,
+                )
+                pair_loss = pair_loss + loss
+                feature_gradients[a].add_(gradient_a, alpha=pair_weight)
+                feature_gradients[b].add_(gradient_b, alpha=pair_weight)
+                del gradient_a, gradient_b
+    del synthetic_features
+    loss = covariance_loss + gamma * mean_loss + pair_weight * pair_loss
+    if not torch.isfinite(loss).item():
+        raise FloatingPointError('Non-finite augmented scattering loss.')
+    for extractor, gradient in zip(feature_extractors, feature_gradients):
+        _backward_feature_gradient(images, extractor, gradient, batch_size, accumulate=True)
+    return loss, mean_loss, covariance_loss, pair_loss, view_losses
+
+
 def backward_scattering_moments(images, feature_extractor, real_mean,
                                 real_covariance, gamma=1.0, batch_size=32,
                                 covariance_block_size=1024, real_features=None,
@@ -154,18 +279,5 @@ def backward_scattering_moments(images, feature_extractor, real_mean,
     if not torch.isfinite(loss).item() or not torch.isfinite(feature_gradient).all().item():
         raise FloatingPointError('Non-finite scattering moment loss or feature gradient.')
 
-    image_gradient = torch.empty_like(images)
-    for start in range(0, len(images), batch_size):
-        end = min(start + batch_size, len(images))
-        batch = images[start:end].detach().requires_grad_(True)
-        output = feature_extractor(batch)
-        image_gradient[start:end] = torch.autograd.grad(
-            output, batch, grad_outputs=feature_gradient[start:end]
-        )[0]
-    if not torch.isfinite(image_gradient).all().item():
-        raise FloatingPointError('Non-finite synthetic pixel gradient.')
-    if accumulate and images.grad is not None:
-        images.grad.add_(image_gradient)
-    else:
-        images.grad = image_gradient
+    _backward_feature_gradient(images, feature_extractor, feature_gradient, batch_size, accumulate)
     return loss, mean_loss, covariance_loss

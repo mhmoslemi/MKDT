@@ -1,4 +1,4 @@
-"""Match scattering moments of clean images and fresh DSA-augmented views.
+"""Match clean/view scattering moments and paired-view cross-covariances.
 
 Additional dependency: python -m pip install kymatio==0.3.0
 SSL networks are trained only for downstream evaluation, never for distillation.
@@ -16,6 +16,7 @@ from torchvision.utils import save_image
 from scattering_moments import (
     ScatteringFeatures,
     backward_scattering_moments,
+    backward_scattering_views,
     compute_real_moments,
 )
 from utils import (
@@ -96,23 +97,24 @@ def main():
 
     # -------------------- Distillation --------------------
     parser.add_argument('--Iteration', type=int, default=4000, help='number of synthetic pixel updates')
-    parser.add_argument('--lr_img', type=float, default=0.1, help='SGD step size for synthetic pixels')
+    parser.add_argument('--lr_img', type=float, default=0.1, help='Adam learning rate for synthetic pixels')
     parser.add_argument('--batch_real', type=int, default=4096, help='batch size for caching full real moments')
     parser.add_argument('--batch_syn', type=int, default=512, help='synthetic scattering batch size; moments use all images')
     parser.add_argument('--scattering_J', type=int, default=2, help='log2 scattering scale (at least 2)')
     parser.add_argument('--scattering_L', type=int, default=8, help='number of wavelet orientations')
     parser.add_argument('--gamma', type=float, default=5.0, help='weight of squared mean distance; covariance weight is 1')
     parser.add_argument('--covariance_block_size', type=int, default=1024, help='rows per exact covariance-loss block')
-    parser.add_argument('--distill_aug_views', type=int, default=2, help='fresh augmented loss terms per update, in addition to the clean loss; 0 disables')
+    parser.add_argument('--distill_aug_views', type=int, default=2, help='fresh views per update; clean-only mode requires 0 together with --pair_weight 0')
     parser.add_argument('--distill_aug_strategy', type=str, default='color_crop_cutout_flip_scale_rotate', help='DSA operations for distillation views')
     parser.add_argument('--distill_aug_mode', choices=['S', 'M'], default='M', help='S: sample one operation group per view; M: compose all listed groups')
+    parser.add_argument('--pair_weight', type=float, default=1.0, help='weight of summed paired-view cross-covariance losses; 0 disables')
 
     # -------------------- SSL evaluation --------------------
     parser.add_argument('--model', type=str, default='ConvNet', help='evaluation model')
     parser.add_argument('--lr_net', type=float, default=0.01, help='SSL evaluation learning rate')
     parser.add_argument('--batch_train', type=int, default=256, help='batch size for SSL evaluation')
     parser.add_argument('--ssl_method', type=str, default='simclr', help='simclr/barlowtwins')
-    parser.add_argument('--ssl_aug_strategy', type=str, default='color_crop_cutout_flip_scale_rotate', help='augmentation strategy for SSL evaluation')
+    parser.add_argument('--ssl_aug_strategy', type=str, default=None, help='defaults to --distill_aug_strategy; must match it when augmented distillation is enabled')
     parser.add_argument('--projection_dim', type=int, default=128, help='projection dimension for SSL evaluation')
     parser.add_argument('--temperature', type=float, default=0.5, help='temperature for SimCLR')
     parser.add_argument('--barlow_lambda', type=float, default=0.005, help='off-diagonal weight for Barlow Twins')
@@ -142,13 +144,23 @@ def main():
         parser.error('--seed must be nonnegative.')
     if args.distill_aug_views < 0:
         parser.error('--distill_aug_views must be nonnegative.')
+    if not math.isfinite(args.pair_weight) or args.pair_weight < 0:
+        parser.error('--pair_weight must be finite and nonnegative.')
+    if args.pair_weight > 0 and args.distill_aug_views < 2:
+        parser.error('Paired-view matching needs --distill_aug_views >= 2; use --pair_weight 0 to disable it.')
     if args.distill_aug_views:
         if args.batch_real < 2:
             parser.error('Augmented covariance needs --batch_real >= 2.')
         if set(args.distill_aug_strategy.split('_')) - set(AUGMENT_FNS):
             parser.error('--distill_aug_strategy must contain groups from: ' + ', '.join(AUGMENT_FNS))
+    if args.ssl_aug_strategy is None:
+        args.ssl_aug_strategy = args.distill_aug_strategy
+    if args.distill_aug_views and args.ssl_aug_strategy != args.distill_aug_strategy:
+        parser.error('SSL evaluation and distillation must use the same augmentation strategy.')
     args.method = 'Scattering'
     args.dsa_param = ParamDiffAug()
+    args.dsa_param.aug_mode = args.distill_aug_mode
+    args.ssl_aug_mode = args.distill_aug_mode
     args.dsa = False
     configure_determinism(args.seed)
 
@@ -164,6 +176,7 @@ def main():
     scattering = ScatteringFeatures(im_size, J=args.scattering_J, L=args.scattering_L).to(args.device).eval()
     model_eval_pool = get_eval_pool(args.eval_mode, args.model, args.model) if args.num_eval else []
     accs_all_exps = {model: [] for model in model_eval_pool}
+    baseline_accs = {}
     print('Hyper-parameters: \n', args.__dict__)
 
     # Keep the real dataset on the host; only scattering batches go to the device.
@@ -192,14 +205,22 @@ def main():
                 _, _, acc_test = evaluate_synset_SSL(
                     it_eval, net_eval, image_syn.detach().clone(), dst_train, testloader, args
                 )
-                accs.append(acc_test)
+                accs.append(float(acc_test))
             print('Evaluate %d random %s, mean = %.4f std = %.4f\n-------------------------' % (
                 len(accs), model_eval, np.mean(accs), np.std(accs)
             ))
+            if iteration == 0:
+                baseline_accs[model_eval] = list(accs)
+            else:
+                differences = 100 * (np.asarray(accs) - np.asarray(baseline_accs[model_eval]))
+                print('Gain over initial subset with matched evaluation seeds: mean = %+.3f pp, std = %.3f pp, per seed = %s' % (
+                    np.mean(differences), np.std(differences),
+                    ', '.join('%+.3f' % difference for difference in differences),
+                ), flush=True)
             if record:
                 accs_all_exps[model_eval].extend(accs)
 
-    # evaluate(0, record=args.Iteration == 0)
+    evaluate(0, record=args.Iteration == 0)
 
     # Phi is fixed, so the full-dataset real statistics are computed only once.
     # Inputs use the same dataset normalization as the downstream SSL evaluator.
@@ -217,14 +238,12 @@ def main():
     # This generator intentionally has no fixed seed: augmented batches and
     # transforms are freshly sampled independently of initialization/evaluation.
     augmentation_rng = np.random.default_rng()
-    print('Loss = clean full-dataset loss + sum of %d fresh DSA view losses (real batch size %d)' % (
-        args.distill_aug_views, min(args.batch_real, len(dst_train))
+    pair_count = args.distill_aug_views * (args.distill_aug_views - 1) // 2
+    print('Loss = clean + sum of %d view moment losses + %.4g * sum of %d cross-view covariance losses (real batch size %d)' % (
+        args.distill_aug_views, args.pair_weight, pair_count, min(args.batch_real, len(dst_train))
     ), flush=True)
     print('%s distillation begins' % get_time(), flush=True)
-    # Plain SGD implements S_{t+1} = S_t - lr_img * grad_S L exactly.
-    # optimizer_img = torch.optim.SGD([image_syn], lr=args.lr_img)
-    optimizer_img = torch.optim.Adam([image_syn, ], lr=args.lr_img) # optimizer_img for synthetic data
-    optimizer_img.zero_grad()
+    optimizer_img = torch.optim.Adam([image_syn], lr=args.lr_img)
 
 
     for it in range(1, args.Iteration + 1):
@@ -236,11 +255,14 @@ def main():
         )
         clean_loss = loss.item()
         view_losses = []
+        pair_loss = image_syn.new_zeros(())
         if args.distill_aug_views:
             real_indices = augmentation_rng.choice(
                 len(dst_train), size=min(args.batch_real, len(dst_train)), replace=False
             )
             real_batch = torch.stack([dst_train[int(i)][0] for i in real_indices]).to(args.device)
+            views = []
+            real_view_features = []
             for _ in range(args.distill_aug_views):
                 # Reuse this sampled transform only within this view's real,
                 # synthetic, and backward passes. Resample on the next view.
@@ -248,31 +270,31 @@ def main():
                     scattering, args.distill_aug_strategy, args.distill_aug_mode,
                     replay_seed=int(augmentation_rng.integers(0, 2 ** 31)),
                 )
+                views.append(view)
                 with torch.no_grad():
-                    real_view_features = torch.cat([
+                    # Every view uses the SAME image rows, preserving pairs.
+                    real_view_features.append(torch.cat([
                         view(batch) for batch in real_batch.split(args.batch_syn)
-                    ], dim=0)
-                    real_view_mean = real_view_features.mean(dim=0)
-                view_loss, view_mean_loss, view_covariance_loss = backward_scattering_moments(
-                    image_syn, view, real_view_mean, None,
-                    gamma=args.gamma, batch_size=args.batch_syn,
-                    covariance_block_size=args.covariance_block_size,
-                    real_features=real_view_features, accumulate=True,
-                )
-                loss = loss + view_loss
-                mean_loss = mean_loss + view_mean_loss
-                covariance_loss = covariance_loss + view_covariance_loss
-                view_losses.append(view_loss.item())
-                del real_view_features, real_view_mean, view
-            del real_batch
+                    ], dim=0))
+            augmented_loss, augmented_mean, augmented_covariance, pair_loss, view_terms = backward_scattering_views(
+                image_syn, views, real_view_features,
+                gamma=args.gamma, pair_weight=args.pair_weight,
+                batch_size=args.batch_syn, covariance_block_size=args.covariance_block_size,
+            )
+            loss = loss + augmented_loss
+            mean_loss = mean_loss + augmented_mean
+            covariance_loss = covariance_loss + augmented_covariance
+            view_losses = [term.item() for term in view_terms]
+            del real_batch, real_view_features, views, view
         optimizer_img.step()
         with torch.no_grad():
             if not torch.isfinite(image_syn).all().item():
                 raise FloatingPointError('Synthetic pixel update is non-finite; reduce --lr_img.')
             changed = (to_uint8(image_syn) != image_syn_init_uint8).float().mean().item() * 100
         if it%5 == 0 or it ==1:
-            print('%s iter = %05d, loss = %.10f, covariance = %.10f, mean = %.10f, clean = %.10f, augmented views = %s, PNG values changed = %.5f%%' % (
+            print('%s iter = %05d, loss = %.10f, covariance = %.10f, mean = %.10f, pair = %.10f, weighted pair = %.10f, clean = %.10f, augmented views = %s, PNG values changed = %.5f%%' % (
                 get_time(), it, loss.item(), covariance_loss.item(), mean_loss.item(),
+                pair_loss.item(), args.pair_weight * pair_loss.item(),
                 clean_loss, ', '.join('%.10f' % value for value in view_losses), changed
             ), flush=True)
 
@@ -295,13 +317,17 @@ def main():
         'iteration': args.Iteration,
         'scattering': {'J': args.scattering_J, 'L': args.scattering_L, 'max_order': 2},
         'gamma': args.gamma,
+        'pair_weight': args.pair_weight,
         'seed': args.seed,
+        'baseline_accs': baseline_accs,
+        'evaluation_augmentation': {'strategy': args.ssl_aug_strategy, 'mode': args.ssl_aug_mode},
         'distill_augmentation': {
             'views': args.distill_aug_views,
             'strategy': args.distill_aug_strategy,
             'mode': args.distill_aug_mode,
             'batch_real': args.batch_real,
             'fixed_seed': False,
+            'cross_view_pairs': 'all_unordered_pairs_with_corresponding_image_rows',
         },
     }, save_name)
     print('Saved synthetic data to %s' % save_name)
