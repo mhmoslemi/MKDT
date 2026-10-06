@@ -235,10 +235,10 @@ def main():
         loss_history.append(objective)
         print('%s iter = %05d, loss = %.10f, pixel drift RMS = %.5f/255, PNG values changed = %.5f%%, samples = %s' % (get_time(), iteration, objective, drift, changed, '; '.join(sampled_models)), flush=True)
 
-        if iteration % 50 == 0:
+        if iteration % 200 == 0:
             evaluate(iteration)
 
-        if iteration % 5 == 0:
+        if iteration % 10 == 0:
             grid_path = os.path.join(args.save_path, 'vis_RFC_%s_%s_%gpercent_iter%d.png' % (args.dataset, args.model, args.percentage, iteration))
             visible = (image_syn.detach() * diag_std + diag_mean).clamp(0, 1).cpu()
             save_image(visible, grid_path, nrow=int(np.ceil(np.sqrt(num_syn))))
