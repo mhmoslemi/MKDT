@@ -7,7 +7,11 @@ import torch
 from torchvision.utils import save_image
 from utils import (
     get_dataset, get_network, get_eval_pool, evaluate_synset_SSL,
-    get_time, DiffAugment, ParamDiffAug
+    get_time, ParamDiffAug
+)
+from ssl_gradient_matching import (
+    SSLReference, draw_view_seeds, mean_parameter_gradients,
+    gradient_match_and_backward, projected_backtracking_step,
 )
 
 def clear_directory(directory):
@@ -24,136 +28,8 @@ def clear_directory(directory):
 
 
 
-def compute_cross_moment(z1, z2):
-    """Return the uncentered cross moment E[z1 z2^T] in the supplied equation."""
-    return (z1.T @ z2) / z1.size(0)
-
-
-def augmented_cross_moment(embed, images, view_seeds, strategy, aug_param):
-    seed_1, seed_2 = view_seeds
-    features_1 = embed(DiffAugment(images, strategy=strategy, seed=seed_1, param=aug_param))
-    features_2 = embed(DiffAugment(images, strategy=strategy, seed=seed_2, param=aug_param))
-    return compute_cross_moment(features_1, features_2)
-
-
-def cross_moment_loss_and_backward(
-    embed, real_images, synthetic_images, view_pairs, strategy, aug_param, num_networks
-):
-    """Accumulate the image gradient of ||mean_a(C_syn,a - C_real,a)||_F^2 / K.
-
-    For D_a = C_syn,a - C_real,a, the old mean_a ||D_a||_F^2 equals
-    ||mean_a D_a||_F^2 + mean_a ||D_a - mean_a D_a||_F^2. Averaging the
-    moments before squaring removes that extra empirical variance term.
-    Finite view sampling remains a Monte Carlo approximation of the expectation.
-
-    If D = mean_a D_a, then dL/dC_syn,a = 2 D / (K A). Compute D without
-    retaining graphs, then replay each view pair and apply this exact upstream
-    gradient. This is the chain rule for the sampled objective, with graph memory
-    independent of A. The caller must freeze the network and put it in eval mode.
-    No division by the feature matrix's d^2 entries is applied to loss or gradient.
-    """
-    num_pairs = len(view_pairs)
-    real_mean = None
-    synthetic_mean = None
-    with torch.no_grad():
-        for seeds in view_pairs:
-            real_moment = augmented_cross_moment(embed, real_images, seeds, strategy, aug_param)
-            synthetic_moment = augmented_cross_moment(embed, synthetic_images, seeds, strategy, aug_param)
-            if real_mean is None:
-                real_mean = real_moment
-                synthetic_mean = synthetic_moment
-            else:
-                real_mean.add_(real_moment)
-                synthetic_mean.add_(synthetic_moment)
-
-        real_mean.div_(num_pairs)
-        synthetic_mean.div_(num_pairs)
-        residual = synthetic_mean - real_mean
-        loss_f2 = residual.square().sum()
-        target_f2 = real_mean.square().sum()
-        moment_gradient = residual * (2.0 / (num_networks * num_pairs))
-
-    # Seeds are fresh each step, but must be identical between the two passes.
-    # Do not square a separate loss for each replayed pair here.
-    for seeds in view_pairs:
-        synthetic_moment = augmented_cross_moment(embed, synthetic_images, seeds, strategy, aug_param)
-        synthetic_moment.backward(moment_gradient)
-
-    return loss_f2, target_f2, real_mean
-
-
-@torch.no_grad()
-def sampled_cross_moment_loss(images, sampled_targets, strategy, aug_param, reject_above):
-    """Evaluate a trial on the SAME targets and views used for its gradient.
-
-    Targets are cached on the CPU to avoid keeping K dense matrices on the GPU.
-    All loss contributions are nonnegative, so a partial sum above the acceptance
-    threshold proves rejection without evaluating the remaining networks.
-    """
-    if reject_above < 0:
-        return math.inf
-    total = torch.zeros((), device=images.device)
-    for embed, real_mean_cpu, view_pairs in sampled_targets:
-        synthetic_mean = None
-        for seeds in view_pairs:
-            moment = augmented_cross_moment(embed, images, seeds, strategy, aug_param)
-            if synthetic_mean is None:
-                synthetic_mean = moment
-            else:
-                synthetic_mean.add_(moment)
-        synthetic_mean.div_(len(view_pairs))
-        residual = synthetic_mean - real_mean_cpu.to(images.device)
-        total.add_(residual.square().sum() / len(sampled_targets))
-        value = total.item()
-        if not math.isfinite(value) or value > reject_above:
-            return math.inf
-    return total.item()
-
-
-@torch.no_grad()
-def projected_backtracking_step(
-    images, sampled_targets, strategy, aug_param, pixel_min, pixel_max,
-    loss_before, initial_step, max_trials=20,
-):
-    """Commit only a projected gradient step satisfying Armijo decrease.
-
-    Set y = projection_box(x - alpha*g), d = y-x. For feasible x, projection
-    gives <g,d> <= -||d||^2/alpha. Accept only if
-        f(y) <= f(x) + 1e-4 * <g,d> < f(x).
-    Otherwise halve alpha and retry. Trials never modify x; if no candidate
-    passes, leave x unchanged. Reuse all real targets and augmentation seeds:
-    resampling during the search would invalidate this comparison.
-
-    This enforces decrease of the current sampled surrogate, not a guarantee
-    about a fresh sample, the population objective, or downstream SSL accuracy.
-    """
-    gradient = images.grad.detach()
-    original = images.detach()
-    step_size = initial_step
-    for trial in range(1, max_trials + 1):
-        candidate = original - step_size * gradient
-        candidate = torch.maximum(torch.minimum(candidate, pixel_max), pixel_min)
-        displacement = candidate - original
-        slope = (gradient * displacement).sum(dtype=torch.float64).item()
-        if not math.isfinite(slope):
-            step_size *= 0.5
-            continue
-        if slope >= 0:
-            # No representable feasible descent step at this point/step size.
-            return loss_before, 0.0, trial, False
-        acceptance_bound = loss_before + 1e-4 * slope
-        loss_after = sampled_cross_moment_loss(
-            candidate, sampled_targets, strategy, aug_param, acceptance_bound
-        )
-        if math.isfinite(loss_after) and loss_after <= acceptance_bound and loss_after < loss_before:
-            images.copy_(candidate)
-            return loss_after, step_size, trial, True
-        step_size *= 0.5
-    return loss_before, 0.0, max_trials, False
-
-
 def main():
-    parser = argparse.ArgumentParser(description='Parameter Processing')
+    parser = argparse.ArgumentParser(description='Dataset distillation by matching SSL training gradients')
 
     # -------------------- Data --------------------
     parser.add_argument('--dataset', type=str, default='CIFAR10', help='dataset')
@@ -162,10 +38,12 @@ def main():
 
     # -------------------- Distillation --------------------
     parser.add_argument('--Iteration', type=int, default=1000, help='training iterations')
-    parser.add_argument('--lr_img', type=float, default=0.5, help='initial trial step for projected gradient with backtracking')
+    parser.add_argument('--lr_img', type=float, default=0.5, help='initial proposed pixel-step RMS in 0-255 units; backtracking controls acceptance')
     parser.add_argument('--batch_real', type=int, default=256, help='batch size for real data')
-    parser.add_argument('--num_random_nets', type=int, default=20, help='number of fixed random feature networks')
-    parser.add_argument('--num_aug_pairs', type=int, default=10, help='view pairs averaged inside the cross-moment distance')
+    parser.add_argument('--num_reference_nets', '--num_random_nets', dest='num_reference_nets', type=int, default=3, help='number of evolving SSL references (old flag retained as an alias)')
+    parser.add_argument('--num_aug_pairs', type=int, default=2, help='view pairs averaged before matching SSL parameter gradients')
+    parser.add_argument('--reference_warmup_steps', type=int, default=200, help='initial training-age spacing between reference networks')
+    parser.add_argument('--reference_max_steps', type=int, default=2000, help='real SSL steps before a reference restarts from a new seeded initialization')
     parser.add_argument('--seed', type=int, default=0, help='seed for initialization, sampling, and evaluation networks')
 
     # -------------------- Network --------------------
@@ -194,11 +72,19 @@ def main():
     parser.add_argument('--save_path', type=str, default='result', help='path to save results')
 
     args = parser.parse_args()
-    if args.num_random_nets < 1 or args.num_aug_pairs < 1 or args.batch_real < 1:
-        parser.error('num_random_nets, num_aug_pairs, and batch_real must be positive')
+    if args.num_reference_nets < 1 or args.num_aug_pairs < 1 or args.batch_real < 2 or args.batch_train < 2:
+        parser.error('reference and augmentation counts must be positive; SSL batch sizes must be at least two')
     if not math.isfinite(args.lr_img) or args.lr_img <= 0:
         parser.error('lr_img must be finite and positive')
-    args.method = 'GraphEigenspace'
+    if args.reference_warmup_steps < 0 or args.reference_max_steps < 1:
+        parser.error('reference_warmup_steps must be nonnegative and reference_max_steps positive')
+    if args.ssl_method.lower() not in ('simclr', 'barlowtwins', 'barlow_twins'):
+        parser.error('ssl_method must be simclr or barlowtwins')
+    if not math.isfinite(args.temperature) or args.temperature <= 0 or args.projection_dim < 1:
+        parser.error('temperature and projection_dim must be positive')
+    if args.Iteration < 1 or not 0 < args.percentage <= 100:
+        parser.error('Iteration must be positive and percentage must lie in (0, 100]')
+    args.method = 'SSLGradientMatching'
     args.image_optimizer = 'projected_gradient_armijo'
     args.device = 'cuda' if torch.cuda.is_available() else 'cpu'
     args.dsa_param = ParamDiffAug()
@@ -209,14 +95,11 @@ def main():
     print('Cleared all previous files from %s' % args.save_path, flush=True)
     os.makedirs(args.data_path, exist_ok=True)
 
-    if not os.path.exists(args.data_path):
-        os.makedirs(args.data_path, exist_ok=True)
-
-    if not os.path.exists(args.save_path):
-        os.makedirs(args.save_path, exist_ok=True)
-
     channel, im_size, num_classes, class_names, mean, std, dst_train, dst_test, testloader = get_dataset(args.dataset, args.data_path)
     num_syn = int(len(dst_train) * args.percentage / 100)
+    if num_syn < 2:
+        parser.error('the synthetic set needs at least two images for SSL')
+    args.match_batch_size = min(args.batch_real, args.batch_train, num_syn)
     model_eval_pool = get_eval_pool(args.eval_mode, args.model, args.model)
 
     accs_all_exps = dict()
@@ -227,13 +110,14 @@ def main():
 
     ''' organize the real dataset '''
     images_all = [torch.unsqueeze(dst_train[i][0], dim=0) for i in range(len(dst_train))]
-    images_all = torch.cat(images_all, dim=0).to(args.device)
+    images_all = torch.cat(images_all, dim=0)
 
     sample_generator = torch.Generator().manual_seed(args.seed + 1)
+    synthetic_generator = torch.Generator().manual_seed(args.seed + 2)
 
     def get_images(n):
-        idx_shuffle = torch.randperm(len(images_all), generator=sample_generator)[:n].to(args.device)
-        return images_all[idx_shuffle]
+        idx_shuffle = torch.randperm(len(images_all), generator=sample_generator)[:n]
+        return images_all[idx_shuffle].to(args.device)
 
     ''' initialize the synthetic data '''
     image_syn = get_images(num_syn).detach().clone().requires_grad_(True)
@@ -268,70 +152,75 @@ def main():
         evaluate_checkpoint(0)
 
     ''' training '''
-    print('%s training begins' % get_time())
-
-    trial_step = args.lr_img
-    dsa_strategy = args.ssl_aug_strategy
+    trial_step = None
     augmentation_rng = np.random.default_rng()
+    reference_generations = [0] * args.num_reference_nets
 
-    # A finite fixed-bank approximation of E_{phi ~ P_net}. Resampling networks
-    # would also be a valid stochastic estimator; the fixed bank is retained here.
-    random_feature_nets = []
-    for net_index in range(args.num_random_nets):
-        net_seed = args.seed + 10000 + net_index
-        net = get_network(args.model, channel, num_classes, im_size, seed=net_seed).to(args.device)
-        net.eval()
-        for parameter in net.parameters():
-            parameter.requires_grad_(False)
-        random_feature_nets.append(net)
+    def build_reference(index):
+        seed = args.seed + 100000 + reference_generations[index] * args.num_reference_nets + index
+        reference = SSLReference(args, channel, num_classes, im_size, seed)
+        warmup = min(index * args.reference_warmup_steps, args.reference_max_steps - 1)
+        print(f'{get_time()} reference {index}: seed = {seed}, real SSL warmup = {warmup} steps', flush=True)
+        for step in range(warmup):
+            gradients, real_loss = mean_parameter_gradients(
+                reference, get_images(args.match_batch_size), draw_view_seeds(augmentation_rng, 1), args
+            )
+            reference.advance(gradients, args)
+            if (step + 1) % 100 == 0 or step + 1 == warmup:
+                print(f'{get_time()} reference {index}: warmup = {step + 1}/{warmup}, SSL loss = {real_loss.item():.6f}', flush=True)
+        return reference
 
-    print('Objective: mean_network ||mean_view C_syn - mean_view C_real||_F^2 (SUM over matrix entries)', flush=True)
-    print('Image updates: projected gradient with Armijo backtracking; loss_before/after use identical samples and views', flush=True)
+    references = [build_reference(index) for index in range(args.num_reference_nets)]
+    print(f'{get_time()} distillation begins: matching encoder AND projector gradients', flush=True)
+    print('Objective: mean_reference ||mean_view grad_SSL(syn) - mean_view grad_SSL(real)||^2 / ||mean_view grad_SSL(real)||^2', flush=True)
+    print(f'Matching batches: real = synthetic = {args.match_batch_size}; reference weights stay fixed during each image update', flush=True)
 
     for it in range(1, args.Iteration + 1):
         image_syn.grad = None
-        loss_avg = torch.zeros((), device=args.device)
-        target_f2_avg = torch.zeros((), device=args.device)
+        averages = dict(loss=0.0, cosine=0.0, norm_ratio=0.0, real_ssl=0.0, synthetic_ssl=0.0)
         sampled_targets = []
-
-        for net in random_feature_nets:
-            embed = net.module.embed if hasattr(net, 'module') else net.embed
-            real_batch = get_images(args.batch_real)
-            # Nondeterministic new augmentations; replay seeds only tie together
-            # real/synthetic views and the moment/gradient computation passes.
-            view_pairs = augmentation_rng.integers(
-                0, 2**31 - 1, size=(args.num_aug_pairs, 2)
-            ).tolist()
-            loss_f2, target_f2, real_mean = cross_moment_loss_and_backward(
-                embed, real_batch, image_syn, view_pairs, dsa_strategy,
-                args.dsa_param, args.num_random_nets,
+        reference_ages = []
+        for index, reference in enumerate(references):
+            if reference.steps >= args.reference_max_steps:
+                reference_generations[index] += 1
+                reference = references[index] = build_reference(index)
+            reference_ages.append(reference.steps)
+            indices = torch.randperm(num_syn, generator=synthetic_generator)[:args.match_batch_size].to(args.device)
+            target, metrics = gradient_match_and_backward(
+                reference, get_images(len(indices)), image_syn, indices,
+                draw_view_seeds(augmentation_rng, args.num_aug_pairs), args,
             )
-            loss_avg.add_(loss_f2 / args.num_random_nets)
-            target_f2_avg.add_(target_f2 / args.num_random_nets)
-            sampled_targets.append((embed, real_mean.cpu(), view_pairs))
+            sampled_targets.append(target)
+            for key, value in metrics.items():
+                averages[key] += value / args.num_reference_nets
 
-        if not torch.isfinite(loss_avg).item() or not torch.isfinite(image_syn.grad).all().item():
-            raise FloatingPointError('Non-finite cross-moment loss or image gradient; image update aborted')
+        if image_syn.grad is None:
+            image_syn.grad = torch.zeros_like(image_syn)
+        if not math.isfinite(averages['loss']) or not torch.isfinite(image_syn.grad).all().item():
+            raise FloatingPointError('Non-finite SSL gradient-matching loss or image gradient; update aborted')
 
         image_before_step = image_syn.detach().clone()
         gradient_rms = image_syn.grad.square().mean().sqrt().item()
-        loss_before = loss_avg.item()
+        loss_before = averages['loss']
+        if trial_step is None:
+            gradient_pixel_rms = (image_syn.grad * diag_std * 255).square().mean().sqrt().item()
+            # Start in interpretable pixel units, independent of loss units.
+            trial_step = min(args.lr_img / max(gradient_pixel_rms, 1e-12), math.sqrt(torch.finfo(image_syn.dtype).max))
         loss_after, accepted_step, trials, accepted = projected_backtracking_step(
-            image_syn, sampled_targets, dsa_strategy, args.dsa_param,
-            pixel_min, pixel_max, loss_before, trial_step,
+            image_syn, sampled_targets, args, pixel_min, pixel_max, loss_before, trial_step,
         )
+        # Advancing a reference sooner would invalidate the cached gradients and
+        # the loss comparisons used to accept/reject the image step.
+        for target in sampled_targets:
+            target.reference.advance(target.gradients, args)
         sampled_targets.clear()
         if accepted:
-            # Try growing the last successful step; every trial must still pass
-            # the same sufficient-decrease check, so growth cannot bypass it.
-            trial_step = min(2.0 * accepted_step, math.sqrt(torch.finfo(image_syn.dtype).max))
+            trial_step = min(accepted_step * (2.0 if trials == 1 else 1.0), math.sqrt(torch.finfo(image_syn.dtype).max))
+        else:
+            trial_step = None
 
         if it == 1 or it % 2 == 0 or not accepted:
             with torch.no_grad():
-                # Diagnostic normalization only; the optimized loss is the SUM.
-                target_norm_squared = max(target_f2_avg.item(), torch.finfo(loss_avg.dtype).tiny)
-                relative_before = math.sqrt(loss_before / target_norm_squared)
-                relative_after = math.sqrt(loss_after / target_norm_squared)
                 pixel_step = (image_syn - image_before_step) * diag_std * 255
                 pixel_drift = (image_syn - image_syn_init) * diag_std * 255
                 step_rms_255 = pixel_step.square().mean().sqrt().item()
@@ -339,8 +228,10 @@ def main():
                 image_syn_uint8 = ((image_syn * diag_std + diag_mean) * 255 + 0.5).clamp(0, 255).to(torch.uint8)
                 changed_pct = (image_syn_uint8 != image_syn_init_uint8).float().mean().item() * 100
                 print(
-                    f'{get_time()} iter = {it:05d}, loss_F2_before = {loss_before:.6f}, loss_F2_after = {loss_after:.6f}, '
-                    f'rel_F = {relative_before:.6f} -> {relative_after:.6f}, grad_RMS = {gradient_rms:.3e}, '
+                    f'{get_time()} iter = {it:05d}, grad_match = {loss_before:.6f} -> {loss_after:.6f}, '
+                    f'grad_cos_before = {averages["cosine"]:.4f}, norm_ratio_before = {averages["norm_ratio"]:.4f}, '
+                    f'SSL_real/syn_before = {averages["real_ssl"]:.4f}/{averages["synthetic_ssl"]:.4f}, '
+                    f'image_grad_RMS = {gradient_rms:.3e}, reference_steps = {reference_ages}, '
                     f'step_RMS_255 = {step_rms_255:.4f}, drift_RMS_255 = {drift_rms_255:.4f}, '
                     f'step_size = {accepted_step:.3e}, trials = {trials}, accepted = {accepted}, '
                     f'PNG values changed = {changed_pct:.5f}%',
@@ -348,9 +239,11 @@ def main():
                 )
         del image_before_step
 
-        if it == args.Iteration:
+        if it % 50 == 0 or it == args.Iteration:
             data_save = copy.deepcopy(image_syn.detach().cpu())
-            torch.save({'data': data_save}, os.path.join(args.save_path, 'res_GraphEigenspace_%s_%s_%dpercent.pt' % (args.dataset, args.model, args.percentage)))
+            save_path = os.path.join(args.save_path, 'res_%s_%s_%s_%gpercent.pt' % (args.method, args.dataset, args.model, args.percentage))
+            torch.save({'data': data_save, 'method': args.method, 'iteration': it, 'seed': args.seed}, save_path)
+            print(f'{get_time()} saved synthetic data to {save_path}', flush=True)
 
         if it % 50 == 0 or it == args.Iteration:
             checkpoint_accs = evaluate_checkpoint(it)
@@ -360,7 +253,7 @@ def main():
 
         if it % 10 == 0 and it != 0:
             ''' visualize and save '''
-            save_name = os.path.join(args.save_path, 'vis_GraphEigenspace_%s_%s_%dpercent_iter%d.png' % (args.dataset, args.model, args.percentage, it))
+            save_name = os.path.join(args.save_path, 'vis_%s_%s_%s_%gpercent_iter%d.png' % (args.method, args.dataset, args.model, args.percentage, it))
             image_syn_vis = copy.deepcopy(image_syn.detach().cpu())
             for ch in range(channel):
                 image_syn_vis[:, ch] = image_syn_vis[:, ch] * std[ch] + mean[ch]
