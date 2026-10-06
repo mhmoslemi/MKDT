@@ -38,7 +38,7 @@ def main():
 
     # -------------------- Distillation --------------------
     parser.add_argument('--Iteration', type=int, default=1000, help='training iterations')
-    parser.add_argument('--lr_img', type=float, default=0.5, help='maximum pixel-step RMS in 0-255 units on EVERY iteration; backtracking may reduce it')
+    parser.add_argument('--lr_img', type=float, default=4, help='maximum pixel-step RMS in 0-255 units on EVERY iteration; backtracking may reduce it')
     parser.add_argument('--batch_real', type=int, default=256, help='batch size for real data')
     parser.add_argument('--num_reference_nets', '--num_random_nets', dest='num_reference_nets', type=int, default=3, help='number of evolving SSL references (old flag retained as an alias)')
     parser.add_argument('--num_aug_pairs', type=int, default=2, help='view pairs averaged before matching SSL parameter gradients')
@@ -248,13 +248,13 @@ def main():
                 )
         del image_before_step
 
-        if it % 50 == 0 or it == args.Iteration:
+        if it % 25 == 0 or it == args.Iteration:
             data_save = copy.deepcopy(image_syn.detach().cpu())
             save_path = os.path.join(args.save_path, 'res_%s_%s_%s_%gpercent.pt' % (args.method, args.dataset, args.model, args.percentage))
             torch.save({'data': data_save, 'method': args.method, 'iteration': it, 'seed': args.seed}, save_path)
             print(f'{get_time()} saved synthetic data to {save_path}', flush=True)
 
-        if it % 50 == 0 or it == args.Iteration:
+        if it % 25 == 0 or it == args.Iteration:
             checkpoint_accs = evaluate_checkpoint(it)
             if it == args.Iteration:
                 for model_eval, accs in checkpoint_accs.items():
