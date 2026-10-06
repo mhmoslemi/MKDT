@@ -44,7 +44,7 @@ def main():
 
     # -------------------- Distillation --------------------
     parser.add_argument('--Iteration', type=int, default=1000, help='training iterations')
-    parser.add_argument('--lr_img', type=float, default=0.01, help='learning rate for updating synthetic images')
+    parser.add_argument('--lr_img', type=float, default=0.5, help='learning rate for updating synthetic images')
     parser.add_argument('--batch_real', type=int, default=256, help='batch size for real data')
 
     # -------------------- Network --------------------
@@ -115,16 +115,16 @@ def main():
     diag_std = torch.tensor(std, device=args.device).view(1, channel, 1, 1)
     image_syn_init_uint8 = ((image_syn_init * diag_std + diag_mean) * 255 + 0.5).clamp(0, 255).to(torch.uint8)
 
-    ''' Evaluate synthetic data prior to training '''
-    for model_eval in model_eval_pool:
-        print('-------------------------\nEvaluation\nmodel_train = %s, model_eval = %s, iteration = %d' % (args.model, model_eval, 0))
-        accs = []
-        for it_eval in range(args.num_eval):
-            net_eval = get_network(model_eval, channel, num_classes, im_size).to(args.device)
-            image_syn_eval = copy.deepcopy(image_syn.detach())
-            _, acc_train, acc_test = evaluate_synset_SSL(it_eval, net_eval, image_syn_eval, dst_train, testloader, args)
-            accs.append(acc_test)
-        print('Evaluate %d random %s, mean = %.4f std = %.4f\n-------------------------' % (len(accs), model_eval, np.mean(accs), np.std(accs)))
+    # ''' Evaluate synthetic data prior to training '''
+    # for model_eval in model_eval_pool:
+    #     print('-------------------------\nEvaluation\nmodel_train = %s, model_eval = %s, iteration = %d' % (args.model, model_eval, 0))
+    #     accs = []
+    #     for it_eval in range(args.num_eval):
+    #         net_eval = get_network(model_eval, channel, num_classes, im_size).to(args.device)
+    #         image_syn_eval = copy.deepcopy(image_syn.detach())
+    #         _, acc_train, acc_test = evaluate_synset_SSL(it_eval, net_eval, image_syn_eval, dst_train, testloader, args)
+    #         accs.append(acc_test)
+        # print('Evaluate %d random %s, mean = %.4f std = %.4f\n-------------------------' % (len(accs), model_eval, np.mean(accs), np.std(accs)))
 
     ''' training '''
     print('%s training begins' % get_time())
@@ -137,7 +137,7 @@ def main():
         loss_avg = 0.0
         
         # We sample K random architectures per step to compute the expectation.
-        num_random_nets = 4 
+        num_random_nets = 20
 
         for _ in range(num_random_nets):
             # 1. Sample a purely random network (NO TRAINING)
@@ -177,7 +177,7 @@ def main():
             loss_marg1 = F.mse_loss(C_syn_11, C_real_11)
             loss_marg2 = F.mse_loss(C_syn_22, C_real_22)
 
-            loss = (loss_cross + 0.5 * (loss_marg1 + loss_marg2)) / num_random_nets
+            loss =  (loss_cross + 0.5 * (loss_marg1 + loss_marg2)) / num_random_nets
             loss.backward()
             loss_avg += loss.item() * num_random_nets
 
@@ -193,7 +193,7 @@ def main():
             data_save = copy.deepcopy(image_syn.detach().cpu())
             torch.save({'data': data_save}, os.path.join(args.save_path, 'res_GraphEigenspace_%s_%s_%dpercent.pt' % (args.dataset, args.model, args.percentage)))
 
-        if it % 50 == 0 and it != 0:
+        if it % 250 == 0 and it != 0:
             ''' Evaluate synthetic data '''
             for model_eval in model_eval_pool:
                 print('-------------------------\nEvaluation\nmodel_train = %s, model_eval = %s, iteration = %d' % (args.model, model_eval, it))
@@ -209,7 +209,7 @@ def main():
                 if it == args.Iteration: 
                     accs_all_exps[model_eval] += accs
 
-        if it % 10 == 0 and it != 0:
+        if it % 50 == 0 and it != 0:
             ''' visualize and save '''
             save_name = os.path.join(args.save_path, 'vis_GraphEigenspace_%s_%s_%dpercent_iter%d.png' % (args.dataset, args.model, args.percentage, it))
             image_syn_vis = copy.deepcopy(image_syn.detach().cpu())
