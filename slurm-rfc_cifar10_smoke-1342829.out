@@ -1,0 +1,19 @@
+PyTorch: 2.9.1 CUDA: True GPU: NVIDIA L40S
+Starting random-feature CIFAR-10 smoke job on rack05-09 at Tue Oct  6 17:15:03 MDT 2026
+Project: /scratch/mmoslem3/MKDT
+Data: /scratch/mmoslem3/data
+Output: /scratch/mmoslem3/MKDT/tmp
+CUDA_VISIBLE_DEVICES=0
+Cleared all previous files from /scratch/mmoslem3/MKDT/tmp
+Hyper-parameters: 
+ {'dataset': 'CIFAR10', 'percentage': 1.0, 'data_path': '/scratch/mmoslem3/data', 'device': 'cuda', 'seed': 0, 'Iteration': 5, 'lr_img': 0.1, 'batch_real': 1024, 'batch_syn': 512, 'num_random_networks': 2, 'num_aug_pairs': 2, 'covariance_block_size': 256, 'random_models': None, 'distill_aug_strategy': 'color_crop_cutout_flip_scale_rotate', 'distill_aug_mode': 'S', 'model': 'ConvNet', 'lr_net': 0.01, 'batch_train': 256, 'ssl_method': 'simclr', 'ssl_aug_strategy': 'color_crop_cutout_flip_scale_rotate', 'projection_dim': 128, 'temperature': 0.5, 'barlow_lambda': 0.005, 'eval_mode': 'S', 'num_eval': 0, 'epoch_eval_train': 1000, 'label_percentage': 1.0, 'epoch_linear_train': 100, 'lr_linear': 0.1, 'batch_linear': 256, 'save_path': '/scratch/mmoslem3/MKDT/tmp', 'method': 'RandomFeatureCrossCovariance', 'dsa_param': <utils.ParamDiffAug object at 0x745e9d8fb710>, 'dsa': False}
+P_net support: ConvNet
+Objective: mean_phi ||Sigma_T(phi) - Sigma_S(phi)||_F^2; encoders are randomly initialized and never trained.
+[2026-10-06 17:15:08] distillation begins
+[2026-10-06 17:15:22] iter = 00001, loss = 557.4136962891, pixel drift RMS = 5.09267/255, PNG values changed = 99.47240%, samples = ConvNet(seed=357381689,d=2048); ConvNet(seed=1281658936,d=2048)
+[2026-10-06 17:15:34] iter = 00002, loss = 1009.6005859375, pixel drift RMS = 6.41030/255, PNG values changed = 99.62285%, samples = ConvNet(seed=2096326824,d=2048); ConvNet(seed=840906422,d=2048)
+[2026-10-06 17:15:47] iter = 00003, loss = 754.3848266602, pixel drift RMS = 7.32465/255, PNG values changed = 90.76921%, samples = ConvNet(seed=1603142011,d=2048); ConvNet(seed=1603858733,d=2048)
+[2026-10-06 17:16:00] iter = 00004, loss = 854.7550048828, pixel drift RMS = 7.98623/255, PNG values changed = 93.04830%, samples = ConvNet(seed=718300911,d=2048); ConvNet(seed=1132687495,d=2048)
+[2026-10-06 17:16:13] iter = 00005, loss = 778.8794555664, pixel drift RMS = 8.59341/255, PNG values changed = 94.25684%, samples = ConvNet(seed=1364809162,d=2048); ConvNet(seed=1211579813,d=2048)
+Saved synthetic data to /scratch/mmoslem3/MKDT/tmp/res_RFC_CIFAR10_ConvNet_1percent.pt
+Finished random-feature CIFAR-10 smoke job at Tue Oct  6 17:16:14 MDT 2026

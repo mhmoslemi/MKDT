@@ -1,10 +1,10 @@
 #!/bin/bash
 #SBATCH --account=aip-boyuwang
 #SBATCH --job-name=rfc_cifar10_smoke
-#SBATCH --time=00:30:00
+#SBATCH --time=00:20:00
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
-#SBATCH --cpus-per-task=4
+#SBATCH --cpus-per-task=1
 #SBATCH --mem=12G
 #SBATCH --gres=gpu:1
 #SBATCH --output=slurm-%x-%j.out
@@ -33,6 +33,6 @@ echo "Data: $DATA_ROOT"
 echo "Output: $SAVE_ROOT"
 echo "CUDA_VISIBLE_DEVICES=${CUDA_VISIBLE_DEVICES:-not-set}"
 
-srun --unbuffered python3 OT-SSL-DD/main_idea.py --dataset CIFAR10 --data_path "$DATA_ROOT" --save_path "$SAVE_ROOT" --Iteration 2 --device cuda --num_eval 0
+srun --unbuffered python3 OT-SSL-DD/main_idea.py --dataset CIFAR10 --data_path "$DATA_ROOT" --save_path "$SAVE_ROOT" --Iteration 5 --device cuda --num_eval 0
 
 echo "Finished random-feature CIFAR-10 smoke job at $(date)"
