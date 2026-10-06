@@ -66,14 +66,14 @@ def main():
     parser.add_argument('--seed', type=int, default=0, help='seed for distillation initialization and evaluation')
 
     # -------------------- Distillation --------------------
-    parser.add_argument('--Iteration', type=int, default=1001, help='number of synthetic pixel updates')
-    parser.add_argument('--lr_img', type=float, default=0.05, help='SGD step size for synthetic pixels')
+    parser.add_argument('--Iteration', type=int, default=3001, help='number of synthetic pixel updates')
+    parser.add_argument('--lr_img', type=float, default=0.025, help='SGD step size for synthetic pixels')
     parser.add_argument('--batch_real', type=int, default=512, help='batch size for caching full real moments')
     parser.add_argument('--batch_syn', type=int, default=512, help='synthetic scattering batch size; moments use all images')
     parser.add_argument('--scattering_J', type=int, default=2, help='log2 scattering scale (at least 2)')
-    parser.add_argument('--scattering_L', type=int, default=12, help='number of wavelet orientations')
+    parser.add_argument('--scattering_L', type=int, default=16, help='number of wavelet orientations')
     parser.add_argument('--gamma', type=float, default=20.0, help='weight of squared mean distance; covariance weight is 1')
-    parser.add_argument('--covariance_block_size', type=int, default=1024, help='rows per exact covariance-loss block')
+    parser.add_argument('--covariance_block_size', type=int, default=2048, help='rows per exact covariance-loss block')
 
     # -------------------- SSL evaluation --------------------
     parser.add_argument('--model', type=str, default='ConvNet', help='evaluation model')
@@ -85,7 +85,7 @@ def main():
     parser.add_argument('--temperature', type=float, default=0.5, help='temperature for SimCLR')
     parser.add_argument('--barlow_lambda', type=float, default=0.005, help='off-diagonal weight for Barlow Twins')
     parser.add_argument('--eval_mode', type=str, default='S', help='evaluation architecture pool')
-    parser.add_argument('--num_eval', type=int, default=2, help='number of random evaluation networks; 0 skips evaluation')
+    parser.add_argument('--num_eval', type=int, default=6, help='number of random evaluation networks; 0 skips evaluation')
     parser.add_argument('--epoch_eval_train', type=int, default=1000, help='SSL evaluation epochs')
     parser.add_argument('--label_percentage', type=float, default=1.0, help='percentage of labeled data for linear probing')
     parser.add_argument('--epoch_linear_train', type=int, default=100, help='epochs to train the linear probe')
@@ -194,14 +194,14 @@ def main():
             if not torch.isfinite(image_syn).all().item():
                 raise FloatingPointError('Synthetic pixel update is non-finite; reduce --lr_img.')
             changed = (to_uint8(image_syn) != image_syn_init_uint8).float().mean().item() * 100
-        if it%25 == 0 or it ==1:
+        if it%50 == 0 or it ==1:
             print('%s iter = %05d, loss = %.10f, covariance = %.10f, mean = %.10f, PNG values changed = %.5f%%' % (
                 get_time(), it, loss.item(), covariance_loss.item(), mean_loss.item(), changed
             ), flush=True)
 
-        if it % 500 == 0 and it != args.Iteration:
+        if it % 3000 == 0 and it != args.Iteration:
             evaluate(it)
-        if it % 100 == 0 or it == args.Iteration:
+        if it % 250 == 0 or it == args.Iteration:
             save_name = os.path.join(args.save_path, 'vis_%s_%s_%s_%dpercent_iter%d.png' % (
                 args.method, args.dataset, args.model, args.percentage, it
             ))
