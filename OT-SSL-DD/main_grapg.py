@@ -55,6 +55,9 @@ def main():
     # -------------------- Self-Supervised Learning --------------------
     parser.add_argument('--ssl_method', type=str, default='simclr', help='simclr/barlowtwins')
     parser.add_argument('--ssl_aug_strategy', type=str, default='color_crop_cutout_flip_scale_rotate', help='augmentation strategy for SSL training')
+    parser.add_argument('--projection_dim', type=int, default=128, help='projection dimension for SSL training')
+    parser.add_argument('--temperature', type=float, default=0.5, help='temperature for SimCLR')
+    parser.add_argument('--barlow_lambda', type=float, default=0.005, help='off-diagonal weight for Barlow Twins')
     
     # -------------------- Evaluation --------------------
     parser.add_argument('--eval_mode', type=str, default='S', help='eval_mode')
@@ -116,7 +119,7 @@ def main():
     for model_eval in model_eval_pool:
         print('-------------------------\nEvaluation\nmodel_train = %s, model_eval = %s, iteration = %d' % (args.model, model_eval, 0))
         accs = []
-        for it_eval in range(4):
+        for it_eval in range(args.num_eval):
             net_eval = get_network(model_eval, channel, num_classes, im_size).to(args.device)
             image_syn_eval = copy.deepcopy(image_syn.detach())
             _, acc_train, acc_test = evaluate_synset_SSL(it_eval, net_eval, image_syn_eval, dst_train, testloader, args)
@@ -127,7 +130,7 @@ def main():
     print('%s training begins' % get_time())
 
     optimizer_img = torch.optim.Adam([image_syn], lr=args.lr_img)
-    dsa_strategy = args.ssl_aug_strategy.replace('_', ',') if '_' in args.ssl_aug_strategy else 'color,crop,cutout,flip'
+    dsa_strategy = args.ssl_aug_strategy
 
     for it in range(args.Iteration + 1):
         optimizer_img.zero_grad()
@@ -148,8 +151,8 @@ def main():
             # 3. Apply differentiable augmentations
             # REAL VIEWS (No gradients needed)
             with torch.no_grad():
-                real_aug1 = DiffAugment(real_batch, strategy=dsa_strategy)
-                real_aug2 = DiffAugment(real_batch, strategy=dsa_strategy)
+                real_aug1 = DiffAugment(real_batch, strategy=dsa_strategy, param=args.dsa_param)
+                real_aug2 = DiffAugment(real_batch, strategy=dsa_strategy, param=args.dsa_param)
                 
                 f_real_1 = embed(real_aug1)
                 f_real_2 = embed(real_aug2)
@@ -159,8 +162,8 @@ def main():
                 C_real_22 = compute_covariance(f_real_2, f_real_2)
 
             # SYNTHETIC VIEWS (Requires gradients)
-            syn_aug1 = DiffAugment(image_syn, strategy=dsa_strategy)
-            syn_aug2 = DiffAugment(image_syn, strategy=dsa_strategy)
+            syn_aug1 = DiffAugment(image_syn, strategy=dsa_strategy, param=args.dsa_param)
+            syn_aug2 = DiffAugment(image_syn, strategy=dsa_strategy, param=args.dsa_param)
 
             f_syn_1 = embed(syn_aug1)
             f_syn_2 = embed(syn_aug2)
@@ -196,7 +199,7 @@ def main():
                 print('-------------------------\nEvaluation\nmodel_train = %s, model_eval = %s, iteration = %d' % (args.model, model_eval, it))
 
                 accs = []
-                for it_eval in range(4):
+                for it_eval in range(args.num_eval):
                     net_eval = get_network(model_eval, channel, num_classes, im_size).to(args.device) 
                     image_syn_eval = copy.deepcopy(image_syn.detach()) 
                     _, acc_train, acc_test = evaluate_synset_SSL(it_eval, net_eval, image_syn_eval, dst_train, testloader, args)
