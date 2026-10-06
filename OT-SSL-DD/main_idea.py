@@ -206,7 +206,7 @@ def main():
     print('Hyper-parameters: \n', args.__dict__)
     print('P_net support: %s' % ', '.join(random_models), flush=True)
     print('Objective: mean_phi ||Sigma_T(phi) - Sigma_S(phi)||_F^2; encoders are randomly initialized and never trained.', flush=True)
-    evaluate(0)
+    # evaluate(0)
     print('%s distillation begins' % get_time(), flush=True)
 
     for iteration in range(1, args.Iteration + 1):
