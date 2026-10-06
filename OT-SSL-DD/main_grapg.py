@@ -42,8 +42,8 @@ def main():
     parser.add_argument('--Iteration', type=int, default=1000, help='training iterations')
     parser.add_argument('--lr_img', type=float, default=0.5, help='learning rate for updating synthetic images')
     parser.add_argument('--batch_real', type=int, default=256, help='batch size for real data')
-    parser.add_argument('--num_random_nets', type=int, default=8, help='number of fixed random feature networks')
-    parser.add_argument('--num_aug_pairs', type=int, default=2, help='independent augmented-view pairs per network and step')
+    parser.add_argument('--num_random_nets', type=int, default=50, help='number of fixed random feature networks')
+    parser.add_argument('--num_aug_pairs', type=int, default=10, help='independent augmented-view pairs per network and step')
     parser.add_argument('--seed', type=int, default=0, help='seed for initialization, sampling, and evaluation networks')
 
     # -------------------- Network --------------------
@@ -194,7 +194,7 @@ def main():
         with torch.no_grad():
             image_syn.copy_(torch.maximum(torch.minimum(image_syn, pixel_max), pixel_min))
 
-        if it % 1 == 0:
+        if it % 2 == 0:
             with torch.no_grad():
                 image_syn_uint8 = ((image_syn * diag_std + diag_mean) * 255 + 0.5).clamp(0, 255).to(torch.uint8)
                 print('%s iter = %05d, cross-moment loss = %.10f' % (get_time(), it, loss_avg), end='\t/\t')
@@ -204,13 +204,13 @@ def main():
             data_save = copy.deepcopy(image_syn.detach().cpu())
             torch.save({'data': data_save}, os.path.join(args.save_path, 'res_GraphEigenspace_%s_%s_%dpercent.pt' % (args.dataset, args.model, args.percentage)))
 
-        if it % 250 == 0 or it == args.Iteration:
+        if it % 50 == 0 or it == args.Iteration:
             checkpoint_accs = evaluate_checkpoint(it)
             if it == args.Iteration:
                 for model_eval, accs in checkpoint_accs.items():
                     accs_all_exps[model_eval] += accs
 
-        if it % 50 == 0 and it != 0:
+        if it % 10 == 0 and it != 0:
             ''' visualize and save '''
             save_name = os.path.join(args.save_path, 'vis_GraphEigenspace_%s_%s_%dpercent_iter%d.png' % (args.dataset, args.model, args.percentage, it))
             image_syn_vis = copy.deepcopy(image_syn.detach().cpu())
