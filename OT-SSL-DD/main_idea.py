@@ -124,11 +124,11 @@ def main():
 
     # Random-feature cross-covariance objective.
     parser.add_argument('--Iteration', type=int, default=100)
-    parser.add_argument('--lr_img', type=float, default=0.01)
-    parser.add_argument('--batch_real', type=int, default=256)
-    parser.add_argument('--batch_syn', type=int, default=256)
-    parser.add_argument('--num_random_networks', type=int, default=1, help='fresh samples from P_net per pixel update')
-    parser.add_argument('--num_aug_pairs', type=int, default=1, help='Monte Carlo samples of independent (t1, t2) per network')
+    parser.add_argument('--lr_img', type=float, default=0.1)
+    parser.add_argument('--batch_real', type=int, default=1024)
+    parser.add_argument('--batch_syn', type=int, default=512)
+    parser.add_argument('--num_random_networks', type=int, default=2, help='fresh samples from P_net per pixel update')
+    parser.add_argument('--num_aug_pairs', type=int, default=2, help='Monte Carlo samples of independent (t1, t2) per network')
     parser.add_argument('--covariance_block_size', type=int, default=256)
     parser.add_argument('--random_models', default=None, help='comma-separated P_net support; defaults to --model')
     parser.add_argument('--distill_aug_strategy', default='color_crop_cutout_flip_scale_rotate')
@@ -144,7 +144,7 @@ def main():
     parser.add_argument('--temperature', type=float, default=0.5)
     parser.add_argument('--barlow_lambda', type=float, default=0.005)
     parser.add_argument('--eval_mode', default='S')
-    parser.add_argument('--num_eval', type=int, default=1)
+    parser.add_argument('--num_eval', type=int, default=2)
     parser.add_argument('--epoch_eval_train', type=int, default=1000)
     parser.add_argument('--label_percentage', type=float, default=1.0)
     parser.add_argument('--epoch_linear_train', type=int, default=100)
@@ -206,7 +206,7 @@ def main():
     print('Hyper-parameters: \n', args.__dict__)
     print('P_net support: %s' % ', '.join(random_models), flush=True)
     print('Objective: mean_phi ||Sigma_T(phi) - Sigma_S(phi)||_F^2; encoders are randomly initialized and never trained.', flush=True)
-    # evaluate(0)
+    evaluate(0)
     print('%s distillation begins' % get_time(), flush=True)
 
     for iteration in range(1, args.Iteration + 1):
@@ -238,7 +238,7 @@ def main():
         if iteration % 50 == 0:
             evaluate(iteration)
 
-        if iteration % 20 == 0:
+        if iteration % 5 == 0:
             grid_path = os.path.join(args.save_path, 'vis_RFC_%s_%s_%gpercent_iter%d.png' % (args.dataset, args.model, args.percentage, iteration))
             visible = (image_syn.detach() * diag_std + diag_mean).clamp(0, 1).cpu()
             save_image(visible, grid_path, nrow=int(np.ceil(np.sqrt(num_syn))))
