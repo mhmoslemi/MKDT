@@ -1,18 +1,23 @@
-"""Match SSL training updates, without differentiating through a training trajectory.
+"""One-step SSL meta-learning (legacy filename retained for existing launch setups).
 
-For a fixed reference state theta and A augmentation draws, let
-    g_D = mean_a grad_theta L_SSL(D, theta, a).
-The image objective is ||g_S - g_T||^2 / max(||g_T||^2, 1e-12), averaged
-over reference states. There is no division by the number of parameters.
-Starting from identical parameters and SGD momentum state, one SGD update obeys
-    ||theta_S_next - theta_T_next||^2 = eta^2 * ||g_S - g_T||^2,
-where eta is the reference optimizer's current learning rate.
-This is a local update-matching statement, not an accuracy guarantee.
+For a learner state (theta, momentum), take a virtual SGD step on synthetic S:
+    theta_plus(S) = SGD(theta, momentum, mean_a grad_theta L_SSL(S, a)).
+Optimize J(S) = mean_q L_SSL(real_query_q; theta_plus(S)). No gradient-distance
+or covariance proxy enters J. This is a one-step bilevel objective, following the
+dataset-distillation formulation: https://arxiv.org/abs/1811.10959, adapted to SSL.
 
-References advance on real data only. Their weights remain fixed while computing
-the image gradient and accepting a pixel step. Matching uses mixed derivatives
-of the actual SSL loss; no reference update is unrolled into the image graph.
-Gradient matching: https://arxiv.org/abs/2006.05929 (adapted here to SSL).
+With the starting state fixed, its exact image derivative is
+    grad_S J = -eta * (d g_S / d S)^T * grad_theta_plus L_query.
+We compute the query gradient at the UPDATED weights, then replay each synthetic
+view for this mixed-derivative product. This bounds memory without dropping the
+derivative through SGD. Momentum and weight decay are included in the forward
+update; they have zero image derivative at the fixed starting state.
+
+A pixel candidate must improve J and pass a single check on disjoint real query
+images, independently sampled synthetic batches, and fresh augmentations. This
+is an optimization guard, not a downstream-accuracy guarantee. No test images or
+class labels enter distillation. Accepted images drive the learners' next steps;
+history before the current step is detached (truncated meta-learning).
 """
 
 from contextlib import contextmanager
@@ -22,6 +27,7 @@ import math
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
+from torch.func import functional_call
 
 from utils import DiffAugment, get_network
 
@@ -56,6 +62,18 @@ def ssl_loss(z1, z2, args):
     raise ValueError(f'Unsupported SSL method: {args.ssl_method}')
 
 
+class _SSLModel(nn.Module):
+    """Expose embed + projector through forward for stateless updated weights."""
+
+    def __init__(self, encoder, projector):
+        super().__init__()
+        self.encoder = encoder
+        self.projector = projector
+
+    def forward(self, images):
+        return self.projector(self.encoder.embed(images))
+
+
 class SSLReference:
     """An encoder plus the evaluation architecture's two-layer SSL projector."""
 
@@ -84,7 +102,9 @@ class SSLReference:
                 nn.ReLU(inplace=False),
                 nn.Linear(args.projection_dim, args.projection_dim),
             ).to(args.device)
-        self.parameters = tuple(p for p in self.encoder.parameters() if p.requires_grad) + tuple(self.projector.parameters())
+        self.model = _SSLModel(self.encoder, self.projector)
+        self.named_parameters = tuple((name, p) for name, p in self.model.named_parameters() if p.requires_grad)
+        self.parameters = tuple(p for _, p in self.named_parameters)
         self.optimizer = torch.optim.SGD(
             self.parameters, lr=args.lr_net, momentum=0.9, weight_decay=0.0005
         )
@@ -111,12 +131,12 @@ class SSLReference:
             for module, tracking in zip(batch_norms, tracking_flags):
                 module.track_running_stats = tracking
 
-    def advance(self, real_gradients, args):
-        """One real-data SGD step, outside the synthetic-image computation graph."""
-        if not all(torch.isfinite(gradient).all().item() for gradient in real_gradients):
-            raise FloatingPointError('Non-finite real SSL gradient; reference update aborted')
+    def advance(self, gradients, args):
+        """Commit one SGD step; no graph is retained across distillation iterations."""
+        if not all(torch.isfinite(gradient).all().item() for gradient in gradients):
+            raise FloatingPointError('Non-finite SSL gradient; learner update aborted')
         self.optimizer.zero_grad(set_to_none=True)
-        for parameter, gradient in zip(self.parameters, real_gradients):
+        for parameter, gradient in zip(self.parameters, gradients):
             parameter.grad = gradient.detach().clone()
         self.optimizer.step()
         self.optimizer.zero_grad(set_to_none=True)
@@ -162,44 +182,71 @@ def mean_parameter_gradients(reference, images, view_pairs, args):
     return tuple(averaged), loss_avg
 
 
-def squared_norm(gradients):
-    return torch.stack([gradient.square().sum() for gradient in gradients]).sum()
-
-
 @dataclass
-class GradientTarget:
+class MetaTask:
     reference: SSLReference
     indices: torch.Tensor
-    view_pairs: list
-    gradients: tuple
-    norm_squared: torch.Tensor
+    support_views: list
+    query_images: torch.Tensor
+    query_views: list
 
 
-def gradient_match_and_backward(reference, real_images, images, indices, view_pairs, args):
-    """Differentiate the squared difference of MEAN SSL gradients over views.
+def virtual_sgd_weights(reference, gradients, requires_grad=False):
+    """The exact next weights of this learner's SGD, without mutating its state."""
+    group = reference.optimizer.param_groups[0]
+    updated = {}
+    for (name, parameter), gradient in zip(reference.named_parameters, gradients):
+        direction = gradient.detach() + group['weight_decay'] * parameter.detach()
+        momentum = reference.optimizer.state.get(parameter, {}).get('momentum_buffer')
+        if momentum is not None:
+            direction = direction + group['momentum'] * momentum.detach()
+        updated[name] = (parameter.detach() - group['lr'] * direction).requires_grad_(requires_grad)
+    return updated
 
-    The upstream derivative for g_S,a is 2*(g_S-g_T)/(K*A*||g_T||^2).
-    Replaying one view pair at a time evaluates the mixed theta/image derivative
-    exactly for these sampled batches, without retaining A second-order graphs.
-    """
-    real_gradients, real_ssl = mean_parameter_gradients(reference, real_images, view_pairs, args)
-    synthetic_gradients, synthetic_ssl = mean_parameter_gradients(
-        reference, images.detach().index_select(0, indices), view_pairs, args
+
+def query_ssl_loss(task, weights, seeds, args):
+    reference = task.reference
+    # Clone buffers so even a custom module cannot overwrite the learner's state.
+    buffers = {name: buffer.detach().clone() for name, buffer in reference.model.named_buffers()}
+    with reference.matching_mode(), torch.random.fork_rng(devices=cuda_rng_devices()):
+        torch.manual_seed(seeds[0])
+        view1 = DiffAugment(task.query_images, args.ssl_aug_strategy, seed=-1, param=args.dsa_param)
+        torch.manual_seed(seeds[1])
+        view2 = DiffAugment(task.query_images, args.ssl_aug_strategy, seed=-1, param=args.dsa_param)
+        torch.manual_seed(seeds[2])
+        z1 = functional_call(reference.model, (weights, buffers), (view1,))
+        z2 = functional_call(reference.model, (weights, buffers), (view2,))
+        return ssl_loss(z1, z2, args)
+
+
+def mean_query_loss(task, weights, args):
+    with torch.no_grad():
+        return sum(query_ssl_loss(task, weights, seeds, args).item() for seeds in task.query_views) / len(task.query_views)
+
+
+def meta_gradient_and_backward(task, images, args):
+    """Exact one-step meta-gradient via updated-weight query gradients and replay."""
+    reference = task.reference
+    support_gradients, support_ssl = mean_parameter_gradients(
+        reference, images.detach().index_select(0, task.indices), task.support_views, args
     )
-    normalizer = squared_norm(real_gradients).clamp_min(1e-12)
-    residuals = tuple(synthetic - real for synthetic, real in zip(synthetic_gradients, real_gradients))
-    error = squared_norm(residuals)
-    loss = error / normalizer
-    if not torch.isfinite(loss).item():
-        raise FloatingPointError('Non-finite SSL gradient-matching loss')
-    upstream = tuple(
-        2 * residual / (args.num_reference_nets * len(view_pairs) * normalizer)
-        for residual in residuals
-    )
-    for seeds in view_pairs:
-        # A fresh index_select graph each time allows independent backward passes.
+    weights = virtual_sgd_weights(reference, support_gradients, requires_grad=True)
+    query_gradients = [torch.zeros_like(weight) for weight in weights.values()]
+    loss_avg = 0.0
+    with torch.enable_grad():
+        for seeds in task.query_views:
+            loss = query_ssl_loss(task, weights, seeds, args)
+            gradients = torch.autograd.grad(loss, tuple(weights.values()))
+            loss_avg += loss.detach().item() / len(task.query_views)
+            for total, gradient in zip(query_gradients, gradients):
+                total.add_(gradient.detach() / len(task.query_views))
+    if not math.isfinite(loss_avg):
+        raise FloatingPointError('Non-finite real-query SSL loss after the synthetic SGD step')
+    lr = reference.optimizer.param_groups[0]['lr']
+    upstream = tuple(-lr * gradient / (args.num_reference_nets * len(task.support_views)) for gradient in query_gradients)
+    for seeds in task.support_views:
         gradients, _ = parameter_gradients(
-            reference, images.index_select(0, indices), seeds, args, create_graph=True
+            reference, images.index_select(0, task.indices), seeds, args, create_graph=True
         )
         differentiable = [(gradient, coefficient) for gradient, coefficient in zip(gradients, upstream) if gradient.requires_grad]
         if differentiable:
@@ -212,61 +259,86 @@ def gradient_match_and_backward(reference, real_images, images, indices, view_pa
                     images.grad = image_gradient.detach()
                 else:
                     images.grad.add_(image_gradient.detach())
-    synthetic_norm = squared_norm(synthetic_gradients)
-    dot = torch.stack([(real * synthetic).sum() for real, synthetic in zip(real_gradients, synthetic_gradients)]).sum()
-    cosine = dot / (normalizer * synthetic_norm.clamp_min(1e-12)).sqrt()
-    target = GradientTarget(reference, indices, view_pairs, real_gradients, normalizer)
-    metrics = {
-        'loss': loss.item(), 'cosine': cosine.item(),
-        'norm_ratio': (synthetic_norm / normalizer).sqrt().item(),
-        'real_ssl': real_ssl.item(), 'synthetic_ssl': synthetic_ssl.item(),
+    before_sgd = mean_query_loss(task, {name: p.detach() for name, p in reference.named_parameters}, args)
+    return {
+        'loss': loss_avg, 'query_before_sgd': before_sgd,
+        'synthetic_ssl': support_ssl.item(),
     }
-    return target, metrics
 
 
-def sampled_gradient_match_loss(images, targets, args, reject_above):
+def sampled_meta_loss(images, tasks, args, reject_above=math.inf):
     total = 0.0
-    for target in targets:
+    for task in tasks:
         gradients, _ = mean_parameter_gradients(
-            target.reference, images.index_select(0, target.indices), target.view_pairs, args
+            task.reference, images.index_select(0, task.indices), task.support_views, args
         )
-        error = squared_norm(tuple(synthetic - real for synthetic, real in zip(gradients, target.gradients)))
-        total += (error / target.norm_squared).item() / len(targets)
+        weights = virtual_sgd_weights(task.reference, gradients)
+        total += mean_query_loss(task, weights, args) / len(tasks)
         if not math.isfinite(total) or total > reject_above:
             return math.inf
     return total
 
 
-@torch.no_grad()
-def projected_backtracking_step(images, targets, args, lower, upper, pixel_std, loss_before, initial_step):
-    """Bound pixel movement and decrease the objective for these sampled targets.
+@dataclass
+class MetaStepResult:
+    loss_after: float
+    step_size: float = 0.0
+    trials: int = 0
+    accepted: bool = False
+    reason: str = 'no_descent'
+    next_step: float = None
+    guard_before: float = None
+    guard_after: float = None
 
-    Armijo descent on one minibatch does not imply expected-loss descent. In
-    particular, carrying a growing step coefficient across changing references
-    and minibatches can accept increasingly large updates that fit sampling noise.
-    Recompute the RMS bound from the CURRENT gradient on EVERY iteration.
+
+@torch.no_grad()
+def meta_backtracking_step(images, tasks, guard_tasks, args, lower, upper, pixel_std, loss_before, initial_step):
+    """Find a descent candidate, then check it ONCE on independent samples.
+
+    The guard never contributes to the image gradient or backtracking search.
+    A failed guard discards the candidate; subsequent iterations draw new data.
     """
+    result = MetaStepResult(loss_after=loss_before)
     gradient = images.grad.detach()
     original = images.detach()
     gradient_pixel_rms = (gradient.double() * pixel_std * 255).square().mean().sqrt().item()
     if not math.isfinite(gradient_pixel_rms) or gradient_pixel_rms == 0:
-        return loss_before, 0.0, 0, False
+        return result
     step_limit = min(
         args.lr_img / max(gradient_pixel_rms, 1e-12), math.sqrt(torch.finfo(images.dtype).max)
     )
     step = step_limit if initial_step is None else min(initial_step, step_limit)
+    result.next_step = step
     for trial in range(1, 21):
+        result.trials = trial
         candidate = torch.maximum(torch.minimum(original - step * gradient, upper), lower)
         slope = (gradient * (candidate - original)).sum(dtype=torch.float64).item()
         if not math.isfinite(slope):
             step *= 0.5
+            result.next_step = step
             continue
         if slope >= 0:
-            return loss_before, 0.0, trial, False
+            return result
         bound = loss_before + 1e-4 * slope
-        loss_after = sampled_gradient_match_loss(candidate, targets, args, bound) if bound >= 0 else math.inf
+        loss_after = sampled_meta_loss(candidate, tasks, args, bound) if bound >= 0 else math.inf
         if math.isfinite(loss_after) and loss_after <= bound and loss_after < loss_before:
+            result.guard_before = sampled_meta_loss(original, guard_tasks, args)
+            result.guard_after = sampled_meta_loss(candidate, guard_tasks, args)
+            if not (math.isfinite(result.guard_before) and math.isfinite(result.guard_after)
+                    and result.guard_after < result.guard_before):
+                result.reason = 'independent_batch_rejected'
+                # A noisy held-out rejection need not indicate excessive step
+                # length. Keep the coefficient; repeated guard rejections must
+                # not geometrically shrink every future update to zero.
+                result.next_step = step
+                return result
             images.copy_(candidate)
-            return loss_after, step, trial, True
+            result.loss_after = loss_after
+            result.step_size = step
+            result.accepted = True
+            result.reason = 'accepted'
+            result.next_step = step
+            return result
         step *= 0.5
-    return loss_before, 0.0, 20, False
+        result.next_step = step
+    return result
