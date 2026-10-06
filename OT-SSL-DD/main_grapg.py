@@ -96,7 +96,7 @@ def main():
     parser.add_argument('--Iteration', type=int, default=1000, help='training iterations')
     parser.add_argument('--lr_img', type=float, default=0.5, help='learning rate for updating synthetic images')
     parser.add_argument('--batch_real', type=int, default=256, help='batch size for real data')
-    parser.add_argument('--num_random_nets', type=int, default=50, help='number of fixed random feature networks')
+    parser.add_argument('--num_random_nets', type=int, default=25, help='number of fixed random feature networks')
     parser.add_argument('--num_aug_pairs', type=int, default=10, help='view pairs averaged inside the cross-moment distance')
     parser.add_argument('--seed', type=int, default=0, help='seed for initialization, sampling, and evaluation networks')
 
