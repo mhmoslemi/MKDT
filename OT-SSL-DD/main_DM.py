@@ -12,6 +12,8 @@ from utils import get_loops, get_dataset, get_network, get_eval_pool, evaluate_s
 
 # random , test acc = 0.3993
 
+
+
 def main():
 
     parser = argparse.ArgumentParser(description='Parameter Processing')
@@ -54,7 +56,7 @@ def main():
     parser.add_argument('--batch_linear', type=int, default=256, help='batch size for the linear probe')
 
     # -------------------- Output --------------------
-    parser.add_argument('--save_path', type=str, default='result', help='path to save results')
+    parser.add_argument('--save_path', type=str, default='result2', help='path to save results')
 
     args = parser.parse_args()
     args.method = 'DM'
@@ -62,11 +64,14 @@ def main():
     args.dsa_param = ParamDiffAug()
     args.dsa = False
 
+
+
     if not os.path.exists(args.data_path):
         os.mkdir(args.data_path)
 
     if not os.path.exists(args.save_path):
         os.mkdir(args.save_path)
+
 
     
     channel, im_size, num_classes, class_names, mean, std, dst_train, dst_test, testloader = get_dataset(args.dataset, args.data_path)

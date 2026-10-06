@@ -12,6 +12,20 @@ from utils import (
     get_time, DiffAugment, ParamDiffAug
 )
 
+def clear_directory(directory):
+    """Remove everything inside directory while keeping directory itself."""
+    for root, directories, files in os.walk(directory, topdown=False):
+        for filename in files:
+            os.remove(os.path.join(root, filename))
+        for dirname in directories:
+            path = os.path.join(root, dirname)
+            if os.path.islink(path):
+                os.remove(path)
+            else:
+                os.rmdir(path)
+
+
+
 def compute_covariance(z1, z2):
     """Computes the centered cross-covariance matrix of two feature batches."""
     z1_c = z1 - z1.mean(dim=0)
@@ -59,6 +73,11 @@ def main():
     args.device = 'cuda' if torch.cuda.is_available() else 'cpu'
     args.dsa_param = ParamDiffAug()
     args.dsa = False
+
+    os.makedirs(args.save_path, exist_ok=True)
+    clear_directory(args.save_path)
+    print('Cleared all previous files from %s' % args.save_path, flush=True)
+    os.makedirs(args.data_path, exist_ok=True)
 
     if not os.path.exists(args.data_path):
         os.makedirs(args.data_path, exist_ok=True)
@@ -187,7 +206,7 @@ def main():
                 if it == args.Iteration: 
                     accs_all_exps[model_eval] += accs
 
-        if it % 20 == 0 and it != 0:
+        if it % 10 == 0 and it != 0:
             ''' visualize and save '''
             save_name = os.path.join(args.save_path, 'vis_GraphEigenspace_%s_%s_%dpercent_iter%d.png' % (args.dataset, args.model, args.percentage, it))
             image_syn_vis = copy.deepcopy(image_syn.detach().cpu())
