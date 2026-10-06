@@ -24,7 +24,7 @@ from utils import (
     ParamDiffAug, DiffAugment, AUGMENT_FNS,
 )
 
-
+#  random ConvNet, mean = 0.4066 std = 0.0104
 
 # Evaluate 6 random ConvNet, mean = 0.3763 std = 0.0113
 
@@ -97,7 +97,7 @@ def main():
 
     # -------------------- Distillation --------------------
     parser.add_argument('--Iteration', type=int, default=4000, help='number of synthetic pixel updates')
-    parser.add_argument('--lr_img', type=float, default=0.1, help='Adam learning rate for synthetic pixels')
+    parser.add_argument('--lr_img', type=float, default=0.5, help='Adam learning rate for synthetic pixels')
     parser.add_argument('--batch_real', type=int, default=4096, help='batch size for caching full real moments')
     parser.add_argument('--batch_syn', type=int, default=512, help='synthetic scattering batch size; moments use all images')
     parser.add_argument('--scattering_J', type=int, default=2, help='log2 scattering scale (at least 2)')
@@ -220,7 +220,7 @@ def main():
             if record:
                 accs_all_exps[model_eval].extend(accs)
 
-    evaluate(0, record=args.Iteration == 0)
+    # evaluate(0, record=args.Iteration == 0)
 
     # Phi is fixed, so the full-dataset real statistics are computed only once.
     # Inputs use the same dataset normalization as the downstream SSL evaluator.
@@ -298,9 +298,9 @@ def main():
                 clean_loss, ', '.join('%.10f' % value for value in view_losses), changed
             ), flush=True)
 
-        if it % 400 == 0 and it != args.Iteration:
+        if it % 500 == 0 and it != args.Iteration:
             evaluate(it)
-        if it % 50 == 0 or it == args.Iteration:
+        if it % 25 == 0 or it == args.Iteration:
             save_name = os.path.join(args.save_path, 'vis_%s_%s_%s_%dpercent_iter%d.png' % (
                 args.method, args.dataset, args.model, args.percentage, it
             ))
