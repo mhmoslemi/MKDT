@@ -38,11 +38,11 @@ def main():
 
     # -------------------- Distillation --------------------
     parser.add_argument('--Iteration', type=int, default=1000, help='training iterations')
-    parser.add_argument('--lr_img', type=float, default=0.5, help='initial proposed pixel-step RMS in 0-255 units; backtracking controls acceptance')
+    parser.add_argument('--lr_img', type=float, default=0.5, help='maximum pixel-step RMS in 0-255 units on EVERY iteration; backtracking may reduce it')
     parser.add_argument('--batch_real', type=int, default=256, help='batch size for real data')
     parser.add_argument('--num_reference_nets', '--num_random_nets', dest='num_reference_nets', type=int, default=3, help='number of evolving SSL references (old flag retained as an alias)')
     parser.add_argument('--num_aug_pairs', type=int, default=2, help='view pairs averaged before matching SSL parameter gradients')
-    parser.add_argument('--reference_warmup_steps', type=int, default=200, help='initial training-age spacing between reference networks')
+    parser.add_argument('--reference_warmup_steps', type=int, default=200, help='requested initial training-age spacing; bounded by max_steps / num_reference_nets and used only at startup')
     parser.add_argument('--reference_max_steps', type=int, default=2000, help='real SSL steps before a reference restarts from a new seeded initialization')
     parser.add_argument('--seed', type=int, default=0, help='seed for initialization, sampling, and evaluation networks')
 
@@ -84,6 +84,12 @@ def main():
         parser.error('temperature and projection_dim must be positive')
     if args.Iteration < 1 or not 0 < args.percentage <= 100:
         parser.error('Iteration must be positive and percentage must lie in (0, 100]')
+    # Leave each initial reference a meaningful lifetime. Clamping every warmup
+    # separately to max_steps - 1 made mature references restart after ONE step.
+    initial_age_spacing = min(
+        args.reference_warmup_steps, args.reference_max_steps // args.num_reference_nets
+    )
+    args.reference_initial_steps = [index * initial_age_spacing for index in range(args.num_reference_nets)]
     args.method = 'SSLGradientMatching'
     args.image_optimizer = 'projected_gradient_armijo'
     args.device = 'cuda' if torch.cuda.is_available() else 'cpu'
@@ -156,10 +162,9 @@ def main():
     augmentation_rng = np.random.default_rng()
     reference_generations = [0] * args.num_reference_nets
 
-    def build_reference(index):
+    def build_reference(index, warmup=0):
         seed = args.seed + 100000 + reference_generations[index] * args.num_reference_nets + index
         reference = SSLReference(args, channel, num_classes, im_size, seed)
-        warmup = min(index * args.reference_warmup_steps, args.reference_max_steps - 1)
         print(f'{get_time()} reference {index}: seed = {seed}, real SSL warmup = {warmup} steps', flush=True)
         for step in range(warmup):
             gradients, real_loss = mean_parameter_gradients(
@@ -170,10 +175,15 @@ def main():
                 print(f'{get_time()} reference {index}: warmup = {step + 1}/{warmup}, SSL loss = {real_loss.item():.6f}', flush=True)
         return reference
 
-    references = [build_reference(index) for index in range(args.num_reference_nets)]
+    references = [
+        build_reference(index, warmup) for index, warmup in enumerate(args.reference_initial_steps)
+    ]
     print(f'{get_time()} distillation begins: matching encoder AND projector gradients', flush=True)
     print('Objective: mean_reference ||mean_view grad_SSL(syn) - mean_view grad_SSL(real)||^2 / ||mean_view grad_SSL(real)||^2', flush=True)
     print(f'Matching batches: real = synthetic = {args.match_batch_size}; reference weights stay fixed during each image update', flush=True)
+    print(f'Reference initial ages: {args.reference_initial_steps}; subsequent restarts begin at age 0', flush=True)
+    print(f'Pixel-step RMS limit: {args.lr_img:g}/255 on every iteration', flush=True)
+    print('The before/after loss uses the same sampled targets; losses across iterations use new targets.', flush=True)
 
     for it in range(1, args.Iteration + 1):
         image_syn.grad = None
@@ -183,7 +193,10 @@ def main():
         for index, reference in enumerate(references):
             if reference.steps >= args.reference_max_steps:
                 reference_generations[index] += 1
+                # Initial staggering is a one-time cost. A recycled reference
+                # starts at zero and traverses the whole training-age range.
                 reference = references[index] = build_reference(index)
+                trial_step = None
             reference_ages.append(reference.steps)
             indices = torch.randperm(num_syn, generator=synthetic_generator)[:args.match_batch_size].to(args.device)
             target, metrics = gradient_match_and_backward(
@@ -202,12 +215,8 @@ def main():
         image_before_step = image_syn.detach().clone()
         gradient_rms = image_syn.grad.square().mean().sqrt().item()
         loss_before = averages['loss']
-        if trial_step is None:
-            gradient_pixel_rms = (image_syn.grad * diag_std * 255).square().mean().sqrt().item()
-            # Start in interpretable pixel units, independent of loss units.
-            trial_step = min(args.lr_img / max(gradient_pixel_rms, 1e-12), math.sqrt(torch.finfo(image_syn.dtype).max))
         loss_after, accepted_step, trials, accepted = projected_backtracking_step(
-            image_syn, sampled_targets, args, pixel_min, pixel_max, loss_before, trial_step,
+            image_syn, sampled_targets, args, pixel_min, pixel_max, diag_std, loss_before, trial_step,
         )
         # Advancing a reference sooner would invalidate the cached gradients and
         # the loss comparisons used to accept/reject the image step.
@@ -228,7 +237,7 @@ def main():
                 image_syn_uint8 = ((image_syn * diag_std + diag_mean) * 255 + 0.5).clamp(0, 255).to(torch.uint8)
                 changed_pct = (image_syn_uint8 != image_syn_init_uint8).float().mean().item() * 100
                 print(
-                    f'{get_time()} iter = {it:05d}, grad_match = {loss_before:.6f} -> {loss_after:.6f}, '
+                    f'{get_time()} iter = {it:05d}, sampled_grad_match = {loss_before:.6f} -> {loss_after:.6f}, '
                     f'grad_cos_before = {averages["cosine"]:.4f}, norm_ratio_before = {averages["norm_ratio"]:.4f}, '
                     f'SSL_real/syn_before = {averages["real_ssl"]:.4f}/{averages["synthetic_ssl"]:.4f}, '
                     f'image_grad_RMS = {gradient_rms:.3e}, reference_steps = {reference_ages}, '

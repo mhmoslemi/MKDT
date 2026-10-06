@@ -238,11 +238,23 @@ def sampled_gradient_match_loss(images, targets, args, reject_above):
 
 
 @torch.no_grad()
-def projected_backtracking_step(images, targets, args, lower, upper, loss_before, initial_step):
-    """Keep references, batches, augmentations, and normalization fixed per search."""
+def projected_backtracking_step(images, targets, args, lower, upper, pixel_std, loss_before, initial_step):
+    """Bound pixel movement and decrease the objective for these sampled targets.
+
+    Armijo descent on one minibatch does not imply expected-loss descent. In
+    particular, carrying a growing step coefficient across changing references
+    and minibatches can accept increasingly large updates that fit sampling noise.
+    Recompute the RMS bound from the CURRENT gradient on EVERY iteration.
+    """
     gradient = images.grad.detach()
     original = images.detach()
-    step = initial_step
+    gradient_pixel_rms = (gradient.double() * pixel_std * 255).square().mean().sqrt().item()
+    if not math.isfinite(gradient_pixel_rms) or gradient_pixel_rms == 0:
+        return loss_before, 0.0, 0, False
+    step_limit = min(
+        args.lr_img / max(gradient_pixel_rms, 1e-12), math.sqrt(torch.finfo(images.dtype).max)
+    )
+    step = step_limit if initial_step is None else min(initial_step, step_limit)
     for trial in range(1, 21):
         candidate = torch.maximum(torch.minimum(original - step * gradient, upper), lower)
         slope = (gradient * (candidate - original)).sum(dtype=torch.float64).item()
