@@ -1,0 +1,103 @@
+% Standalone Method section for inclusion in a CVPR manuscript.
+% Requires amsmath and amssymb; citation entries are in method3_refs.bib.
+% This file has not been compiled.
+
+\section{Method 3: Distillation through the Future Effects of Self-Supervised Learning}
+\label{sec:method3}
+
+Self-supervised dataset distillation should preserve the representations that a new learner acquires from data. Matching statistics of a fixed feature map provides an indirect route to this goal, since those statistics may fail to describe the features discovered during nonlinear self-supervised learning. We instead study whether a synthetic learning intervention can replace a real-data intervention while preserving its eventual effect on the backbone. The eventual effect is essential: an update to a projection head or an optimizer state may leave the current backbone unchanged while modifying its subsequent learning. Our construction exposes these delayed effects through a common real-data continuation and compares the resulting backbone geometry. The distilled artifact consists only of images, and fresh evaluation learners are trained on these images without real-data continuation or stored representation targets.
+
+Let $T=\{x_i\}_{i=1}^{n}$ be an unlabeled real dataset and $S=\{s_j\}_{j=1}^{m}$ the synthetic dataset, where $m\ll n$ and every $s_j$ lies in the valid image domain $\mathcal X$. Write $P_T$ for the uniform distribution over $T$. The augmentation distribution, network architecture, initialization distribution, and self-supervised learning rule are prescribed independently of the synthetic images. An SSL batch contains two conditionally independent augmented views of each sampled image. The real and synthetic batches follow the same sampling convention and contain the same number of underlying images. The default learner uses SimCLR~\cite{chen2020simclr}: if $u_i$ is the normalized projected representation of view $i$, and $p(i)$ identifies its other positive view, its batch loss is
+\begin{equation}
+\ell(\theta;B)
+=-\frac{1}{2b}\sum_{i=1}^{2b}
+\log\frac{\exp(u_i^\top u_{p(i)}/\tau)}
+{\sum_{j\ne i}\exp(u_i^\top u_j/\tau)}.
+\label{eq:m3-ssl}
+\end{equation}
+Here $b$ is the number of underlying images, $\tau>0$ is fixed, and $\theta$ includes both the backbone and projection head. Other specified SSL objectives can be substituted, but preservation claims concern the particular learner used to define the distillation problem.
+
+A state $z$ contains everything required to determine the learner's next update. For the momentum learner considered here, it includes $\theta$ and its momentum $v$. One learning block is one SSL update,
+\begin{equation}
+\begin{aligned}
+v^+&=\beta v+\operatorname{clip}(\nabla_\theta\ell(\theta;B))+\lambda\theta,\\
+\theta^+&=\theta-\alpha v^+,
+\end{aligned}
+\label{eq:m3-update}
+\end{equation}
+where the gradient clipping rule and the coefficients are fixed parts of the learning process. The process uses a backbone without running normalization statistics; otherwise, those statistics would also need to be included in $z$. Batch selection and augmentation make this state transition stochastic. The same transition rule is applied to $T$ and $S$.
+
+We measure a state through the backbone feature kernel on real inputs. For a backbone $f_z:\mathcal X\rightarrow\mathbb R^d$, define
+\begin{equation}
+\begin{aligned}
+G_z(x,x')&=\frac{1}{d}f_z(x)^\top f_z(x'),\\
+\|G\|_T^2&=\mathbb E_{x,x'\sim P_T}\big[G(x,x')^2\big].
+\end{aligned}
+\label{eq:m3-kernel}
+\end{equation}
+The two inputs are drawn independently. The division by the fixed feature dimension changes only the measurement units; it does not normalize individual features or remove their anisotropy. This observable is invariant to orthogonal changes of feature coordinates and describes the kernel available to linear readouts of the backbone. The projection head remains part of the learning state because it influences future updates, although it is absent from the observable. We assume that these random kernels have finite second moments in the space equipped with $\|\cdot\|_T$.
+
+Fix a learning horizon of $H$ blocks. At replacement position $t\in\{0,\ldots,H-1\}$, draw a fresh initialization and perform $t$ synthetic learning blocks, obtaining a state $z_t$. From this common state, form two branches. The first performs one additional synthetic block and then $H-t-1$ real blocks. The second performs one real block and then the same number of real blocks. Let $Q_t^S(\cdot\mid z_t)$ and $Q_t^T(\cdot\mid z_t)$ denote their conditional distributions of the final backbone kernel. Their discrepancy measures the delayed consequence of substituting one real learning block with a synthetic block. The ideal distillation objective is
+\begin{equation}
+\begin{aligned}
+\mathcal D_H(S)
+&=\frac{1}{H}\sum_{t=0}^{H-1}\mathbb E_{z_t}\!\left[
+W_2^2\!\left(Q_t^S,Q_t^T\right)\right],\\
+S^\star&\in\arg\min_{S\in\mathcal X^m}\mathcal D_H(S),
+\end{aligned}
+\label{eq:m3-ideal}
+\end{equation}
+where $Q_t^S$ and $Q_t^T$ inside the expectation retain their conditioning on $z_t$, and $W_2$ is the Wasserstein distance with ground norm $\|\cdot\|_T$. The expectation over $z_t$ uses the states actually reached by synthetic-prefix learning. Matching only random initial states would omit the learner states encountered after the synthetic images have already influenced training.
+
+We obtain a computable objective by specifying a coupling of the two conditional learning processes. Both branches share the synthetic prefix. Their intervention batches are sampled from their respective datasets, with common augmentation randomness. Every subsequent real batch and its two augmentation draws are identical across the branches. This construction preserves the correct marginal learning law of each branch. Let $G_t^S$ and $G_t^T$ be the resulting paired terminal kernels. We minimize
+\begin{equation}
+\widetilde{\mathcal D}_H(S)
+=\frac{1}{H}\sum_{t=0}^{H-1}
+\mathbb E\!\left[\|G_t^S-G_t^T\|_T^2\right].
+\label{eq:m3-coupled}
+\end{equation}
+Since a specified coupling need not minimize transport cost, $\mathcal D_H(S)\le\widetilde{\mathcal D}_H(S)$. Equation~\eqref{eq:m3-coupled} is therefore an upper-bound objective rather than an exact Wasserstein computation. Sharing the real continuation isolates the consequence of the intervention from additional differences in the sampled continuation data. The coupling can nevertheless be loose, and differences between the intervention batches can contribute variability even when their underlying learning laws are similar.
+
+For two independently sampled real query batches $\{a_i\}_{i=1}^{q}$ and $\{b_j\}_{j=1}^{q}$, independent of the learning rollouts, a single sampled position contributes
+\begin{equation}
+\begin{aligned}
+\widehat{\mathcal L}(S)
+&=\frac{1}{q^2}\sum_{i,j=1}^{q}
+\left[G_t^S(a_i,b_j)-G_t^T(a_i,b_j)\right]^2,\\
+t&\sim\operatorname{Uniform}\{0,\ldots,H-1\}.
+\end{aligned}
+\label{eq:m3-sampled}
+\end{equation}
+This is an unbiased estimate of the coupled objective when the query batches and rollouts have the stated marginals. Independent query batches avoid changing the weighting of self-pairs through a finite query-set diagonal. We differentiate the complete sampled computation, including all synthetic-prefix updates, the intervention, and both continuations. In particular, the real branch must remain differentiable: for $t>0$, its initial state depends on $S$. Detaching that branch or the shared prefix would change the derivative of the stated objective. Under the usual conditions for interchanging differentiation and expectation, these derivatives estimate the gradient of Equation~\eqref{eq:m3-coupled}, rather than the gradient of an expected-inner-minimizer surrogate. This statement does not imply that the resulting estimator has low variance. The synthetic images remain in the valid pixel domain throughout optimization.
+
+The construction has a finite-horizon composition guarantee. Let $\nu_t$ denote the distribution of the terminal backbone kernel after $t$ synthetic blocks followed by $H-t$ real blocks, with the prescribed fresh initialization. Thus $\nu_0$ is the all-real learning law and $\nu_H$ is the all-synthetic learning law. Consecutive hybrids have the same distribution of synthetic-prefix states. Coupling that common prefix and then coupling their two conditional terminal laws yields
+\begin{equation}
+W_2^2(\nu_{t+1},\nu_t)
+\le
+\mathbb E_{z_t}\!\left[W_2^2\!\left(Q_t^S,Q_t^T\right)\right].
+\label{eq:m3-mixture}
+\end{equation}
+The triangle inequality and Cauchy--Schwarz inequality then give
+\begin{equation}
+W_2(\nu_H,\nu_0)
+\le H\sqrt{\mathcal D_H(S)}
+\le H\sqrt{\widetilde{\mathcal D}_H(S)}.
+\label{eq:m3-bound}
+\end{equation}
+This argument applies to each candidate $S$, including its $S$-dependent prefix-state distributions. It requires the complete learner state, but does not require the backbone kernel itself to be a Markov state. All replacement positions are included, especially $t=H-1$, for which the real continuation is empty. Restricting the comparison to a long real continuation could allow that continuation to erase the effects of a harmful synthetic intervention. Equation~\eqref{eq:m3-bound} concerns population expectations for the specified horizon; a small value from a few sampled rollouts is not by itself a certificate for the bound.
+
+The role of continuation can also be seen through a local deterministic approximation. Let $C_r(z)$ be the backbone kernel obtained after $r$ real learning blocks from state $z$, and let $\Delta z$ be the state difference produced by synthetic and real interventions at the same starting state. Around the state $z^+$ produced by the real intervention,
+\begin{equation}
+\|C_r(z^++\Delta z)-C_r(z^+)\|_T^2
+\approx
+\left\langle\Delta z,
+DC_r(z^+)^*DC_r(z^+)\Delta z\right\rangle .
+\label{eq:m3-local}
+\end{equation}
+The adjoint is defined using the kernel norm and the learner-state inner product. The induced metric weights an update difference by its influence on future backbone geometry. With $r=0$, hidden head or momentum directions may be invisible. Positive continuation lengths can reveal their later effects. This local explanation motivates the measurement; the composition argument in Equation~\eqref{eq:m3-bound} does not rely on the linearization.
+
+Our construction belongs to the family of learner-dependent bilevel distillation methods. Matching Training Trajectories compares parameter trajectories~\cite{cazenavette2022mtt}, whereas KRR-ST uses a teacher-defined representation objective and synthetic representation targets~\cite{lee2024krrst}. MKDT distills trajectories generated by regressing teacher representations~\cite{joshi2025mkdt}. Here, the training rule remains the prescribed SSL rule and the comparison concerns the future backbone consequences of a same-state learning intervention. A fixed pretrained teacher and stored synthetic representation targets are unnecessary, but real-data continuation remains a source-learning cost. The composition inequality alone is not a novelty claim or evidence of computational superiority.
+
+The practical instantiation uses a finite horizon, finite query batches, and the explicit coupling in Equation~\eqref{eq:m3-coupled}. Its guarantee therefore concerns that finite-horizon learner. Longer training, different batch laws, other architectures, and different SSL objectives constitute transfer settings to be evaluated separately. Matching backbone kernels on the real input distribution also does not automatically preserve arbitrary downstream tasks or distribution shifts. Exact kernel equality supports equivalent kernel-based readout problems on that domain; approximate equality requires suitable conditioning and task assumptions. In particular, a useful real-data reference learner is a prerequisite for preserving its behavior to be a meaningful target.
+
+The mechanism makes distinct, falsifiable predictions. Reducing a well-estimated coupled discrepancy should improve terminal kernel agreement for the same finite-horizon learner on independent query inputs and rollouts. If this fails, the practical estimates or optimization do not faithfully realize the stated criterion. If terminal kernel agreement improves while downstream transfer deteriorates, the remaining limitation is the relation between preserved geometry and the downstream task. If the discrepancy is dominated by coupling variability, or useful agreement cannot be achieved at the desired image budget, then the approximation or compression premise must be reconsidered. The final assessment always uses fresh learners trained on $S$ alone, so real continuation cannot conceal a deficient synthetic dataset.

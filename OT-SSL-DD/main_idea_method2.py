@@ -41,11 +41,11 @@ def main():
     parser.add_argument('--device', choices=['cpu', 'cuda'], default='cuda' if torch.cuda.is_available() else 'cpu')
     parser.add_argument('--seed', type=int, default=0)
 
-    parser.add_argument('--Iteration', type=int, default=100)
-    parser.add_argument('--lr_img', type=float, default=0.02)
+    parser.add_argument('--Iteration', type=int, default=2000)
+    parser.add_argument('--lr_img', type=float, default=0.05)
     parser.add_argument('--batch_real', type=int, default=256)
     parser.add_argument('--batch_syn', type=int, default=64)
-    parser.add_argument('--num_random_networks', type=int, default=2, help='number of fixed random feature maps; none of them are trained')
+    parser.add_argument('--num_random_networks', type=int, default=10, help='number of fixed random feature maps; none of them are trained')
     parser.add_argument('--num_aug_pairs', type=int, default=4)
     parser.add_argument('--feature_dim', type=int, default=128, help='random feature dimension, capped at the synthetic image count minus one')
     parser.add_argument('--random_models', default=None, help='comma-separated architectures; defaults to --model')
@@ -61,7 +61,7 @@ def main():
     parser.add_argument('--temperature', type=float, default=0.5)
     parser.add_argument('--barlow_lambda', type=float, default=0.005)
     parser.add_argument('--eval_mode', default='S')
-    parser.add_argument('--num_eval', type=int, default=2)
+    parser.add_argument('--num_eval', type=int, default=6)
     parser.add_argument('--epoch_eval_train', type=int, default=1000)
     parser.add_argument('--label_percentage', type=float, default=1.0)
     parser.add_argument('--epoch_linear_train', type=int, default=100)
@@ -167,7 +167,7 @@ def main():
         step_history.append(step_rms)
         print('%s iter = %05d, loss = %.8f, gradient RMS = %.3e, step RMS = %.5f/255, total drift = %.5f/255, PNG values changed = %.3f%%' % (get_time(), iteration, loss_history[-1], grad_rms, step_rms, drift, changed), flush=True)
 
-        if iteration % 200 == 0 or iteration == args.Iteration:
+        if iteration % 250 == 0 or iteration == args.Iteration:
             evaluate(iteration)
         if iteration % 10 == 0 or iteration == args.Iteration:
             visible = (image_syn.detach() * data_std + data_mean).clamp(0, 1).cpu()
