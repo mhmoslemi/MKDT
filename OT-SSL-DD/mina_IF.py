@@ -158,9 +158,9 @@ def main():
 
     # Information-Theoretic Objective.
     parser.add_argument('--Iteration', type=int, default=5000)
-    parser.add_argument('--lr_img', type=float, default=0.1)
-    parser.add_argument('--batch_real', type=int, default=1024, help='Large batch to stabilize joint probability marginals')
-    parser.add_argument('--num_random_networks', type=int, default=2, help='Fresh samples from P_net per pixel update')
+    parser.add_argument('--lr_img', type=float, default=0.01)
+    parser.add_argument('--batch_real', type=int, default=2048, help='Large batch to stabilize joint probability marginals')
+    parser.add_argument('--num_random_networks', type=int, default=5, help='Fresh samples from P_net per pixel update')
     parser.add_argument('--temperature', type=float, default=0.2, help='Softmax temperature for prototype assignment')
     parser.add_argument('--random_models', default=None, help='Comma-separated P_net support; defaults to --model')
     parser.add_argument('--distill_aug_strategy', default='color_crop_cutout_flip_scale_rotate')
@@ -175,10 +175,10 @@ def main():
     parser.add_argument('--projection_dim', type=int, default=128)
     parser.add_argument('--barlow_lambda', type=float, default=0.005)
     parser.add_argument('--eval_mode', default='S')
-    parser.add_argument('--num_eval', type=int, default=2)
-    parser.add_argument('--epoch_eval_train', type=int, default=1000)
+    parser.add_argument('--num_eval', type=int, default=3)
+    parser.add_argument('--epoch_eval_train', type=int, default=2000)
     parser.add_argument('--label_percentage', type=float, default=1.0)
-    parser.add_argument('--epoch_linear_train', type=int, default=100)
+    parser.add_argument('--epoch_linear_train', type=int, default=300)
     parser.add_argument('--lr_linear', type=float, default=0.1)
     parser.add_argument('--batch_linear', type=int, default=256)
 
@@ -245,7 +245,8 @@ def main():
     print('Hyper-parameters: \n', args.__dict__)
     print('P_net support: %s' % ', '.join(random_models), flush=True)
     print('Objective: Maximize IIC Mutual Information (assigning augmentations of X to prototypes S).', flush=True)
-    # evaluate(0)
+    # evaluate(0) 
+    # Evaluate 3 random ConvNet, mean = 0.3895 std = 0.0127
     print('%s distillation begins' % get_time(), flush=True)
 
     for iteration in range(1, args.Iteration + 1):
@@ -299,13 +300,14 @@ def main():
             drift = ((image_syn - image_syn_initial) * diag_std * 255).square().mean().sqrt().item()
             
         loss_history.append(objective)
-        print('%s iter = %05d, neg_MI = %.6f, pixel drift RMS = %.5f/255, PNG values changed = %.5f%%, models = %s' % 
-              (get_time(), iteration, objective, drift, changed, '; '.join(sampled_models)), flush=True)
+        if iteration % 5 == 0:
+            print('%s iter = %05d, neg_MI = %.6f, pixel drift RMS = %.5f/255, PNG values changed = %.5f%%, models = %s' % 
+                (get_time(), iteration, objective, drift, changed, '; '.join(sampled_models)), flush=True)
 
-        if iteration % 25 == 0:
+        if iteration % 250 == 0:
             evaluate(iteration)
 
-        if iteration % 5 == 0:
+        if iteration % 25 == 0:
             grid_path = os.path.join(args.save_path, 'vis_IIC_%s_%s_%gpercent_iter%d.png' % (args.dataset, args.model, args.percentage, iteration))
             visible = (image_syn.detach() * diag_std + diag_mean).clamp(0, 1).cpu()
             save_image(visible, grid_path, nrow=int(np.ceil(np.sqrt(num_syn))))
