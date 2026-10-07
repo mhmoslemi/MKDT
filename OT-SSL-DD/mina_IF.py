@@ -164,7 +164,7 @@ def main():
     parser.add_argument('--seed', type=int, default=0)
 
     # Information-Theoretic Objective.
-    parser.add_argument('--Iteration', type=int, default=5000)
+    parser.add_argument('--Iteration', type=int, default=2000)
     parser.add_argument('--lr_img', type=float, default=0.005, help='Higher LR, decays via CosineAnnealing')
     parser.add_argument('--batch_real', type=int, default=1024, help='Slightly noisier batch prevents deep proxy minima')
     parser.add_argument('--num_random_networks', type=int, default=20, help='Fresh samples from P_net per pixel update')
@@ -184,7 +184,7 @@ def main():
     parser.add_argument('--projection_dim', type=int, default=128)
     parser.add_argument('--barlow_lambda', type=float, default=0.005)
     parser.add_argument('--eval_mode', default='S')
-    parser.add_argument('--num_eval', type=int, default=2)
+    parser.add_argument('--num_eval', type=int, default=3)
     parser.add_argument('--epoch_eval_train', type=int, default=1200)
     parser.add_argument('--label_percentage', type=float, default=1.0)
     parser.add_argument('--epoch_linear_train', type=int, default=200)
@@ -258,7 +258,7 @@ def main():
     print('Hyper-parameters: \n', args.__dict__)
     print('P_net support: %s' % ', '.join(random_models), flush=True)
     print('Objective: Maximize IIC Mutual Information with TV Regularization and Asymmetric Augmentation.', flush=True)
-    # evaluate(0)
+    evaluate(0)
     # Evaluation
     # model_train = ConvNet, model_eval = ConvNet, iteration = 0
     # [2026-10-07 16:13:57] Evaluate_SSL_00: method = simclr ssl epoch = 1200 linear epoch = 0200 labeled = 1.00% train time = 54 s ssl loss = 1.654803 train loss = 0.013506 train acc = 1.0000, test acc = 0.3909
@@ -326,17 +326,17 @@ def main():
             drift = ((image_syn - image_syn_initial) * diag_std * 255).square().mean().sqrt().item()
             
         loss_history.append(objective)
-        if iteration % 40 == 0:
+        if iteration % 50 == 0:
             current_lr = scheduler_img.get_last_lr()[0]
             # print('%s iter = %05d, neg_MI = %.6f, pixel drift RMS = %.5f/255, PNG values changed = %.5f%%, lr = %.4f, models = %s' % 
             #     (get_time(), iteration, objective, drift, changed, current_lr, '; '.join(sampled_models)), flush=True)
             print('%s iter = %05d, neg_MI = %.6f, pixel drift RMS = %.5f/255, PNG values changed = %.5f%%, lr = %.4f' % 
                 (get_time(), iteration, objective, drift, changed, current_lr), flush=True)
 
-        if iteration % 350 == 0:
+        if iteration % 250 == 0:
             evaluate(iteration)
 
-        if iteration % 80 == 0:
+        if iteration % 100 == 0:
             grid_path = os.path.join(args.save_path, 'vis_IIC_%s_%s_%gpercent_iter%d.png' % (args.dataset, args.model, args.percentage, iteration))
             visible = (image_syn.detach() * diag_std + diag_mean).clamp(0, 1).cpu()
             save_image(visible, grid_path, nrow=int(np.ceil(np.sqrt(num_syn))))
