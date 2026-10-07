@@ -61,6 +61,13 @@ def make_diff_augmenter(strategy, param):
     return augment
 
 
+def total_variation_loss(img):
+    """Calculates the Total Variation (TV) loss to encourage spatial smoothness and penalize high-frequency noise."""
+    tv_h = torch.mean(torch.abs(img[:, :, 1:, :] - img[:, :, :-1, :]))
+    tv_w = torch.mean(torch.abs(img[:, :, :, 1:] - img[:, :, :, :-1]))
+    return tv_h + tv_w
+
+
 @torch.no_grad()
 def deepcluster_initialize(dst_train, num_syn, device, seed, channel, num_classes, im_size, model_name='ConvNet'):
     """Extract features with a random network and perform K-Means to initialize synthetic images as cluster centroids."""
@@ -158,11 +165,13 @@ def main():
 
     # Information-Theoretic Objective.
     parser.add_argument('--Iteration', type=int, default=5000)
-    parser.add_argument('--lr_img', type=float, default=0.01)
-    parser.add_argument('--batch_real', type=int, default=2048, help='Large batch to stabilize joint probability marginals')
-    parser.add_argument('--num_random_networks', type=int, default=5, help='Fresh samples from P_net per pixel update')
+    parser.add_argument('--lr_img', type=float, default=0.005, help='Higher LR, decays via CosineAnnealing')
+    parser.add_argument('--batch_real', type=int, default=1024, help='Slightly noisier batch prevents deep proxy minima')
+    parser.add_argument('--num_random_networks', type=int, default=20, help='Fresh samples from P_net per pixel update')
     parser.add_argument('--temperature', type=float, default=0.2, help='Softmax temperature for prototype assignment')
-    parser.add_argument('--random_models', default=None, help='Comma-separated P_net support; defaults to --model')
+    # parser.add_argument('--random_models', default='ConvNet,ResNet18', help='Comma-separated P_net support; forces geometric generalization')
+    parser.add_argument('--random_models', default='ConvNet', help='Comma-separated P_net support; forces geometric generalization')
+    parser.add_argument('--tv_weight', type=float, default=0.01, help='Total Variation penalty to destroy adversarial high-frequencies')
     parser.add_argument('--distill_aug_strategy', default='color_crop_cutout_flip_scale_rotate')
     parser.add_argument('--distill_aug_mode', choices=['S', 'M'], default='S')
 
@@ -175,10 +184,10 @@ def main():
     parser.add_argument('--projection_dim', type=int, default=128)
     parser.add_argument('--barlow_lambda', type=float, default=0.005)
     parser.add_argument('--eval_mode', default='S')
-    parser.add_argument('--num_eval', type=int, default=3)
-    parser.add_argument('--epoch_eval_train', type=int, default=2000)
+    parser.add_argument('--num_eval', type=int, default=2)
+    parser.add_argument('--epoch_eval_train', type=int, default=1200)
     parser.add_argument('--label_percentage', type=float, default=1.0)
-    parser.add_argument('--epoch_linear_train', type=int, default=300)
+    parser.add_argument('--epoch_linear_train', type=int, default=200)
     parser.add_argument('--lr_linear', type=float, default=0.1)
     parser.add_argument('--batch_linear', type=int, default=256)
 
@@ -226,7 +235,11 @@ def main():
     
     augmenter = make_diff_augmenter(args.distill_aug_strategy, args.dsa_param)
     objective_rng = np.random.default_rng(args.seed + 10_000)
+    
+    # Optimizer & Scheduler Setup
     optimizer_img = torch.optim.Adam([image_syn], lr=args.lr_img)
+    scheduler_img = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer_img, T_max=args.Iteration, eta_min=0.005)
+    
     loss_history = []
     model_eval_pool = get_eval_pool(args.eval_mode, args.model, args.model) if args.num_eval else []
 
@@ -244,9 +257,16 @@ def main():
 
     print('Hyper-parameters: \n', args.__dict__)
     print('P_net support: %s' % ', '.join(random_models), flush=True)
-    print('Objective: Maximize IIC Mutual Information (assigning augmentations of X to prototypes S).', flush=True)
-    # evaluate(0) 
-    # Evaluate 3 random ConvNet, mean = 0.3895 std = 0.0127
+    print('Objective: Maximize IIC Mutual Information with TV Regularization and Asymmetric Augmentation.', flush=True)
+    # evaluate(0)
+    # Evaluation
+    # model_train = ConvNet, model_eval = ConvNet, iteration = 0
+    # [2026-10-07 16:13:57] Evaluate_SSL_00: method = simclr ssl epoch = 1200 linear epoch = 0200 labeled = 1.00% train time = 54 s ssl loss = 1.654803 train loss = 0.013506 train acc = 1.0000, test acc = 0.3909
+    # [2026-10-07 16:14:52] Evaluate_SSL_01: method = simclr ssl epoch = 1200 linear epoch = 0200 labeled = 1.00% train time = 54 s ssl loss = 1.672578 train loss = 0.012457 train acc = 1.0000, test acc = 0.3986
+    # [2026-10-07 16:15:47] Evaluate_SSL_02: method = simclr ssl epoch = 1200 linear epoch = 0200 labeled = 1.00% train time = 54 s ssl loss = 1.643402 train loss = 0.009727 train acc = 1.0000, test acc = 0.3652
+    # [2026-10-07 16:16:42] Evaluate_SSL_03: method = simclr ssl epoch = 1200 linear epoch = 0200 labeled = 1.00% train time = 53 s ssl loss = 1.672449 train loss = 0.013573 train acc = 1.0000, test acc = 0.3915
+    # Evaluate 4 random ConvNet, mean = 0.3866 std = 0.0127
+
     print('%s distillation begins' % get_time(), flush=True)
 
     for iteration in range(1, args.Iteration + 1):
@@ -269,30 +289,36 @@ def main():
             network = get_network(model_name, channel, num_classes, im_size, seed=network_seed).to(args.device)
             encoder = frozen_embedder(network)
 
-            # Draw independent augmentations
+            # ASYMMETRIC AUGMENTATION: Draw independent augmentations for real views only
             view_u = augmenter(real_imgs, int(objective_rng.integers(0, 2**31 - 1)))
             view_v = augmenter(real_imgs, int(objective_rng.integers(0, 2**31 - 1)))
-            
-            # Augment the synthetic prototypes to enforce robust centroid learning
-            view_S = augmenter(image_syn, int(objective_rng.integers(0, 2**31 - 1)))
 
             with torch.no_grad():
                 features_u = encoder(view_u)
                 features_v = encoder(view_v)
                 
             # Gradients flow ONLY into the synthetic pixels S
-            features_S = encoder(view_S) 
+            # No strong augmentation on S during distillation forces clean, stable anchors
+            features_S = encoder(image_syn) 
 
-            # Compute and backpropagate Negative Mutual Information
+            # Compute Negative Mutual Information
             network_loss = information_theoretic_loss(features_u, features_v, features_S, tau=args.temperature)
-            (network_loss / args.num_random_networks).backward()
+            
+            # Compute Total Variation penalty for Structural Regularization
+            # tv_penalty = args.tv_weight * total_variation_loss(image_syn)
+            
+            # Combine and backpropagate
+            # total_loss = network_loss + tv_penalty * 5
+            total_loss = network_loss
+            (total_loss / args.num_random_networks).backward()
             
             sampled_losses.append(network_loss.detach())
             sampled_models.append('%s(s=%d)' % (model_name, network_seed))
-            del encoder, network, network_loss, features_u, features_v, features_S, view_u, view_v, view_S
+            del encoder, network, network_loss, total_loss, features_u, features_v, features_S, view_u, view_v
 
         objective = torch.stack(sampled_losses).mean().item()
         optimizer_img.step()
+        scheduler_img.step()
         
         with torch.no_grad():
             image_syn.copy_(torch.maximum(torch.minimum(image_syn, pixel_max), pixel_min))
@@ -300,14 +326,17 @@ def main():
             drift = ((image_syn - image_syn_initial) * diag_std * 255).square().mean().sqrt().item()
             
         loss_history.append(objective)
-        if iteration % 5 == 0:
-            print('%s iter = %05d, neg_MI = %.6f, pixel drift RMS = %.5f/255, PNG values changed = %.5f%%, models = %s' % 
-                (get_time(), iteration, objective, drift, changed, '; '.join(sampled_models)), flush=True)
+        if iteration % 40 == 0:
+            current_lr = scheduler_img.get_last_lr()[0]
+            # print('%s iter = %05d, neg_MI = %.6f, pixel drift RMS = %.5f/255, PNG values changed = %.5f%%, lr = %.4f, models = %s' % 
+            #     (get_time(), iteration, objective, drift, changed, current_lr, '; '.join(sampled_models)), flush=True)
+            print('%s iter = %05d, neg_MI = %.6f, pixel drift RMS = %.5f/255, PNG values changed = %.5f%%, lr = %.4f' % 
+                (get_time(), iteration, objective, drift, changed, current_lr), flush=True)
 
-        if iteration % 250 == 0:
+        if iteration % 350 == 0:
             evaluate(iteration)
 
-        if iteration % 25 == 0:
+        if iteration % 80 == 0:
             grid_path = os.path.join(args.save_path, 'vis_IIC_%s_%s_%gpercent_iter%d.png' % (args.dataset, args.model, args.percentage, iteration))
             visible = (image_syn.detach() * diag_std + diag_mean).clamp(0, 1).cpu()
             save_image(visible, grid_path, nrow=int(np.ceil(np.sqrt(num_syn))))
@@ -320,7 +349,7 @@ def main():
         'loss_history': torch.tensor(loss_history, dtype=torch.float64), 
         'seed': args.seed, 
         'random_feature_distribution': {'models': random_models, 'samples_per_update': args.num_random_networks}, 
-        'iic_params': {'tau': args.temperature, 'strategy': args.distill_aug_strategy, 'batch_real': args.batch_real}
+        'iic_params': {'tau': args.temperature, 'strategy': args.distill_aug_strategy, 'batch_real': args.batch_real, 'tv_weight': args.tv_weight}
     }, result_path)
     print('Saved synthetic data to %s' % result_path, flush=True)
 
