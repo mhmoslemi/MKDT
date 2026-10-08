@@ -1,0 +1,66 @@
+DOWNLOAD cifar-100-python.tar.gz
+curl: (22) The requested URL returned error: 403
+Traceback (most recent call last):
+  File "/scratch/mmoslem3/MKDT/benchmarks/downstream/download_datasets.py", line 80, in <module>
+    stage(dataset)
+  File "/scratch/mmoslem3/MKDT/benchmarks/downstream/download_datasets.py", line 48, in stage
+    unpack(fetch('cifar-100-python.tar.gz', 'https://www.cs.toronto.edu/~kriz/cifar-100-python.tar.gz',
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/scratch/mmoslem3/MKDT/benchmarks/downstream/download_datasets.py", line 22, in fetch
+    subprocess.run(['curl', '--fail', '--location', '--silent', '--show-error',
+  File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/python/3.11.5/lib/python3.11/subprocess.py", line 571, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['curl', '--fail', '--location', '--silent', '--show-error', '--retry', '3', '--connect-timeout', '30', '--max-time', '2400', '--speed-limit', '1024', '--speed-time', '120', '--continue-at', '-', '--output', '/scratch/mmoslem3/data/.downstream-downloads/cifar-100-python.tar.gz.partial', 'https://www.cs.toronto.edu/~kriz/cifar-100-python.tar.gz']' returned non-zero exit status 22.
+DOWNLOAD 102flowers.tgz
+curl: (22) The requested URL returned error: 403
+Traceback (most recent call last):
+  File "/scratch/mmoslem3/MKDT/benchmarks/downstream/download_datasets.py", line 80, in <module>
+    stage(dataset)
+  File "/scratch/mmoslem3/MKDT/benchmarks/downstream/download_datasets.py", line 67, in stage
+    unpack(fetch('102flowers.tgz', base + '102flowers.tgz', '52808999861908f626f3c1f4e79d11fa'), source)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/scratch/mmoslem3/MKDT/benchmarks/downstream/download_datasets.py", line 22, in fetch
+    subprocess.run(['curl', '--fail', '--location', '--silent', '--show-error',
+  File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/python/3.11.5/lib/python3.11/subprocess.py", line 571, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['curl', '--fail', '--location', '--silent', '--show-error', '--retry', '3', '--connect-timeout', '30', '--max-time', '2400', '--speed-limit', '1024', '--speed-time', '120', '--continue-at', '-', '--output', '/scratch/mmoslem3/data/.downstream-downloads/102flowers.tgz.partial', 'https://www.robots.ox.ac.uk/~vgg/data/flowers/102/102flowers.tgz']' returned non-zero exit status 22.
+DOWNLOAD CUB_200_2011.tgz
+curl: (22) The requested URL returned error: 403
+Traceback (most recent call last):
+  File "/scratch/mmoslem3/MKDT/benchmarks/downstream/download_datasets.py", line 80, in <module>
+    stage(dataset)
+  File "/scratch/mmoslem3/MKDT/benchmarks/downstream/download_datasets.py", line 52, in stage
+    unpack(fetch('CUB_200_2011.tgz', 'https://data.caltech.edu/records/65de6-vp158/files/CUB_200_2011.tgz?download=1',
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/scratch/mmoslem3/MKDT/benchmarks/downstream/download_datasets.py", line 22, in fetch
+    subprocess.run(['curl', '--fail', '--location', '--silent', '--show-error',
+  File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/python/3.11.5/lib/python3.11/subprocess.py", line 571, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['curl', '--fail', '--location', '--silent', '--show-error', '--retry', '3', '--connect-timeout', '30', '--max-time', '2400', '--speed-limit', '1024', '--speed-time', '120', '--continue-at', '-', '--output', '/scratch/mmoslem3/data/.downstream-downloads/CUB_200_2011.tgz.partial', 'https://data.caltech.edu/records/65de6-vp158/files/CUB_200_2011.tgz?download=1']' returned non-zero exit status 22.
+DOWNLOAD dogs-images.tar
+curl: (22) The requested URL returned error: 403
+Traceback (most recent call last):
+  File "/scratch/mmoslem3/MKDT/benchmarks/downstream/download_datasets.py", line 80, in <module>
+    stage(dataset)
+  File "/scratch/mmoslem3/MKDT/benchmarks/downstream/download_datasets.py", line 62, in stage
+    unpack(fetch('dogs-' + name, 'https://vision.stanford.edu/aditya86/ImageNetDogs/' + name), source)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/scratch/mmoslem3/MKDT/benchmarks/downstream/download_datasets.py", line 22, in fetch
+    subprocess.run(['curl', '--fail', '--location', '--silent', '--show-error',
+  File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/python/3.11.5/lib/python3.11/subprocess.py", line 571, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['curl', '--fail', '--location', '--silent', '--show-error', '--retry', '3', '--connect-timeout', '30', '--max-time', '2400', '--speed-limit', '1024', '--speed-time', '120', '--continue-at', '-', '--output', '/scratch/mmoslem3/data/.downstream-downloads/dogs-images.tar.partial', 'https://vision.stanford.edu/aditya86/ImageNetDogs/images.tar']' returned non-zero exit status 22.
+DOWNLOAD fgvc-aircraft-2013b.tar.gz
+curl: (22) The requested URL returned error: 403
+Traceback (most recent call last):
+  File "/scratch/mmoslem3/MKDT/benchmarks/downstream/download_datasets.py", line 80, in <module>
+    stage(dataset)
+  File "/scratch/mmoslem3/MKDT/benchmarks/downstream/download_datasets.py", line 56, in stage
+    unpack(fetch('fgvc-aircraft-2013b.tar.gz', 'https://www.robots.ox.ac.uk/~vgg/data/fgvc-aircraft/archives/fgvc-aircraft-2013b.tar.gz'), staging)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/scratch/mmoslem3/MKDT/benchmarks/downstream/download_datasets.py", line 22, in fetch
+    subprocess.run(['curl', '--fail', '--location', '--silent', '--show-error',
+  File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/python/3.11.5/lib/python3.11/subprocess.py", line 571, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['curl', '--fail', '--location', '--silent', '--show-error', '--retry', '3', '--connect-timeout', '30', '--max-time', '2400', '--speed-limit', '1024', '--speed-time', '120', '--continue-at', '-', '--output', '/scratch/mmoslem3/data/.downstream-downloads/fgvc-aircraft-2013b.tar.gz.partial', 'https://www.robots.ox.ac.uk/~vgg/data/fgvc-aircraft/archives/fgvc-aircraft-2013b.tar.gz']' returned non-zero exit status 22.
+FINISHED failed=['CIFAR100', 'Flowers', 'CUB2011', 'Dogs', 'Aircraft']
