@@ -68,6 +68,12 @@ def total_variation_loss(img):
     return tv_h + tv_w
 
 
+def pixel_mse_loss(images, initial_images, channel_std):
+    """Mean squared pixel drift in [0, 1] RGB units, with a fixed initial target."""
+    # Dataset normalization is (pixels - mean) / std; the mean cancels in a difference.
+    return ((images - initial_images.detach()) * channel_std).square().mean()
+
+
 @torch.no_grad()
 def deepcluster_initialize(dst_train, num_syn, device, seed, channel, num_classes, im_size, model_name='ConvNet'):
     """Extract features with a random network and perform K-Means to initialize synthetic images as cluster centroids."""
@@ -164,16 +170,17 @@ def main():
     parser.add_argument('--seed', type=int, default=0)
 
     # Information-Theoretic Objective.
-    parser.add_argument('--Iteration', type=int, default=2000)
+    parser.add_argument('--Iteration', type=int, default=505)
     parser.add_argument('--lr_img', type=float, default=0.005, help='Higher LR, decays via CosineAnnealing')
     parser.add_argument('--batch_real', type=int, default=1024, help='Slightly noisier batch prevents deep proxy minima')
-    parser.add_argument('--num_random_networks', type=int, default=20, help='Fresh samples from P_net per pixel update')
+    parser.add_argument('--num_random_networks', type=int, default=10, help='Fresh samples from P_net per pixel update')
     parser.add_argument('--temperature', type=float, default=0.2, help='Softmax temperature for prototype assignment')
     # parser.add_argument('--random_models', default='ConvNet,ResNet18', help='Comma-separated P_net support; forces geometric generalization')
-    parser.add_argument('--random_models', default='ConvNet', help='Comma-separated P_net support; forces geometric generalization')
+    parser.add_argument('--random_models', default='ConvNet,ResNet18', help='Comma-separated P_net support; forces geometric generalization')
     parser.add_argument('--tv_weight', type=float, default=0.01, help='Total Variation penalty to destroy adversarial high-frequencies')
+    parser.add_argument('--pixel_mse_weight', type=float, default=0.1, help='Nonnegative weight for mean pixel MSE to initialization in [0,1] units; 0 disables it')
     parser.add_argument('--distill_aug_strategy', default='color_crop_cutout_flip_scale_rotate')
-    parser.add_argument('--distill_aug_mode', choices=['S', 'M'], default='S')
+    parser.add_argument('--distill_aug_mode', choices=['S', 'M'], default='M')
 
     # Downstream SSL evaluation.
     parser.add_argument('--model', default='ConvNet')
@@ -199,8 +206,11 @@ def main():
     if args.ssl_aug_strategy is None:
         args.ssl_aug_strategy = args.distill_aug_strategy
     args.method = 'InformationTheoretic_IIC'
+
     args.dsa_param = ParamDiffAug()
-    args.dsa_param.aug_mode = args.distill_aug_mode
+    args.dsa_param.aug_mode = 'S'
+    distill_dsa_param = ParamDiffAug()
+    distill_dsa_param.aug_mode = args.distill_aug_mode
     args.dsa = False
     set_random_seed(args.seed)
 
@@ -233,7 +243,7 @@ def main():
     real_loader = torch.utils.data.DataLoader(dst_train, batch_size=args.batch_real, shuffle=True, num_workers=0, pin_memory=args.device == 'cuda', drop_last=True)
     real_iter = iter(real_loader)
     
-    augmenter = make_diff_augmenter(args.distill_aug_strategy, args.dsa_param)
+    augmenter = make_diff_augmenter(args.distill_aug_strategy, distill_dsa_param)
     objective_rng = np.random.default_rng(args.seed + 10_000)
     
     # Optimizer & Scheduler Setup
@@ -241,6 +251,8 @@ def main():
     scheduler_img = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer_img, T_max=args.Iteration, eta_min=0.005)
     
     loss_history = []
+    pixel_mse_history = []
+    total_loss_history = []
     model_eval_pool = get_eval_pool(args.eval_mode, args.model, args.model) if args.num_eval else []
 
     def evaluate(iteration):
@@ -257,8 +269,8 @@ def main():
 
     print('Hyper-parameters: \n', args.__dict__)
     print('P_net support: %s' % ', '.join(random_models), flush=True)
-    print('Objective: Maximize IIC Mutual Information with TV Regularization and Asymmetric Augmentation.', flush=True)
-    evaluate(0)
+    print('Objective: minimize mean(-MI) + %g * pixel_MSE_to_initial ([0,1] pixel units).' % args.pixel_mse_weight, flush=True)
+    # evaluate(0)
     # Evaluation
     # model_train = ConvNet, model_eval = ConvNet, iteration = 0
     # [2026-10-07 16:13:57] Evaluate_SSL_00: method = simclr ssl epoch = 1200 linear epoch = 0200 labeled = 1.00% train time = 54 s ssl loss = 1.654803 train loss = 0.013506 train acc = 1.0000, test acc = 0.3909
@@ -304,19 +316,21 @@ def main():
             # Compute Negative Mutual Information
             network_loss = information_theoretic_loss(features_u, features_v, features_S, tau=args.temperature)
             
-            # Compute Total Variation penalty for Structural Regularization
-            # tv_penalty = args.tv_weight * total_variation_loss(image_syn)
-            
-            # Combine and backpropagate
-            # total_loss = network_loss + tv_penalty * 5
-            total_loss = network_loss
-            (total_loss / args.num_random_networks).backward()
+            # Gradient descent on negative MI maximizes mutual information.
+            (network_loss / args.num_random_networks).backward()
             
             sampled_losses.append(network_loss.detach())
             sampled_models.append('%s(s=%d)' % (model_name, network_seed))
-            del encoder, network, network_loss, total_loss, features_u, features_v, features_S, view_u, view_v
+            del encoder, network, network_loss, features_u, features_v, features_S, view_u, view_v
 
+        # Add the positive drift penalty ONCE per pixel update, independent of
+        # num_random_networks. The target is the fixed, unaugmented initialization.
+        pixel_mse = pixel_mse_loss(image_syn, image_syn_initial, diag_std)
+        if args.pixel_mse_weight > 0:
+            (args.pixel_mse_weight * pixel_mse).backward()
         objective = torch.stack(sampled_losses).mean().item()
+        pixel_mse_value = pixel_mse.detach().item()
+        total_loss_value = objective + args.pixel_mse_weight * pixel_mse_value
         optimizer_img.step()
         scheduler_img.step()
         
@@ -326,14 +340,14 @@ def main():
             drift = ((image_syn - image_syn_initial) * diag_std * 255).square().mean().sqrt().item()
             
         loss_history.append(objective)
+        pixel_mse_history.append(pixel_mse_value)
+        total_loss_history.append(total_loss_value)
         if iteration % 50 == 0:
             current_lr = scheduler_img.get_last_lr()[0]
-            # print('%s iter = %05d, neg_MI = %.6f, pixel drift RMS = %.5f/255, PNG values changed = %.5f%%, lr = %.4f, models = %s' % 
-            #     (get_time(), iteration, objective, drift, changed, current_lr, '; '.join(sampled_models)), flush=True)
-            print('%s iter = %05d, neg_MI = %.6f, pixel drift RMS = %.5f/255, PNG values changed = %.5f%%, lr = %.4f' % 
-                (get_time(), iteration, objective, drift, changed, current_lr), flush=True)
+            print('%s iter = %05d, neg_MI = %.6f, pixel_MSE = %.6f, total_loss = %.6f, pixel drift RMS = %.5f/255, PNG values changed = %.5f%%, lr = %.4f' %
+                (get_time(), iteration, objective, pixel_mse_value, total_loss_value, drift, changed, current_lr), flush=True)
 
-        if iteration % 250 == 0:
+        if iteration % 100 == 0:
             evaluate(iteration)
 
         if iteration % 100 == 0:
@@ -347,9 +361,12 @@ def main():
         'method': args.method, 
         'iteration': args.Iteration, 
         'loss_history': torch.tensor(loss_history, dtype=torch.float64), 
+        'pixel_mse_history': torch.tensor(pixel_mse_history, dtype=torch.float64),
+        'total_loss_history': torch.tensor(total_loss_history, dtype=torch.float64),
         'seed': args.seed, 
         'random_feature_distribution': {'models': random_models, 'samples_per_update': args.num_random_networks}, 
-        'iic_params': {'tau': args.temperature, 'strategy': args.distill_aug_strategy, 'batch_real': args.batch_real, 'tv_weight': args.tv_weight}
+        'iic_params': {'tau': args.temperature, 'strategy': args.distill_aug_strategy, 'batch_real': args.batch_real, 'tv_weight': args.tv_weight,
+                       'pixel_mse_weight': args.pixel_mse_weight, 'pixel_mse_space': 'pixels_0_1'}
     }, result_path)
     print('Saved synthetic data to %s' % result_path, flush=True)
 

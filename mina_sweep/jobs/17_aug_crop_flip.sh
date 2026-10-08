@@ -1,0 +1,21 @@
+#!/bin/bash
+#SBATCH --account=aip-boyuwang
+#SBATCH --job-name=mina_17_aug_crop_flip
+#SBATCH --time=0-03:00:00
+#SBATCH --nodes=1
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=1
+#SBATCH --mem=12G
+#SBATCH --gres=gpu:l40s:1
+#SBATCH --output=slurm-%x-%j.out
+
+set -euo pipefail
+RUN_TAG=17_aug_crop_flip
+LR_IMG=0.005
+BATCH_REAL=1024
+NUM_RANDOM_NETWORKS=20
+TEMPERATURE=0.2
+DISTILL_AUG_STRATEGY=crop_flip
+DISTILL_AUG_MODE=S
+PROJECT_ROOT="${PROJECT_ROOT:-${SLURM_SUBMIT_DIR:-$SCRATCH/MKDT}}"
+source "$PROJECT_ROOT/mina_sweep/run.sh"

@@ -1,0 +1,124 @@
+PyTorch: 2.9.1 CUDA: True GPU: NVIDIA L40S
+Starting 20_aug_color_crop_flip_scale_rotate at Wed Oct  7 17:53:37 MDT 2026; output: /scratch/mmoslem3/MKDT/results_mina_sweep/20_aug_color_crop_flip_scale_rotate/job_1364765
+Command: python3 OT-SSL-DD/mina_IF.py --data_path /scratch/mmoslem3/data --save_path /scratch/mmoslem3/MKDT/results_mina_sweep/20_aug_color_crop_flip_scale_rotate/job_1364765 --device cuda --lr_img 0.005 --batch_real 1024 --num_random_networks 20 --temperature 0.2 --distill_aug_strategy color_crop_flip_scale_rotate --ssl_aug_strategy color_crop_cutout_flip_scale_rotate 
+Cleared all previous files from /scratch/mmoslem3/MKDT/results_mina_sweep/20_aug_color_crop_flip_scale_rotate/job_1364765
+Initializing 500 synthetic prototypes via DeepCluster K-Means on ConvNet...
+Hyper-parameters: 
+ {'dataset': 'CIFAR10', 'percentage': 1.0, 'data_path': '/scratch/mmoslem3/data', 'device': 'cuda', 'seed': 0, 'Iteration': 2000, 'lr_img': 0.005, 'batch_real': 1024, 'num_random_networks': 20, 'temperature': 0.2, 'random_models': 'ConvNet', 'tv_weight': 0.01, 'distill_aug_strategy': 'color_crop_flip_scale_rotate', 'distill_aug_mode': 'S', 'model': 'ConvNet', 'lr_net': 0.01, 'batch_train': 256, 'ssl_method': 'simclr', 'ssl_aug_strategy': 'color_crop_cutout_flip_scale_rotate', 'projection_dim': 128, 'barlow_lambda': 0.005, 'eval_mode': 'S', 'num_eval': 3, 'epoch_eval_train': 1200, 'label_percentage': 1.0, 'epoch_linear_train': 200, 'lr_linear': 0.1, 'batch_linear': 256, 'save_path': '/scratch/mmoslem3/MKDT/results_mina_sweep/20_aug_color_crop_flip_scale_rotate/job_1364765', 'method': 'InformationTheoretic_IIC', 'dsa_param': <utils.ParamDiffAug object at 0x7a77fa603090>, 'dsa': False}
+P_net support: ConvNet
+Objective: Maximize IIC Mutual Information with TV Regularization and Asymmetric Augmentation.
+-------------------------
+Evaluation
+model_train = ConvNet, model_eval = ConvNet, iteration = 0
+[2026-10-07 17:55:59] Evaluate_SSL_00: method = simclr ssl epoch = 1200 linear epoch = 0200 labeled = 1.00% train time = 52 s ssl loss = 1.657395 train loss = 0.012907 train acc = 1.0000, test acc = 0.3880
+[2026-10-07 17:56:52] Evaluate_SSL_01: method = simclr ssl epoch = 1200 linear epoch = 0200 labeled = 1.00% train time = 52 s ssl loss = 1.676046 train loss = 0.011806 train acc = 1.0000, test acc = 0.3953
+[2026-10-07 17:57:46] Evaluate_SSL_02: method = simclr ssl epoch = 1200 linear epoch = 0200 labeled = 1.00% train time = 52 s ssl loss = 1.648159 train loss = 0.010374 train acc = 1.0000, test acc = 0.3722
+Evaluate 3 random ConvNet, mean = 0.3852 std = 0.0096
+-------------------------
+[2026-10-07 17:57:46] distillation begins
+[2026-10-07 17:58:40] iter = 00050, neg_MI = -0.004776, pixel drift RMS = 5.20254/255, PNG values changed = 92.22858%, lr = 0.0050
+[2026-10-07 17:59:34] iter = 00100, neg_MI = -0.007657, pixel drift RMS = 11.16017/255, PNG values changed = 95.82591%, lr = 0.0050
+[2026-10-07 18:00:28] iter = 00150, neg_MI = -0.010313, pixel drift RMS = 17.20981/255, PNG values changed = 96.94466%, lr = 0.0050
+[2026-10-07 18:01:23] iter = 00200, neg_MI = -0.011394, pixel drift RMS = 22.89065/255, PNG values changed = 97.47135%, lr = 0.0050
+[2026-10-07 18:02:17] iter = 00250, neg_MI = -0.016624, pixel drift RMS = 27.94582/255, PNG values changed = 97.79291%, lr = 0.0050
+-------------------------
+Evaluation
+model_train = ConvNet, model_eval = ConvNet, iteration = 250
+[2026-10-07 18:03:10] Evaluate_SSL_00: method = simclr ssl epoch = 1200 linear epoch = 0200 labeled = 1.00% train time = 52 s ssl loss = 1.759536 train loss = 0.014211 train acc = 1.0000, test acc = 0.4097
+[2026-10-07 18:04:03] Evaluate_SSL_01: method = simclr ssl epoch = 1200 linear epoch = 0200 labeled = 1.00% train time = 52 s ssl loss = 1.770023 train loss = 0.011316 train acc = 1.0000, test acc = 0.4163
+[2026-10-07 18:04:56] Evaluate_SSL_02: method = simclr ssl epoch = 1200 linear epoch = 0200 labeled = 1.00% train time = 52 s ssl loss = 1.776586 train loss = 0.013095 train acc = 1.0000, test acc = 0.3928
+Evaluate 3 random ConvNet, mean = 0.4063 std = 0.0099
+-------------------------
+[2026-10-07 18:05:49] iter = 00300, neg_MI = -0.018168, pixel drift RMS = 32.31107/255, PNG values changed = 97.98014%, lr = 0.0050
+[2026-10-07 18:06:43] iter = 00350, neg_MI = -0.018807, pixel drift RMS = 36.12112/255, PNG values changed = 98.12923%, lr = 0.0050
+[2026-10-07 18:07:36] iter = 00400, neg_MI = -0.023391, pixel drift RMS = 39.42211/255, PNG values changed = 98.26432%, lr = 0.0050
+[2026-10-07 18:08:31] iter = 00450, neg_MI = -0.020182, pixel drift RMS = 42.30192/255, PNG values changed = 98.35150%, lr = 0.0050
+[2026-10-07 18:09:24] iter = 00500, neg_MI = -0.021249, pixel drift RMS = 44.75832/255, PNG values changed = 98.43411%, lr = 0.0050
+-------------------------
+Evaluation
+model_train = ConvNet, model_eval = ConvNet, iteration = 500
+[2026-10-07 18:10:17] Evaluate_SSL_00: method = simclr ssl epoch = 1200 linear epoch = 0200 labeled = 1.00% train time = 52 s ssl loss = 2.035386 train loss = 0.016018 train acc = 1.0000, test acc = 0.4165
+[2026-10-07 18:11:11] Evaluate_SSL_01: method = simclr ssl epoch = 1200 linear epoch = 0200 labeled = 1.00% train time = 52 s ssl loss = 2.015876 train loss = 0.014001 train acc = 1.0000, test acc = 0.4361
+[2026-10-07 18:12:04] Evaluate_SSL_02: method = simclr ssl epoch = 1200 linear epoch = 0200 labeled = 1.00% train time = 52 s ssl loss = 2.023978 train loss = 0.014843 train acc = 1.0000, test acc = 0.3964
+Evaluate 3 random ConvNet, mean = 0.4163 std = 0.0162
+-------------------------
+[2026-10-07 18:12:58] iter = 00550, neg_MI = -0.022358, pixel drift RMS = 46.83567/255, PNG values changed = 98.51328%, lr = 0.0050
+[2026-10-07 18:13:53] iter = 00600, neg_MI = -0.022107, pixel drift RMS = 48.62453/255, PNG values changed = 98.56575%, lr = 0.0050
+[2026-10-07 18:14:48] iter = 00650, neg_MI = -0.024819, pixel drift RMS = 50.16740/255, PNG values changed = 98.61920%, lr = 0.0050
+[2026-10-07 18:15:42] iter = 00700, neg_MI = -0.022896, pixel drift RMS = 51.47649/255, PNG values changed = 98.68301%, lr = 0.0050
+[2026-10-07 18:16:36] iter = 00750, neg_MI = -0.026289, pixel drift RMS = 52.61259/255, PNG values changed = 98.71296%, lr = 0.0050
+-------------------------
+Evaluation
+model_train = ConvNet, model_eval = ConvNet, iteration = 750
+[2026-10-07 18:17:30] Evaluate_SSL_00: method = simclr ssl epoch = 1200 linear epoch = 0200 labeled = 1.00% train time = 52 s ssl loss = 2.181959 train loss = 0.015825 train acc = 1.0000, test acc = 0.4131
+[2026-10-07 18:18:23] Evaluate_SSL_01: method = simclr ssl epoch = 1200 linear epoch = 0200 labeled = 1.00% train time = 52 s ssl loss = 2.046845 train loss = 0.012589 train acc = 1.0000, test acc = 0.4353
+[2026-10-07 18:19:16] Evaluate_SSL_02: method = simclr ssl epoch = 1200 linear epoch = 0200 labeled = 1.00% train time = 52 s ssl loss = 2.017958 train loss = 0.016553 train acc = 1.0000, test acc = 0.4053
+Evaluate 3 random ConvNet, mean = 0.4179 std = 0.0127
+-------------------------
+[2026-10-07 18:20:11] iter = 00800, neg_MI = -0.026974, pixel drift RMS = 53.58572/255, PNG values changed = 98.73477%, lr = 0.0050
+[2026-10-07 18:21:06] iter = 00850, neg_MI = -0.027500, pixel drift RMS = 54.44752/255, PNG values changed = 98.77376%, lr = 0.0050
+[2026-10-07 18:22:00] iter = 00900, neg_MI = -0.026582, pixel drift RMS = 55.20414/255, PNG values changed = 98.81432%, lr = 0.0050
+[2026-10-07 18:22:55] iter = 00950, neg_MI = -0.023372, pixel drift RMS = 55.86390/255, PNG values changed = 98.83965%, lr = 0.0050
+[2026-10-07 18:23:49] iter = 01000, neg_MI = -0.026140, pixel drift RMS = 56.44818/255, PNG values changed = 98.86022%, lr = 0.0050
+-------------------------
+Evaluation
+model_train = ConvNet, model_eval = ConvNet, iteration = 1000
+[2026-10-07 18:24:42] Evaluate_SSL_00: method = simclr ssl epoch = 1200 linear epoch = 0200 labeled = 1.00% train time = 52 s ssl loss = 2.264646 train loss = 0.015217 train acc = 1.0000, test acc = 0.3956
+[2026-10-07 18:25:35] Evaluate_SSL_01: method = simclr ssl epoch = 1200 linear epoch = 0200 labeled = 1.00% train time = 52 s ssl loss = 2.052540 train loss = 0.013311 train acc = 1.0000, test acc = 0.4139
+[2026-10-07 18:26:29] Evaluate_SSL_02: method = simclr ssl epoch = 1200 linear epoch = 0200 labeled = 1.00% train time = 52 s ssl loss = 2.137672 train loss = 0.016072 train acc = 1.0000, test acc = 0.3921
+Evaluate 3 random ConvNet, mean = 0.4005 std = 0.0096
+-------------------------
+[2026-10-07 18:27:24] iter = 01050, neg_MI = -0.023127, pixel drift RMS = 56.98915/255, PNG values changed = 98.88190%, lr = 0.0050
+[2026-10-07 18:28:18] iter = 01100, neg_MI = -0.027166, pixel drift RMS = 57.46971/255, PNG values changed = 98.89752%, lr = 0.0050
+[2026-10-07 18:29:14] iter = 01150, neg_MI = -0.026123, pixel drift RMS = 57.91210/255, PNG values changed = 98.90104%, lr = 0.0050
+[2026-10-07 18:30:08] iter = 01200, neg_MI = -0.028604, pixel drift RMS = 58.31941/255, PNG values changed = 98.91458%, lr = 0.0050
+[2026-10-07 18:31:02] iter = 01250, neg_MI = -0.025316, pixel drift RMS = 58.71209/255, PNG values changed = 98.93164%, lr = 0.0050
+-------------------------
+Evaluation
+model_train = ConvNet, model_eval = ConvNet, iteration = 1250
+[2026-10-07 18:31:55] Evaluate_SSL_00: method = simclr ssl epoch = 1200 linear epoch = 0200 labeled = 1.00% train time = 52 s ssl loss = 2.075343 train loss = 0.015111 train acc = 1.0000, test acc = 0.4117
+[2026-10-07 18:32:49] Evaluate_SSL_01: method = simclr ssl epoch = 1200 linear epoch = 0200 labeled = 1.00% train time = 52 s ssl loss = 2.063809 train loss = 0.012761 train acc = 1.0000, test acc = 0.4204
+[2026-10-07 18:33:42] Evaluate_SSL_02: method = simclr ssl epoch = 1200 linear epoch = 0200 labeled = 1.00% train time = 52 s ssl loss = 2.054891 train loss = 0.013910 train acc = 1.0000, test acc = 0.3965
+Evaluate 3 random ConvNet, mean = 0.4095 std = 0.0099
+-------------------------
+[2026-10-07 18:34:36] iter = 01300, neg_MI = -0.026988, pixel drift RMS = 59.06709/255, PNG values changed = 98.93665%, lr = 0.0050
+[2026-10-07 18:35:31] iter = 01350, neg_MI = -0.025015, pixel drift RMS = 59.40919/255, PNG values changed = 98.93861%, lr = 0.0050
+[2026-10-07 18:36:24] iter = 01400, neg_MI = -0.025745, pixel drift RMS = 59.72817/255, PNG values changed = 98.96016%, lr = 0.0050
+[2026-10-07 18:37:18] iter = 01450, neg_MI = -0.029892, pixel drift RMS = 60.02896/255, PNG values changed = 98.95619%, lr = 0.0050
+[2026-10-07 18:38:13] iter = 01500, neg_MI = -0.025366, pixel drift RMS = 60.30986/255, PNG values changed = 98.96120%, lr = 0.0050
+-------------------------
+Evaluation
+model_train = ConvNet, model_eval = ConvNet, iteration = 1500
+[2026-10-07 18:39:06] Evaluate_SSL_00: method = simclr ssl epoch = 1200 linear epoch = 0200 labeled = 1.00% train time = 52 s ssl loss = 2.296373 train loss = 0.016011 train acc = 1.0000, test acc = 0.4043
+[2026-10-07 18:39:59] Evaluate_SSL_01: method = simclr ssl epoch = 1200 linear epoch = 0200 labeled = 1.00% train time = 52 s ssl loss = 2.408757 train loss = 0.014115 train acc = 1.0000, test acc = 0.4110
+[2026-10-07 18:40:52] Evaluate_SSL_02: method = simclr ssl epoch = 1200 linear epoch = 0200 labeled = 1.00% train time = 52 s ssl loss = 2.381944 train loss = 0.013046 train acc = 1.0000, test acc = 0.3884
+Evaluate 3 random ConvNet, mean = 0.4012 std = 0.0095
+-------------------------
+[2026-10-07 18:41:47] iter = 01550, neg_MI = -0.026905, pixel drift RMS = 60.56940/255, PNG values changed = 98.97181%, lr = 0.0050
+[2026-10-07 18:42:42] iter = 01600, neg_MI = -0.024504, pixel drift RMS = 60.80637/255, PNG values changed = 98.96276%, lr = 0.0050
+[2026-10-07 18:43:37] iter = 01650, neg_MI = -0.027694, pixel drift RMS = 61.04213/255, PNG values changed = 98.98281%, lr = 0.0050
+[2026-10-07 18:44:31] iter = 01700, neg_MI = -0.026043, pixel drift RMS = 61.24515/255, PNG values changed = 98.98261%, lr = 0.0050
+[2026-10-07 18:45:26] iter = 01750, neg_MI = -0.025678, pixel drift RMS = 61.44211/255, PNG values changed = 98.98490%, lr = 0.0050
+-------------------------
+Evaluation
+model_train = ConvNet, model_eval = ConvNet, iteration = 1750
+[2026-10-07 18:46:19] Evaluate_SSL_00: method = simclr ssl epoch = 1200 linear epoch = 0200 labeled = 1.00% train time = 52 s ssl loss = 2.304096 train loss = 0.015637 train acc = 1.0000, test acc = 0.3869
+[2026-10-07 18:47:13] Evaluate_SSL_01: method = simclr ssl epoch = 1200 linear epoch = 0200 labeled = 1.00% train time = 52 s ssl loss = 2.341711 train loss = 0.011813 train acc = 1.0000, test acc = 0.4063
+[2026-10-07 18:48:06] Evaluate_SSL_02: method = simclr ssl epoch = 1200 linear epoch = 0200 labeled = 1.00% train time = 52 s ssl loss = 2.158017 train loss = 0.015081 train acc = 1.0000, test acc = 0.3840
+Evaluate 3 random ConvNet, mean = 0.3924 std = 0.0099
+-------------------------
+[2026-10-07 18:49:01] iter = 01800, neg_MI = -0.023883, pixel drift RMS = 61.62348/255, PNG values changed = 98.99108%, lr = 0.0050
+[2026-10-07 18:49:56] iter = 01850, neg_MI = -0.029683, pixel drift RMS = 61.79829/255, PNG values changed = 98.99564%, lr = 0.0050
+[2026-10-07 18:50:52] iter = 01900, neg_MI = -0.027614, pixel drift RMS = 61.95156/255, PNG values changed = 98.99095%, lr = 0.0050
+[2026-10-07 18:51:47] iter = 01950, neg_MI = -0.027585, pixel drift RMS = 62.10005/255, PNG values changed = 98.99421%, lr = 0.0050
+[2026-10-07 18:52:42] iter = 02000, neg_MI = -0.026948, pixel drift RMS = 62.24954/255, PNG values changed = 99.00885%, lr = 0.0050
+-------------------------
+Evaluation
+model_train = ConvNet, model_eval = ConvNet, iteration = 2000
+[2026-10-07 18:53:35] Evaluate_SSL_00: method = simclr ssl epoch = 1200 linear epoch = 0200 labeled = 1.00% train time = 52 s ssl loss = 2.328757 train loss = 0.015920 train acc = 1.0000, test acc = 0.3936
+[2026-10-07 18:54:28] Evaluate_SSL_01: method = simclr ssl epoch = 1200 linear epoch = 0200 labeled = 1.00% train time = 52 s ssl loss = 2.393733 train loss = 0.011305 train acc = 1.0000, test acc = 0.4028
+[2026-10-07 18:55:21] Evaluate_SSL_02: method = simclr ssl epoch = 1200 linear epoch = 0200 labeled = 1.00% train time = 52 s ssl loss = 2.281790 train loss = 0.016208 train acc = 1.0000, test acc = 0.3736
+Evaluate 3 random ConvNet, mean = 0.3900 std = 0.0122
+-------------------------
+Saved synthetic data to /scratch/mmoslem3/MKDT/results_mina_sweep/20_aug_color_crop_flip_scale_rotate/job_1364765/res_IIC_CIFAR10_ConvNet_1percent.pt
+Finished 20_aug_color_crop_flip_scale_rotate at Wed Oct  7 18:55:22 MDT 2026
