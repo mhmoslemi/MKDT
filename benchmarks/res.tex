@@ -6,13 +6,13 @@
 \caption{Consolidated CIFAR-10 accuracy (\%) across backbones,
 pretraining objectives, and subset sizes. Results are reported as
 mean $\pm$ sample standard deviation over 15 independent runs.
-Pretrained methods use frozen linear probes; No Pre-Training uses
-supervised training from scratch.}
+All methods use frozen linear probes; No Pre-Training uses
+a random encoder.}
 \label{tab:cifar10-all}
 
-\setlength{\tabcolsep}{4pt}
-\renewcommand{\arraystretch}{1.12}
-\resizebox{\textwidth}{!}{%
+\setlength{\tabcolsep}{3pt}
+\renewcommand{\arraystretch}{1}
+\resizebox{0.8\textwidth}{!}{%
 \begin{tabular}{@{}cclcccccc@{}}
 \toprule
 \multirow{2}{*}{\shortstack{Labeled data\\(\%)}}
@@ -29,9 +29,9 @@ supervised training from scratch.}
 
 \multirow{17}{*}{1\%}
 & -- & No Pre-Training
-& \multicolumn{2}{c}{$47.53 \pm 1.18$}
-& \multicolumn{2}{c}{$44.68 \pm 1.08$}
-& \multicolumn{2}{c}{$43.05 \pm 0.90$} \\
+& \multicolumn{2}{c}{$34.48 \pm 1.05$}
+& \multicolumn{2}{c}{$17.02 \pm 0.70$}
+& \multicolumn{2}{c}{$17.30 \pm 0.95$} \\
 \cmidrule(lr){2-9}
 
 & 100\% & Full Data
@@ -69,11 +69,11 @@ supervised training from scratch.}
 & \multirow{5}{*}{5\%} & Random Subset
 & $43.39 \pm 0.81$ & $41.50 \pm 1.30$
 & $29.11 \pm 3.49$ & $16.69 \pm 3.40$
-&  &  \\
+& $35.34 \pm 1.55$ & $29.77 \pm 2.98$ \\
 & & K-means Subset
 & $43.37 \pm 0.82$ & $41.43 \pm 1.34$
 & $30.46 \pm 1.99$ & $17.07 \pm 2.45$
-&  &  \\
+& $35.09 \pm 1.04$ & $30.19 \pm 2.07$ \\
 & & KRR-ST & & & & & & \\
 & & MKDT & & & & & & \\
 & & Ours & & & & & & \\
@@ -82,9 +82,9 @@ supervised training from scratch.}
 
 \multirow{17}{*}{5\%}
 & -- & No Pre-Training
-& \multicolumn{2}{c}{$63.35 \pm 0.71$}
-& \multicolumn{2}{c}{$61.38 \pm 0.63$}
-& \multicolumn{2}{c}{$60.12 \pm 0.86$} \\
+& \multicolumn{2}{c}{$45.75 \pm 0.48$}
+& \multicolumn{2}{c}{$21.12 \pm 0.74$}
+& \multicolumn{2}{c}{$21.14 \pm 0.83$} \\
 \cmidrule(lr){2-9}
 
 & 100\% & Full Data
@@ -122,11 +122,11 @@ supervised training from scratch.}
 & \multirow{5}{*}{5\%} & Random Subset
 & $53.90 \pm 0.71$ & $52.19 \pm 1.37$
 & $32.63 \pm 4.00$ & $16.90 \pm 3.11$
-&  &  \\
+& $40.75 \pm 1.12$ & $33.74 \pm 3.19$ \\
 & & K-means Subset
 & $53.51 \pm 0.48$ & $51.95 \pm 1.15$
 & $34.10 \pm 1.69$ & $17.56 \pm 3.14$
-&  &  \\
+& $40.35 \pm 0.92$ & $34.47 \pm 2.13$ \\
 & & KRR-ST & & & & & & \\
 & & MKDT & & & & & & \\
 & & Ours & & & & & & \\
@@ -135,4 +135,3 @@ supervised training from scratch.}
 \end{tabular}%
 }
 \end{table*}
-

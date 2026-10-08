@@ -1,9 +1,4 @@
-"""CIFAR-10 subset baselines with independent repetitions and frozen linear probes.
-
-Run through Slurm. No-pretraining follows the supplied method definition: supervised
-training of the entire randomly initialized network on the labeled target subset.
-K-means uses the same kind of random ConvNet features as mina_IF initialization.
-"""
+"""CIFAR-10 baselines; no pretraining uses a frozen random encoder and linear probe."""
 
 import argparse
 import gc
@@ -252,7 +247,7 @@ def benchmark(args):
     settings = vars(args).copy()
     settings.update(protocol=PROTOCOL, ssl_aug_strategy=STRATEGY, ssl_aug_mode='S',
                     temperature=0.2, batch_size=256, std_ddof=1,
-                    no_pretrain_protocol='supervised_end_to_end',
+                    no_pretrain_protocol='frozen_random_encoder',
                     kmeans_features='random_ConvNet')
     write_json(output / 'config.json', settings)
     train, labels, test, test_labels = load_data(args.data_path, args.device)
@@ -266,8 +261,7 @@ def benchmark(args):
         ssl_steps = 0
         subset_indices = []
         if args.method == 'no_pretrain':
-            train_supervised(network, train[labeled], labels[labeled], args.probe_epochs, seed)
-            accuracy = supervised_accuracy(network, test, test_labels)
+            accuracy = linear_probe(network, train[labeled], labels[labeled], test, test_labels, args.probe_epochs, seed)
         else:
             if args.method == 'full':
                 source = train

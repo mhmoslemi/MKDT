@@ -16,6 +16,7 @@ SPECS = {
     'CUB2011': (200, [0.4857, 0.4995, 0.4324], [0.2145, 0.2098, 0.2496]),
     'Dogs': (120, [0.4765, 0.4516, 0.3911], [0.2490, 0.2435, 0.2479]),
     'Flowers': (102, [0.4329, 0.3820, 0.2965], [0.2828, 0.2333, 0.2615]),
+    'TinyImageNet': (200, [0.485, 0.456, 0.406], [0.229, 0.224, 0.225]),
 }
 CACHE_PROTOCOL = 'downstream_32x32_v1'
 
@@ -28,10 +29,9 @@ def locate(root, dataset):
                      (root / 'aircraft/fgvc-aircraft-2013b/data', 'variants.txt')],
         'CUB2011': [(root / 'CUB_200_2011', 'images.txt'),
                     (root / 'cub2011/CUB_200_2011', 'images.txt')],
-        'Dogs': [(root / 'dogs', 'train_list.mat'), (root / 'stanford_dogs', 'train_list.mat'),
-                 (root, 'train_list.mat')],
-        'Flowers': [(root / 'flowers-102', 'setid.mat'),
-                    (root / 'flowers/flowers-102', 'setid.mat')],
+        'Dogs': [(root / 'StanfordDogs', 'train_list.mat'), (root / 'dogs', 'train_list.mat'), (root / 'stanford_dogs', 'train_list.mat'), (root, 'train_list.mat')],
+        'Flowers': [(root / 'Oxford102Flowers', 'setid.mat'), (root / 'flowers-102', 'setid.mat'), (root / 'flowers/flowers-102', 'setid.mat')],
+        'TinyImageNet': [(root, 'tinyimagenet.pt')],
     }[dataset]
     matches = [folder for folder, marker in candidates if (folder / marker).is_file()]
     if len(matches) > 1:
@@ -66,6 +66,7 @@ def records(root, dataset, training):
         return [(folder / 'images' / name, int(labels[index]) - 1)
                 for index, name in names.items() if int(splits[index]) == int(training)]
     if dataset == 'Dogs':
+        image_folder = folder / ('images' if (folder / 'images').is_dir() else 'Images')
         metadata = loadmat(folder / ('train_list.mat' if training else 'test_list.mat'))
         names = metadata.get('file_list', metadata.get('annotation_list'))
         if names is None:
@@ -80,18 +81,30 @@ def records(root, dataset, training):
             name = str(entry)
             if not name.lower().endswith('.jpg'):
                 name += '.jpg'
-            samples.append((folder / 'Images' / name, int(label) - 1))
+            samples.append((image_folder / name, int(label) - 1))
         return samples
     if dataset == 'Flowers':
+        image_folder = folder / 'jpg' if (folder / 'jpg').is_dir() else folder
         # Follow existing repository protocol: official train only, not train+val.
         splits = loadmat(folder / 'setid.mat', squeeze_me=True)
         ids = np.atleast_1d(splits['trnid' if training else 'tstid']).astype(int)
         labels = np.atleast_1d(loadmat(folder / 'imagelabels.mat', squeeze_me=True)['labels'])
-        return [(folder / 'jpg' / f'image_{index:05d}.jpg', int(labels[index - 1]) - 1) for index in ids]
+        return [(image_folder / f'image_{index:05d}.jpg', int(labels[index - 1]) - 1) for index in ids]
     raise ValueError(f'{dataset} does not use image-file records')
 
 
 def read_split(root, dataset, training):
+    if dataset == 'TinyImageNet':
+        data = torch.load(locate(root, dataset) / 'tinyimagenet.pt', map_location='cpu', weights_only=True)
+        split = 'train' if training else 'val'
+        originals, labels = data['images_' + split], data['labels_' + split].long()
+        if originals.dtype != torch.uint8 or originals.ndim != 4 or originals.shape[1:] != (3, 64, 64) or len(originals) != len(labels):
+            raise ValueError('Expected Tiny ImageNet uint8 NCHW 64x64 images and matching labels')
+        images = torch.empty((len(originals), 3, 32, 32), dtype=torch.uint8)
+        for index, pixels in enumerate(originals):
+            image = Image.fromarray(pixels.permute(1, 2, 0).numpy()).resize((32, 32), Image.Resampling.LANCZOS)
+            images[index] = torch.from_numpy(np.array(image, copy=True)).permute(2, 0, 1)
+        return images, labels, []
     if dataset == 'CIFAR100':
         data = CIFAR100(str(locate(root, dataset)), train=training, download=False)
         return torch.from_numpy(data.data).permute(0, 3, 1, 2).contiguous(), torch.tensor(data.targets), []

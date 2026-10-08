@@ -10,8 +10,8 @@ from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parent.parent
-TARGETS = ('CIFAR100', 'Aircraft', 'CUB2011', 'Dogs', 'Flowers')
-TRAIN_COUNTS = dict(CIFAR100=50000, Aircraft=6667, CUB2011=5994, Dogs=12000, Flowers=1020)
+TARGETS = ('CIFAR100', 'Aircraft', 'CUB2011', 'Dogs', 'Flowers', 'TinyImageNet')
+TRAIN_COUNTS = dict(CIFAR100=50000, Aircraft=6667, CUB2011=5994, Dogs=12000, Flowers=1020, TinyImageNet=100000)
 SCRIPTS = {}
 
 
@@ -20,9 +20,9 @@ def walltime(seconds):
     return f'{minutes // 1440}-{minutes // 60 % 24:02d}:{minutes % 60:02d}:00'
 
 
-def header(name, limit, gpu=True):
+def header(name, limit, gpu=True, account='aip-boyuwang'):
     return f'''#!/bin/bash
-#SBATCH --account=aip-boyuwang
+#SBATCH --account={account}
 #SBATCH --job-name={name}
 #SBATCH --time={limit}
 #SBATCH --nodes=1
@@ -40,6 +40,8 @@ source "$PROJECT_ROOT/benchmarks/downstream/environment.sh"
 def save_script(path, content):
     if HERE / 'jobs' in path.parents:
         SCRIPTS[str(path.relative_to(ROOT))] = content
+        if 'no_pretrain' in path.name and path.exists():
+            path.write_text(content)
         return
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(content)
@@ -87,14 +89,12 @@ srun --unbuffered python3 benchmarks/benchmark_downstream.py pretrain \\
             for spec in applicable:
                 for labels in (1, 5):
                     probe_epochs = {1: 200, 5: 100}[labels]
-                    steps = math.ceil(math.ceil(TRAIN_COUNTS[target] * labels / 100) / 256) * probe_epochs
+                    steps = math.ceil(max(1, TRAIN_COUNTS[target] * labels // 100) / 256) * probe_epochs
                     name = f'{target}_{model}_{spec["ssl_method"]}_{spec["method"]}_size{spec["subset_percentage"]}_lbl{labels}'
                     seconds = 15 * (timing['models'][model]['probe_seconds'] * max(1, steps / 400) + 5)
-                    if spec['method'] == 'no_pretrain':
-                        seconds += 15 * steps * timing['models'][model]['supervised_step_seconds']
                     limit = walltime(seconds)
                     path = HERE / 'jobs/evaluate' / f'{name}.sh'
-                    content = header(f'ds_{name}', limit)
+                    content = header(f'ds_{name}', limit, account='aip-yiweilu' if spec['method'] == 'no_pretrain' else 'aip-boyuwang')
                     content += f'''mkdir -p "$DOWNSTREAM_RUN_ROOT/evaluations/{name}"
 srun --unbuffered python3 benchmarks/benchmark_downstream.py evaluate \\
     --output "$DOWNSTREAM_RUN_ROOT/evaluations/{name}/job_$SLURM_JOB_ID" \\

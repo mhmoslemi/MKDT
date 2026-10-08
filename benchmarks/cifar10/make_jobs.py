@@ -17,6 +17,8 @@ SCRIPTS = {}
 
 def save_job(path, content):
     SCRIPTS[str(path.relative_to(ROOT))] = content
+    if 'no_pretrain' in path.name and path.exists():
+        path.write_text(content)
 
 
 def save_jobs():
@@ -33,9 +35,9 @@ def walltime(seconds):
     return f'{minutes // 1440}-{minutes // 60 % 24:02d}:{minutes % 60:02d}:00'
 
 
-def script_header(name, time_limit, gpu=True):
+def script_header(name, time_limit, gpu=True, account='aip-boyuwang'):
     return f'''#!/bin/bash
-#SBATCH --account=aip-boyuwang
+#SBATCH --account={account}
 #SBATCH --job-name={name}
 #SBATCH --time={time_limit}
 #SBATCH --nodes=1
@@ -68,12 +70,12 @@ def main():
                 supervised_steps = math.ceil(500 * labels / 256) * probe_epochs
                 probe_seconds = timing['probe_seconds'] * max(1, supervised_steps / 400)
                 if method == 'no_pretrain':
-                    runtime = RUNS * (supervised_steps * timing['supervised_step_seconds'] + probe_seconds + 5)
+                    runtime = RUNS * (probe_seconds + 5)
                 else:
                     runtime = RUNS * (steps * timing[f'{ssl}_step_seconds'] + probe_seconds + 5)
                 limit = walltime(runtime)
                 path = jobs / f'{name}.sh'
-                script = script_header(f'bench_{name}', limit)
+                script = script_header(f'bench_{name}', limit, account='aip-yiweilu' if method == 'no_pretrain' else 'aip-boyuwang')
                 script += f'''CONFIG_ID={name}
 OUTPUT="$BENCH_RUN_ROOT/$CONFIG_ID/job_$SLURM_JOB_ID"
 mkdir -p "$BENCH_RUN_ROOT/$CONFIG_ID"

@@ -17,6 +17,8 @@ def render(results, output):
     flat = []
     for config in configs:
         candidates = sorted((results / config['config_id']).glob('job_*/summary.json'))
+        if config['method'] == 'no_pretrain':
+            candidates = [path for path in candidates if json.loads(path.read_text())['config'].get('no_pretrain_protocol') == 'frozen_random_encoder']
         if len(candidates) > 1:
             raise ValueError(f'Multiple submissions for {config["config_id"]}; select one before reporting.')
         summary = json.loads(candidates[0].read_text()) if candidates else None

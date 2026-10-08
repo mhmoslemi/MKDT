@@ -1,4 +1,4 @@
-"""CIFAR-10 SSL encoders transferred to five target datasets; run under Slurm."""
+"""CIFAR-10 SSL encoders transferred to downstream target datasets."""
 
 import argparse
 import gc
@@ -39,6 +39,12 @@ def preflight(args):
             for file in ('train', 'test', 'meta'):
                 if not (folder / 'cifar-100-python' / file).is_file():
                     raise FileNotFoundError(folder / 'cifar-100-python' / file)
+        elif name == 'TinyImageNet':
+            data = torch.load(folder / 'tinyimagenet.pt', map_location='cpu', weights_only=True)
+            for split, count in (('train', 100000), ('val', 10000)):
+                if data['images_' + split].shape != (count, 3, 64, 64) or data['labels_' + split].shape != (count,):
+                    raise ValueError(f'TinyImageNet: unexpected {split} tensor shape')
+            del data
         else:
             train, test = records(root, name, True), records(root, name, False)
             if not train or not test:
@@ -156,7 +162,7 @@ def evaluate(args):
     output.mkdir(parents=True, exist_ok=False)
     settings = dict(vars(args), protocol=PROTOCOL, std_ddof=1,
                     normalization='target_dataset_repository_statistics', image_size=32,
-                    no_pretrain_protocol='supervised_end_to_end', temperature=0.2,
+                    no_pretrain_protocol='frozen_random_encoder', temperature=0.2,
                     ssl_aug_strategy=source.STRATEGY, ssl_aug_mode='S')
     source.write_json(output / 'config.json', settings)
     train, labels, test, test_labels, classes = load_target(args.target_cache, args.device, args.target)
@@ -170,8 +176,7 @@ def evaluate(args):
         epochs = args.probe_epochs
         if args.method == 'no_pretrain':
             network = source.get_network(args.model, 3, classes, (32, 32), seed=seed + 3000)
-            source.train_supervised(network, train[chosen], labels[chosen], epochs, seed)
-            accuracy = source.supervised_accuracy(network, test, test_labels)
+            accuracy = probe(network, train[chosen], labels[chosen], test, test_labels, classes, epochs, seed)
         else:
             network = load_encoder(args, seed)
             accuracy = probe(network, train[chosen], labels[chosen], test, test_labels, classes, epochs, seed)

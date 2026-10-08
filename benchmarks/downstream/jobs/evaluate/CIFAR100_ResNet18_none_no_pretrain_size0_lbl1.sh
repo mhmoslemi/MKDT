@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --account=aip-boyuwang
+#SBATCH --account=aip-yiweilu
 #SBATCH --job-name=ds_CIFAR100_ResNet18_none_no_pretrain_size0_lbl1
 #SBATCH --time=0-01:05:00
 #SBATCH --nodes=1

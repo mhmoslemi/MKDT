@@ -4,23 +4,23 @@ PROJECT_ROOT="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd -P)"
 export PROJECT_ROOT
 cd "$PROJECT_ROOT"
 dry_run=0
-TARGET_DATASETS=CIFAR100,Aircraft,CUB2011,Dogs,Flowers
+TARGET_DATASETS=CIFAR100,Aircraft,CUB2011,Dogs,Flowers,TinyImageNet
 while (( $# )); do
     case $1 in
         --dry-run) dry_run=1; shift ;;
         --datasets) [[ $# -ge 2 ]] || { echo '--datasets needs a comma-separated list.' >&2; exit 2; }; TARGET_DATASETS=$2; shift 2 ;;
-        *) echo "Usage: bash $0 [--dry-run] [--datasets CIFAR100,Aircraft,CUB2011,Dogs,Flowers]" >&2; exit 2 ;;
+        *) echo "Usage: bash $0 [--dry-run] [--datasets CIFAR100,Aircraft,CUB2011,Dogs,Flowers,TinyImageNet]" >&2; exit 2 ;;
     esac
 done
 IFS=, read -r -a targets <<< "$TARGET_DATASETS"
 [[ ${#targets[@]} -gt 0 && $TARGET_DATASETS != *, ]] || { echo 'Empty target list.' >&2; exit 2; }
 declare -A selected=()
 for target in "${targets[@]}"; do
-    case $target in CIFAR100|Aircraft|CUB2011|Dogs|Flowers) ;; *) echo "Unknown target: $target" >&2; exit 2 ;; esac
+    case $target in CIFAR100|Aircraft|CUB2011|Dogs|Flowers|TinyImageNet) ;; *) echo "Unknown target: $target" >&2; exit 2 ;; esac
     [[ ! -v selected[$target] ]] || { echo "Duplicate target: $target" >&2; exit 2; }
     selected[$target]=1
 done
-SOURCE_CIFAR10_BATCH="${SOURCE_CIFAR10_BATCH:-$PROJECT_ROOT/benchmarks/cifar10/results/batch_20261008T052732Z_lb36yJ}"
+SOURCE_CIFAR10_BATCH="${SOURCE_CIFAR10_BATCH:-$PROJECT_ROOT/benchmarks/cifar10/results/batch_20261008T163904Z_ELW6hy}"
 export TARGET_DATASETS SOURCE_CIFAR10_BATCH
 JOB_ARCHIVE="$PROJECT_ROOT/benchmarks/downstream/jobs.tar"
 [[ -f $JOB_ARCHIVE ]] || { echo 'Missing downstream jobs.' >&2; exit 1; }
@@ -38,8 +38,9 @@ else
             CIFAR100) markers=("$data_root/cifar-100-python/train") ;;
             Aircraft) markers=("$data_root/fgvc-aircraft-2013b/data/variants.txt" "$data_root/aircraft/fgvc-aircraft-2013b/data/variants.txt") ;;
             CUB2011) markers=("$data_root/CUB_200_2011/images.txt" "$data_root/cub2011/CUB_200_2011/images.txt") ;;
-            Dogs) markers=("$data_root/dogs/train_list.mat" "$data_root/stanford_dogs/train_list.mat" "$data_root/train_list.mat") ;;
-            Flowers) markers=("$data_root/flowers-102/setid.mat" "$data_root/flowers/flowers-102/setid.mat") ;;
+            Dogs) markers=("$data_root/StanfordDogs/train_list.mat" "$data_root/dogs/train_list.mat" "$data_root/stanford_dogs/train_list.mat" "$data_root/train_list.mat") ;;
+            Flowers) markers=("$data_root/Oxford102Flowers/setid.mat" "$data_root/flowers-102/setid.mat" "$data_root/flowers/flowers-102/setid.mat") ;;
+            TinyImageNet) markers=("$data_root/tinyimagenet.pt") ;;
         esac
         present=0
         for marker in "${markers[@]}"; do [[ ! -f $marker ]] || present=1; done
@@ -98,7 +99,7 @@ for member in "${source_jobs[@]}"; do
     encoder_ids[$(basename "$script" .sh)]=$SUBMITTED_ID
 done
 evaluation_ids=()
-while IFS=$'\t' read -r config target model ssl method size labels encoder epochs runs policy updates estimate limit script; do
+while IFS=$'\t' read -r config target model ssl method size labels encoder epochs runs policy probe_epochs estimate limit script; do
     [[ $config != config_id ]] || continue
     [[ -v selected[$target] ]] || continue
     script=${script%$'\r'}
