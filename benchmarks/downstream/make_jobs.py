@@ -3,12 +3,16 @@
 import csv
 import json
 import math
+import io
+import tarfile
 from pathlib import Path
 
 
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parent.parent
 TARGETS = ('CIFAR100', 'Aircraft', 'CUB2011', 'Dogs', 'Flowers')
+TRAIN_COUNTS = dict(CIFAR100=50000, Aircraft=6667, CUB2011=5994, Dogs=12000, Flowers=1020)
+SCRIPTS = {}
 
 
 def walltime(seconds):
@@ -34,6 +38,9 @@ source "$PROJECT_ROOT/benchmarks/downstream/environment.sh"
 
 
 def save_script(path, content):
+    if HERE / 'jobs' in path.parents:
+        SCRIPTS[str(path.relative_to(ROOT))] = content
+        return
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(content)
     path.chmod(0o755)
@@ -47,13 +54,13 @@ def save_manifest(path, rows):
 
 
 def main():
-    timing = json.loads((ROOT / 'benchmarks/cifar10/validation/timing.json').read_text())
+    timing = json.loads((ROOT / 'benchmarks/timing.json').read_text())
     sources, evaluations = [], []
     for model in ('ConvNet', 'VGG11', 'ResNet18'):
         for ssl in ('simclr', 'barlowtwins'):
-            for method, size, epochs in [('full', 100, 13)] + [
+            for method, size, epochs in [('full', 100, 300)] + [
                 (method, size, epochs) for method in ('random', 'kmeans')
-                for size, epochs in ((1, 1200), (2, 600), (5, 240))
+                for size, epochs in ((1, 1200), (2, 800), (5, 500))
             ]:
                 name = f'{model}_{ssl}_{method}_size{size}'
                 seconds = 15 * (math.ceil(size * 500 / 256) * epochs * timing['models'][model][f'{ssl}_step_seconds'] + 5)
@@ -79,10 +86,12 @@ srun --unbuffered python3 OT-SSL-DD/benchmark_downstream.py pretrain \\
                                 subset_percentage=0, ssl_epochs=0)]
             for spec in applicable:
                 for labels in (1, 5):
+                    probe_epochs = {1: 200, 5: 100}[labels]
+                    steps = math.ceil(math.ceil(TRAIN_COUNTS[target] * labels / 100) / 256) * probe_epochs
                     name = f'{target}_{model}_{spec["ssl_method"]}_{spec["method"]}_size{spec["subset_percentage"]}_lbl{labels}'
-                    seconds = 15 * (timing['models'][model]['probe_seconds'] + 5)
+                    seconds = 15 * (timing['models'][model]['probe_seconds'] * max(1, steps / 400) + 5)
                     if spec['method'] == 'no_pretrain':
-                        seconds += 15 * 400 * timing['models'][model]['supervised_step_seconds']
+                        seconds += 15 * steps * timing['models'][model]['supervised_step_seconds']
                     limit = walltime(seconds)
                     path = HERE / 'jobs/evaluate' / f'{name}.sh'
                     content = header(f'ds_{name}', limit)
@@ -93,14 +102,14 @@ srun --unbuffered python3 OT-SSL-DD/benchmark_downstream.py evaluate \\
     --encoder-dir "$DOWNSTREAM_RUN_ROOT/encoders/{spec['source_id']}" \\
     --model {model} --method {spec['method']} --ssl-method {spec['ssl_method']} \\
     --subset-percentage {spec['subset_percentage']} --ssl-epochs {spec['ssl_epochs']} \\
-    --label-percentage {labels} --label-policy exact --probe-updates 400 --runs 15
+    --label-percentage {labels} --label-policy exact --probe-epochs {probe_epochs} --runs 15
 '''
                     save_script(path, content)
                     evaluations.append(dict(config_id=name, target=target, model=model,
                         ssl_method=spec['ssl_method'], method=spec['method'],
                         subset_percentage=spec['subset_percentage'], label_percentage=labels,
                         source_id=spec['source_id'], ssl_epochs=spec['ssl_epochs'], runs=15,
-                        label_policy='exact', probe_updates=400, estimated_minutes=round(seconds / 60, 2),
+                        label_policy='exact', probe_epochs=probe_epochs, estimated_minutes=round(seconds / 60, 2),
                         walltime=limit, job_script=str(path.relative_to(ROOT))))
         path = HERE / 'jobs/prepare' / f'{target}.sh'
         content = header(f'ds_pack_{target}', '0-01:15:00', gpu=False)
@@ -123,6 +132,12 @@ srun --unbuffered python3 OT-SSL-DD/benchmark_downstream.py prepare-target \\
     --device cpu --data-path "$DATA_ROOT" --targets "$TARGET_DATASETS"
 '''
     save_script(HERE / 'preflight.sh', content)
+    with tarfile.open(HERE / 'jobs.tar', 'w') as archive:
+        for name, content in SCRIPTS.items():
+            data = content.encode()
+            member = tarfile.TarInfo(name)
+            member.size, member.mode = len(data), 0o755
+            archive.addfile(member, io.BytesIO(data))
     print(f'Generated {len(sources)} shared pretraining jobs and {len(evaluations)} downstream configuration jobs.')
 
 

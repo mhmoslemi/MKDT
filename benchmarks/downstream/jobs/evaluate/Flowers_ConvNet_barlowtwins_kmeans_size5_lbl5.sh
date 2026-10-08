@@ -18,5 +18,5 @@ srun --unbuffered python3 OT-SSL-DD/benchmark_downstream.py evaluate \
     --target Flowers --target-cache "$DOWNSTREAM_RUN_ROOT/targets/Flowers.pt" \
     --encoder-dir "$DOWNSTREAM_RUN_ROOT/encoders/ConvNet_barlowtwins_kmeans_size5" \
     --model ConvNet --method kmeans --ssl-method barlowtwins \
-    --subset-percentage 5 --ssl-epochs 240 \
-    --label-percentage 5 --label-policy exact --probe-updates 400 --runs 15
+    --subset-percentage 5 --ssl-epochs 500 \
+    --label-percentage 5 --label-policy exact --probe-epochs 100 --runs 15

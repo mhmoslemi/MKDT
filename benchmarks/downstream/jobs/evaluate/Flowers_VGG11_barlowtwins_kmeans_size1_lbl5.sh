@@ -19,4 +19,4 @@ srun --unbuffered python3 OT-SSL-DD/benchmark_downstream.py evaluate \
     --encoder-dir "$DOWNSTREAM_RUN_ROOT/encoders/VGG11_barlowtwins_kmeans_size1" \
     --model VGG11 --method kmeans --ssl-method barlowtwins \
     --subset-percentage 1 --ssl-epochs 1200 \
-    --label-percentage 5 --label-policy exact --probe-updates 400 --runs 15
+    --label-percentage 5 --label-policy exact --probe-epochs 100 --runs 15

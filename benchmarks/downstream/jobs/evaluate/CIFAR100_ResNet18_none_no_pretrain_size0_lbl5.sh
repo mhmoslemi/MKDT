@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH --account=aip-boyuwang
 #SBATCH --job-name=ds_CIFAR100_ResNet18_none_no_pretrain_size0_lbl5
-#SBATCH --time=0-01:05:00
+#SBATCH --time=0-01:10:00
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=1
@@ -19,4 +19,4 @@ srun --unbuffered python3 OT-SSL-DD/benchmark_downstream.py evaluate \
     --encoder-dir "$DOWNSTREAM_RUN_ROOT/encoders/none" \
     --model ResNet18 --method no_pretrain --ssl-method none \
     --subset-percentage 0 --ssl-epochs 0 \
-    --label-percentage 5 --label-policy exact --probe-updates 400 --runs 15
+    --label-percentage 5 --label-policy exact --probe-epochs 100 --runs 15

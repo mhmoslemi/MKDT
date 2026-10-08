@@ -19,4 +19,4 @@ srun --unbuffered python3 OT-SSL-DD/benchmark_downstream.py evaluate \
     --encoder-dir "$DOWNSTREAM_RUN_ROOT/encoders/VGG11_barlowtwins_random_size1" \
     --model VGG11 --method random --ssl-method barlowtwins \
     --subset-percentage 1 --ssl-epochs 1200 \
-    --label-percentage 1 --label-policy exact --probe-updates 400 --runs 15
+    --label-percentage 1 --label-policy exact --probe-epochs 200 --runs 15

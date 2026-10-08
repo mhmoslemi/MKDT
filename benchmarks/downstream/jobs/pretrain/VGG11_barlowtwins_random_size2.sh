@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH --account=aip-boyuwang
 #SBATCH --job-name=ds_pre_VGG11_barlowtwins_random_size2
-#SBATCH --time=0-01:15:00
+#SBATCH --time=0-01:20:00
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=1
@@ -17,4 +17,4 @@ srun --unbuffered python3 OT-SSL-DD/benchmark_downstream.py pretrain \
     --data-path "$DATA_ROOT" --output "$DOWNSTREAM_RUN_ROOT/encoders/VGG11_barlowtwins_random_size2" \
     --selection-dir "$DOWNSTREAM_RUN_ROOT/selections" --runs 15 \
     --model VGG11 --ssl-method barlowtwins --method random \
-    --subset-percentage 2 --ssl-epochs 600
+    --subset-percentage 2 --ssl-epochs 800

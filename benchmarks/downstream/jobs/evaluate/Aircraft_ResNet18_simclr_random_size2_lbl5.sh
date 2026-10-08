@@ -18,5 +18,5 @@ srun --unbuffered python3 OT-SSL-DD/benchmark_downstream.py evaluate \
     --target Aircraft --target-cache "$DOWNSTREAM_RUN_ROOT/targets/Aircraft.pt" \
     --encoder-dir "$DOWNSTREAM_RUN_ROOT/encoders/ResNet18_simclr_random_size2" \
     --model ResNet18 --method random --ssl-method simclr \
-    --subset-percentage 2 --ssl-epochs 600 \
-    --label-percentage 5 --label-policy exact --probe-updates 400 --runs 15
+    --subset-percentage 2 --ssl-epochs 800 \
+    --label-percentage 5 --label-policy exact --probe-epochs 100 --runs 15

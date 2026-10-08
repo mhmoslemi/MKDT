@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH --account=aip-boyuwang
 #SBATCH --job-name=ds_pre_ResNet18_barlowtwins_kmeans_size5
-#SBATCH --time=0-01:40:00
+#SBATCH --time=0-02:20:00
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=1
@@ -17,4 +17,4 @@ srun --unbuffered python3 OT-SSL-DD/benchmark_downstream.py pretrain \
     --data-path "$DATA_ROOT" --output "$DOWNSTREAM_RUN_ROOT/encoders/ResNet18_barlowtwins_kmeans_size5" \
     --selection-dir "$DOWNSTREAM_RUN_ROOT/selections" --runs 15 \
     --model ResNet18 --ssl-method barlowtwins --method kmeans \
-    --subset-percentage 5 --ssl-epochs 240
+    --subset-percentage 5 --ssl-epochs 500

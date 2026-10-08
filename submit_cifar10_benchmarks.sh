@@ -1,6 +1,4 @@
 #!/bin/bash
-# One configuration per job, with 15 independent repetitions inside it.
-# Production runs are submitted only when this script is invoked without --dry-run.
 set -euo pipefail
 PROJECT_ROOT="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)"
 export PROJECT_ROOT
@@ -12,8 +10,9 @@ elif (( $# )); then
     echo "Usage: bash $0 [--dry-run]" >&2
     exit 2
 fi
-jobs=("$PROJECT_ROOT"/benchmarks/cifar10/jobs/*.sh)
-[[ -f ${jobs[0]} && -f benchmarks/cifar10/prepare.sh ]] || { echo 'Benchmark job files are missing.' >&2; exit 1; }
+JOB_ARCHIVE="$PROJECT_ROOT/benchmarks/cifar10/jobs.tar"
+[[ -f $JOB_ARCHIVE && -f benchmarks/cifar10/prepare.sh ]] || { echo 'Missing benchmark jobs.' >&2; exit 1; }
+mapfile -t jobs < <(tar -tf "$JOB_ARCHIVE")
 if (( dry_run )); then
     BENCH_RUN_ROOT="$PROJECT_ROOT/benchmarks/cifar10/results/<new-batch>"
 else
@@ -28,22 +27,25 @@ else
     mkdir -p "$BENCH_CODE_ROOT/OT-SSL-DD" "$BENCH_CODE_ROOT/benchmarks/cifar10"
     cp OT-SSL-DD/benchmark_cifar10.py OT-SSL-DD/utils.py OT-SSL-DD/networks.py "$BENCH_CODE_ROOT/OT-SSL-DD/"
     cp benchmarks/cifar10/report.py benchmarks/cifar10/configs.tsv "$BENCH_CODE_ROOT/benchmarks/cifar10/"
-    # Freeze the code and job definitions used by this submission for provenance.
-    tar -czf "$BENCH_RUN_ROOT/source.tar.gz" OT-SSL-DD/benchmark_cifar10.py OT-SSL-DD/utils.py OT-SSL-DD/networks.py benchmarks/cifar10/jobs benchmarks/cifar10/environment.sh benchmarks/cifar10/report.py benchmarks/cifar10/protocol.txt
+    tar -czf "$BENCH_RUN_ROOT/source.tar.gz" OT-SSL-DD/benchmark_cifar10.py OT-SSL-DD/utils.py OT-SSL-DD/networks.py benchmarks/cifar10/jobs.tar benchmarks/cifar10/environment.sh benchmarks/cifar10/report.py benchmarks/cifar10/protocol.txt
 fi
 export BENCH_RUN_ROOT BENCH_CODE_ROOT
 export SELECTION_DIR="$BENCH_RUN_ROOT/selections"
 submit() {
     local script=$1
     shift
-    local args=(sbatch --parsable --chdir="$PROJECT_ROOT" --output="$BENCH_RUN_ROOT/logs/%x-%j.out" "$@" "$script")
+    local args=(sbatch --parsable --chdir="$PROJECT_ROOT" --output="$BENCH_RUN_ROOT/logs/%x-%j.out" "$@")
     if (( dry_run )); then
         printf '%q ' "${args[@]}" >&2
-        printf '\n' >&2
+        printf '%s\n' "$script" >&2
         printf 'DRY_JOB_ID\n'
     else
         local id
-        id=$("${args[@]}")
+        if [[ $script == benchmarks/cifar10/jobs/* ]]; then
+            id=$(tar -xOf "$JOB_ARCHIVE" "$script" | "${args[@]}")
+        else
+            id=$("${args[@]}" "$script")
+        fi
         printf '%s\t%s\t%s\n' "$(date -u +%FT%TZ)" "$id" "$script" >> "$BENCH_RUN_ROOT/submitted.tsv"
         printf 'Submitted %s: %s\n' "$(basename "$script")" "$id" >&2
         printf '%s\n' "${id%%;*}"

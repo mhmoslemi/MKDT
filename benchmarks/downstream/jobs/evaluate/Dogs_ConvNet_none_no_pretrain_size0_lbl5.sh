@@ -19,4 +19,4 @@ srun --unbuffered python3 OT-SSL-DD/benchmark_downstream.py evaluate \
     --encoder-dir "$DOWNSTREAM_RUN_ROOT/encoders/none" \
     --model ConvNet --method no_pretrain --ssl-method none \
     --subset-percentage 0 --ssl-epochs 0 \
-    --label-percentage 5 --label-policy exact --probe-updates 400 --runs 15
+    --label-percentage 5 --label-policy exact --probe-epochs 100 --runs 15

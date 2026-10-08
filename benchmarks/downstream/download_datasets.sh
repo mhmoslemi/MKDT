@@ -4,7 +4,7 @@
 #SBATCH --cpus-per-task=2
 #SBATCH --mem=4G
 #SBATCH --time=03:00:00
-#SBATCH --output=/scratch/mmoslem3/MKDT/benchmarks/downstream/validation/download-%j.log
+#SBATCH --output=/scratch/mmoslem3/MKDT/benchmarks/downstream/download-%j.log
 set -euo pipefail
 : "${SLURM_JOB_ID:?Submit through Slurm}"
 cd /scratch/mmoslem3/MKDT

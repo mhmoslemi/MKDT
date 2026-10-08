@@ -18,5 +18,5 @@ srun --unbuffered python3 OT-SSL-DD/benchmark_downstream.py evaluate \
     --target Dogs --target-cache "$DOWNSTREAM_RUN_ROOT/targets/Dogs.pt" \
     --encoder-dir "$DOWNSTREAM_RUN_ROOT/encoders/ResNet18_barlowtwins_full_size100" \
     --model ResNet18 --method full --ssl-method barlowtwins \
-    --subset-percentage 100 --ssl-epochs 13 \
-    --label-percentage 1 --label-policy exact --probe-updates 400 --runs 15
+    --subset-percentage 100 --ssl-epochs 300 \
+    --label-percentage 1 --label-policy exact --probe-epochs 200 --runs 15

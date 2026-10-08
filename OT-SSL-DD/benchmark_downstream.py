@@ -19,7 +19,7 @@ import benchmark_cifar10 as source
 from downstream_data import SPECS, load_target, locate, prepare_target, records, select_labels
 
 
-PROTOCOL = 'cifar10_to_downstream_v1'
+PROTOCOL = 'cifar10_to_downstream_v2_epochs'
 
 
 def atomic_save(path, value):
@@ -167,7 +167,7 @@ def evaluate(args):
         indices = select_labels(labels_cpu, args.label_percentage, seed, args.label_policy)
         chosen = torch.tensor(indices, device=args.device)
         batches = math.ceil(len(indices) / 256)
-        epochs = math.ceil(args.probe_updates / batches)
+        epochs = args.probe_epochs
         if args.method == 'no_pretrain':
             network = source.get_network(args.model, 3, classes, (32, 32), seed=seed + 3000)
             source.train_supervised(network, train[chosen], labels[chosen], epochs, seed)
@@ -215,13 +215,14 @@ def main():
     parser.add_argument('--subset-percentage', type=int, choices=[0, 1, 2, 5, 100], default=1)
     parser.add_argument('--label-percentage', type=int, choices=[1, 5], default=1)
     parser.add_argument('--label-policy', choices=['exact', 'at_least_one_per_class'], default='exact')
-    parser.add_argument('--probe-updates', type=int, default=400)
+    parser.add_argument('--probe-epochs', type=int)
     parser.add_argument('--ssl-epochs', type=int)
     parser.add_argument('--runs', type=int, default=15)
     args = parser.parse_args()
     args.ssl_epochs = args.ssl_epochs if args.ssl_epochs is not None else source.SSL_EPOCHS.get(args.subset_percentage, 0)
-    if args.runs < 1 or args.probe_updates < 1:
-        parser.error('runs and probe-updates must be positive')
+    args.probe_epochs = args.probe_epochs if args.probe_epochs is not None else source.PROBE_EPOCHS[args.label_percentage]
+    if args.runs < 1 or args.probe_epochs < 1:
+        parser.error('runs and probe-epochs must be positive')
     if args.command != 'preflight' and args.output is None:
         parser.error('--output is required')
     if args.command in ('prepare-target', 'evaluate') and args.target is None:

@@ -18,5 +18,5 @@ srun --unbuffered python3 OT-SSL-DD/benchmark_downstream.py evaluate \
     --target CIFAR100 --target-cache "$DOWNSTREAM_RUN_ROOT/targets/CIFAR100.pt" \
     --encoder-dir "$DOWNSTREAM_RUN_ROOT/encoders/VGG11_simclr_random_size5" \
     --model VGG11 --method random --ssl-method simclr \
-    --subset-percentage 5 --ssl-epochs 240 \
-    --label-percentage 5 --label-policy exact --probe-updates 400 --runs 15
+    --subset-percentage 5 --ssl-epochs 500 \
+    --label-percentage 5 --label-policy exact --probe-epochs 100 --runs 15

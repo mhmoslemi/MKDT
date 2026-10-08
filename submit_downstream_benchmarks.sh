@@ -1,5 +1,4 @@
 #!/bin/bash
-# Each target configuration runs seeds 0..14; CIFAR-10 encoders are shared.
 set -euo pipefail
 PROJECT_ROOT="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)"
 export PROJECT_ROOT
@@ -23,6 +22,8 @@ for target in "${targets[@]}"; do
 done
 SOURCE_CIFAR10_BATCH="${SOURCE_CIFAR10_BATCH:-$PROJECT_ROOT/benchmarks/cifar10/results/batch_20261008T052732Z_lb36yJ}"
 export TARGET_DATASETS SOURCE_CIFAR10_BATCH
+JOB_ARCHIVE="$PROJECT_ROOT/benchmarks/downstream/jobs.tar"
+[[ -f $JOB_ARCHIVE ]] || { echo 'Missing downstream jobs.' >&2; exit 1; }
 [[ -f benchmarks/downstream/configs.tsv && -f benchmarks/downstream/preflight.sh ]] || { echo 'Downstream job files have not been generated.' >&2; exit 1; }
 if (( dry_run )); then
     DOWNSTREAM_RUN_ROOT="$PROJECT_ROOT/benchmarks/downstream/results/<new-batch>"
@@ -32,7 +33,6 @@ else
     [[ -f ${VENV_ACTIVATE:-$HOME/ENV/bin/activate} ]] || { echo 'Missing Python environment.' >&2; exit 1; }
     data_root="${DATA_ROOT:-$SCRATCH/data}"
     [[ -f $data_root/cifar-10-batches-py/data_batch_1 ]] || { echo "Missing CIFAR-10 under $data_root" >&2; exit 1; }
-    # Cheap staging checks before submitting any jobs. The Slurm preflight checks metadata.
     for target in "${targets[@]}"; do
         case $target in
             CIFAR100) markers=("$data_root/cifar-100-python/train") ;;
@@ -53,6 +53,7 @@ else
     cp benchmarks/downstream/report.py benchmarks/downstream/configs.tsv benchmarks/downstream/pretraining.tsv benchmarks/downstream/protocol.txt benchmarks/downstream/data_layout.txt "$DOWNSTREAM_CODE_ROOT/benchmarks/downstream/"
     cp res.tex "$DOWNSTREAM_RUN_ROOT/res_template.tex"
     cp benchmarks/downstream/configs.tsv benchmarks/downstream/pretraining.tsv "$DOWNSTREAM_RUN_ROOT/"
+    cp "$JOB_ARCHIVE" "$DOWNSTREAM_RUN_ROOT/jobs.tar"
     printf '%s\n' "$TARGET_DATASETS" > "$DOWNSTREAM_RUN_ROOT/targets.txt"
     if [[ -f $SOURCE_CIFAR10_BATCH/tables.csv ]]; then cp "$SOURCE_CIFAR10_BATCH/tables.csv" "$DOWNSTREAM_RUN_ROOT/source_cifar10.csv"; fi
 fi
@@ -61,13 +62,17 @@ dry_id=900000
 submit() {
     local script=$1
     shift
-    local args=(sbatch --parsable --chdir="$PROJECT_ROOT" --output="$DOWNSTREAM_RUN_ROOT/logs/%x-%j.out" "$@" "$script")
+    local args=(sbatch --parsable --chdir="$PROJECT_ROOT" --output="$DOWNSTREAM_RUN_ROOT/logs/%x-%j.out" "$@")
     if (( dry_run )); then
         printf '%q ' "${args[@]}" >&2
-        printf '\n' >&2
+        printf '%s\n' "$script" >&2
         SUBMITTED_ID=$((++dry_id))
     else
-        SUBMITTED_ID=$("${args[@]}")
+        if [[ $script == "$PROJECT_ROOT/benchmarks/downstream/jobs/"* ]]; then
+            SUBMITTED_ID=$(tar -xOf "$JOB_ARCHIVE" "${script#"$PROJECT_ROOT/"}" | "${args[@]}")
+        else
+            SUBMITTED_ID=$("${args[@]}" "$script")
+        fi
         SUBMITTED_ID=${SUBMITTED_ID%%;*}
         printf '%s\t%s\t%s\n' "$(date -u +%FT%TZ)" "$SUBMITTED_ID" "$script" >> "$DOWNSTREAM_RUN_ROOT/submitted.tsv"
         printf 'Submitted %s: %s\n' "$(basename "$script")" "$SUBMITTED_ID" >&2
@@ -82,7 +87,10 @@ for target in "${targets[@]}"; do
     submit "$PROJECT_ROOT/benchmarks/downstream/jobs/prepare/$target.sh" --dependency="afterok:$preflight_id" --kill-on-invalid-dep=yes
     packing_ids[$target]=$SUBMITTED_ID
 done
-for script in "$PROJECT_ROOT"/benchmarks/downstream/jobs/pretrain/*.sh; do
+mapfile -t source_jobs < <(tar -tf "$JOB_ARCHIVE" | sort)
+for member in "${source_jobs[@]}"; do
+    [[ $member == benchmarks/downstream/jobs/pretrain/* ]] || continue
+    script="$PROJECT_ROOT/$member"
     dependency=$preflight_id
     [[ $script != *_kmeans_* ]] || dependency=$selection_id
     submit "$script" --dependency="afterok:$dependency" --kill-on-invalid-dep=yes

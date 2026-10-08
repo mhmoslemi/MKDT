@@ -20,7 +20,7 @@ def main():
     args = argparse.Namespace(output='', data_path=os.path.join(os.environ['SCRATCH'], 'data'),
         device='cuda', runs=2, model='ConvNet', method='random', ssl_method='simclr',
         subset_percentage=1, ssl_epochs=1, selection_dir=None, encoder_dir=None,
-        target='CIFAR100', target_cache='', label_percentage=1, label_policy='exact', probe_updates=2)
+        target='CIFAR100', target_cache='', label_percentage=1, label_policy='exact', probe_epochs=1)
     for target, (classes, mean, std) in data.SPECS.items():
         # Several images per class make 1% and 5% distinct, with many unlabeled classes.
         n_train = classes * 10

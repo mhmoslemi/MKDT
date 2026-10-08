@@ -18,5 +18,5 @@ srun --unbuffered python3 OT-SSL-DD/benchmark_downstream.py evaluate \
     --target Aircraft --target-cache "$DOWNSTREAM_RUN_ROOT/targets/Aircraft.pt" \
     --encoder-dir "$DOWNSTREAM_RUN_ROOT/encoders/ResNet18_barlowtwins_random_size5" \
     --model ResNet18 --method random --ssl-method barlowtwins \
-    --subset-percentage 5 --ssl-epochs 240 \
-    --label-percentage 1 --label-policy exact --probe-updates 400 --runs 15
+    --subset-percentage 5 --ssl-epochs 500 \
+    --label-percentage 1 --label-policy exact --probe-epochs 200 --runs 15

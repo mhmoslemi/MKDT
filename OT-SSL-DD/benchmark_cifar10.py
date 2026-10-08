@@ -24,9 +24,9 @@ from utils import DiffAugment, ParamDiffAug, get_network
 
 
 STRATEGY = 'color_crop_cutout_flip_scale_rotate'
-SSL_EPOCHS = {1: 1200, 2: 600, 5: 240, 100: 13}
-PROBE_EPOCHS = {1: 200, 5: 40}
-PROTOCOL = 'cifar10_baselines_v1'
+SSL_EPOCHS = {1: 1200, 2: 800, 5: 500, 100: 300}
+PROBE_EPOCHS = {1: 200, 5: 100}
+PROTOCOL = 'cifar10_baselines_v2_epochs'
 
 
 def seed_all(seed):

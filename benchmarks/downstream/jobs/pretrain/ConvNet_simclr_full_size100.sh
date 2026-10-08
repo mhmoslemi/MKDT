@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH --account=aip-boyuwang
 #SBATCH --job-name=ds_pre_ConvNet_simclr_full_size100
-#SBATCH --time=0-01:15:00
+#SBATCH --time=0-04:40:00
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=1
@@ -17,4 +17,4 @@ srun --unbuffered python3 OT-SSL-DD/benchmark_downstream.py pretrain \
     --data-path "$DATA_ROOT" --output "$DOWNSTREAM_RUN_ROOT/encoders/ConvNet_simclr_full_size100" \
     --selection-dir "$DOWNSTREAM_RUN_ROOT/selections" --runs 15 \
     --model ConvNet --ssl-method simclr --method full \
-    --subset-percentage 100 --ssl-epochs 13
+    --subset-percentage 100 --ssl-epochs 300

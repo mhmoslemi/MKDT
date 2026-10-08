@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH --account=aip-boyuwang
 #SBATCH --job-name=bench_ResNet18_simclr_kmeans_size5_lbl5
-#SBATCH --time=0-01:40:00
+#SBATCH --time=0-02:20:00
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=1
@@ -13,7 +13,7 @@ set -euo pipefail
 PROJECT_ROOT="${PROJECT_ROOT:-${SLURM_SUBMIT_DIR:?Submit from the MKDT project directory}}"
 source "$PROJECT_ROOT/benchmarks/cifar10/environment.sh"
 CONFIG_ID=ResNet18_simclr_kmeans_size5_lbl5
-# Measured runtime estimate for all 15 repetitions: 37.4 minutes.
+# Measured runtime estimate for all 15 repetitions: 76.6 minutes.
 # The time limit includes one additional hour, rounded up to five minutes.
 OUTPUT="$BENCH_RUN_ROOT/$CONFIG_ID/job_$SLURM_JOB_ID"
 mkdir -p "$BENCH_RUN_ROOT/$CONFIG_ID"
@@ -22,4 +22,4 @@ srun --unbuffered python3 OT-SSL-DD/benchmark_cifar10.py run \
     --selection-dir "$SELECTION_DIR" --runs 15 --seed-start 0 \
     --method kmeans --model ResNet18 --ssl-method simclr \
     --subset-percentage 5 --label-percentage 5 \
-    --ssl-epochs 240 --probe-epochs 40
+    --ssl-epochs 500 --probe-epochs 100
