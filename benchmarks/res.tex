@@ -3,6 +3,7 @@
 
 \begin{table*}[t]
 \centering
+\def\dsacc#1#2{$#1${\footnotesize$\pm #2$}}
 \caption{Consolidated CIFAR-10 accuracy (\%) across backbones,
 pretraining objectives, and subset sizes. Results are reported as
 mean $\pm$ sample standard deviation over 15 independent runs.
@@ -29,9 +30,9 @@ a random encoder.}
 
 \multirow{17}{*}{1\%}
 & -- & No Pre-Training
-& \multicolumn{2}{c}{$34.48 \pm 1.05$}
-& \multicolumn{2}{c}{$17.02 \pm 0.70$}
-& \multicolumn{2}{c}{$17.30 \pm 0.95$} \\
+& \multicolumn{2}{c}{\dsacc{34.48}{1.05}}
+& \multicolumn{2}{c}{\dsacc{17.02}{0.70}}
+& \multicolumn{2}{c}{\dsacc{17.30}{0.95}} \\
 \cmidrule(lr){2-9}
 
 & 100\% & Full Data
@@ -41,39 +42,39 @@ a random encoder.}
 \cmidrule(lr){2-9}
 
 & \multirow{5}{*}{1\%} & Random Subset
-& $39.02 \pm 1.07$ & $37.02 \pm 1.17$
-& $27.03 \pm 1.41$ & $14.88 \pm 2.24$
-& $31.73 \pm 1.11$ & $25.52 \pm 2.56$ \\
+& \dsacc{39.02}{1.07} & \dsacc{37.02}{1.17}
+& \dsacc{27.03}{1.41} & \dsacc{14.88}{2.24}
+& \dsacc{31.73}{1.11} & \dsacc{25.52}{2.56} \\
 & & K-means Subset
-& $38.72 \pm 0.82$ & $36.36 \pm 1.20$
-& $27.31 \pm 0.93$ & $15.01 \pm 2.10$
-& $31.26 \pm 1.16$ & $26.01 \pm 1.71$ \\
+& \dsacc{38.72}{0.82} & \dsacc{36.36}{1.20}
+& \dsacc{27.31}{0.93} & \dsacc{15.01}{2.10}
+& \dsacc{31.26}{1.16} & \dsacc{26.01}{1.71} \\
 & & KRR-ST & & & & & & \\
 & & MKDT & & & & & & \\
 & & Ours & & & & & & \\
 \cmidrule(lr){2-9}
 
 & \multirow{5}{*}{2\%} & Random Subset
-& $41.02 \pm 0.75$ & $38.97 \pm 1.46$
-& $28.31 \pm 1.37$ & $16.54 \pm 2.64$
-& $33.23 \pm 1.03$ & $27.21 \pm 2.68$ \\
+& \dsacc{41.02}{0.75} & \dsacc{38.97}{1.46}
+& \dsacc{28.31}{1.37} & \dsacc{16.54}{2.64}
+& \dsacc{33.23}{1.03} & \dsacc{27.21}{2.68} \\
 & & K-means Subset
-& $41.07 \pm 0.93$ & $38.49 \pm 1.17$
-& $28.46 \pm 1.52$ & $16.24 \pm 2.87$
-& $33.08 \pm 1.03$ & $27.61 \pm 2.28$ \\
+& \dsacc{41.07}{0.93} & \dsacc{38.49}{1.17}
+& \dsacc{28.46}{1.52} & \dsacc{16.24}{2.87}
+& \dsacc{33.08}{1.03} & \dsacc{27.61}{2.28} \\
 & & KRR-ST & & & & & & \\
 & & MKDT & & & & & & \\
 & & Ours & & & & & & \\
 \cmidrule(lr){2-9}
 
 & \multirow{5}{*}{5\%} & Random Subset
-& $43.39 \pm 0.81$ & $41.50 \pm 1.30$
-& $29.11 \pm 3.49$ & $16.69 \pm 3.40$
-& $35.34 \pm 1.55$ & $29.77 \pm 2.98$ \\
+& \dsacc{43.39}{0.81} & \dsacc{41.50}{1.30}
+& \dsacc{29.11}{3.49} & \dsacc{16.69}{3.40}
+& \dsacc{35.34}{1.55} & \dsacc{29.77}{2.98} \\
 & & K-means Subset
-& $43.37 \pm 0.82$ & $41.43 \pm 1.34$
-& $30.46 \pm 1.99$ & $17.07 \pm 2.45$
-& $35.09 \pm 1.04$ & $30.19 \pm 2.07$ \\
+& \dsacc{43.37}{0.82} & \dsacc{41.43}{1.34}
+& \dsacc{30.46}{1.99} & \dsacc{17.07}{2.45}
+& \dsacc{35.09}{1.04} & \dsacc{30.19}{2.07} \\
 & & KRR-ST & & & & & & \\
 & & MKDT & & & & & & \\
 & & Ours & & & & & & \\
@@ -82,9 +83,9 @@ a random encoder.}
 
 \multirow{17}{*}{5\%}
 & -- & No Pre-Training
-& \multicolumn{2}{c}{$45.75 \pm 0.48$}
-& \multicolumn{2}{c}{$21.12 \pm 0.74$}
-& \multicolumn{2}{c}{$21.14 \pm 0.83$} \\
+& \multicolumn{2}{c}{\dsacc{45.75}{0.48}}
+& \multicolumn{2}{c}{\dsacc{21.12}{0.74}}
+& \multicolumn{2}{c}{\dsacc{21.14}{0.83}} \\
 \cmidrule(lr){2-9}
 
 & 100\% & Full Data
@@ -94,39 +95,39 @@ a random encoder.}
 \cmidrule(lr){2-9}
 
 & \multirow{5}{*}{1\%} & Random Subset
-& $49.13 \pm 0.65$ & $47.50 \pm 1.13$
-& $30.59 \pm 1.04$ & $15.20 \pm 2.06$
-& $36.28 \pm 1.08$ & $30.01 \pm 2.68$ \\
+& \dsacc{49.13}{0.65} & \dsacc{47.50}{1.13}
+& \dsacc{30.59}{1.04} & \dsacc{15.20}{2.06}
+& \dsacc{36.28}{1.08} & \dsacc{30.01}{2.68} \\
 & & K-means Subset
-& $49.47 \pm 0.74$ & $46.75 \pm 1.05$
-& $30.86 \pm 0.75$ & $15.07 \pm 2.22$
-& $35.96 \pm 0.99$ & $30.44 \pm 1.58$ \\
+& \dsacc{49.47}{0.74} & \dsacc{46.75}{1.05}
+& \dsacc{30.86}{0.75} & \dsacc{15.07}{2.22}
+& \dsacc{35.96}{0.99} & \dsacc{30.44}{1.58} \\
 & & KRR-ST & & & & & & \\
 & & MKDT & & & & & & \\
 & & Ours & & & & & & \\
 \cmidrule(lr){2-9}
 
 & \multirow{5}{*}{2\%} & Random Subset
-& $51.33 \pm 0.60$ & $49.49 \pm 1.40$
-& $31.61 \pm 1.26$ & $16.19 \pm 2.96$
-& $38.05 \pm 1.00$ & $31.68 \pm 3.16$ \\
+& \dsacc{51.33}{0.60} & \dsacc{49.49}{1.40}
+& \dsacc{31.61}{1.26} & \dsacc{16.19}{2.96}
+& \dsacc{38.05}{1.00} & \dsacc{31.68}{3.16} \\
 & & K-means Subset
-& $51.28 \pm 0.71$ & $49.15 \pm 0.98$
-& $31.92 \pm 1.72$ & $15.75 \pm 3.19$
-& $37.91 \pm 0.81$ & $31.38 \pm 2.29$ \\
+& \dsacc{51.28}{0.71} & \dsacc{49.15}{0.98}
+& \dsacc{31.92}{1.72} & \dsacc{15.75}{3.19}
+& \dsacc{37.91}{0.81} & \dsacc{31.38}{2.29} \\
 & & KRR-ST & & & & & & \\
 & & MKDT & & & & & & \\
 & & Ours & & & & & & \\
 \cmidrule(lr){2-9}
 
 & \multirow{5}{*}{5\%} & Random Subset
-& $53.90 \pm 0.71$ & $52.19 \pm 1.37$
-& $32.63 \pm 4.00$ & $16.90 \pm 3.11$
-& $40.75 \pm 1.12$ & $33.74 \pm 3.19$ \\
+& \dsacc{53.90}{0.71} & \dsacc{52.19}{1.37}
+& \dsacc{32.63}{4.00} & \dsacc{16.90}{3.11}
+& \dsacc{40.75}{1.12} & \dsacc{33.74}{3.19} \\
 & & K-means Subset
-& $53.51 \pm 0.48$ & $51.95 \pm 1.15$
-& $34.10 \pm 1.69$ & $17.56 \pm 3.14$
-& $40.35 \pm 0.92$ & $34.47 \pm 2.13$ \\
+& \dsacc{53.51}{0.48} & \dsacc{51.95}{1.15}
+& \dsacc{34.10}{1.69} & \dsacc{17.56}{3.14}
+& \dsacc{40.35}{0.92} & \dsacc{34.47}{2.13} \\
 & & KRR-ST & & & & & & \\
 & & MKDT & & & & & & \\
 & & Ours & & & & & & \\
