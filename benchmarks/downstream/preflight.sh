@@ -11,5 +11,5 @@
 set -euo pipefail
 PROJECT_ROOT="${PROJECT_ROOT:-${SLURM_SUBMIT_DIR:?Submit from the MKDT project directory}}"
 source "$PROJECT_ROOT/benchmarks/downstream/environment.sh"
-python3 OT-SSL-DD/benchmark_downstream.py preflight \
+python3 benchmarks/benchmark_downstream.py preflight \
     --device cpu --data-path "$DATA_ROOT" --targets "$TARGET_DATASETS"

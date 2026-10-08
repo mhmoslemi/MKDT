@@ -12,6 +12,6 @@ set -euo pipefail
 PROJECT_ROOT="${PROJECT_ROOT:-${SLURM_SUBMIT_DIR:?Submit from the MKDT project directory}}"
 source "$PROJECT_ROOT/benchmarks/downstream/environment.sh"
 mkdir -p "$DOWNSTREAM_RUN_ROOT/targets"
-srun --unbuffered python3 OT-SSL-DD/benchmark_downstream.py prepare-target \
+srun --unbuffered python3 benchmarks/benchmark_downstream.py prepare-target \
     --device cpu --data-path "$DATA_ROOT" --target CIFAR100 \
     --output "$DOWNSTREAM_RUN_ROOT/targets/CIFAR100.pt"

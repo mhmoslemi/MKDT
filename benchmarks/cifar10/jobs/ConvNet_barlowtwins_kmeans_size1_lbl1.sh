@@ -17,7 +17,7 @@ CONFIG_ID=ConvNet_barlowtwins_kmeans_size1_lbl1
 # The time limit includes one additional hour, rounded up to five minutes.
 OUTPUT="$BENCH_RUN_ROOT/$CONFIG_ID/job_$SLURM_JOB_ID"
 mkdir -p "$BENCH_RUN_ROOT/$CONFIG_ID"
-srun --unbuffered python3 OT-SSL-DD/benchmark_cifar10.py run \
+srun --unbuffered python3 benchmarks/benchmark_cifar10.py run \
     --data-path "$DATA_ROOT" --output "$OUTPUT" \
     --selection-dir "$SELECTION_DIR" --runs 15 --seed-start 0 \
     --method kmeans --model ConvNet --ssl-method barlowtwins \

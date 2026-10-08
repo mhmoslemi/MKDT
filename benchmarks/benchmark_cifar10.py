@@ -12,6 +12,7 @@ import os
 from pathlib import Path
 import random
 import statistics
+import sys
 import time
 
 import numpy as np
@@ -20,6 +21,7 @@ from torch import nn
 from torch.nn import functional as F
 from torchvision.datasets import CIFAR10
 
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'OT-SSL-DD'))
 from utils import DiffAugment, ParamDiffAug, get_network
 
 

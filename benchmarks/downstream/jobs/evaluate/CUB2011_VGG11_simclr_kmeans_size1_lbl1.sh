@@ -13,7 +13,7 @@ set -euo pipefail
 PROJECT_ROOT="${PROJECT_ROOT:-${SLURM_SUBMIT_DIR:?Submit from the MKDT project directory}}"
 source "$PROJECT_ROOT/benchmarks/downstream/environment.sh"
 mkdir -p "$DOWNSTREAM_RUN_ROOT/evaluations/CUB2011_VGG11_simclr_kmeans_size1_lbl1"
-srun --unbuffered python3 OT-SSL-DD/benchmark_downstream.py evaluate \
+srun --unbuffered python3 benchmarks/benchmark_downstream.py evaluate \
     --output "$DOWNSTREAM_RUN_ROOT/evaluations/CUB2011_VGG11_simclr_kmeans_size1_lbl1/job_$SLURM_JOB_ID" \
     --target CUB2011 --target-cache "$DOWNSTREAM_RUN_ROOT/targets/CUB2011.pt" \
     --encoder-dir "$DOWNSTREAM_RUN_ROOT/encoders/VGG11_simclr_kmeans_size1" \

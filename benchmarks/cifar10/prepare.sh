@@ -13,5 +13,5 @@ set -euo pipefail
 PROJECT_ROOT="${PROJECT_ROOT:-${SLURM_SUBMIT_DIR:?Submit from the MKDT project directory}}"
 source "$PROJECT_ROOT/benchmarks/cifar10/environment.sh"
 mkdir -p "$SELECTION_DIR"
-srun --unbuffered python3 OT-SSL-DD/benchmark_cifar10.py prepare \
+srun --unbuffered python3 benchmarks/benchmark_cifar10.py prepare \
     --data-path "$DATA_ROOT" --output "$SELECTION_DIR" --runs 15 --seed-start 0

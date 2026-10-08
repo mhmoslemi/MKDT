@@ -68,7 +68,7 @@ def main():
                 path = HERE / 'jobs/pretrain' / f'{name}.sh'
                 content = header(f'ds_pre_{name}', limit)
                 content += f'''mkdir -p "$DOWNSTREAM_RUN_ROOT/encoders"
-srun --unbuffered python3 OT-SSL-DD/benchmark_downstream.py pretrain \\
+srun --unbuffered python3 benchmarks/benchmark_downstream.py pretrain \\
     --data-path "$DATA_ROOT" --output "$DOWNSTREAM_RUN_ROOT/encoders/{name}" \\
     --selection-dir "$DOWNSTREAM_RUN_ROOT/selections" --runs 15 \\
     --model {model} --ssl-method {ssl} --method {method} \\
@@ -96,7 +96,7 @@ srun --unbuffered python3 OT-SSL-DD/benchmark_downstream.py pretrain \\
                     path = HERE / 'jobs/evaluate' / f'{name}.sh'
                     content = header(f'ds_{name}', limit)
                     content += f'''mkdir -p "$DOWNSTREAM_RUN_ROOT/evaluations/{name}"
-srun --unbuffered python3 OT-SSL-DD/benchmark_downstream.py evaluate \\
+srun --unbuffered python3 benchmarks/benchmark_downstream.py evaluate \\
     --output "$DOWNSTREAM_RUN_ROOT/evaluations/{name}/job_$SLURM_JOB_ID" \\
     --target {target} --target-cache "$DOWNSTREAM_RUN_ROOT/targets/{target}.pt" \\
     --encoder-dir "$DOWNSTREAM_RUN_ROOT/encoders/{spec['source_id']}" \\
@@ -114,7 +114,7 @@ srun --unbuffered python3 OT-SSL-DD/benchmark_downstream.py evaluate \\
         path = HERE / 'jobs/prepare' / f'{target}.sh'
         content = header(f'ds_pack_{target}', '0-01:15:00', gpu=False)
         content += f'''mkdir -p "$DOWNSTREAM_RUN_ROOT/targets"
-srun --unbuffered python3 OT-SSL-DD/benchmark_downstream.py prepare-target \\
+srun --unbuffered python3 benchmarks/benchmark_downstream.py prepare-target \\
     --device cpu --data-path "$DATA_ROOT" --target {target} \\
     --output "$DOWNSTREAM_RUN_ROOT/targets/{target}.pt"
 '''
@@ -122,13 +122,13 @@ srun --unbuffered python3 OT-SSL-DD/benchmark_downstream.py prepare-target \\
     save_manifest(HERE / 'pretraining.tsv', sources)
     save_manifest(HERE / 'configs.tsv', evaluations)
     content = header('ds_selections', '0-01:05:00')
-    content += '''python3 OT-SSL-DD/benchmark_downstream.py prepare-selections \\
+    content += '''python3 benchmarks/benchmark_downstream.py prepare-selections \\
     --data-path "$DATA_ROOT" --output "$DOWNSTREAM_RUN_ROOT/selections" \\
     --source-batch "$SOURCE_CIFAR10_BATCH" --runs 15
 '''
     save_script(HERE / 'prepare_selections.sh', content)
     content = header('ds_preflight', '0-00:10:00', gpu=False)
-    content += '''python3 OT-SSL-DD/benchmark_downstream.py preflight \\
+    content += '''python3 benchmarks/benchmark_downstream.py preflight \\
     --device cpu --data-path "$DATA_ROOT" --targets "$TARGET_DATASETS"
 '''
     save_script(HERE / 'preflight.sh', content)

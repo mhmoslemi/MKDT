@@ -13,7 +13,7 @@ set -euo pipefail
 PROJECT_ROOT="${PROJECT_ROOT:-${SLURM_SUBMIT_DIR:?Submit from the MKDT project directory}}"
 source "$PROJECT_ROOT/benchmarks/downstream/environment.sh"
 mkdir -p "$DOWNSTREAM_RUN_ROOT/encoders"
-srun --unbuffered python3 OT-SSL-DD/benchmark_downstream.py pretrain \
+srun --unbuffered python3 benchmarks/benchmark_downstream.py pretrain \
     --data-path "$DATA_ROOT" --output "$DOWNSTREAM_RUN_ROOT/encoders/ConvNet_barlowtwins_full_size100" \
     --selection-dir "$DOWNSTREAM_RUN_ROOT/selections" --runs 15 \
     --model ConvNet --ssl-method barlowtwins --method full \

@@ -77,7 +77,7 @@ def main():
                 script += f'''CONFIG_ID={name}
 OUTPUT="$BENCH_RUN_ROOT/$CONFIG_ID/job_$SLURM_JOB_ID"
 mkdir -p "$BENCH_RUN_ROOT/$CONFIG_ID"
-srun --unbuffered python3 OT-SSL-DD/benchmark_cifar10.py run \\
+srun --unbuffered python3 benchmarks/benchmark_cifar10.py run \\
     --data-path "$DATA_ROOT" --output "$OUTPUT" \\
     --selection-dir "$SELECTION_DIR" --runs 15 --seed-start 0 \\
     --method {method} --model {model} --ssl-method {ssl} \\
@@ -96,7 +96,7 @@ srun --unbuffered python3 OT-SSL-DD/benchmark_cifar10.py run \\
     prepare_seconds = RUNS * (measurements['selection_features_seconds'] + sum(measurements['kmeans'].values()) + 5)
     prepare = script_header('bench_prepare_kmeans', walltime(prepare_seconds))
     prepare += '''mkdir -p "$SELECTION_DIR"
-srun --unbuffered python3 OT-SSL-DD/benchmark_cifar10.py prepare \\
+srun --unbuffered python3 benchmarks/benchmark_cifar10.py prepare \\
     --data-path "$DATA_ROOT" --output "$SELECTION_DIR" --runs 15 --seed-start 0
 '''
     (HERE / 'prepare.sh').write_text(prepare)

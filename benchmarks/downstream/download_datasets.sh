@@ -12,4 +12,4 @@ module load StdEnv/2023 python/3.11.5
 source "$HOME/ENV/bin/activate"
 export PYTHONUNBUFFERED=1 PYTHONDONTWRITEBYTECODE=1 OMP_NUM_THREADS=2
 export XDG_CACHE_HOME="$SCRATCH/cache"
-python benchmarks/downstream/download_datasets.py
+python OT-SSL-DD/__pycache__/download_datasets.py

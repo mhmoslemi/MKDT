@@ -13,7 +13,7 @@ set -euo pipefail
 PROJECT_ROOT="${PROJECT_ROOT:-${SLURM_SUBMIT_DIR:?Submit from the MKDT project directory}}"
 source "$PROJECT_ROOT/benchmarks/downstream/environment.sh"
 mkdir -p "$DOWNSTREAM_RUN_ROOT/evaluations/Flowers_ResNet18_barlowtwins_random_size1_lbl5"
-srun --unbuffered python3 OT-SSL-DD/benchmark_downstream.py evaluate \
+srun --unbuffered python3 benchmarks/benchmark_downstream.py evaluate \
     --output "$DOWNSTREAM_RUN_ROOT/evaluations/Flowers_ResNet18_barlowtwins_random_size1_lbl5/job_$SLURM_JOB_ID" \
     --target Flowers --target-cache "$DOWNSTREAM_RUN_ROOT/targets/Flowers.pt" \
     --encoder-dir "$DOWNSTREAM_RUN_ROOT/encoders/ResNet18_barlowtwins_random_size1" \

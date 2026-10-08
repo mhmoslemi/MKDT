@@ -14,4 +14,4 @@ module load StdEnv/2023 python/3.11.5
 source "$HOME/ENV/bin/activate"
 export OMP_NUM_THREADS=1 PYTHONUNBUFFERED=1 PYTHONDONTWRITEBYTECODE=1
 export XDG_CACHE_HOME="$SCRATCH/cache"
-srun python3 OT-SSL-DD/benchmark_cifar10.py profile --output benchmarks/cifar10/validation/timing.json
+srun python3 benchmarks/benchmark_cifar10.py profile --output benchmarks/cifar10/validation/timing.json

@@ -1,6 +1,6 @@
 #!/bin/bash
 set -euo pipefail
-PROJECT_ROOT="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)"
+PROJECT_ROOT="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd -P)"
 export PROJECT_ROOT
 cd "$PROJECT_ROOT"
 dry_run=0
@@ -49,9 +49,10 @@ else
     DOWNSTREAM_RUN_ROOT=$(mktemp -d "$PROJECT_ROOT/benchmarks/downstream/results/batch_$(date -u +%Y%m%dT%H%M%SZ)_XXXXXX")
     DOWNSTREAM_CODE_ROOT="$DOWNSTREAM_RUN_ROOT/code"
     mkdir -p "$DOWNSTREAM_RUN_ROOT/logs" "$DOWNSTREAM_CODE_ROOT/OT-SSL-DD" "$DOWNSTREAM_CODE_ROOT/benchmarks/downstream"
-    cp OT-SSL-DD/benchmark_downstream.py OT-SSL-DD/downstream_data.py OT-SSL-DD/benchmark_cifar10.py OT-SSL-DD/utils.py OT-SSL-DD/networks.py "$DOWNSTREAM_CODE_ROOT/OT-SSL-DD/"
+    cp OT-SSL-DD/utils.py OT-SSL-DD/networks.py "$DOWNSTREAM_CODE_ROOT/OT-SSL-DD/"
+    cp benchmarks/benchmark_downstream.py benchmarks/downstream_data.py benchmarks/benchmark_cifar10.py "$DOWNSTREAM_CODE_ROOT/benchmarks/"
     cp benchmarks/downstream/report.py benchmarks/downstream/configs.tsv benchmarks/downstream/pretraining.tsv benchmarks/downstream/protocol.txt benchmarks/downstream/data_layout.txt "$DOWNSTREAM_CODE_ROOT/benchmarks/downstream/"
-    cp res.tex "$DOWNSTREAM_RUN_ROOT/res_template.tex"
+    cp benchmarks/res.tex "$DOWNSTREAM_RUN_ROOT/res_template.tex"
     cp benchmarks/downstream/configs.tsv benchmarks/downstream/pretraining.tsv "$DOWNSTREAM_RUN_ROOT/"
     cp "$JOB_ARCHIVE" "$DOWNSTREAM_RUN_ROOT/jobs.tar"
     printf '%s\n' "$TARGET_DATASETS" > "$DOWNSTREAM_RUN_ROOT/targets.txt"

@@ -1,6 +1,6 @@
 #!/bin/bash
 set -euo pipefail
-PROJECT_ROOT="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)"
+PROJECT_ROOT="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd -P)"
 export PROJECT_ROOT
 cd "$PROJECT_ROOT"
 dry_run=0
@@ -25,9 +25,10 @@ else
     cp benchmarks/cifar10/configs.tsv "$BENCH_RUN_ROOT/configs.tsv"
     BENCH_CODE_ROOT="$BENCH_RUN_ROOT/code"
     mkdir -p "$BENCH_CODE_ROOT/OT-SSL-DD" "$BENCH_CODE_ROOT/benchmarks/cifar10"
-    cp OT-SSL-DD/benchmark_cifar10.py OT-SSL-DD/utils.py OT-SSL-DD/networks.py "$BENCH_CODE_ROOT/OT-SSL-DD/"
+    cp OT-SSL-DD/utils.py OT-SSL-DD/networks.py "$BENCH_CODE_ROOT/OT-SSL-DD/"
+    cp benchmarks/benchmark_cifar10.py "$BENCH_CODE_ROOT/benchmarks/"
     cp benchmarks/cifar10/report.py benchmarks/cifar10/configs.tsv "$BENCH_CODE_ROOT/benchmarks/cifar10/"
-    tar -czf "$BENCH_RUN_ROOT/source.tar.gz" OT-SSL-DD/benchmark_cifar10.py OT-SSL-DD/utils.py OT-SSL-DD/networks.py benchmarks/cifar10/jobs.tar benchmarks/cifar10/environment.sh benchmarks/cifar10/report.py benchmarks/cifar10/protocol.txt
+    tar -czf "$BENCH_RUN_ROOT/source.tar.gz" benchmarks/benchmark_cifar10.py OT-SSL-DD/utils.py OT-SSL-DD/networks.py benchmarks/cifar10/jobs.tar benchmarks/cifar10/environment.sh benchmarks/cifar10/report.py benchmarks/cifar10/protocol.txt
 fi
 export BENCH_RUN_ROOT BENCH_CODE_ROOT
 export SELECTION_DIR="$BENCH_RUN_ROOT/selections"
