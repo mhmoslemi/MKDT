@@ -15,7 +15,7 @@ source "$HOME/ENV/bin/activate"
 export OMP_NUM_THREADS=1 PYTHONUNBUFFERED=1 PYTHONDONTWRITEBYTECODE=1
 export XDG_CACHE_HOME="$SCRATCH/cache"
 export TMPDIR="$SLURM_TMPDIR"
-python3 OT-SSL-DD/test_benchmark_cifar10.py
+PYTHONPATH="$PWD/benchmarks:$PWD/OT-SSL-DD${PYTHONPATH:+:$PYTHONPATH}" python3 _extra/test_benchmark_cifar10.py
 python3 benchmarks/cifar10/make_jobs.py
 python3 benchmarks/cifar10/report.py --results benchmarks/cifar10/results --output benchmarks/cifar10/tables.md
 python3 benchmarks/cifar10/validation/smoke.py

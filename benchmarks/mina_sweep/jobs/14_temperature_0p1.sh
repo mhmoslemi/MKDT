@@ -18,4 +18,4 @@ TEMPERATURE=0.1
 DISTILL_AUG_STRATEGY=color_crop_cutout_flip_scale_rotate
 DISTILL_AUG_MODE=S
 PROJECT_ROOT="${PROJECT_ROOT:-${SLURM_SUBMIT_DIR:-$SCRATCH/MKDT}}"
-source "$PROJECT_ROOT/mina_sweep/run.sh"
+source "$PROJECT_ROOT/benchmarks/mina_sweep/run.sh"

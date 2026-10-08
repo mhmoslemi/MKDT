@@ -6,7 +6,7 @@ set -euo pipefail
 
 PROJECT_ROOT="${PROJECT_ROOT:-${SLURM_SUBMIT_DIR:-$SCRATCH/MKDT}}"
 DATA_ROOT="${DATA_ROOT:-$SCRATCH/data}"
-SAVE_ROOT="${SAVE_ROOT:-$PROJECT_ROOT/results_mina_sweep}"
+SAVE_ROOT="${SAVE_ROOT:-$PROJECT_ROOT/benchmarks/results_mina_sweep}"
 VENV_ACTIVATE="${VENV_ACTIVATE:-$HOME/ENV/bin/activate}"
 # mina_IF.py clears save_path on startup. Give every submission a fresh directory.
 SAVE_PATH="$SAVE_ROOT/$RUN_TAG/job_$SLURM_JOB_ID"

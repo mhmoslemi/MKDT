@@ -14,4 +14,4 @@ export OMP_NUM_THREADS=1
 export XDG_CACHE_HOME="$SCRATCH/cache"
 export PYTHONDONTWRITEBYTECODE=1
 export TMPDIR="$SLURM_TMPDIR"
-python3 OT-SSL-DD/test_mina_if_pixel_mse.py
+PYTHONPATH="$PWD/OT-SSL-DD${PYTHONPATH:+:$PYTHONPATH}" python3 _extra/test_mina_if_pixel_mse.py
