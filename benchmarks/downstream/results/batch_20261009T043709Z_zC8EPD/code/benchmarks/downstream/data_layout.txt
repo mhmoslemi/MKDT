@@ -1,0 +1,22 @@
+Data root: /scratch/mmoslem3/data
+
+CIFAR100: cifar-100-python/{train,test,meta}
+Aircraft: fgvc-aircraft-2013b/data/{variants.txt,images_variant_trainval.txt,images_variant_test.txt,images/}
+CUB2011: CUB_200_2011/{images.txt,image_class_labels.txt,train_test_split.txt,images/}
+Dogs: StanfordDogs/{train_list.mat,test_list.mat,images/}
+Flowers: Oxford102Flowers/{imagelabels.mat,setid.mat,image_*.jpg}
+TinyImageNet: tinyimagenet.pt
+
+Tiny ImageNet keys: images_train, labels_train, images_val, labels_val, classes.
+Images are uint8 NCHW tensors at 64x64. Train: 100000; evaluation: 10000 validation images.
+Other official splits: CIFAR100 train/test; Aircraft trainval/test; CUB train/test;
+Dogs train/test; Flowers train/test (validation excluded).
+All datasets use RGB at 32x32, LANCZOS resizing and their recorded normalization.
+
+Labels: floor(training_count * percentage / 100), 1% or 5%, sampled per seed 0..14.
+Selection uses a randomized class-balanced ordering without increasing the label budget.
+SVHN is not included.
+
+Submit: bash benchmarks/submit_downstream_benchmarks.sh
+Optional subset: bash benchmarks/submit_downstream_benchmarks.sh --datasets Dogs,Flowers,TinyImageNet
+DATA_ROOT overrides the data root. SOURCE_CIFAR10_BATCH overrides the selection cache source.
