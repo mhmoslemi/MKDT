@@ -1,4 +1,4 @@
-"""Summarize complete 15-run target configurations and fill a copy of res.tex."""
+"""Summarize complete target configurations and fill a copy of res.tex."""
 
 import argparse
 import csv
@@ -26,7 +26,8 @@ def collect(root):
         if len(paths) > 1:
             raise ValueError(f'Multiple submissions for {config["config_id"]}; choose one before reporting.')
         summary = json.loads(paths[0].read_text()) if paths else None
-        complete = bool(summary and summary['complete'] and summary['completed_runs'] == 15 and summary['expected_runs'] == 15 and sorted(summary['seeds']) == list(range(15)))
+        expected = int(config['runs'])
+        complete = bool(summary and summary['complete'] and summary['completed_runs'] == expected and summary['expected_runs'] == expected and sorted(summary['seeds']) == list(range(expected)))
         key = (config['target'], config['model'], config['ssl_method'], config['method'], int(config['subset_percentage']), int(config['label_percentage']))
         if complete:
             results[key] = f'${summary["mean_percent"]:.2f} \\pm {summary["std_percent"]:.2f}$'
@@ -34,8 +35,8 @@ def collect(root):
     return results, rows
 
 
-def fill_latex(template, results, targets=DATASETS):
-    source = template.split('% Downstream results')[0].rstrip()
+def fill_latex(template, results, targets=DATASETS, runs=10):
+    source = template.split('% Downstream results')[0].rstrip().replace('15 independent runs', f'{runs} independent runs')
     lines = source.splitlines()
     tables = [source, '% Downstream results']
     for target in targets:
@@ -77,7 +78,8 @@ def render(root):
         writer.writerows(rows)
     template = (root / 'res_template.tex').read_text()
     targets = (root / 'targets.txt').read_text().strip().split(',')
-    (root / 'res.tex').write_text(fill_latex(template, results, targets))
+    runs = int(rows[0]['runs'])
+    (root / 'res.tex').write_text(fill_latex(template, results, targets, runs))
     print(f'Completed {len(results)}/{len(rows)} configurations. Wrote {root / "tables.csv"} and {root / "res.tex"}.')
 
 

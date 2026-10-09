@@ -14,4 +14,4 @@ PROJECT_ROOT="${PROJECT_ROOT:-${SLURM_SUBMIT_DIR:?Submit from the MKDT project d
 source "$PROJECT_ROOT/benchmarks/downstream/environment.sh"
 python3 benchmarks/benchmark_downstream.py prepare-selections \
     --data-path "$DATA_ROOT" --output "$DOWNSTREAM_RUN_ROOT/selections" \
-    --source-batch "$SOURCE_CIFAR10_BATCH" --runs 15
+    --source-batch "$SOURCE_CIFAR10_BATCH" --runs 10

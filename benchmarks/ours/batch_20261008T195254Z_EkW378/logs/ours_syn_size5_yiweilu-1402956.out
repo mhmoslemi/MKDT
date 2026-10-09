@@ -1,0 +1,16 @@
+Cleared all previous files from /scratch/mmoslem3/MKDT/benchmarks/ours/batch_20261008T195254Z_EkW378/yiweilu_mCLPIh/synthetic/size5
+Initializing 2500 synthetic prototypes via DeepCluster K-Means on ConvNet...
+Hyper-parameters: 
+ {'dataset': 'CIFAR10', 'percentage': 5.0, 'data_path': '/scratch/mmoslem3/data', 'device': 'cuda', 'seed': 0, 'Iteration': 400, 'lr_img': 0.005, 'batch_real': 1024, 'num_random_networks': 10, 'temperature': 0.2, 'random_models': 'ConvNet,ResNet18', 'tv_weight': 0.01, 'pixel_mse_weight': 0.0, 'distill_aug_strategy': 'color_crop_cutout_flip_scale_rotate', 'distill_aug_mode': 'M', 'model': 'ConvNet', 'lr_net': 0.01, 'batch_train': 256, 'ssl_method': 'simclr', 'ssl_aug_strategy': 'color_crop_cutout_flip_scale_rotate', 'projection_dim': 128, 'barlow_lambda': 0.005, 'eval_mode': 'S', 'num_eval': 3, 'epoch_eval_train': 1200, 'label_percentage': 1.0, 'epoch_linear_train': 200, 'lr_linear': 0.1, 'batch_linear': 256, 'save_path': '/scratch/mmoslem3/MKDT/benchmarks/ours/batch_20261008T195254Z_EkW378/yiweilu_mCLPIh/synthetic/size5', 'method': 'InformationTheoretic_IIC', 'dsa_param': <utils.ParamDiffAug object at 0x7b9dfd9dc890>, 'dsa': False}
+P_net support: ConvNet, ResNet18
+Objective: minimize mean(-MI) + 0 * pixel_MSE_to_initial ([0,1] pixel units).
+[2026-10-08 14:17:25] distillation begins
+[2026-10-08 14:20:07] iter = 00050, neg_MI = -0.000336, pixel_MSE = 0.000002, total_loss = -0.000336, pixel drift RMS = 0.38647/255, PNG values changed = 16.22499%, lr = 0.0050
+[2026-10-08 14:22:45] iter = 00100, neg_MI = -0.000397, pixel_MSE = 0.000009, total_loss = -0.000397, pixel drift RMS = 0.77633/255, PNG values changed = 38.64833%, lr = 0.0050
+[2026-10-08 14:25:21] iter = 00150, neg_MI = -0.000420, pixel_MSE = 0.000023, total_loss = -0.000420, pixel drift RMS = 1.21988/255, PNG values changed = 52.87166%, lr = 0.0050
+[2026-10-08 14:27:57] iter = 00200, neg_MI = -0.000397, pixel_MSE = 0.000042, total_loss = -0.000397, pixel drift RMS = 1.66384/255, PNG values changed = 61.43875%, lr = 0.0050
+[2026-10-08 14:30:37] iter = 00250, neg_MI = -0.000343, pixel_MSE = 0.000070, total_loss = -0.000343, pixel drift RMS = 2.13679/255, PNG values changed = 67.51589%, lr = 0.0050
+[2026-10-08 14:33:18] iter = 00300, neg_MI = -0.000483, pixel_MSE = 0.000104, total_loss = -0.000483, pixel drift RMS = 2.60553/255, PNG values changed = 71.80167%, lr = 0.0050
+[2026-10-08 14:36:03] iter = 00350, neg_MI = -0.000444, pixel_MSE = 0.000144, total_loss = -0.000444, pixel drift RMS = 3.06668/255, PNG values changed = 75.02650%, lr = 0.0050
+[2026-10-08 14:38:44] iter = 00400, neg_MI = -0.000528, pixel_MSE = 0.000194, total_loss = -0.000528, pixel drift RMS = 3.56619/255, PNG values changed = 77.76558%, lr = 0.0050
+Saved synthetic data to /scratch/mmoslem3/MKDT/benchmarks/ours/batch_20261008T195254Z_EkW378/yiweilu_mCLPIh/synthetic/size5/res_IIC_CIFAR10_ConvNet_5percent.pt

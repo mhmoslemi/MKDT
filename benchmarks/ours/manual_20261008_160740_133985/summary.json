@@ -1,0 +1,39 @@
+{
+  "config": {
+    "percentage": 1,
+    "label_percentage": 1,
+    "model": "ConvNet",
+    "ssl_method": "simclr",
+    "runs": 5,
+    "seed": 0,
+    "data_path": "/scratch/mmoslem3/data",
+    "synthetic_root": "/home/mmoslem3/scratch/MKDT/benchmarks/ours/batch_20261008T195254Z_EkW378/yiweilu_mCLPIh/synthetic",
+    "save_path": null,
+    "ssl_epochs": 3000,
+    "probe_epochs": 200,
+    "batch_size": 256,
+    "lr_ssl": 0.01,
+    "lr_probe": 0.1,
+    "momentum": 0.9,
+    "weight_decay": 0.0005,
+    "temperature": 0.2,
+    "barlow_lambda": 0.005,
+    "projection_dim": 32,
+    "augmentation": "color_crop_cutout_flip_scale_rotate",
+    "augmentation_mode": "S",
+    "synthetic_checkpoint": "result2/res_IIC_CIFAR10_ConvNet_1percent.pt",
+    "std_ddof": 1
+  },
+  "completed_runs": 5,
+  "expected_runs": 5,
+  "complete": true,
+  "accuracies_percent": [
+    43.39999854564667,
+    43.709999322891235,
+    43.63999962806702,
+    44.39999759197235,
+    43.68999898433685
+  ],
+  "mean_percent": 43.767998814582825,
+  "std_percent": 0.37439229387853723
+}

@@ -19,7 +19,7 @@ import benchmark_cifar10 as source
 from downstream_data import SPECS, load_target, locate, prepare_target, records, select_labels
 
 
-PROTOCOL = 'cifar10_to_downstream_v2_epochs'
+PROTOCOL = 'cifar10_to_downstream_v3_random_labels_barlow2x'
 
 
 def atomic_save(path, value):
@@ -106,7 +106,7 @@ def pretrain(args):
         indices = source_indices(args, len(images), seed)
         train = images if args.method == 'full' else images[torch.tensor(indices, device=args.device)]
         network = source.get_network(args.model, 3, 10, (32, 32), seed=seed + 3000)
-        steps = source.train_ssl(network, train, args.ssl_method, args.ssl_epochs, seed)
+        steps = source.train_ssl(network, train, args.ssl_method, args.ssl_epochs, seed, log_every=args.ssl_log_every)
         checkpoint = dict(protocol=PROTOCOL, source_protocol=source.PROTOCOL, seed=seed,
                           model=args.model, method=args.method, ssl_method=args.ssl_method,
                           subset_percentage=args.subset_percentage, ssl_epochs=args.ssl_epochs,
@@ -219,15 +219,18 @@ def main():
     parser.add_argument('--ssl-method', choices=['none', 'simclr', 'barlowtwins'])
     parser.add_argument('--subset-percentage', type=int, choices=[0, 1, 2, 5, 100], default=1)
     parser.add_argument('--label-percentage', type=int, choices=[1, 5], default=1)
-    parser.add_argument('--label-policy', choices=['exact', 'at_least_one_per_class'], default='exact')
+    parser.add_argument('--label-policy', choices=['random', 'exact', 'at_least_one_per_class'], default='random')
     parser.add_argument('--probe-epochs', type=int)
     parser.add_argument('--ssl-epochs', type=int)
+    parser.add_argument('--ssl-log-every', type=int, default=0, help='Print SSL loss every N epochs; 0 prints four times per run')
     parser.add_argument('--runs', type=int, default=15)
     args = parser.parse_args()
     args.ssl_epochs = args.ssl_epochs if args.ssl_epochs is not None else source.SSL_EPOCHS.get(args.subset_percentage, 0)
     args.probe_epochs = args.probe_epochs if args.probe_epochs is not None else source.PROBE_EPOCHS[args.label_percentage]
     if args.runs < 1 or args.probe_epochs < 1:
         parser.error('runs and probe-epochs must be positive')
+    if args.ssl_log_every < 0:
+        parser.error('--ssl-log-every must be nonnegative')
     if args.command != 'preflight' and args.output is None:
         parser.error('--output is required')
     if args.command in ('prepare-target', 'evaluate') and args.target is None:

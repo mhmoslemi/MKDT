@@ -1,0 +1,121 @@
+{
+  "method": "ours",
+  "synthesis_runs_per_size": 1,
+  "synthesis_seed": 0,
+  "synthesis_checkpoint": "final_iteration",
+  "mina_sha256": "7bfefd555029b96cb8a77f1252108db29d124d36a8286dff8c60c5ebd1072f22",
+  "synthetic_counts": {
+    "1": 500,
+    "2": 1000,
+    "5": 2500
+  },
+  "repetitions": 15,
+  "uncertainty": "sample_std_across_encoder_and_probe_seeds_conditional_on_one_synthetic_set",
+  "epochs": {
+    "protocol": "v2_epochs",
+    "runs_per_configuration": 15,
+    "no_pretraining_protocol": "frozen_random_encoder_with_SGD_linear_probe",
+    "pretraining": {
+      "source_dataset": "CIFAR10",
+      "ssl_methods": [
+        "simclr",
+        "barlowtwins"
+      ],
+      "models": [
+        "ConvNet",
+        "VGG11",
+        "ResNet18"
+      ],
+      "random_subset_epochs_by_data_percentage": {
+        "1": 1200,
+        "2": 800,
+        "5": 500
+      },
+      "kmeans_subset_epochs_by_data_percentage": {
+        "1": 1200,
+        "2": 800,
+        "5": 500
+      },
+      "full_data_epochs_by_data_percentage": {
+        "100": 300
+      }
+    },
+    "evaluation_by_dataset": {
+      "CIFAR10": {
+        "linear_probe_epochs_by_label_percentage": {
+          "1": 200,
+          "5": 100
+        },
+        "no_pretraining_linear_probe_epochs_by_label_percentage": {
+          "1": 200,
+          "5": 100
+        }
+      },
+      "CIFAR100": {
+        "linear_probe_epochs_by_label_percentage": {
+          "1": 200,
+          "5": 100
+        },
+        "no_pretraining_linear_probe_epochs_by_label_percentage": {
+          "1": 200,
+          "5": 100
+        }
+      },
+      "Aircraft": {
+        "linear_probe_epochs_by_label_percentage": {
+          "1": 200,
+          "5": 100
+        },
+        "no_pretraining_linear_probe_epochs_by_label_percentage": {
+          "1": 200,
+          "5": 100
+        }
+      },
+      "CUB2011": {
+        "linear_probe_epochs_by_label_percentage": {
+          "1": 200,
+          "5": 100
+        },
+        "no_pretraining_linear_probe_epochs_by_label_percentage": {
+          "1": 200,
+          "5": 100
+        }
+      },
+      "Dogs": {
+        "linear_probe_epochs_by_label_percentage": {
+          "1": 200,
+          "5": 100
+        },
+        "no_pretraining_linear_probe_epochs_by_label_percentage": {
+          "1": 200,
+          "5": 100
+        }
+      },
+      "Flowers": {
+        "linear_probe_epochs_by_label_percentage": {
+          "1": 200,
+          "5": 100
+        },
+        "no_pretraining_linear_probe_epochs_by_label_percentage": {
+          "1": 200,
+          "5": 100
+        }
+      },
+      "TinyImageNet": {
+        "linear_probe_epochs_by_label_percentage": {
+          "1": 200,
+          "5": 100
+        },
+        "no_pretraining_linear_probe_epochs_by_label_percentage": {
+          "1": 200,
+          "5": 100
+        }
+      }
+    },
+    "downstream_pretraining_source": "CIFAR10; downstream datasets supply labeled evaluation data, not SSL pretraining data",
+    "budget_type": "fixed_epochs_without_update_matching",
+    "record_scope": "Configured epoch budgets; completion is recorded separately in per-run results"
+  },
+  "account": "aip-yiweilu",
+  "target_cache_root": "/scratch/mmoslem3/MKDT/benchmarks/downstream/results/batch_20261008T175805Z_GKcdxU/targets"
+}

@@ -157,17 +157,19 @@ def load_target(path, device, expected_dataset):
 
 
 def select_labels(labels, percentage, seed, policy='exact'):
-    """Nested class-balanced prefixes with exact overall budgets, even below C."""
+    """Select a nested label subset with an exact overall budget."""
     labels = np.asarray(labels)
     classes = np.unique(labels)
     count = max(1, int(len(labels) * percentage / 100))
+    generator = np.random.default_rng(seed + 5000)
+    if policy == 'random':
+        return generator.permutation(len(labels))[:count].astype(np.int64, copy=False)
     if policy == 'at_least_one_per_class':
         count = max(count, len(classes))
     elif policy != 'exact':
         raise ValueError(policy)
     if count > len(labels):
         raise ValueError('Label budget exceeds the target training split')
-    generator = np.random.default_rng(seed + 5000)
     class_order = generator.permutation(classes)
     pools = [generator.permutation(np.flatnonzero(labels == label)) for label in class_order]
     chosen = []

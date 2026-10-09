@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --account=aip-boyuwang
+#SBATCH --account=aip-yiweilu
 #SBATCH --job-name=cifar_bench_tables
 #SBATCH --time=0-00:05:00
 #SBATCH --ntasks=1

@@ -1,0 +1,35 @@
+{
+  "config": {
+    "percentage": 2,
+    "label_percentage": 1,
+    "model": "ConvNet",
+    "ssl_method": "simclr",
+    "runs": 5,
+    "seed": 0,
+    "data_path": "/scratch/mmoslem3/data",
+    "synthetic_root": "/home/mmoslem3/scratch/MKDT/benchmarks/ours/batch_20261008T195254Z_EkW378/yiweilu_mCLPIh/synthetic",
+    "save_path": null,
+    "ssl_epochs": 3000,
+    "probe_epochs": 200,
+    "batch_size": 256,
+    "lr_ssl": 0.01,
+    "lr_probe": 0.1,
+    "momentum": 0.9,
+    "weight_decay": 0.0005,
+    "temperature": 0.2,
+    "barlow_lambda": 0.005,
+    "projection_dim": 128,
+    "augmentation": "color_crop_cutout_flip_scale_rotate",
+    "augmentation_mode": "S",
+    "synthetic_checkpoint": "/home/mmoslem3/scratch/MKDT/benchmarks/ours/batch_20261008T195254Z_EkW378/yiweilu_mCLPIh/synthetic/size2/res_IIC_CIFAR10_ConvNet_2percent.pt",
+    "std_ddof": 1
+  },
+  "completed_runs": 1,
+  "expected_runs": 5,
+  "complete": false,
+  "accuracies_percent": [
+    40.80999791622162
+  ],
+  "mean_percent": 40.80999791622162,
+  "std_percent": null
+}

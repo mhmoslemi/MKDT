@@ -50,7 +50,7 @@ else
     DOWNSTREAM_RUN_ROOT=$(mktemp -d "$PROJECT_ROOT/benchmarks/downstream/results/batch_$(date -u +%Y%m%dT%H%M%SZ)_XXXXXX")
     DOWNSTREAM_CODE_ROOT="$DOWNSTREAM_RUN_ROOT/code"
     mkdir -p "$DOWNSTREAM_RUN_ROOT/logs" "$DOWNSTREAM_CODE_ROOT/OT-SSL-DD" "$DOWNSTREAM_CODE_ROOT/benchmarks/downstream"
-    cp OT-SSL-DD/utils.py OT-SSL-DD/networks.py "$DOWNSTREAM_CODE_ROOT/OT-SSL-DD/"
+    cp OT-SSL-DD/utils.py OT-SSL-DD/networks.py OT-SSL-DD/training_epochs.json "$DOWNSTREAM_CODE_ROOT/OT-SSL-DD/"
     cp benchmarks/benchmark_downstream.py benchmarks/downstream_data.py benchmarks/benchmark_cifar10.py "$DOWNSTREAM_CODE_ROOT/benchmarks/"
     cp benchmarks/downstream/report.py benchmarks/downstream/configs.tsv benchmarks/downstream/pretraining.tsv benchmarks/downstream/protocol.txt benchmarks/downstream/data_layout.txt "$DOWNSTREAM_CODE_ROOT/benchmarks/downstream/"
     cp benchmarks/res.tex "$DOWNSTREAM_RUN_ROOT/res_template.tex"
@@ -64,7 +64,7 @@ dry_id=900000
 submit() {
     local script=$1
     shift
-    local args=(sbatch --parsable --chdir="$PROJECT_ROOT" --output="$DOWNSTREAM_RUN_ROOT/logs/%x-%j.out" "$@")
+    local args=(sbatch --parsable --account=aip-boyuwang --chdir="$PROJECT_ROOT" --output="$DOWNSTREAM_RUN_ROOT/logs/%x-%j.out" "$@")
     if (( dry_run )); then
         printf '%q ' "${args[@]}" >&2
         printf '%s\n' "$script" >&2
@@ -110,4 +110,6 @@ while IFS=$'\t' read -r config target model ssl method size labels encoder epoch
 done < benchmarks/downstream/configs.tsv
 dependency=$(IFS=:; echo "${evaluation_ids[*]}")
 submit "$PROJECT_ROOT/benchmarks/downstream/report.sh" --dependency="afterany:$dependency"
-printf '%s downstream configurations x 15 runs, 42 shared source jobs, and preparation/report jobs.\nResults: %s\n' "${#evaluation_ids[@]}" "$DOWNSTREAM_RUN_ROOT"
+runs=$(awk -F'\t' 'NR==1 {for (i=1;i<=NF;i++) if ($i=="runs") c=i; next} NR==2 {print $c; exit}' benchmarks/downstream/configs.tsv)
+source_count=$(awk 'END {print NR-1}' benchmarks/downstream/pretraining.tsv)
+printf '%s downstream configurations x %s runs, %s shared source jobs, and preparation/report jobs.\nResults: %s\n' "${#evaluation_ids[@]}" "$runs" "$source_count" "$DOWNSTREAM_RUN_ROOT"

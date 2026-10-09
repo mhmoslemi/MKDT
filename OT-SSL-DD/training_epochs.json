@@ -1,23 +1,25 @@
 {
-  "protocol": "v2_epochs",
-  "runs_per_configuration": 15,
+  "protocol": "v3_random_labels_barlow2x",
+  "runs_per_configuration": 10,
+  "label_selection": "uniform_random_without_replacement",
   "no_pretraining_protocol": "frozen_random_encoder_with_SGD_linear_probe",
   "pretraining": {
     "source_dataset": "CIFAR10",
     "ssl_methods": ["simclr", "barlowtwins"],
     "models": ["ConvNet", "VGG11", "ResNet18"],
-    "random_subset_epochs_by_data_percentage": {"1": 1200, "2": 800, "5": 500},
-    "kmeans_subset_epochs_by_data_percentage": {"1": 1200, "2": 800, "5": 500},
+    "barlowtwins_epoch_multiplier": 2,
+    "random_subset_epochs_by_data_percentage": {"1": 5000, "2": 4000, "5": 3000},
+    "kmeans_subset_epochs_by_data_percentage": {"1": 5000, "2": 4000, "5": 3000},
     "full_data_epochs_by_data_percentage": {"100": 300}
   },
   "evaluation_by_dataset": {
-    "CIFAR10": {"linear_probe_epochs_by_label_percentage": {"1": 200, "5": 100}, "no_pretraining_linear_probe_epochs_by_label_percentage": {"1": 200, "5": 100}},
-    "CIFAR100": {"linear_probe_epochs_by_label_percentage": {"1": 200, "5": 100}, "no_pretraining_linear_probe_epochs_by_label_percentage": {"1": 200, "5": 100}},
-    "Aircraft": {"linear_probe_epochs_by_label_percentage": {"1": 200, "5": 100}, "no_pretraining_linear_probe_epochs_by_label_percentage": {"1": 200, "5": 100}},
-    "CUB2011": {"linear_probe_epochs_by_label_percentage": {"1": 200, "5": 100}, "no_pretraining_linear_probe_epochs_by_label_percentage": {"1": 200, "5": 100}},
-    "Dogs": {"linear_probe_epochs_by_label_percentage": {"1": 200, "5": 100}, "no_pretraining_linear_probe_epochs_by_label_percentage": {"1": 200, "5": 100}},
-    "Flowers": {"linear_probe_epochs_by_label_percentage": {"1": 200, "5": 100}, "no_pretraining_linear_probe_epochs_by_label_percentage": {"1": 200, "5": 100}},
-    "TinyImageNet": {"linear_probe_epochs_by_label_percentage": {"1": 200, "5": 100}, "no_pretraining_linear_probe_epochs_by_label_percentage": {"1": 200, "5": 100}}
+    "CIFAR10": {"linear_probe_epochs_by_label_percentage": {"1": 500, "5": 300}, "no_pretraining_linear_probe_epochs_by_label_percentage": {"1": 500, "5": 300}},
+    "CIFAR100": {"linear_probe_epochs_by_label_percentage": {"1": 500, "5": 300}, "no_pretraining_linear_probe_epochs_by_label_percentage": {"1": 500, "5": 300}},
+    "Aircraft": {"linear_probe_epochs_by_label_percentage": {"1": 500, "5": 300}, "no_pretraining_linear_probe_epochs_by_label_percentage": {"1": 500, "5": 300}},
+    "CUB2011": {"linear_probe_epochs_by_label_percentage": {"1": 500, "5": 300}, "no_pretraining_linear_probe_epochs_by_label_percentage": {"1": 500, "5": 300}},
+    "Dogs": {"linear_probe_epochs_by_label_percentage": {"1": 500, "5": 300}, "no_pretraining_linear_probe_epochs_by_label_percentage": {"1": 500, "5": 300}},
+    "Flowers": {"linear_probe_epochs_by_label_percentage": {"1": 500, "5": 300}, "no_pretraining_linear_probe_epochs_by_label_percentage": {"1": 500, "5": 300}},
+    "TinyImageNet": {"linear_probe_epochs_by_label_percentage": {"1": 500, "5": 300}, "no_pretraining_linear_probe_epochs_by_label_percentage": {"1": 500, "5": 300}}
   },
   "downstream_pretraining_source": "CIFAR10; downstream datasets supply labeled evaluation data, not SSL pretraining data",
   "budget_type": "fixed_epochs_without_update_matching",

@@ -1,4 +1,4 @@
-"""Build the requested table panels, counting only complete 15-seed configurations."""
+"""Build table panels, counting only complete configurations."""
 
 import argparse
 import csv
@@ -22,12 +22,13 @@ def render(results, output):
         if len(candidates) > 1:
             raise ValueError(f'Multiple submissions for {config["config_id"]}; select one before reporting.')
         summary = json.loads(candidates[0].read_text()) if candidates else None
-        complete = bool(summary and summary['complete'] and summary['completed_runs'] == 15 and len(set(summary['seeds'])) == 15)
+        expected = int(config['runs'])
+        complete = bool(summary and summary['complete'] and summary['completed_runs'] == expected and summary['expected_runs'] == expected and sorted(set(summary['seeds'])) == list(range(expected)))
         key = (config['model'], config['ssl_method'], config['method'], int(config['subset_percentage']), int(config['label_percentage']))
         if complete:
             text = f'{summary["mean_percent"]:.2f} ± {summary["std_percent"]:.2f}'
         elif summary:
-            text = f'Incomplete ({summary["completed_runs"]}/15)'
+            text = f'Incomplete ({summary["completed_runs"]}/{expected})'
         else:
             text = '—'
         available[key] = text

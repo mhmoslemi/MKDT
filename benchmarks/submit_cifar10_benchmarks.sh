@@ -25,7 +25,7 @@ else
     cp benchmarks/cifar10/configs.tsv "$BENCH_RUN_ROOT/configs.tsv"
     BENCH_CODE_ROOT="$BENCH_RUN_ROOT/code"
     mkdir -p "$BENCH_CODE_ROOT/OT-SSL-DD" "$BENCH_CODE_ROOT/benchmarks/cifar10"
-    cp OT-SSL-DD/utils.py OT-SSL-DD/networks.py "$BENCH_CODE_ROOT/OT-SSL-DD/"
+    cp OT-SSL-DD/utils.py OT-SSL-DD/networks.py OT-SSL-DD/training_epochs.json "$BENCH_CODE_ROOT/OT-SSL-DD/"
     cp benchmarks/benchmark_cifar10.py "$BENCH_CODE_ROOT/benchmarks/"
     cp benchmarks/cifar10/report.py benchmarks/cifar10/configs.tsv "$BENCH_CODE_ROOT/benchmarks/cifar10/"
     tar -czf "$BENCH_RUN_ROOT/source.tar.gz" benchmarks/benchmark_cifar10.py OT-SSL-DD/utils.py OT-SSL-DD/networks.py benchmarks/cifar10/jobs.tar benchmarks/cifar10/environment.sh benchmarks/cifar10/report.py benchmarks/cifar10/protocol.txt
@@ -35,7 +35,7 @@ export SELECTION_DIR="$BENCH_RUN_ROOT/selections"
 submit() {
     local script=$1
     shift
-    local args=(sbatch --parsable --chdir="$PROJECT_ROOT" --output="$BENCH_RUN_ROOT/logs/%x-%j.out" "$@")
+    local args=(sbatch --parsable --account=aip-yiweilu --chdir="$PROJECT_ROOT" --output="$BENCH_RUN_ROOT/logs/%x-%j.out" "$@")
     if (( dry_run )); then
         printf '%q ' "${args[@]}" >&2
         printf '%s\n' "$script" >&2
@@ -63,4 +63,5 @@ for script in "${jobs[@]}"; do
 done
 dependency=$(IFS=:; echo "${ids[*]}")
 report_id=$(submit "$PROJECT_ROOT/benchmarks/cifar10/report.sh" --dependency="afterany:$dependency")
-printf '%s configurations × 15 runs, plus K-means preparation and a results-table job.\nResults: %s\n' "${#jobs[@]}" "$BENCH_RUN_ROOT"
+runs=$(awk -F'\t' 'NR==1 {for (i=1;i<=NF;i++) if ($i=="runs") c=i; next} NR==2 {print $c; exit}' benchmarks/cifar10/configs.tsv)
+printf '%s configurations × %s runs, plus K-means preparation and a results-table job.\nResults: %s\n' "${#jobs[@]}" "$runs" "$BENCH_RUN_ROOT"

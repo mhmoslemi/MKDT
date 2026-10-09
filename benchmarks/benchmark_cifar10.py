@@ -23,7 +23,7 @@ from utils import DiffAugment, ParamDiffAug, get_network
 STRATEGY = 'color_crop_cutout_flip_scale_rotate'
 SSL_EPOCHS = {1: 1200, 2: 800, 5: 500, 100: 300}
 PROBE_EPOCHS = {1: 200, 5: 100}
-PROTOCOL = 'cifar10_baselines_v2_epochs'
+PROTOCOL = 'cifar10_baselines_v3_random_labels_barlow2x'
 
 
 def seed_all(seed):
@@ -56,15 +56,11 @@ def load_data(root, device):
 
 
 def labeled_indices(labels, percentage, seed):
-    """Balanced, nested label subsets, paired across methods for a run seed."""
+    """Random nested label subsets, paired across methods for a run seed."""
     labels = np.asarray(labels)
     generator = np.random.default_rng(seed + 5000)
-    chosen = []
-    for label in np.unique(labels):
-        indices = np.flatnonzero(labels == label)
-        count = int(len(indices) * percentage / 100)
-        chosen.extend(generator.permutation(indices)[:count].tolist())
-    return np.asarray(chosen, dtype=np.int64)
+    count = max(1, int(len(labels) * percentage / 100))
+    return generator.permutation(len(labels))[:count].astype(np.int64, copy=False)
 
 
 @torch.no_grad()
@@ -129,7 +125,7 @@ def ssl_loss(z1, z2, method):
     return (diagonal - 1).square().sum() + 0.005 * (correlation - torch.diag(diagonal)).square().sum()
 
 
-def train_ssl(network, images, method, epochs, seed, max_steps=None):
+def train_ssl(network, images, method, epochs, seed, max_steps=None, log_every=None):
     seed_all(seed + 4000)
     dimension = network.embed(images[:1]).shape[1]
     projector = nn.Sequential(nn.Linear(dimension, 128), nn.ReLU(), nn.Linear(128, 128)).to(images.device)
@@ -158,7 +154,8 @@ def train_ssl(network, images, method, epochs, seed, max_steps=None):
             steps += 1
             if max_steps is not None and steps >= max_steps:
                 return steps
-        if (epoch + 1) % max(1, epochs // 4) == 0:
+        log_interval = log_every if log_every else max(1, epochs // 4)
+        if (epoch + 1) % log_interval == 0 or epoch + 1 == epochs:
             print(f'SSL epoch={epoch + 1}/{epochs} loss={loss.item():.6f}', flush=True)
     return steps
 
@@ -246,6 +243,7 @@ def benchmark(args):
     output.mkdir(parents=True, exist_ok=False)
     settings = vars(args).copy()
     settings.update(protocol=PROTOCOL, ssl_aug_strategy=STRATEGY, ssl_aug_mode='S',
+                    label_selection='uniform_random_without_replacement',
                     temperature=0.2, batch_size=256, std_ddof=1,
                     no_pretrain_protocol='frozen_random_encoder',
                     kmeans_features='random_ConvNet')
@@ -278,7 +276,7 @@ def benchmark(args):
                 if len(set(subset_indices)) != expected or min(subset_indices) < 0 or max(subset_indices) >= len(train):
                     raise ValueError('Invalid subset size or indices')
                 source = train[torch.tensor(subset_indices, device=args.device)]
-            ssl_steps = train_ssl(network, source, args.ssl_method, args.ssl_epochs, seed)
+            ssl_steps = train_ssl(network, source, args.ssl_method, args.ssl_epochs, seed, log_every=args.ssl_log_every)
             accuracy = linear_probe(network, train[labeled], labels[labeled], test, test_labels, args.probe_epochs, seed)
             del source
         record = dict(seed=seed, accuracy_percent=accuracy, seconds=time.perf_counter() - started,
@@ -351,10 +349,13 @@ def main():
     parser.add_argument('--runs', type=int, default=15)
     parser.add_argument('--seed-start', type=int, default=0)
     parser.add_argument('--ssl-epochs', type=int)
+    parser.add_argument('--ssl-log-every', type=int, default=0, help='Print SSL loss every N epochs; 0 prints four times per run')
     parser.add_argument('--probe-epochs', type=int)
     args = parser.parse_args()
     if args.runs < 1:
         parser.error('--runs must be positive')
+    if args.ssl_log_every < 0:
+        parser.error('--ssl-log-every must be nonnegative')
     args.ssl_epochs = args.ssl_epochs if args.ssl_epochs is not None else SSL_EPOCHS.get(args.subset_percentage, 0)
     args.probe_epochs = args.probe_epochs if args.probe_epochs is not None else PROBE_EPOCHS[args.label_percentage]
     if args.command == 'run':
