@@ -1,0 +1,53 @@
+{
+  "config": {
+    "command": "run",
+    "dataset": "CIFAR100",
+    "target_cache": "/scratch/mmoslem3/MKDT/benchmarks/downstream/results/batch_20261009T043709Z_zC8EPD/targets/CIFAR100.pt",
+    "output": "/scratch/mmoslem3/MKDT/benchmarks/cifar100/results/batch_20261009T163141Z_eMeTVJ/ConvNet_barlowtwins_random_size2_lbl5/job_1421511",
+    "selection_dir": "/scratch/mmoslem3/MKDT/benchmarks/cifar100/results/batch_20261009T163141Z_eMeTVJ/selections",
+    "device": "cuda",
+    "method": "random",
+    "model": "ConvNet",
+    "ssl_method": "barlowtwins",
+    "subset_percentage": 2,
+    "label_percentage": 5,
+    "runs": 10,
+    "seed_start": 0,
+    "ssl_epochs": 8000,
+    "probe_epochs": 300,
+    "ssl_log_every": 0,
+    "protocol": "main_datasets_v1_random_labels_barlow2x",
+    "label_selection": "uniform_random_without_replacement",
+    "temperature": 0.2,
+    "batch_size": 256,
+    "std_ddof": 1,
+    "no_pretrain_protocol": "frozen_random_encoder",
+    "ssl_aug_strategy": "color_crop_cutout_flip_scale_rotate",
+    "ssl_aug_mode": "S"
+  },
+  "completed_runs": 8,
+  "expected_runs": 10,
+  "complete": false,
+  "mean_percent": 20.933749340474606,
+  "std_percent": 0.7070652264189236,
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+  ],
+  "accuracies_percent": [
+    20.739999413490295,
+    21.42999917268753,
+    20.69999873638153,
+    21.050000190734863,
+    19.759999215602875,
+    20.469999313354492,
+    22.15999960899353,
+    21.159999072551727
+  ]
+}

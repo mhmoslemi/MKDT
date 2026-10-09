@@ -97,7 +97,7 @@ def render(dataset, scores, runs):
         if block_index == 0:
             lines += ['', '\\midrule', '']
     lines += ['', '\\bottomrule', '\\end{tabular}%', '}', '\\end{table*}', '']
-    return '\n'.join(lines)
+    return '\n'.join(line.rstrip() for line in lines)
 
 
 def main():

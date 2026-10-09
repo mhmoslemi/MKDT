@@ -123,7 +123,7 @@ def render(source, scores, runs=10):
         if block == 0:
             lines.extend(['', '\\midrule', ''])
     lines.extend(['', '\\bottomrule', '\\end{tabular}%', '}', '\\end{table*}', ''])
-    return '\n'.join(lines)
+    return '\n'.join(line.rstrip() for line in lines)
 
 
 def main():
