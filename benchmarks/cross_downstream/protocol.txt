@@ -1,0 +1,9 @@
+ResNet18 cross-dataset transfer benchmark (10 runs).
+Sources: CIFAR-100 and Tiny ImageNet.
+Each source is evaluated on the other source, CIFAR-10, Aircraft, CUB-2011, Dogs, and Flowers.
+SSL: SimCLR and Barlow Twins. Methods: random subset, K-means subset, and full data.
+Label budgets: 1% and 5%, uniform random without replacement. Frozen linear probes.
+Epoch budgets come from OT-SSL-DD/training_epochs.json.
+One L40S, one CPU, and 4 GB host RAM per GPU job. Evaluation targets are bundled by encoder.
+GPU jobs: 51 Wang, 6 Lu (10.53% Lu).
+Longest estimate: tinyimagenet_ResNet18_barlowtwins_random_size5 at 1203.1 minutes (requested 0-23:10:00).
