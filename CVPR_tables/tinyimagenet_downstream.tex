@@ -1,0 +1,111 @@
+\begin{table*}[t]
+\centering
+\def\dsacc#1#2{$#1${\footnotesize$\pm #2$}}
+\caption{Transfer accuracy (\%) on six downstream datasets using ResNet18 representations pretrained on Tiny ImageNet. Results are mean $\pm$ sample standard deviation over 10 independent runs. SimCLR and Barlow Twins (BT) use frozen linear probes; No Pre-Training uses a random encoder. PT denotes pretraining subset size. Empty entries indicate unavailable results.}
+\label{tab:tinyimagenet-downstream-resnet18}
+
+\setlength{\tabcolsep}{2pt}
+\renewcommand{\arraystretch}{1.1}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{@{}D{7mm}D{8mm}l*{12}{c}@{}}
+\toprule
+\multirow{2}{*}{\shortstack{Labeled\\(\%)}}
+& \multirow{2}{*}{\shortstack{PT\\(\%)}}
+& \multirow{2}{*}{Method}
+& \multicolumn{2}{c}{CIFAR-10}
+& \multicolumn{2}{c}{CIFAR-100}
+& \multicolumn{2}{c}{Aircraft}
+& \multicolumn{2}{c}{CUB-2011}
+& \multicolumn{2}{c}{Dogs}
+& \multicolumn{2}{c}{Flowers} \\
+\cmidrule(lr){4-5} \cmidrule(lr){6-7} \cmidrule(lr){8-9}
+\cmidrule(lr){10-11} \cmidrule(lr){12-13} \cmidrule(l){14-15}
+& & & SimCLR & BT & SimCLR & BT & SimCLR & BT & SimCLR & BT & SimCLR & BT & SimCLR & BT \\
+\midrule
+
+\multirow{17}{*}{1\%}
+& -- & No Pre-Training
+& \multicolumn{2}{c}{\dsacc{16.85}{0.66}}
+& \multicolumn{2}{c}{\dsacc{1.68}{0.16}}
+& \multicolumn{2}{c}{\dsacc{1.22}{0.17}}
+& \multicolumn{2}{c}{\dsacc{0.54}{0.12}}
+& \multicolumn{2}{c}{\dsacc{0.92}{0.14}}
+& \multicolumn{2}{c}{\dsacc{0.93}{0.36}} \\
+\cmidrule(lr){2-15}
+
+& 100\% & Full Data
+&  &  &  &  &  &  &  &  &  &  &  &  \\
+\cmidrule(lr){2-15}
+
+& \multirow{5}{*}{1\%} & Random Subset
+&  &  &  &  &  &  &  &  &  &  &  &  \\
+& & K-means Subset
+&  &  &  &  &  &  &  &  &  &  &  &  \\
+& & KRR-ST & \multicolumn{12}{c}{} \\
+& & MKDT & \multicolumn{12}{c}{} \\
+& & Ours & \multicolumn{12}{c}{} \\
+\cmidrule(lr){2-15}
+
+& \multirow{5}{*}{2\%} & Random Subset
+&  &  &  &  &  &  &  &  &  &  &  &  \\
+& & K-means Subset
+&  &  &  &  &  &  &  &  &  &  &  &  \\
+& & KRR-ST & \multicolumn{12}{c}{} \\
+& & MKDT & \multicolumn{12}{c}{} \\
+& & Ours & \multicolumn{12}{c}{} \\
+\cmidrule(lr){2-15}
+
+& \multirow{5}{*}{5\%} & Random Subset
+&  &  &  &  &  &  &  &  &  &  &  &  \\
+& & K-means Subset
+&  &  &  &  &  &  &  &  &  &  &  &  \\
+& & KRR-ST & \multicolumn{12}{c}{} \\
+& & MKDT & \multicolumn{12}{c}{} \\
+& & Ours & \multicolumn{12}{c}{} \\
+
+\midrule
+
+\multirow{17}{*}{5\%}
+& -- & No Pre-Training
+& \multicolumn{2}{c}{\dsacc{20.55}{0.72}}
+& \multicolumn{2}{c}{\dsacc{2.87}{0.32}}
+& \multicolumn{2}{c}{\dsacc{1.46}{0.31}}
+& \multicolumn{2}{c}{\dsacc{0.61}{0.06}}
+& \multicolumn{2}{c}{\dsacc{0.92}{0.12}}
+& \multicolumn{2}{c}{\dsacc{1.23}{0.42}} \\
+\cmidrule(lr){2-15}
+
+& 100\% & Full Data
+&  &  &  &  &  &  &  &  &  &  &  &  \\
+\cmidrule(lr){2-15}
+
+& \multirow{5}{*}{1\%} & Random Subset
+&  &  &  &  &  &  &  &  &  &  &  &  \\
+& & K-means Subset
+&  &  &  &  &  &  &  &  &  &  &  &  \\
+& & KRR-ST & \multicolumn{12}{c}{} \\
+& & MKDT & \multicolumn{12}{c}{} \\
+& & Ours & \multicolumn{12}{c}{} \\
+\cmidrule(lr){2-15}
+
+& \multirow{5}{*}{2\%} & Random Subset
+&  &  &  &  &  &  &  &  &  &  &  &  \\
+& & K-means Subset
+&  &  &  &  &  &  &  &  &  &  &  &  \\
+& & KRR-ST & \multicolumn{12}{c}{} \\
+& & MKDT & \multicolumn{12}{c}{} \\
+& & Ours & \multicolumn{12}{c}{} \\
+\cmidrule(lr){2-15}
+
+& \multirow{5}{*}{5\%} & Random Subset
+&  &  &  &  &  &  &  &  &  &  &  &  \\
+& & K-means Subset
+&  &  &  &  &  &  &  &  &  &  &  &  \\
+& & KRR-ST & \multicolumn{12}{c}{} \\
+& & MKDT & \multicolumn{12}{c}{} \\
+& & Ours & \multicolumn{12}{c}{} \\
+
+\bottomrule
+\end{tabular}%
+}
+\end{table*}

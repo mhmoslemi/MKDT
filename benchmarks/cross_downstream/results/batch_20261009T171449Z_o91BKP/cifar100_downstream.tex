@@ -1,8 +1,8 @@
 \begin{table*}[t]
 \centering
 \def\dsacc#1#2{$#1${\footnotesize$\pm #2$}}
-\caption{Transfer accuracy (\%) on six downstream datasets using ResNet18 representations pretrained on Tiny ImageNet. Results are mean $\pm$ sample standard deviation over 10 independent runs. SimCLR and Barlow Twins (BT) use frozen linear probes; No Pre-Training uses a random encoder. PT denotes pretraining subset size. Empty entries indicate unavailable results.}
-\label{tab:tinyimagenet-downstream-resnet18}
+\caption{Transfer accuracy (\%) on six downstream datasets using ResNet18 representations pretrained on CIFAR-100. Results are mean $\pm$ sample standard deviation over 10 independent runs. SimCLR and Barlow Twins (BT) use frozen linear probes; No Pre-Training uses a random encoder. PT denotes pretraining subset size. Empty entries indicate unavailable results.}
+\label{tab:cifar100-downstream-resnet18}
 
 \setlength{\tabcolsep}{2pt}
 \renewcommand{\arraystretch}{1.1}
@@ -12,8 +12,8 @@
 \multirow{2}{*}{\shortstack{Labeled\\(\%)}}
 & \multirow{2}{*}{\shortstack{PT\\(\%)}}
 & \multirow{2}{*}{Method}
+& \multicolumn{2}{c}{Tiny ImageNet}
 & \multicolumn{2}{c}{CIFAR-10}
-& \multicolumn{2}{c}{CIFAR-100}
 & \multicolumn{2}{c}{Aircraft}
 & \multicolumn{2}{c}{CUB-2011}
 & \multicolumn{2}{c}{Dogs}
@@ -25,12 +25,12 @@
 
 \multirow{17}{*}{1\%}
 & -- & No Pre-Training
-& \multicolumn{2}{c}{}
-& \multicolumn{2}{c}{}
-& \multicolumn{2}{c}{}
-& \multicolumn{2}{c}{}
-& \multicolumn{2}{c}{}
-& \multicolumn{2}{c}{} \\
+& \multicolumn{2}{c}{\dsacc{0.64}{0.07}}
+& \multicolumn{2}{c}{\dsacc{16.85}{0.66}}
+& \multicolumn{2}{c}{\dsacc{1.22}{0.17}}
+& \multicolumn{2}{c}{\dsacc{0.54}{0.12}}
+& \multicolumn{2}{c}{\dsacc{0.92}{0.14}}
+& \multicolumn{2}{c}{\dsacc{0.93}{0.36}} \\
 \cmidrule(lr){2-15}
 
 & 100\% & Full Data
@@ -67,12 +67,12 @@
 
 \multirow{17}{*}{5\%}
 & -- & No Pre-Training
-& \multicolumn{2}{c}{}
-& \multicolumn{2}{c}{}
-& \multicolumn{2}{c}{}
-& \multicolumn{2}{c}{}
-& \multicolumn{2}{c}{}
-& \multicolumn{2}{c}{} \\
+& \multicolumn{2}{c}{\dsacc{0.88}{0.11}}
+& \multicolumn{2}{c}{\dsacc{20.55}{0.72}}
+& \multicolumn{2}{c}{\dsacc{1.46}{0.31}}
+& \multicolumn{2}{c}{\dsacc{0.61}{0.06}}
+& \multicolumn{2}{c}{\dsacc{0.92}{0.12}}
+& \multicolumn{2}{c}{\dsacc{1.23}{0.42}} \\
 \cmidrule(lr){2-15}
 
 & 100\% & Full Data

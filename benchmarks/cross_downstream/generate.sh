@@ -13,7 +13,7 @@ cd "${SLURM_SUBMIT_DIR:?Submit from the MKDT project directory}"
 module load StdEnv/2023 python/3.11.5
 export PYTHONDONTWRITEBYTECODE=1
 python3 benchmarks/cross_downstream/make_jobs.py
-python3 benchmarks/cross_downstream/report.py --empty --output-dir "$SLURM_SUBMIT_DIR"
+python3 benchmarks/cross_downstream/report.py --empty --output-dir "$SLURM_SUBMIT_DIR/CVPR_tables"
 python3 - <<'PY'
 import ast
 from pathlib import Path
