@@ -1,0 +1,156 @@
+
+
+\begin{table*}[t]
+\centering
+\def\dsacc#1#2{$#1${\footnotesize$\pm #2$}}
+\caption{Consolidated Tiny ImageNet accuracy (\%) across backbones,
+pretraining objectives, and subset sizes. Results are reported as
+mean $\pm$ sample standard deviation over 10 independent runs.
+All methods use frozen linear probes; No Pre-Training uses
+a random encoder.}
+\label{tab:tinyimagenet-all}
+
+\setlength{\tabcolsep}{3pt}
+\renewcommand{\arraystretch}{1}
+\resizebox{0.8\textwidth}{!}{%
+\begin{tabular}{@{}cclcccccc@{}}
+\toprule
+\multirow{2}{*}{\shortstack{Labeled data\\(\%)}}
+& \multirow{2}{*}{\shortstack{Pretraining subset\\(\%)}}
+& \multirow{2}{*}{Method}
+& \multicolumn{2}{c}{ConvNet}
+& \multicolumn{2}{c}{VGG11}
+& \multicolumn{2}{c}{ResNet18} \\
+\cmidrule(lr){4-5} \cmidrule(lr){6-7} \cmidrule(l){8-9}
+& & & SimCLR & Barlow Twins
+& SimCLR & Barlow Twins
+& SimCLR & Barlow Twins \\
+\midrule
+
+\multirow{17}{*}{1\%}
+& -- & No Pre-Training
+& \multicolumn{2}{c}{}
+& \multicolumn{2}{c}{}
+& \multicolumn{2}{c}{} \\
+\cmidrule(lr){2-9}
+
+& 100\% & Full Data
+&  & 
+&  & 
+&  &  \\
+\cmidrule(lr){2-9}
+
+& \multirow{5}{*}{1\%} & Random Subset
+&  & 
+&  & 
+&  &  \\
+& & K-means Subset
+&  & 
+&  & 
+&  &  \\
+& & KRR-ST & & & & & & \\
+& & MKDT & & & & & & \\
+& & Ours
+& &
+& &
+& & \\
+\cmidrule(lr){2-9}
+
+& \multirow{5}{*}{2\%} & Random Subset
+&  & 
+&  & 
+&  &  \\
+& & K-means Subset
+&  & 
+&  & 
+&  &  \\
+& & KRR-ST & & & & & & \\
+& & MKDT & & & & & & \\
+& & Ours
+& &
+& &
+&  &  \\
+\cmidrule(lr){2-9}
+
+& \multirow{5}{*}{5\%} & Random Subset
+&  & 
+&  & 
+&  &  \\
+& & K-means Subset
+&  & 
+&  & 
+&  &  \\
+& & KRR-ST & & & & & & \\
+& & MKDT & & & & & & \\
+& & Ours
+& &
+& &
+&  &  \\
+
+\midrule
+
+\multirow{17}{*}{5\%}
+& -- & No Pre-Training
+& \multicolumn{2}{c}{}
+& \multicolumn{2}{c}{}
+& \multicolumn{2}{c}{} \\
+\cmidrule(lr){2-9}
+
+& 100\% & Full Data
+&  & 
+&  & 
+&  &  \\
+\cmidrule(lr){2-9}
+
+& \multirow{5}{*}{1\%} & Random Subset
+&  & 
+&  & 
+&  &  \\
+& & K-means Subset
+&  & 
+&  & 
+&  &  \\
+& & KRR-ST & & & & & & \\
+& & MKDT & & & & & & \\
+& & Ours
+& &
+& &
+& & \\
+\cmidrule(lr){2-9}
+
+& \multirow{5}{*}{2\%} & Random Subset
+&  & 
+&  & 
+&  &  \\
+& & K-means Subset
+&  & 
+&  & 
+&  &  \\
+& & KRR-ST & & & & & & \\
+& & MKDT & & & & & & \\
+& & Ours
+& &
+& &
+&  &  \\
+\cmidrule(lr){2-9}
+
+& \multirow{5}{*}{5\%} & Random Subset
+&  & 
+&  & 
+&  &  \\
+& & K-means Subset
+&  & 
+&  & 
+&  &  \\
+& & KRR-ST & & & & & & \\
+& & MKDT & & & & & & \\
+& & Ours
+&  & 
+& &
+&  &  \\
+
+\bottomrule
+\end{tabular}%
+}
+\end{table*}
+

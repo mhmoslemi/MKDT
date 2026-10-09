@@ -1,0 +1,10 @@
+CIFAR100 same-dataset main benchmark (10 runs).
+Models: ConvNet, VGG11, ResNet18. SSL: SimCLR, Barlow Twins.
+Methods: no pretraining, random subset, K-means subset, full data.
+Label budgets: 1% and 5%, uniform random without replacement.
+Frozen linear probes; source and evaluation dataset are identical.
+Epoch budgets come from OT-SSL-DD/training_epochs.json.
+One L40S, one CPU, and 4 GB host RAM per configuration.
+Walltimes use measured L40S step timings plus a 15% safety margin.
+Accounts: 72 Wang, 18 Lu.
+Longest estimate: ResNet18_barlowtwins_random_size5_lbl5 at 602.6 minutes (requested 0-11:40:00).
