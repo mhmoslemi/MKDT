@@ -1,0 +1,45 @@
+CIFAR-10 to downstream datasets (cifar10_to_downstream_v3_random_labels_barlow2x)
+
+Targets: CIFAR100, Aircraft, CUB2011, Dogs, Flowers, TinyImageNet.
+Source: CIFAR10 only. Models: ConvNet, VGG11, ResNet18. SSL: SimCLR, Barlow Twins.
+Methods: no pretraining, random subset, K-means subset. Full data is excluded.
+Each evaluation configuration has 10 independent runs, seeds 0..9.
+
+Source SimCLR epochs: 1%=5000; 2%=4000; 5%=3000.
+Source Barlow Twins epochs: 1%=10000; 2%=8000; 5%=6000.
+Linear probe epochs (including no-pretraining): 1% labels=500; 5% labels=300.
+Label budgets use uniform random samples without replacement at exact percentages.
+There is no update matching. Pretrained encoders stay frozen during probing.
+No-pretraining freezes a random encoder and trains only its linear classifier.
+Tiny ImageNet is a downstream target, with no SSL pretraining on Tiny images.
+
+Batch=256; SGD momentum=0.9; weight decay=0.0005; LR drops 10x halfway.
+SSL/supervised LR=0.01; linear-probe LR=0.1; projection dimension=128.
+SimCLR temperature=0.2; Barlow Twins lambda=0.005.
+SSL augmentation=color_crop_cutout_flip_scale_rotate, mode S.
+Target images use 32x32 RGB, LANCZOS resizing, and dataset normalization.
+Tiny ImageNet uses the provided training tensors and held-out validation tensors.
+Final evaluation only; report mean and sample standard deviation over 10 runs.
+
+468 evaluation jobs (432 frozen probes, 36 random-encoder baselines).
+36 shared source-pretraining jobs, 6 target-packing jobs, 1 selection job,
+1 preflight job, and 1 reporting job: 513 jobs in total.
+Source encoders are saved once per configuration/seed and shared across targets.
+The current CIFAR-10 batch supplies compatible K-means selections, not trained weights.
+
+Source/evaluation jobs request 15 GB and one L40S. Target packing uses CPUs.
+Walltimes use measured per-step timings plus one hour, rounded up to five minutes.
+Exact epoch budgets and walltimes are in configs.tsv and pretraining.tsv.
+Generated job scripts are stored in jobs.tar; submission creates a fresh batch.
+
+Results: benchmarks/downstream/results/batch_<timestamp>_<suffix>/
+  logs/                         Slurm logs with job IDs
+  targets/                      prepared target tensors
+  encoders/<source_config>/     10 encoder checkpoints
+  evaluations/<config>/job_*/    configuration, per-seed scores, summary
+  tables.csv                    aggregate scores and completion status
+  res.tex                       CIFAR-10 table plus a table per downstream dataset
+Only completed 10-run configurations fill cells. KRR-ST, MKDT, and Ours stay empty.
+The project table benchmarks/res.tex is preserved.
+
+Submit: bash benchmarks/submit_downstream_benchmarks.sh

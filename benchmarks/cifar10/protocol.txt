@@ -1,0 +1,53 @@
+CIFAR-10 baseline benchmark (cifar10_baselines_v3_random_labels_barlow2x)
+
+78 configurations, each with 10 independent seeds (0..9) in one job:
+  72 subset configurations = 2 methods x 3 sizes x 2 SSL losses x 3 models x 2 label budgets.
+   6 no-pretraining configurations = 3 models x 2 label budgets.
+Full-data configurations are excluded from this batch.
+
+Methods:
+- No pretraining: freeze a freshly initialized random encoder and train a linear
+  classifier on the labeled data, using the same probe as pretrained methods.
+- Random: a uniformly sampled subset without replacement, resampled per run seed.
+- K-means: 50-iteration Lloyd clustering of features from a fresh random ConvNet
+  per run seed, matching the feature-source convention in mina_IF.py. Select the
+  nearest real images without replacement. This is not a pretrained encoder and
+  is not claimed to reproduce all details of the paper referenced in the image.
+
+SSL subset budgets (batch size 256):
+  SimCLR: 1%=5000, 2%=4000, 5%=3000 epochs.
+  Barlow Twins: 1%=10000, 2%=8000, 5%=6000 epochs.
+These are the user-specified epoch budgets; there is no update matching.
+
+Downstream labels and training:
+  1% = 500 randomly labeled images, 500 epochs.
+  5% = 2500 randomly labeled images, 300 epochs.
+Labeled subsets are uniform random samples without replacement, nested by percentage,
+and paired across methods for the same seed.
+All methods freeze the entire encoder before training a fresh linear head.
+Frozen deterministic features are cached in GPU memory to avoid re-encoding each
+linear epoch. No encoder parameters or normalization state are updated by probing.
+No pretraining uses the same probe epochs as pretrained methods.
+The test set is used only for final evaluation; there is no best-test-epoch selection.
+
+Models: ConvNet, VGG11, ResNet18 from this repository (instance/group normalization).
+SSL: SimCLR temperature 0.2 or Barlow Twins lambda 0.005; projection dimension 128.
+Augmentation: color_crop_cutout_flip_scale_rotate, mode S, fixed across all SSL runs.
+Optimizer: SGD, momentum 0.9, weight decay 0.0005; LR 0.01 SSL,
+0.1 linear probe. LR is reduced 10x halfway through each training stage.
+Each run reseeds subset selection, network initialization, training, and the probe.
+K-means selections are generated once per seed/size and shared across configs.
+Results report mean and sample standard deviation (ddof=1) over 10 complete runs.
+They do not pool partial repetitions or average best epochs.
+
+Resources: 1 L40S GPU, 1 CPU, 15 GB RAM per training/preparation job.
+Walltimes are derived from benchmarks/timing.json (measured on L40S), rounded up
+to five minutes, plus one hour. These are estimates, not guaranteed runtimes.
+Only the short profiling/validation jobs are run while preparing these scripts.
+
+Submit all: bash benchmarks/submit_cifar10_benchmarks.sh
+Preview:    bash benchmarks/submit_cifar10_benchmarks.sh --dry-run
+Every invocation creates a fresh batch directory. Slurm log names include job ID.
+Per-seed JSON files and progress summaries are written after each completed run.
+The dependent reporting job creates tables.md and tables.csv in the batch folder.
+Incomplete/failed configurations are marked incomplete, never reported as 10 runs.
