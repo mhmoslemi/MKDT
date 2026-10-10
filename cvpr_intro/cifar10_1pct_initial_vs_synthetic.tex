@@ -1,24 +1,34 @@
 % Requires \usepackage{graphicx} in the paper preamble.
 \begin{figure}[t]
   \centering
-  \def\introimagewidth{\dimexpr(\columnwidth-8pt)/5\relax}
-  \begin{tabular}{@{}c@{\hspace{2pt}}c@{\hspace{2pt}}c@{\hspace{2pt}}c@{\hspace{2pt}}c@{}}
-    \resizebox{\introimagewidth}{!}{\includegraphics{cvpr_intro/intro_img/automobile_orig.jpg}} &
+  % Manually adjust class-label size here: \fontsize{FONT_SIZE}{LINE_SPACING}.
+  \def\introclassfontsize{\fontsize{7pt}{7pt}\selectfont}
+  \def\introimagewidth{\dimexpr(\columnwidth-12pt)/7\relax}
+  \begin{tabular}{@{}c@{\hspace{2pt}}c@{\hspace{2pt}}c@{\hspace{2pt}}c@{\hspace{2pt}}c@{\hspace{2pt}}c@{\hspace{2pt}}c@{}}
+    \resizebox{\introimagewidth}{!}{\includegraphics{cvpr_intro/intro_img/dog_orig.jpg}} &
     \resizebox{\introimagewidth}{!}{\includegraphics{cvpr_intro/intro_img/airplane_orig.jpg}} &
     \resizebox{\introimagewidth}{!}{\includegraphics{cvpr_intro/intro_img/horse_orig.jpg}} &
-    \resizebox{\introimagewidth}{!}{\includegraphics{cvpr_intro/intro_img/dog_orig.jpg}} &
-    \resizebox{\introimagewidth}{!}{\includegraphics{cvpr_intro/intro_img/truck_orig.jpg}}
+    \resizebox{\introimagewidth}{!}{\includegraphics{cvpr_intro/intro_img/automobile_orig.jpg}} &
+    \resizebox{\introimagewidth}{!}{\includegraphics{cvpr_intro/intro_img/truck_orig.jpg}} &
+    \resizebox{\introimagewidth}{!}{\includegraphics{cvpr_intro/intro_img/bird_orig.jpg}} &
+    \resizebox{\introimagewidth}{!}{\includegraphics{cvpr_intro/intro_img/ship_orig.jpg}}
     \\
-    \noalign{\vskip 5pt}
-    \resizebox{\introimagewidth}{!}{\includegraphics{cvpr_intro/intro_img/automobile_syn.jpg}} &
+    \noalign{\vskip 0pt}
+    \resizebox{\introimagewidth}{!}{\includegraphics{cvpr_intro/intro_img/dog_syn.jpg}} &
     \resizebox{\introimagewidth}{!}{\includegraphics{cvpr_intro/intro_img/airplane_syn.jpg}} &
     \resizebox{\introimagewidth}{!}{\includegraphics{cvpr_intro/intro_img/horse_syn.jpg}} &
-    \resizebox{\introimagewidth}{!}{\includegraphics{cvpr_intro/intro_img/dog_syn.jpg}} &
-    \resizebox{\introimagewidth}{!}{\includegraphics{cvpr_intro/intro_img/truck_syn.jpg}}
+    \resizebox{\introimagewidth}{!}{\includegraphics{cvpr_intro/intro_img/automobile_syn.jpg}} &
+    \resizebox{\introimagewidth}{!}{\includegraphics{cvpr_intro/intro_img/truck_syn.jpg}} &
+    \resizebox{\introimagewidth}{!}{\includegraphics{cvpr_intro/intro_img/bird_syn.jpg}} &
+    \resizebox{\introimagewidth}{!}{\includegraphics{cvpr_intro/intro_img/ship_syn.jpg}}
     \\
-    \noalign{\vskip 2pt}
-    \textbf{Automobile} & \textbf{Airplane} & \textbf{Horse} & \textbf{Dog} & \textbf{Truck}
+    \noalign{\vskip 0pt}
+    {\introclassfontsize\textbf{Dog}} & {\introclassfontsize\textbf{Airplane}} &
+    {\introclassfontsize\textbf{Horse}} & {\introclassfontsize\textbf{Automobile}} &
+    {\introclassfontsize\textbf{Truck}} & {\introclassfontsize\textbf{Bird}} &
+    {\introclassfontsize\textbf{Ship}}
   \end{tabular}
+    \vspace{-0.6em}
   \caption{CIFAR-10 initialization images and their corresponding optimized synthetic images from the 1\% synthetic set. Each column shows one image pair, with initialization above and the resulting synthetic image below.}
   \label{fig:cifar10-initial-vs-synthetic}
 \end{figure}
