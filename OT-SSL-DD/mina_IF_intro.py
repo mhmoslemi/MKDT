@@ -10,6 +10,7 @@ import numpy as np
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
+from PIL import Image, ImageDraw
 from torchvision.utils import save_image
 
 from utils import DiffAugment, ParamDiffAug, evaluate_synset_SSL, get_dataset, get_eval_pool, get_network, get_time
@@ -132,7 +133,7 @@ def deepcluster_initialize(dst_train, num_syn, device, seed, channel, num_classe
     centers = features[indices].clone()
 
     # K-Means loop
-    for _ in range(50):
+    for _ in range(5):
         dists = torch.cdist(features, centers)
         assigns = dists.argmin(dim=1)
         new_centers = torch.stack([
@@ -201,7 +202,7 @@ def main():
     parser.add_argument('--seed', type=int, default=0)
 
     # Information-Theoretic Objective.
-    parser.add_argument('--Iteration', type=int, default=1000)
+    parser.add_argument('--Iteration', type=int, default=800)
     parser.add_argument('--lr_img', type=float, default=0.005, help='Higher LR, decays via CosineAnnealing')
     parser.add_argument('--batch_real', type=int, default=512, help='Slightly noisier batch prevents deep proxy minima')
     parser.add_argument('--num_random_networks', type=int, default=5, help='Fresh samples from P_net per pixel update')
@@ -210,7 +211,7 @@ def main():
     parser.add_argument('--random_models', default='ConvNet', help='Comma-separated P_net support; forces geometric generalization')
     parser.add_argument('--tv_weight', type=float, default=0.01, help='Total Variation penalty to destroy adversarial high-frequencies')
     parser.add_argument('--pixel_mse_weight', type=float, default=0.0, help='Nonnegative weight for mean pixel MSE to initialization in [0,1] units; 0 disables it')
-    parser.add_argument('--encoder_train_steps', type=int, default=20, help='SimCLR steps on the selected detached images before freezing each sampled encoder; 0 disables adaptation')
+    parser.add_argument('--encoder_train_steps', type=int, default=2, help='SimCLR steps on the selected detached images before freezing each sampled encoder; 0 disables adaptation')
     parser.add_argument('--encoder_train_data', choices=['synthetic', 'real'], default='synthetic', help='Images used for the sampled encoder SimCLR warm-up')
     parser.add_argument('--distill_aug_strategy', default='color_crop_cutout_flip_scale_rotate')
     parser.add_argument('--distill_aug_mode', choices=['S', 'M'], default='M')
@@ -408,6 +409,40 @@ def main():
             writer.writerow([synthetic_number, dataset_index, label, synthetic_name, original_name])
     print('Saved %d synthetic/original image pairs and source metadata to %s' %
           (num_syn, metadata_path), flush=True)
+
+    comparison_indices = []
+    seen_labels = set()
+    for image_index, label in enumerate(original_labels.tolist()):
+        if label not in seen_labels:
+            comparison_indices.append(image_index)
+            seen_labels.add(label)
+        if len(comparison_indices) == 5:
+            break
+    if len(comparison_indices) < 5:
+        raise RuntimeError('Cannot create the comparison image: fewer than 5 classes were selected.')
+
+    image_size = 128
+    caption_height = 24
+    comparison = Image.new('RGB', (5 * image_size, 2 * image_size + caption_height), 'white')
+    draw = ImageDraw.Draw(comparison)
+    for column, image_index in enumerate(comparison_indices):
+        image_number = image_index + 1
+        label = int(original_labels[image_index])
+        synthetic_path = os.path.join(args.save_path, '%d_%d.jpg' % (image_number, label))
+        original_path = os.path.join(args.save_path, '%d_%d_orig.jpg' % (image_number, label))
+        original_image = Image.open(original_path).convert('RGB').resize((image_size, image_size))
+        synthetic_image = Image.open(synthetic_path).convert('RGB').resize((image_size, image_size))
+        comparison.paste(original_image, (column * image_size, 0))
+        comparison.paste(synthetic_image, (column * image_size, image_size))
+        caption = 'Class %d' % label
+        caption_box = draw.textbbox((0, 0), caption)
+        caption_width = caption_box[2] - caption_box[0]
+        draw.text((column * image_size + (image_size - caption_width) // 2, 2 * image_size + 4),
+                  caption, fill='black')
+
+    comparison_path = os.path.join(args.save_path, 'comparison_5_classes.jpg')
+    comparison.save(comparison_path, quality=95)
+    print('Saved 5-class original/synthetic comparison to %s' % comparison_path, flush=True)
 
         # result_path = os.path.join(args.save_path, 'res_IIC_%s_%s_%gpercent.pt' % (args.dataset, args.model, args.percentage))
         # torch.save({
