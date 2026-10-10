@@ -1,0 +1,111 @@
+\begin{table*}[t]
+\centering
+\def\dsacc#1#2{$#1${\footnotesize$\pm #2$}}
+\caption{Transfer accuracy (\%) on six downstream datasets using ResNet18 representations pretrained on CIFAR-100. Results are mean $\pm$ sample standard deviation over 10 independent runs. SimCLR and Barlow Twins (BT) use frozen linear probes; No Pre-Training uses a random encoder. PT denotes pretraining subset size. Empty entries indicate unavailable results.}
+\label{tab:cifar100-downstream-resnet18}
+
+\setlength{\tabcolsep}{2pt}
+\renewcommand{\arraystretch}{1.1}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{@{}D{7mm}D{8mm}l*{12}{c}@{}}
+\toprule
+\multirow{2}{*}{\shortstack{Labeled\\(\%)}}
+& \multirow{2}{*}{\shortstack{PT\\(\%)}}
+& \multirow{2}{*}{Method}
+& \multicolumn{2}{c}{Tiny ImageNet}
+& \multicolumn{2}{c}{CIFAR-10}
+& \multicolumn{2}{c}{Aircraft}
+& \multicolumn{2}{c}{CUB-2011}
+& \multicolumn{2}{c}{Dogs}
+& \multicolumn{2}{c}{Flowers} \\
+\cmidrule(lr){4-5} \cmidrule(lr){6-7} \cmidrule(lr){8-9}
+\cmidrule(lr){10-11} \cmidrule(lr){12-13} \cmidrule(l){14-15}
+& & & SimCLR & BT & SimCLR & BT & SimCLR & BT & SimCLR & BT & SimCLR & BT & SimCLR & BT \\
+\midrule
+
+\multirow{17}{*}{1\%}
+& -- & No Pre-Training
+& \multicolumn{2}{c}{\dsacc{0.64}{0.07}}
+& \multicolumn{2}{c}{\dsacc{16.85}{0.66}}
+& \multicolumn{2}{c}{\dsacc{1.22}{0.17}}
+& \multicolumn{2}{c}{\dsacc{0.54}{0.12}}
+& \multicolumn{2}{c}{\dsacc{0.92}{0.14}}
+& \multicolumn{2}{c}{\dsacc{0.93}{0.36}} \\
+\cmidrule(lr){2-15}
+
+& 100\% & Full Data
+&  &  &  &  &  &  &  &  &  &  &  &  \\
+\cmidrule(lr){2-15}
+
+& \multirow{5}{*}{1\%} & Random Subset
+& \dsacc{2.01}{0.26} & \dsacc{1.67}{0.24} & \dsacc{30.72}{0.79} & \dsacc{30.45}{0.96} & \dsacc{2.08}{0.35} & \dsacc{1.76}{0.30} & \dsacc{0.89}{0.11} & \dsacc{0.81}{0.11} & \dsacc{1.49}{0.14} & \dsacc{1.43}{0.22} & \dsacc{2.01}{0.51} & \dsacc{2.13}{0.68} \\
+& & K-means Subset
+& \dsacc{1.97}{0.26} & \dsacc{1.59}{0.29} & \dsacc{30.33}{1.02} & \dsacc{29.11}{1.48} & \dsacc{2.26}{0.30} & \dsacc{1.85}{0.31} & \dsacc{0.92}{0.13} & \dsacc{0.80}{0.11} & \dsacc{1.56}{0.14} & \dsacc{1.38}{0.12} & \dsacc{2.06}{0.55} & \dsacc{1.90}{0.47} \\
+& & KRR-ST & \multicolumn{12}{c}{} \\
+& & MKDT & \multicolumn{12}{c}{} \\
+& & Ours & \multicolumn{12}{c}{} \\
+\cmidrule(lr){2-15}
+
+& \multirow{5}{*}{2\%} & Random Subset
+& \dsacc{2.17}{0.22} & \dsacc{1.48}{0.24} & \dsacc{32.35}{0.96} & \dsacc{28.99}{1.47} & \dsacc{2.14}{0.27} & \dsacc{1.63}{0.29} & \dsacc{0.88}{0.15} & \dsacc{0.84}{0.11} & \dsacc{1.61}{0.10} & \dsacc{1.37}{0.20} & \dsacc{2.11}{0.65} & \dsacc{2.11}{0.63} \\
+& & K-means Subset
+& \dsacc{1.99}{0.30} & \dsacc{1.53}{0.32} & \dsacc{31.40}{0.65} & \dsacc{29.23}{1.34} & \dsacc{2.05}{0.24} & \dsacc{1.59}{0.25} & \dsacc{0.83}{0.12} & \dsacc{0.83}{0.12} & \dsacc{1.49}{0.17} & \dsacc{1.34}{0.22} & \dsacc{2.00}{0.64} & \dsacc{1.95}{0.59} \\
+& & KRR-ST & \multicolumn{12}{c}{} \\
+& & MKDT & \multicolumn{12}{c}{} \\
+& & Ours & \multicolumn{12}{c}{} \\
+\cmidrule(lr){2-15}
+
+& \multirow{5}{*}{5\%} & Random Subset
+& \dsacc{2.02}{0.36} &  & \dsacc{33.40}{1.42} &  & \dsacc{2.09}{0.16} &  & \dsacc{0.96}{0.16} &  & \dsacc{1.57}{0.25} &  & \dsacc{2.05}{0.48} &  \\
+& & K-means Subset
+& \dsacc{2.11}{0.36} &  & \dsacc{33.62}{0.91} &  & \dsacc{1.98}{0.32} &  & \dsacc{0.99}{0.14} &  & \dsacc{1.52}{0.23} &  & \dsacc{2.14}{0.48} &  \\
+& & KRR-ST & \multicolumn{12}{c}{} \\
+& & MKDT & \multicolumn{12}{c}{} \\
+& & Ours & \multicolumn{12}{c}{} \\
+
+\midrule
+
+\multirow{17}{*}{5\%}
+& -- & No Pre-Training
+& \multicolumn{2}{c}{\dsacc{0.88}{0.11}}
+& \multicolumn{2}{c}{\dsacc{20.55}{0.72}}
+& \multicolumn{2}{c}{\dsacc{1.46}{0.31}}
+& \multicolumn{2}{c}{\dsacc{0.61}{0.06}}
+& \multicolumn{2}{c}{\dsacc{0.92}{0.12}}
+& \multicolumn{2}{c}{\dsacc{1.23}{0.42}} \\
+\cmidrule(lr){2-15}
+
+& 100\% & Full Data
+&  &  &  &  &  &  &  &  &  &  &  &  \\
+\cmidrule(lr){2-15}
+
+& \multirow{5}{*}{1\%} & Random Subset
+& \dsacc{3.33}{0.27} & \dsacc{2.47}{0.35} & \dsacc{36.31}{1.00} & \dsacc{35.23}{1.24} & \dsacc{2.99}{0.40} & \dsacc{2.00}{0.33} & \dsacc{1.09}{0.14} & \dsacc{0.91}{0.19} & \dsacc{2.10}{0.24} & \dsacc{1.61}{0.21} & \dsacc{2.86}{0.51} & \dsacc{2.63}{0.77} \\
+& & K-means Subset
+& \dsacc{3.27}{0.20} & \dsacc{2.34}{0.29} & \dsacc{35.95}{0.74} & \dsacc{33.69}{0.92} & \dsacc{2.89}{0.30} & \dsacc{2.03}{0.40} & \dsacc{1.14}{0.19} & \dsacc{0.91}{0.07} & \dsacc{2.13}{0.27} & \dsacc{1.63}{0.24} & \dsacc{2.86}{0.71} & \dsacc{2.66}{0.77} \\
+& & KRR-ST & \multicolumn{12}{c}{} \\
+& & MKDT & \multicolumn{12}{c}{} \\
+& & Ours & \multicolumn{12}{c}{} \\
+\cmidrule(lr){2-15}
+
+& \multirow{5}{*}{2\%} & Random Subset
+& \dsacc{3.46}{0.25} & \dsacc{2.33}{0.33} & \dsacc{38.01}{0.71} & \dsacc{33.79}{1.50} & \dsacc{2.71}{0.24} & \dsacc{1.79}{0.28} & \dsacc{1.11}{0.14} & \dsacc{0.78}{0.09} & \dsacc{2.14}{0.19} & \dsacc{1.51}{0.21} & \dsacc{3.10}{0.64} & \dsacc{2.46}{0.93} \\
+& & K-means Subset
+& \dsacc{3.27}{0.23} & \dsacc{2.29}{0.22} & \dsacc{37.36}{0.43} & \dsacc{33.59}{1.23} & \dsacc{2.60}{0.27} & \dsacc{1.90}{0.25} & \dsacc{1.10}{0.20} & \dsacc{0.86}{0.07} & \dsacc{2.09}{0.29} & \dsacc{1.41}{0.26} & \dsacc{2.87}{0.60} & \dsacc{2.41}{0.81} \\
+& & KRR-ST & \multicolumn{12}{c}{} \\
+& & MKDT & \multicolumn{12}{c}{} \\
+& & Ours & \multicolumn{12}{c}{} \\
+\cmidrule(lr){2-15}
+
+& \multirow{5}{*}{5\%} & Random Subset
+& \dsacc{3.45}{0.11} &  & \dsacc{39.13}{0.93} &  & \dsacc{2.54}{0.31} &  & \dsacc{1.11}{0.11} &  & \dsacc{2.12}{0.21} &  & \dsacc{2.90}{0.60} &  \\
+& & K-means Subset
+& \dsacc{3.46}{0.38} &  & \dsacc{39.06}{0.91} &  & \dsacc{2.41}{0.26} &  & \dsacc{1.11}{0.14} &  & \dsacc{2.04}{0.25} &  & \dsacc{3.22}{0.60} &  \\
+& & KRR-ST & \multicolumn{12}{c}{} \\
+& & MKDT & \multicolumn{12}{c}{} \\
+& & Ours & \multicolumn{12}{c}{} \\
+
+\bottomrule
+\end{tabular}%
+}
+\end{table*}

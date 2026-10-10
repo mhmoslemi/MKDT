@@ -1,0 +1,118 @@
+{
+  "protocol": "synthetic_new_v1_random_labels_barlow2x",
+  "sources": [
+    "CIFAR10",
+    "CIFAR100"
+  ],
+  "synthetic_sizes_percent": [
+    1,
+    2,
+    5
+  ],
+  "main_models": [
+    "ConvNet",
+    "VGG11",
+    "ResNet18"
+  ],
+  "downstream_models": [
+    "ResNet18"
+  ],
+  "ssl_methods": [
+    "simclr",
+    "barlowtwins"
+  ],
+  "runs_per_configuration": 10,
+  "simclr_epochs": {
+    "1": 5000,
+    "2": 4000,
+    "5": 3000
+  },
+  "barlowtwins_epochs": {
+    "1": 10000,
+    "2": 8000,
+    "5": 6000
+  },
+  "probe_epochs": {
+    "CIFAR10": {
+      "linear_probe_epochs_by_label_percentage": {
+        "1": 500,
+        "5": 300
+      },
+      "no_pretraining_linear_probe_epochs_by_label_percentage": {
+        "1": 500,
+        "5": 300
+      }
+    },
+    "CIFAR100": {
+      "linear_probe_epochs_by_label_percentage": {
+        "1": 500,
+        "5": 300
+      },
+      "no_pretraining_linear_probe_epochs_by_label_percentage": {
+        "1": 500,
+        "5": 300
+      }
+    },
+    "Aircraft": {
+      "linear_probe_epochs_by_label_percentage": {
+        "1": 500,
+        "5": 300
+      },
+      "no_pretraining_linear_probe_epochs_by_label_percentage": {
+        "1": 500,
+        "5": 300
+      }
+    },
+    "CUB2011": {
+      "linear_probe_epochs_by_label_percentage": {
+        "1": 500,
+        "5": 300
+      },
+      "no_pretraining_linear_probe_epochs_by_label_percentage": {
+        "1": 500,
+        "5": 300
+      }
+    },
+    "Dogs": {
+      "linear_probe_epochs_by_label_percentage": {
+        "1": 500,
+        "5": 300
+      },
+      "no_pretraining_linear_probe_epochs_by_label_percentage": {
+        "1": 500,
+        "5": 300
+      }
+    },
+    "Flowers": {
+      "linear_probe_epochs_by_label_percentage": {
+        "1": 500,
+        "5": 300
+      },
+      "no_pretraining_linear_probe_epochs_by_label_percentage": {
+        "1": 500,
+        "5": 300
+      }
+    },
+    "TinyImageNet": {
+      "linear_probe_epochs_by_label_percentage": {
+        "1": 500,
+        "5": 300
+      },
+      "no_pretraining_linear_probe_epochs_by_label_percentage": {
+        "1": 500,
+        "5": 300
+      }
+    }
+  },
+  "gpu_jobs": 84,
+  "gpu_accounts": {
+    "aip-boyuwang": 67,
+    "aip-yiweilu": 17
+  },
+  "report_account": "aip-boyuwang",
+  "total_jobs_including_report": 85,
+  "account_split_including_report": {
+    "aip-boyuwang": 68,
+    "aip-yiweilu": 17
+  }
+}
