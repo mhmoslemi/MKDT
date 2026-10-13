@@ -8,8 +8,16 @@ MKDT_BATCH="$PROJECT_ROOT/benchmarks/mkdt_multidataset/results/batch_20261010T16
 MKDT_CODE_ROOT="$MKDT_BATCH/code"
 MKDT_SYNTH_ROOT="$MKDT_BATCH/synthetic"
 TARGET_CACHE_ROOT="$MKDT_BATCH/targets"
-LOG_ROOT="$BUNDLE/logs"
-MANIFEST="$BUNDLE/submitted.tsv"
+PART=${SUBMIT_PART:-}
+case "$PART" in
+    1|2) ;;
+    *)
+        echo 'Run submit_part1.sh or submit_part2.sh; submit_all.sh does not run directly.' >&2
+        exit 2
+        ;;
+esac
+LOG_ROOT="$BUNDLE/logs/part$PART"
+MANIFEST="$BUNDLE/submitted_part${PART}.tsv"
 WANG_ACCOUNT=aip-boyuwang
 LU_ACCOUNT=aip-yiweilu
 DRY_RUN=${DRY_RUN:-0}
@@ -26,7 +34,6 @@ fi
 [ -d "$DATA_ROOT" ] || fail "missing data root: $DATA_ROOT"
 [ -f /home/mmoslem3/ENV/bin/activate ] || fail "missing /home/mmoslem3/ENV/bin/activate"
 [ -d "$MKDT_CODE_ROOT" ] || fail "missing code snapshot: $MKDT_CODE_ROOT"
-[ -f "$BUNDLE/synthesis_job.sh" ] || fail "missing synthesis worker"
 [ -f "$BUNDLE/mkdt_job.sh" ] || fail "missing benchmark worker"
 if [ "$DRY_RUN" != 1 ]; then
     [ ! -s "$MANIFEST" ] || fail "$MANIFEST already contains submissions"
@@ -36,31 +43,38 @@ for target in CIFAR10 CIFAR100 TinyImageNet Aircraft CUB2011 Dogs Flowers; do
     [ -f "$TARGET_CACHE_ROOT/$target.pt" ] || fail "missing target cache: $TARGET_CACHE_ROOT/$target.pt"
 done
 
-for dataset in CIFAR10 CIFAR100; do
-    target_rep="$MKDT_SYNTH_ROOT/work/target_rep/barlow_twins/${dataset}_target_rep_train.pt"
-    [ -f "$target_rep" ] || fail "missing target representations: $target_rep"
-    for index in $(seq 0 99); do
-        buffer="$MKDT_SYNTH_ROOT/work/buffers/$dataset/VGG11/replay_buffer_${index}.pt"
-        [ -f "$buffer" ] || fail "missing VGG11 expert buffer: $buffer"
-    done
+if [ "$PART" = 1 ]; then
     for size in 1 2 5; do
-        init="$MKDT_SYNTH_ROOT/work/init/$dataset/VGG11/${dataset}_barlow_twins_${size}_high_loss_indices.pkl"
-        [ -f "$init" ] || fail "missing VGG11 initialization: $init"
+        for ssl in simclr barlowtwins; do
+            encoder="$MKDT_BATCH/runs/CIFAR10_ConvNet_ConvNet_size${size}_${ssl}/encoders/seed_000.pt"
+            [ -s "$encoder" ] || fail "missing existing CIFAR10 ConvNet encoder: $encoder"
+        done
     done
-done
-
-for size in 1 2 5; do
-    for ssl in simclr barlowtwins; do
-        encoder="$MKDT_BATCH/runs/CIFAR10_ConvNet_ConvNet_size${size}_${ssl}/encoders/seed_000.pt"
-        [ -f "$encoder" ] || fail "missing existing CIFAR10 ConvNet encoder: $encoder"
+else
+    [ -f "$BUNDLE/synthesis_job.sh" ] || fail "missing synthesis worker"
+    for dataset in CIFAR10 CIFAR100; do
+        target_rep="$MKDT_SYNTH_ROOT/work/target_rep/barlow_twins/${dataset}_target_rep_train.pt"
+        [ -s "$target_rep" ] || fail "missing target representations: $target_rep"
+        index=0
+        while [ "$index" -lt 100 ]; do
+            buffer="$MKDT_SYNTH_ROOT/work/buffers/$dataset/VGG11/replay_buffer_${index}.pt"
+            [ -s "$buffer" ] || fail "missing VGG11 expert buffer: $buffer"
+            index=$((index + 1))
+        done
+        for size in 1 2 5; do
+            init="$MKDT_SYNTH_ROOT/work/init/$dataset/VGG11/${dataset}_barlow_twins_${size}_high_loss_indices.pkl"
+            [ -s "$init" ] || fail "missing VGG11 initialization: $init"
+        done
     done
-done
+fi
 
 if [ "$DRY_RUN" != 1 ]; then
     mkdir -p "$LOG_ROOT"
     cp "$PROJECT_ROOT/benchmarks/benchmark_mkdt_multidataset.py" \
         "$MKDT_CODE_ROOT/benchmarks/benchmark_mkdt_multidataset.py"
-    cp "$PROJECT_ROOT/distill.py" "$MKDT_CODE_ROOT/distill.py"
+    if [ "$PART" = 2 ]; then
+        cp "$PROJECT_ROOT/distill.py" "$MKDT_CODE_ROOT/distill.py"
+    fi
     printf 'submitted_utc\tjob_id\taccount\tclass\tname\ttime\tmem\tdependency\n' > "$MANIFEST"
 fi
 
@@ -124,33 +138,44 @@ submit_gpu() {
     echo "Submitted $name: $LAST_JOB_ID"
 }
 
-SYNTHESIS_JOB="$BUNDLE/synthesis_job.sh"
 MKDT_JOB="$BUNDLE/mkdt_job.sh"
 
-submit_gpu mkdt_distill kil_syn_C10_VGG_1 01:30:00 8G "" "$SYNTHESIS_JOB" CIFAR10 1
-SYN_C10_1=$LAST_JOB_ID
-submit_gpu mkdt_distill kil_syn_C10_VGG_2 01:30:00 8G "" "$SYNTHESIS_JOB" CIFAR10 2
-SYN_C10_2=$LAST_JOB_ID
-submit_gpu mkdt_distill kil_syn_C10_VGG_5 01:30:00 8G "" "$SYNTHESIS_JOB" CIFAR10 5
-SYN_C10_5=$LAST_JOB_ID
-submit_gpu mkdt_distill kil_syn_C100_VGG_1 01:30:00 8G "" "$SYNTHESIS_JOB" CIFAR100 1
-SYN_C100_1=$LAST_JOB_ID
-submit_gpu mkdt_distill kil_syn_C100_VGG_2 01:30:00 8G "" "$SYNTHESIS_JOB" CIFAR100 2
-SYN_C100_2=$LAST_JOB_ID
-submit_gpu mkdt_distill kil_syn_C100_VGG_5 01:30:00 8G "" "$SYNTHESIS_JOB" CIFAR100 5
-SYN_C100_5=$LAST_JOB_ID
+if [ "$PART" = 1 ]; then
+    for size in 1 2 5; do
+        case "$size" in
+            1) sim_epochs=5000; bt_epochs=10000 ;;
+            2) sim_epochs=4000; bt_epochs=8000 ;;
+            5) sim_epochs=3000; bt_epochs=6000 ;;
+        esac
+        submit_gpu mkdt_evaluate "kil_p1_C10_Conv_down_${size}_simclr" 01:00:00 4G "" \
+            "$MKDT_JOB" evaluate CIFAR10 ConvNet ConvNet "$size" simclr "$sim_epochs" downstream
+        submit_gpu mkdt_evaluate "kil_p1_C10_Conv_down_${size}_barlow" 01:00:00 4G "" \
+            "$MKDT_JOB" evaluate CIFAR10 ConvNet ConvNet "$size" barlowtwins "$bt_epochs" downstream
+    done
 
-for size in 1 2 5; do
-    case "$size" in
-        1) sim_epochs=5000; bt_epochs=10000 ;;
-        2) sim_epochs=4000; bt_epochs=8000 ;;
-        5) sim_epochs=3000; bt_epochs=6000 ;;
-    esac
-    submit_gpu mkdt_evaluate "kil_ev_C10_Conv_down_${size}_simclr" 01:00:00 4G "" \
-        "$MKDT_JOB" evaluate CIFAR10 ConvNet ConvNet "$size" simclr "$sim_epochs" downstream
-    submit_gpu mkdt_evaluate "kil_ev_C10_Conv_down_${size}_barlow" 01:00:00 4G "" \
-        "$MKDT_JOB" evaluate CIFAR10 ConvNet ConvNet "$size" barlowtwins "$bt_epochs" downstream
-done
+    if [ "$DRY_RUN" = 1 ]; then
+        echo "Validated $gpu_index Part 1 jobs; nothing was submitted."
+    else
+        echo "Submitted $gpu_index Part 1 jobs."
+        echo "Manifest: $MANIFEST"
+    fi
+    exit 0
+fi
+
+SYNTHESIS_JOB="$BUNDLE/synthesis_job.sh"
+
+submit_gpu mkdt_distill kil_p2_syn_C10_VGG_1 01:30:00 8G "" "$SYNTHESIS_JOB" CIFAR10 1
+SYN_C10_1=$LAST_JOB_ID
+submit_gpu mkdt_distill kil_p2_syn_C10_VGG_2 01:30:00 8G "" "$SYNTHESIS_JOB" CIFAR10 2
+SYN_C10_2=$LAST_JOB_ID
+submit_gpu mkdt_distill kil_p2_syn_C10_VGG_5 01:30:00 8G "" "$SYNTHESIS_JOB" CIFAR10 5
+SYN_C10_5=$LAST_JOB_ID
+submit_gpu mkdt_distill kil_p2_syn_C100_VGG_1 01:30:00 8G "" "$SYNTHESIS_JOB" CIFAR100 1
+SYN_C100_1=$LAST_JOB_ID
+submit_gpu mkdt_distill kil_p2_syn_C100_VGG_2 01:30:00 8G "" "$SYNTHESIS_JOB" CIFAR100 2
+SYN_C100_2=$LAST_JOB_ID
+submit_gpu mkdt_distill kil_p2_syn_C100_VGG_5 01:30:00 8G "" "$SYNTHESIS_JOB" CIFAR100 5
+SYN_C100_5=$LAST_JOB_ID
 
 for source in CIFAR10 CIFAR100; do
     if [ "$source" = CIFAR10 ]; then
@@ -180,11 +205,11 @@ for source in CIFAR10 CIFAR100; do
                 epochs=$bt_epochs
                 short_ssl=barlow
             fi
-            submit_gpu mkdt_pretrain "kil_pre_${source}_VGG_${size}_${short_ssl}" 01:00:00 4G \
+            submit_gpu mkdt_pretrain "kil_p2_pre_${source}_VGG_${size}_${short_ssl}" 01:00:00 4G \
                 "afterok:$synth_id" "$MKDT_JOB" pretrain "$source" VGG11 VGG11 \
                 "$size" "$ssl" "$epochs" "$scope"
             pretrain_id=$LAST_JOB_ID
-            submit_gpu mkdt_evaluate "kil_ev_${source}_VGG_${size}_${short_ssl}" 01:00:00 4G \
+            submit_gpu mkdt_evaluate "kil_p2_ev_${source}_VGG_${size}_${short_ssl}" 01:00:00 4G \
                 "afterok:$pretrain_id" "$MKDT_JOB" evaluate "$source" VGG11 VGG11 \
                 "$size" "$ssl" "$epochs" "$scope"
         done
@@ -192,8 +217,8 @@ for source in CIFAR10 CIFAR100; do
 done
 
 if [ "$DRY_RUN" = 1 ]; then
-    echo "Validated $gpu_index short one-CPU/one-GPU jobs; nothing was submitted."
+    echo "Validated $gpu_index Part 2 jobs; nothing was submitted."
 else
-    echo "Submitted $gpu_index short one-CPU/one-GPU jobs."
+    echo "Submitted $gpu_index Part 2 jobs."
     echo "Manifest: $MANIFEST"
 fi
