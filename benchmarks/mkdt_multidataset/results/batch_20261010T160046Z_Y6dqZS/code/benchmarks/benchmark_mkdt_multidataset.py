@@ -92,9 +92,7 @@ def load_images(path, source, size, device):
     return images.to(device)
 
 
-def pretrain(args):
-    output = Path(args.output)
-    output.mkdir(parents=True, exist_ok=True)
+def pretrain_settings(args):
     digest = sha256(args.images)
     settings = {
         'protocol': PROTOCOL,
@@ -116,9 +114,25 @@ def pretrain(args):
         'ssl_aug_strategy': shared.STRATEGY,
         'ssl_aug_mode': 'S',
     }
+    return digest, settings
+
+
+def prepare_pretrain(args):
+    output = Path(args.output)
+    output.mkdir(parents=True, exist_ok=True)
+    _, settings = pretrain_settings(args)
+    compatible_config(output / 'config.json', settings)
+    print(f'PREPARED pretrain config: {output}', flush=True)
+
+
+def pretrain(args):
+    output = Path(args.output)
+    output.mkdir(parents=True, exist_ok=True)
+    digest, settings = pretrain_settings(args)
     compatible_config(output / 'config.json', settings)
     images = load_images(args.images, args.source, args.subset_percentage, args.device)
-    for seed in range(RUNS):
+    requested = list(range(args.seed_start, args.seed_start + args.runs))
+    for seed in requested:
         destination = output / f'seed_{seed:03d}.pt'
         if destination.exists():
             checkpoint = torch.load(destination, map_location='cpu', weights_only=True)
@@ -146,8 +160,61 @@ def pretrain(args):
               f'seconds={time.perf_counter() - started:.1f}', flush=True)
         del network, checkpoint
         gc.collect()
-    completed = sorted(int(path.stem.split('_')[-1])
-                       for path in output.glob('seed_*.pt'))
+    completed = [seed for seed in requested
+                 if (output / f'seed_{seed:03d}.pt').is_file()]
+    shard_summary = {
+        'config': settings,
+        'complete': completed == requested,
+        'completed_runs': len(completed),
+        'expected_runs': len(requested),
+        'seeds': completed,
+    }
+    shared.write_json(
+        output / f'shard_{requested[0]:03d}_{requested[-1]:03d}.json',
+        shard_summary)
+    if args.seed_start == 0 and args.runs == RUNS:
+        shared.write_json(output / 'summary.json', shard_summary)
+    if not shard_summary['complete']:
+        raise RuntimeError(
+            f'Only {len(completed)}/{len(requested)} requested encoders are complete')
+
+
+def finalize_pretrain(args):
+    output = Path(args.output)
+    config_path = output / 'config.json'
+    if not config_path.is_file():
+        raise FileNotFoundError(f'Missing pretraining config: {config_path}')
+    settings = json.loads(config_path.read_text())
+    expected_settings = {
+        'protocol': PROTOCOL,
+        'source': args.source,
+        'generator': args.generator,
+        'model': args.model,
+        'ssl_method': args.ssl_method,
+        'subset_percentage': args.subset_percentage,
+        'ssl_epochs': args.ssl_epochs,
+        'runs': RUNS,
+        'input_scope': 'images_only_no_labels_pt_no_synlr_pt',
+    }
+    for key, value in expected_settings.items():
+        if settings.get(key) != value:
+            raise ValueError(
+                f'{config_path}: unexpected {key}={settings.get(key)!r}; expected {value!r}')
+    completed = []
+    for seed in range(RUNS):
+        path = output / f'seed_{seed:03d}.pt'
+        if not path.is_file():
+            continue
+        checkpoint = torch.load(path, map_location='cpu', weights_only=True)
+        expected = {
+            **expected_settings,
+            'seed': seed,
+            'synthetic_sha256': settings['synthetic_sha256'],
+        }
+        for key, value in expected.items():
+            if checkpoint.get(key) != value:
+                raise ValueError(f'{path}: unexpected {key}')
+        completed.append(seed)
     summary = {
         'config': settings,
         'complete': completed == list(range(RUNS)),
@@ -158,6 +225,7 @@ def pretrain(args):
     shared.write_json(output / 'summary.json', summary)
     if not summary['complete']:
         raise RuntimeError(f'Only {len(completed)}/{RUNS} encoders are complete')
+    print(f'FINALIZED {len(completed)}/{RUNS} encoders: {output}', flush=True)
 
 
 def load_encoder(args, seed):
@@ -306,7 +374,9 @@ def evaluate(args):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('command', choices=('pretrain', 'evaluate'))
+    parser.add_argument(
+        'command', choices=('prepare-pretrain', 'pretrain',
+                            'finalize-pretrain', 'evaluate'))
     parser.add_argument('--source', choices=tuple(SOURCES), required=True)
     parser.add_argument('--generator', choices=GENERATORS, required=True)
     parser.add_argument('--images')
@@ -318,12 +388,16 @@ def main():
     parser.add_argument('--subset-percentage', type=int, choices=SIZES, required=True)
     parser.add_argument('--ssl-epochs', type=int, required=True)
     parser.add_argument('--ssl-log-every', type=int, default=0)
+    parser.add_argument('--seed-start', type=int, default=0)
+    parser.add_argument('--runs', type=int, default=RUNS)
     parser.add_argument('--device', choices=('cpu', 'cuda'), default='cuda')
     args = parser.parse_args()
     if args.ssl_epochs < 1 or args.ssl_log_every < 0:
         parser.error('epoch counts must be valid')
-    if args.command == 'pretrain' and not args.images:
-        parser.error('pretrain requires --images')
+    if args.seed_start < 0 or args.runs < 1 or args.seed_start + args.runs > RUNS:
+        parser.error(f'seed range must be within 0..{RUNS - 1}')
+    if args.command in ('prepare-pretrain', 'pretrain') and not args.images:
+        parser.error(f'{args.command} requires --images')
     if args.command == 'evaluate' and not args.encoder_dir:
         parser.error('evaluate requires --encoder-dir')
     if args.command == 'evaluate' and not args.target_cache_root:
@@ -332,7 +406,12 @@ def main():
     if args.device == 'cuda' and not torch.cuda.is_available():
         raise RuntimeError('A GPU allocation is required')
     shared.seed_all(0)
-    {'pretrain': pretrain, 'evaluate': evaluate}[args.command](args)
+    {
+        'prepare-pretrain': prepare_pretrain,
+        'pretrain': pretrain,
+        'finalize-pretrain': finalize_pretrain,
+        'evaluate': evaluate,
+    }[args.command](args)
 
 
 if __name__ == '__main__':
