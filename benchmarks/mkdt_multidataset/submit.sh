@@ -82,8 +82,10 @@ done
 # which is explicitly constructed with batch normalization in networks.py.
 combinations=(
     'CIFAR10 ConvNet ConvNet'
+    'CIFAR10 VGG11 VGG11'
     'CIFAR10 ResNet18 ResNet18BN'
     'CIFAR100 ConvNet ConvNet'
+    'CIFAR100 VGG11 VGG11'
     'CIFAR100 ResNet18 ResNet18BN'
     'Tiny ConvNetD4 ConvNet'
     'Tiny ResNet18 ResNet18BN'
@@ -98,7 +100,7 @@ for entry in "${combinations[@]}"; do
         expert_time=0-04:00:00; expert_mem=24G; sort_time=0-04:00:00; sort_mem=24G
     elif [[ $dataset == Tiny && $implementation == ResNet18 ]]; then
         expert_time=0-10:00:00; expert_mem=24G; sort_time=0-08:00:00; sort_mem=24G
-    elif [[ $implementation == ResNet18 ]]; then
+    elif [[ $implementation == ResNet18 || $implementation == VGG11 ]]; then
         expert_time=0-04:00:00; sort_time=0-04:00:00
     fi
     shard_ids=()
@@ -114,7 +116,7 @@ for entry in "${combinations[@]}"; do
     for size in 1 2 5; do
         distill_time=0-10:00:00
         distill_mem=16G
-        if [[ $dataset == Tiny || $implementation == ResNet18 ]]; then
+        if [[ $dataset == Tiny || $implementation == ResNet18 || $implementation == VGG11 ]]; then
             distill_time=1-00:00:00
             distill_mem=24G
         fi
@@ -130,6 +132,8 @@ declare -A bt_epochs=( [1]=10000 [2]=8000 [5]=6000 )
 declare -A c32_time=(
     [ConvNet_1_simclr]=0-01:30:00 [ConvNet_2_simclr]=0-01:40:00 [ConvNet_5_simclr]=0-02:15:00
     [ConvNet_1_barlowtwins]=0-02:05:00 [ConvNet_2_barlowtwins]=0-02:40:00 [ConvNet_5_barlowtwins]=0-04:10:00
+    [VGG11_1_simclr]=0-00:40:00 [VGG11_2_simclr]=0-01:05:00 [VGG11_5_simclr]=0-01:50:00
+    [VGG11_1_barlowtwins]=0-01:15:00 [VGG11_2_barlowtwins]=0-01:55:00 [VGG11_5_barlowtwins]=0-03:30:00
     [ResNet18_1_simclr]=0-02:45:00 [ResNet18_2_simclr]=0-03:45:00 [ResNet18_5_simclr]=0-06:05:00
     [ResNet18_1_barlowtwins]=0-04:25:00 [ResNet18_2_barlowtwins]=0-06:25:00 [ResNet18_5_barlowtwins]=0-11:05:00
 )
@@ -144,11 +148,15 @@ evaluation_ids=()
 for source_dataset in CIFAR10 CIFAR100 TinyImageNet; do
     mkdt_dataset=$source_dataset
     [[ $source_dataset == TinyImageNet ]] && mkdt_dataset=Tiny
-    for generator in ConvNet ResNet18BN; do
+    generators=(ConvNet ResNet18BN)
+    [[ $source_dataset != TinyImageNet ]] && generators+=(VGG11)
+    for generator in "${generators[@]}"; do
         implementation=$generator
         [[ $generator == ResNet18BN ]] && implementation=ResNet18
         [[ $source_dataset == TinyImageNet && $generator == ConvNet ]] && implementation=ConvNetD4
-        for model in ConvNet ResNet18; do
+        models=(ConvNet ResNet18)
+        [[ $generator == VGG11 ]] && models=(VGG11)
+        for model in "${models[@]}"; do
             for size in 1 2 5; do
                 for ssl in simclr barlowtwins; do
                     if [[ $ssl == simclr ]]; then epochs=${sim_epochs[$size]}; else epochs=${bt_epochs[$size]}; fi

@@ -26,22 +26,29 @@ case "$phase" in
         srun --unbuffered python3 benchmarks/benchmark_full_refresh.py pretrain \
             --source "$source_dataset" --source-cache "$TARGET_CACHE_ROOT/$source_dataset.pt" \
             --output "$output" --model "$model" --ssl-method "$ssl" \
-            --ssl-epochs "$ssl_epochs" --seed-start "$seed_start" --runs "$runs"
+            --ssl-epochs "$ssl_epochs" --seed-start "$seed_start" --runs "$runs" \
+            --ssl-log-every "${FULL_SSL_LOG_EVERY:-0}"
         ;;
     evaluate)
         [[ $# -eq 7 ]] || { echo "evaluate additionally requires comma-separated targets" >&2; exit 2; }
         IFS=',' read -r -a targets <<< "$7"
+        eval_progress_total=$((${#targets[@]} * 2 * 10))
+        eval_progress_completed=0
+        echo "PROGRESS: 0%"
         for target in "${targets[@]}"; do
             for labels in 1 5; do
                 if [[ $labels == 1 ]]; then probe_epochs=500; else probe_epochs=300; fi
                 output="$FULL_BATCH/runs/$config/evaluations/${target}_lbl${labels}/job_$SLURM_JOB_ID"
                 mkdir -p "$(dirname "$output")"
+                export FULL_EVAL_PROGRESS_BASE=$eval_progress_completed
+                export FULL_EVAL_PROGRESS_TOTAL=$eval_progress_total
                 srun --unbuffered python3 benchmarks/benchmark_full_refresh.py evaluate \
                     --source "$source_dataset" --encoder-dir "$encoder_root" \
                     --target "$target" --target-cache "$TARGET_CACHE_ROOT/$target.pt" \
                     --output "$output" --model "$model" --ssl-method "$ssl" \
                     --ssl-epochs "$ssl_epochs" --label-percentage "$labels" \
                     --probe-epochs "$probe_epochs" --runs 10
+                eval_progress_completed=$((eval_progress_completed + 10))
             done
         done
         ;;

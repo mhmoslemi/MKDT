@@ -108,6 +108,11 @@ def main(args):
         log_it = it + 1
         if (it == 0) or (log_it in eval_it_pool):
             with torch.no_grad():
+                for name, value in (("images", image_syn), ("labels", label_syn),
+                                    ("synthetic learning rate", syn_lr)):
+                    if not torch.isfinite(value).all().item():
+                        raise FloatingPointError(
+                            f"Non-finite {name} before checkpoint {log_it}")
                 image_save = image_syn.cuda()
                 torch.save(image_save.cpu(), os.path.join(save_dir, "images_{}.pt".format(log_it)))
                 # visualize
@@ -136,7 +141,7 @@ def main(args):
             # print("loading file {}".format(expert_files[file_idx]))
             random.shuffle(buffer)
 
-        start_epoch = np.random.randint(0, args.max_start_epoch)
+        start_epoch = np.random.randint(args.min_start_epoch, args.max_start_epoch)
         starting_params = expert_trajectory[start_epoch]
         target_params = expert_trajectory[start_epoch+args.expert_epochs]
         target_params = torch.cat([p.data.to(args.device).reshape(-1) for p in target_params], 0)
@@ -189,16 +194,31 @@ def main(args):
         param_loss /= param_dist
 
         grand_loss = param_loss
+        if not torch.isfinite(grand_loss).item():
+            raise FloatingPointError(
+                f"Non-finite trajectory-matching loss at iteration {log_it}")
         optimizer_img.zero_grad()
         optimizer_labels.zero_grad()
         optimizer_lr.zero_grad()
         
         grand_loss.backward()
+
+        for name, value in (("images", image_syn), ("labels", label_syn),
+                            ("synthetic learning rate", syn_lr)):
+            if value.grad is None or not torch.isfinite(value.grad).all().item():
+                raise FloatingPointError(
+                    f"Non-finite {name} gradient at iteration {log_it}")
         
         avg_grad = torch.mean(torch.abs(image_syn.grad)).item()
         optimizer_img.step()
         optimizer_labels.step()
         optimizer_lr.step()
+
+        for name, value in (("images", image_syn), ("labels", label_syn),
+                            ("synthetic learning rate", syn_lr)):
+            if not torch.isfinite(value).all().item():
+                raise FloatingPointError(
+                    f"Non-finite {name} after iteration {log_it}")
 
         pbar.set_postfix({"Grand_Loss": grand_loss.detach().cpu().item(),
                    "Start_Epoch": start_epoch, 
@@ -228,6 +248,7 @@ if __name__ == '__main__':
     parser.add_argument('--expert_epochs', type=int, default=5, help='how many expert epochs the target params are') # M but in epochs from paper
     parser.add_argument('--syn_steps', type=int, default=40, help='how many steps to take on synthetic data')
     parser.add_argument('--max_start_epoch', type=int, default=5, help='max epoch we can start at')
+    parser.add_argument('--min_start_epoch', type=int, default=0, help='minimum expert epoch we can start at (inclusive)')
     
     parser.add_argument('--lr_labels', type=float, default=1, help='learning rate for updating labels')
     parser.add_argument('--image_init_idx_path', type=str, help='path to the initial images')
@@ -238,5 +259,8 @@ if __name__ == '__main__':
     parser.add_argument('--criterion', type=str, default="mse") # Should always use MSE
 
     args = parser.parse_args()
+
+    if args.min_start_epoch < 0 or args.min_start_epoch >= args.max_start_epoch:
+        parser.error('min_start_epoch must satisfy 0 <= min_start_epoch < max_start_epoch')
 
     main(args)

@@ -40,6 +40,8 @@ def main(args):
 
     # [each example's loss in the first epoch, averaged over all the buffers]
     epoch_losses = np.zeros(num_examples)
+    next_progress = 2
+    print("PROGRESS: 0%", flush=True)
 
     for num_buffer in range(1, args.num_buffers + 1):
         checkpoint_path = os.path.join(buffer_dir, f'replay_buffer_{num_buffer-1}.pt')
@@ -57,6 +59,11 @@ def main(args):
                 mse_losses = torch.mean((outputs - targets) ** 2, dim=1)
                 individual_losses = mse_losses.detach().cpu().numpy()
                 epoch_losses[i * args.batch_train:(i + 1) * args.batch_train] += individual_losses
+
+        completed_percent = 100 * num_buffer / args.num_buffers
+        while next_progress <= 100 and next_progress <= completed_percent:
+            print(f"PROGRESS: {next_progress}%", flush=True)
+            next_progress += 2
 
     epoch_losses /= args.num_buffers
 

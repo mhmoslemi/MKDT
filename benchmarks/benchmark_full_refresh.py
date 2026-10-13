@@ -10,6 +10,8 @@ import time
 
 import numpy as np
 import torch
+from torch import nn
+from torch.nn import functional as F
 
 import benchmark_cifar10 as shared
 import benchmark_dataset as main_dataset
@@ -81,14 +83,14 @@ def checkpoint_path(root, seed):
     return matches[0]
 
 
-def load_encoder(args, seed):
-    path = checkpoint_path(args.encoder_dir, seed)
+def load_encoder(args, encoder_seed):
+    path = checkpoint_path(args.encoder_dir, encoder_seed)
     checkpoint = torch.load(path, map_location='cpu', weights_only=True)
     expected = {
         'protocol': PROTOCOL,
         'source_dataset': args.source,
         'source_classes': SPECS[args.source][0],
-        'seed': seed,
+        'seed': encoder_seed,
         'model': args.model,
         'method': 'full',
         'ssl_method': args.ssl_method,
@@ -103,9 +105,31 @@ def load_encoder(args, seed):
             raise ValueError(
                 f'{path}: unexpected {key}={checkpoint.get(key)!r}; expected {value!r}')
     network = shared.get_network(args.model, 3, checkpoint['source_classes'],
-                                 (32, 32), seed=seed + 3000)
+                                 (32, 32), seed=encoder_seed + 3000)
     network.load_state_dict(checkpoint['state_dict'], strict=True)
     return network.eval().requires_grad_(False)
+
+
+def linear_probe_features(train_features, train_labels, test_features,
+                          test_labels, classes, epochs, seed):
+    shared.seed_all(seed + 6000)
+    head = nn.Linear(train_features.shape[1], classes).to(train_features.device)
+    optimizer = torch.optim.SGD(head.parameters(), lr=0.1, momentum=0.9,
+                                weight_decay=0.0005)
+    for epoch in range(epochs):
+        if epoch == epochs // 2:
+            for group in optimizer.param_groups:
+                group['lr'] *= 0.1
+        for indices in torch.randperm(len(train_features),
+                                      device=train_features.device).split(256):
+            loss = F.cross_entropy(head(train_features[indices]), train_labels[indices])
+            if not torch.isfinite(loss):
+                raise RuntimeError('Non-finite linear-probe loss')
+            optimizer.zero_grad(set_to_none=True)
+            loss.backward()
+            optimizer.step()
+    with torch.no_grad():
+        return (head(test_features).argmax(1) == test_labels).float().mean().item() * 100
 
 
 def evaluate(args):
@@ -121,17 +145,30 @@ def evaluate(args):
     train, labels, test, test_labels, classes = load_target(
         args.target_cache, args.device, args.target)
     labels_cpu = labels.cpu().numpy()
+    shared_network = None
+    train_features = test_features = None
+    if args.reuse_encoder_seed is not None:
+        shared_network = load_encoder(args, args.reuse_encoder_seed)
+        train_features = shared.extract_features(shared_network, train)
+        test_features = shared.extract_features(shared_network, test)
     rows = []
     for seed in range(args.runs):
         started = time.perf_counter()
         indices = select_labels(labels_cpu, args.label_percentage, seed, 'random')
         chosen = torch.tensor(indices, device=args.device)
-        network = load_encoder(args, seed)
-        accuracy = main_dataset.linear_probe(
-            network, train[chosen], labels[chosen], test, test_labels,
-            classes, args.probe_epochs, seed)
+        if shared_network is None:
+            network = load_encoder(args, seed)
+            accuracy = main_dataset.linear_probe(
+                network, train[chosen], labels[chosen], test, test_labels,
+                classes, args.probe_epochs, seed)
+        else:
+            network = None
+            accuracy = linear_probe_features(
+                train_features[chosen], labels[chosen], test_features, test_labels,
+                classes, args.probe_epochs, seed)
         row = {
             'seed': seed,
+            'encoder_seed': seed if args.reuse_encoder_seed is None else args.reuse_encoder_seed,
             'accuracy_percent': accuracy,
             'labeled_indices': indices.tolist(),
             'labeled_count': len(indices),
@@ -158,7 +195,11 @@ def evaluate(args):
         print(f'EVAL source={args.source} target={args.target} model={args.model} '
               f'ssl={args.ssl_method} labels={args.label_percentage}% seed={seed} '
               f'accuracy={accuracy:.4f}% seconds={row["seconds"]:.1f}', flush=True)
-        del network
+        if network is not None:
+            del network
+        gc.collect()
+    if shared_network is not None:
+        del shared_network, train_features, test_features
         gc.collect()
 
 
@@ -179,9 +220,11 @@ def main():
     parser.add_argument('--label-percentage', type=int, choices=(1, 5), default=1)
     parser.add_argument('--runs', type=int, default=10)
     parser.add_argument('--seed-start', type=int, default=0)
+    parser.add_argument('--reuse-encoder-seed', type=int)
     parser.add_argument('--ssl-log-every', type=int, default=0)
     args = parser.parse_args()
-    if args.runs < 1 or args.seed_start < 0 or args.ssl_epochs < 1:
+    if (args.runs < 1 or args.seed_start < 0 or args.ssl_epochs < 1 or
+            (args.reuse_encoder_seed is not None and args.reuse_encoder_seed < 0)):
         parser.error('run and epoch counts must be positive')
     if args.command == 'pretrain' and not args.source_cache:
         parser.error('pretrain requires --source-cache')

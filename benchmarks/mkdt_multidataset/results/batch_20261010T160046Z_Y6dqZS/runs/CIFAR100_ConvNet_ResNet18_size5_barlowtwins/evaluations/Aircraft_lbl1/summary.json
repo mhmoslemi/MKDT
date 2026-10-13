@@ -1,0 +1,49 @@
+{
+  "config": {
+    "protocol": "mkdt_dual_generator_v2_random_labels_barlow2x",
+    "source": "CIFAR100",
+    "generator": "ConvNet",
+    "target": "Aircraft",
+    "model": "ResNet18",
+    "ssl_method": "barlowtwins",
+    "subset_percentage": 5,
+    "ssl_epochs": 6000,
+    "label_percentage": 1,
+    "probe_epochs": 500,
+    "runs": 10,
+    "label_selection": "uniform_random_without_replacement",
+    "probe_protocol": "frozen_encoder",
+    "input_scope": "images_only_no_labels_pt_no_synlr_pt",
+    "normalization": "target_dataset_repository_statistics_32x32",
+    "std_ddof": 1
+  },
+  "complete": true,
+  "completed_runs": 10,
+  "expected_runs": 10,
+  "mean_percent": 1.281128041446209,
+  "std_percent": 0.2025295221569585,
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9
+  ],
+  "accuracies_percent": [
+    1.380137912929058,
+    1.1701169423758984,
+    1.5001500025391579,
+    1.5301529318094254,
+    0.9000899270176888,
+    1.1401139199733734,
+    1.2001199647784233,
+    1.1401139199733734,
+    1.380137912929058,
+    1.470146980136633
+  ]
+}

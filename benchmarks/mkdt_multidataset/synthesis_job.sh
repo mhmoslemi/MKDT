@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
-#SBATCH --cpus-per-task=2
+#SBATCH --cpus-per-task=1
 #SBATCH --mem=16G
 #SBATCH --gres=gpu:l40s:1
 #SBATCH --output=slurm-%x-%j.out
@@ -55,7 +55,8 @@ case "$phase" in
             --start_index "$start" --buffer_path "$MKDT_SYNTH_ROOT/work/buffers" \
             --train_labels_path "$target_rep" --train_epochs 20 \
             --batch_train 256 --lr_teacher 0.1 --mom 0.9 --l2 1e-4 \
-            --criterion mse --data_path "$DATA_ROOT" --device 0
+            --criterion mse --data_path "$DATA_ROOT" --device 0 \
+            --progress_percent_step 2
         ;;
     sort)
         [[ $# -eq 3 ]] || { echo "sort requires model" >&2; exit 2; }
@@ -95,32 +96,60 @@ case "$phase" in
             final=5000
             if [[ $size == 5 ]]; then lr_img=10000; max_start=5; else lr_img=1000; max_start=2; fi
         fi
+        min_start=0
+        # The first (random-initialization) trajectory segment makes 40-step
+        # unrolling numerically unstable for the larger ResNet/VGG generators.
+        # Their trained trajectory segments remain the same MKDT objective.
+        [[ $model == ResNet18 || $model == VGG11 ]] && min_start=1
         source_name=$dataset
         [[ $dataset == Tiny ]] && source_name=TinyImageNet
         case "$generator:$model" in
-            ConvNet:ConvNet|ConvNet:ConvNetD4|ResNet18BN:ResNet18) ;;
+            ConvNet:ConvNet|ConvNet:ConvNetD4|VGG11:VGG11|ResNet18BN:ResNet18) ;;
             *) echo "Invalid logical/implementation generator pair: $generator $model" >&2; exit 2 ;;
         esac
         output="$MKDT_SYNTH_ROOT/generated/$generator/$source_name/${dataset}_${size}pct"
+        checkpoint_is_finite() {
+            python3 - "$1" "$2" "$3" <<'PY'
+import sys
+import torch
+
+for path in sys.argv[1:]:
+    value = torch.load(path, map_location='cpu', weights_only=True)
+    if not isinstance(value, torch.Tensor) or not torch.isfinite(value).all().item():
+        raise SystemExit(f'Non-finite or invalid synthetic checkpoint: {path}')
+PY
+        }
         [[ -f $target_rep ]] || { echo "Missing target representations: $target_rep" >&2; exit 1; }
         [[ -f $buffer_dir/replay_buffer_99.pt ]] || { echo "Missing expert trajectories" >&2; exit 1; }
         [[ -f $init_file ]] || { echo "Missing high-loss initialization: $init_file" >&2; exit 1; }
         if [[ -f "$output/images_${final}.pt" ]]; then
-            echo "Synthetic images already exist: $output/images_${final}.pt"
-            exit 0
+            if checkpoint_is_finite "$output/images_${final}.pt" \
+                "$output/labels_${final}.pt" "$output/synlr_${final}.pt"; then
+                echo "Finite synthetic checkpoint already exists: $output/images_${final}.pt"
+                exit 0
+            fi
+            quarantine="${output}.invalid_$(date -u +%Y%m%dT%H%M%SZ)"
+            echo "Moving invalid checkpoint directory to: $quarantine" >&2
+            mv "$output" "$quarantine"
         fi
         mkdir -p "$output"
         command=(srun --unbuffered python3 distill.py
             --dataset "$dataset" --model "$model" --iters "$iters" --eval_it 1000
             --train_labels_path "$target_rep" --expert_epochs 2
             --lr_img "$lr_img" --syn_steps "$syn_steps"
-            --image_init_idx_path "$init_file" --max_start_epoch "$max_start"
+            --image_init_idx_path "$init_file" --min_start_epoch "$min_start"
+            --max_start_epoch "$max_start"
             --expert_dir "$buffer_dir" --data_path "$DATA_ROOT"
             --run_id "${dataset}_${model}_${size}pct" --save_dir "$output")
-        if [[ $model == ResNet18 ]]; then
+        if [[ $model == ResNet18 || $model == VGG11 ]]; then
             if [[ $dataset == Tiny ]]; then command+=(--batch_syn 32); else command+=(--batch_syn 64); fi
         fi
         "${command[@]}"
+        checkpoint_is_finite "$output/images_${final}.pt" \
+            "$output/labels_${final}.pt" "$output/synlr_${final}.pt" || {
+            echo "Distillation completed with an invalid final checkpoint." >&2
+            exit 1
+        }
         ;;
     *) echo "Invalid phase: $phase" >&2; exit 2 ;;
 esac

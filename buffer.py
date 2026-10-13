@@ -9,6 +9,15 @@ def main(args):
     args.device = f'cuda:{args.device}' if torch.cuda.is_available() else 'cpu' 
     print('Hyper-parameters: \n', args.__dict__)
 
+    progress_step = args.progress_percent_step
+    if progress_step < 0 or progress_step > 100:
+        raise ValueError('--progress_percent_step must be between 0 and 100')
+    total_progress_units = args.num_experts * args.train_epochs
+    completed_progress_units = 0
+    next_progress = progress_step
+    if progress_step:
+        print('PROGRESS: 0%', flush=True)
+
     # Get the dataset   
     channel, im_size, _, dst_train, _ = get_dataset(dataset=args.dataset, data_path=args.data_path)
 
@@ -43,6 +52,11 @@ def main(args):
                 save_dir, "replay_buffer_{}.pt".format(args.start_index + it))
             if os.path.exists(planned_path):
                 print("Skipping existing {}".format(planned_path))
+                completed_progress_units += args.train_epochs
+                while (progress_step and next_progress <= 100 and
+                       completed_progress_units * 100 >= next_progress * total_progress_units):
+                    print(f'PROGRESS: {next_progress}%', flush=True)
+                    next_progress += progress_step
                 continue
 
         # Sample model 
@@ -64,6 +78,12 @@ def main(args):
                                         criterion=criterion, device=args.device)
 
             print(f"Itr: {it} \tEpoch: {e} \tTrain Loss: {train_loss}")
+
+            completed_progress_units += 1
+            while (progress_step and next_progress <= 100 and
+                   completed_progress_units * 100 >= next_progress * total_progress_units):
+                print(f'PROGRESS: {next_progress}%', flush=True)
+                next_progress += progress_step
 
             timestamps.append([p.detach().cpu() for p in teacher_net.parameters()])
 
@@ -98,6 +118,8 @@ if __name__ == '__main__':
     parser.add_argument('--criterion', type=str, default="mse")
     parser.add_argument('--device', type=int, default=0, help='gpu number')
     parser.add_argument('--start_index', type=int, default=None, help='first explicit replay-buffer index for collision-free parallel shards')
+    parser.add_argument('--progress_percent_step', type=int, default=0,
+                        help='print aggregate progress at this percentage interval; 0 disables it')
     
     args = parser.parse_args()
     main(args)

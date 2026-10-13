@@ -1,0 +1,118 @@
+Image size: (32, 32)
+Hyper-parameters: 
+ {'dataset': 'CIFAR10', 'model': 'VGG11', 'eval_it': 1000, 'iters': 5000, 'lr_img': 1000.0, 'lr_lr': 0.0001, 'lr_teacher': 0.1, 'batch_syn': 64, 'data_path': '/scratch/mmoslem3/data', 'expert_epochs': 2, 'syn_steps': 40, 'max_start_epoch': 2, 'lr_labels': 1, 'image_init_idx_path': '/scratch/mmoslem3/MKDT/benchmarks/mkdt_multidataset/results/batch_20261010T160046Z_Y6dqZS/synthetic/work/init/CIFAR10/VGG11/CIFAR10_barlow_twins_2_high_loss_indices.pkl', 'train_labels_path': '/scratch/mmoslem3/MKDT/benchmarks/mkdt_multidataset/results/batch_20261010T160046Z_Y6dqZS/synthetic/work/target_rep/barlow_twins/CIFAR10_target_rep_train.pt', 'run_id': 'CIFAR10_VGG11_2pct', 'save_dir': '/scratch/mmoslem3/MKDT/benchmarks/mkdt_multidataset/results/batch_20261010T160046Z_Y6dqZS/synthetic/generated/VGG11/CIFAR10/CIFAR10_2pct', 'expert_dir': '/scratch/mmoslem3/MKDT/benchmarks/mkdt_multidataset/results/batch_20261010T160046Z_Y6dqZS/synthetic/work/buffers/CIFAR10/VGG11', 'criterion': 'mse', 'device': 'cuda', 'im_size': (32, 32), 'distributed': False}
+BUILDING TRAINSET
+
+  0%|          | 0/50000 [00:00<?, ?it/s]
+  2%|▏         | 1111/50000 [00:00<00:04, 11100.77it/s]
+  5%|▍         | 2255/50000 [00:00<00:04, 11296.39it/s]
+  7%|▋         | 3385/50000 [00:00<00:04, 11121.86it/s]
+  9%|▉         | 4508/50000 [00:00<00:04, 11161.11it/s]
+ 11%|█▏        | 5625/50000 [00:00<00:04, 11059.88it/s]
+ 13%|█▎        | 6732/50000 [00:00<00:03, 11061.33it/s]
+ 16%|█▌        | 7839/50000 [00:00<00:03, 11060.29it/s]
+ 18%|█▊        | 8947/50000 [00:00<00:03, 11065.49it/s]
+ 20%|██        | 10054/50000 [00:00<00:03, 10928.29it/s]
+ 22%|██▏       | 11148/50000 [00:01<00:03, 10793.57it/s]
+ 24%|██▍       | 12228/50000 [00:01<00:03, 10594.05it/s]
+ 27%|██▋       | 13289/50000 [00:01<00:03, 10548.18it/s]
+ 29%|██▊       | 14345/50000 [00:01<00:03, 10535.75it/s]
+ 31%|███       | 15399/50000 [00:01<00:03, 10506.10it/s]
+ 33%|███▎      | 16450/50000 [00:01<00:03, 10494.82it/s]
+ 35%|███▌      | 17500/50000 [00:01<00:03, 10475.01it/s]
+ 37%|███▋      | 18548/50000 [00:01<00:03, 10470.98it/s]
+ 39%|███▉      | 19611/50000 [00:01<00:02, 10516.36it/s]
+ 41%|████▏     | 20689/50000 [00:01<00:02, 10593.38it/s]
+ 44%|████▎     | 21769/50000 [00:02<00:02, 10653.86it/s]
+ 46%|████▌     | 22835/50000 [00:02<00:02, 10537.81it/s]
+ 48%|████▊     | 23890/50000 [00:02<00:02, 10503.66it/s]
+ 50%|████▉     | 24941/50000 [00:02<00:02, 10489.41it/s]
+ 52%|█████▏    | 26000/50000 [00:02<00:02, 10516.33it/s]
+ 54%|█████▍    | 27052/50000 [00:02<00:02, 10512.37it/s]
+ 56%|█████▌    | 28104/50000 [00:02<00:02, 10472.75it/s]
+ 58%|█████▊    | 29152/50000 [00:02<00:02, 7750.55it/s] 
+ 60%|██████    | 30160/50000 [00:02<00:02, 8307.04it/s]
+ 62%|██████▏   | 31178/50000 [00:03<00:02, 8783.96it/s]
+ 64%|██████▍   | 32189/50000 [00:03<00:01, 9137.21it/s]
+ 66%|██████▋   | 33194/50000 [00:03<00:01, 9387.19it/s]
+ 68%|██████▊   | 34211/50000 [00:03<00:01, 9607.43it/s]
+ 70%|███████   | 35239/50000 [00:03<00:01, 9799.86it/s]
+ 72%|███████▏  | 36240/50000 [00:03<00:01, 9812.05it/s]
+ 74%|███████▍  | 37248/50000 [00:03<00:01, 9889.13it/s]
+ 77%|███████▋  | 38264/50000 [00:03<00:01, 9968.70it/s]
+ 79%|███████▊  | 39285/50000 [00:03<00:01, 10037.50it/s]
+ 81%|████████  | 40319/50000 [00:03<00:00, 10127.23it/s]
+ 83%|████████▎ | 41347/50000 [00:04<00:00, 10170.42it/s]
+ 85%|████████▍ | 42385/50000 [00:04<00:00, 10232.06it/s]
+ 87%|████████▋ | 43423/50000 [00:04<00:00, 10273.35it/s]
+ 89%|████████▉ | 44452/50000 [00:04<00:00, 10236.11it/s]
+ 91%|█████████ | 45507/50000 [00:04<00:00, 10328.74it/s]
+ 93%|█████████▎| 46573/50000 [00:04<00:00, 10427.17it/s]
+ 95%|█████████▌| 47642/50000 [00:04<00:00, 10505.06it/s]
+ 97%|█████████▋| 48713/50000 [00:04<00:00, 10566.15it/s]
+100%|█████████▉| 49770/50000 [00:04<00:00, 10553.46it/s]
+100%|██████████| 50000/50000 [00:04<00:00, 10252.16it/s]
+real images channel 0, mean = -0.0000, std = 1.2211
+real images channel 1, mean = -0.0002, std = 1.2211
+real images channel 2, mean = 0.0002, std = 1.3014
+Shape of the synthetic images:  torch.Size([1000, 3, 32, 32])
+Shape of the synthetic image labels:  torch.Size([1000, 512])
+Expert Dir: /scratch/mmoslem3/MKDT/benchmarks/mkdt_multidataset/results/batch_20261010T160046Z_Y6dqZS/synthetic/work/buffers/CIFAR10/VGG11
+[2026-10-13 11:44:35] training begins
+
+
+[CIFAR10_VGG11_2pct] 2%
+[CIFAR10_VGG11_2pct] 4%
+[CIFAR10_VGG11_2pct] 6%
+[CIFAR10_VGG11_2pct] 8%
+[CIFAR10_VGG11_2pct] 10%
+[CIFAR10_VGG11_2pct] 12%
+[CIFAR10_VGG11_2pct] 14%
+[CIFAR10_VGG11_2pct] 16%
+[CIFAR10_VGG11_2pct] 18%
+[CIFAR10_VGG11_2pct] 20%
+
+[CIFAR10_VGG11_2pct] 22%
+[CIFAR10_VGG11_2pct] 24%
+[CIFAR10_VGG11_2pct] 26%
+[CIFAR10_VGG11_2pct] 28%
+[CIFAR10_VGG11_2pct] 30%
+[CIFAR10_VGG11_2pct] 32%
+[CIFAR10_VGG11_2pct] 34%
+[CIFAR10_VGG11_2pct] 36%
+[CIFAR10_VGG11_2pct] 38%
+[CIFAR10_VGG11_2pct] 40%
+
+[CIFAR10_VGG11_2pct] 42%
+[CIFAR10_VGG11_2pct] 44%
+[CIFAR10_VGG11_2pct] 46%
+[CIFAR10_VGG11_2pct] 48%
+[CIFAR10_VGG11_2pct] 50%
+[CIFAR10_VGG11_2pct] 52%
+[CIFAR10_VGG11_2pct] 54%
+[CIFAR10_VGG11_2pct] 56%
+[CIFAR10_VGG11_2pct] 58%
+[CIFAR10_VGG11_2pct] 60%
+
+[CIFAR10_VGG11_2pct] 62%
+[CIFAR10_VGG11_2pct] 64%
+[CIFAR10_VGG11_2pct] 66%
+[CIFAR10_VGG11_2pct] 68%
+[CIFAR10_VGG11_2pct] 70%
+[CIFAR10_VGG11_2pct] 72%
+[CIFAR10_VGG11_2pct] 74%
+[CIFAR10_VGG11_2pct] 76%
+[CIFAR10_VGG11_2pct] 78%
+[CIFAR10_VGG11_2pct] 80%
+
+[CIFAR10_VGG11_2pct] 82%
+[CIFAR10_VGG11_2pct] 84%
+[CIFAR10_VGG11_2pct] 86%
+[CIFAR10_VGG11_2pct] 88%
+[CIFAR10_VGG11_2pct] 90%
+[CIFAR10_VGG11_2pct] 92%
+[CIFAR10_VGG11_2pct] 94%
+[CIFAR10_VGG11_2pct] 96%
+[CIFAR10_VGG11_2pct] 98%
+[CIFAR10_VGG11_2pct] 100%
+

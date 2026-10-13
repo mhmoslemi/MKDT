@@ -1,4 +1,4 @@
-"""Render separate MKDT table variants for ConvNet and ResNet18BN generators."""
+"""Render separate MKDT table variants for each synthetic-data generator."""
 
 import argparse
 import csv
@@ -8,8 +8,8 @@ import re
 import statistics
 
 
-GENERATORS = ('ConvNet', 'ResNet18BN')
-MODELS = ('ConvNet', 'ResNet18')
+GENERATORS = ('ConvNet', 'VGG11', 'ResNet18BN')
+MODELS = ('ConvNet', 'VGG11', 'ResNet18')
 LOSSES = ('simclr', 'barlowtwins')
 SIZES = (1, 2, 5)
 LABELS = (1, 5)
@@ -17,7 +17,7 @@ RUNS = 10
 SOURCES = {
     'CIFAR10': {
         'token': 'cifar10',
-        'targets': ('CIFAR100', 'TinyImageNet', 'Aircraft', 'CUB2011', 'Dogs', 'Flowers'),
+        'targets': ('CIFAR100', 'Aircraft', 'CUB2011', 'Dogs', 'Flowers', 'TinyImageNet'),
     },
     'CIFAR100': {
         'token': 'cifar100',
@@ -118,10 +118,13 @@ def main():
                 convnet = [scores.get((generator, source, source, 'ConvNet',
                                        subset, labels, loss), '')
                            for loss in LOSSES]
+                vgg = [scores.get((generator, source, source, 'VGG11',
+                                   subset, labels, loss), '')
+                       for loss in LOSSES]
                 resnet = [scores.get((generator, source, source, 'ResNet18',
                                       subset, labels, loss), '')
                           for loss in LOSSES]
-                return convnet + ['', ''] + resnet
+                return convnet + vgg + resnet
 
             def downstream_cells(labels, subset):
                 return [scores.get((generator, source, target, 'ResNet18',

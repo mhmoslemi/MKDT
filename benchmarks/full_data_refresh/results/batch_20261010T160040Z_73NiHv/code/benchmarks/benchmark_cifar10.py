@@ -156,7 +156,9 @@ def train_ssl(network, images, method, epochs, seed, max_steps=None, log_every=N
                 return steps
         log_interval = log_every if log_every else max(1, epochs // 4)
         if (epoch + 1) % log_interval == 0 or epoch + 1 == epochs:
-            print(f'SSL epoch={epoch + 1}/{epochs} loss={loss.item():.6f}', flush=True)
+            progress = 100 * (epoch + 1) / epochs
+            print(f'PROGRESS: {progress:.1f}% SSL epoch={epoch + 1}/{epochs} '
+                  f'loss={loss.item():.6f}', flush=True)
     return steps
 
 

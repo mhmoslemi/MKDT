@@ -23,8 +23,8 @@ from downstream_data import SPECS, load_target, select_labels
 
 
 PROTOCOL = 'mkdt_dual_generator_v2_random_labels_barlow2x'
-MODELS = ('ConvNet', 'ResNet18')
-GENERATORS = ('ConvNet', 'ResNet18BN')
+MODELS = ('ConvNet', 'VGG11', 'ResNet18')
+GENERATORS = ('ConvNet', 'VGG11', 'ResNet18BN')
 LOSSES = ('simclr', 'barlowtwins')
 SIZES = (1, 2, 5)
 LABELS = (1, 5)
@@ -103,7 +103,7 @@ def pretrain_settings(args):
         'ssl_method': args.ssl_method,
         'subset_percentage': args.subset_percentage,
         'ssl_epochs': args.ssl_epochs,
-        'runs': RUNS,
+        'runs': args.runs,
         'synthetic_path': str(Path(args.images).resolve()),
         'synthetic_sha256': digest,
         'input_scope': 'images_only_no_labels_pt_no_synlr_pt',
@@ -271,18 +271,18 @@ def probe(train_features, train_labels, test_features, test_labels,
         return (head(test_features).argmax(1) == test_labels).float().mean().item() * 100
 
 
-def write_summary(folder, settings):
+def write_summary(folder, settings, runs):
     rows = []
-    for seed in range(RUNS):
+    for seed in range(runs):
         path = Path(folder) / f'seed_{seed:03d}.json'
         if path.exists():
             rows.append(json.loads(path.read_text()))
     values = [row['accuracy_percent'] for row in rows]
     summary = {
         'config': settings,
-        'complete': len(rows) == RUNS and [row['seed'] for row in rows] == list(range(RUNS)),
+        'complete': len(rows) == runs and [row['seed'] for row in rows] == list(range(runs)),
         'completed_runs': len(rows),
-        'expected_runs': RUNS,
+        'expected_runs': runs,
         'mean_percent': statistics.mean(values) if values else None,
         'std_percent': statistics.stdev(values) if len(values) > 1 else None,
         'seeds': [row['seed'] for row in rows],
@@ -312,7 +312,8 @@ def evaluate_target(args, target):
             'ssl_epochs': args.ssl_epochs,
             'label_percentage': percentage,
             'probe_epochs': PROBE_EPOCHS[percentage],
-            'runs': RUNS,
+            'runs': args.runs,
+            'encoder_reuse_seed': args.reuse_encoder_seed,
             'label_selection': 'uniform_random_without_replacement',
             'probe_protocol': 'frozen_encoder',
             'input_scope': 'images_only_no_labels_pt_no_synlr_pt',
@@ -323,22 +324,35 @@ def evaluate_target(args, target):
         folders[percentage] = folder
         settings_by_label[percentage] = settings
 
-    for seed in range(RUNS):
+    shared_network = None
+    shared_digest = None
+    train_features = test_features = None
+    if args.reuse_encoder_seed is not None:
+        shared_network, shared_digest = load_encoder(args, args.reuse_encoder_seed)
+        train_features = shared.extract_features(shared_network, train)
+        test_features = shared.extract_features(shared_network, test)
+
+    for seed in range(args.runs):
         pending = [percentage for percentage in LABELS
                    if not (folders[percentage] / f'seed_{seed:03d}.json').exists()]
         if not pending:
             continue
         started = time.perf_counter()
-        network, digest = load_encoder(args, seed)
-        train_features = shared.extract_features(network, train)
-        test_features = shared.extract_features(network, test)
+        if shared_network is None:
+            network, digest = load_encoder(args, seed)
+            current_train_features = shared.extract_features(network, train)
+            current_test_features = shared.extract_features(network, test)
+        else:
+            network, digest = None, shared_digest
+            current_train_features, current_test_features = train_features, test_features
         for percentage in pending:
             indices = select_labels(labels_cpu, percentage, seed, 'random')
             chosen = torch.tensor(indices, device=args.device)
-            accuracy = probe(train_features[chosen], labels[chosen], test_features,
+            accuracy = probe(current_train_features[chosen], labels[chosen], current_test_features,
                              test_labels, classes, PROBE_EPOCHS[percentage], seed)
             row = {
                 'seed': seed,
+                'encoder_seed': seed if args.reuse_encoder_seed is None else args.reuse_encoder_seed,
                 'accuracy_percent': accuracy,
                 'labeled_indices': indices.tolist(),
                 'labeled_count': len(indices),
@@ -348,22 +362,25 @@ def evaluate_target(args, target):
             shared.write_json(folders[percentage] / f'seed_{seed:03d}.json', row)
             print(f'RUN source={args.source} target={target} model={args.model} '
                   f'labels={percentage}% seed={seed} accuracy={accuracy:.4f}%', flush=True)
-        del network, train_features, test_features
+        if network is not None:
+            del network, current_train_features, current_test_features
         gc.collect()
 
     incomplete = []
     for percentage in LABELS:
-        summary = write_summary(folders[percentage], settings_by_label[percentage])
+        summary = write_summary(folders[percentage], settings_by_label[percentage], args.runs)
         if not summary['complete']:
             incomplete.append(f'{target}:{percentage}%')
     del train, labels, test, test_labels
+    if shared_network is not None:
+        del shared_network, train_features, test_features
     gc.collect()
     return incomplete
 
 
 def evaluate(args):
-    targets = (args.source,)
-    if args.model == 'ResNet18':
+    targets = () if args.downstream_only else (args.source,)
+    if args.model == 'ResNet18' or args.all_targets:
         targets += SOURCES[args.source]['targets']
     incomplete = []
     for target in targets:
@@ -390,12 +407,21 @@ def main():
     parser.add_argument('--ssl-log-every', type=int, default=0)
     parser.add_argument('--seed-start', type=int, default=0)
     parser.add_argument('--runs', type=int, default=RUNS)
+    parser.add_argument('--reuse-encoder-seed', type=int)
+    parser.add_argument('--all-targets', action='store_true')
+    parser.add_argument('--downstream-only', action='store_true')
     parser.add_argument('--device', choices=('cpu', 'cuda'), default='cuda')
     args = parser.parse_args()
     if args.ssl_epochs < 1 or args.ssl_log_every < 0:
         parser.error('epoch counts must be valid')
-    if args.seed_start < 0 or args.runs < 1 or args.seed_start + args.runs > RUNS:
-        parser.error(f'seed range must be within 0..{RUNS - 1}')
+    if args.seed_start < 0 or args.runs < 1:
+        parser.error('seed-start must be nonnegative and runs must be positive')
+    if args.command != 'evaluate' and args.seed_start + args.runs > RUNS:
+        parser.error(f'pretraining seed range must be within 0..{RUNS - 1}')
+    if args.reuse_encoder_seed is not None and args.reuse_encoder_seed < 0:
+        parser.error('reuse-encoder-seed must be nonnegative')
+    if args.downstream_only and not (args.model == 'ResNet18' or args.all_targets):
+        parser.error('downstream-only requires ResNet18 or --all-targets')
     if args.command in ('prepare-pretrain', 'pretrain') and not args.images:
         parser.error(f'{args.command} requires --images')
     if args.command == 'evaluate' and not args.encoder_dir:
