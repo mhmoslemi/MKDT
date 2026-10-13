@@ -6,7 +6,8 @@ set -euo pipefail
     exit 2
 }
 
-source /home/mmoslem3/scratch/MKDT/benchmarks/killarney_short_jobs/environment.sh
+PROJECT_ROOT=$(readlink -f /home/mmoslem3/scratch/MKDT)
+source "$PROJECT_ROOT/benchmarks/killarney_short_jobs/environment.sh"
 
 phase=$1
 source_dataset=$2
@@ -75,4 +76,3 @@ case "$phase" in
         exit 2
         ;;
 esac
-

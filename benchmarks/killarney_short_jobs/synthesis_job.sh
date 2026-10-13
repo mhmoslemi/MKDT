@@ -6,7 +6,8 @@ set -euo pipefail
     exit 2
 }
 
-source /home/mmoslem3/scratch/MKDT/benchmarks/killarney_short_jobs/environment.sh
+PROJECT_ROOT=$(readlink -f /home/mmoslem3/scratch/MKDT)
+source "$PROJECT_ROOT/benchmarks/killarney_short_jobs/environment.sh"
 
 dataset=$1
 size=$2
@@ -79,4 +80,3 @@ srun --unbuffered python3 distill.py \
     --batch_syn 64
 
 checkpoint_is_finite "$output/images_5000.pt" "$output/labels_5000.pt" "$output/synlr_5000.pt"
-

@@ -3,5 +3,5 @@ set -eu
 
 SUBMIT_PART=2
 export SUBMIT_PART
-exec sh /home/mmoslem3/scratch/MKDT/benchmarks/killarney_short_jobs/submit_all.sh
-
+PROJECT_ROOT=$(readlink -f /home/mmoslem3/scratch/MKDT)
+exec sh "$PROJECT_ROOT/benchmarks/killarney_short_jobs/submit_all.sh"

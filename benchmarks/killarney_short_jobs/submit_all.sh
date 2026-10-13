@@ -1,7 +1,11 @@
 #!/bin/sh
 set -eu
 
-PROJECT_ROOT=/home/mmoslem3/scratch/MKDT
+PROJECT_LINK=/home/mmoslem3/scratch/MKDT
+PROJECT_ROOT=$(readlink -f "$PROJECT_LINK") || {
+    echo "FATAL: cannot resolve $PROJECT_LINK" >&2
+    exit 1
+}
 DATA_ROOT=/home/mmoslem3/scratch/data
 BUNDLE="$PROJECT_ROOT/benchmarks/killarney_short_jobs"
 MKDT_BATCH="$PROJECT_ROOT/benchmarks/mkdt_multidataset/results/batch_20261010T160046Z_Y6dqZS"
@@ -27,6 +31,12 @@ fail() {
     exit 1
 }
 
+case "$PROJECT_ROOT" in
+    /scratch/*|/project/*) ;;
+    *) fail "resolved project path is not on scratch/project: $PROJECT_ROOT" ;;
+esac
+cd "$PROJECT_ROOT"
+
 if [ "$DRY_RUN" != 1 ]; then
     command -v sbatch >/dev/null 2>&1 || fail "sbatch is not available"
 fi
@@ -36,7 +46,11 @@ fi
 [ -d "$MKDT_CODE_ROOT" ] || fail "missing code snapshot: $MKDT_CODE_ROOT"
 [ -f "$BUNDLE/mkdt_job.sh" ] || fail "missing benchmark worker"
 if [ "$DRY_RUN" != 1 ]; then
-    [ ! -s "$MANIFEST" ] || fail "$MANIFEST already contains submissions"
+    submitted_rows=0
+    if [ -s "$MANIFEST" ]; then
+        submitted_rows=$(awk 'NR > 1 && NF {count++} END {print count + 0}' "$MANIFEST")
+    fi
+    [ "$submitted_rows" -eq 0 ] || fail "$MANIFEST already contains submitted job rows"
 fi
 
 for target in CIFAR10 CIFAR100 TinyImageNet Aircraft CUB2011 Dogs Flowers; do
