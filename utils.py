@@ -78,6 +78,28 @@ class DropSensitive(Dataset):
         return self.base[index][2]
 
 
+class TinyImageNetTensor(Dataset):
+    """Lazy normalized view of the staged Tiny ImageNet tensor archive."""
+
+    def __init__(self, path, split, mean, std):
+        saved = torch.load(path, map_location="cpu", weights_only=True)
+        self.images = saved[f"images_{split}"]
+        self.labels = saved[f"labels_{split}"].long()
+        if (self.images.dtype != torch.uint8 or self.images.ndim != 4
+                or tuple(self.images.shape[1:]) != (3, 64, 64)
+                or len(self.images) != len(self.labels)):
+            raise ValueError("invalid Tiny ImageNet tensor archive: %s" % path)
+        self.mean = torch.tensor(mean).view(3, 1, 1)
+        self.std = torch.tensor(std).view(3, 1, 1)
+
+    def __len__(self):
+        return len(self.labels)
+
+    def __getitem__(self, index):
+        image = self.images[index].float().div(255)
+        return (image - self.mean) / self.std, int(self.labels[index])
+
+
 def get_cobra_dataset(dataset, data_path, skew_ratio=0.9, severity=0):
     """Returns (channel, im_size, num_classes, dst_train, dst_test),
     both datasets wrapped so they yield (img, label)."""
@@ -156,8 +178,16 @@ def get_dataset(dataset, data_path, subset_size=None, epc=None, seed=None):
         mean = [0.485, 0.456, 0.406]
         std = [0.229, 0.224, 0.225]
         transform = transforms.Compose([transforms.ToTensor(), transforms.Normalize(mean=mean, std=std)])
-        dst_train = torchvision_datasets.ImageFolder(os.path.join(data_path + "/tiny_imagenet", "train"), transform=transform)  # no augmentation
-        dst_test = torchvision_datasets.ImageFolder(os.path.join(data_path + "/tiny_imagenet", "val"), transform=transform)
+        image_folder = os.path.join(data_path, "tiny_imagenet")
+        tensor_archive = os.path.join(data_path, "tinyimagenet.pt")
+        if os.path.isdir(os.path.join(image_folder, "train")):
+            dst_train = torchvision_datasets.ImageFolder(os.path.join(image_folder, "train"), transform=transform)  # no augmentation
+            dst_test = torchvision_datasets.ImageFolder(os.path.join(image_folder, "val"), transform=transform)
+        elif os.path.isfile(tensor_archive):
+            dst_train = TinyImageNetTensor(tensor_archive, "train", mean, std)
+            dst_test = TinyImageNetTensor(tensor_archive, "val", mean, std)
+        else:
+            raise FileNotFoundError("Tiny ImageNet not found under %s" % data_path)
 
     elif dataset == 'ImageNet':
         channel = 3

@@ -67,12 +67,15 @@ def main(args):
     dset_name = (args.dataset).lower() if args.dataset != "Tiny" else "tiny_imagenet"
 
     if args.dataset != "ImageNet":
+        top_1_percent_idx = sorted_indices[:int(0.01 * num_examples)]
         top_2_percent_idx = sorted_indices[:int(0.02 * num_examples)]
         top_5_percent_idx = sorted_indices[:int(0.05 * num_examples)]
 
         output_dir = args.output_dir or os.path.join('init', dset_name)
         os.makedirs(output_dir, exist_ok=True)
 
+        with open(f'{output_dir}/{args.dataset}_{args.ssl_algo}_1_high_loss_indices.pkl', 'wb') as f:
+            pickle.dump(top_1_percent_idx, f)
         with open(f'{output_dir}/{args.dataset}_{args.ssl_algo}_2_high_loss_indices.pkl', 'wb') as f:
             pickle.dump(top_2_percent_idx, f)
         with open(f'{output_dir}/{args.dataset}_{args.ssl_algo}_5_high_loss_indices.pkl', 'wb') as f:

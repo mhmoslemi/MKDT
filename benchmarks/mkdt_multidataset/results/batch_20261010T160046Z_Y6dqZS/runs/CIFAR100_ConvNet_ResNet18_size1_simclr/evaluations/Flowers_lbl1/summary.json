@@ -1,0 +1,49 @@
+{
+  "config": {
+    "protocol": "mkdt_dual_generator_v2_random_labels_barlow2x",
+    "source": "CIFAR100",
+    "generator": "ConvNet",
+    "target": "Flowers",
+    "model": "ResNet18",
+    "ssl_method": "simclr",
+    "subset_percentage": 1,
+    "ssl_epochs": 5000,
+    "label_percentage": 1,
+    "probe_epochs": 500,
+    "runs": 10,
+    "label_selection": "uniform_random_without_replacement",
+    "probe_protocol": "frozen_encoder",
+    "input_scope": "images_only_no_labels_pt_no_synlr_pt",
+    "normalization": "target_dataset_repository_statistics_32x32",
+    "std_ddof": 1
+  },
+  "complete": true,
+  "completed_runs": 10,
+  "expected_runs": 10,
+  "mean_percent": 1.969425966963172,
+  "std_percent": 0.6040610811790076,
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9
+  ],
+  "accuracies_percent": [
+    2.5044722482562065,
+    2.2280046716332436,
+    2.7484145015478134,
+    1.333550177514553,
+    1.8051715567708015,
+    2.732151560485363,
+    2.000325359404087,
+    1.3010245747864246,
+    2.000325359404087,
+    1.0408196598291397
+  ]
+}

@@ -1,0 +1,37 @@
+{
+  "config": {
+    "protocol": "mkdt_dual_generator_v2_random_labels_barlow2x",
+    "source": "CIFAR10",
+    "generator": "ConvNet",
+    "source_classes": 10,
+    "model": "ResNet18",
+    "ssl_method": "simclr",
+    "subset_percentage": 1,
+    "ssl_epochs": 5000,
+    "runs": 10,
+    "synthetic_path": "/scratch/mmoslem3/MKDT/benchmarks/mkdt_multidataset/results/batch_20261010T160046Z_Y6dqZS/synthetic/generated/ConvNet/CIFAR10/CIFAR10_1pct/images_5000.pt",
+    "synthetic_sha256": "db2cb86627960e119f7b3f3805453662a711e60d0b27dd316116c04c4a87661c",
+    "input_scope": "images_only_no_labels_pt_no_synlr_pt",
+    "evaluation_image_size": 32,
+    "tiny_synthetic_resize": "none",
+    "temperature": 0.2,
+    "batch_size": 256,
+    "ssl_aug_strategy": "color_crop_cutout_flip_scale_rotate",
+    "ssl_aug_mode": "S"
+  },
+  "complete": true,
+  "completed_runs": 10,
+  "expected_runs": 10,
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9
+  ]
+}

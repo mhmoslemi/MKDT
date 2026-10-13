@@ -1,0 +1,18 @@
+{
+  "protocol": "mkdt_dual_generator_v2_random_labels_barlow2x",
+  "source": "CIFAR10",
+  "generator": "ConvNet",
+  "target": "CUB2011",
+  "model": "ResNet18",
+  "ssl_method": "simclr",
+  "subset_percentage": 1,
+  "ssl_epochs": 5000,
+  "label_percentage": 5,
+  "probe_epochs": 300,
+  "runs": 10,
+  "label_selection": "uniform_random_without_replacement",
+  "probe_protocol": "frozen_encoder",
+  "input_scope": "images_only_no_labels_pt_no_synlr_pt",
+  "normalization": "target_dataset_repository_statistics_32x32",
+  "std_ddof": 1
+}

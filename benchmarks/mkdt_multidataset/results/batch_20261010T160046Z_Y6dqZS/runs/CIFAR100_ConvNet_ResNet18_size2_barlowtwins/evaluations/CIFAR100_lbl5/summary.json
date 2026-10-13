@@ -1,0 +1,49 @@
+{
+  "config": {
+    "protocol": "mkdt_dual_generator_v2_random_labels_barlow2x",
+    "source": "CIFAR100",
+    "generator": "ConvNet",
+    "target": "CIFAR100",
+    "model": "ResNet18",
+    "ssl_method": "barlowtwins",
+    "subset_percentage": 2,
+    "ssl_epochs": 8000,
+    "label_percentage": 5,
+    "probe_epochs": 300,
+    "runs": 10,
+    "label_selection": "uniform_random_without_replacement",
+    "probe_protocol": "frozen_encoder",
+    "input_scope": "images_only_no_labels_pt_no_synlr_pt",
+    "normalization": "target_dataset_repository_statistics_32x32",
+    "std_ddof": 1
+  },
+  "complete": true,
+  "completed_runs": 10,
+  "expected_runs": 10,
+  "mean_percent": 5.025999844074249,
+  "std_percent": 0.5803676814674852,
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9
+  ],
+  "accuracies_percent": [
+    4.339999705553055,
+    5.8799996972084045,
+    5.859999731183052,
+    4.779999703168869,
+    5.260000005364418,
+    4.690000042319298,
+    5.51999993622303,
+    4.71000000834465,
+    4.279999807476997,
+    4.939999803900719
+  ]
+}

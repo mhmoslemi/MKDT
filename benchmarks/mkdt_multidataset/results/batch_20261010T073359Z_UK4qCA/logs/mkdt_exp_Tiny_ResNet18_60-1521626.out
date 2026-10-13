@@ -1,0 +1,119 @@
+Hyper-parameters: 
+ {'dataset': 'Tiny', 'model': 'ResNet18', 'num_experts': 20, 'lr_teacher': 0.1, 'batch_train': 256, 'data_path': '/scratch/mmoslem3/data', 'buffer_path': '/scratch/mmoslem3/MKDT/mkdt_synthetic/work/buffers', 'train_epochs': 20, 'mom': 0.9, 'l2': 0.0001, 'train_labels_path': '/scratch/mmoslem3/MKDT/mkdt_synthetic/work/target_rep/barlow_twins/Tiny_target_rep_train.pt', 'criterion': 'mse', 'device': 'cuda:0', 'start_index': 60}
+BUILDING TRAINSET
+  0%|          | 0/100000 [00:00<?, ?it/s]  2%|▏         | 1763/100000 [00:00<00:05, 17618.59it/s]  4%|▎         | 3525/100000 [00:00<00:05, 17018.25it/s]  5%|▌         | 5229/100000 [00:00<00:05, 16765.77it/s]  7%|▋         | 7300/100000 [00:00<00:05, 18289.83it/s] 10%|▉         | 9621/100000 [00:00<00:04, 20037.09it/s] 12%|█▏        | 11949/100000 [00:00<00:04, 21126.73it/s] 14%|█▍        | 14266/100000 [00:00<00:03, 21787.64it/s] 17%|█▋        | 16577/100000 [00:00<00:03, 22204.70it/s] 19%|█▉        | 18800/100000 [00:00<00:03, 22069.58it/s] 21%|██        | 21009/100000 [00:01<00:03, 21925.93it/s] 23%|██▎       | 23323/100000 [00:01<00:03, 22292.41it/s] 26%|██▌       | 25641/100000 [00:01<00:03, 22559.08it/s] 28%|██▊       | 27961/100000 [00:01<00:03, 22751.34it/s] 30%|███       | 30237/100000 [00:01<00:04, 17295.69it/s] 32%|███▏      | 32392/100000 [00:01<00:03, 18342.46it/s] 35%|███▍      | 34536/100000 [00:01<00:03, 19146.31it/s] 37%|███▋      | 36691/100000 [00:01<00:03, 19795.79it/s] 39%|███▉      | 38840/100000 [00:01<00:03, 20267.58it/s] 41%|████      | 40975/100000 [00:02<00:02, 20574.96it/s] 43%|████▎     | 43121/100000 [00:02<00:02, 20830.54it/s] 45%|████▌     | 45287/100000 [00:02<00:02, 21072.15it/s] 47%|████▋     | 47433/100000 [00:02<00:02, 21183.41it/s] 50%|████▉     | 49594/100000 [00:02<00:02, 21307.38it/s] 52%|█████▏    | 51739/100000 [00:02<00:02, 21347.88it/s] 54%|█████▍    | 53883/100000 [00:02<00:02, 21315.61it/s] 56%|█████▌    | 56043/100000 [00:02<00:02, 21399.25it/s] 58%|█████▊    | 58210/100000 [00:02<00:01, 21478.22it/s] 60%|██████    | 60362/100000 [00:02<00:01, 21482.92it/s] 63%|██████▎   | 62513/100000 [00:03<00:01, 21489.88it/s] 65%|██████▍   | 64664/100000 [00:03<00:01, 21375.38it/s] 67%|██████▋   | 66825/100000 [00:03<00:01, 21443.33it/s] 69%|██████▉   | 68971/100000 [00:03<00:01, 21430.82it/s] 71%|███████   | 71116/100000 [00:03<00:01, 21433.52it/s] 73%|███████▎  | 73281/100000 [00:03<00:01, 21495.73it/s] 75%|███████▌  | 75431/100000 [00:03<00:01, 21468.93it/s] 78%|███████▊  | 77579/100000 [00:03<00:01, 15817.64it/s] 80%|███████▉  | 79738/100000 [00:03<00:01, 17198.73it/s] 82%|████████▏ | 81890/100000 [00:04<00:00, 18298.39it/s] 84%|████████▍ | 84059/100000 [00:04<00:00, 19202.38it/s] 86%|████████▌ | 86223/100000 [00:04<00:00, 19874.31it/s] 88%|████████▊ | 88370/100000 [00:04<00:00, 20322.81it/s] 91%|█████████ | 90520/100000 [00:04<00:00, 20659.94it/s] 93%|█████████▎| 92632/100000 [00:04<00:00, 20721.97it/s] 95%|█████████▍| 94782/100000 [00:04<00:00, 20947.59it/s] 97%|█████████▋| 96915/100000 [00:04<00:00, 21060.12it/s] 99%|█████████▉| 99074/100000 [00:04<00:00, 21214.45it/s]100%|██████████| 100000/100000 [00:04<00:00, 20462.01it/s]
+train label shape torch.Size([100000, 512])
+real images channel 0, mean = -0.0208, std = 1.2071
+real images channel 1, mean = -0.0354, std = 1.2003
+real images channel 2, mean = -0.0378, std = 1.2515
+/home/mmoslem3/ENV/lib/python3.11/site-packages/torch/utils/data/dataloader.py:627: UserWarning: This DataLoader will create 4 worker processes in total. Our suggested max number of worker in current system is 2, which is smaller than what this DataLoader is going to create. Please be aware that excessive worker creation might get DataLoader running slow or even freeze, lower the worker number to avoid potential slowness/freeze if necessary.
+  warnings.warn(
+Dataset creation complete
+ResNet(
+  (conv1): Conv2d(3, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+  (bn1): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+  (layer1): Sequential(
+    (0): BasicBlock(
+      (conv1): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn1): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (conv2): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn2): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (shortcut): Sequential()
+    )
+    (1): BasicBlock(
+      (conv1): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn1): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (conv2): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn2): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (shortcut): Sequential()
+    )
+  )
+  (layer2): Sequential(
+    (0): BasicBlock(
+      (conv1): Conv2d(64, 128, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1), bias=False)
+      (bn1): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (conv2): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn2): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (shortcut): Sequential(
+        (0): Conv2d(64, 128, kernel_size=(1, 1), stride=(2, 2), bias=False)
+        (1): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      )
+    )
+    (1): BasicBlock(
+      (conv1): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn1): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (conv2): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn2): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (shortcut): Sequential()
+    )
+  )
+  (layer3): Sequential(
+    (0): BasicBlock(
+      (conv1): Conv2d(128, 256, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1), bias=False)
+      (bn1): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (conv2): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn2): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (shortcut): Sequential(
+        (0): Conv2d(128, 256, kernel_size=(1, 1), stride=(2, 2), bias=False)
+        (1): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      )
+    )
+    (1): BasicBlock(
+      (conv1): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn1): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (conv2): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn2): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (shortcut): Sequential()
+    )
+  )
+  (layer4): Sequential(
+    (0): BasicBlock(
+      (conv1): Conv2d(256, 512, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1), bias=False)
+      (bn1): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (conv2): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn2): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (shortcut): Sequential(
+        (0): Conv2d(256, 512, kernel_size=(1, 1), stride=(2, 2), bias=False)
+        (1): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      )
+    )
+    (1): BasicBlock(
+      (conv1): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn1): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (conv2): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn2): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (shortcut): Sequential()
+    )
+  )
+  (classifier): Linear(in_features=512, out_features=512, bias=True)
+)
+Training:   0%|          | 0/391 [00:00<?, ?it/s]Training:   0%|          | 0/391 [00:00<?, ?it/s]
+Traceback (most recent call last):
+  File "/scratch/mmoslem3/MKDT/benchmarks/mkdt_multidataset/results/batch_20261010T073359Z_UK4qCA/code/buffer.py", line 102, in <module>
+    main(args)
+  File "/scratch/mmoslem3/MKDT/benchmarks/mkdt_multidataset/results/batch_20261010T073359Z_UK4qCA/code/buffer.py", line 62, in main
+    train_loss = epoch("train", dataloader=trainloader, net=teacher_net, optimizer=teacher_optim,
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/scratch/mmoslem3/MKDT/benchmarks/mkdt_multidataset/results/batch_20261010T073359Z_UK4qCA/code/utils.py", line 497, in epoch
+    output = net(img)
+             ^^^^^^^^
+  File "/home/mmoslem3/ENV/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1775, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mmoslem3/ENV/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1786, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/scratch/mmoslem3/MKDT/benchmarks/mkdt_multidataset/results/batch_20261010T073359Z_UK4qCA/code/networks.py", line 471, in forward
+    out = self.classifier(out)
+          ^^^^^^^^^^^^^^^^^^^^
+  File "/home/mmoslem3/ENV/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1775, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mmoslem3/ENV/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1786, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mmoslem3/ENV/lib/python3.11/site-packages/torch/nn/modules/linear.py", line 134, in forward
+    return F.linear(input, self.weight, self.bias)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: mat1 and mat2 shapes cannot be multiplied (256x2048 and 512x512)
+srun: error: rack10-11: task 0: Exited with exit code 1

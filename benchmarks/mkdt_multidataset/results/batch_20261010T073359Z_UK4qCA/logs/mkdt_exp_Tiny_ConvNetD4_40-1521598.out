@@ -1,0 +1,10 @@
+Hyper-parameters: 
+ {'dataset': 'Tiny', 'model': 'ConvNetD4', 'num_experts': 20, 'lr_teacher': 0.1, 'batch_train': 256, 'data_path': '/scratch/mmoslem3/data', 'buffer_path': '/scratch/mmoslem3/MKDT/mkdt_synthetic/work/buffers', 'train_epochs': 20, 'mom': 0.9, 'l2': 0.0001, 'train_labels_path': '/scratch/mmoslem3/MKDT/mkdt_synthetic/work/target_rep/barlow_twins/Tiny_target_rep_train.pt', 'criterion': 'mse', 'device': 'cuda:0', 'start_index': 40}
+Traceback (most recent call last):
+  File "/scratch/mmoslem3/MKDT/benchmarks/mkdt_multidataset/results/batch_20261010T073359Z_UK4qCA/code/buffer.py", line 102, in <module>
+    main(args)
+  File "/scratch/mmoslem3/MKDT/benchmarks/mkdt_multidataset/results/batch_20261010T073359Z_UK4qCA/code/buffer.py", line 19, in main
+    os.makedirs(save_dir)
+  File "<frozen os>", line 225, in makedirs
+FileExistsError: [Errno 17] File exists: '/scratch/mmoslem3/MKDT/mkdt_synthetic/work/buffers/Tiny/ConvNetD4'
+srun: error: rack06-05: task 0: Exited with exit code 1

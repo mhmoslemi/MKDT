@@ -6,7 +6,6 @@ import torch
 import torch.nn as nn
 from tqdm import tqdm
 from utils import get_dataset, get_network, get_time
-import wandb
 import copy
 import pickle 
 import random
@@ -22,17 +21,6 @@ def main(args):
     channel, im_size, _, dst_train, _ = get_dataset(dataset=args.dataset, data_path=args.data_path)
     args.im_size = im_size
     print(f"Image size: {im_size}")
-
-    wandb.init(sync_tensorboard=False,
-               project="MKDT",
-               job_type="CleanRepo",
-               config=args,
-               )
-
-    args = type('', (), {})()
-
-    for key in wandb.config._items:
-        setattr(args, key, wandb.config._items[key])
 
     args.distributed = torch.cuda.device_count() > 1
 
@@ -124,7 +112,6 @@ def main(args):
                 torch.save(image_save.cpu(), os.path.join(save_dir, "images_{}.pt".format(log_it)))
                 # visualize
                 # grid = make_grid(image_save.clone(), nrow=100)
-                # wandb.log({"images": wandb.Image(grid.detach().cpu())}, step=it)
                 torch.save(label_syn.cpu(), os.path.join(save_dir, "labels_{}.pt".format(log_it)))
                 torch.save(syn_lr.cpu(), os.path.join(save_dir, "synlr_{}.pt".format(log_it)))
                 print("Synthetic LR", syn_lr.item())
@@ -219,9 +206,6 @@ def main(args):
         for _ in student_params:
             del _
     
-    wandb.finish()
-
-
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Parameter Processing')
 
@@ -256,4 +240,3 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     main(args)
-

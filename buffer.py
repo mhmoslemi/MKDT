@@ -15,8 +15,9 @@ def main(args):
     # Location to save the buffers
     save_dir = os.path.join(args.buffer_path, args.dataset)
     save_dir = os.path.join(save_dir, args.model)
-    if not os.path.exists(save_dir):
-        os.makedirs(save_dir)
+    # Expert shards are launched concurrently and share this directory.
+    # exist_ok avoids the harmless check/create race between those jobs.
+    os.makedirs(save_dir, exist_ok=True)
 
     trainloader, labels_all = build_trainset(dataset=args.dataset,
                                  dst_train=dst_train,
@@ -36,6 +37,13 @@ def main(args):
     # Get the expert trajectories
     trajectories = []
     for it in range(0, args.num_experts):
+
+        if args.start_index is not None:
+            planned_path = os.path.join(
+                save_dir, "replay_buffer_{}.pt".format(args.start_index + it))
+            if os.path.exists(planned_path):
+                print("Skipping existing {}".format(planned_path))
+                continue
 
         # Sample model 
         teacher_net = get_network(args.model, channel, labels_all.shape[1], im_size).to(args.device) # get a random model
@@ -63,9 +71,12 @@ def main(args):
         
         # Save trajectory checkpoint
         print("Saving trajectory checkpoint")
-        n = 0
-        while os.path.exists(os.path.join(save_dir, "replay_buffer_{}.pt".format(n))):
-            n += 1
+        if args.start_index is None:
+            n = 0
+            while os.path.exists(os.path.join(save_dir, "replay_buffer_{}.pt".format(n))):
+                n += 1
+        else:
+            n = args.start_index + it
         print("Saving {}".format(os.path.join(save_dir, "replay_buffer_{}.pt".format(n))))
         torch.save(trajectories, os.path.join(save_dir, "replay_buffer_{}.pt".format(n)))
         trajectories = []
@@ -86,6 +97,7 @@ if __name__ == '__main__':
     parser.add_argument('--train_labels_path', type=str, required=True)
     parser.add_argument('--criterion', type=str, default="mse")
     parser.add_argument('--device', type=int, default=0, help='gpu number')
+    parser.add_argument('--start_index', type=int, default=None, help='first explicit replay-buffer index for collision-free parallel shards')
     
     args = parser.parse_args()
     main(args)

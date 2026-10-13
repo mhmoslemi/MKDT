@@ -2,6 +2,7 @@
 Minimizes the negative mutual information between augmented views of real images assigned to synthetic prototypes in random feature spaces."""
 
 import argparse
+import math
 import os
 import random
 
@@ -141,7 +142,7 @@ def deepcluster_initialize(dst_train, num_syn, device, seed, channel, num_classe
     centers = features[indices].clone()
 
     # K-Means loop
-    for _ in range(50):
+    for _ in range(4):
         dists = torch.cdist(features, centers)
         assigns = dists.argmin(dim=1)
         new_centers = torch.stack([
@@ -194,8 +195,19 @@ def information_theoretic_loss(features_u, features_v, features_S, tau):
     # Mutual Information: \sum P_ij \log( P_ij / (P_i * P_j) )
     MI = (P * torch.log(P / (P_i * P_j))).sum()
 
-    # We maximize MI by minimizing its negative
-    return -MI
+    negative_mi = -MI
+    # Directed soft-Chamfer coverage from every synthetic prototype to the
+    # real batch. Normalizing over dim=0 ensures every prototype contributes.
+    log_batch_size = math.log(B)
+    coverage_u = -tau * (
+        torch.logsumexp(sim_u / tau, dim=0) - log_batch_size
+    ).mean()
+    coverage_v = -tau * (
+        torch.logsumexp(sim_v / tau, dim=0) - log_batch_size
+    ).mean()
+    coverage_loss = 0.5 * (coverage_u + coverage_v)
+
+    return negative_mi, coverage_loss
 
 
 def main():
@@ -209,22 +221,23 @@ def main():
     parser.add_argument('--seed', type=int, default=0)
 
     # Information-Theoretic Objective.
-    parser.add_argument('--Iteration', type=int, default=1000)
-    parser.add_argument('--lr_img', type=float, default=0.005, help='Higher LR, decays via CosineAnnealing')
-    parser.add_argument('--batch_real', type=int, default=512, help='Slightly noisier batch prevents deep proxy minima')
-    parser.add_argument('--num_random_networks', type=int, default=5, help='Fresh samples from P_net per pixel update')
-    parser.add_argument('--temperature', type=float, default=0.2, help='Softmax temperature for prototype assignment')
+    parser.add_argument('--Iteration', type=int, default=800)
+    parser.add_argument('--lr_img', type=float, default=0.01, help='Higher LR, decays via CosineAnnealing')
+    parser.add_argument('--batch_real', type=int, default=4096, help='Slightly noisier batch prevents deep proxy minima')
+    parser.add_argument('--num_random_networks', type=int, default=8, help='Fresh samples from P_net per pixel update')
+    parser.add_argument('--temperature', type=float, default=0.02, help='Softmax temperature for prototype assignment')
+    parser.add_argument('--coverage_gamma', type=float, default=0.00, help='Weight of prototype-to-real soft coverage; 0 preserves the original pure-IIC objective')
     # parser.add_argument('--random_models', default='ConvNet,ResNet18', help='Comma-separated P_net support; forces geometric generalization')
-    parser.add_argument('--random_models', default='ConvNet', help='Comma-separated P_net support; forces geometric generalization')
+    parser.add_argument('--random_models', default='ResNet18BN', help='Comma-separated P_net support; forces geometric generalization')
     parser.add_argument('--tv_weight', type=float, default=0.01, help='Total Variation penalty to destroy adversarial high-frequencies')
     parser.add_argument('--pixel_mse_weight', type=float, default=0.0, help='Nonnegative weight for mean pixel MSE to initialization in [0,1] units; 0 disables it')
-    parser.add_argument('--encoder_train_steps', type=int, default=20, help='SimCLR steps on the selected detached images before freezing each sampled encoder; 0 disables adaptation')
+    parser.add_argument('--encoder_train_steps', type=int, default=2, help='SimCLR steps on the selected detached images before freezing each sampled encoder; 0 disables adaptation')
     parser.add_argument('--encoder_train_data', choices=['synthetic', 'real'], default='synthetic', help='Images used for the sampled encoder SimCLR warm-up')
     parser.add_argument('--distill_aug_strategy', default='color_crop_cutout_flip_scale_rotate')
     parser.add_argument('--distill_aug_mode', choices=['S', 'M'], default='M')
 
     # Downstream SSL evaluation.
-    parser.add_argument('--model', default='ConvNet')
+    parser.add_argument('--model', default='ResNet18_cover')
     parser.add_argument('--lr_net', type=float, default=0.01)
     parser.add_argument('--batch_train', type=int, default=256)
     parser.add_argument('--ssl_method', default='simclr')
@@ -240,7 +253,7 @@ def main():
     parser.add_argument('--batch_linear', type=int, default=256)
 
     # Output.
-    parser.add_argument('--save_path', default='result2')
+    parser.add_argument('--save_path', default='res_tmp')
 
     args = parser.parse_args()
     random_models = [name.strip() for name in (args.random_models or args.model).split(',') if name.strip()]
@@ -256,8 +269,8 @@ def main():
     set_random_seed(args.seed)
 
     os.makedirs(args.save_path, exist_ok=True)
-    clear_directory(args.save_path)
-    print('Cleared all previous files from %s' % args.save_path, flush=True)
+    # clear_directory(args.save_path)
+    # print('Cleared all previous files from %s' % args.save_path, flush=True)
     os.makedirs(args.data_path, exist_ok=True)
     channel, im_size, num_classes, _, mean, std, dst_train, _, testloader = get_dataset(args.dataset, args.data_path)
     num_syn = int(len(dst_train) * args.percentage / 100)
@@ -289,9 +302,12 @@ def main():
     
     # Optimizer & Scheduler Setup
     optimizer_img = torch.optim.Adam([image_syn], lr=args.lr_img)
-    scheduler_img = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer_img, T_max=args.Iteration, eta_min=0.005)
+    scheduler_img = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer_img, T_max=args.Iteration, eta_min=0.001)
     
     loss_history = []
+    negative_mi_history = []
+    coverage_loss_history = []
+    weighted_coverage_history = []
     pixel_mse_history = []
     total_loss_history = []
     encoder_ssl_history = []
@@ -312,7 +328,8 @@ def main():
     print('Hyper-parameters: \n', args.__dict__)
     print('P_net support: %s' % ', '.join(random_models), flush=True)
     print('Each sampled encoder receives %d SimCLR step(s) on detached %s images before freezing.' % (args.encoder_train_steps, args.encoder_train_data), flush=True)
-    print('Objective: minimize mean(-MI) + %g * pixel_MSE_to_initial ([0,1] pixel units).' % args.pixel_mse_weight, flush=True)
+    print('Objective: minimize mean(-MI + %g * prototype_coverage) + %g * pixel_MSE_to_initial ([0,1] pixel units).' %
+          (args.coverage_gamma, args.pixel_mse_weight), flush=True)
     # evaluate(0)
     # Evaluation
     # model_train = ConvNet, model_eval = ConvNet, iteration = 0
@@ -327,6 +344,8 @@ def main():
     for iteration in range(1, args.Iteration + 1):
         optimizer_img.zero_grad(set_to_none=True)
         sampled_losses = []
+        sampled_negative_mi_losses = []
+        sampled_coverage_losses = []
         sampled_models = []
         sampled_encoder_losses = []
         
@@ -360,15 +379,24 @@ def main():
             features_S = encoder(image_syn) 
 
             # Compute Negative Mutual Information
-            network_loss = information_theoretic_loss(features_u, features_v, features_S, tau=args.temperature)
+            negative_mi, coverage_loss = information_theoretic_loss(
+                features_u, features_v, features_S, tau=args.temperature
+            )
+            if args.coverage_gamma == 0:
+                network_loss = negative_mi
+            else:
+                network_loss = negative_mi + args.coverage_gamma * coverage_loss
             
             # Gradient descent on negative MI maximizes mutual information.
             (network_loss / args.num_random_networks).backward()
-            
+
             sampled_losses.append(network_loss.detach())
+            sampled_negative_mi_losses.append(negative_mi.detach())
+            sampled_coverage_losses.append(coverage_loss.detach())
             sampled_encoder_losses.append(encoder_ssl_loss)
             sampled_models.append('%s(s=%d)' % (model_name, network_seed))
-            del encoder, network, network_loss, features_u, features_v, features_S, view_u, view_v
+            del encoder, network, network_loss, negative_mi, coverage_loss
+            del features_u, features_v, features_S, view_u, view_v
 
         # Add the positive drift penalty ONCE per pixel update, independent of
         # num_random_networks. The target is the fixed, unaugmented initialization.
@@ -376,6 +404,9 @@ def main():
         if args.pixel_mse_weight > 0:
             (args.pixel_mse_weight * pixel_mse).backward()
         objective = torch.stack(sampled_losses).mean().item()
+        negative_mi_value = torch.stack(sampled_negative_mi_losses).mean().item()
+        coverage_value = torch.stack(sampled_coverage_losses).mean().item()
+        weighted_coverage_value = args.coverage_gamma * coverage_value
         pixel_mse_value = pixel_mse.detach().item()
         total_loss_value = objective + args.pixel_mse_weight * pixel_mse_value
         encoder_ssl_value = float(np.mean(sampled_encoder_losses))
@@ -388,19 +419,22 @@ def main():
             drift = ((image_syn - image_syn_initial) * diag_std * 255).square().mean().sqrt().item()
             
         loss_history.append(objective)
+        negative_mi_history.append(negative_mi_value)
+        coverage_loss_history.append(coverage_value)
+        weighted_coverage_history.append(weighted_coverage_value)
         pixel_mse_history.append(pixel_mse_value)
         total_loss_history.append(total_loss_value)
         encoder_ssl_history.append(encoder_ssl_value)
-        if iteration % 50 == 0:
+        if iteration % 25 == 0:
             current_lr = scheduler_img.get_last_lr()[0]
-            print('%s iter = %05d, encoder_SSL = %.6f, neg_MI = %.6f, pixel_MSE = %.6f, total_loss = %.6f, pixel drift RMS = %.5f/255, PNG values changed = %.5f%%, lr = %.4f' %
-                (get_time(), iteration, encoder_ssl_value, objective, pixel_mse_value, total_loss_value, drift, changed, current_lr), flush=True)
+            print('%s iter = %05d, encoder_SSL = %.6f, neg_MI = %.6f, coverage = %.6f, proxy_loss = %.6f, pixel_MSE = %.6f, total_loss = %.6f, pixel drift RMS = %.5f/255, PNG values changed = %.5f%%, lr = %.4f' %
+                (get_time(), iteration, encoder_ssl_value, negative_mi_value, coverage_value, objective, pixel_mse_value, total_loss_value, drift, changed, current_lr), flush=True)
 
         # if iteration % 100 == 0:
         #     evaluate(iteration)
 
         # if iteration % 50 == 0:
-    grid_path = os.path.join(args.save_path, 'vis_IIC_%s_%s_%gpercent_iter%d.png' % (args.dataset, args.model, args.percentage, iteration))
+    grid_path = os.path.join(args.save_path, 'vis_IIC_%s_%s_%gpercent_iter%d_final.png' % (args.dataset, args.model, args.percentage, iteration))
     visible = (image_syn.detach() * diag_std + diag_mean).clamp(0, 1).cpu()
     save_image(visible, grid_path, nrow=int(np.ceil(np.sqrt(num_syn))))
 
@@ -419,18 +453,21 @@ def main():
         #                 'pixel_mse_weight': args.pixel_mse_weight, 'pixel_mse_space': 'pixels_0_1'}
         # }, result_path)
 
-    result_path = os.path.join(args.save_path, 'res_IIC_%s_%s_%gpercent.pt' % (args.dataset, args.model, args.percentage))
+    result_path = os.path.join(args.save_path, 'res_IIC_%s_%s_%gpercent_final.pt' % (args.dataset, args.model, args.percentage))
     torch.save({
         'data': image_syn.detach().cpu(), 
         'method': args.method, 
         'iteration': args.Iteration, 
         'loss_history': torch.tensor(loss_history, dtype=torch.float64), 
+        'negative_mi_history': torch.tensor(negative_mi_history, dtype=torch.float64),
+        'coverage_loss_history': torch.tensor(coverage_loss_history, dtype=torch.float64),
+        'weighted_coverage_history': torch.tensor(weighted_coverage_history, dtype=torch.float64),
         'pixel_mse_history': torch.tensor(pixel_mse_history, dtype=torch.float64),
         'total_loss_history': torch.tensor(total_loss_history, dtype=torch.float64),
         'encoder_ssl_history': torch.tensor(encoder_ssl_history, dtype=torch.float64),
         'seed': args.seed, 
         'random_feature_distribution': {'models': random_models, 'samples_per_update': args.num_random_networks, 'encoder_train_steps': args.encoder_train_steps, 'encoder_train_data': args.encoder_train_data, 'encoder_train_lr': args.lr_net, 'encoder_train_batch': args.batch_train, 'encoder_train_method': 'simclr'},
-        'iic_params': {'tau': args.temperature, 'strategy': args.distill_aug_strategy, 'batch_real': args.batch_real, 'tv_weight': args.tv_weight,
+        'iic_params': {'tau': args.temperature, 'coverage_gamma': args.coverage_gamma, 'strategy': args.distill_aug_strategy, 'batch_real': args.batch_real, 'tv_weight': args.tv_weight,
                     'pixel_mse_weight': args.pixel_mse_weight, 'pixel_mse_space': 'pixels_0_1'}
     }, result_path)
     print('Saved synthetic data to %s' % result_path, flush=True)

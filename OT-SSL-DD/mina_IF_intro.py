@@ -196,13 +196,13 @@ def main():
 
     # Data.
     parser.add_argument('--dataset', default='CIFAR10')
-    parser.add_argument('--percentage', type=float, default=1.0)
+    parser.add_argument('--percentage', type=float, default=5.0)
     parser.add_argument('--data_path', default='/home/mmoslem3/scratch/data')
     parser.add_argument('--device', choices=['cpu', 'cuda'], default='cuda' if torch.cuda.is_available() else 'cpu')
     parser.add_argument('--seed', type=int, default=0)
 
     # Information-Theoretic Objective.
-    parser.add_argument('--Iteration', type=int, default=800)
+    parser.add_argument('--Iteration', type=int, default=1500)
     parser.add_argument('--lr_img', type=float, default=0.005, help='Higher LR, decays via CosineAnnealing')
     parser.add_argument('--batch_real', type=int, default=512, help='Slightly noisier batch prevents deep proxy minima')
     parser.add_argument('--num_random_networks', type=int, default=5, help='Fresh samples from P_net per pixel update')
@@ -233,7 +233,7 @@ def main():
     parser.add_argument('--batch_linear', type=int, default=256)
 
     # Output.
-    parser.add_argument('--save_path', default='result_intro')
+    parser.add_argument('--save_path', default='res_test')
 
     args = parser.parse_args()
     random_models = [name.strip() for name in (args.random_models or args.model).split(',') if name.strip()]
@@ -396,53 +396,53 @@ def main():
     visible_original = (image_syn_initial * diag_std + diag_mean).clamp(0, 1).cpu()
     save_image(visible, grid_path, nrow=int(np.ceil(np.sqrt(num_syn))))
 
-    metadata_path = os.path.join(args.save_path, 'source_metadata.csv')
-    with open(metadata_path, 'w', newline='') as metadata_file:
-        writer = csv.writer(metadata_file)
-        writer.writerow(['synthetic_number', 'original_dataset_index', 'original_label', 'synthetic_file', 'original_file'])
-        for synthetic_number, (synthetic_image, original_image, dataset_index, label) in enumerate(
-                zip(visible, visible_original, original_indices.tolist(), original_labels.tolist()), start=1):
-            synthetic_name = '%d_%d.jpg' % (synthetic_number, label)
-            original_name = '%d_%d_orig.jpg' % (synthetic_number, label)
-            save_image(synthetic_image, os.path.join(args.save_path, synthetic_name))
-            save_image(original_image, os.path.join(args.save_path, original_name))
-            writer.writerow([synthetic_number, dataset_index, label, synthetic_name, original_name])
-    print('Saved %d synthetic/original image pairs and source metadata to %s' %
-          (num_syn, metadata_path), flush=True)
+    # metadata_path = os.path.join(args.save_path, 'source_metadata.csv')
+    # with open(metadata_path, 'w', newline='') as metadata_file:
+    #     writer = csv.writer(metadata_file)
+    #     writer.writerow(['synthetic_number', 'original_dataset_index', 'original_label', 'synthetic_file', 'original_file'])
+    #     for synthetic_number, (synthetic_image, original_image, dataset_index, label) in enumerate(
+    #             zip(visible, visible_original, original_indices.tolist(), original_labels.tolist()), start=1):
+    #         synthetic_name = '%d_%d.jpg' % (synthetic_number, label)
+    #         original_name = '%d_%d_orig.jpg' % (synthetic_number, label)
+    #         save_image(synthetic_image, os.path.join(args.save_path, synthetic_name))
+    #         save_image(original_image, os.path.join(args.save_path, original_name))
+    #         writer.writerow([synthetic_number, dataset_index, label, synthetic_name, original_name])
+    # print('Saved %d synthetic/original image pairs and source metadata to %s' %
+    #       (num_syn, metadata_path), flush=True)
 
-    comparison_indices = []
-    seen_labels = set()
-    for image_index, label in enumerate(original_labels.tolist()):
-        if label not in seen_labels:
-            comparison_indices.append(image_index)
-            seen_labels.add(label)
-        if len(comparison_indices) == 5:
-            break
-    if len(comparison_indices) < 5:
-        raise RuntimeError('Cannot create the comparison image: fewer than 5 classes were selected.')
+    # comparison_indices = []
+    # seen_labels = set()
+    # for image_index, label in enumerate(original_labels.tolist()):
+    #     if label not in seen_labels:
+    #         comparison_indices.append(image_index)
+    #         seen_labels.add(label)
+    #     if len(comparison_indices) == 5:
+    #         break
+    # if len(comparison_indices) < 5:
+    #     raise RuntimeError('Cannot create the comparison image: fewer than 5 classes were selected.')
 
-    image_size = 128
-    caption_height = 24
-    comparison = Image.new('RGB', (5 * image_size, 2 * image_size + caption_height), 'white')
-    draw = ImageDraw.Draw(comparison)
-    for column, image_index in enumerate(comparison_indices):
-        image_number = image_index + 1
-        label = int(original_labels[image_index])
-        synthetic_path = os.path.join(args.save_path, '%d_%d.jpg' % (image_number, label))
-        original_path = os.path.join(args.save_path, '%d_%d_orig.jpg' % (image_number, label))
-        original_image = Image.open(original_path).convert('RGB').resize((image_size, image_size))
-        synthetic_image = Image.open(synthetic_path).convert('RGB').resize((image_size, image_size))
-        comparison.paste(original_image, (column * image_size, 0))
-        comparison.paste(synthetic_image, (column * image_size, image_size))
-        caption = 'Class %d' % label
-        caption_box = draw.textbbox((0, 0), caption)
-        caption_width = caption_box[2] - caption_box[0]
-        draw.text((column * image_size + (image_size - caption_width) // 2, 2 * image_size + 4),
-                  caption, fill='black')
+    # image_size = 128
+    # caption_height = 24
+    # comparison = Image.new('RGB', (5 * image_size, 2 * image_size + caption_height), 'white')
+    # draw = ImageDraw.Draw(comparison)
+    # for column, image_index in enumerate(comparison_indices):
+    #     image_number = image_index + 1
+    #     label = int(original_labels[image_index])
+    #     synthetic_path = os.path.join(args.save_path, '%d_%d.jpg' % (image_number, label))
+    #     original_path = os.path.join(args.save_path, '%d_%d_orig.jpg' % (image_number, label))
+    #     original_image = Image.open(original_path).convert('RGB').resize((image_size, image_size))
+    #     synthetic_image = Image.open(synthetic_path).convert('RGB').resize((image_size, image_size))
+    #     comparison.paste(original_image, (column * image_size, 0))
+    #     comparison.paste(synthetic_image, (column * image_size, image_size))
+    #     caption = 'Class %d' % label
+    #     caption_box = draw.textbbox((0, 0), caption)
+    #     caption_width = caption_box[2] - caption_box[0]
+    #     draw.text((column * image_size + (image_size - caption_width) // 2, 2 * image_size + 4),
+    #               caption, fill='black')
 
-    comparison_path = os.path.join(args.save_path, 'comparison_5_classes.jpg')
-    comparison.save(comparison_path, quality=95)
-    print('Saved 5-class original/synthetic comparison to %s' % comparison_path, flush=True)
+    # comparison_path = os.path.join(args.save_path, 'comparison_5_classes.jpg')
+    # comparison.save(comparison_path, quality=95)
+    # print('Saved 5-class original/synthetic comparison to %s' % comparison_path, flush=True)
 
         # result_path = os.path.join(args.save_path, 'res_IIC_%s_%s_%gpercent.pt' % (args.dataset, args.model, args.percentage))
         # torch.save({
