@@ -15,17 +15,17 @@ from torchvision.utils import save_image
 from utils import DiffAugment, ParamDiffAug, evaluate_synset_SSL, get_dataset, get_eval_pool, get_network, get_time
 
 
-def clear_directory(directory):
-    """Remove everything inside directory while keeping directory itself."""
-    for root, directories, files in os.walk(directory, topdown=False):
-        for filename in files:
-            os.remove(os.path.join(root, filename))
-        for dirname in directories:
-            path = os.path.join(root, dirname)
-            if os.path.islink(path):
-                os.remove(path)
-            else:
-                os.rmdir(path)
+# def clear_directory(directory):
+#     """Remove everything inside directory while keeping directory itself."""
+#     for root, directories, files in os.walk(directory, topdown=False):
+#         for filename in files:
+#             os.remove(os.path.join(root, filename))
+#         for dirname in directories:
+#             path = os.path.join(root, dirname)
+#             if os.path.islink(path):
+#                 os.remove(path)
+#             else:
+#                 os.rmdir(path)
 
 
 def set_random_seed(seed):
@@ -214,24 +214,24 @@ def main():
     parser = argparse.ArgumentParser(description='Information-Theoretic Dataset Condensation (DeepCluster + IIC)')
 
     # Data.
-    parser.add_argument('--dataset', default='CIFAR10')
-    parser.add_argument('--percentage', type=float, default=1.0)
-    parser.add_argument('--data_path', default='/home/mmoslem3/scratch/data')
+    parser.add_argument('--dataset', default='CIFAR100')
+    parser.add_argument('--percentage', type=float, default=5.0)
+    parser.add_argument('--data_path', default='/home/mmoslem3/scratch/data') 
     parser.add_argument('--device', choices=['cpu', 'cuda'], default='cuda' if torch.cuda.is_available() else 'cpu')
     parser.add_argument('--seed', type=int, default=0)
 
     # Information-Theoretic Objective.
     parser.add_argument('--Iteration', type=int, default=800)
-    parser.add_argument('--lr_img', type=float, default=0.01, help='Higher LR, decays via CosineAnnealing')
-    parser.add_argument('--batch_real', type=int, default=4096, help='Slightly noisier batch prevents deep proxy minima')
-    parser.add_argument('--num_random_networks', type=int, default=8, help='Fresh samples from P_net per pixel update')
-    parser.add_argument('--temperature', type=float, default=0.02, help='Softmax temperature for prototype assignment')
+    parser.add_argument('--lr_img', type=float, default=0.005, help='Higher LR, decays via CosineAnnealing')
+    parser.add_argument('--batch_real', type=int, default=512, help='Slightly noisier batch prevents deep proxy minima')
+    parser.add_argument('--num_random_networks', type=int, default=5, help='Fresh samples from P_net per pixel update')
+    parser.add_argument('--temperature', type=float, default=0.2, help='Softmax temperature for prototype assignment')
     parser.add_argument('--coverage_gamma', type=float, default=0.00, help='Weight of prototype-to-real soft coverage; 0 preserves the original pure-IIC objective')
     # parser.add_argument('--random_models', default='ConvNet,ResNet18', help='Comma-separated P_net support; forces geometric generalization')
     parser.add_argument('--random_models', default='ResNet18BN', help='Comma-separated P_net support; forces geometric generalization')
     parser.add_argument('--tv_weight', type=float, default=0.01, help='Total Variation penalty to destroy adversarial high-frequencies')
     parser.add_argument('--pixel_mse_weight', type=float, default=0.0, help='Nonnegative weight for mean pixel MSE to initialization in [0,1] units; 0 disables it')
-    parser.add_argument('--encoder_train_steps', type=int, default=2, help='SimCLR steps on the selected detached images before freezing each sampled encoder; 0 disables adaptation')
+    parser.add_argument('--encoder_train_steps', type=int, default=5, help='SimCLR steps on the selected detached images before freezing each sampled encoder; 0 disables adaptation')
     parser.add_argument('--encoder_train_data', choices=['synthetic', 'real'], default='synthetic', help='Images used for the sampled encoder SimCLR warm-up')
     parser.add_argument('--distill_aug_strategy', default='color_crop_cutout_flip_scale_rotate')
     parser.add_argument('--distill_aug_mode', choices=['S', 'M'], default='M')
@@ -253,7 +253,7 @@ def main():
     parser.add_argument('--batch_linear', type=int, default=256)
 
     # Output.
-    parser.add_argument('--save_path', default='res_tmp')
+    parser.add_argument('--save_path', default='result')
 
     args = parser.parse_args()
     random_models = [name.strip() for name in (args.random_models or args.model).split(',') if name.strip()]
