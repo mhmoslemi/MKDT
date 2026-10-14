@@ -1,0 +1,49 @@
+submitted_utc	job_id	account	class	name	time	mem	dependency
+2026-10-14T02:52:22Z	6196841	aip-boyuwang	mkdt_distill	kil_p3_syn_Tiny_Conv_1	04:40:00	12G	
+2026-10-14T02:52:22Z	6196842	aip-boyuwang	mkdt_distill	kil_p3_syn_Tiny_Conv_2	04:40:00	12G	
+2026-10-14T02:52:22Z	6196843	aip-boyuwang	mkdt_distill	kil_p3_syn_Tiny_Conv_5	04:40:00	12G	
+2026-10-14T02:52:22Z	6196844	aip-boyuwang	mkdt_experts	kil_p3_exp_Tiny_VGG_0	02:30:00	20G	
+2026-10-14T02:52:22Z	6196845	aip-boyuwang	mkdt_experts	kil_p3_exp_Tiny_VGG_20	02:30:00	20G	
+2026-10-14T02:52:22Z	6196846	aip-boyuwang	mkdt_experts	kil_p3_exp_Tiny_VGG_40	02:30:00	20G	
+2026-10-14T02:52:22Z	6196847	aip-boyuwang	mkdt_experts	kil_p3_exp_Tiny_VGG_60	02:30:00	20G	
+2026-10-14T02:52:22Z	6196848	aip-boyuwang	mkdt_experts	kil_p3_exp_Tiny_VGG_80	02:30:00	20G	
+2026-10-14T02:52:22Z	6196849	aip-boyuwang	mkdt_sort	kil_p3_sort_Tiny_VGG	01:10:00	26G	afterok:6196844:6196845:6196846:6196847:6196848
+2026-10-14T02:52:22Z	6196850	aip-yiweilu	mkdt_distill	kil_p3_syn_Tiny_VGG_1	02:10:00	12G	afterok:6196849
+2026-10-14T02:52:22Z	6196851	aip-boyuwang	mkdt_distill	kil_p3_syn_Tiny_VGG_2	02:10:00	12G	afterok:6196849
+2026-10-14T02:52:22Z	6196852	aip-boyuwang	mkdt_distill	kil_p3_syn_Tiny_VGG_5	02:10:00	12G	afterok:6196849
+2026-10-14T02:52:22Z	6196853	aip-boyuwang	mkdt_pretrain	kil_p3_pre_Tiny_ConvNet_ConvNet_1_simclr	00:50:00	4G	afterok:6196841
+2026-10-14T02:52:22Z	6196854	aip-boyuwang	mkdt_evaluate	kil_p3_ev_Tiny_ConvNet_ConvNet_1_simclr	00:15:00	4G	afterok:6196853
+2026-10-14T02:52:22Z	6196855	aip-boyuwang	mkdt_pretrain	kil_p3_pre_Tiny_ConvNet_ResNet18_1_simclr	01:05:00	4G	afterok:6196841
+2026-10-14T02:52:22Z	6196856	aip-boyuwang	mkdt_evaluate	kil_p3_ev_Tiny_ConvNet_ResNet18_1_simclr	00:20:00	4G	afterok:6196855
+2026-10-14T02:52:22Z	6196857	aip-boyuwang	mkdt_pretrain	kil_p3_pre_Tiny_VGG11_VGG11_1_simclr	00:55:00	4G	afterok:6196850
+2026-10-14T02:52:22Z	6196858	aip-boyuwang	mkdt_evaluate	kil_p3_ev_Tiny_VGG11_VGG11_1_simclr	00:15:00	4G	afterok:6196857
+2026-10-14T02:52:22Z	6196859	aip-boyuwang	mkdt_pretrain	kil_p3_pre_Tiny_ConvNet_ConvNet_1_barlow	00:55:00	4G	afterok:6196841
+2026-10-14T02:52:22Z	6196860	aip-yiweilu	mkdt_evaluate	kil_p3_ev_Tiny_ConvNet_ConvNet_1_barlow	00:15:00	4G	afterok:6196859
+2026-10-14T02:52:22Z	6196861	aip-boyuwang	mkdt_pretrain	kil_p3_pre_Tiny_ConvNet_ResNet18_1_barlow	01:25:00	4G	afterok:6196841
+2026-10-14T02:52:22Z	6196862	aip-boyuwang	mkdt_evaluate	kil_p3_ev_Tiny_ConvNet_ResNet18_1_barlow	00:20:00	4G	afterok:6196861
+2026-10-14T02:52:22Z	6196863	aip-boyuwang	mkdt_pretrain	kil_p3_pre_Tiny_VGG11_VGG11_1_barlow	01:00:00	4G	afterok:6196850
+2026-10-14T02:52:22Z	6196864	aip-boyuwang	mkdt_evaluate	kil_p3_ev_Tiny_VGG11_VGG11_1_barlow	00:15:00	4G	afterok:6196863
+2026-10-14T02:52:22Z	6196865	aip-boyuwang	mkdt_pretrain	kil_p3_pre_Tiny_ConvNet_ConvNet_2_simclr	00:55:00	4G	afterok:6196842
+2026-10-14T02:52:22Z	6196866	aip-boyuwang	mkdt_evaluate	kil_p3_ev_Tiny_ConvNet_ConvNet_2_simclr	00:15:00	4G	afterok:6196865
+2026-10-14T02:52:22Z	6196867	aip-boyuwang	mkdt_pretrain	kil_p3_pre_Tiny_ConvNet_ResNet18_2_simclr	01:20:00	4G	afterok:6196842
+2026-10-14T02:52:22Z	6196868	aip-boyuwang	mkdt_evaluate	kil_p3_ev_Tiny_ConvNet_ResNet18_2_simclr	00:20:00	4G	afterok:6196867
+2026-10-14T02:52:22Z	6196869	aip-boyuwang	mkdt_pretrain	kil_p3_pre_Tiny_VGG11_VGG11_2_simclr	01:00:00	4G	afterok:6196851
+2026-10-14T02:52:22Z	6196870	aip-yiweilu	mkdt_evaluate	kil_p3_ev_Tiny_VGG11_VGG11_2_simclr	00:15:00	4G	afterok:6196869
+2026-10-14T02:52:23Z	6196871	aip-boyuwang	mkdt_pretrain	kil_p3_pre_Tiny_ConvNet_ConvNet_2_barlow	01:05:00	4G	afterok:6196842
+2026-10-14T02:52:23Z	6196872	aip-boyuwang	mkdt_evaluate	kil_p3_ev_Tiny_ConvNet_ConvNet_2_barlow	00:15:00	4G	afterok:6196871
+2026-10-14T02:52:23Z	6196873	aip-boyuwang	mkdt_pretrain	kil_p3_pre_Tiny_ConvNet_ResNet18_2_barlow	01:50:00	4G	afterok:6196842
+2026-10-14T02:52:23Z	6196874	aip-boyuwang	mkdt_evaluate	kil_p3_ev_Tiny_ConvNet_ResNet18_2_barlow	00:20:00	4G	afterok:6196873
+2026-10-14T02:52:23Z	6196875	aip-boyuwang	mkdt_pretrain	kil_p3_pre_Tiny_VGG11_VGG11_2_barlow	01:05:00	4G	afterok:6196851
+2026-10-14T02:52:23Z	6196876	aip-boyuwang	mkdt_evaluate	kil_p3_ev_Tiny_VGG11_VGG11_2_barlow	00:15:00	4G	afterok:6196875
+2026-10-14T02:52:23Z	6196877	aip-boyuwang	mkdt_pretrain	kil_p3_pre_Tiny_ConvNet_ConvNet_5_simclr	01:00:00	4G	afterok:6196843
+2026-10-14T02:52:23Z	6196878	aip-boyuwang	mkdt_evaluate	kil_p3_ev_Tiny_ConvNet_ConvNet_5_simclr	00:15:00	4G	afterok:6196877
+2026-10-14T02:52:23Z	6196879	aip-boyuwang	mkdt_pretrain	kil_p3_pre_Tiny_ConvNet_ResNet18_5_simclr	01:45:00	4G	afterok:6196843
+2026-10-14T02:52:23Z	6196880	aip-yiweilu	mkdt_evaluate	kil_p3_ev_Tiny_ConvNet_ResNet18_5_simclr	00:20:00	4G	afterok:6196879
+2026-10-14T02:52:23Z	6196881	aip-boyuwang	mkdt_pretrain	kil_p3_pre_Tiny_VGG11_VGG11_5_simclr	01:05:00	4G	afterok:6196852
+2026-10-14T02:52:23Z	6196882	aip-boyuwang	mkdt_evaluate	kil_p3_ev_Tiny_VGG11_VGG11_5_simclr	00:15:00	4G	afterok:6196881
+2026-10-14T02:52:23Z	6196883	aip-boyuwang	mkdt_pretrain	kil_p3_pre_Tiny_ConvNet_ConvNet_5_barlow	01:15:00	4G	afterok:6196843
+2026-10-14T02:52:23Z	6196884	aip-boyuwang	mkdt_evaluate	kil_p3_ev_Tiny_ConvNet_ConvNet_5_barlow	00:15:00	4G	afterok:6196883
+2026-10-14T02:52:23Z	6196885	aip-boyuwang	mkdt_pretrain	kil_p3_pre_Tiny_ConvNet_ResNet18_5_barlow	02:45:00	4G	afterok:6196843
+2026-10-14T02:52:23Z	6196886	aip-boyuwang	mkdt_evaluate	kil_p3_ev_Tiny_ConvNet_ResNet18_5_barlow	00:20:00	4G	afterok:6196885
+2026-10-14T02:52:23Z	6196887	aip-boyuwang	mkdt_pretrain	kil_p3_pre_Tiny_VGG11_VGG11_5_barlow	01:20:00	4G	afterok:6196852
+2026-10-14T02:52:23Z	6196888	aip-yiweilu	mkdt_evaluate	kil_p3_ev_Tiny_VGG11_VGG11_5_barlow	00:15:00	4G	afterok:6196887
