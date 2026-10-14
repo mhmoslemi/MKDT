@@ -1,0 +1,28 @@
+{
+  "config": {
+    "protocol": "mkdt_dual_generator_v2_random_labels_barlow2x",
+    "source": "TinyImageNet",
+    "generator": "ConvNet",
+    "source_classes": 200,
+    "model": "ConvNet",
+    "ssl_method": "barlowtwins",
+    "subset_percentage": 2,
+    "ssl_epochs": 8000,
+    "runs": 1,
+    "synthetic_path": "/scratch/mmoslem3/MKDT/benchmarks/mkdt_multidataset/results/batch_20261010T160046Z_Y6dqZS/synthetic/generated/ConvNet/TinyImageNet/Tiny_2pct/images_10000.pt",
+    "synthetic_sha256": "b3bc1331b229bee9f3cbf87f7e9756c9090f267a535aecfd341014fa6407f830",
+    "input_scope": "images_only_no_labels_pt_no_synlr_pt",
+    "evaluation_image_size": 32,
+    "tiny_synthetic_resize": "bicubic_antialias_64_to_32",
+    "temperature": 0.2,
+    "batch_size": 256,
+    "ssl_aug_strategy": "color_crop_cutout_flip_scale_rotate",
+    "ssl_aug_mode": "S"
+  },
+  "complete": true,
+  "completed_runs": 1,
+  "expected_runs": 1,
+  "seeds": [
+    0
+  ]
+}
