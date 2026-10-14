@@ -1,0 +1,20 @@
+{
+  "protocol": "mkdt_dual_generator_v2_random_labels_barlow2x",
+  "source": "CIFAR100",
+  "generator": "VGG11",
+  "source_classes": 100,
+  "model": "VGG11",
+  "ssl_method": "simclr",
+  "subset_percentage": 2,
+  "ssl_epochs": 4000,
+  "runs": 1,
+  "synthetic_path": "/scratch/mmoslem3/MKDT/benchmarks/mkdt_multidataset/results/batch_20261010T160046Z_Y6dqZS/synthetic/generated/VGG11/CIFAR100/CIFAR100_2pct/images_5000.pt",
+  "synthetic_sha256": "3c9d1029809ba2f47f2a3f839594d437736627a65283dc28f1728ddfdf0330a4",
+  "input_scope": "images_only_no_labels_pt_no_synlr_pt",
+  "evaluation_image_size": 32,
+  "tiny_synthetic_resize": "none",
+  "temperature": 0.2,
+  "batch_size": 256,
+  "ssl_aug_strategy": "color_crop_cutout_flip_scale_rotate",
+  "ssl_aug_mode": "S"
+}
