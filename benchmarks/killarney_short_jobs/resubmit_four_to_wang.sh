@@ -42,14 +42,20 @@ if [[ -n $(squeue -h -j "$OLD_JOBS" 2>/dev/null) ]]; then
     fail "one or more old jobs are still queued; run the cancellation sequence first"
 fi
 
-sort_details=$(scontrol show job "$SORT_JOB" -o) || \
-    fail "downstream sort job $SORT_JOB no longer exists"
-[[ $sort_details == *"JobState=PENDING"* ]] || \
-    fail "sort job $SORT_JOB is not pending"
-[[ $sort_details == *"Reason=JobHeldUser"* ]] || \
-    fail "sort job $SORT_JOB is not held; run 'scontrol hold $SORT_JOB' first"
-[[ $sort_details != *"6214274"* ]] || \
-    fail "sort job $SORT_JOB still depends on cancelled job 6214274"
+REWIRE_SORT=0
+RELEASE_SORT=0
+if sort_details=$(scontrol show job "$SORT_JOB" -o 2>/dev/null); then
+    if [[ $sort_details == *"JobState=PENDING"* ]]; then
+        REWIRE_SORT=1
+        if [[ $sort_details == *"Reason=JobHeldUser"* ]]; then
+            RELEASE_SORT=1
+        fi
+    else
+        echo "Notice: sort job $SORT_JOB is not pending; submitting the four replacements without rewiring it."
+    fi
+else
+    echo "Notice: sort job $SORT_JOB is no longer known to Slurm; submitting the four replacements only."
+fi
 
 mkdir -p "$LOG_ROOT"
 printf 'submitted_utc\toriginal_job_id\treplacement_job_id\taccount\tname\ttime\tmem\n' > "$MANIFEST"
@@ -90,10 +96,16 @@ submit_gpu 6214274 kil_wang_exp_Tiny_VGG_80 02:30:00 20G \
     "$TINY_WORKER" experts Tiny VGG11 80
 new_expert=$LAST_JOB_ID
 
-scontrol update JobId="$SORT_JOB" \
-    Dependency="afterok:${REMAINING_EXPERTS}:${new_expert}"
-scontrol release "$SORT_JOB"
-echo "Rewired and released sort job $SORT_JOB; new dependency includes $new_expert"
+if [[ $REWIRE_SORT == 1 ]]; then
+    scontrol update JobId="$SORT_JOB" \
+        Dependency="afterok:${REMAINING_EXPERTS}:${new_expert}"
+    if [[ $RELEASE_SORT == 1 ]]; then
+        scontrol release "$SORT_JOB"
+        echo "Rewired and released sort job $SORT_JOB; new dependency includes $new_expert"
+    else
+        echo "Rewired sort job $SORT_JOB; new dependency includes $new_expert"
+    fi
+fi
 
 # These evaluation jobs had already cleared their pretraining dependencies and
 # were pending only for priority, so their input encoders are already present.
