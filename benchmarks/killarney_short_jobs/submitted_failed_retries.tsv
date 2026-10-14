@@ -1,0 +1,27 @@
+submitted_utc	job_id	account	class	name	time	mem	dependency
+2026-10-14T13:38:45Z	6214264	aip-boyuwang	mkdt_distill	kil_retry_syn_C10_VGG_2	04:15:00	8G	
+2026-10-14T13:38:45Z	6214265	aip-boyuwang	mkdt_pretrain	kil_retry_pre_C10_VGG_2_simclr	01:00:00	4G	afterok:6214264
+2026-10-14T13:38:45Z	6214266	aip-boyuwang	mkdt_evaluate	kil_retry_ev_C10_VGG_2_simclr	01:00:00	4G	afterok:6214265
+2026-10-14T13:38:46Z	6214267	aip-boyuwang	mkdt_pretrain	kil_retry_pre_C10_VGG_2_barlow	01:00:00	4G	afterok:6214264
+2026-10-14T13:38:46Z	6214268	aip-boyuwang	mkdt_evaluate	kil_retry_ev_C10_VGG_2_barlow	01:00:00	4G	afterok:6214267
+2026-10-14T13:38:46Z	6214270	aip-boyuwang	mkdt_experts	kil_retry_exp_Tiny_VGG_0	02:30:00	20G	
+2026-10-14T13:38:46Z	6214271	aip-boyuwang	mkdt_experts	kil_retry_exp_Tiny_VGG_20	02:30:00	20G	
+2026-10-14T13:38:46Z	6214272	aip-boyuwang	mkdt_experts	kil_retry_exp_Tiny_VGG_40	02:30:00	20G	
+2026-10-14T13:38:46Z	6214273	aip-boyuwang	mkdt_experts	kil_retry_exp_Tiny_VGG_60	02:30:00	20G	
+2026-10-14T13:38:46Z	6214274	aip-yiweilu	mkdt_experts	kil_retry_exp_Tiny_VGG_80	02:30:00	20G	
+2026-10-14T13:38:46Z	6214275	aip-boyuwang	mkdt_sort	kil_retry_sort_Tiny_VGG	01:10:00	26G	afterok:6214270:6214271:6214272:6214273:6214274
+2026-10-14T13:38:46Z	6214276	aip-boyuwang	mkdt_distill	kil_retry_syn_Tiny_VGG_1	02:10:00	12G	afterok:6214275
+2026-10-14T13:38:46Z	6214277	aip-boyuwang	mkdt_distill	kil_retry_syn_Tiny_VGG_2	02:10:00	12G	afterok:6214275
+2026-10-14T13:38:46Z	6214278	aip-boyuwang	mkdt_distill	kil_retry_syn_Tiny_VGG_5	02:10:00	12G	afterok:6214275
+2026-10-14T13:38:46Z	6214279	aip-boyuwang	mkdt_pretrain	kil_retry_pre_Tiny_VGG_1_simclr	00:55:00	4G	afterok:6214276
+2026-10-14T13:38:46Z	6214280	aip-boyuwang	mkdt_evaluate	kil_retry_ev_Tiny_VGG_1_simclr	00:15:00	4G	afterok:6214279
+2026-10-14T13:38:46Z	6214281	aip-boyuwang	mkdt_pretrain	kil_retry_pre_Tiny_VGG_1_barlow	01:00:00	4G	afterok:6214276
+2026-10-14T13:38:46Z	6214282	aip-boyuwang	mkdt_evaluate	kil_retry_ev_Tiny_VGG_1_barlow	00:15:00	4G	afterok:6214281
+2026-10-14T13:38:46Z	6214283	aip-boyuwang	mkdt_pretrain	kil_retry_pre_Tiny_VGG_2_simclr	01:00:00	4G	afterok:6214277
+2026-10-14T13:38:46Z	6214284	aip-yiweilu	mkdt_evaluate	kil_retry_ev_Tiny_VGG_2_simclr	00:15:00	4G	afterok:6214283
+2026-10-14T13:38:46Z	6214285	aip-boyuwang	mkdt_pretrain	kil_retry_pre_Tiny_VGG_2_barlow	01:05:00	4G	afterok:6214277
+2026-10-14T13:38:46Z	6214286	aip-boyuwang	mkdt_evaluate	kil_retry_ev_Tiny_VGG_2_barlow	00:15:00	4G	afterok:6214285
+2026-10-14T13:38:46Z	6214287	aip-boyuwang	mkdt_pretrain	kil_retry_pre_Tiny_VGG_5_simclr	01:05:00	4G	afterok:6214278
+2026-10-14T13:38:46Z	6214288	aip-boyuwang	mkdt_evaluate	kil_retry_ev_Tiny_VGG_5_simclr	00:15:00	4G	afterok:6214287
+2026-10-14T13:38:46Z	6214289	aip-boyuwang	mkdt_pretrain	kil_retry_pre_Tiny_VGG_5_barlow	01:20:00	4G	afterok:6214278
+2026-10-14T13:38:46Z	6214290	aip-yiweilu	mkdt_evaluate	kil_retry_ev_Tiny_VGG_5_barlow	00:15:00	4G	afterok:6214289
