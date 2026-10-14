@@ -33,8 +33,8 @@ cd "$PROJECT_ROOT"
 command -v sbatch >/dev/null 2>&1 || fail "sbatch is not available"
 command -v scontrol >/dev/null 2>&1 || fail "scontrol is not available"
 command -v squeue >/dev/null 2>&1 || fail "squeue is not available"
-[[ -x $WORKER ]] || fail "missing executable worker: $WORKER"
-[[ -x $TINY_WORKER ]] || fail "missing executable worker: $TINY_WORKER"
+[[ -s $WORKER ]] || fail "missing worker: $WORKER"
+[[ -s $TINY_WORKER ]] || fail "missing worker: $TINY_WORKER"
 [[ ! -e $MANIFEST ]] || fail "$MANIFEST already exists; refusing duplicate submissions"
 
 # Refuse to submit duplicates if any of the old jobs are still in the queue.
