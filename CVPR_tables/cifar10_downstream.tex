@@ -193,7 +193,7 @@ SimCLR & BT & SimCLR & BT & SimCLR & BT \\
 \begin{table*}[t]
 \centering
 \def\dsacc#1#2{$#1${\footnotesize$\pm #2$}}
-\caption{Transfer accuracy (\%) on six downstream datasets using VGG11 representations pretrained on CIFAR-10. Results are mean $\pm$ sample standard deviation over 10 independent runs. SimCLR and Barlow Twins (BT) use frozen linear probes; No Pre-Training uses a random encoder. PT denotes pretraining subset size. Empty entries indicate unavailable results.}
+\caption{Transfer accuracy (\%) on six downstream datasets using VGG11 representations pretrained on CIFAR-10. Results are mean $\pm$ sample standard deviation; MKDT uses 15 independent runs and the other methods use 10. SimCLR and Barlow Twins (BT) use frozen linear probes; No Pre-Training uses a random encoder. PT denotes pretraining subset size. Empty entries indicate unavailable results.}
 \label{tab:downstream-vgg11}
 
 \setlength{\tabcolsep}{2pt}
@@ -250,7 +250,7 @@ SimCLR & BT & SimCLR & BT & SimCLR & BT \\
 & \dsacc{1.87}{0.60} & \dsacc{1.63}{0.74}
 & \dsacc{1.42}{0.17} & \dsacc{0.70}{0.16} \\
 
-& & MKDT & \multicolumn{12}{c}{} \\
+& & MKDT & \dsacc{4.62}{0.27} & & \dsacc{1.81}{0.27} & & \dsacc{0.94}{0.15} & & \dsacc{1.60}{0.13} & & \dsacc{2.11}{0.81} & & \dsacc{1.41}{0.17} & \\
 & & Ours & \multicolumn{12}{c}{} \\
 \cmidrule(lr){2-15}
 
@@ -290,7 +290,7 @@ SimCLR & BT & SimCLR & BT & SimCLR & BT \\
 & \dsacc{1.91}{0.49} & \dsacc{1.75}{0.59}
 & \dsacc{1.86}{0.18} & \dsacc{0.75}{0.30} \\
 
-& & MKDT & \multicolumn{12}{c}{} \\
+& & MKDT & \dsacc{3.79}{0.29} & \dsacc{1.65}{0.23} & \dsacc{1.65}{0.24} & \dsacc{1.28}{0.17} & \dsacc{0.87}{0.15} & \dsacc{0.66}{0.12} & \dsacc{1.38}{0.15} & \dsacc{1.02}{0.15} & \dsacc{2.13}{0.52} & \dsacc{1.50}{0.34} & \dsacc{1.36}{0.16} & \dsacc{0.72}{0.10} \\
 & & Ours & \multicolumn{12}{c}{} \\
 
 \midrule
@@ -324,7 +324,7 @@ SimCLR & BT & SimCLR & BT & SimCLR & BT \\
 & \dsacc{2.44}{0.50} & \dsacc{1.13}{0.67}
 & \dsacc{2.25}{0.08} & \dsacc{0.79}{0.29} \\
 
-& & MKDT & \multicolumn{12}{c}{} \\
+& & MKDT & \dsacc{7.97}{0.31} & & \dsacc{2.79}{0.27} & & \dsacc{1.18}{0.15} & & \dsacc{2.17}{0.19} & & \dsacc{3.39}{0.60} & & \dsacc{2.35}{0.12} & \\
 & & Ours & \multicolumn{12}{c}{} \\
 \cmidrule(lr){2-15}
 
@@ -364,7 +364,7 @@ SimCLR & BT & SimCLR & BT & SimCLR & BT \\
 & \dsacc{2.67}{0.53} & \dsacc{1.40}{1.12}
 & \dsacc{3.20}{0.18} & \dsacc{0.95}{0.33} \\
 
-& & MKDT & \multicolumn{12}{c}{} \\
+& & MKDT & \dsacc{6.57}{0.23} & \dsacc{2.42}{0.17} & \dsacc{2.44}{0.25} & \dsacc{1.29}{0.19} & \dsacc{1.06}{0.15} & \dsacc{0.61}{0.08} & \dsacc{1.73}{0.15} & \dsacc{1.16}{0.23} & \dsacc{3.25}{0.46} & \dsacc{1.49}{0.63} & \dsacc{2.15}{0.13} & \dsacc{0.96}{0.13} \\
 & & Ours & \multicolumn{12}{c}{} \\
 
 \bottomrule

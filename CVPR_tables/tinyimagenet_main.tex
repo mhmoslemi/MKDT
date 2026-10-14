@@ -5,7 +5,8 @@
 \def\dsacc#1#2{$#1${\footnotesize$\pm #2$}}
 \caption{Consolidated Tiny ImageNet accuracy (\%) across backbones,
 pretraining objectives, and subset sizes. Results are reported as
-mean $\pm$ sample standard deviation over 10 independent runs.
+mean $\pm$ sample standard deviation; MKDT entries use 15 independent
+evaluation runs and all other reported results use 10.
 All methods use frozen linear probes; No Pre-Training uses
 a random encoder.}
 \label{tab:tinyimagenet-all}
@@ -48,7 +49,7 @@ a random encoder.}
 & \dsacc{3.51}{0.18} & \dsacc{3.36}{0.26}
 & \dsacc{1.66}{0.12} & \dsacc{0.61}{0.15}
 & \dsacc{2.00}{0.30} & \dsacc{1.31}{0.23} \\
-& & MKDT & & & & & & \\
+& & MKDT & \dsacc{3.41}{0.24} & \dsacc{3.53}{0.25} & & & \dsacc{1.98}{0.19} & \dsacc{1.33}{0.23} \\
 & & Ours & & & & & & \\
 \cmidrule(lr){2-9}
 
@@ -60,7 +61,7 @@ a random encoder.}
 & \dsacc{3.80}{0.24} & \dsacc{3.77}{0.34}
 & \dsacc{1.81}{0.20} & \dsacc{0.56}{0.10}
 & \dsacc{1.92}{0.21} & \dsacc{0.77}{0.20} \\
-& & MKDT & & & & & & \\
+& & MKDT & \dsacc{3.66}{0.31} & \dsacc{3.78}{0.34} & & & \dsacc{1.59}{0.21} & \\
 & & Ours & & & & & & \\
 \cmidrule(lr){2-9}
 
@@ -72,7 +73,7 @@ a random encoder.}
 & \dsacc{4.36}{0.33} & \dsacc{3.92}{0.38}
 & \dsacc{1.81}{0.32} & \dsacc{0.65}{0.18}
 & \dsacc{1.54}{0.36} & \dsacc{0.57}{0.15} \\
-& & MKDT & & & & & & \\
+& & MKDT & \dsacc{3.85}{0.36} & \dsacc{3.91}{0.28} & & & & \\
 & & Ours & & & & & & \\
 
 \midrule
@@ -98,7 +99,7 @@ a random encoder.}
 & \dsacc{7.42}{0.18} & \dsacc{7.64}{0.31}
 & \dsacc{2.74}{0.20} & \dsacc{0.70}{0.22}
 & \dsacc{3.47}{0.18} & \dsacc{2.00}{0.21} \\
-& & MKDT & & & & & & \\
+& & MKDT & \dsacc{7.20}{0.21} & \dsacc{7.95}{0.33} & & & \dsacc{3.15}{0.17} & \dsacc{1.84}{0.19} \\
 & & Ours & & & & & & \\
 \cmidrule(lr){2-9}
 
@@ -110,7 +111,7 @@ a random encoder.}
 & \dsacc{8.08}{0.25} & \dsacc{7.38}{0.29}
 & \dsacc{3.02}{0.19} & \dsacc{0.81}{0.25}
 & \dsacc{3.19}{0.29} & \dsacc{1.19}{0.27} \\
-& & MKDT & & & & & & \\
+& & MKDT & \dsacc{7.66}{0.18} & \dsacc{7.74}{0.27} & & & \dsacc{2.49}{0.16} & \\
 & & Ours & & & & & & \\
 \cmidrule(lr){2-9}
 
@@ -122,7 +123,7 @@ a random encoder.}
 & \dsacc{9.45}{0.22} & \dsacc{7.55}{0.38}
 & \dsacc{2.89}{0.17} & \dsacc{0.79}{0.24}
 & \dsacc{2.56}{0.28} & \dsacc{0.59}{0.11} \\
-& & MKDT & & & & & & \\
+& & MKDT & \dsacc{8.37}{0.33} & \dsacc{7.95}{0.27} & & & & \\
 & & Ours & & & & & & \\
 
 \bottomrule

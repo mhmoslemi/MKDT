@@ -5,7 +5,9 @@
 \def\dsacc#1#2{$#1${\footnotesize$\pm #2$}}
 \caption{Consolidated CIFAR-10 accuracy (\%) across backbones,
 pretraining objectives, and subset sizes. Results are reported as
-mean $\pm$ sample standard deviation over 10 runs for subset and no-pretraining methods; full-data entries use 15 runs.
+mean $\pm$ sample standard deviation; MKDT VGG11 and full-data entries
+use 15 independent runs, while all other subset and no-pretraining
+entries use 10.
 All methods use frozen linear probes; No Pre-Training uses
 a random encoder.}
 \label{tab:cifar10-all}
@@ -48,7 +50,7 @@ a random encoder.}
 & \dsacc{39.59}{0.92} & \dsacc{40.01}{0.74}
 & \dsacc{27.61}{0.90} & \dsacc{17.73}{3.48}
 & \dsacc{32.41}{0.89} & \dsacc{31.57}{1.12} \\
-& & MKDT & \dsacc{38.49}{1.10} & \dsacc{39.51}{1.26} &  &  & \dsacc{29.54}{1.09} & \dsacc{30.19}{1.12} \\
+& & MKDT & \dsacc{38.49}{1.10} & \dsacc{39.51}{1.26} & \dsacc{27.44}{0.91} &  & \dsacc{29.54}{1.09} & \dsacc{30.19}{1.12} \\
 & & Ours & \dsacc{43.80}{1.19} & \dsacc{32.63}{2.34} &  &  &  &  \\
 \cmidrule(lr){2-9}
 
@@ -72,7 +74,7 @@ a random encoder.}
 & \dsacc{44.25}{1.17} & \dsacc{45.75}{0.99}
 & \dsacc{35.03}{1.09} & \dsacc{21.81}{3.83}
 & \dsacc{37.23}{1.13} & \dsacc{33.47}{2.62} \\
-& & MKDT & \dsacc{40.98}{0.81} & \dsacc{43.68}{0.98} &  &  & \dsacc{33.41}{0.72} & \dsacc{24.02}{1.77} \\
+& & MKDT & \dsacc{40.98}{0.81} & \dsacc{43.68}{0.98} & \dsacc{23.31}{1.01} & \dsacc{19.20}{0.85} & \dsacc{33.41}{0.72} & \dsacc{24.02}{1.77} \\
 & & Ours & \dsacc{44.29}{0.77} & \dsacc{39.95}{1.24} &  &  &  &  \\
 
 \midrule
@@ -98,7 +100,7 @@ a random encoder.}
 & \dsacc{49.87}{0.69} & \dsacc{50.89}{0.75}
 & \dsacc{30.93}{0.41} & \dsacc{18.85}{2.43}
 & \dsacc{37.57}{0.40} & \dsacc{35.75}{1.32} \\
-& & MKDT & \dsacc{48.86}{0.36} & \dsacc{51.11}{0.58} &  &  & \dsacc{35.21}{1.06} & \dsacc{34.86}{1.26} \\
+& & MKDT & \dsacc{48.86}{0.36} & \dsacc{51.11}{0.58} & \dsacc{30.95}{0.53} &  & \dsacc{35.21}{1.06} & \dsacc{34.86}{1.26} \\
 & & Ours & \dsacc{53.65}{0.35} & \dsacc{41.28}{1.75} &  &  &  &  \\
 \cmidrule(lr){2-9}
 
@@ -122,7 +124,7 @@ a random encoder.}
 & \dsacc{54.53}{0.41} & \dsacc{56.05}{0.60}
 & \dsacc{40.56}{0.63} & \dsacc{25.53}{3.00}
 & \dsacc{42.69}{0.77} & \dsacc{38.16}{1.26} \\
-& & MKDT & \dsacc{51.40}{0.66} & \dsacc{54.96}{0.80} &  &  & \dsacc{39.22}{0.50} & \dsacc{29.51}{0.75} \\
+& & MKDT & \dsacc{51.40}{0.66} & \dsacc{54.96}{0.80} & \dsacc{28.11}{0.50} & \dsacc{22.07}{0.42} & \dsacc{39.22}{0.50} & \dsacc{29.51}{0.75} \\
 & & Ours & \dsacc{54.70}{0.64} & \dsacc{50.06}{0.91} &  &  &  &  \\
 
 \bottomrule
