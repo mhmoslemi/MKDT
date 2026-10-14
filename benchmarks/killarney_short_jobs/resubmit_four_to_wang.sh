@@ -9,7 +9,8 @@ BUNDLE="$PROJECT_ROOT/benchmarks/killarney_short_jobs"
 WORKER="$BUNDLE/mkdt_job.sh"
 TINY_WORKER="$BUNDLE/synthesis_part3_job.sh"
 LOG_ROOT="$BUNDLE/logs/wang_replacements"
-MANIFEST="$BUNDLE/submitted_wang_replacements.tsv"
+LEGACY_MANIFEST="$BUNDLE/submitted_wang_replacements.tsv"
+MANIFEST="$BUNDLE/submitted_wang_full_rebuild.tsv"
 ACCOUNT=aip-boyuwang
 
 # Old sort -> distill -> pretrain -> evaluation graph. These jobs must be
@@ -32,7 +33,6 @@ command -v scancel >/dev/null 2>&1 || fail "scancel is not available"
 command -v squeue >/dev/null 2>&1 || fail "squeue is not available"
 [[ -s $WORKER ]] || fail "missing worker: $WORKER"
 [[ -s $TINY_WORKER ]] || fail "missing worker: $TINY_WORKER"
-[[ ! -e $MANIFEST ]] || fail "$MANIFEST already exists; refusing duplicate submissions"
 
 # Cancel only the obsolete downstream graph. Missing/already-cancelled IDs are
 # ignored; active IDs are resolved first so scancel receives valid targets.
@@ -46,7 +46,35 @@ else
 fi
 
 mkdir -p "$LOG_ROOT"
-printf 'submitted_utc\treplacement_job_id\taccount\tclass\tname\ttime\tmem\tdependency\n' > "$MANIFEST"
+if [[ ! -e $MANIFEST ]]; then
+    printf 'submitted_utc\treplacement_job_id\taccount\tclass\tname\ttime\tmem\tdependency\n' > "$MANIFEST"
+fi
+
+# Find a previously submitted replacement by name. This supports both the
+# earlier four-job manifest and this script's resumable full-graph manifest.
+lookup_job_id() {
+    local wanted=$1
+    local file id
+    for file in "$MANIFEST" "$LEGACY_MANIFEST"; do
+        [[ -s $file ]] || continue
+        id=$(awk -F '\t' -v wanted="$wanted" '
+            NR == 1 {
+                for (i = 1; i <= NF; i++) {
+                    if ($i == "replacement_job_id") job_col = i
+                    if ($i == "name") name_col = i
+                }
+                next
+            }
+            job_col && name_col && $name_col == wanted { found = $job_col }
+            END { if (found != "") print found }
+        ' "$file")
+        if [[ -n $id ]]; then
+            printf '%s\n' "$id"
+            return 0
+        fi
+    done
+    return 1
+}
 
 LAST_JOB_ID=
 submit_gpu() {
@@ -57,6 +85,13 @@ submit_gpu() {
     local dependency=$5
     local script=$6
     shift 6
+
+    local existing
+    if existing=$(lookup_job_id "$name"); then
+        LAST_JOB_ID=$existing
+        echo "Reusing existing $name as $LAST_JOB_ID"
+        return 0
+    fi
 
     local args=(sbatch --parsable
         --account="$ACCOUNT"
@@ -143,5 +178,5 @@ submit_gpu mkdt_evaluate kil_wang_ev_CIFAR100_VGG_1_simclr 01:00:00 4G "" \
 submit_gpu mkdt_evaluate kil_wang_ev_CIFAR100_VGG_5_barlow 01:00:00 4G "" \
     "$WORKER" evaluate CIFAR100 VGG11 VGG11 5 barlowtwins 6000 main
 
-echo "Submitted 20 Wang-funded replacement jobs with a complete dependency graph."
+echo "The complete 20-job Wang-funded replacement graph is now submitted."
 echo "Manifest: $MANIFEST"
