@@ -243,6 +243,11 @@ class VGG(nn.Module):
 
     def forward(self, x):
         x = self.features(x)
+        # The five VGG pooling stages produce 1x1 maps for CIFAR (32x32)
+        # but 2x2 maps for Tiny ImageNet (64x64). Collapse either case to
+        # the 512 features expected by the classifier. This is a no-op for
+        # the existing CIFAR path and makes VGG resolution-safe for Tiny.
+        x = F.adaptive_avg_pool2d(x, (1, 1))
         x = x.view(x.size(0), -1)
         x = self.classifier(x)
         return x
