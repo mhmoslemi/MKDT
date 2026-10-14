@@ -1,0 +1,28 @@
+{
+  "config": {
+    "protocol": "mkdt_dual_generator_v2_random_labels_barlow2x",
+    "source": "CIFAR10",
+    "generator": "VGG11",
+    "source_classes": 10,
+    "model": "VGG11",
+    "ssl_method": "barlowtwins",
+    "subset_percentage": 2,
+    "ssl_epochs": 8000,
+    "runs": 1,
+    "synthetic_path": "/scratch/mmoslem3/MKDT/benchmarks/mkdt_multidataset/results/batch_20261010T160046Z_Y6dqZS/synthetic/generated/VGG11/CIFAR10/CIFAR10_2pct/images_5000.pt",
+    "synthetic_sha256": "bf8b9df0a41c95b2d098e9df78bbd939c079d5b75d2c4d6dc44e2e10f577fa55",
+    "input_scope": "images_only_no_labels_pt_no_synlr_pt",
+    "evaluation_image_size": 32,
+    "tiny_synthetic_resize": "none",
+    "temperature": 0.2,
+    "batch_size": 256,
+    "ssl_aug_strategy": "color_crop_cutout_flip_scale_rotate",
+    "ssl_aug_mode": "S"
+  },
+  "complete": true,
+  "completed_runs": 1,
+  "expected_runs": 1,
+  "seeds": [
+    0
+  ]
+}
