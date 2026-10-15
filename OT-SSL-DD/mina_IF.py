@@ -142,7 +142,7 @@ def deepcluster_initialize(dst_train, num_syn, device, seed, channel, num_classe
     centers = features[indices].clone()
 
     # K-Means loop
-    for _ in range(4):
+    for _ in range(50):
         dists = torch.cdist(features, centers)
         assigns = dists.argmin(dim=1)
         new_centers = torch.stack([
@@ -214,8 +214,8 @@ def main():
     parser = argparse.ArgumentParser(description='Information-Theoretic Dataset Condensation (DeepCluster + IIC)')
 
     # Data.
-    parser.add_argument('--dataset', default='CIFAR100')
-    parser.add_argument('--percentage', type=float, default=5.0)
+    parser.add_argument('--dataset', default='CIFAR10')
+    parser.add_argument('--percentage', type=float, default=1.0)
     parser.add_argument('--data_path', default='/home/mmoslem3/scratch/data') 
     parser.add_argument('--device', choices=['cpu', 'cuda'], default='cuda' if torch.cuda.is_available() else 'cpu')
     parser.add_argument('--seed', type=int, default=0)
@@ -227,11 +227,11 @@ def main():
     parser.add_argument('--num_random_networks', type=int, default=5, help='Fresh samples from P_net per pixel update')
     parser.add_argument('--temperature', type=float, default=0.2, help='Softmax temperature for prototype assignment')
     parser.add_argument('--coverage_gamma', type=float, default=0.00, help='Weight of prototype-to-real soft coverage; 0 preserves the original pure-IIC objective')
-    # parser.add_argument('--random_models', default='ConvNet,ResNet18', help='Comma-separated P_net support; forces geometric generalization')
-    parser.add_argument('--random_models', default='ResNet18BN', help='Comma-separated P_net support; forces geometric generalization')
+    # parser.add_argument('--random_models', default='ConvNet,ResNet18BN', help='Comma-separated P_net support; forces geometric generalization')
+    parser.add_argument('--random_models', default='ConvNet', help='Comma-separated P_net support; forces geometric generalization')
     parser.add_argument('--tv_weight', type=float, default=0.01, help='Total Variation penalty to destroy adversarial high-frequencies')
     parser.add_argument('--pixel_mse_weight', type=float, default=0.0, help='Nonnegative weight for mean pixel MSE to initialization in [0,1] units; 0 disables it')
-    parser.add_argument('--encoder_train_steps', type=int, default=5, help='SimCLR steps on the selected detached images before freezing each sampled encoder; 0 disables adaptation')
+    parser.add_argument('--encoder_train_steps', type=int, default=0, help='SimCLR steps on the selected detached images before freezing each sampled encoder; 0 disables adaptation')
     parser.add_argument('--encoder_train_data', choices=['synthetic', 'real'], default='synthetic', help='Images used for the sampled encoder SimCLR warm-up')
     parser.add_argument('--distill_aug_strategy', default='color_crop_cutout_flip_scale_rotate')
     parser.add_argument('--distill_aug_mode', choices=['S', 'M'], default='M')
@@ -433,44 +433,44 @@ def main():
         # if iteration % 100 == 0:
         #     evaluate(iteration)
 
-        # if iteration % 50 == 0:
-    grid_path = os.path.join(args.save_path, 'vis_IIC_%s_%s_%gpercent_iter%d_final.png' % (args.dataset, args.model, args.percentage, iteration))
-    visible = (image_syn.detach() * diag_std + diag_mean).clamp(0, 1).cpu()
-    save_image(visible, grid_path, nrow=int(np.ceil(np.sqrt(num_syn))))
+        if iteration % 100 == 0 or iteration == args.Iteration:
+            grid_path = os.path.join(args.save_path, 'vis_IIC_%s_%s_%gpercent_iter%d_final.png' % (args.dataset, args.model, args.percentage, iteration))
+            visible = (image_syn.detach() * diag_std + diag_mean).clamp(0, 1).cpu()
+            save_image(visible, grid_path, nrow=int(np.ceil(np.sqrt(num_syn))))
 
-        # result_path = os.path.join(args.save_path, 'res_IIC_%s_%s_%gpercent.pt' % (args.dataset, args.model, args.percentage))
-        # torch.save({
-        #     'data': image_syn.detach().cpu(),
-        #     'method': args.method,
-        #     'iteration': args.Iteration,
-        #     'loss_history': torch.tensor(loss_history, dtype=torch.float64),
-        #     'pixel_mse_history': torch.tensor(pixel_mse_history, dtype=torch.float64),
-        #     'total_loss_history': torch.tensor(total_loss_history, dtype=torch.float64),
-        #     'encoder_ssl_history': torch.tensor(encoder_ssl_history, dtype=torch.float64),
-        #     'seed': args.seed,
-        #     'random_feature_distribution': {'models': random_models, 'samples_per_update': args.num_random_networks, 'encoder_train_steps': args.encoder_train_steps, 'encoder_train_data': args.encoder_train_data, 'encoder_train_lr': args.lr_net, 'encoder_train_batch': args.batch_train, 'encoder_train_method': 'simclr'},
-        #     'iic_params': {'tau': args.temperature, 'strategy': args.distill_aug_strategy, 'batch_real': args.batch_real, 'tv_weight': args.tv_weight,
-        #                 'pixel_mse_weight': args.pixel_mse_weight, 'pixel_mse_space': 'pixels_0_1'}
-        # }, result_path)
-
-    result_path = os.path.join(args.save_path, 'res_IIC_%s_%s_%gpercent_final.pt' % (args.dataset, args.model, args.percentage))
-    torch.save({
-        'data': image_syn.detach().cpu(), 
-        'method': args.method, 
-        'iteration': args.Iteration, 
-        'loss_history': torch.tensor(loss_history, dtype=torch.float64), 
-        'negative_mi_history': torch.tensor(negative_mi_history, dtype=torch.float64),
-        'coverage_loss_history': torch.tensor(coverage_loss_history, dtype=torch.float64),
-        'weighted_coverage_history': torch.tensor(weighted_coverage_history, dtype=torch.float64),
-        'pixel_mse_history': torch.tensor(pixel_mse_history, dtype=torch.float64),
-        'total_loss_history': torch.tensor(total_loss_history, dtype=torch.float64),
-        'encoder_ssl_history': torch.tensor(encoder_ssl_history, dtype=torch.float64),
-        'seed': args.seed, 
-        'random_feature_distribution': {'models': random_models, 'samples_per_update': args.num_random_networks, 'encoder_train_steps': args.encoder_train_steps, 'encoder_train_data': args.encoder_train_data, 'encoder_train_lr': args.lr_net, 'encoder_train_batch': args.batch_train, 'encoder_train_method': 'simclr'},
-        'iic_params': {'tau': args.temperature, 'coverage_gamma': args.coverage_gamma, 'strategy': args.distill_aug_strategy, 'batch_real': args.batch_real, 'tv_weight': args.tv_weight,
-                    'pixel_mse_weight': args.pixel_mse_weight, 'pixel_mse_space': 'pixels_0_1'}
-    }, result_path)
-    print('Saved synthetic data to %s' % result_path, flush=True)
+            # result_path = os.path.join(args.save_path, 'res_IIC_%s_%s_%gpercent.pt' % (args.dataset, args.model, args.percentage))
+            # torch.save({
+            #     'data': image_syn.detach().cpu(),
+            #     'method': args.method,
+            #     'iteration': args.Iteration,
+            #     'loss_history': torch.tensor(loss_history, dtype=torch.float64),
+            #     'pixel_mse_history': torch.tensor(pixel_mse_history, dtype=torch.float64),
+            #     'total_loss_history': torch.tensor(total_loss_history, dtype=torch.float64),
+            #     'encoder_ssl_history': torch.tensor(encoder_ssl_history, dtype=torch.float64),
+            #     'seed': args.seed,
+            #     'random_feature_distribution': {'models': random_models, 'samples_per_update': args.num_random_networks, 'encoder_train_steps': args.encoder_train_steps, 'encoder_train_data': args.encoder_train_data, 'encoder_train_lr': args.lr_net, 'encoder_train_batch': args.batch_train, 'encoder_train_method': 'simclr'},
+            #     'iic_params': {'tau': args.temperature, 'strategy': args.distill_aug_strategy, 'batch_real': args.batch_real, 'tv_weight': args.tv_weight,
+            #                 'pixel_mse_weight': args.pixel_mse_weight, 'pixel_mse_space': 'pixels_0_1'}
+            # }, result_path)
+        if iteration % 200 == 0 or iteration == args.Iteration:
+            result_path = os.path.join(args.save_path, 'res_IIC_%s_%s_%gpercent_final.pt' % (args.dataset, args.model, args.percentage))
+            torch.save({
+                'data': image_syn.detach().cpu(), 
+                'method': args.method, 
+                'iteration': args.Iteration, 
+                'loss_history': torch.tensor(loss_history, dtype=torch.float64), 
+                'negative_mi_history': torch.tensor(negative_mi_history, dtype=torch.float64),
+                'coverage_loss_history': torch.tensor(coverage_loss_history, dtype=torch.float64),
+                'weighted_coverage_history': torch.tensor(weighted_coverage_history, dtype=torch.float64),
+                'pixel_mse_history': torch.tensor(pixel_mse_history, dtype=torch.float64),
+                'total_loss_history': torch.tensor(total_loss_history, dtype=torch.float64),
+                'encoder_ssl_history': torch.tensor(encoder_ssl_history, dtype=torch.float64),
+                'seed': args.seed, 
+                'random_feature_distribution': {'models': random_models, 'samples_per_update': args.num_random_networks, 'encoder_train_steps': args.encoder_train_steps, 'encoder_train_data': args.encoder_train_data, 'encoder_train_lr': args.lr_net, 'encoder_train_batch': args.batch_train, 'encoder_train_method': 'simclr'},
+                'iic_params': {'tau': args.temperature, 'coverage_gamma': args.coverage_gamma, 'strategy': args.distill_aug_strategy, 'batch_real': args.batch_real, 'tv_weight': args.tv_weight,
+                            'pixel_mse_weight': args.pixel_mse_weight, 'pixel_mse_space': 'pixels_0_1'}
+            }, result_path)
+            print('Saved synthetic data to %s' % result_path, flush=True)
 
 
 if __name__ == '__main__':
