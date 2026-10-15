@@ -40,7 +40,7 @@ def main():
     if probe_epochs is None:
         probe_epochs = 500 if args.label_percentage == 1 else 300
     checkpoint_path = Path(args.synthetic_root) / f"size{args.percentage}" / f"res_IIC_CIFAR10_ConvNet_{args.percentage}percent.pt"
-    checkpoint_path = '/home/mmoslem3/scratch/MKDT/OT-SSL-DD/result/res_IIC_CIFAR10_ResNet18_cover_1percent_final.pt'
+    checkpoint_path = '/home/mmoslem3/scratch/MKDT/OT-SSL-DD/result2/res_IIC_CIFAR10_ResNet18_cover_1percent_final.pt'
     synthetic = torch.load(checkpoint_path, map_location="cpu", weights_only=True)["data"].to("cuda")
     if synthetic.shape != (500 * args.percentage, 3, 32, 32):
         raise ValueError(f"Unexpected synthetic shape: {tuple(synthetic.shape)}")

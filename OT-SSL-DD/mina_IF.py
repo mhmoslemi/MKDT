@@ -221,10 +221,10 @@ def main():
     parser.add_argument('--seed', type=int, default=0)
 
     # Information-Theoretic Objective.
-    parser.add_argument('--Iteration', type=int, default=800)
+    parser.add_argument('--Iteration', type=int, default=1000)
     parser.add_argument('--lr_img', type=float, default=0.005, help='Higher LR, decays via CosineAnnealing')
     parser.add_argument('--batch_real', type=int, default=512, help='Slightly noisier batch prevents deep proxy minima')
-    parser.add_argument('--num_random_networks', type=int, default=5, help='Fresh samples from P_net per pixel update')
+    parser.add_argument('--num_random_networks', type=int, default=10, help='Fresh samples from P_net per pixel update')
     parser.add_argument('--temperature', type=float, default=0.2, help='Softmax temperature for prototype assignment')
     parser.add_argument('--coverage_gamma', type=float, default=0.00, help='Weight of prototype-to-real soft coverage; 0 preserves the original pure-IIC objective')
     # parser.add_argument('--random_models', default='ConvNet,ResNet18BN', help='Comma-separated P_net support; forces geometric generalization')
@@ -253,7 +253,7 @@ def main():
     parser.add_argument('--batch_linear', type=int, default=256)
 
     # Output.
-    parser.add_argument('--save_path', default='result')
+    parser.add_argument('--save_path', default='result2')
 
     args = parser.parse_args()
     random_models = [name.strip() for name in (args.random_models or args.model).split(',') if name.strip()]
