@@ -19,6 +19,7 @@ shift 4
 
 case "$source_dataset:$model:$ssl_method" in
     CIFAR10:ConvNet:simclr|CIFAR10:VGG11:simclr|CIFAR10:ResNet18:simclr|\
+    CIFAR10:ResNet18:barlowtwins|\
     CIFAR100:ResNet18:simclr|CIFAR100:ResNet18:barlowtwins|\
     TinyImageNet:ResNet18:simclr|TinyImageNet:ResNet18:barlowtwins) ;;
     *)
