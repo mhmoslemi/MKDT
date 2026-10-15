@@ -19,8 +19,10 @@ def main():
     parser.add_argument("--label-percentage", type=int, choices=[1, 5], default=1)
     parser.add_argument("--model", choices=["ConvNet", "VGG11", "ResNet18"], default="ConvNet")
     parser.add_argument("--ssl-method", choices=["simclr", "barlowtwins"], default="barlowtwins")
-    parser.add_argument("--ssl-log-every", type=int, default=200)
-    parser.add_argument("--runs", type=int, default=5)
+    parser.add_argument("--ssl-epochs", type=int, default=10000)
+    parser.add_argument("--probe-epochs", type=int, default=None)
+    parser.add_argument("--ssl-log-every", type=int, default=500)
+    parser.add_argument("--runs", type=int, default=1)
     parser.add_argument("--seed", type=int, default=0)
     parser.add_argument("--data-path", default="/scratch/mmoslem3/data")
     # parser.add_argument("--synthetic-root", default=str(ROOT / "benchmarks/ours/batch_20261008T195254Z_EkW378/yiweilu_mCLPIh/synthetic"))
@@ -33,9 +35,10 @@ def main():
 
 
     torch.set_num_threads(int(os.environ.get("SLURM_CPUS_PER_TASK", "1")))
-    budgets = json.loads((ROOT / "OT-SSL-DD/training_epochs.json").read_text())
-    ssl_epochs = 10000
-    probe_epochs = 300
+    ssl_epochs = args.ssl_epochs
+    probe_epochs = args.probe_epochs
+    if probe_epochs is None:
+        probe_epochs = 500 if args.label_percentage == 1 else 300
     checkpoint_path = Path(args.synthetic_root) / f"size{args.percentage}" / f"res_IIC_CIFAR10_ConvNet_{args.percentage}percent.pt"
     checkpoint_path = '/home/mmoslem3/scratch/MKDT/OT-SSL-DD/result/res_IIC_CIFAR10_ResNet18_cover_1percent_final.pt'
     synthetic = torch.load(checkpoint_path, map_location="cpu", weights_only=True)["data"].to("cuda")
