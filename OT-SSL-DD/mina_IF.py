@@ -71,8 +71,32 @@ def simclr_loss(features_u, features_v, temperature):
     return F.cross_entropy(logits, targets)
 
 
+def barlow_twins_loss(features_u, features_v, off_diagonal_weight):
+    """Barlow Twins cross-correlation loss for two aligned batches."""
+    features_u = (features_u - features_u.mean(dim=0)) / (features_u.std(dim=0, unbiased=False) + 1e-5)
+    features_v = (features_v - features_v.mean(dim=0)) / (features_v.std(dim=0, unbiased=False) + 1e-5)
+    cross_correlation = features_u.t() @ features_v / features_u.shape[0]
+    diagonal = torch.diagonal(cross_correlation)
+    on_diagonal = (diagonal - 1).square().sum()
+    off_diagonal = (cross_correlation - torch.diag(diagonal)).square().sum()
+    return on_diagonal + off_diagonal_weight * off_diagonal
+
+
+def encoder_train_loss(features_u, features_v, args):
+    """Return the selected SSL objective for sampled-encoder adaptation."""
+    if args.encoder_train_method == 'simclr':
+        return simclr_loss(features_u, features_v, args.temperature)
+    if args.encoder_train_method == 'barlowtwins':
+        return barlow_twins_loss(features_u, features_v, args.barlow_lambda)
+    if args.encoder_train_method == 'both':
+        simclr = simclr_loss(features_u, features_v, args.temperature)
+        barlow = barlow_twins_loss(features_u, features_v, args.barlow_lambda)
+        return 0.5 * (simclr + barlow)
+    raise ValueError('Unknown encoder training method: %s' % args.encoder_train_method)
+
+
 def train_encoder_ssl(network, images, augmenter, args, objective_rng):
-    """Briefly adapt a sampled encoder with SimCLR while keeping images detached."""
+    """Briefly adapt a sampled encoder with SSL while keeping images detached."""
     if args.encoder_train_steps == 0:
         return 0.0
     module = network.module if isinstance(network, nn.DataParallel) else network
@@ -91,7 +115,9 @@ def train_encoder_ssl(network, images, augmenter, args, objective_rng):
         batch = detached_images[indices]
         view_u = augmenter(batch, int(objective_rng.integers(0, 2**31 - 1)))
         view_v = augmenter(batch, int(objective_rng.integers(0, 2**31 - 1)))
-        loss = simclr_loss(projector(module.embed(view_u)), projector(module.embed(view_v)), args.temperature)
+        features_u = projector(module.embed(view_u))
+        features_v = projector(module.embed(view_v))
+        loss = encoder_train_loss(features_u, features_v, args)
         if not torch.isfinite(loss):
             raise RuntimeError('Non-finite synthetic encoder warm-up loss')
         optimizer.zero_grad(set_to_none=True)
@@ -231,8 +257,9 @@ def main():
     parser.add_argument('--random_models', default='ConvNet', help='Comma-separated P_net support; forces geometric generalization')
     parser.add_argument('--tv_weight', type=float, default=0.01, help='Total Variation penalty to destroy adversarial high-frequencies')
     parser.add_argument('--pixel_mse_weight', type=float, default=0.0, help='Nonnegative weight for mean pixel MSE to initialization in [0,1] units; 0 disables it')
-    parser.add_argument('--encoder_train_steps', type=int, default=0, help='SimCLR steps on the selected detached images before freezing each sampled encoder; 0 disables adaptation')
-    parser.add_argument('--encoder_train_data', choices=['synthetic', 'real'], default='synthetic', help='Images used for the sampled encoder SimCLR warm-up')
+    parser.add_argument('--encoder_train_steps', type=int, default=0, help='SSL steps on the selected detached images before freezing each sampled encoder; 0 disables adaptation')
+    parser.add_argument('--encoder_train_method', choices=['simclr', 'barlowtwins', 'barlow_twins', 'both'], default='simclr', help='SSL objective for sampled-encoder adaptation; both uses the mean of the SimCLR and Barlow Twins losses')
+    parser.add_argument('--encoder_train_data', choices=['synthetic', 'real'], default='synthetic', help='Images used for the sampled encoder SSL warm-up')
     parser.add_argument('--distill_aug_strategy', default='color_crop_cutout_flip_scale_rotate')
     parser.add_argument('--distill_aug_mode', choices=['S', 'M'], default='M')
 
@@ -243,7 +270,7 @@ def main():
     parser.add_argument('--ssl_method', default='simclr')
     parser.add_argument('--ssl_aug_strategy', default=None)
     parser.add_argument('--projection_dim', type=int, default=128)
-    parser.add_argument('--barlow_lambda', type=float, default=0.005)
+    parser.add_argument('--barlow_lambda', type=float, default=0.005, help='Barlow Twins off-diagonal loss weight')
     parser.add_argument('--eval_mode', default='S')
     parser.add_argument('--num_eval', type=int, default=3)
     parser.add_argument('--epoch_eval_train', type=int, default=1200)
@@ -256,6 +283,8 @@ def main():
     parser.add_argument('--save_path', default='result2')
 
     args = parser.parse_args()
+    if args.encoder_train_method == 'barlow_twins':
+        args.encoder_train_method = 'barlowtwins'
     random_models = [name.strip() for name in (args.random_models or args.model).split(',') if name.strip()]
     if args.ssl_aug_strategy is None:
         args.ssl_aug_strategy = args.distill_aug_strategy
@@ -327,7 +356,8 @@ def main():
 
     print('Hyper-parameters: \n', args.__dict__)
     print('P_net support: %s' % ', '.join(random_models), flush=True)
-    print('Each sampled encoder receives %d SimCLR step(s) on detached %s images before freezing.' % (args.encoder_train_steps, args.encoder_train_data), flush=True)
+    print('Each sampled encoder receives %d SSL step(s) using %s on detached %s images before freezing.' %
+          (args.encoder_train_steps, args.encoder_train_method, args.encoder_train_data), flush=True)
     print('Objective: minimize mean(-MI + %g * prototype_coverage) + %g * pixel_MSE_to_initial ([0,1] pixel units).' %
           (args.coverage_gamma, args.pixel_mse_weight), flush=True)
     # evaluate(0)
@@ -448,7 +478,7 @@ def main():
             #     'total_loss_history': torch.tensor(total_loss_history, dtype=torch.float64),
             #     'encoder_ssl_history': torch.tensor(encoder_ssl_history, dtype=torch.float64),
             #     'seed': args.seed,
-            #     'random_feature_distribution': {'models': random_models, 'samples_per_update': args.num_random_networks, 'encoder_train_steps': args.encoder_train_steps, 'encoder_train_data': args.encoder_train_data, 'encoder_train_lr': args.lr_net, 'encoder_train_batch': args.batch_train, 'encoder_train_method': 'simclr'},
+            #     'random_feature_distribution': {'models': random_models, 'samples_per_update': args.num_random_networks, 'encoder_train_steps': args.encoder_train_steps, 'encoder_train_data': args.encoder_train_data, 'encoder_train_lr': args.lr_net, 'encoder_train_batch': args.batch_train, 'encoder_train_method': args.encoder_train_method},
             #     'iic_params': {'tau': args.temperature, 'strategy': args.distill_aug_strategy, 'batch_real': args.batch_real, 'tv_weight': args.tv_weight,
             #                 'pixel_mse_weight': args.pixel_mse_weight, 'pixel_mse_space': 'pixels_0_1'}
             # }, result_path)
@@ -466,7 +496,7 @@ def main():
                 'total_loss_history': torch.tensor(total_loss_history, dtype=torch.float64),
                 'encoder_ssl_history': torch.tensor(encoder_ssl_history, dtype=torch.float64),
                 'seed': args.seed, 
-                'random_feature_distribution': {'models': random_models, 'samples_per_update': args.num_random_networks, 'encoder_train_steps': args.encoder_train_steps, 'encoder_train_data': args.encoder_train_data, 'encoder_train_lr': args.lr_net, 'encoder_train_batch': args.batch_train, 'encoder_train_method': 'simclr'},
+                'random_feature_distribution': {'models': random_models, 'samples_per_update': args.num_random_networks, 'encoder_train_steps': args.encoder_train_steps, 'encoder_train_data': args.encoder_train_data, 'encoder_train_lr': args.lr_net, 'encoder_train_batch': args.batch_train, 'encoder_train_method': args.encoder_train_method, 'encoder_barlow_lambda': args.barlow_lambda},
                 'iic_params': {'tau': args.temperature, 'coverage_gamma': args.coverage_gamma, 'strategy': args.distill_aug_strategy, 'batch_real': args.batch_real, 'tv_weight': args.tv_weight,
                             'pixel_mse_weight': args.pixel_mse_weight, 'pixel_mse_space': 'pixels_0_1'}
             }, result_path)
