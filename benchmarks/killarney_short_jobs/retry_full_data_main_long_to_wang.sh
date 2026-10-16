@@ -11,9 +11,10 @@ PROJECT_ROOT=$(readlink -f "$SCRIPT_DIR/../..")
 RESULTS_ROOT=${MAINLONG_RESULTS_ROOT:-$PROJECT_ROOT/benchmarks/full_data_main_long/results}
 ACCOUNT=${ACCOUNT:-aip-boyuwang}
 VENV_ACTIVATE=${VENV_ACTIVATE:-$HOME/ENV/bin/activate}
-# Observed in the failed batch: kn140 exposed no CUDA device, kn072 had a
-# broken CVMFS/Lmod environment, and kn161 reported an uncorrectable ECC error.
-EXCLUDED_NODES=${EXCLUDED_NODES:-kn072,kn140,kn161}
+# Observed in the failed batches: kn140 exposed no CUDA device, kn072 had a
+# broken CVMFS/Lmod environment, and kn117/kn161 reported uncorrectable ECC
+# errors.
+EXCLUDED_NODES=${EXCLUDED_NODES:-kn072,kn117,kn140,kn161}
 EXPECTED_PROTOCOL=full_data_main_simclr1000_barlow1500_v1
 
 dry_run=0
