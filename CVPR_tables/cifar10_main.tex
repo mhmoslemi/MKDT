@@ -4,12 +4,7 @@
 \centering
 \def\dsacc#1#2{$#1${\footnotesize$\pm #2$}}
 \def\oldacc#1#2{\textcolor{red}{\dsacc{#1}{#2}}}
-\caption{Consolidated CIFAR-10 accuracy (\%) across backbones,
-pretraining objectives, and subset sizes. Results are reported as
-mean $\pm$ sample standard deviation; MKDT VGG11 entries use 15
-independent evaluation runs and all other reported results use 10.
-All methods use frozen linear probes; No Pre-Training uses
-a random encoder. Values in red use superseded epoch budgets and are provisional.}
+\caption{CIFAR-10 main results.}
 \label{tab:cifar10-all}
 
 \setlength{\tabcolsep}{3pt}
@@ -62,7 +57,7 @@ a random encoder. Values in red use superseded epoch budgets and are provisional
 & \dsacc{40.14}{0.88} & \dsacc{40.24}{0.76}
 & \dsacc{28.12}{0.70} & \dsacc{19.16}{3.54}
 & \dsacc{32.98}{0.68} & \dsacc{32.01}{1.30} \\
-& & MKDT & \oldacc{38.49}{1.10} & \oldacc{39.51}{1.26} & \oldacc{27.44}{0.91} & \oldacc{14.17}{0.72} & \oldacc{29.54}{1.09} & \oldacc{30.19}{1.12} \\
+& & MKDT & \dsacc{38.91}{0.64} & \dsacc{39.83}{0.81} & \dsacc{27.71}{1.01} & \dsacc{14.42}{0.84} & \dsacc{29.40}{0.90} & \dsacc{29.26}{0.67} \\
 & & Ours & \oldacc{43.80}{1.19} &  &  &  &  &  \\
 \cmidrule(lr){2-9}
 
@@ -74,7 +69,7 @@ a random encoder. Values in red use superseded epoch budgets and are provisional
 & \dsacc{41.98}{0.94} & \dsacc{43.44}{0.73}
 & \dsacc{32.21}{1.39} & \dsacc{20.01}{3.18}
 & \dsacc{34.82}{0.97} & \dsacc{32.96}{1.25} \\
-& & MKDT & \oldacc{40.72}{1.08} & \oldacc{43.95}{1.04} & \oldacc{23.91}{0.68} & \oldacc{17.61}{1.18} & \oldacc{32.08}{0.96} & \oldacc{31.00}{1.63} \\
+& & MKDT & \dsacc{41.69}{0.85} & \dsacc{43.65}{0.84} & \dsacc{24.63}{0.61} & \dsacc{19.06}{0.99} & \dsacc{31.37}{0.78} & \dsacc{30.40}{0.57} \\
 & & Ours & \oldacc{43.96}{1.21} &  &  &  &  &  \\
 % BEGIN DISABLED: 5% pretraining subset
 % \cmidrule(lr){2-9}
@@ -126,7 +121,7 @@ a random encoder. Values in red use superseded epoch budgets and are provisional
 & \dsacc{50.05}{0.69} & \dsacc{50.99}{0.77}
 & \dsacc{32.77}{0.90} & \dsacc{19.46}{1.78}
 & \dsacc{38.66}{0.40} & \dsacc{36.22}{1.24} \\
-& & MKDT & \oldacc{48.86}{0.36} & \oldacc{51.11}{0.58} & \oldacc{30.95}{0.53} & \oldacc{14.72}{0.62} & \oldacc{35.21}{1.06} & \oldacc{34.86}{1.26} \\
+& & MKDT & \dsacc{49.28}{0.48} & \dsacc{51.08}{0.54} & \dsacc{32.28}{0.70} & \dsacc{14.56}{0.88} & \dsacc{35.48}{0.39} & \dsacc{33.88}{0.52} \\
 & & Ours & \oldacc{53.65}{0.35} &  &  &  &  &  \\
 \cmidrule(lr){2-9}
 
@@ -138,7 +133,7 @@ a random encoder. Values in red use superseded epoch budgets and are provisional
 & \dsacc{51.66}{0.62} & \dsacc{54.38}{0.69}
 & \dsacc{37.90}{0.93} & \dsacc{22.33}{3.35}
 & \dsacc{39.99}{0.53} & \dsacc{36.89}{0.89} \\
-& & MKDT & \oldacc{51.09}{0.54} & \oldacc{55.78}{0.77} & \oldacc{27.14}{0.59} & \oldacc{19.14}{0.80} & \oldacc{38.21}{1.08} & \oldacc{35.49}{1.63} \\
+& & MKDT & \dsacc{51.71}{0.43} & \dsacc{55.44}{0.38} & \dsacc{29.76}{0.39} & \dsacc{20.48}{0.49} & \dsacc{36.52}{0.32} & \dsacc{34.56}{0.34} \\
 & & Ours & \oldacc{54.43}{0.36} &  &  &  &  &  \\
 % BEGIN DISABLED: 5% pretraining subset
 % \cmidrule(lr){2-9}

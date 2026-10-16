@@ -2,7 +2,7 @@
 \centering
 \def\dsacc#1#2{$#1${\footnotesize$\pm #2$}}
 \def\oldacc#1#2{\textcolor{red}{\dsacc{#1}{#2}}}
-\caption{Transfer accuracy (\%) on six downstream datasets using ResNet18 representations pretrained on CIFAR-100. Results are mean $\pm$ sample standard deviation over 10 independent runs. SimCLR and Barlow Twins (BT) use frozen linear probes; No Pre-Training uses a random encoder. PT denotes pretraining subset size. Empty entries indicate unavailable results. Values in red use superseded epoch budgets and are provisional.}
+\caption{cifar100 downstream. ResNet18}
 \label{tab:cifar100-downstream-resnet18}
 
 \setlength{\tabcolsep}{2pt}
@@ -70,7 +70,7 @@
 & \dsacc{0.94}{0.16} & \dsacc{0.85}{0.09}
 & \dsacc{1.52}{0.21} & \dsacc{1.43}{0.13}
 & \dsacc{2.02}{0.57} & \dsacc{1.90}{0.47} \\
-& & MKDT & \oldacc{1.72}{0.23} & \oldacc{1.54}{0.21} & \oldacc{29.26}{1.47} & \oldacc{28.89}{1.37} & \oldacc{2.11}{0.35} & \oldacc{1.68}{0.12} & \oldacc{0.85}{0.12} & \oldacc{0.82}{0.07} & \oldacc{1.46}{0.14} & \oldacc{1.42}{0.18} & \oldacc{1.97}{0.60} & \oldacc{2.00}{0.44} \\
+& & MKDT & \dsacc{1.76}{0.16} & \dsacc{1.49}{0.19} & \dsacc{29.91}{0.69} & \dsacc{28.47}{0.81} & \dsacc{2.05}{0.26} & \dsacc{1.78}{0.29} & \dsacc{0.86}{0.11} & \dsacc{0.83}{0.11} & \dsacc{1.51}{0.16} & \dsacc{1.44}{0.17} & \dsacc{2.05}{0.58} & \dsacc{1.86}{0.52} \\
 & & Ours & \multicolumn{12}{c}{} \\
 \cmidrule(lr){2-15}
 
@@ -78,7 +78,7 @@
 & \oldacc{2.17}{0.22} & \oldacc{1.48}{0.24} & \oldacc{32.35}{0.96} & \oldacc{28.99}{1.47} & \oldacc{2.14}{0.27} & \oldacc{1.63}{0.29} & \oldacc{0.88}{0.15} & \oldacc{0.84}{0.11} & \oldacc{1.61}{0.10} & \oldacc{1.37}{0.20} & \oldacc{2.11}{0.65} & \oldacc{2.11}{0.63} \\
 & & K-means Subset
 & \oldacc{1.99}{0.30} & \oldacc{1.53}{0.32} & \oldacc{31.40}{0.65} & \oldacc{29.23}{1.34} & \oldacc{2.05}{0.24} & \oldacc{1.59}{0.25} & \oldacc{0.83}{0.12} & \oldacc{0.83}{0.12} & \oldacc{1.49}{0.17} & \oldacc{1.34}{0.22} & \oldacc{2.00}{0.64} & \oldacc{1.95}{0.59} \\
-& & MKDT & \oldacc{1.42}{0.22} & \oldacc{1.10}{0.24} & \oldacc{26.19}{1.14} & \oldacc{25.03}{0.93} & \oldacc{1.94}{0.27} & \oldacc{1.50}{0.32} & \oldacc{0.75}{0.12} & \oldacc{0.79}{0.14} & \oldacc{1.46}{0.20} & \oldacc{1.23}{0.20} & \oldacc{1.55}{0.50} & \oldacc{1.71}{0.42} \\
+& & MKDT & \dsacc{1.24}{0.18} & \dsacc{1.04}{0.16} & \dsacc{26.77}{0.65} & \dsacc{23.48}{0.49} & \dsacc{1.92}{0.29} & \dsacc{1.55}{0.32} & \dsacc{0.80}{0.11} & \dsacc{0.73}{0.12} & \dsacc{1.34}{0.18} & \dsacc{1.22}{0.20} & \dsacc{1.80}{0.50} & \dsacc{1.79}{0.58} \\
 & & Ours & \multicolumn{12}{c}{} \\
 % BEGIN DISABLED: 5% pretraining subset
 % \cmidrule(lr){2-15}
@@ -139,7 +139,7 @@
 & \dsacc{1.21}{0.18} & \dsacc{1.01}{0.20}
 & \dsacc{2.14}{0.19} & \dsacc{1.84}{0.17}
 & \dsacc{3.05}{0.73} & \dsacc{2.84}{0.77} \\
-& & MKDT & \oldacc{2.91}{0.23} & \oldacc{2.22}{0.27} & \oldacc{35.05}{0.94} & \oldacc{33.70}{1.30} & \oldacc{3.02}{0.23} & \oldacc{2.00}{0.40} & \oldacc{1.07}{0.13} & \oldacc{0.84}{0.10} & \oldacc{2.09}{0.20} & \oldacc{1.57}{0.28} & \oldacc{2.73}{0.65} & \oldacc{2.38}{0.52} \\
+& & MKDT & \dsacc{2.70}{0.18} & \dsacc{2.13}{0.12} & \dsacc{36.12}{0.47} & \dsacc{32.82}{0.42} & \dsacc{2.83}{0.38} & \dsacc{2.28}{0.34} & \dsacc{1.06}{0.20} & \dsacc{0.97}{0.20} & \dsacc{2.05}{0.27} & \dsacc{1.77}{0.26} & \dsacc{2.83}{0.60} & \dsacc{2.23}{0.48} \\
 & & Ours & \multicolumn{12}{c}{} \\
 \cmidrule(lr){2-15}
 
@@ -147,7 +147,7 @@
 & \oldacc{3.46}{0.25} & \oldacc{2.33}{0.33} & \oldacc{38.01}{0.71} & \oldacc{33.79}{1.50} & \oldacc{2.71}{0.24} & \oldacc{1.79}{0.28} & \oldacc{1.11}{0.14} & \oldacc{0.78}{0.09} & \oldacc{2.14}{0.19} & \oldacc{1.51}{0.21} & \oldacc{3.10}{0.64} & \oldacc{2.46}{0.93} \\
 & & K-means Subset
 & \oldacc{3.27}{0.23} & \oldacc{2.29}{0.22} & \oldacc{37.36}{0.43} & \oldacc{33.59}{1.23} & \oldacc{2.60}{0.27} & \oldacc{1.90}{0.25} & \oldacc{1.10}{0.20} & \oldacc{0.86}{0.07} & \oldacc{2.09}{0.29} & \oldacc{1.41}{0.26} & \oldacc{2.87}{0.60} & \oldacc{2.41}{0.81} \\
-& & MKDT & \oldacc{2.23}{0.20} & \oldacc{1.60}{0.12} & \oldacc{32.39}{1.14} & \oldacc{30.07}{1.00} & \oldacc{2.64}{0.29} & \oldacc{1.67}{0.31} & \oldacc{0.89}{0.14} & \oldacc{0.71}{0.10} & \oldacc{1.85}{0.29} & \oldacc{1.40}{0.31} & \oldacc{2.29}{0.42} & \oldacc{2.05}{0.64} \\
+& & MKDT & \dsacc{1.76}{0.14} & \dsacc{1.34}{0.13} & \dsacc{31.95}{0.30} & \dsacc{27.70}{0.42} & \dsacc{2.22}{0.34} & \dsacc{1.72}{0.24} & \dsacc{0.82}{0.14} & \dsacc{0.70}{0.14} & \dsacc{1.64}{0.25} & \dsacc{1.35}{0.29} & \dsacc{2.28}{0.55} & \dsacc{1.72}{0.56} \\
 & & Ours & \multicolumn{12}{c}{} \\
 % BEGIN DISABLED: 5% pretraining subset
 % \cmidrule(lr){2-15}
