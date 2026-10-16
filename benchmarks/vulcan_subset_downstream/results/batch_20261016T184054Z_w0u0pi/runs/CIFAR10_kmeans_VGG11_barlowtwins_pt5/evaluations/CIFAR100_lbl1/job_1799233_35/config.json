@@ -1,0 +1,23 @@
+{
+  "protocol": "subset_refresh_v1_pt0p2_long_probes",
+  "source_dataset": "CIFAR10",
+  "source_classes": 10,
+  "model": "VGG11",
+  "method": "kmeans",
+  "ssl_method": "barlowtwins",
+  "subset_percentage": 5.0,
+  "ssl_epochs": 8000,
+  "temperature": 0.2,
+  "batch_size": 256,
+  "ssl_aug_strategy": "color_crop_cutout_flip_scale_rotate",
+  "ssl_aug_mode": "S",
+  "target_dataset": "CIFAR100",
+  "label_percentage": 1,
+  "probe_epochs": 1000,
+  "runs": 10,
+  "probe_protocol": "frozen_encoder",
+  "label_selection": "uniform_random_without_replacement",
+  "normalization": "target_dataset_repository_statistics",
+  "image_size": 32,
+  "std_ddof": 1
+}

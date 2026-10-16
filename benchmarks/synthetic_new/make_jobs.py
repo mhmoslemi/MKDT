@@ -101,7 +101,6 @@ def main():
         raise ValueError('Expected the current 10-run protocol')
     pretraining = protocol['pretraining']
     random_epochs = pretraining['random_subset_epochs_by_data_percentage']
-    multiplier = int(pretraining['barlowtwins_epoch_multiplier'])
 
     jobs = []
     configs = []
@@ -131,9 +130,8 @@ def main():
         slug = source_meta['slug']
         for model in MODELS:
             for ssl in LOSSES:
-                ssl_multiplier = multiplier if ssl == 'barlowtwins' else 1
                 for size in SIZES:
-                    ssl_epochs = int(random_epochs[str(size)]) * ssl_multiplier
+                    ssl_epochs = int(random_epochs[str(size)])
                     steps_per_epoch = math.ceil(500 * size / 256)
                     seconds = RUNS * (
                         steps_per_epoch * ssl_epochs
@@ -229,7 +227,7 @@ def main():
         'runs_per_configuration': RUNS,
         'simclr_epochs': {size: int(random_epochs[str(size)]) for size in SIZES},
         'barlowtwins_epochs': {
-            size: int(random_epochs[str(size)]) * multiplier for size in SIZES},
+            size: int(random_epochs[str(size)]) for size in SIZES},
         'probe_epochs': protocol['evaluation_by_dataset'],
         'gpu_jobs': len(jobs),
         'gpu_accounts': {WANG: wang_gpu, LU: lu_gpu},

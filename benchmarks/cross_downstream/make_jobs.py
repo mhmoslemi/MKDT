@@ -75,7 +75,6 @@ def main():
     protocol = json.loads((ROOT / 'OT-SSL-DD/training_epochs.json').read_text())
     runs = int(protocol['runs_per_configuration'])
     pretraining = protocol['pretraining']
-    barlow_multiplier = int(pretraining['barlowtwins_epoch_multiplier'])
     model_timing = timing['models']['ResNet18']
     scripts = {}
     sources = []
@@ -91,13 +90,13 @@ def main():
     for source, source_meta in SOURCES.items():
         specs = []
         for ssl in ('simclr', 'barlowtwins'):
-            multiplier = barlow_multiplier if ssl == 'barlowtwins' else 1
             for method in ('random', 'kmeans'):
                 epoch_map = pretraining[f'{method}_subset_epochs_by_data_percentage']
-                specs.extend((method, ssl, size, int(epoch_map[str(size)]) * multiplier)
+                specs.extend((method, ssl, size, int(epoch_map[str(size)]))
                              for size in (1, 2, 5))
             specs.append(('full', ssl, 100,
-                          int(pretraining['full_data_epochs_by_data_percentage']['100'])))
+                          int(pretraining['full_data_epochs_by_dataset_and_ssl_method']
+                              [source][ssl])))
         for method, ssl, size, ssl_epochs in specs:
             source_id = f'{source_meta["slug"]}_ResNet18_{ssl}_{method}_size{size}'
             updates = math.ceil(source_meta['train_count'] * size / 100 / 256) * ssl_epochs

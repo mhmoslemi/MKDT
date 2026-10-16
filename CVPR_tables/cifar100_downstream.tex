@@ -1,7 +1,8 @@
 \begin{table*}[t]
 \centering
 \def\dsacc#1#2{$#1${\footnotesize$\pm #2$}}
-\caption{Transfer accuracy (\%) on six downstream datasets using ResNet18 representations pretrained on CIFAR-100. Results are mean $\pm$ sample standard deviation over 10 independent runs. SimCLR and Barlow Twins (BT) use frozen linear probes; No Pre-Training uses a random encoder. PT denotes pretraining subset size. Empty entries indicate unavailable results.}
+\def\oldacc#1#2{\textcolor{red}{\dsacc{#1}{#2}}}
+\caption{Transfer accuracy (\%) on six downstream datasets using ResNet18 representations pretrained on CIFAR-100. Results are mean $\pm$ sample standard deviation over 10 independent runs. SimCLR and Barlow Twins (BT) use frozen linear probes; No Pre-Training uses a random encoder. PT denotes pretraining subset size. Empty entries indicate unavailable results. Values in red use superseded epoch budgets and are provisional.}
 \label{tab:cifar100-downstream-resnet18}
 
 \setlength{\tabcolsep}{2pt}
@@ -23,80 +24,136 @@
 & & & SimCLR & BT & SimCLR & BT & SimCLR & BT & SimCLR & BT & SimCLR & BT & SimCLR & BT \\
 \midrule
 
-\multirow{14}{*}{1\%}
+\multirow{18}{*}{1\%}
 & -- & No Pre-Training
-& \multicolumn{2}{c}{\dsacc{0.64}{0.07}}
-& \multicolumn{2}{c}{\dsacc{16.85}{0.66}}
-& \multicolumn{2}{c}{\dsacc{1.22}{0.17}}
-& \multicolumn{2}{c}{\dsacc{0.54}{0.12}}
-& \multicolumn{2}{c}{\dsacc{0.92}{0.14}}
-& \multicolumn{2}{c}{\dsacc{0.93}{0.36}} \\
+& \multicolumn{2}{c}{\oldacc{0.64}{0.07}}
+& \multicolumn{2}{c}{\oldacc{16.85}{0.66}}
+& \multicolumn{2}{c}{\oldacc{1.22}{0.17}}
+& \multicolumn{2}{c}{\oldacc{0.54}{0.12}}
+& \multicolumn{2}{c}{\oldacc{0.92}{0.14}}
+& \multicolumn{2}{c}{\oldacc{0.93}{0.36}} \\
 \cmidrule(lr){2-15}
 
 & 100\% & Full Data
-& \dsacc{2.17}{0.37} & \dsacc{0.68}{0.19} & \dsacc{37.32}{0.92} & \dsacc{28.40}{4.77} & \dsacc{1.73}{0.30} & \dsacc{1.29}{0.26} & \dsacc{1.04}{0.19} & \dsacc{0.69}{0.15} & \dsacc{1.60}{0.27} & \dsacc{0.91}{0.19} & \dsacc{3.07}{1.02} & \dsacc{2.39}{0.83} \\
+& \oldacc{2.17}{0.37} & \oldacc{0.68}{0.19} & \oldacc{37.32}{0.92} & \oldacc{28.40}{4.77} & \oldacc{1.73}{0.30} & \oldacc{1.29}{0.26} & \oldacc{1.04}{0.19} & \oldacc{0.69}{0.15} & \oldacc{1.60}{0.27} & \oldacc{0.91}{0.19} & \oldacc{3.07}{1.02} & \oldacc{2.39}{0.83} \\
+\cmidrule(lr){2-15}
+
+& \multirow{4}{*}{0.2\%} & Random Subset
+& \dsacc{1.73}{0.22} & \dsacc{1.39}{0.30}
+& \dsacc{29.22}{1.38} & \dsacc{27.69}{1.10}
+& \dsacc{1.98}{0.34} & \dsacc{1.81}{0.22}
+& \dsacc{0.84}{0.12} & \dsacc{0.81}{0.13}
+& \dsacc{1.49}{0.19} & \dsacc{1.29}{0.21}
+& \dsacc{1.89}{0.47} & \dsacc{1.84}{0.60} \\
+& & K-means Subset
+& \dsacc{1.75}{0.18} & \dsacc{1.41}{0.27}
+& \dsacc{28.09}{1.33} & \dsacc{27.06}{1.47}
+& \dsacc{2.11}{0.36} & \dsacc{1.85}{0.38}
+& \dsacc{0.90}{0.12} & \dsacc{0.81}{0.09}
+& \dsacc{1.44}{0.21} & \dsacc{1.35}{0.15}
+& \dsacc{2.01}{0.64} & \dsacc{1.98}{0.72} \\
+& & MKDT & \multicolumn{12}{c}{} \\
+& & Ours & \multicolumn{12}{c}{} \\
 \cmidrule(lr){2-15}
 
 & \multirow{4}{*}{1\%} & Random Subset
-& \dsacc{2.01}{0.26} & \dsacc{1.67}{0.24} & \dsacc{30.72}{0.79} & \dsacc{30.45}{0.96} & \dsacc{2.08}{0.35} & \dsacc{1.76}{0.30} & \dsacc{0.89}{0.11} & \dsacc{0.81}{0.11} & \dsacc{1.49}{0.14} & \dsacc{1.43}{0.22} & \dsacc{2.01}{0.51} & \dsacc{2.13}{0.68} \\
+& \dsacc{2.06}{0.24} & \dsacc{1.83}{0.26}
+& \dsacc{30.86}{0.79} & \dsacc{31.09}{0.90}
+& \dsacc{2.15}{0.41} & \dsacc{1.77}{0.26}
+& \dsacc{0.85}{0.13} & \dsacc{0.85}{0.10}
+& \dsacc{1.52}{0.08} & \dsacc{1.47}{0.18}
+& \dsacc{2.00}{0.53} & \dsacc{2.14}{0.70} \\
 & & K-means Subset
-& \dsacc{1.97}{0.26} & \dsacc{1.59}{0.29} & \dsacc{30.33}{1.02} & \dsacc{29.11}{1.48} & \dsacc{2.26}{0.30} & \dsacc{1.85}{0.31} & \dsacc{0.92}{0.13} & \dsacc{0.80}{0.11} & \dsacc{1.56}{0.14} & \dsacc{1.38}{0.12} & \dsacc{2.06}{0.55} & \dsacc{1.90}{0.47} \\
-& & MKDT & \dsacc{1.72}{0.23} & \dsacc{1.54}{0.21} & \dsacc{29.26}{1.47} & \dsacc{28.89}{1.37} & \dsacc{2.11}{0.35} & \dsacc{1.68}{0.12} & \dsacc{0.85}{0.12} & \dsacc{0.82}{0.07} & \dsacc{1.46}{0.14} & \dsacc{1.42}{0.18} & \dsacc{1.97}{0.60} & \dsacc{2.00}{0.44} \\
+& \dsacc{2.04}{0.30} & \dsacc{1.71}{0.29}
+& \dsacc{30.68}{0.91} & \dsacc{29.79}{1.24}
+& \dsacc{2.14}{0.28} & \dsacc{1.89}{0.35}
+& \dsacc{0.94}{0.16} & \dsacc{0.85}{0.09}
+& \dsacc{1.52}{0.21} & \dsacc{1.43}{0.13}
+& \dsacc{2.02}{0.57} & \dsacc{1.90}{0.47} \\
+& & MKDT & \oldacc{1.72}{0.23} & \oldacc{1.54}{0.21} & \oldacc{29.26}{1.47} & \oldacc{28.89}{1.37} & \oldacc{2.11}{0.35} & \oldacc{1.68}{0.12} & \oldacc{0.85}{0.12} & \oldacc{0.82}{0.07} & \oldacc{1.46}{0.14} & \oldacc{1.42}{0.18} & \oldacc{1.97}{0.60} & \oldacc{2.00}{0.44} \\
 & & Ours & \multicolumn{12}{c}{} \\
 \cmidrule(lr){2-15}
 
 & \multirow{4}{*}{2\%} & Random Subset
-& \dsacc{2.17}{0.22} & \dsacc{1.48}{0.24} & \dsacc{32.35}{0.96} & \dsacc{28.99}{1.47} & \dsacc{2.14}{0.27} & \dsacc{1.63}{0.29} & \dsacc{0.88}{0.15} & \dsacc{0.84}{0.11} & \dsacc{1.61}{0.10} & \dsacc{1.37}{0.20} & \dsacc{2.11}{0.65} & \dsacc{2.11}{0.63} \\
+& \oldacc{2.17}{0.22} & \oldacc{1.48}{0.24} & \oldacc{32.35}{0.96} & \oldacc{28.99}{1.47} & \oldacc{2.14}{0.27} & \oldacc{1.63}{0.29} & \oldacc{0.88}{0.15} & \oldacc{0.84}{0.11} & \oldacc{1.61}{0.10} & \oldacc{1.37}{0.20} & \oldacc{2.11}{0.65} & \oldacc{2.11}{0.63} \\
 & & K-means Subset
-& \dsacc{1.99}{0.30} & \dsacc{1.53}{0.32} & \dsacc{31.40}{0.65} & \dsacc{29.23}{1.34} & \dsacc{2.05}{0.24} & \dsacc{1.59}{0.25} & \dsacc{0.83}{0.12} & \dsacc{0.83}{0.12} & \dsacc{1.49}{0.17} & \dsacc{1.34}{0.22} & \dsacc{2.00}{0.64} & \dsacc{1.95}{0.59} \\
-& & MKDT & \dsacc{1.42}{0.22} & \dsacc{1.10}{0.24} & \dsacc{26.19}{1.14} & \dsacc{25.03}{0.93} & \dsacc{1.94}{0.27} & \dsacc{1.50}{0.32} & \dsacc{0.75}{0.12} & \dsacc{0.79}{0.14} & \dsacc{1.46}{0.20} & \dsacc{1.23}{0.20} & \dsacc{1.55}{0.50} & \dsacc{1.71}{0.42} \\
+& \oldacc{1.99}{0.30} & \oldacc{1.53}{0.32} & \oldacc{31.40}{0.65} & \oldacc{29.23}{1.34} & \oldacc{2.05}{0.24} & \oldacc{1.59}{0.25} & \oldacc{0.83}{0.12} & \oldacc{0.83}{0.12} & \oldacc{1.49}{0.17} & \oldacc{1.34}{0.22} & \oldacc{2.00}{0.64} & \oldacc{1.95}{0.59} \\
+& & MKDT & \oldacc{1.42}{0.22} & \oldacc{1.10}{0.24} & \oldacc{26.19}{1.14} & \oldacc{25.03}{0.93} & \oldacc{1.94}{0.27} & \oldacc{1.50}{0.32} & \oldacc{0.75}{0.12} & \oldacc{0.79}{0.14} & \oldacc{1.46}{0.20} & \oldacc{1.23}{0.20} & \oldacc{1.55}{0.50} & \oldacc{1.71}{0.42} \\
 & & Ours & \multicolumn{12}{c}{} \\
 \cmidrule(lr){2-15}
 
 & \multirow{4}{*}{5\%} & Random Subset
-& \dsacc{2.02}{0.36} & \dsacc{0.87}{0.25} & \dsacc{33.40}{1.42} & \dsacc{27.23}{2.04} & \dsacc{2.09}{0.16} & \dsacc{1.46}{0.21} & \dsacc{0.96}{0.16} & \dsacc{0.66}{0.09} & \dsacc{1.57}{0.25} & \dsacc{1.06}{0.28} & \dsacc{2.05}{0.48} & \dsacc{2.04}{0.53} \\
+& \oldacc{2.02}{0.36} & \oldacc{0.87}{0.25} & \oldacc{33.40}{1.42} & \oldacc{27.23}{2.04} & \oldacc{2.09}{0.16} & \oldacc{1.46}{0.21} & \oldacc{0.96}{0.16} & \oldacc{0.66}{0.09} & \oldacc{1.57}{0.25} & \oldacc{1.06}{0.28} & \oldacc{2.05}{0.48} & \oldacc{2.04}{0.53} \\
 & & K-means Subset
-& \dsacc{2.11}{0.36} & \dsacc{0.82}{0.19} & \dsacc{33.62}{0.91} & \dsacc{26.84}{2.50} & \dsacc{1.98}{0.32} & \dsacc{1.42}{0.37} & \dsacc{0.99}{0.14} & \dsacc{0.78}{0.20} & \dsacc{1.52}{0.23} & \dsacc{0.98}{0.23} & \dsacc{2.14}{0.48} & \dsacc{2.24}{0.58} \\
-& & MKDT & \dsacc{1.60}{0.23} & \dsacc{0.76}{0.15} & \dsacc{30.31}{0.88} & \dsacc{24.27}{1.99} & \dsacc{1.92}{0.23} & \dsacc{1.28}{0.20} & \dsacc{0.81}{0.12} & \dsacc{0.70}{0.13} & \dsacc{1.51}{0.21} & \dsacc{0.92}{0.26} & \dsacc{2.07}{0.57} & \dsacc{1.84}{0.60} \\
+& \oldacc{2.11}{0.36} & \oldacc{0.82}{0.19} & \oldacc{33.62}{0.91} & \oldacc{26.84}{2.50} & \oldacc{1.98}{0.32} & \oldacc{1.42}{0.37} & \oldacc{0.99}{0.14} & \oldacc{0.78}{0.20} & \oldacc{1.52}{0.23} & \oldacc{0.98}{0.23} & \oldacc{2.14}{0.48} & \oldacc{2.24}{0.58} \\
+& & MKDT & \oldacc{1.60}{0.23} & \oldacc{0.76}{0.15} & \oldacc{30.31}{0.88} & \oldacc{24.27}{1.99} & \oldacc{1.92}{0.23} & \oldacc{1.28}{0.20} & \oldacc{0.81}{0.12} & \oldacc{0.70}{0.13} & \oldacc{1.51}{0.21} & \oldacc{0.92}{0.26} & \oldacc{2.07}{0.57} & \oldacc{1.84}{0.60} \\
 & & Ours & \multicolumn{12}{c}{} \\
 
 \midrule
 
-\multirow{14}{*}{5\%}
+\multirow{18}{*}{5\%}
 & -- & No Pre-Training
-& \multicolumn{2}{c}{\dsacc{0.88}{0.11}}
-& \multicolumn{2}{c}{\dsacc{20.55}{0.72}}
-& \multicolumn{2}{c}{\dsacc{1.46}{0.31}}
-& \multicolumn{2}{c}{\dsacc{0.61}{0.06}}
-& \multicolumn{2}{c}{\dsacc{0.92}{0.12}}
-& \multicolumn{2}{c}{\dsacc{1.23}{0.42}} \\
+& \multicolumn{2}{c}{\oldacc{0.88}{0.11}}
+& \multicolumn{2}{c}{\oldacc{20.55}{0.72}}
+& \multicolumn{2}{c}{\oldacc{1.46}{0.31}}
+& \multicolumn{2}{c}{\oldacc{0.61}{0.06}}
+& \multicolumn{2}{c}{\oldacc{0.92}{0.12}}
+& \multicolumn{2}{c}{\oldacc{1.23}{0.42}} \\
 \cmidrule(lr){2-15}
 
 & 100\% & Full Data
-& \dsacc{3.83}{0.33} & \dsacc{1.10}{0.45} & \dsacc{42.61}{0.70} & \dsacc{36.43}{1.60} & \dsacc{2.09}{0.35} & \dsacc{1.10}{0.18} & \dsacc{1.10}{0.21} & \dsacc{0.63}{0.17} & \dsacc{1.93}{0.44} & \dsacc{1.00}{0.23} & \dsacc{3.66}{1.14} & \dsacc{1.70}{1.46} \\
+& \oldacc{3.83}{0.33} & \oldacc{1.10}{0.45} & \oldacc{42.61}{0.70} & \oldacc{36.43}{1.60} & \oldacc{2.09}{0.35} & \oldacc{1.10}{0.18} & \oldacc{1.10}{0.21} & \oldacc{0.63}{0.17} & \oldacc{1.93}{0.44} & \oldacc{1.00}{0.23} & \oldacc{3.66}{1.14} & \oldacc{1.70}{1.46} \\
+\cmidrule(lr){2-15}
+
+& \multirow{4}{*}{0.2\%} & Random Subset
+& \dsacc{2.73}{0.13} & \dsacc{1.94}{0.25}
+& \dsacc{35.40}{0.91} & \dsacc{32.29}{0.99}
+& \dsacc{2.66}{0.36} & \dsacc{2.05}{0.39}
+& \dsacc{1.07}{0.16} & \dsacc{0.84}{0.09}
+& \dsacc{1.86}{0.19} & \dsacc{1.53}{0.17}
+& \dsacc{2.84}{0.66} & \dsacc{2.58}{0.90} \\
+& & K-means Subset
+& \dsacc{2.60}{0.20} & \dsacc{1.89}{0.27}
+& \dsacc{34.27}{0.78} & \dsacc{31.22}{1.30}
+& \dsacc{2.66}{0.30} & \dsacc{2.16}{0.34}
+& \dsacc{1.12}{0.14} & \dsacc{0.92}{0.16}
+& \dsacc{2.02}{0.21} & \dsacc{1.64}{0.20}
+& \dsacc{2.77}{0.45} & \dsacc{2.29}{0.49} \\
+& & MKDT & \multicolumn{12}{c}{} \\
+& & Ours & \multicolumn{12}{c}{} \\
 \cmidrule(lr){2-15}
 
 & \multirow{4}{*}{1\%} & Random Subset
-& \dsacc{3.33}{0.27} & \dsacc{2.47}{0.35} & \dsacc{36.31}{1.00} & \dsacc{35.23}{1.24} & \dsacc{2.99}{0.40} & \dsacc{2.00}{0.33} & \dsacc{1.09}{0.14} & \dsacc{0.91}{0.19} & \dsacc{2.10}{0.24} & \dsacc{1.61}{0.21} & \dsacc{2.86}{0.51} & \dsacc{2.63}{0.77} \\
+& \dsacc{3.26}{0.25} & \dsacc{2.56}{0.37}
+& \dsacc{37.01}{0.96} & \dsacc{35.63}{1.25}
+& \dsacc{2.92}{0.31} & \dsacc{2.17}{0.31}
+& \dsacc{1.12}{0.20} & \dsacc{1.07}{0.16}
+& \dsacc{2.10}{0.23} & \dsacc{1.79}{0.18}
+& \dsacc{3.08}{0.57} & \dsacc{2.80}{0.74} \\
 & & K-means Subset
-& \dsacc{3.27}{0.20} & \dsacc{2.34}{0.29} & \dsacc{35.95}{0.74} & \dsacc{33.69}{0.92} & \dsacc{2.89}{0.30} & \dsacc{2.03}{0.40} & \dsacc{1.14}{0.19} & \dsacc{0.91}{0.07} & \dsacc{2.13}{0.27} & \dsacc{1.63}{0.24} & \dsacc{2.86}{0.71} & \dsacc{2.66}{0.77} \\
-& & MKDT & \dsacc{2.91}{0.23} & \dsacc{2.22}{0.27} & \dsacc{35.05}{0.94} & \dsacc{33.70}{1.30} & \dsacc{3.02}{0.23} & \dsacc{2.00}{0.40} & \dsacc{1.07}{0.13} & \dsacc{0.84}{0.10} & \dsacc{2.09}{0.20} & \dsacc{1.57}{0.28} & \dsacc{2.73}{0.65} & \dsacc{2.38}{0.52} \\
+& \dsacc{3.18}{0.12} & \dsacc{2.37}{0.30}
+& \dsacc{36.57}{0.72} & \dsacc{34.14}{1.15}
+& \dsacc{2.87}{0.33} & \dsacc{2.31}{0.31}
+& \dsacc{1.21}{0.18} & \dsacc{1.01}{0.20}
+& \dsacc{2.14}{0.19} & \dsacc{1.84}{0.17}
+& \dsacc{3.05}{0.73} & \dsacc{2.84}{0.77} \\
+& & MKDT & \oldacc{2.91}{0.23} & \oldacc{2.22}{0.27} & \oldacc{35.05}{0.94} & \oldacc{33.70}{1.30} & \oldacc{3.02}{0.23} & \oldacc{2.00}{0.40} & \oldacc{1.07}{0.13} & \oldacc{0.84}{0.10} & \oldacc{2.09}{0.20} & \oldacc{1.57}{0.28} & \oldacc{2.73}{0.65} & \oldacc{2.38}{0.52} \\
 & & Ours & \multicolumn{12}{c}{} \\
 \cmidrule(lr){2-15}
 
 & \multirow{4}{*}{2\%} & Random Subset
-& \dsacc{3.46}{0.25} & \dsacc{2.33}{0.33} & \dsacc{38.01}{0.71} & \dsacc{33.79}{1.50} & \dsacc{2.71}{0.24} & \dsacc{1.79}{0.28} & \dsacc{1.11}{0.14} & \dsacc{0.78}{0.09} & \dsacc{2.14}{0.19} & \dsacc{1.51}{0.21} & \dsacc{3.10}{0.64} & \dsacc{2.46}{0.93} \\
+& \oldacc{3.46}{0.25} & \oldacc{2.33}{0.33} & \oldacc{38.01}{0.71} & \oldacc{33.79}{1.50} & \oldacc{2.71}{0.24} & \oldacc{1.79}{0.28} & \oldacc{1.11}{0.14} & \oldacc{0.78}{0.09} & \oldacc{2.14}{0.19} & \oldacc{1.51}{0.21} & \oldacc{3.10}{0.64} & \oldacc{2.46}{0.93} \\
 & & K-means Subset
-& \dsacc{3.27}{0.23} & \dsacc{2.29}{0.22} & \dsacc{37.36}{0.43} & \dsacc{33.59}{1.23} & \dsacc{2.60}{0.27} & \dsacc{1.90}{0.25} & \dsacc{1.10}{0.20} & \dsacc{0.86}{0.07} & \dsacc{2.09}{0.29} & \dsacc{1.41}{0.26} & \dsacc{2.87}{0.60} & \dsacc{2.41}{0.81} \\
-& & MKDT & \dsacc{2.23}{0.20} & \dsacc{1.60}{0.12} & \dsacc{32.39}{1.14} & \dsacc{30.07}{1.00} & \dsacc{2.64}{0.29} & \dsacc{1.67}{0.31} & \dsacc{0.89}{0.14} & \dsacc{0.71}{0.10} & \dsacc{1.85}{0.29} & \dsacc{1.40}{0.31} & \dsacc{2.29}{0.42} & \dsacc{2.05}{0.64} \\
+& \oldacc{3.27}{0.23} & \oldacc{2.29}{0.22} & \oldacc{37.36}{0.43} & \oldacc{33.59}{1.23} & \oldacc{2.60}{0.27} & \oldacc{1.90}{0.25} & \oldacc{1.10}{0.20} & \oldacc{0.86}{0.07} & \oldacc{2.09}{0.29} & \oldacc{1.41}{0.26} & \oldacc{2.87}{0.60} & \oldacc{2.41}{0.81} \\
+& & MKDT & \oldacc{2.23}{0.20} & \oldacc{1.60}{0.12} & \oldacc{32.39}{1.14} & \oldacc{30.07}{1.00} & \oldacc{2.64}{0.29} & \oldacc{1.67}{0.31} & \oldacc{0.89}{0.14} & \oldacc{0.71}{0.10} & \oldacc{1.85}{0.29} & \oldacc{1.40}{0.31} & \oldacc{2.29}{0.42} & \oldacc{2.05}{0.64} \\
 & & Ours & \multicolumn{12}{c}{} \\
 \cmidrule(lr){2-15}
 
 & \multirow{4}{*}{5\%} & Random Subset
-& \dsacc{3.45}{0.11} & \dsacc{1.40}{0.20} & \dsacc{39.13}{0.93} & \dsacc{32.44}{1.02} & \dsacc{2.54}{0.31} & \dsacc{1.31}{0.26} & \dsacc{1.11}{0.11} & \dsacc{0.65}{0.20} & \dsacc{2.12}{0.21} & \dsacc{1.04}{0.20} & \dsacc{2.90}{0.60} & \dsacc{1.56}{0.78} \\
+& \oldacc{3.45}{0.11} & \oldacc{1.40}{0.20} & \oldacc{39.13}{0.93} & \oldacc{32.44}{1.02} & \oldacc{2.54}{0.31} & \oldacc{1.31}{0.26} & \oldacc{1.11}{0.11} & \oldacc{0.65}{0.20} & \oldacc{2.12}{0.21} & \oldacc{1.04}{0.20} & \oldacc{2.90}{0.60} & \oldacc{1.56}{0.78} \\
 & & K-means Subset
-& \dsacc{3.46}{0.38} & \dsacc{1.43}{0.37} & \dsacc{39.06}{0.91} & \dsacc{32.19}{1.08} & \dsacc{2.41}{0.26} & \dsacc{1.28}{0.21} & \dsacc{1.11}{0.14} & \dsacc{0.62}{0.15} & \dsacc{2.04}{0.25} & \dsacc{1.00}{0.16} & \dsacc{3.22}{0.60} & \dsacc{1.68}{1.08} \\
-& & MKDT & \dsacc{2.57}{0.27} & \dsacc{1.06}{0.16} & \dsacc{35.79}{0.84} & \dsacc{29.66}{1.11} & \dsacc{2.58}{0.36} & \dsacc{1.40}{0.24} & \dsacc{0.93}{0.07} & \dsacc{0.57}{0.16} & \dsacc{1.93}{0.25} & \dsacc{1.02}{0.20} & \dsacc{2.83}{0.75} & \dsacc{1.40}{0.94} \\
+& \oldacc{3.46}{0.38} & \oldacc{1.43}{0.37} & \oldacc{39.06}{0.91} & \oldacc{32.19}{1.08} & \oldacc{2.41}{0.26} & \oldacc{1.28}{0.21} & \oldacc{1.11}{0.14} & \oldacc{0.62}{0.15} & \oldacc{2.04}{0.25} & \oldacc{1.00}{0.16} & \oldacc{3.22}{0.60} & \oldacc{1.68}{1.08} \\
+& & MKDT & \oldacc{2.57}{0.27} & \oldacc{1.06}{0.16} & \oldacc{35.79}{0.84} & \oldacc{29.66}{1.11} & \oldacc{2.58}{0.36} & \oldacc{1.40}{0.24} & \oldacc{0.93}{0.07} & \oldacc{0.57}{0.16} & \oldacc{1.93}{0.25} & \oldacc{1.02}{0.20} & \oldacc{2.83}{0.75} & \oldacc{1.40}{0.94} \\
 & & Ours & \multicolumn{12}{c}{} \\
 
 \bottomrule

@@ -58,12 +58,10 @@ def main():
     protocol = json.loads(EPOCHS.read_text())
     runs = int(protocol['runs_per_configuration'])
     pretraining = protocol['pretraining']
-    barlow_multiplier = int(pretraining['barlowtwins_epoch_multiplier'])
     sources, evaluations = [], []
     for model in ('ConvNet', 'VGG11', 'ResNet18'):
         for ssl in ('simclr', 'barlowtwins'):
-            multiplier = barlow_multiplier if ssl == 'barlowtwins' else 1
-            specifications = [(method, size, int(pretraining[f'{method}_subset_epochs_by_data_percentage'][str(size)]) * multiplier) for method in ('random', 'kmeans') for size in (1, 2, 5)]
+            specifications = [(method, size, int(pretraining[f'{method}_subset_epochs_by_data_percentage'][str(size)])) for method in ('random', 'kmeans') for size in (1, 2, 5)]
             for method, size, epochs in specifications:
                 name = f'{model}_{ssl}_{method}_size{size}'
                 seconds = runs * (math.ceil(size * 500 / 256) * epochs * timing['models'][model][f'{ssl}_step_seconds'] + 5)

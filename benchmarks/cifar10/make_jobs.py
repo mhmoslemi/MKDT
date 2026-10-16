@@ -56,7 +56,6 @@ def main():
     pretraining = protocol['pretraining']
     probe_epochs = protocol['evaluation_by_dataset']['CIFAR10']['linear_probe_epochs_by_label_percentage']
     no_pretrain_epochs = protocol['evaluation_by_dataset']['CIFAR10']['no_pretraining_linear_probe_epochs_by_label_percentage']
-    barlow_multiplier = int(pretraining['barlowtwins_epoch_multiplier'])
     jobs = HERE / 'jobs'
     rows = []
     for model in ('ConvNet', 'VGG11', 'ResNet18'):
@@ -64,10 +63,9 @@ def main():
         for labels in (1, 5):
             specifications = [('no_pretrain', 'none', 0, 0, int(no_pretrain_epochs[str(labels)]))]
             for ssl in ('simclr', 'barlowtwins'):
-                multiplier = barlow_multiplier if ssl == 'barlowtwins' else 1
                 for method in ('random', 'kmeans'):
                     epoch_map = pretraining[f'{method}_subset_epochs_by_data_percentage']
-                    specifications.extend((method, ssl, size, int(epoch_map[str(size)]) * multiplier, int(probe_epochs[str(labels)])) for size in (1, 2, 5))
+                    specifications.extend((method, ssl, size, int(epoch_map[str(size)]), int(probe_epochs[str(labels)])) for size in (1, 2, 5))
             for method, ssl, size, epochs, probe in specifications:
                 name = f'{model}_{ssl}_{method}_size{size}_lbl{labels}'
                 steps = math.ceil(50000 * size / 100 / 256) * epochs

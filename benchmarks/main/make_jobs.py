@@ -55,7 +55,6 @@ def generate(dataset):
     evaluation = protocol['evaluation_by_dataset'][dataset]
     probe_epochs = evaluation['linear_probe_epochs_by_label_percentage']
     no_pretrain_epochs = evaluation['no_pretraining_linear_probe_epochs_by_label_percentage']
-    barlow_multiplier = int(pretraining['barlowtwins_epoch_multiplier'])
     scripts = {}
     rows = []
     job_index = 0
@@ -64,12 +63,12 @@ def generate(dataset):
         for labels in (1, 5):
             specs = [('no_pretrain', 'none', 0, 0, int(no_pretrain_epochs[str(labels)]))]
             for ssl in ('simclr', 'barlowtwins'):
-                multiplier = barlow_multiplier if ssl == 'barlowtwins' else 1
                 for method in ('random', 'kmeans'):
                     epoch_map = pretraining[f'{method}_subset_epochs_by_data_percentage']
-                    specs.extend((method, ssl, size, int(epoch_map[str(size)]) * multiplier,
+                    specs.extend((method, ssl, size, int(epoch_map[str(size)]),
                                   int(probe_epochs[str(labels)])) for size in (1, 2, 5))
-                full_epochs = int(pretraining['full_data_epochs_by_data_percentage']['100'])
+                full_epochs = int(
+                    pretraining['full_data_epochs_by_dataset_and_ssl_method'][dataset][ssl])
                 specs.append(('full', ssl, 100, full_epochs, int(probe_epochs[str(labels)])))
             for method, ssl, size, ssl_epochs, probe in specs:
                 account = LU if job_index % 5 == 4 else WANG
