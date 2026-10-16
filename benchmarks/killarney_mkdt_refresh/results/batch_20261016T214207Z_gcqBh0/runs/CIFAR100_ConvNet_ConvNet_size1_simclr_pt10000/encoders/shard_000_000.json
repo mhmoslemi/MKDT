@@ -1,0 +1,28 @@
+{
+  "config": {
+    "protocol": "mkdt_10k_probe1000_500_shared_encoder_v1",
+    "source": "CIFAR100",
+    "generator": "ConvNet",
+    "source_classes": 100,
+    "model": "ConvNet",
+    "ssl_method": "simclr",
+    "subset_percentage": 1,
+    "ssl_epochs": 10000,
+    "runs": 1,
+    "synthetic_path": "/scratch/mmoslem3/MKDT/benchmarks/mkdt_multidataset/results/batch_20261010T160046Z_Y6dqZS/synthetic/generated/ConvNet/CIFAR100/CIFAR100_1pct/images_5000.pt",
+    "synthetic_sha256": "4cbccc2a8843bf744f69aaaa8271e6d1f36ca412fb54c0b5aa540911fdb630dd",
+    "input_scope": "images_only_no_labels_pt_no_synlr_pt",
+    "evaluation_image_size": 32,
+    "tiny_synthetic_resize": "none",
+    "temperature": 0.2,
+    "batch_size": 256,
+    "ssl_aug_strategy": "color_crop_cutout_flip_scale_rotate",
+    "ssl_aug_mode": "S"
+  },
+  "complete": true,
+  "completed_runs": 1,
+  "expected_runs": 1,
+  "seeds": [
+    0
+  ]
+}
