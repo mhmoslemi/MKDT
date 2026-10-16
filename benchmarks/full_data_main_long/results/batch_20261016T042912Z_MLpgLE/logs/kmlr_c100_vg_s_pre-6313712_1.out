@@ -1,0 +1,19 @@
+Traceback (most recent call last):
+  File "/scratch/mmoslem3/MKDT/benchmarks/full_data_main_long/results/batch_20261016T042912Z_MLpgLE/code/benchmarks/benchmark_full_data_main_long.py", line 12, in <module>
+    implementation.main()
+  File "/scratch/mmoslem3/MKDT/benchmarks/full_data_main_long/results/batch_20261016T042912Z_MLpgLE/code/benchmarks/benchmark_full_refresh.py", line 242, in main
+    {'pretrain': pretrain, 'evaluate': evaluate}[args.command](args)
+  File "/scratch/mmoslem3/MKDT/benchmarks/full_data_main_long/results/batch_20261016T042912Z_MLpgLE/code/benchmarks/benchmark_full_refresh.py", line 40, in pretrain
+    train, labels, test, test_labels, classes = load_target(
+                                                ^^^^^^^^^^^^
+  File "/scratch/mmoslem3/MKDT/benchmarks/full_data_main_long/results/batch_20261016T042912Z_MLpgLE/code/benchmarks/downstream_data.py", line 152, in load_target
+    mean = torch.tensor(cache['mean'], device=device).view(1, 3, 1, 1)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+torch.AcceleratorError: CUDA error: uncorrectable ECC error encountered
+Search for `cudaErrorECCUncorrectable' in https://docs.nvidia.com/cuda/cuda-runtime-api/group__CUDART__TYPES.html for more information.
+CUDA kernel errors might be asynchronously reported at some other API call, so the stacktrace below might be incorrect.
+For debugging consider passing CUDA_LAUNCH_BLOCKING=1
+Compile with `TORCH_USE_CUDA_DSA` to enable device-side assertions.
+
+srun: error: kn117: task 0: Exited with exit code 1
+[2026-10-16T10:59:14.888] error: Timeout waiting for /sys/fs/cgroup/system.slice/slurmstepd.scope/job_6314425/step_batch/slurm/cgroup.events to become empty.
