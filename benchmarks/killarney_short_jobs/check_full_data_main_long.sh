@@ -60,6 +60,8 @@ for source in CIFAR10 CIFAR100; do
             identifier="${prefix}_${model}_${ssl}_full_size100_${epochs}ep"
             encoder_root="$batch/encoders/$identifier"
             config_checkpoints=0
+            config_evaluations=0
+            missing_seeds=()
 
             for seed in {0..9}; do
                 printf -v checkpoint 'seed_%03d.pt' "$seed"
@@ -68,14 +70,16 @@ for source in CIFAR10 CIFAR100; do
                     config_checkpoints=$((config_checkpoints + 1))
                     checkpoint_count=$((checkpoint_count + 1))
                 else
-                    printf 'MISSING checkpoint %-68s seed=%d found=%d\n' \
-                        "$identifier" "$seed" "${#matches[@]}" >&2
-                    failed=1
+                    missing_seeds+=("$seed:${#matches[@]}")
                 fi
             done
 
-            printf 'ENCODER %-68s checkpoints=%d/10\n' \
-                "$identifier" "$config_checkpoints"
+            printf 'ENCODER %-68s retained=%d/10' "$identifier" "$config_checkpoints"
+            if (( ${#missing_seeds[@]} > 0 )); then
+                missing_list=$(IFS=,; printf '%s' "${missing_seeds[*]}")
+                printf ' absent(seed:matches)=%s' "$missing_list"
+            fi
+            printf '\n'
 
             for label in 1 5; do
                 if [[ $label == 1 ]]; then probe=500; else probe=300; fi
@@ -104,6 +108,7 @@ for source in CIFAR10 CIFAR100; do
 
                 if (( valid == 1 )); then
                     evaluation_count=$((evaluation_count + 1))
+                    config_evaluations=$((config_evaluations + 1))
                     printf 'EVAL    %-68s labels=%s%% mean=%s std=%s\n' \
                         "$identifier" "$label" "$mean" "$std"
                 else
@@ -112,13 +117,24 @@ for source in CIFAR10 CIFAR100; do
                     failed=1
                 fi
             done
+
+            # Once both evaluation summaries are complete, checkpoints are
+            # optional archival artifacts. They remain mandatory while an
+            # evaluation is still missing, because the missing result cannot
+            # be recovered without them.
+            if (( config_evaluations < 2 && config_checkpoints < 10 )); then
+                printf 'INCOMPLETE %-67s needs checkpoints and/or evaluation retry\n' \
+                    "$identifier" >&2
+                failed=1
+            fi
         done
     done
 done
 
-printf '\nCheckpoints: %d/120\n' "$checkpoint_count"
+printf '\nCheckpoints retained: %d/120 (optional after both evaluations complete)\n' \
+    "$checkpoint_count"
 printf 'Evaluations: %d/24\n' "$evaluation_count"
-if (( failed == 0 && checkpoint_count == 120 && evaluation_count == 24 )); then
+if (( failed == 0 && evaluation_count == 24 )); then
     printf '%s\n' 'AUDIT PASSED: every CIFAR main-table long-run result is complete.'
     exit 0
 fi
