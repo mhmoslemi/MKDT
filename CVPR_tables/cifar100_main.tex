@@ -29,7 +29,7 @@ a random encoder. Values in red use superseded epoch budgets and are provisional
 & SimCLR & Barlow Twins \\
 \midrule
 
-\multirow{18}{*}{1\%}
+\multirow{14}{*}{1\%}
 & -- & No Pre-Training
 & \multicolumn{2}{c}{\dsacc{7.87}{0.57}}
 & \multicolumn{2}{c}{\dsacc{1.88}{0.19}}
@@ -76,22 +76,24 @@ a random encoder. Values in red use superseded epoch budgets and are provisional
 & \dsacc{5.94}{0.57} & \dsacc{4.79}{0.69} \\
 & & MKDT & \oldacc{7.76}{0.62} & \oldacc{7.87}{0.59} & \oldacc{5.83}{0.40} & \oldacc{1.60}{0.40} & \oldacc{4.33}{0.54} & \oldacc{2.80}{0.37} \\
 & & Ours & \oldacc{11.58}{0.45} &  &  &  &  &  \\
-\cmidrule(lr){2-9}
-
-& \multirow{4}{*}{5\%} & Random Subset
-& \dsacc{11.49}{0.65} & \dsacc{10.87}{0.53}
-& \dsacc{5.98}{0.49} & \dsacc{2.74}{0.46}
-& \oldacc{6.39}{0.75} & \oldacc{2.68}{0.78} \\
-& & K-means Subset
-& \dsacc{11.45}{0.67} & \dsacc{10.89}{0.62}
-& \dsacc{6.21}{0.60} & \dsacc{2.65}{0.89}
-& \oldacc{6.46}{0.65} & \oldacc{2.81}{0.80} \\
-& & MKDT & \oldacc{10.65}{0.71} & \oldacc{10.77}{0.57} & \oldacc{3.68}{0.44} & \oldacc{1.46}{0.18} & \oldacc{5.26}{0.81} & \oldacc{2.25}{0.57} \\
-& & Ours & \oldacc{11.14}{0.47} &  &  &  &  &  \\
+% BEGIN DISABLED: 5% pretraining subset
+% \cmidrule(lr){2-9}
+%
+% & \multirow{4}{*}{5\%} & Random Subset
+% & \dsacc{11.49}{0.65} & \dsacc{10.87}{0.53}
+% & \dsacc{5.98}{0.49} & \dsacc{2.74}{0.46}
+% & \oldacc{6.39}{0.75} & \oldacc{2.68}{0.78} \\
+% & & K-means Subset
+% & \dsacc{11.45}{0.67} & \dsacc{10.89}{0.62}
+% & \dsacc{6.21}{0.60} & \dsacc{2.65}{0.89}
+% & \oldacc{6.46}{0.65} & \oldacc{2.81}{0.80} \\
+% & & MKDT & \oldacc{10.65}{0.71} & \oldacc{10.77}{0.57} & \oldacc{3.68}{0.44} & \oldacc{1.46}{0.18} & \oldacc{5.26}{0.81} & \oldacc{2.25}{0.57} \\
+% & & Ours & \oldacc{11.14}{0.47} &  &  &  &  &  \\
+% END DISABLED: 5% pretraining subset
 
 \midrule
 
-\multirow{18}{*}{5\%}
+\multirow{14}{*}{5\%}
 & -- & No Pre-Training
 & \multicolumn{2}{c}{\dsacc{16.47}{0.36}}
 & \multicolumn{2}{c}{\dsacc{2.78}{0.20}}
@@ -138,18 +140,20 @@ a random encoder. Values in red use superseded epoch budgets and are provisional
 & \dsacc{9.81}{0.44} & \dsacc{7.32}{0.54} \\
 & & MKDT & \oldacc{15.65}{0.37} & \oldacc{16.18}{0.34} & \oldacc{9.84}{0.29} & \oldacc{2.34}{0.39} & \oldacc{7.70}{0.73} & \oldacc{5.03}{0.58} \\
 & & Ours & \oldacc{22.44}{0.48} &  &  &  &  &  \\
-\cmidrule(lr){2-9}
-
-& \multirow{4}{*}{5\%} & Random Subset
-& \dsacc{22.38}{0.21} & \dsacc{19.45}{0.98}
-& \dsacc{9.90}{0.70} & \dsacc{4.05}{0.84}
-& \oldacc{11.21}{0.51} & \oldacc{5.74}{0.68} \\
-& & K-means Subset
-& \dsacc{22.39}{0.51} & \dsacc{19.56}{0.91}
-& \dsacc{10.56}{0.53} & \dsacc{3.94}{1.58}
-& \oldacc{11.29}{0.76} & \oldacc{6.19}{0.86} \\
-& & MKDT & \oldacc{21.07}{0.33} & \oldacc{21.00}{0.35} & \oldacc{5.78}{0.33} & \oldacc{1.87}{0.30} & \oldacc{9.27}{1.00} & \oldacc{4.59}{0.90} \\
-& & Ours & \oldacc{21.75}{0.67} &  &  &  &  &  \\
+% BEGIN DISABLED: 5% pretraining subset
+% \cmidrule(lr){2-9}
+%
+% & \multirow{4}{*}{5\%} & Random Subset
+% & \dsacc{22.38}{0.21} & \dsacc{19.45}{0.98}
+% & \dsacc{9.90}{0.70} & \dsacc{4.05}{0.84}
+% & \oldacc{11.21}{0.51} & \oldacc{5.74}{0.68} \\
+% & & K-means Subset
+% & \dsacc{22.39}{0.51} & \dsacc{19.56}{0.91}
+% & \dsacc{10.56}{0.53} & \dsacc{3.94}{1.58}
+% & \oldacc{11.29}{0.76} & \oldacc{6.19}{0.86} \\
+% & & MKDT & \oldacc{21.07}{0.33} & \oldacc{21.00}{0.35} & \oldacc{5.78}{0.33} & \oldacc{1.87}{0.30} & \oldacc{9.27}{1.00} & \oldacc{4.59}{0.90} \\
+% & & Ours & \oldacc{21.75}{0.67} &  &  &  &  &  \\
+% END DISABLED: 5% pretraining subset
 
 \bottomrule
 \end{tabular}%

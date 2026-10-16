@@ -24,7 +24,7 @@
 & & & SimCLR & BT & SimCLR & BT & SimCLR & BT & SimCLR & BT & SimCLR & BT & SimCLR & BT \\
 \midrule
 
-\multirow{18}{*}{1\%}
+\multirow{14}{*}{1\%}
 & -- & No Pre-Training
 & \multicolumn{2}{c}{\dsacc{16.70}{0.70}}
 & \multicolumn{2}{c}{\dsacc{1.66}{0.15}}
@@ -58,18 +58,20 @@
 & \oldacc{31.78}{1.07} & \oldacc{25.65}{2.83} & \oldacc{5.40}{0.44} & \oldacc{1.97}{0.45} & \oldacc{1.86}{0.26} & \oldacc{1.43}{0.30} & \oldacc{0.88}{0.11} & \oldacc{0.70}{0.16} & \oldacc{1.53}{0.21} & \oldacc{0.96}{0.22} & \oldacc{2.10}{0.70} & \oldacc{1.90}{0.52} \\
 & & MKDT & \oldacc{29.90}{0.89} & \oldacc{21.61}{1.94} & \oldacc{4.97}{0.47} & \oldacc{1.86}{0.36} & \oldacc{1.76}{0.28} & \oldacc{1.27}{0.25} & \oldacc{0.85}{0.15} & \oldacc{0.62}{0.10} & \oldacc{1.47}{0.21} & \oldacc{0.84}{0.20} & \oldacc{2.10}{0.66} & \oldacc{1.70}{0.56} \\
 & & Ours & \multicolumn{12}{c}{} \\
-\cmidrule(lr){2-15}
-
-& \multirow{4}{*}{5\%} & Random Subset
-& \oldacc{31.95}{1.38} & \oldacc{18.55}{4.38} & \oldacc{4.10}{0.76} & \oldacc{1.32}{0.35} & \oldacc{1.64}{0.14} & \oldacc{1.20}{0.21} & \oldacc{0.82}{0.15} & \oldacc{0.63}{0.08} & \oldacc{1.42}{0.33} & \oldacc{0.90}{0.23} & \oldacc{2.05}{0.61} & \oldacc{1.72}{0.72} \\
-& & K-means Subset
-& \oldacc{32.01}{1.35} & \oldacc{18.39}{4.79} & \oldacc{4.07}{0.69} & \oldacc{1.26}{0.34} & \oldacc{1.62}{0.23} & \oldacc{1.14}{0.18} & \oldacc{0.79}{0.09} & \oldacc{0.64}{0.14} & \oldacc{1.34}{0.32} & \oldacc{0.91}{0.25} & \oldacc{2.09}{0.59} & \oldacc{1.62}{0.67} \\
-& & MKDT & \oldacc{27.80}{0.77} & \oldacc{17.35}{2.90} & \oldacc{3.38}{0.45} & \oldacc{1.30}{0.29} & \oldacc{1.55}{0.32} & \oldacc{1.08}{0.12} & \oldacc{0.81}{0.11} & \oldacc{0.61}{0.15} & \oldacc{1.26}{0.31} & \oldacc{0.85}{0.20} & \oldacc{1.94}{0.62} & \oldacc{1.33}{0.54} \\
-& & Ours & \multicolumn{12}{c}{} \\
+% BEGIN DISABLED: 5% pretraining subset
+% \cmidrule(lr){2-15}
+%
+% & \multirow{4}{*}{5\%} & Random Subset
+% & \oldacc{31.95}{1.38} & \oldacc{18.55}{4.38} & \oldacc{4.10}{0.76} & \oldacc{1.32}{0.35} & \oldacc{1.64}{0.14} & \oldacc{1.20}{0.21} & \oldacc{0.82}{0.15} & \oldacc{0.63}{0.08} & \oldacc{1.42}{0.33} & \oldacc{0.90}{0.23} & \oldacc{2.05}{0.61} & \oldacc{1.72}{0.72} \\
+% & & K-means Subset
+% & \oldacc{32.01}{1.35} & \oldacc{18.39}{4.79} & \oldacc{4.07}{0.69} & \oldacc{1.26}{0.34} & \oldacc{1.62}{0.23} & \oldacc{1.14}{0.18} & \oldacc{0.79}{0.09} & \oldacc{0.64}{0.14} & \oldacc{1.34}{0.32} & \oldacc{0.91}{0.25} & \oldacc{2.09}{0.59} & \oldacc{1.62}{0.67} \\
+% & & MKDT & \oldacc{27.80}{0.77} & \oldacc{17.35}{2.90} & \oldacc{3.38}{0.45} & \oldacc{1.30}{0.29} & \oldacc{1.55}{0.32} & \oldacc{1.08}{0.12} & \oldacc{0.81}{0.11} & \oldacc{0.61}{0.15} & \oldacc{1.26}{0.31} & \oldacc{0.85}{0.20} & \oldacc{1.94}{0.62} & \oldacc{1.33}{0.54} \\
+% & & Ours & \multicolumn{12}{c}{} \\
+% END DISABLED: 5% pretraining subset
 
 \midrule
 
-\multirow{18}{*}{5\%}
+\multirow{14}{*}{5\%}
 & -- & No Pre-Training
 & \multicolumn{2}{c}{\dsacc{20.18}{0.80}}
 & \multicolumn{2}{c}{\dsacc{2.81}{0.30}}
@@ -103,14 +105,16 @@
 & \oldacc{37.39}{0.86} & \oldacc{31.04}{1.74} & \oldacc{9.29}{0.26} & \oldacc{3.94}{0.52} & \oldacc{2.30}{0.26} & \oldacc{1.31}{0.23} & \oldacc{0.99}{0.11} & \oldacc{0.56}{0.14} & \oldacc{1.92}{0.24} & \oldacc{1.00}{0.21} & \oldacc{2.65}{0.36} & \oldacc{1.53}{1.47} \\
 & & MKDT & \oldacc{35.50}{0.33} & \oldacc{27.34}{0.53} & \oldacc{8.45}{0.40} & \oldacc{3.36}{0.49} & \oldacc{2.23}{0.41} & \oldacc{1.21}{0.17} & \oldacc{0.96}{0.16} & \oldacc{0.54}{0.15} & \oldacc{1.89}{0.32} & \oldacc{0.90}{0.20} & \oldacc{2.68}{0.49} & \oldacc{1.31}{0.80} \\
 & & Ours & \multicolumn{12}{c}{} \\
-\cmidrule(lr){2-15}
-
-& \multirow{4}{*}{5\%} & Random Subset
-& \oldacc{37.00}{1.17} & \oldacc{29.64}{1.62} & \oldacc{7.58}{0.98} & \oldacc{1.85}{0.61} & \oldacc{1.90}{0.35} & \oldacc{1.04}{0.10} & \oldacc{0.82}{0.13} & \oldacc{0.55}{0.13} & \oldacc{1.55}{0.35} & \oldacc{0.87}{0.18} & \oldacc{2.32}{0.79} & \oldacc{1.41}{1.23} \\
-& & K-means Subset
-& \oldacc{37.06}{0.75} & \oldacc{29.53}{1.98} & \oldacc{7.56}{0.92} & \oldacc{1.66}{0.59} & \oldacc{1.82}{0.28} & \oldacc{1.05}{0.11} & \oldacc{0.79}{0.17} & \oldacc{0.54}{0.16} & \oldacc{1.56}{0.29} & \oldacc{0.84}{0.15} & \oldacc{2.38}{0.63} & \oldacc{1.38}{1.13} \\
-& & MKDT & \oldacc{32.19}{0.41} & \oldacc{24.08}{1.01} & \oldacc{6.16}{0.44} & \oldacc{1.52}{0.45} & \oldacc{1.81}{0.34} & \oldacc{1.04}{0.13} & \oldacc{0.79}{0.09} & \oldacc{0.49}{0.10} & \oldacc{1.44}{0.24} & \oldacc{0.82}{0.18} & \oldacc{1.94}{0.73} & \oldacc{1.24}{0.82} \\
-& & Ours & \multicolumn{12}{c}{} \\
+% BEGIN DISABLED: 5% pretraining subset
+% \cmidrule(lr){2-15}
+%
+% & \multirow{4}{*}{5\%} & Random Subset
+% & \oldacc{37.00}{1.17} & \oldacc{29.64}{1.62} & \oldacc{7.58}{0.98} & \oldacc{1.85}{0.61} & \oldacc{1.90}{0.35} & \oldacc{1.04}{0.10} & \oldacc{0.82}{0.13} & \oldacc{0.55}{0.13} & \oldacc{1.55}{0.35} & \oldacc{0.87}{0.18} & \oldacc{2.32}{0.79} & \oldacc{1.41}{1.23} \\
+% & & K-means Subset
+% & \oldacc{37.06}{0.75} & \oldacc{29.53}{1.98} & \oldacc{7.56}{0.92} & \oldacc{1.66}{0.59} & \oldacc{1.82}{0.28} & \oldacc{1.05}{0.11} & \oldacc{0.79}{0.17} & \oldacc{0.54}{0.16} & \oldacc{1.56}{0.29} & \oldacc{0.84}{0.15} & \oldacc{2.38}{0.63} & \oldacc{1.38}{1.13} \\
+% & & MKDT & \oldacc{32.19}{0.41} & \oldacc{24.08}{1.01} & \oldacc{6.16}{0.44} & \oldacc{1.52}{0.45} & \oldacc{1.81}{0.34} & \oldacc{1.04}{0.13} & \oldacc{0.79}{0.09} & \oldacc{0.49}{0.10} & \oldacc{1.44}{0.24} & \oldacc{0.82}{0.18} & \oldacc{1.94}{0.73} & \oldacc{1.24}{0.82} \\
+% & & Ours & \multicolumn{12}{c}{} \\
+% END DISABLED: 5% pretraining subset
 
 \bottomrule
 \end{tabular}%
