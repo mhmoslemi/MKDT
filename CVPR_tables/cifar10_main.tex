@@ -5,9 +5,8 @@
 \def\dsacc#1#2{$#1${\footnotesize$\pm #2$}}
 \caption{Consolidated CIFAR-10 accuracy (\%) across backbones,
 pretraining objectives, and subset sizes. Results are reported as
-mean $\pm$ sample standard deviation; MKDT VGG11 and full-data entries
-use 15 independent runs, while all other subset and no-pretraining
-entries use 10.
+mean $\pm$ sample standard deviation; MKDT VGG11 entries use 15
+independent evaluation runs and all other reported results use 10.
 All methods use frozen linear probes; No Pre-Training uses
 a random encoder.}
 \label{tab:cifar10-all}
@@ -39,7 +38,7 @@ a random encoder.}
 & 100\% & Full Data
 & \dsacc{46.25}{1.07} & \dsacc{47.26}{0.82}
 & \dsacc{40.57}{5.04} & \dsacc{30.17}{6.04}
-& \dsacc{40.35}{1.39} &  \\
+& \dsacc{40.35}{1.39} & \dsacc{38.12}{5.16} \\
 \cmidrule(lr){2-9}
 
 & \multirow{4}{*}{1\%} & Random Subset
@@ -89,7 +88,7 @@ a random encoder.}
 & 100\% & Full Data
 & \dsacc{57.86}{0.33} & \dsacc{56.92}{0.67}
 & \dsacc{45.81}{6.70} & \dsacc{34.07}{5.06}
-& \dsacc{46.08}{1.27} &  \\
+& \dsacc{46.08}{1.27} & \dsacc{45.99}{2.05} \\
 \cmidrule(lr){2-9}
 
 & \multirow{4}{*}{1\%} & Random Subset
