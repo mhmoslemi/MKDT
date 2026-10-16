@@ -1,0 +1,25 @@
+START task=7 config=Aircraft_VGG11_no_pretrain target=Aircraft model=VGG11 labels=1 probe_epochs=1000
+RUN seed=0 target=Aircraft labels=66 classes=49/100 epochs=1000 accuracy=1.1401% seconds=0.9
+RUN seed=1 target=Aircraft labels=66 classes=50/100 epochs=1000 accuracy=1.4101% seconds=0.5
+RUN seed=2 target=Aircraft labels=66 classes=47/100 epochs=1000 accuracy=1.3201% seconds=0.5
+RUN seed=3 target=Aircraft labels=66 classes=48/100 epochs=1000 accuracy=1.0201% seconds=0.5
+RUN seed=4 target=Aircraft labels=66 classes=45/100 epochs=1000 accuracy=1.0501% seconds=0.5
+RUN seed=5 target=Aircraft labels=66 classes=47/100 epochs=1000 accuracy=1.0201% seconds=0.5
+RUN seed=6 target=Aircraft labels=66 classes=47/100 epochs=1000 accuracy=1.4401% seconds=0.5
+RUN seed=7 target=Aircraft labels=66 classes=51/100 epochs=1000 accuracy=1.5002% seconds=0.5
+RUN seed=8 target=Aircraft labels=66 classes=45/100 epochs=1000 accuracy=1.1101% seconds=0.5
+RUN seed=9 target=Aircraft labels=66 classes=48/100 epochs=1000 accuracy=1.3501% seconds=0.5
+COMPLETE mean=1.2361 std=0.18699462439337527 n=10
+START task=7 config=Aircraft_VGG11_no_pretrain target=Aircraft model=VGG11 labels=5 probe_epochs=500
+RUN seed=0 target=Aircraft labels=333 classes=98/100 epochs=500 accuracy=1.2601% seconds=0.9
+RUN seed=1 target=Aircraft labels=333 classes=99/100 epochs=500 accuracy=1.5902% seconds=0.5
+RUN seed=2 target=Aircraft labels=333 classes=96/100 epochs=500 accuracy=1.3201% seconds=0.5
+RUN seed=3 target=Aircraft labels=333 classes=96/100 epochs=500 accuracy=1.9202% seconds=0.5
+RUN seed=4 target=Aircraft labels=333 classes=98/100 epochs=500 accuracy=1.5902% seconds=0.5
+RUN seed=5 target=Aircraft labels=333 classes=94/100 epochs=500 accuracy=1.4101% seconds=0.5
+RUN seed=6 target=Aircraft labels=333 classes=98/100 epochs=500 accuracy=1.2901% seconds=0.5
+RUN seed=7 target=Aircraft labels=333 classes=96/100 epochs=500 accuracy=1.4401% seconds=0.5
+RUN seed=8 target=Aircraft labels=333 classes=99/100 epochs=500 accuracy=1.6502% seconds=0.5
+RUN seed=9 target=Aircraft labels=333 classes=98/100 epochs=500 accuracy=1.7102% seconds=0.5
+COMPLETE mean=1.5182 std=0.21130292167396883 n=10
+COMPLETE task=7 config=Aircraft_VGG11_no_pretrain (both label budgets)

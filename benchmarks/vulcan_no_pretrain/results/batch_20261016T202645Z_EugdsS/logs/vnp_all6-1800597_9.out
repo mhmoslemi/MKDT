@@ -1,0 +1,25 @@
+START task=9 config=CUB2011_ConvNet_no_pretrain target=CUB2011 model=ConvNet labels=1 probe_epochs=1000
+RUN seed=0 target=CUB2011 labels=59 classes=49/200 epochs=1000 accuracy=1.0010% seconds=1.2
+RUN seed=1 target=CUB2011 labels=59 classes=51/200 epochs=1000 accuracy=1.1046% seconds=0.5
+RUN seed=2 target=CUB2011 labels=59 classes=50/200 epochs=1000 accuracy=1.0183% seconds=0.5
+RUN seed=3 target=CUB2011 labels=59 classes=52/200 epochs=1000 accuracy=1.2599% seconds=0.5
+RUN seed=4 target=CUB2011 labels=59 classes=50/200 epochs=1000 accuracy=1.0010% seconds=0.5
+RUN seed=5 target=CUB2011 labels=59 classes=50/200 epochs=1000 accuracy=1.1564% seconds=0.5
+RUN seed=6 target=CUB2011 labels=59 classes=52/200 epochs=1000 accuracy=1.2081% seconds=0.5
+RUN seed=7 target=CUB2011 labels=59 classes=49/200 epochs=1000 accuracy=1.0356% seconds=0.5
+RUN seed=8 target=CUB2011 labels=59 classes=52/200 epochs=1000 accuracy=1.1564% seconds=0.5
+RUN seed=9 target=CUB2011 labels=59 classes=53/200 epochs=1000 accuracy=0.9493% seconds=0.5
+COMPLETE mean=1.0891 std=0.10305880153136018 n=10
+START task=9 config=CUB2011_ConvNet_no_pretrain target=CUB2011 model=ConvNet labels=5 probe_epochs=500
+RUN seed=0 target=CUB2011 labels=299 classes=152/200 epochs=500 accuracy=1.6741% seconds=0.8
+RUN seed=1 target=CUB2011 labels=299 classes=151/200 epochs=500 accuracy=1.4670% seconds=0.5
+RUN seed=2 target=CUB2011 labels=299 classes=157/200 epochs=500 accuracy=1.3117% seconds=0.5
+RUN seed=3 target=CUB2011 labels=299 classes=160/200 epochs=500 accuracy=1.5188% seconds=0.5
+RUN seed=4 target=CUB2011 labels=299 classes=156/200 epochs=500 accuracy=1.6741% seconds=0.5
+RUN seed=5 target=CUB2011 labels=299 classes=153/200 epochs=500 accuracy=1.6914% seconds=0.5
+RUN seed=6 target=CUB2011 labels=299 classes=157/200 epochs=500 accuracy=1.9158% seconds=0.5
+RUN seed=7 target=CUB2011 labels=299 classes=156/200 epochs=500 accuracy=2.0193% seconds=0.5
+RUN seed=8 target=CUB2011 labels=299 classes=161/200 epochs=500 accuracy=1.3290% seconds=0.5
+RUN seed=9 target=CUB2011 labels=299 classes=159/200 epochs=500 accuracy=1.5188% seconds=0.5
+COMPLETE mean=1.6120 std=0.23115633378093756 n=10
+COMPLETE task=9 config=CUB2011_ConvNet_no_pretrain (both label budgets)

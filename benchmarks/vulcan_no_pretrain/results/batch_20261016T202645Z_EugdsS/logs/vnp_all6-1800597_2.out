@@ -1,0 +1,25 @@
+START task=2 config=CIFAR10_ResNet18_no_pretrain target=CIFAR10 model=ResNet18 labels=1 probe_epochs=1000
+RUN seed=0 target=CIFAR10 labels=500 classes=10/10 epochs=1000 accuracy=16.9200% seconds=1.5
+RUN seed=1 target=CIFAR10 labels=500 classes=10/10 epochs=1000 accuracy=16.4400% seconds=1.2
+RUN seed=2 target=CIFAR10 labels=500 classes=10/10 epochs=1000 accuracy=17.7100% seconds=1.2
+RUN seed=3 target=CIFAR10 labels=500 classes=10/10 epochs=1000 accuracy=15.8900% seconds=1.2
+RUN seed=4 target=CIFAR10 labels=500 classes=10/10 epochs=1000 accuracy=16.9400% seconds=1.2
+RUN seed=5 target=CIFAR10 labels=500 classes=10/10 epochs=1000 accuracy=16.5300% seconds=1.2
+RUN seed=6 target=CIFAR10 labels=500 classes=10/10 epochs=1000 accuracy=17.9300% seconds=1.2
+RUN seed=7 target=CIFAR10 labels=500 classes=10/10 epochs=1000 accuracy=16.5900% seconds=1.2
+RUN seed=8 target=CIFAR10 labels=500 classes=10/10 epochs=1000 accuracy=15.8800% seconds=1.2
+RUN seed=9 target=CIFAR10 labels=500 classes=10/10 epochs=1000 accuracy=16.1600% seconds=1.2
+COMPLETE mean=16.6990 std=0.6966342050943525 n=10
+START task=2 config=CIFAR10_ResNet18_no_pretrain target=CIFAR10 model=ResNet18 labels=5 probe_epochs=500
+RUN seed=0 target=CIFAR10 labels=2500 classes=10/10 epochs=500 accuracy=19.7900% seconds=2.7
+RUN seed=1 target=CIFAR10 labels=2500 classes=10/10 epochs=500 accuracy=20.0300% seconds=2.3
+RUN seed=2 target=CIFAR10 labels=2500 classes=10/10 epochs=500 accuracy=21.6800% seconds=2.3
+RUN seed=3 target=CIFAR10 labels=2500 classes=10/10 epochs=500 accuracy=19.2000% seconds=2.3
+RUN seed=4 target=CIFAR10 labels=2500 classes=10/10 epochs=500 accuracy=19.4200% seconds=2.3
+RUN seed=5 target=CIFAR10 labels=2500 classes=10/10 epochs=500 accuracy=20.1500% seconds=2.3
+RUN seed=6 target=CIFAR10 labels=2500 classes=10/10 epochs=500 accuracy=20.1700% seconds=2.3
+RUN seed=7 target=CIFAR10 labels=2500 classes=10/10 epochs=500 accuracy=21.3300% seconds=2.3
+RUN seed=8 target=CIFAR10 labels=2500 classes=10/10 epochs=500 accuracy=20.4300% seconds=2.3
+RUN seed=9 target=CIFAR10 labels=2500 classes=10/10 epochs=500 accuracy=19.5800% seconds=2.3
+COMPLETE mean=20.1780 std=0.7964195210138896 n=10
+COMPLETE task=2 config=CIFAR10_ResNet18_no_pretrain (both label budgets)

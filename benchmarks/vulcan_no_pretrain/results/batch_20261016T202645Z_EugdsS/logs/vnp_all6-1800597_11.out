@@ -1,0 +1,25 @@
+START task=11 config=CUB2011_ResNet18_no_pretrain target=CUB2011 model=ResNet18 labels=1 probe_epochs=1000
+RUN seed=0 target=CUB2011 labels=59 classes=49/200 epochs=1000 accuracy=0.7767% seconds=1.1
+RUN seed=1 target=CUB2011 labels=59 classes=51/200 epochs=1000 accuracy=0.6213% seconds=0.7
+RUN seed=2 target=CUB2011 labels=59 classes=50/200 epochs=1000 accuracy=0.4487% seconds=0.7
+RUN seed=3 target=CUB2011 labels=59 classes=52/200 epochs=1000 accuracy=0.4660% seconds=0.7
+RUN seed=4 target=CUB2011 labels=59 classes=50/200 epochs=1000 accuracy=0.4142% seconds=0.7
+RUN seed=5 target=CUB2011 labels=59 classes=50/200 epochs=1000 accuracy=0.4315% seconds=0.7
+RUN seed=6 target=CUB2011 labels=59 classes=52/200 epochs=1000 accuracy=0.4487% seconds=0.7
+RUN seed=7 target=CUB2011 labels=59 classes=49/200 epochs=1000 accuracy=0.6213% seconds=0.7
+RUN seed=8 target=CUB2011 labels=59 classes=52/200 epochs=1000 accuracy=0.5868% seconds=0.7
+RUN seed=9 target=CUB2011 labels=59 classes=53/200 epochs=1000 accuracy=0.5696% seconds=0.7
+COMPLETE mean=0.5385 std=0.11643411150103077 n=10
+START task=11 config=CUB2011_ResNet18_no_pretrain target=CUB2011 model=ResNet18 labels=5 probe_epochs=500
+RUN seed=0 target=CUB2011 labels=299 classes=152/200 epochs=500 accuracy=0.7249% seconds=1.0
+RUN seed=1 target=CUB2011 labels=299 classes=151/200 epochs=500 accuracy=0.6731% seconds=0.7
+RUN seed=2 target=CUB2011 labels=299 classes=157/200 epochs=500 accuracy=0.4833% seconds=0.7
+RUN seed=3 target=CUB2011 labels=299 classes=160/200 epochs=500 accuracy=0.7594% seconds=0.7
+RUN seed=4 target=CUB2011 labels=299 classes=156/200 epochs=500 accuracy=0.7076% seconds=0.7
+RUN seed=5 target=CUB2011 labels=299 classes=153/200 epochs=500 accuracy=0.5523% seconds=0.7
+RUN seed=6 target=CUB2011 labels=299 classes=157/200 epochs=500 accuracy=0.5523% seconds=0.7
+RUN seed=7 target=CUB2011 labels=299 classes=156/200 epochs=500 accuracy=0.5350% seconds=0.7
+RUN seed=8 target=CUB2011 labels=299 classes=161/200 epochs=500 accuracy=0.5005% seconds=0.7
+RUN seed=9 target=CUB2011 labels=299 classes=159/200 epochs=500 accuracy=0.5696% seconds=0.7
+COMPLETE mean=0.6058 std=0.10045671885895008 n=10
+COMPLETE task=11 config=CUB2011_ResNet18_no_pretrain (both label budgets)

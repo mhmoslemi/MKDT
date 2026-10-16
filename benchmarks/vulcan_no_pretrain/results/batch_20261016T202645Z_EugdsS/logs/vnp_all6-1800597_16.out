@@ -1,0 +1,25 @@
+START task=16 config=Flowers_VGG11_no_pretrain target=Flowers model=VGG11 labels=1 probe_epochs=1000
+RUN seed=0 target=Flowers labels=10 classes=10/102 epochs=1000 accuracy=1.7726% seconds=0.9
+RUN seed=1 target=Flowers labels=10 classes=10/102 epochs=1000 accuracy=1.7564% seconds=0.5
+RUN seed=2 target=Flowers labels=10 classes=10/102 epochs=1000 accuracy=2.2931% seconds=0.5
+RUN seed=3 target=Flowers labels=10 classes=9/102 epochs=1000 accuracy=2.4557% seconds=0.5
+RUN seed=4 target=Flowers labels=10 classes=10/102 epochs=1000 accuracy=0.6342% seconds=0.5
+RUN seed=5 target=Flowers labels=10 classes=9/102 epochs=1000 accuracy=1.4311% seconds=0.5
+RUN seed=6 target=Flowers labels=10 classes=10/102 epochs=1000 accuracy=0.7481% seconds=0.5
+RUN seed=7 target=Flowers labels=10 classes=10/102 epochs=1000 accuracy=0.9758% seconds=0.5
+RUN seed=8 target=Flowers labels=10 classes=10/102 epochs=1000 accuracy=1.1872% seconds=0.5
+RUN seed=9 target=Flowers labels=10 classes=9/102 epochs=1000 accuracy=0.3740% seconds=0.5
+COMPLETE mean=1.3628 std=0.7035029560483901 n=10
+START task=16 config=Flowers_VGG11_no_pretrain target=Flowers model=VGG11 labels=5 probe_epochs=500
+RUN seed=0 target=Flowers labels=51 classes=46/102 epochs=500 accuracy=0.8131% seconds=0.7
+RUN seed=1 target=Flowers labels=51 classes=42/102 epochs=500 accuracy=0.9595% seconds=0.3
+RUN seed=2 target=Flowers labels=51 classes=41/102 epochs=500 accuracy=1.4149% seconds=0.3
+RUN seed=3 target=Flowers labels=51 classes=40/102 epochs=500 accuracy=1.7564% seconds=0.3
+RUN seed=4 target=Flowers labels=51 classes=43/102 epochs=500 accuracy=1.1221% seconds=0.3
+RUN seed=5 target=Flowers labels=51 classes=40/102 epochs=500 accuracy=1.2034% seconds=0.3
+RUN seed=6 target=Flowers labels=51 classes=43/102 epochs=500 accuracy=1.2034% seconds=0.3
+RUN seed=7 target=Flowers labels=51 classes=42/102 epochs=500 accuracy=1.4962% seconds=0.3
+RUN seed=8 target=Flowers labels=51 classes=38/102 epochs=500 accuracy=0.6830% seconds=0.3
+RUN seed=9 target=Flowers labels=51 classes=36/102 epochs=500 accuracy=0.6342% seconds=0.3
+COMPLETE mean=1.1286 std=0.36414809839260426 n=10
+COMPLETE task=16 config=Flowers_VGG11_no_pretrain (both label budgets)

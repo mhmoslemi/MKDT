@@ -1,0 +1,25 @@
+START task=8 config=Aircraft_ResNet18_no_pretrain target=Aircraft model=ResNet18 labels=1 probe_epochs=1000
+RUN seed=0 target=Aircraft labels=66 classes=49/100 epochs=1000 accuracy=1.3501% seconds=1.0
+RUN seed=1 target=Aircraft labels=66 classes=50/100 epochs=1000 accuracy=1.0501% seconds=0.6
+RUN seed=2 target=Aircraft labels=66 classes=47/100 epochs=1000 accuracy=1.4101% seconds=0.6
+RUN seed=3 target=Aircraft labels=66 classes=48/100 epochs=1000 accuracy=1.3501% seconds=0.6
+RUN seed=4 target=Aircraft labels=66 classes=45/100 epochs=1000 accuracy=1.0801% seconds=0.6
+RUN seed=5 target=Aircraft labels=66 classes=47/100 epochs=1000 accuracy=1.1101% seconds=0.6
+RUN seed=6 target=Aircraft labels=66 classes=47/100 epochs=1000 accuracy=1.1401% seconds=0.6
+RUN seed=7 target=Aircraft labels=66 classes=51/100 epochs=1000 accuracy=1.3801% seconds=0.6
+RUN seed=8 target=Aircraft labels=66 classes=45/100 epochs=1000 accuracy=1.1101% seconds=0.6
+RUN seed=9 target=Aircraft labels=66 classes=48/100 epochs=1000 accuracy=1.3801% seconds=0.6
+COMPLETE mean=1.2361 std=0.1482038760668826 n=10
+START task=8 config=Aircraft_ResNet18_no_pretrain target=Aircraft model=ResNet18 labels=5 probe_epochs=500
+RUN seed=0 target=Aircraft labels=333 classes=98/100 epochs=500 accuracy=1.0501% seconds=1.0
+RUN seed=1 target=Aircraft labels=333 classes=99/100 epochs=500 accuracy=1.4401% seconds=0.6
+RUN seed=2 target=Aircraft labels=333 classes=96/100 epochs=500 accuracy=1.5602% seconds=0.6
+RUN seed=3 target=Aircraft labels=333 classes=96/100 epochs=500 accuracy=2.1002% seconds=0.6
+RUN seed=4 target=Aircraft labels=333 classes=98/100 epochs=500 accuracy=1.8902% seconds=0.6
+RUN seed=5 target=Aircraft labels=333 classes=94/100 epochs=500 accuracy=1.4701% seconds=0.6
+RUN seed=6 target=Aircraft labels=333 classes=98/100 epochs=500 accuracy=1.3501% seconds=0.6
+RUN seed=7 target=Aircraft labels=333 classes=96/100 epochs=500 accuracy=1.5302% seconds=0.6
+RUN seed=8 target=Aircraft labels=333 classes=99/100 epochs=500 accuracy=1.0801% seconds=0.6
+RUN seed=9 target=Aircraft labels=333 classes=98/100 epochs=500 accuracy=1.4401% seconds=0.6
+COMPLETE mean=1.4911 std=0.3206720413841887 n=10
+COMPLETE task=8 config=Aircraft_ResNet18_no_pretrain (both label budgets)

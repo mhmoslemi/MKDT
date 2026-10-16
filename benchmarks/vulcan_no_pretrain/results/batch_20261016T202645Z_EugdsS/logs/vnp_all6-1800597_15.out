@@ -1,0 +1,25 @@
+START task=15 config=Flowers_ConvNet_no_pretrain target=Flowers model=ConvNet labels=1 probe_epochs=1000
+RUN seed=0 target=Flowers labels=10 classes=10/102 epochs=1000 accuracy=2.3093% seconds=2.9
+RUN seed=1 target=Flowers labels=10 classes=10/102 epochs=1000 accuracy=2.8460% seconds=1.7
+RUN seed=2 target=Flowers labels=10 classes=10/102 epochs=1000 accuracy=3.5290% seconds=1.8
+RUN seed=3 target=Flowers labels=10 classes=9/102 epochs=1000 accuracy=1.0896% seconds=1.7
+RUN seed=4 target=Flowers labels=10 classes=10/102 epochs=1000 accuracy=2.9273% seconds=1.7
+RUN seed=5 target=Flowers labels=10 classes=9/102 epochs=1000 accuracy=1.2034% seconds=1.7
+RUN seed=6 target=Flowers labels=10 classes=10/102 epochs=1000 accuracy=3.5453% seconds=1.7
+RUN seed=7 target=Flowers labels=10 classes=10/102 epochs=1000 accuracy=3.4152% seconds=1.7
+RUN seed=8 target=Flowers labels=10 classes=10/102 epochs=1000 accuracy=2.8623% seconds=1.8
+RUN seed=9 target=Flowers labels=10 classes=9/102 epochs=1000 accuracy=0.8457% seconds=1.7
+COMPLETE mean=2.4573 std=1.0460426120197064 n=10
+START task=15 config=Flowers_ConvNet_no_pretrain target=Flowers model=ConvNet labels=5 probe_epochs=500
+RUN seed=0 target=Flowers labels=51 classes=46/102 epochs=500 accuracy=4.2934% seconds=2.1
+RUN seed=1 target=Flowers labels=51 classes=42/102 epochs=500 accuracy=4.1308% seconds=0.9
+RUN seed=2 target=Flowers labels=51 classes=41/102 epochs=500 accuracy=5.0903% seconds=0.9
+RUN seed=3 target=Flowers labels=51 classes=40/102 epochs=500 accuracy=5.1390% seconds=0.9
+RUN seed=4 target=Flowers labels=51 classes=43/102 epochs=500 accuracy=4.4235% seconds=0.9
+RUN seed=5 target=Flowers labels=51 classes=40/102 epochs=500 accuracy=4.7325% seconds=0.9
+RUN seed=6 target=Flowers labels=51 classes=43/102 epochs=500 accuracy=5.5131% seconds=0.9
+RUN seed=7 target=Flowers labels=51 classes=42/102 epochs=500 accuracy=4.0494% seconds=0.9
+RUN seed=8 target=Flowers labels=51 classes=38/102 epochs=500 accuracy=5.5619% seconds=0.9
+RUN seed=9 target=Flowers labels=51 classes=36/102 epochs=500 accuracy=4.0169% seconds=0.9
+COMPLETE mean=4.6951 std=0.5967979856711321 n=10
+COMPLETE task=15 config=Flowers_ConvNet_no_pretrain (both label budgets)

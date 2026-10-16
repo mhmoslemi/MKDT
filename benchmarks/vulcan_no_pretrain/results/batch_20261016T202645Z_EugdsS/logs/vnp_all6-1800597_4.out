@@ -1,0 +1,25 @@
+START task=4 config=CIFAR100_VGG11_no_pretrain target=CIFAR100 model=VGG11 labels=1 probe_epochs=1000
+RUN seed=0 target=CIFAR100 labels=500 classes=100/100 epochs=1000 accuracy=1.8400% seconds=1.3
+RUN seed=1 target=CIFAR100 labels=500 classes=100/100 epochs=1000 accuracy=1.9600% seconds=1.0
+RUN seed=2 target=CIFAR100 labels=500 classes=100/100 epochs=1000 accuracy=1.7100% seconds=0.9
+RUN seed=3 target=CIFAR100 labels=500 classes=99/100 epochs=1000 accuracy=1.7800% seconds=0.9
+RUN seed=4 target=CIFAR100 labels=500 classes=99/100 epochs=1000 accuracy=1.6400% seconds=0.9
+RUN seed=5 target=CIFAR100 labels=500 classes=99/100 epochs=1000 accuracy=1.8700% seconds=0.9
+RUN seed=6 target=CIFAR100 labels=500 classes=99/100 epochs=1000 accuracy=2.1600% seconds=0.9
+RUN seed=7 target=CIFAR100 labels=500 classes=100/100 epochs=1000 accuracy=1.6800% seconds=0.9
+RUN seed=8 target=CIFAR100 labels=500 classes=99/100 epochs=1000 accuracy=2.0900% seconds=0.9
+RUN seed=9 target=CIFAR100 labels=500 classes=100/100 epochs=1000 accuracy=2.1100% seconds=0.9
+COMPLETE mean=1.8840 std=0.1885146535233759 n=10
+START task=4 config=CIFAR100_VGG11_no_pretrain target=CIFAR100 model=VGG11 labels=5 probe_epochs=500
+RUN seed=0 target=CIFAR100 labels=2500 classes=100/100 epochs=500 accuracy=2.7800% seconds=2.4
+RUN seed=1 target=CIFAR100 labels=2500 classes=100/100 epochs=500 accuracy=2.6700% seconds=2.1
+RUN seed=2 target=CIFAR100 labels=2500 classes=100/100 epochs=500 accuracy=2.5200% seconds=2.0
+RUN seed=3 target=CIFAR100 labels=2500 classes=100/100 epochs=500 accuracy=2.6900% seconds=2.0
+RUN seed=4 target=CIFAR100 labels=2500 classes=100/100 epochs=500 accuracy=2.5300% seconds=2.1
+RUN seed=5 target=CIFAR100 labels=2500 classes=100/100 epochs=500 accuracy=2.8000% seconds=2.0
+RUN seed=6 target=CIFAR100 labels=2500 classes=100/100 epochs=500 accuracy=3.0700% seconds=2.1
+RUN seed=7 target=CIFAR100 labels=2500 classes=100/100 epochs=500 accuracy=3.0700% seconds=2.0
+RUN seed=8 target=CIFAR100 labels=2500 classes=100/100 epochs=500 accuracy=2.6800% seconds=2.0
+RUN seed=9 target=CIFAR100 labels=2500 classes=100/100 epochs=500 accuracy=3.0000% seconds=2.0
+COMPLETE mean=2.7810 std=0.2047464615484817 n=10
+COMPLETE task=4 config=CIFAR100_VGG11_no_pretrain (both label budgets)

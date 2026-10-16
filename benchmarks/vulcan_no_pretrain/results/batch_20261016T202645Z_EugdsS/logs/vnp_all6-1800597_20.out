@@ -1,0 +1,25 @@
+START task=20 config=TinyImageNet_ResNet18_no_pretrain target=TinyImageNet model=ResNet18 labels=1 probe_epochs=1000
+RUN seed=0 target=TinyImageNet labels=1000 classes=198/200 epochs=1000 accuracy=0.6400% seconds=2.3
+RUN seed=1 target=TinyImageNet labels=1000 classes=198/200 epochs=1000 accuracy=0.5800% seconds=1.9
+RUN seed=2 target=TinyImageNet labels=1000 classes=199/200 epochs=1000 accuracy=0.6800% seconds=1.9
+RUN seed=3 target=TinyImageNet labels=1000 classes=200/200 epochs=1000 accuracy=0.5800% seconds=1.9
+RUN seed=4 target=TinyImageNet labels=1000 classes=199/200 epochs=1000 accuracy=0.5800% seconds=1.9
+RUN seed=5 target=TinyImageNet labels=1000 classes=199/200 epochs=1000 accuracy=0.8100% seconds=1.9
+RUN seed=6 target=TinyImageNet labels=1000 classes=199/200 epochs=1000 accuracy=0.6700% seconds=1.9
+RUN seed=7 target=TinyImageNet labels=1000 classes=199/200 epochs=1000 accuracy=0.6500% seconds=1.9
+RUN seed=8 target=TinyImageNet labels=1000 classes=199/200 epochs=1000 accuracy=0.5500% seconds=2.0
+RUN seed=9 target=TinyImageNet labels=1000 classes=199/200 epochs=1000 accuracy=0.7300% seconds=1.9
+COMPLETE mean=0.6470 std=0.0802842188193996 n=10
+START task=20 config=TinyImageNet_ResNet18_no_pretrain target=TinyImageNet model=ResNet18 labels=5 probe_epochs=500
+RUN seed=0 target=TinyImageNet labels=5000 classes=200/200 epochs=500 accuracy=0.7700% seconds=4.6
+RUN seed=1 target=TinyImageNet labels=5000 classes=200/200 epochs=500 accuracy=0.9100% seconds=4.3
+RUN seed=2 target=TinyImageNet labels=5000 classes=200/200 epochs=500 accuracy=0.9500% seconds=4.2
+RUN seed=3 target=TinyImageNet labels=5000 classes=200/200 epochs=500 accuracy=0.8600% seconds=4.2
+RUN seed=4 target=TinyImageNet labels=5000 classes=200/200 epochs=500 accuracy=0.6200% seconds=4.2
+RUN seed=5 target=TinyImageNet labels=5000 classes=200/200 epochs=500 accuracy=0.9300% seconds=4.2
+RUN seed=6 target=TinyImageNet labels=5000 classes=200/200 epochs=500 accuracy=0.7900% seconds=4.2
+RUN seed=7 target=TinyImageNet labels=5000 classes=200/200 epochs=500 accuracy=0.9800% seconds=4.2
+RUN seed=8 target=TinyImageNet labels=5000 classes=200/200 epochs=500 accuracy=0.6900% seconds=4.2
+RUN seed=9 target=TinyImageNet labels=5000 classes=200/200 epochs=500 accuracy=0.8700% seconds=4.2
+COMPLETE mean=0.8370 std=0.1174781330751332 n=10
+COMPLETE task=20 config=TinyImageNet_ResNet18_no_pretrain (both label budgets)
