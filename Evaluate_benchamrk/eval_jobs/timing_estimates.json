@@ -1,0 +1,103 @@
+{
+  "description": "Approximate L40S single-CPU budget, NOT measured linear-probe time. Native cost proxy = measured SSL seconds / (2 * processed examples); includes SSL backward/projector overhead. Transfer JPEG decode assumption = 5ms per read, per-probe checkpoint/load overhead = 10s. Exactly 900s additional margin per job. Killarney SSL evidence reused on Vulcan; storage contention and JPEG sizes are unmeasured.",
+  "counts": {
+    "CIFAR10": [
+      50000,
+      10000
+    ],
+    "CIFAR100": [
+      50000,
+      10000
+    ],
+    "TinyImageNet": [
+      100000,
+      10000
+    ],
+    "Aircraft": [
+      6667,
+      3333
+    ],
+    "CUB2011": [
+      5994,
+      5794
+    ],
+    "Dogs": [
+      12000,
+      8580
+    ],
+    "Flowers": [
+      1020,
+      6149
+    ]
+  },
+  "native_seconds_per_image": {
+    "CIFAR10/ConvNet": 0.0007407012038371856,
+    "CIFAR10/VGG11": 0.0008195475275350266,
+    "CIFAR10/ResNet18": 0.0008856839770910483,
+    "CIFAR100/ConvNet": 0.0007376331657766665,
+    "CIFAR100/VGG11": 0.0007858987427154413,
+    "CIFAR100/ResNet18": 0.0008866763286197663,
+    "TinyImageNet/ConvNet": 0.0012524040515144992,
+    "TinyImageNet/VGG11": 0.0013039369454084927,
+    "TinyImageNet/ResNet18": 0.0017689389281196912
+  },
+  "evidence": {
+    "CIFAR10/ConvNet": {
+      "marker": "Evaluate_benchamrk/random_ssl_checkpoints/CIFAR10/ConvNet/random/pt2/simclr/seed_000/ssl_complete.json",
+      "seconds": 1137.717049093917,
+      "examples": 768000,
+      "seconds_per_view": 0.0007407012038371856
+    },
+    "CIFAR10/VGG11": {
+      "marker": "Evaluate_benchamrk/random_ssl_checkpoints/CIFAR10/VGG11/random/pt2/simclr/seed_000/ssl_complete.json",
+      "seconds": 1258.825002293801,
+      "examples": 768000,
+      "seconds_per_view": 0.0008195475275350266
+    },
+    "CIFAR10/ResNet18": {
+      "marker": "Evaluate_benchamrk/random_ssl_checkpoints/CIFAR10/ResNet18/random/pt2/simclr/seed_000/ssl_complete.json",
+      "seconds": 1360.4105888118502,
+      "examples": 768000,
+      "seconds_per_view": 0.0008856839770910483
+    },
+    "CIFAR100/ConvNet": {
+      "marker": "Evaluate_benchamrk/random_ssl_checkpoints/CIFAR100/ConvNet/random/pt2/simclr/seed_000/ssl_complete.json",
+      "seconds": 1133.0045426329598,
+      "examples": 768000,
+      "seconds_per_view": 0.0007376331657766665
+    },
+    "CIFAR100/VGG11": {
+      "marker": "Evaluate_benchamrk/random_ssl_checkpoints/CIFAR100/VGG11/random/pt2/simclr/seed_000/ssl_complete.json",
+      "seconds": 1207.1404688109178,
+      "examples": 768000,
+      "seconds_per_view": 0.0007858987427154413
+    },
+    "CIFAR100/ResNet18": {
+      "marker": "Evaluate_benchamrk/random_ssl_checkpoints/CIFAR100/ResNet18/random/pt2/simclr/seed_000/ssl_complete.json",
+      "seconds": 1361.934840759961,
+      "examples": 768000,
+      "seconds_per_view": 0.0008866763286197663
+    },
+    "TinyImageNet/ConvNet": {
+      "marker": "Evaluate_benchamrk/random_ssl_checkpoints/TinyImageNet/ConvNet/random/pt2/simclr/seed_000/ssl_complete.json",
+      "seconds": 4488.616120627965,
+      "examples": 1792000,
+      "seconds_per_view": 0.0012524040515144992
+    },
+    "TinyImageNet/VGG11": {
+      "marker": "Evaluate_benchamrk/random_ssl_checkpoints/TinyImageNet/VGG11/random/pt2/simclr/seed_000/ssl_complete.json",
+      "seconds": 4673.310012344038,
+      "examples": 1792000,
+      "seconds_per_view": 0.0013039369454084927
+    },
+    "TinyImageNet/ResNet18": {
+      "marker": "Evaluate_benchamrk/random_ssl_checkpoints/TinyImageNet/ResNet18/random/pt2/simclr/seed_000/ssl_complete.json",
+      "seconds": 6339.877118380973,
+      "examples": 1792000,
+      "seconds_per_view": 0.0017689389281196912
+    }
+  },
+  "jpeg_seconds_per_image": 0.005,
+  "probe_setup_seconds": 10,
+  "margin_seconds": 900
+}
