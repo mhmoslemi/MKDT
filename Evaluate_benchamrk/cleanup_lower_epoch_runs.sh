@@ -173,9 +173,10 @@ for i in "${!targets[@]}"; do
         printf 'TRASH\t%s\t%s\n' "$relative" "$destination" >> "$receipt"
     else
         # The only recursive removal: one resolved, owned, allowlisted run folder.
-        rm -rf --one-file-system -- "$absolute"
+        rm -rfv --one-file-system -- "$absolute"
         [[ ! -e $absolute ]] || { echo "Removal incomplete: $relative" >&2; exit 2; }
         printf 'DELETE\t%s\t-\n' "$relative" >> "$receipt"
+        printf 'DONE deleted: %s\n' "$relative"
     fi
     [[ -z $lock_fd ]] || exec {lock_fd}>&-
 done
