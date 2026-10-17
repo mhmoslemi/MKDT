@@ -85,7 +85,7 @@ class EvaluationTests(unittest.TestCase):
         common.atomic_json(result, row)
         with self.assertRaisesRegex(ValueError, 'modified'):
             self.evaluate(unit)
-        status = report(self.batch, self.plan)
+        status = report(self.batch / 'results', self.plan)
         self.assertEqual(len(status['invalid_encoders']), 1)
         self.assertEqual(status['completed_probes'], 0)
 
@@ -118,10 +118,10 @@ class EvaluationTests(unittest.TestCase):
             unit, _ = self.make_seed(seed)
             self.evaluate(unit)
             if seed == 0:
-                partial = report(self.batch, self.plan)
+                partial = report(self.batch / 'results', self.plan)
                 self.assertEqual(partial['completed_table_cells'], 0)
                 self.assertFalse((self.batch / 'results' / self.group / 'summary.json').exists())
-        status = report(self.batch, self.plan)
+        status = report(self.batch / 'results', self.plan)
         self.assertEqual(status['completed_encoders'], 10)
         self.assertEqual(status['completed_probes'], 20)
         self.assertEqual(status['completed_table_cells'], 2)
@@ -134,12 +134,13 @@ class EvaluationTests(unittest.TestCase):
         unit, _ = self.make_seed()
         self.plan['jobs'] = [{'task': '01', 'units': [unit], 'probes': 2,
                               'account': os.environ['SLURM_JOB_ACCOUNT']}]
-        common.atomic_json(self.batch / 'plan.json', self.plan)
         common.atomic_json(self.batch / 'protocol.json', self.protocol)
         with patch.object(worker, 'BENCH', self.batch), \
+             patch.object(worker, 'build_plan', return_value=self.plan), \
              patch.object(worker, 'RawDataset', FixtureDataset), \
              patch.object(torch, 'set_num_interop_threads'), \
-             patch.object(sys, 'argv', ['worker.py', str(self.batch), '01']):
+             patch.object(sys, 'argv', ['worker.py', '01', self.plan['data_root'],
+                 self.plan['checkpoint_root'], str(self.batch / 'results')]):
             worker.main()
         job = json.loads((self.batch / 'results/jobs/01.json').read_text())
         self.assertTrue(job['complete'])
@@ -149,6 +150,13 @@ class EvaluationTests(unittest.TestCase):
 
 
 class BackboneSmokeTests(unittest.TestCase):
+    def test_task_list_covers_all_cells_and_dependencies(self):
+        plan = worker.build_plan('/fixture/checkpoints', '/fixture/data')
+        self.assertEqual(len(plan['jobs']), 40)
+        self.assertEqual(sum(j['probes'] for j in plan['jobs']), 3240)
+        self.assertEqual(len(plan['jobs'][38]['units']), 20)
+        self.assertEqual(len(plan['jobs'][39]['units']), 20)
+
     def test_six_real_backbone_shapes_on_gpu(self):
         self.assertTrue(torch.cuda.is_available())
         for model in ('ConvNet', 'VGG11', 'ResNet18'):

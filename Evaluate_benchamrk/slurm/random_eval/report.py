@@ -18,8 +18,7 @@ def write_tsv(path, columns, rows):
     temporary.replace(path)
 
 
-def report(batch, plan):
-    root = batch / 'results'
+def report(root, plan):
     root.mkdir(parents=True, exist_ok=True)
     with (root / '.report.lock').open('a') as lock:
         fcntl.flock(lock, fcntl.LOCK_EX)

@@ -202,7 +202,7 @@ To evaluate a retained full-data checkpoint separately:
     --target CIFAR100 --labels 1 --output Evaluate_benchamrk/reprobe/cifar100_lbl1.json
 This reads the checkpoint's sibling config.json and uses its saved protocol.
 
-For the 540 retained encoders produced by random_ssl.sh, random_eval.sh prepares
+For the 540 retained encoders produced by random_ssl.sh, random_eval.sh submits
 40 evaluation-only Slurm jobs for the active random rows of all six CVPR tables:
 38 ready jobs plus two TinyImageNet/ResNet18 dependency groups. After git sync,
 run bash Evaluate_benchamrk/random_eval.sh on Killarney to submit all 40. This path

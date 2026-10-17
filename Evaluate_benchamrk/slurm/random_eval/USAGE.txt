@@ -1,92 +1,43 @@
-Random-subset checkpoint evaluation for Killarney
-================================================
+Random-subset evaluation on Killarney
+===================================
 
-Sync the repository to Killarney with git, including random_eval.sh and
-slurm/random_eval/. Generated batches and logs are ignored by git.
-Keep the existing benchmark Python files/protocol and random_ssl_checkpoints.
-The new worker is in a subdirectory so the saved training code hashes do not change.
-
-On Killarney, from the MKDT directory:
+Sync the repository with git, then run from MKDT, just like random_ssl.sh:
 
   bash Evaluate_benchamrk/random_eval.sh
 
-This prepares and submits all 40 jobs in one command. It prints the batch path.
-For a preview without submission, append --dry-run. For a separate preparation
-step, use --prepare and then --submit BATCH.
+This Bash launcher directly submits 40 ordinary jobs from the existing checkout.
+The worker uses StdEnv/2023, python/3.11.5, and $HOME/ENV, as random_ssl.sh does.
+The fixed tasks.tsv is tracked in git. Python runs only in the GPU workers.
 
-Preparation creates an immutable code snapshot, 40 reviewable job scripts under
-jobs/, jobs.tsv, and a 3240-row checklist.tsv. Prefer the submission launcher over
-direct sbatch of jobs/*.sh: it checks inputs and resolves old dependencies first.
-Re-prepare on the destination; generated batches contain absolute local paths.
+Jobs 01..38 evaluate the other 500 encoders. Job 39 evaluates the twenty
+TinyImageNet/ResNet18/1% encoders after jobs 6334332 and 6334333. Job 40 evaluates
+the twenty TinyImageNet/ResNet18/2% encoders after jobs 6334334 and 6334335.
+Finished checkpoints need no dependency. Missing checkpoints require the named
+active Killarney training jobs. Failed parents cancel their dependent evaluation.
 
-Exactly 40 production jobs, no arrays and no extra aggregator:
-  01..38: 500 encoders from the other 50 training groups, balanced by estimated
-          image work. Each encoder's probes remain in one job.
-  39: TinyImageNet / ResNet18 / 1% pretraining, both SSL methods, seeds 0..9;
-      afterok:6334332:6334333 while those checkpoints remain unfinished.
-  40: TinyImageNet / ResNet18 / 2% pretraining, both SSL methods, seeds 0..9;
-      afterok:6334334:6334335 while those checkpoints remain unfinished.
-Completed groups need no dependency, including when old job IDs have expired.
-A missing encoder requires the matching active training job on Killarney;
-otherwise submission stops before any evaluation job is queued. A failed parent
-cancels its dependent job. No waiting/sleep loops or SSL training in workers.
+Coverage: 540 encoders, 3240 probes, 324 active random table cells; pretraining
+sizes 0.2%, 1%, 2%; both SSL methods; ten seeds; 1% and 5% labels. All three
+backbones have main-table probes; ResNet18 also has six downstream targets.
 
-Coverage: random rows only, 0.2%, 1%, 2% pretraining; ten seeds per combination;
-SimCLR and Barlow Twins; 1% and 5% labeled data. ConvNet/VGG11 have source probes.
-ResNet18 has source plus six transfer targets. Total: 540 encoders, 1080 source
-probes + 2160 transfer probes = 3240 probes, forming 324 mean/std table cells.
-The disabled 5%-pretraining rows and other selection methods are outside this batch.
+Resources per job: 1 GPU, 1 CPU, 6G. Default walltime is 6h for jobs 01..38 and
+12h for 39..40. These are allocation limits, not measured runtimes. Override
+BENCH_EVAL_TIME / BENCH_EVAL_TAIL_TIME if needed. Accounts: 36 Wang / 4 Lu.
+BENCH_VENV, BENCH_DATA_ROOT, BENCH_CHECKPOINT_ROOT and GPU_TYPE work as overrides.
+Checkpoint default: Evaluate_benchamrk/random_ssl_checkpoints.
+Data default: <MKDT parent>/data. All datasets must already be staged.
 
-Resource requests: one full L40S, one CPU, 6G per job; workers=0, torch threads=1.
-Default limits: 6h for ordinary jobs; 12h for each 280-probe tail job. These are
-conservative allocation limits, not measured completion-time predictions. Set
-BENCH_EVAL_TIME and BENCH_EVAL_TAIL_TIME before --prepare to change them.
-Accounts preserve the previous approximate 90/10 allocation: 36 Wang, 4 Lu.
-BENCH_ACCOUNT/BENCH_SECONDARY_ACCOUNT can override them before preparation.
-The launcher discovers destination modules, GPU types, own accounts and queue.
-It never sets a partition. GPU_TYPE is checked when submitting; default l40s.
-If Node.js is absent from the login PATH, it discovers/loads nodejs/20.16.0
-from the Alliance stack. Production GPU workers themselves need only Python.
+Outputs: Evaluate_benchamrk/random_eval_results/
+  submitted_TIMESTAMP_PID.tsv   submitted job IDs
+  logs/                        Slurm stdout/stderr
+  SOURCE/MODEL/random/ptSIZE/SSL/seed_NNN/evaluations/   probe results
+  SOURCE/MODEL/random/ptSIZE/SSL/summary.json            ten-seed mean/sample std
+  checklist.tsv                all 3240 probe statuses
+  table_summary.tsv            table cells, mean/std, ready-to-copy LaTeX
+  progress.json                overall completion and invalid-result details
 
-BENCH_VENV defaults to $HOME/ENV; BENCH_DATA_ROOT defaults to <MKDT parent>/data;
-BENCH_CHECKPOINT_ROOT defaults to Evaluate_benchamrk/random_ssl_checkpoints.
-All seven target datasets must already be staged. No downloads or installations.
-Frozen probes use the existing 100-epoch recipe, original source resolution and
-normalization, exact nested label budgets, and final-head scoring. The worker
-strictly verifies saved config/code, completed SSL epochs, checkpoint bytes,
-encoder state, source fingerprint, and consistent target data. It never deletes
-encoders or their source files. Outputs are separate from training checkpoints.
+Re-run the same command to resume; completed/live jobs are skipped, completed
+probes are verified/reused, and interrupted heads restart from epoch 1. Saved
+encoders remain intact. Existing CVPR .tex tables are not overwritten.
 
-Results inside the printed batch path:
-  submitted.tsv             actual job IDs and resolved dependencies
-  logs/                     stdout/stderr
-  results/SOURCE/MODEL/random/ptSIZE/SSL/seed_NNN/evaluations/*.json
-  results/.../complete.json verified per-encoder result hashes
-  results/.../summary.json  per-group mean/sample std after all ten seeds pass
-  results/checklist.tsv     all 3240 probe statuses, scores, and paths
-  results/table_summary.tsv all 324 cells, completed seed counts, mean/std,
-                            and ready-to-copy LaTeX \dsacc{mean}{std}
-  results/progress.json     overall completeness and invalid-result details
-  results/jobs/             job environments, completion markers, errors
-
-Each finishing job refreshes reports under a lock. Incomplete cells have blank
-mean/std; the final worker finishes aggregation. CVPR_tables/*.tex stay unchanged.
-Report statuses are conservative: an encoder counts only after all its probes
-are verified. Completed probes from an interrupted encoder still resume safely.
-
-Restart an interrupted submission or failed/timed-out evaluation on Killarney:
-  bash Evaluate_benchamrk/random_eval.sh --resume "$batch"
-This skips completed jobs and jobs still visible in your queue. It revalidates
-and skips completed probe files; an interrupted individual head restarts from
-epoch 1. No duplicate live jobs are submitted. Result corruption fails loudly.
-
-Validation script (optional, separate from the 40 production jobs):
-  sbatch --account=aip-boyuwang --nodes=1 --ntasks=1 --cpus-per-task=1 --mem=6G \
-    --gres=gpu:l40s:1 --time=00:10:00 --chdir="$PWD" \
-    --output="$PWD/Evaluate_benchamrk/slurm/random_eval/validation-%j.out" \
-    Evaluate_benchamrk/slurm/random_eval/validate.sh \
-    "$PWD/Evaluate_benchamrk/slurm/random_eval"
-It uses synthetic data to test planning, dependencies, strict loading, actual
-GPU probes, retention, restart, corruption rejection and ten-seed summaries,
-plus native 32/64px forward passes of the real three backbones. It does not
-measure final accuracy or certify the unavailable Killarney data/checkpoints.
+Preview without submitting or writing files:
+  bash Evaluate_benchamrk/random_eval.sh --dry-run

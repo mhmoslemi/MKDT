@@ -1,4 +1,5 @@
 """Evaluate retained random encoders only. Never call SSL training or cleanup."""
+import csv
 import functools
 import gc
 import json
@@ -7,11 +8,8 @@ from pathlib import Path
 import sys
 import traceback
 
-# The batch is an immutable copy; also support importing from the source for tests.
 SCRIPT = Path(__file__).resolve().parent
-BENCH = SCRIPT / 'code/Evaluate_benchamrk'
-if not BENCH.is_dir():
-    BENCH = SCRIPT.parent.parent
+BENCH = SCRIPT.parent.parent
 sys.path.insert(0, str(BENCH))
 
 import torch
@@ -25,6 +23,45 @@ from report import report
 
 def read(path):
     return json.loads(Path(path).read_text())
+
+
+def build_plan(checkpoint_root, data_root):
+    """Read the git-tracked task list and the existing table checklist in Slurm."""
+    with (BENCH / 'table_coverage.tsv').open() as stream:
+        cells = [r for r in csv.DictReader(stream, delimiter='\t')
+                 if r['method'] == 'random' and r['disabled'] == 'False']
+    groups = {}
+    for cell in cells:
+        key = f"{cell['source']}/{cell['model']}/random/pt{cell['subset']}/{cell['ssl']}"
+        group = groups.setdefault(key, {'group': key, 'source': cell['source'],
+            'model': cell['model'], 'subset': float(cell['subset']), 'ssl': cell['ssl'], 'cells': []})
+        group['cells'].append(cell)
+    jobs = {f'{i:02d}': {'task': f'{i:02d}', 'units': [], 'probes': 0} for i in range(1, 41)}
+    seen = set()
+    with (SCRIPT / 'tasks.tsv').open() as stream:
+        for row in csv.DictReader(stream, delimiter='\t'):
+            key = f"{row['source']}/{row['model']}/random/pt{row['subset']}/{row['ssl']}"
+            seed = int(row['seed'])
+            relative = f'{key}/seed_{seed:03d}'
+            if seed not in range(10) or relative in seen:
+                raise ValueError('Invalid or duplicate seed in tasks.tsv')
+            seen.add(relative)
+            unit = {**groups[key], 'seed': seed, 'relative': relative}
+            expected_task = ('39' if row['subset'] == '1' else '40') if (
+                row['source'] == 'TinyImageNet' and row['model'] == 'ResNet18'
+                and row['subset'] in ('1', '2')) else None
+            if (expected_task and row['task'] != expected_task) or (
+                    not expected_task and row['task'] in ('39', '40')):
+                raise ValueError('Task does not match its training dependency')
+            job = jobs[row['task']]
+            job['units'].append(unit)
+            job['probes'] += len(unit['cells'])
+    if (len(cells) != 324 or len(groups) != 54 or len(seen) != 540
+            or sum(j['probes'] for j in jobs.values()) != 3240
+            or any(not j['units'] for j in jobs.values())):
+        raise ValueError('Task list does not cover the random benchmark exactly')
+    return {'checkpoint_root': checkpoint_root, 'data_root': data_root,
+            'jobs': list(jobs.values()), 'groups': list(groups.values())}
 
 
 def validate_checkpoint(folder, unit, protocol, hashes):
@@ -101,14 +138,13 @@ def evaluate_seed(unit, plan, result_root, datasets, protocol, hashes, device='c
 def main():
     if 'SLURM_JOB_ID' not in os.environ:
         raise RuntimeError('Run this worker through Slurm')
-    batch, task = Path(sys.argv[1]).resolve(), sys.argv[2]
-    plan = read(batch / 'plan.json')
+    task, data_root, checkpoint_root, output_root = sys.argv[1:]
+    root = Path(output_root).resolve()
+    plan = build_plan(checkpoint_root, data_root)
     jobs = [j for j in plan['jobs'] if j['task'] == task]
     if len(jobs) != 1:
         raise ValueError('Unknown or duplicate task')
     job = jobs[0]
-    if os.environ.get('SLURM_JOB_ACCOUNT') != job['account']:
-        raise ValueError('Slurm account differs from the job manifest')
     if not torch.cuda.is_available():
         raise RuntimeError('CUDA unavailable; no CPU fallback')
     torch.set_num_threads(1)
@@ -117,7 +153,6 @@ def main():
     torch.backends.cudnn.allow_tf32 = False
     protocol = read(BENCH / 'protocol.json')
     hashes = code_hashes()
-    root = batch / 'results'
 
     # Seven bounded raw splits: CIFAR pixels, mmap'd Tiny pixels, and paths for
     # the four file datasets. Reuse fingerprints instead of restatting tens of
@@ -130,7 +165,7 @@ def main():
     with exclusive_run(root / 'jobs' / task):
         atomic_json(root / 'jobs' / f'{task}_environment.json', {
             'job_id': os.environ['SLURM_JOB_ID'], 'cluster': os.environ.get('SLURM_CLUSTER_NAME'),
-            'account': job['account'], 'python': sys.version, 'torch': str(torch.__version__),
+            'account': os.environ.get('SLURM_JOB_ACCOUNT'), 'python': sys.version, 'torch': str(torch.__version__),
             'torchvision': str(torchvision.__version__), 'gpu': torch.cuda.get_device_name(),
             'workers': 0, 'threads': 1, 'evaluation_code_hashes': hashes})
         # Fail before spending GPU time if any required dataset is absent/broken.
@@ -150,10 +185,10 @@ def main():
             atomic_json(root / 'jobs' / f'{task}_failed.json', {'complete': False, 'failures': failures})
         # Each worker refreshes reports under one lock. The last successful worker
         # produces final summaries without requiring a 41st aggregation job.
-        status = report(batch, plan)
+        status = report(root, plan)
         print('COVERAGE', status, flush=True)
         if failures:
-            raise RuntimeError(f'{len(failures)} encoders failed; see results/jobs/{task}_failed.json')
+            raise RuntimeError(f'{len(failures)} encoders failed; see {root}/jobs/{task}_failed.json')
         if status['invalid_encoders']:
             raise RuntimeError('Report found invalid completed results; see progress.json')
         atomic_json(root / 'jobs' / f'{task}.json', {'complete': True, 'task': task,
