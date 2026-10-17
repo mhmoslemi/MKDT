@@ -1,0 +1,55 @@
+Interactive Killarney random evaluation
+=======================================
+Run inside an existing Killarney GPU-node shell, after syncing these files:
+  bash Evaluate_benchamrk/eval_random_interactive.sh
+
+Ordinary sequential Python evaluation, not a submission script.
+No SSL training, scheduler submissions, waiting loop, or checkpoint deletion.
+
+Scope:
+  Current random-selection encoders, seeds 0..9.
+  3 datasets x 3 backbones x 3 sizes x 2 SSL methods x 10 seeds = 540 encoders.
+  Sizes: 0.2%, 1%, 2%; SSL: SimCLR and Barlow Twins.
+  Main probes on all three backbones; downstream ONLY on ResNet18.
+  1% and 5% real target-training labels: 3,240 possible probes in total.
+
+Recipe:
+  Reuses evaluate.py + protocol.json unchanged, exactly as the Vulcan k-means
+  interactive evaluator: 100 epochs for BOTH label budgets and BOTH SSL methods.
+  Frozen encoder AND BatchNorm statistics; new linear head; SGD LR 0.1,
+  momentum 0.9, weight decay 0, batch <=256, cosine per-step decay.
+  Same existing label selection, train augmentation, and final-test evaluation.
+  See interactive_protocol.txt for the full recipe and literature distinctions.
+  This is the shared low-label benchmark adaptation, not an assertion of exact
+  official ImageNet hyperparameter reproduction.
+
+Input:
+  Evaluate_benchamrk/random_ssl_checkpoints_cifar10k8k6k_tiny6k5k4k/
+  Data defaults to the data directory alongside MKDT.
+  Requires config.json, encoder.pt, and ssl_complete.json for each encoder.
+  Missing checkpoints are skipped; existing checkpoints/probes are strictly
+  validated. Errors are logged and the runner continues with other encoders.
+  A rolling training.pt alone is NOT evaluated or promoted to a final encoder.
+  Accepted near-finished timeouts therefore remain skipped if they have no
+  finalized encoder. No SSL completion markers or epoch counts are fabricated.
+
+Output:
+  Evaluate_benchamrk/random_eval_results_interactive_10seeds/
+    logs/                  console logs and per-session JSON summaries
+    SOURCE/MODEL/.../       per-probe JSON and epoch JSONL logs
+    checklist.tsv          expected cells/seeds and completion status
+    table_summary.tsv      means/sample SD only after all ten seeds finish
+    probe_times.tsv        measured completed-probe times
+    progress.json          overall coverage
+
+Resume:
+  Rerun the same command. Valid completed probe JSONs are reused.
+  An interrupted individual probe restarts its linear head from epoch zero.
+  Missing checkpoints are checked once per pass, with no automatic waiting.
+  Ctrl-C retains completed probes. Checkpoint files are never deleted/modified.
+  Keep this output separate from older batch-evaluation outputs.
+
+Optional command arguments: --data-root PATH, --checkpoints PATH, --output PATH.
+Optional environment: BENCH_VENV (defaults to $HOME/ENV).
+The separate random driver leaves the existing k-means driver, its saved result
+contract, shared evaluation code, and SSL training fingerprints unchanged.

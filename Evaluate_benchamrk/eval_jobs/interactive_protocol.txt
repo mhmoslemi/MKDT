@@ -1,0 +1,48 @@
+Interactive Vulcan k-means evaluation
+====================================
+Run inside an existing GPU-node shell:
+  bash Evaluate_benchamrk/eval_kmeans_interactive.sh
+
+This is one ordinary sequential Python process, not a submission script.
+It makes one pass, skips missing checkpoints, validates/reuses finished probes,
+and logs errors without pretending they are successful. Rerun the same command
+in another allocation to continue. No training checkpoints are deleted or modified.
+An interrupted linear-head fit restarts; completed individual probes are reused.
+The runner uses the current six-seed k-means encoders only, not old benchmark runs.
+
+Outputs: Evaluate_benchamrk/kmeans_eval_results_interactive_6seeds/
+  logs/                     session console logs and session summaries
+  SOURCE/MODEL/.../          per-probe JSON results and per-epoch JSONL logs
+  checklist.tsv             expected table cells/seeds and status
+  table_summary.tsv         mean/sample SD only when all six seeds are complete
+  progress.json             completed coverage (never silently drops missing seeds)
+
+Recipe reused unchanged from evaluate.py + protocol.json:
+  - Strictly load the saved encoder, not its SSL projector/classifier.
+  - Freeze every encoder parameter AND BatchNorm running statistics.
+  - A new linear classifier for each seed / target / label budget.
+  - Exactly 1% or 5% of the target TRAIN split, using the existing nested selector.
+    Labels come from the real target training data, not from the SSL subset.
+  - 100 epochs; SGD; LR 0.1; momentum 0.9; weight decay 0; cosine per-step decay;
+    no warmup; batch min(256, labeled_count); head weight std 0.01, zero bias.
+  - Fresh random resized crops and horizontal flips during probe training.
+    Input size and normalization are those expected by the source encoder.
+    Native source-resolution test images are kept intact; larger transfer images
+    use deterministic resize/center crop. No SSL color-jitter/blur in the probe.
+  - Test once after the prespecified final epoch; no best-test-epoch selection.
+  - Verify the encoder parameters and BN buffers are unchanged after probing.
+  - Main results: ConvNetBN, VGG11BN, ResNet18BN. Downstream: ResNet18 only.
+
+Literature check (2026-10-17):
+  https://github.com/google-research/simclr#finetuning-the-linear-head-linear-eval
+  Official SimCLR CIFAR10 example: frozen linear head, 100 epochs, momentum SGD,
+  LR 0.1, no weight decay, no warmup; example batch is 512, not our 256.
+  https://github.com/facebookresearch/barlowtwins/blob/main/evaluate.py
+  Official Barlow ImageNet example: frozen network including BN, 100 epochs,
+  batch 256, momentum SGD and cosine schedule; classifier LR 0.3, WD 1e-6.
+
+The shared recipe here is a documented adaptation for low-label CIFAR/Tiny and
+cross-dataset comparison, NOT a claim to exactly reproduce either official
+ImageNet protocol. Their semi-supervised whole-network fine-tuning is a different
+experiment; this runner performs only the frozen linear probes requested here.
+No test-label tuning or method-specific post-hoc hyperparameter changes are made.
