@@ -25,6 +25,12 @@ def read(path):
     return json.loads(Path(path).read_text())
 
 
+def missing_checkpoint_files(unit, plan):
+    folder = Path(plan['checkpoint_root']) / unit['relative']
+    return [name for name in ('encoder.pt', 'config.json', 'ssl_complete.json')
+            if not (folder / name).is_file() or (folder / name).stat().st_size == 0]
+
+
 def build_plan(checkpoint_root, data_root):
     """Read the git-tracked task list and the existing table checklist in Slurm."""
     with (BENCH / 'table_coverage.tsv').open() as stream:
@@ -168,12 +174,20 @@ def main():
             'account': os.environ.get('SLURM_JOB_ACCOUNT'), 'python': sys.version, 'torch': str(torch.__version__),
             'torchvision': str(torchvision.__version__), 'gpu': torch.cuda.get_device_name(),
             'workers': 0, 'threads': 1, 'evaluation_code_hashes': hashes})
-        # Fail before spending GPU time if any required dataset is absent/broken.
-        for target in sorted({c['target'] for u in job['units'] for c in u['cells']}):
+        ready, missing = [], []
+        for unit in job['units']:
+            absent = missing_checkpoint_files(unit, plan)
+            if absent:
+                missing.append({'encoder': unit['relative'], 'missing_files': absent})
+                print('SKIP MISSING CHECKPOINT', unit['relative'], ','.join(absent), flush=True)
+            else:
+                ready.append(unit)
+        # Check only datasets needed for the encoders available in this job.
+        for target in sorted({c['target'] for u in ready for c in u['cells']}):
             for dataset in datasets(target):
                 dataset[0]
         failures = []
-        for unit in job['units']:
+        for unit in ready:
             try:
                 evaluate_seed(unit, plan, root, datasets, protocol, hashes)
             except Exception as error:
@@ -183,6 +197,9 @@ def main():
             torch.cuda.empty_cache()
         if failures:
             atomic_json(root / 'jobs' / f'{task}_failed.json', {'complete': False, 'failures': failures})
+        if missing:
+            atomic_json(root / 'jobs' / f'{task}_partial.json', {'complete': False, 'task': task,
+                'evaluated_encoders': len(ready) - len(failures), 'missing_checkpoints': missing})
         # Each worker refreshes reports under one lock. The last successful worker
         # produces final summaries without requiring a 41st aggregation job.
         status = report(root, plan)
@@ -191,8 +208,12 @@ def main():
             raise RuntimeError(f'{len(failures)} encoders failed; see {root}/jobs/{task}_failed.json')
         if status['invalid_encoders']:
             raise RuntimeError('Report found invalid completed results; see progress.json')
-        atomic_json(root / 'jobs' / f'{task}.json', {'complete': True, 'task': task,
-            'job_id': os.environ['SLURM_JOB_ID'], 'encoders': len(job['units']), 'probes': job['probes']})
+        if not missing:
+            atomic_json(root / 'jobs' / f'{task}.json', {'complete': True, 'task': task,
+                'job_id': os.environ['SLURM_JOB_ID'], 'encoders': len(job['units']), 'probes': job['probes']})
+            (root / 'jobs' / f'{task}_partial.json').unlink(missing_ok=True)
+        else:
+            print(f'PARTIAL task={task}: evaluated {len(ready)}, missing {len(missing)}; rerun after SSL resumes.', flush=True)
         (root / 'jobs' / f'{task}_failed.json').unlink(missing_ok=True)
 
 

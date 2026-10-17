@@ -24,7 +24,7 @@ case ${1:---submit} in
     --dry-run) dry_run=1 ;;
     --help|-h)
         printf '%s\n' \
-            'bash Evaluate_benchamrk/random_eval.sh            # submit all 40 jobs' \
+            'bash Evaluate_benchamrk/random_eval.sh            # submit ready work across 40 jobs' \
             'bash Evaluate_benchamrk/random_eval.sh --dry-run  # print the jobs' \
             'Same direct Bash/sbatch workflow as random_ssl.sh; uses this checkout and $HOME/ENV.' \
             '38 ready jobs + 1 after 6334332/6334333 + 1 after 6334334/6334335.' \
@@ -32,6 +32,7 @@ case ${1:---submit} in
             '1 GPU, 1 CPU, 6G per job. BENCH_EVAL_TIME=06:00:00; BENCH_EVAL_TAIL_TIME=12:00:00.' \
             'BENCH_VENV, BENCH_DATA_ROOT, BENCH_CHECKPOINT_ROOT and GPU_TYPE may override defaults.' \
             'Results/logs/job IDs: Evaluate_benchamrk/random_eval_results.' \
+            'Missing seeds are skipped and listed in missing_checkpoints.tsv; ready seeds still run.' \
             'Re-run this command to resume: completed/live jobs are skipped; encoders are retained.'
         exit 0 ;;
     *) echo 'Use --submit (default), --dry-run, or --help' >&2; exit 2 ;;
@@ -53,7 +54,7 @@ for required in "$manifest" "$bench_dir/slurm/random_eval/worker.py" \
     [[ -r $required ]] || { echo "Missing $required; sync the code first." >&2; exit 2; }
 done
 
-declare -A counts probes dependencies active
+declare -A counts probes dependencies active ready waiting missing_by_task
 while IFS=$'\t' read -r task source_name model subset ssl seed; do
     [[ $task != task ]] || continue
     counts[$task]=$((${counts[$task]:-0} + 1))
@@ -97,15 +98,27 @@ else
         active[$id]="$name"
         active[$name]="$id"
     done <<< "$queue"
-    # Check all required files before the first sbatch. Only the four named
-    # training jobs may supply checkpoints that are not complete yet.
-    missing=0
+    mkdir -p "$output_root/logs"
+    missing_log="$output_root/missing_checkpoints.tsv"
+    printf 'task\tsource\tmodel\tsubset\tssl\tseed\tmissing_files\tstatus\tcheckpoint_dir\n' > "$missing_log"
+    # Classify each seed independently: missing training output must not prevent
+    # evaluation of other complete encoders, including those in the same job.
+    missing=0; available=0; awaiting=0
     while IFS=$'\t' read -r task source_name model subset ssl seed; do
         [[ $task != task ]] || continue
         [[ ! -s $output_root/jobs/$task.json && -z ${active[random_eval_$task]:-} ]] || continue
         printf -v seed_name 'seed_%03d' "$seed"
         folder="$checkpoint_root/$source_name/$model/random/pt$subset/$ssl/$seed_name"
-        if [[ -s $folder/encoder.pt && -s $folder/config.json && -s $folder/ssl_complete.json ]]; then continue; fi
+        if [[ -s $folder/encoder.pt && -s $folder/config.json && -s $folder/ssl_complete.json ]]; then
+            ready[$task]=$((${ready[$task]:-0} + 1))
+            available=$((available + 1))
+            continue
+        fi
+        missing_files=''
+        for file in encoder.pt config.json ssl_complete.json; do
+            [[ -s $folder/$file ]] || missing_files="${missing_files:+$missing_files,}$file"
+        done
+        status=missing
         parent=''
         case "$task/$ssl" in
             39/simclr) parent=6334332 ;; 39/barlowtwins) parent=6334333 ;;
@@ -113,23 +126,28 @@ else
         esac
         if [[ -n $parent && $cluster == killarney && \
               ${active[$parent]:-} == "random_TinyImageNet_ResNet18_${subset}_${ssl}" ]]; then
+            waiting[$task]=$((${waiting[$task]:-0} + 1))
+            awaiting=$((awaiting + 1))
+            status="waiting_for_$parent"
             case ":${dependencies[$task]:-}:" in
                 *":$parent:"*) ;;
                 *) dependencies[$task]="${dependencies[$task]:+${dependencies[$task]}:}$parent" ;;
             esac
         else
-            if (( missing < 3 )); then echo "Missing completed checkpoint: $folder" >&2; fi
             missing=$((missing + 1))
+            missing_by_task[$task]=$((${missing_by_task[$task]:-0} + 1))
         fi
+        printf '%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n' "$task" "$source_name" "$model" \
+            "$subset" "$ssl" "$seed" "$missing_files" "$status" "$folder" >> "$missing_log"
     done < "$manifest"
-    (( missing == 0 )) || { echo "$missing checkpoints missing; no jobs submitted." >&2; exit 2; }
-    mkdir -p "$output_root/logs"
+    printf '%s ready encoders; %s waiting for active training; %s missing seeds will be skipped.\n' "$available" "$awaiting" "$missing"
+    printf 'Missing checkpoint details: %s\n' "$missing_log"
     submission_log="$output_root/submitted_$(date -u +%Y%m%dT%H%M%SZ)_$$.tsv"
     printf 'job_id\taccount\ttask\tencoders\tprobes\twalltime\tdependency\n' > "$submission_log"
 fi
 
 printf 'Random evaluation: 40 jobs / 540 encoders / 3240 probes.\n'
-printf 'task\taccount\tencoders\tprobes\twalltime\tdependency\n'
+printf 'task\taccount\tplanned_encoders\tplanned_probes\twalltime\tdependency\n'
 submitted=0
 for task in {01..40}; do
     account=$wang
@@ -137,11 +155,17 @@ for task in {01..40}; do
     walltime=${BENCH_EVAL_TIME:-06:00:00}
     [[ $task != 39 && $task != 40 ]] || walltime=${BENCH_EVAL_TAIL_TIME:-12:00:00}
     dependency=${dependencies[$task]:--}
-    [[ $dependency == - ]] || dependency="afterok:$dependency"
+    # Evaluate the saved seeds even if a parent ends in TIMEOUT/FAILED.
+    [[ $dependency == - ]] || dependency="afterany:$dependency"
     printf '%s\t%s\t%s\t%s\t%s\t%s\n' "$task" "$account" "${counts[$task]}" "${probes[$task]}" "$walltime" "$dependency"
     if (( ! dry_run )); then
         if [[ -s $output_root/jobs/$task.json || -n ${active[random_eval_$task]:-} ]]; then
             printf 'SKIP task %s: already completed or active.\n' "$task"
+            continue
+        fi
+        if (( ${ready[$task]:-0} + ${waiting[$task]:-0} == 0 )); then
+            printf 'SKIP task %s: no ready checkpoint or active training dependency (%s missing seeds).\n' \
+                "$task" "${missing_by_task[$task]:-0}"
             continue
         fi
         args=()

@@ -30,6 +30,10 @@ def report(root, plan):
                 folder = root / unit['relative']
                 marker_path = folder / 'complete.json'
                 rows, status = {}, 'pending'
+                checkpoint_folder = Path(plan['checkpoint_root']) / unit['relative']
+                if not all((checkpoint_folder / name).is_file() and (checkpoint_folder / name).stat().st_size
+                           for name in ('encoder.pt', 'config.json', 'ssl_complete.json')):
+                    status = 'missing_checkpoint'
                 if marker_path.exists():
                     try:
                         marker = json.loads(marker_path.read_text())
