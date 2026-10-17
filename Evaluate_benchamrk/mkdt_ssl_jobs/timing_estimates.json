@@ -1,0 +1,102 @@
+{
+  "reference": "Existing train_ssl.py on Killarney L40S, 1 CPU, workers=0; random subset 1000-epoch completion logs. Synthetic-image conversion/throughput is unprofiled; these are projections, not measured MKDT timings.",
+  "seconds_per_1000_epochs": {
+    "CIFAR10/ConvNet/simclr": [
+      152.064814,
+      389.88164,
+      1137.717049
+    ],
+    "CIFAR10/ConvNet/barlowtwins": [
+      165.042343,
+      376.801052,
+      1110.647621
+    ],
+    "CIFAR10/VGG11/simclr": [
+      170.470094,
+      426.226296,
+      1258.825002
+    ],
+    "CIFAR10/VGG11/barlowtwins": [
+      171.199426,
+      401.636168,
+      1175.011173
+    ],
+    "CIFAR10/ResNet18/simclr": [
+      191.189161,
+      455.985794,
+      1360.410589
+    ],
+    "CIFAR10/ResNet18/barlowtwins": [
+      191.342436,
+      453.655637,
+      1339.718976
+    ],
+    "CIFAR100/ConvNet/simclr": [
+      150.789988,
+      389.86576,
+      1133.004543
+    ],
+    "CIFAR100/ConvNet/barlowtwins": [
+      165.042343,
+      378.600236,
+      1112.378044
+    ],
+    "CIFAR100/VGG11/simclr": [
+      169.794964,
+      406.33259,
+      1207.140469
+    ],
+    "CIFAR100/VGG11/barlowtwins": [
+      172.018359,
+      400.057883,
+      1165.262329
+    ],
+    "CIFAR100/ResNet18/simclr": [
+      190.902911,
+      458.932893,
+      1361.934841
+    ],
+    "CIFAR100/ResNet18/barlowtwins": [
+      195.503562,
+      455.843248,
+      1331.635225
+    ],
+    "TinyImageNet/ConvNet/simclr": [
+      508.378851,
+      1943.642959,
+      4488.616121
+    ],
+    "TinyImageNet/ConvNet/barlowtwins": [
+      496.084897,
+      1819.1738,
+      4208.770114
+    ],
+    "TinyImageNet/VGG11/simclr": [
+      529.595413,
+      2266.329713,
+      4673.310012
+    ],
+    "TinyImageNet/VGG11/barlowtwins": [
+      503.130282,
+      1904.018456,
+      4439.264389
+    ],
+    "TinyImageNet/ResNet18/simclr": [
+      715.795388,
+      2725.167625,
+      6339.877118
+    ],
+    "TinyImageNet/ResNet18/barlowtwins": [
+      691.17008,
+      2598.348825,
+      6027.111621
+    ]
+  },
+  "rate_columns": [
+    "0.2",
+    "1",
+    "2"
+  ],
+  "formula": "ceil(seed_count * epochs / 1000 * reference_seconds) + 900 seconds",
+  "split_rule": "If two-seed projection including 900-second margin exceeds 5 hours, schedule individual seeds. Never truncate epochs."
+}
