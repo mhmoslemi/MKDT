@@ -9,6 +9,9 @@ SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)
 PROJECT_ROOT=$(readlink -f "$SCRIPT_DIR/../..")
 RESULTS_ROOT=${MAINLONG_RESULTS_ROOT:-$PROJECT_ROOT/benchmarks/full_data_main_long/results}
 EXPECTED_PROTOCOL=full_data_main_simclr1000_barlow1500_v1
+EPOCH_CONFIG="$PROJECT_ROOT/OT-SSL-DD/training_epochs.json"
+command -v jq >/dev/null || { echo 'jq is required' >&2; exit 1; }
+[[ -s $EPOCH_CONFIG ]] || { echo "Missing $EPOCH_CONFIG" >&2; exit 1; }
 
 if (( $# > 1 )); then
     echo "Usage: bash $0 [MAINLONG_BATCH]" >&2
@@ -82,7 +85,10 @@ for source in CIFAR10 CIFAR100; do
             printf '\n'
 
             for label in 1 5; do
-                if [[ $label == 1 ]]; then probe=500; else probe=300; fi
+                probe=$(jq -er --arg target "$source" --arg label "$label" \
+                    '.evaluation_by_dataset[$target].linear_probe_epochs_by_label_percentage[$label]
+                     | select(type == "number" and . > 0 and . == floor)' \
+                    "$EPOCH_CONFIG") || exit 1
                 eval_dir="$batch/evaluations/${identifier}__${source}_lbl${label}"
                 valid=0
                 for job_dir in "$eval_dir"/job_*; do

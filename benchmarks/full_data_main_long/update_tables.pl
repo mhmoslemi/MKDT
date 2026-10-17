@@ -5,6 +5,7 @@ use warnings;
 use File::Find qw(find);
 use Getopt::Long qw(GetOptions);
 use JSON::PP qw(decode_json);
+use FindBin qw($Bin);
 
 my $batch;
 my $tables = 'CVPR_tables';
@@ -18,7 +19,10 @@ my $protocol = 'full_data_main_simclr1000_barlow1500_v1';
 my @models = qw(ConvNet VGG11 ResNet18);
 my @objectives = qw(simclr barlowtwins);
 my %ssl_epochs = (simclr => 1_000, barlowtwins => 1_500);
-my %probe_epochs = (1 => 500, 5 => 300);
+open my $epoch_handle, '<', "$Bin/../../OT-SSL-DD/training_epochs.json"
+    or die "Cannot read canonical epoch configuration: $!\n";
+my $epoch_config = do { local $/; decode_json(<$epoch_handle>) };
+close $epoch_handle;
 
 sub result_key {
     return join('|', @_);
@@ -52,6 +56,8 @@ for my $path (sort @summaries) {
     my $model = $config->{model} // '';
     my $objective = $config->{ssl_method} // '';
     my $labels = $config->{label_percentage};
+    my $probe_epochs = $epoch_config->{evaluation_by_dataset}{$target}
+        {linear_probe_epochs_by_label_percentage} // {};
     die "$path has the wrong protocol\n"
         unless ($config->{protocol} // '') eq $protocol;
     die "$path has an unsupported source\n"
@@ -66,9 +72,10 @@ for my $path (sort @summaries) {
     die "$path has the wrong SSL epoch budget\n"
         unless ($config->{ssl_epochs} // -1) == $ssl_epochs{$objective};
     die "$path has an unsupported label budget\n"
-        unless defined $labels && exists $probe_epochs{$labels};
-    die "$path has the wrong probe epoch budget\n"
-        unless ($config->{probe_epochs} // -1) == $probe_epochs{$labels};
+        unless defined $labels && exists $probe_epochs->{$labels};
+    # Historical evaluations coexist with corrected-budget evaluations. Never
+    # let an older probe overwrite a result from the current protocol.
+    next unless ($config->{probe_epochs} // -1) == $probe_epochs->{$labels};
     die "$path is incomplete\n"
         unless $summary->{complete}
             && ($summary->{completed_runs} // 0) == 10
@@ -95,9 +102,9 @@ sub overlay_full_data {
 
     for (my $index = 0; $index < @lines; $index++) {
         my $line = $lines[$index];
-        $labels = $1 if $line =~ /\\multirow\{18\}\{\*\}\{([15])\\%\}/;
+        $labels = $1 if $line !~ /^\s*%/ && $line =~ /\\multirow\{(?:14|18)\}\{\*\}\{([15])\\%\}/;
 
-        if ($line =~ /100\\%\s*&\s*Full Data/ && defined $labels) {
+        if ($line !~ /^\s*%/ && $line =~ /100\\%\s*&\s*Full Data/ && defined $labels) {
             my @row_lines = ($line);
             while ($row_lines[-1] !~ /\\\\\s*$/ && $index + 1 < @lines) {
                 push @row_lines, $lines[++$index];

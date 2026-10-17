@@ -243,6 +243,9 @@ class VGG(nn.Module):
 
     def forward(self, x):
         x = self.features(x)
+        # 32x32 already yields 1x1. Also support native 64x64 Tiny ImageNet
+        # without changing the classifier dimension or the 32x32 behavior.
+        x = F.adaptive_avg_pool2d(x, (1, 1))
         x = x.view(x.size(0), -1)
         x = self.classifier(x)
         return x

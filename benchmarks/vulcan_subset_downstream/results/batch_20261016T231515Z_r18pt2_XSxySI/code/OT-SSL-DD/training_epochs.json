@@ -1,0 +1,47 @@
+{
+  "protocol": "v4_pt0p2_long_full_dataset_specific",
+  "runs_per_configuration": 10,
+  "label_selection": "uniform_random_without_replacement",
+  "no_pretraining_protocol": "frozen_random_encoder_with_SGD_linear_probe",
+  "pretraining": {
+    "source_datasets": ["CIFAR10", "CIFAR100", "TinyImageNet"],
+    "ssl_methods": ["simclr", "barlowtwins"],
+    "models": ["ConvNet", "VGG11", "ResNet18"],
+    "barlowtwins_epoch_multiplier": 1,
+    "random_subset_epochs_by_data_percentage": {
+      "0.2": 20000,
+      "1": 10000,
+      "2": 10000,
+      "5": 8000
+    },
+    "kmeans_subset_epochs_by_data_percentage": {
+      "0.2": 20000,
+      "1": 10000,
+      "2": 10000,
+      "5": 8000
+    },
+    "mkdt_subset_epochs_by_data_percentage": {
+      "0.2": 20000,
+      "1": 10000,
+      "2": 10000,
+      "5": 8000
+    },
+    "full_data_epochs_by_dataset_and_ssl_method": {
+      "CIFAR10": {"simclr": 1000, "barlowtwins": 1500},
+      "CIFAR100": {"simclr": 1000, "barlowtwins": 1500},
+      "TinyImageNet": {"simclr": 300, "barlowtwins": 600}
+    }
+  },
+  "evaluation_by_dataset": {
+    "CIFAR10": {"linear_probe_epochs_by_label_percentage": {"1": 1000, "5": 500}, "no_pretraining_linear_probe_epochs_by_label_percentage": {"1": 1000, "5": 500}},
+    "CIFAR100": {"linear_probe_epochs_by_label_percentage": {"1": 1000, "5": 500}, "no_pretraining_linear_probe_epochs_by_label_percentage": {"1": 1000, "5": 500}},
+    "Aircraft": {"linear_probe_epochs_by_label_percentage": {"1": 1000, "5": 500}, "no_pretraining_linear_probe_epochs_by_label_percentage": {"1": 1000, "5": 500}},
+    "CUB2011": {"linear_probe_epochs_by_label_percentage": {"1": 1000, "5": 500}, "no_pretraining_linear_probe_epochs_by_label_percentage": {"1": 1000, "5": 500}},
+    "Dogs": {"linear_probe_epochs_by_label_percentage": {"1": 1000, "5": 500}, "no_pretraining_linear_probe_epochs_by_label_percentage": {"1": 1000, "5": 500}},
+    "Flowers": {"linear_probe_epochs_by_label_percentage": {"1": 1000, "5": 500}, "no_pretraining_linear_probe_epochs_by_label_percentage": {"1": 1000, "5": 500}},
+    "TinyImageNet": {"linear_probe_epochs_by_label_percentage": {"1": 1000, "5": 500}, "no_pretraining_linear_probe_epochs_by_label_percentage": {"1": 1000, "5": 500}}
+  },
+  "downstream_pretraining_source": "CIFAR10; downstream datasets supply labeled evaluation data, not SSL pretraining data",
+  "budget_type": "fixed_epochs_without_update_matching",
+  "record_scope": "Configured epoch budgets; completion is recorded separately in per-run results"
+}

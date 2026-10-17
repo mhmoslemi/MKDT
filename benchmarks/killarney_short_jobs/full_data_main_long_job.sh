@@ -103,11 +103,10 @@ evaluate() {
 
     cd "$MAINLONG_CODE_ROOT"
     for label in 1 5; do
-        if [[ $label == 1 ]]; then
-            probe=500
-        else
-            probe=300
-        fi
+        probe=$(jq -er --arg target "$source_dataset" --arg label "$label" \
+            '.evaluation_by_dataset[$target].linear_probe_epochs_by_label_percentage[$label]
+             | select(type == "number" and . > 0 and . == floor)' \
+            "$MAINLONG_CODE_ROOT/OT-SSL-DD/training_epochs.json")
         output="$MAINLONG_BATCH/evaluations/${identifier}__${source_dataset}_lbl${label}/job_$SLURM_JOB_ID"
         mkdir -p "$(dirname "$output")"
         srun --unbuffered python3 "$program" evaluate \

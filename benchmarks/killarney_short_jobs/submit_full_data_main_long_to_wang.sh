@@ -49,10 +49,20 @@ for path in \
     benchmarks/benchmark_dataset.py \
     benchmarks/downstream_data.py \
     OT-SSL-DD/utils.py \
-    OT-SSL-DD/networks.py; do
+    OT-SSL-DD/networks.py \
+    OT-SSL-DD/training_epochs.json; do
     [[ -s $path ]] || fail "missing required file: $path"
 done
 [[ -s $VENV_ACTIVATE ]] || fail "missing Python environment: $VENV_ACTIVATE"
+command -v jq >/dev/null || fail "jq is required"
+for source in CIFAR10 CIFAR100; do
+    for label in 1 5; do
+        jq -er --arg source "$source" --arg label "$label" \
+            '.evaluation_by_dataset[$source].linear_probe_epochs_by_label_percentage[$label]
+             | select(type == "number" and . > 0 and . == floor)' \
+            OT-SSL-DD/training_epochs.json >/dev/null || fail "invalid probe budget: $source/$label"
+    done
+done
 
 for target in CIFAR10 CIFAR100; do
     [[ -s $TARGET_SOURCE_BATCH/targets/$target.pt ]] || \
@@ -105,7 +115,8 @@ else
         benchmarks/benchmark_dataset.py \
         benchmarks/downstream_data.py \
         "$MAINLONG_CODE_ROOT/benchmarks/"
-    cp OT-SSL-DD/utils.py OT-SSL-DD/networks.py "$MAINLONG_CODE_ROOT/OT-SSL-DD/"
+    cp OT-SSL-DD/utils.py OT-SSL-DD/networks.py OT-SSL-DD/training_epochs.json \
+        "$MAINLONG_CODE_ROOT/OT-SSL-DD/"
     cp "$WORKER" "$ENVIRONMENT" "$AUDIT" \
         "$MAINLONG_CODE_ROOT/benchmarks/killarney_short_jobs/"
 
@@ -118,9 +129,12 @@ else
     printf 'source\tmodel\tssl_method\tssl_epochs\tencoder_seeds\tlabels\tprobe_epochs\n' \
         > "$MAINLONG_BATCH/configurations.tsv"
     for source in CIFAR10 CIFAR100; do
+        probes=$(jq -er --arg source "$source" \
+            '.evaluation_by_dataset[$source].linear_probe_epochs_by_label_percentage
+             | [."1", ."5"] | join(",")' OT-SSL-DD/training_epochs.json)
         for model in ConvNet VGG11 ResNet18; do
-            printf '%s\t%s\tsimclr\t1000\t0-9\t1,5\t500,300\n' "$source" "$model"
-            printf '%s\t%s\tbarlowtwins\t1500\t0-9\t1,5\t500,300\n' "$source" "$model"
+            printf '%s\t%s\tsimclr\t1000\t0-9\t1,5\t%s\n' "$source" "$model" "$probes"
+            printf '%s\t%s\tbarlowtwins\t1500\t0-9\t1,5\t%s\n' "$source" "$model" "$probes"
         done
     done >> "$MAINLONG_BATCH/configurations.tsv"
     printf 'submitted_utc\tjob_id\taccount\tkind\tconfiguration\tarray\tdependency\n' \
@@ -137,7 +151,8 @@ else
         benchmarks/killarney_short_jobs/submit_full_data_main_long_to_wang.sh \
         benchmarks/killarney_short_jobs/check_full_data_main_long.sh \
         OT-SSL-DD/utils.py \
-        OT-SSL-DD/networks.py
+        OT-SSL-DD/networks.py \
+        OT-SSL-DD/training_epochs.json
 fi
 
 export PROJECT_ROOT MAINLONG_BATCH MAINLONG_CODE_ROOT TARGET_CACHE_ROOT VENV_ACTIVATE

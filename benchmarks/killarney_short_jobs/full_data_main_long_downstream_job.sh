@@ -102,7 +102,10 @@ for target in "${targets[@]}"; do
         exit 1
     }
     for label in 1 5; do
-        if [[ $label == 1 ]]; then probe=500; else probe=300; fi
+        probe=$(jq -er --arg target "$target" --arg label "$label" \
+            '.evaluation_by_dataset[$target].linear_probe_epochs_by_label_percentage[$label]
+             | select(type == "number" and . > 0 and . == floor)' \
+            "$MAINLONG_CODE_ROOT/OT-SSL-DD/training_epochs.json")
         if evaluation_complete "$target" "$label" "$probe"; then
             printf 'SKIP complete source=%s target=%s model=%s ssl=%s labels=%s%%\n' \
                 "$source_dataset" "$target" "$model" "$ssl_method" "$label"

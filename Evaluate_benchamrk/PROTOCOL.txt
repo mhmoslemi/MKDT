@@ -1,0 +1,212 @@
+Evaluation benchmark v1
+=======================
+
+This directory contains the new experiment code, regular Bash runners, recipe,
+synthetic input registry, and table-to-runner mapping. Running a training script
+writes its logs and results here. The default data root is ../../data, relative
+to this directory. No existing table is filled automatically.
+
+Quick use (with a working PyTorch/torchvision environment on a compute machine):
+
+  bash Evaluate_benchamrk/check.sh
+  bash Evaluate_benchamrk/check_inputs.sh
+  bash Evaluate_benchamrk/scripts/CIFAR10_ResNet18_full_pt100_simclr_seed0.sh
+  bash Evaluate_benchamrk/scripts/CIFAR100_ResNet18_random_pt0p2_barlowtwins_10seeds.sh
+
+To validate a particular runner's datasets before training, append --preflight.
+BENCH_PYTHON selects the Python executable, BENCH_DATA_ROOT selects the staged
+dataset directory, and BENCH_WORKERS/BENCH_THREADS default to 4. Any runner can
+receive run.py options, e.g. --workers 0. Run a single seed from a subset runner
+by appending --seeds 3; its summary remains incomplete until all ten exist.
+No packages or datasets are downloaded by the runners.
+
+Reference basis
+---------------
+Original authors' implementations:
+  https://github.com/google-research/simclr
+  https://github.com/facebookresearch/barlowtwins
+
+CIFAR PyTorch recipes used for these defaults:
+  https://github.com/vturrisi/solo-learn/blob/main/scripts/pretrain/cifar/simclr.yaml
+  https://github.com/vturrisi/solo-learn/blob/main/scripts/pretrain/cifar/barlow.yaml
+  https://github.com/vturrisi/solo-learn/blob/main/scripts/pretrain/cifar/augmentations/symmetric.yaml
+  https://github.com/vturrisi/solo-learn/blob/main/scripts/pretrain/cifar/augmentations/asymmetric.yaml
+  https://github.com/vturrisi/solo-learn/blob/main/solo/methods/simclr.py
+  https://github.com/vturrisi/solo-learn/blob/main/solo/methods/barlow_twins.py
+  https://github.com/vturrisi/solo-learn/blob/main/solo/losses/barlow.py
+  https://github.com/vturrisi/solo-learn/blob/main/solo/utils/lars.py
+  https://github.com/vturrisi/solo-learn/blob/main/solo/data/pretrain_dataloader.py
+
+References reviewed 2026-10-16. This is an independent implementation based on
+these recipes; it is not the official repositories running unchanged. There is
+no original-paper recipe covering all of our Tiny ImageNet, VGG, ConvNet,
+distilled-set, and 1%/5%-label frozen-probe combinations. Those adaptations are
+explicit below. Different code/settings do not, by themselves, prove the cause
+of the old accuracy reversal; full-label sanity results are still needed.
+
+Default SSL recipe (all numerical values are in protocol.json)
+-------------------------------------------------------------
+Both methods: 1000 epochs; batch 256 distinct source images (512 augmented
+views); no accumulation; one GPU/process; float32, TF32 disabled; LARS momentum
+0.9, decay 1e-4, eta 0.02, epsilon 1e-8, clipped trust ratio; bias and BN affine
+parameters excluded from decay and LARS adaptation. Ten epochs of linear
+warmup from 3e-5, then per-update cosine decay to zero. No gradient-norm clipping,
+EMA, online supervised head, or test-selected SSL checkpoint.
+
+SimCLR: LR 0.4 at batch 256; 2048 -> 256 two-layer projector with biases and
+hidden ReLU, no projector BN (matches this solo-learn CIFAR recipe); normalized
+NT-Xent at temperature 0.2 over both views, excluding only self comparisons.
+Both views: random resized crop scale .08..1, aspect .75..4/3, bicubic; color
+jitter (.8,.8,.8,.2) with probability .8; grayscale .2; Gaussian blur .5 with
+sigma .1..2; horizontal flip .5. Every view composes these operations.
+
+Barlow Twins: LR 0.3 at batch 256; 2048 -> 2048 -> 2048 projector, BN/ReLU after
+the first two layers; lambda .0051, loss multiplier .1. Output standardization
+uses population variance and epsilon 1e-5, equivalent to non-affine training
+BatchNorm, with cross-correlation divided by the actual number of image pairs.
+Both views use the same crop, grayscale, and flip settings; color jitter
+(.4,.4,.2,.1) with probability .8. CIFAR reference blur probability is zero in
+both views; solarization is zero in view 1 and .2 in view 2.
+
+These are CIFAR recipes. The original Barlow ImageNet example instead uses
+batch 2048, an 8192-wide projector, and separate weight/bias learning rates.
+The original Google CIFAR SimCLR command uses batch 512, LR 1, temperature .5,
+and no blur. Do not mix numbers from these different recipes while claiming to
+reproduce one of them. Our float32 choice differs from solo-learn mixed precision.
+
+Subset adaptation: same 1000-epoch default for 0.2%, 1%, 2%, and 5%, with no
+claim that this is a validated optimum. A 0.2% CIFAR subset has only 100 unique
+images. Its effective batch is 100 and LR is scaled by 100/256. Never duplicate
+images just to fake batch 256: duplicates would become false negatives. With
+larger sets, incomplete final batches are dropped and a fresh permutation is
+drawn each epoch. Effective batch, updates, and processed examples are logged.
+Any budget change belongs in protocol.json and requires a fresh output root;
+old and new results cannot silently be combined.
+
+Architectures and data
+----------------------
+Reuse root networks.py, not the different OT-SSL-DD copies:
+  ResNet18: existing BN variant, 3x3 stride-one stem, standard strided residual
+    blocks, global average pooling, 512 features; zero-initialized residual BN.
+  VGG11: existing VGG11BN, 512 features; a global-pooling fix supports 64x64 while
+    preserving its 32x32 behavior.
+  ConvNet: existing ConvNet configured with BN, width 128, ReLU, average pooling;
+    depth 3 at 32x32 and depth 4 at 64x64; flattened features.
+Classifier removal is explicit. The linear probe consumes backbone features,
+never the SSL projector. AP ResNet is an architectural variant and is not used.
+
+CIFAR inputs stay 32x32; Tiny ImageNet stays native 64x64. Mean/std use the
+solo-learn CIFAR values and ImageNet normalization for Tiny (see protocol.json).
+The same source normalization is used for all targets of one frozen encoder.
+For downstream transfer, images are cropped/resized to that encoder's source
+resolution; these are low-resolution transfer experiments, not published 224px
+ImageNet transfer numbers. The existing downstream_data official split readers
+and exact-budget label selector are reused. Cached normalized 32px tensors and
+DiffAugment are not used. CIFAR and Tiny pixel/archive hashes are recorded;
+image-file datasets record a split/path/label/size/mtime fingerprint.
+
+Dataset splits: CIFAR official train/test; Tiny train/val; Aircraft trainval/test;
+CUB and Dogs official train/test; Flowers official train/test (not train+val).
+No target test image participates in SSL, subset selection, or probe fitting.
+
+Linear evaluation
+-----------------
+Same frozen-probe recipe for every selection method and SSL objective:
+100 epochs, SGD LR .1, momentum .9, zero decay, cosine to zero, no warmup;
+batch at most 256, no dropped samples; normal(.0,.01) head weights, zero bias.
+Fresh random-resized crops and flips during head fitting; deterministic test
+preprocessing. Native size test images are unchanged; larger target images use
+short-side resize then center crop. Only the final head is scored. Neither
+the test split nor its best epoch chooses hyperparameters/checkpoints.
+
+This common recipe draws on the Google CIFAR linear example (100 epochs,
+momentum SGD, LR .1, no decay); its original batch is 512. The Barlow ImageNet
+linear example uses LR .3 and decay 1e-6. Our common batch-256, low-label recipe
+is an adaptation, not an official 1%/5% benchmark. No validation-selected LR
+sweep is silently performed; checking convergence/calibration remains part of
+assessing the resulting experiment before publication.
+
+For each target and seed, the 1% and 5% labeled sets are nested, selected only
+from the target training split, balanced across classes as far as the EXACT
+overall budget allows. All methods/backbones use the same label indices for a
+given target/seed. Some fine-grained targets cannot cover every class: Flowers
+has 1020 training images, so 1%=10 and 5%=51 labels for 102 classes; CUB and
+Aircraft also have too few 1% labels to cover every class. This is inherent in
+the requested experiment. The budget is never silently inflated. Each result
+includes class counts, covered classes, micro/macro accuracy, and feature std.
+
+Full-data runs additionally evaluate a 100%-label source probe for a standard
+representation sanity check. A low-label score is not comparable to a published
+full-label linear-evaluation accuracy. No-Pre-Training runners reproduce a
+FROZEN RANDOM ENCODER control with the new probe; they are not supervised-from-
+scratch baselines, and the final paper should name that control explicitly.
+
+Selection and synthetic inputs
+------------------------------
+Random: exact count, uniform sampling without replacement; nested subsets per
+seed. K-means (the table's method, not a k-NN classifier): 50 Lloyd iterations
+on L2-normalized random ConvNetGAP-BN features, with unique nearest real-image
+exemplars. The feature model is independent of SSL and labels. Selected indices,
+feature configuration, seed, dataset fingerprint, and code hash are saved.
+
+MKDT/Ours: train on image tensors only. The registry inputs.json explicitly
+specifies file, tensor key, generator, and image space. Existing normalized
+synthetic images are unnormalized with the original repository statistics,
+clamped to RGB [0,1], and quantized to PIL for the same reference augmentations.
+The clipped fraction is reported; this conversion is a documented synthetic-data
+adaptation, not an assertion that arbitrary synthetic pixels are natural images.
+Each registered synthetic set is reused across ten independent evaluation seeds;
+these are not ten independently synthesized datasets.
+
+Available registered inputs: MKDT and Ours, CIFAR10/CIFAR100, at 1%, 2%, 5%.
+Missing registrations: both methods' 0.2% CIFAR10/CIFAR100 and all four sizes of
+Tiny ImageNet (12 method/source/size combinations). Their 72 runners exist but
+cannot train until matching images are supplied in inputs.json. No random
+subset, resized wrong-source set, or missing result is substituted. Synthetic
+data generation itself is outside this SSL/evaluation suite.
+
+Runner and checkpoint contract
+------------------------------
+387 training runners: 90 full-data (3 sources x 3 backbones x 2 SSL x 5 seeds),
+288 subset runners (3 x 3 x 2 x 4 sizes x 4 selection methods), and 9 controls.
+Each subset/control runner handles seeds 0..9 sequentially. Full-data scripts
+handle one of seeds 0..4. All include both 1%/5% source probes; ResNet18 runners
+also include six downstream targets at both budgets, using the identical saved
+encoder for all probes. The other backbones have source probes as in the tables.
+2% is included because it is active in the tables; requested 5% is included even
+though those rows are currently commented out. runners.tsv indexes scripts;
+table_coverage.tsv maps all 1458 active + 432 disabled logical result cells.
+
+Result directory:
+  results/SOURCE/MODEL/METHOD/ptPERCENT/SSL/seed_NNN/
+    config.json          complete recipe, source/input/code identity
+    environment.json     Python, torch, torchvision, GPU, worker/thread details
+    ssl.jsonl            epoch losses, LR, step counts, output std, timing
+    encoder.pt           permanent for full data; temporary for subsets/controls
+    training.pt          resumable optimizer/model state, overwritten every 25 epochs
+    evaluations/*.json   per-target/label final metrics, label indices, encoder hash
+    evaluations/*.jsonl  head-training convergence logs
+    complete.json        expected coverage, result hashes, retention metadata
+  summary.json in the SSL directory appears only after all 5/10 seeds complete.
+
+The encoder is strictly reloaded before probing. A hash check proves every
+parameter and BN buffer remained unchanged. Full-data encoder.pt is retained;
+training.pt is removed after successful evaluation. Subset/control encoder.pt
+is removed only after all expected results are safely written and hashed. On
+failure it remains available for restart. Re-running the same script validates
+and skips completed work. Changed config/code/data is refused in an existing
+run directory. Failures in the tee logging pipeline propagate to Bash.
+
+To evaluate a retained full-data checkpoint separately:
+  python Evaluate_benchamrk/evaluate.py --checkpoint PATH/encoder.pt \
+    --target CIFAR100 --labels 1 --output Evaluate_benchamrk/reprobe/cifar100_lbl1.json
+This reads the checkpoint's sibling config.json and uses its saved protocol.
+
+Validation
+----------
+check.sh runs coverage checks plus numerical loss/gradient comparisons,
+LARS/scheduler tests, native-resolution BN architecture tests, exact label
+budget tests, unique-exemplar selection tests, and a small fixture-based
+end-to-end checkpoint/probe/restart/cleanup test. Fixture outputs are temporary
+and never published as benchmark scores. The full recipe still needs measured
+GPU sanity runs; static checks cannot establish accuracy or convergence.

@@ -7,12 +7,10 @@ set -euo pipefail
 SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)
 PROJECT_ROOT=$(readlink -f "$SCRIPT_DIR/../..")
 MAINLONG_BATCH="$PROJECT_ROOT/benchmarks/full_data_main_long/results/batch_20261016T042912Z_MLpgLE"
-MAINLONG_CODE_ROOT="$MAINLONG_BATCH/code"
+UPSTREAM_CODE_ROOT="$MAINLONG_BATCH/code"
 VENV_ACTIVATE="${VENV_ACTIVATE:-$HOME/ENV/bin/activate}"
 ACCOUNT=aip-boyuwang
 WORKER_SOURCE="$SCRIPT_DIR/full_data_main_long_downstream_job.sh"
-WORKER_DEST="$MAINLONG_CODE_ROOT/benchmarks/killarney_short_jobs/full_data_main_long_downstream_job.sh"
-DEPENDENCY_JOB=6322342
 
 fail() {
     echo "FATAL: $*" >&2
@@ -24,6 +22,8 @@ cd "$PROJECT_ROOT"
 [[ $(<"$MAINLONG_BATCH/protocol.txt") == full_data_main_simclr1000_barlow1500_v1 ]] || \
     fail "wrong protocol in $MAINLONG_BATCH/protocol.txt"
 [[ -s $VENV_ACTIVATE ]] || fail "missing Python environment: $VENV_ACTIVATE"
+command -v jq >/dev/null || fail "jq is required"
+[[ -s OT-SSL-DD/training_epochs.json ]] || fail "missing epoch configuration"
 [[ -s $MAINLONG_BATCH/target_source_batch.txt ]] || fail "missing target-source pointer"
 target_source_batch=$(<"$MAINLONG_BATCH/target_source_batch.txt")
 TARGET_CACHE_ROOT="$target_source_batch/targets"
@@ -34,12 +34,21 @@ done
 gpu_inventory=$(sinfo -h -o '%G' --Node | sort -u)
 grep -q 'gpu:l40s:' <<< "$gpu_inventory" || fail "gpu:l40s is not available"
 
-if [[ -e $WORKER_DEST ]]; then
-    cmp -s "$WORKER_SOURCE" "$WORKER_DEST" || fail "batch worker differs from repository worker"
-else
-    cp "$WORKER_SOURCE" "$WORKER_DEST"
-    chmod 750 "$WORKER_DEST"
-fi
+# Preserve the training snapshot. Reuse its exact encoder/probe implementation
+# in a NEW evaluation snapshot, with the corrected worker and epoch config.
+mkdir -p "$MAINLONG_BATCH/evaluation_code"
+MAINLONG_CODE_ROOT=$(mktemp -d "$MAINLONG_BATCH/evaluation_code/probes_$(date -u +%Y%m%dT%H%M%SZ)_XXXXXX")
+mkdir -p "$MAINLONG_CODE_ROOT/benchmarks/killarney_short_jobs" "$MAINLONG_CODE_ROOT/OT-SSL-DD"
+for path in benchmarks/benchmark_full_data_main_long.py benchmarks/benchmark_full_refresh.py \
+    benchmarks/benchmark_cifar10.py benchmarks/benchmark_dataset.py benchmarks/downstream_data.py \
+    benchmarks/killarney_short_jobs/full_data_main_long_environment.sh \
+    OT-SSL-DD/utils.py OT-SSL-DD/networks.py; do
+    [[ -s $UPSTREAM_CODE_ROOT/$path ]] || fail "missing snapshot file: $path"
+    cp "$UPSTREAM_CODE_ROOT/$path" "$MAINLONG_CODE_ROOT/$path"
+done
+cp OT-SSL-DD/training_epochs.json "$MAINLONG_CODE_ROOT/OT-SSL-DD/"
+WORKER_DEST="$MAINLONG_CODE_ROOT/benchmarks/killarney_short_jobs/full_data_main_long_downstream_job.sh"
+cp "$WORKER_SOURCE" "$WORKER_DEST"
 mkdir -p "$MAINLONG_BATCH/logs"
 
 checkpoint_count() {
@@ -82,9 +91,13 @@ for spec in "${specs[@]}"; do
     fi
 
     count=$(checkpoint_count "$source" "$ssl" "$epochs")
-    if [[ -z $dependency ]]; then
+    if (( count == 10 )); then
+        dependency=
+    elif [[ -z $dependency ]]; then
         (( count == 10 )) || fail "$name has only $count/10 checkpoints"
     else
+        [[ -n $(squeue -h -j "$dependency" -o '%i') ]] || \
+            fail "$name has only $count/10 checkpoints and dependency $dependency is not queued"
         printf '%s currently has %d/10 checkpoints; evaluation will wait for %s\n' \
             "$name" "$count" "$dependency"
     fi

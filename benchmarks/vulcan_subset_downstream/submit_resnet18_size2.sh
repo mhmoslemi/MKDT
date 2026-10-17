@@ -7,7 +7,7 @@ set -euo pipefail
 PROJECT_ROOT="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/../.." && pwd -P)"
 cd "$PROJECT_ROOT"
 
-ACCOUNT=aip-yiweilu
+ACCOUNT=aip-boyuwang
 UPSTREAM_BATCH="$PROJECT_ROOT/benchmarks/vulcan_subset_refresh/results/batch_20261016T163046Z_utW9z3"
 VENV_ACTIVATE="${VENV_ACTIVATE:-$HOME/ENV/bin/activate}"
 cache_root="$PROJECT_ROOT/benchmarks/cross_downstream/results/batch_20261009T171449Z_o91BKP/targets"
