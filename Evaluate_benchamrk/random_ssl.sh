@@ -5,11 +5,14 @@
 set -euo pipefail
 
 epochs_for_subset() {
-    case $1 in
-        0.2) printf '10000\n' ;;
-        1) printf '8000\n' ;;
-        2) printf '6000\n' ;;
-        *) echo 'Only 0.2%, 1%, and 2% subsets are supported.' >&2; return 2 ;;
+    case "$1/$2" in
+        TinyImageNet/0.2) printf '6000\n' ;;
+        TinyImageNet/1) printf '5000\n' ;;
+        TinyImageNet/2) printf '4000\n' ;;
+        CIFAR10/0.2|CIFAR100/0.2) printf '10000\n' ;;
+        CIFAR10/1|CIFAR100/1) printf '8000\n' ;;
+        CIFAR10/2|CIFAR100/2) printf '6000\n' ;;
+        *) echo 'Unsupported source dataset or subset percentage.' >&2; return 2 ;;
     esac
 }
 
@@ -22,8 +25,8 @@ if [[ ${1:-} == --worker ]]; then
     [[ ${SLURM_CLUSTER_NAME:-${CC_CLUSTER:-}} == killarney ]] || {
         echo 'This worker is prepared for Killarney only.' >&2; exit 2;
     }
-    [[ $seed_start =~ ^[0-9]$ && $seed_count =~ ^[12]$ && $epochs == "$(epochs_for_subset "$subset")" ]] || {
-        echo 'Expected one or two seeds and the configured subset epoch budget.' >&2; exit 2;
+    [[ $seed_start =~ ^[0-9]$ && $seed_count =~ ^[12]$ && $epochs == "$(epochs_for_subset "$source_name" "$subset")" ]] || {
+        echo 'Expected one or two seeds and the configured source/subset epoch budget.' >&2; exit 2;
     }
     if (( seed_start + seed_count > 10 || (seed_count == 2 && seed_start % 2 != 0) )); then
         echo 'Invalid seed range: use a single seed or an aligned pair within 0..9.' >&2; exit 2
@@ -60,10 +63,12 @@ from train_ssl import train
 source, model, percentage, method, data_root, output_root, launcher, seed_start, epochs, seed_count = sys.argv[1:]
 percentage = float(percentage)
 seed_start, epochs, seed_count = int(seed_start), int(epochs), int(seed_count)
+epoch_budgets = ({0.2: 6000, 1: 5000, 2: 4000} if source == 'TinyImageNet'
+                 else {0.2: 10000, 1: 8000, 2: 6000})
 if (seed_count not in (1, 2) or not 0 <= seed_start < 10 or seed_start + seed_count > 10
         or (seed_count == 2 and seed_start % 2 != 0)
-        or epochs != {0.2: 10000, 1: 8000, 2: 6000}.get(percentage)):
-    raise ValueError('Invalid seed range or subset epoch budget')
+        or epochs != epoch_budgets.get(percentage)):
+    raise ValueError('Invalid seed range or source/subset epoch budget')
 seed_label = str(seed_start) if seed_count == 1 else f'{seed_start}..{seed_start + 1}'
 output_root = Path(output_root).resolve()
 if not output_root.is_relative_to(HERE):
@@ -160,16 +165,18 @@ case ${1:---submit} in
             'Split only configurations whose two-seed walltime (including 15 min) exceeds 5h.' \
             'Currently single-seed: TinyImageNet 1% and 2%, all networks, both SSL methods.' \
             'Other configurations keep pairs 0-1, 2-3, 4-5, 6-7, 8-9; no evaluation.' \
-            'A single seed may still exceed 5h; no truncation, stages, or epoch reduction.' \
-            'Epochs PER SEED: 0.2%=10000, 1%=8000, 2%=6000, for BOTH SSL methods.' \
+            'A single seed may still exceed 5h; no truncation, stages, or automatic epoch reduction.' \
+            'CIFAR10/CIFAR100 epochs PER SEED: 0.2%=10000, 1%=8000, 2%=6000.' \
+            'TinyImageNet epochs PER SEED: 0.2%=6000, 1%=5000, 2%=4000.' \
+            'Both schedules apply to BOTH SSL methods and ALL three networks.' \
             'Networks: ConvNetBN, VGG11BN, ResNet18BN. Sources: CIFAR10, CIFAR100, TinyImageNet.' \
             'Resources: 1 GPU, 1 CPU, 6G; walltime = measured-rate projection + exactly 15 min.' \
             'Accounts: 264 jobs Wang, 66 Lu (80/20), verified before submission.' \
             'Uses the existing MKDT repository and Python environment on the destination server.' \
             'Defaults: BENCH_VENV=$HOME/ENV; BENCH_DATA_ROOT=<MKDT parent>/data.' \
             'GPU_TYPE may select a type from the destination cluster inventory; otherwise prefer L40S.' \
-            'Results: Evaluate_benchamrk/random_ssl_checkpoints_10k8k6k (including logs and job IDs).' \
-            'The old 1000-epoch checkpoints are left untouched and are NOT resumed.' \
+            'Results: Evaluate_benchamrk/random_ssl_checkpoints_cifar10k8k6k_tiny6k5k4k (including logs and job IDs).' \
+            'Earlier schedule directories are left untouched and are NOT resumed into this run.' \
             'Timing reference: this trainer on Killarney L40S, 1 CPU, workers=0, at 1000 epochs.' \
             'Longer schedules are projected linearly; times are estimates, not guarantees.' \
             'Only CIFAR100/ConvNet/0.2%/Barlow uses the matching CIFAR10 timing (CUDA failure).' \
@@ -181,7 +188,7 @@ esac
 [[ -z ${SLURM_JOB_ID:-} ]] || { echo 'Run this launcher with bash on the login node, not sbatch.' >&2; exit 2; }
 bench_dir=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)
 launcher="$bench_dir/random_ssl.sh"
-output_root="$bench_dir/random_ssl_checkpoints_10k8k6k"
+output_root="$bench_dir/random_ssl_checkpoints_cifar10k8k6k_tiny6k5k4k"
 for required in common.py data.py train_ssl.py run.py evaluate.py protocol.json \
                 ../networks.py ../benchmarks/downstream_data.py; do
     [[ -r $bench_dir/$required ]] || {
@@ -273,14 +280,16 @@ fi
 
 printf 'Random SSL only: 330 jobs (210 paired + 120 single-seed), 540 retained encoders.\n'
 printf 'Two-seed configurations over 5h are split; individual seeds can still exceed 5h.\n'
-printf 'Epochs/seed: 0.2%%=10000, 1%%=8000, 2%%=6000. No old 1000-epoch checkpoint reuse.\n'
+printf 'CIFAR10/CIFAR100 epochs/seed: 0.2%%=10000, 1%%=8000, 2%%=6000.\n'
+printf 'TinyImageNet epochs/seed: 0.2%%=6000, 1%%=5000, 2%%=4000.\n'
+printf 'Separate output directory; no reuse of checkpoints from earlier schedule directories.\n'
 printf 'Measured Killarney L40S rates scaled to the new schedules + exactly 00:15:00.\n'
 printf 'dataset\tmodel\tsubset_percent\tssl\tseeds\tepochs_per_seed\taccount\twalltime\n'
 job_index=0
 for source_name in CIFAR10 CIFAR100 TinyImageNet; do
     for model in ConvNet VGG11 ResNet18; do
         for subset in 0.2 1 2; do
-            epochs=$(epochs_for_subset "$subset")
+            epochs=$(epochs_for_subset "$source_name" "$subset")
             for ssl in simclr barlowtwins; do
                 seed_count=2
                 training_seconds=$(estimate_seconds "$source_name" "$model" "$ssl" "$subset" "$epochs" "$seed_count")
