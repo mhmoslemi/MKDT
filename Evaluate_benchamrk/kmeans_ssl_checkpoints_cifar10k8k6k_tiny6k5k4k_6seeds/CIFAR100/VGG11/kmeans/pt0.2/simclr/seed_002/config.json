@@ -1,0 +1,337 @@
+{
+  "identity": {
+    "seed": 2,
+    "selection": {
+      "indices": [
+        30428,
+        27923,
+        13746,
+        39816,
+        9353,
+        27238,
+        41887,
+        12787,
+        31637,
+        49541,
+        22705,
+        28283,
+        32030,
+        35632,
+        42671,
+        31641,
+        18158,
+        23744,
+        47810,
+        49841,
+        1790,
+        2650,
+        21266,
+        24844,
+        38613,
+        47427,
+        32680,
+        30974,
+        8912,
+        9992,
+        22679,
+        46919,
+        44006,
+        23581,
+        22010,
+        19580,
+        18189,
+        15867,
+        14826,
+        37504,
+        14261,
+        21364,
+        22537,
+        30681,
+        25447,
+        2170,
+        25561,
+        41850,
+        38245,
+        39903,
+        49085,
+        31995,
+        43156,
+        11507,
+        41696,
+        49091,
+        3892,
+        2903,
+        7328,
+        18009,
+        11556,
+        16373,
+        15438,
+        29272,
+        12499,
+        6619,
+        10794,
+        27751,
+        848,
+        46514,
+        36057,
+        24715,
+        28044,
+        100,
+        25068,
+        23154,
+        28719,
+        1994,
+        18873,
+        18938,
+        16327,
+        474,
+        18230,
+        5922,
+        31141,
+        26904,
+        27978,
+        22152,
+        16953,
+        1621,
+        4090,
+        36270,
+        5668,
+        26973,
+        15399,
+        33425,
+        19227,
+        30442,
+        35984,
+        40431
+      ],
+      "selection_sha256": "2cd697ef4bf3a6dd99eee8113018387dfb123b04459e6bfdb9dee074eb98e95c"
+    },
+    "selection_method": "kmeans",
+    "signature": "53ae041ee7c12ea1f278f3a033ba8b279c1842636506a505b2f89f355940afb5"
+  },
+  "signature": {
+    "code_hashes": {
+      "Evaluate_benchamrk/common.py": "67fcd33f581a34a7f764431b6761ac120cb080d4b2ea0d69b95074565a224f8b",
+      "Evaluate_benchamrk/data.py": "befcf535679e449b3544ae9b8578325e53f7995179591042315d8937cd55f6d9",
+      "Evaluate_benchamrk/evaluate.py": "2b2162a56878f48ade39d2b80d4316511f20a72d29eaa2cf70fe023d88ad722f",
+      "Evaluate_benchamrk/plan.py": "c6d9bd33b36d1d235a2f6af291b3a0a82187b1eea3a10b90a7f57317d8eee83e",
+      "Evaluate_benchamrk/run.py": "1c2b8d29ab47966f1178c9f04b3e1b7c72bd2f55fb65a32c32c77c3730faf45b",
+      "Evaluate_benchamrk/test_protocol.py": "f018562437924ced1d890343a4e898f10e48c50a63920d337031194671c4e43d",
+      "Evaluate_benchamrk/train_ssl.py": "3670781eb0f0f838ced6cc7ca9775791d4d52683fe25e489239f012937dc1a79",
+      "benchmarks/downstream_data.py": "081fe26e5dc81c96ce8e8ffe5a412302663de4a9d095684c5b37e7c615b4a6fd",
+      "networks.py": "0c15ff3ef11f21df752e2a9a17851ab8c8a52ddc3969380682ea8bfcec1968fc"
+    },
+    "model": "VGG11",
+    "protocol": {
+      "evaluation": {
+        "baseline": "frozen_random_encoder",
+        "batch_size": 256,
+        "checkpoint_selection": "final_epoch_no_test_selection",
+        "epochs": 100,
+        "full_data_sanity_label_percentage": 100,
+        "head_init_std": 0.01,
+        "label_percentages": [
+          1,
+          5
+        ],
+        "label_policy": "exact",
+        "lr": 0.1,
+        "momentum": 0.9,
+        "normalize_using": "source_statistics",
+        "optimizer": "sgd",
+        "schedule": "cosine_per_step",
+        "test_resize_ratio": 1.1428571428571428,
+        "test_transform": "resize_short_side_and_center_crop",
+        "train_transform": "random_resized_crop_and_flip",
+        "warmup_epochs": 0,
+        "weight_decay": 0.0
+      },
+      "full_seeds": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "input_size": {
+        "CIFAR10": 32,
+        "CIFAR100": 32,
+        "TinyImageNet": 64
+      },
+      "methods": {
+        "barlowtwins": {
+          "blur_probabilities": [
+            0.0,
+            0.0
+          ],
+          "color_jitter": [
+            0.4,
+            0.4,
+            0.2,
+            0.1
+          ],
+          "correlation_eps": 1e-05,
+          "lambda": 0.0051,
+          "loss_scale": 0.1,
+          "lr": 0.3,
+          "projector": [
+            2048,
+            2048,
+            2048
+          ],
+          "projector_batchnorm": true,
+          "projector_bias": true,
+          "solarize_probabilities": [
+            0.0,
+            0.2
+          ]
+        },
+        "simclr": {
+          "blur_probabilities": [
+            0.5,
+            0.5
+          ],
+          "color_jitter": [
+            0.8,
+            0.8,
+            0.8,
+            0.2
+          ],
+          "lr": 0.4,
+          "projector": [
+            2048,
+            256
+          ],
+          "projector_batchnorm": false,
+          "projector_bias": true,
+          "solarize_probabilities": [
+            0.0,
+            0.0
+          ],
+          "temperature": 0.2
+        }
+      },
+      "models": [
+        "ConvNet",
+        "VGG11",
+        "ResNet18"
+      ],
+      "normalization": {
+        "CIFAR10": [
+          [
+            0.4914,
+            0.4822,
+            0.4465
+          ],
+          [
+            0.247,
+            0.2435,
+            0.2616
+          ]
+        ],
+        "CIFAR100": [
+          [
+            0.5071,
+            0.4865,
+            0.4409
+          ],
+          [
+            0.2673,
+            0.2564,
+            0.2762
+          ]
+        ],
+        "TinyImageNet": [
+          [
+            0.485,
+            0.456,
+            0.406
+          ],
+          [
+            0.229,
+            0.224,
+            0.225
+          ]
+        ]
+      },
+      "references": {
+        "barlow_official": "https://github.com/facebookresearch/barlowtwins",
+        "cifar_barlow": "https://github.com/vturrisi/solo-learn/blob/main/scripts/pretrain/cifar/barlow.yaml",
+        "cifar_simclr": "https://github.com/vturrisi/solo-learn/blob/main/scripts/pretrain/cifar/simclr.yaml",
+        "simclr_official": "https://github.com/google-research/simclr"
+      },
+      "selection": {
+        "batch_size": 256,
+        "distance_chunk_size": 1024,
+        "feature_model": "random_ConvNetGAP_BN",
+        "feature_normalization": "l2",
+        "feature_seed_offset": 2000,
+        "iterations": 50,
+        "method": "kmeans",
+        "unique_exemplars": true
+      },
+      "sources": [
+        "CIFAR10",
+        "CIFAR100",
+        "TinyImageNet"
+      ],
+      "ssl": {
+        "batch_size": 256,
+        "blur_sigma": [
+          0.1,
+          2.0
+        ],
+        "checkpoint_every_epochs": 500,
+        "color_probability": 0.8,
+        "crop_ratio": [
+          0.75,
+          1.3333333333333333
+        ],
+        "crop_scale": [
+          0.08,
+          1.0
+        ],
+        "exclude_bias_and_norm": true,
+        "flip_probability": 0.5,
+        "full_epochs": 1000,
+        "grayscale_probability": 0.2,
+        "interpolation": "bicubic",
+        "lars_clip": true,
+        "lars_eps": 1e-08,
+        "lars_eta": 0.02,
+        "minimum_lr": 0.0,
+        "momentum": 0.9,
+        "optimizer": "lars",
+        "precision": "float32",
+        "scale_lr_with_batch": true,
+        "schedule": "warmup_cosine_per_step",
+        "small_batch_policy": "min_dataset_size_no_replacement",
+        "subset_epochs": 10000,
+        "warmup_epochs": 10,
+        "warmup_start_lr": 3e-05,
+        "weight_decay": 0.0001
+      },
+      "subset_percentages": [
+        0.2,
+        1,
+        2,
+        5
+      ],
+      "subset_seeds": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "version": "ssl_reference_v1"
+    },
+    "selection_method": "kmeans",
+    "source": "CIFAR100",
+    "source_fingerprint": "091c775676ae5172a0a29eaf9c37f6a6b601efefc7376b95ef622082ae2a9c14",
+    "ssl": "simclr",
+    "ssl_worker_sha256": "efe069a9522add796ba1a7075a9154c39dc9284a197110cc9eac80bc2701bb03",
+    "subset": 0.2
+  }
+}
