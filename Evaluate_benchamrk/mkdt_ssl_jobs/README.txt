@@ -6,6 +6,13 @@ Run from MKDT on Killarney after syncing these new files:
 The launcher has NOT been submitted by Codex. No evaluation or distillation jobs
 are included; existing random/kmeans launchers and shared Python are unchanged.
 
+The launcher now passes the absolute Evaluate_benchamrk directory explicitly to
+each Slurm worker. Worker mode never derives it from BASH_SOURCE (which points
+to Slurm's spool copy). It checks the worker, manifest, protocol and venv paths
+before loading modules. Sync the corrected launcher to Killarney, then rerun
+the same submission command to replace the failed/cancelled original jobs.
+Existing synthetic images are reused; no synthetic generation is needed.
+
 INPUTS
 The default generated root is:
   benchmarks/mkdt_multidataset/results/batch_20261010T160046Z_Y6dqZS/synthetic/generated

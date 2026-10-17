@@ -38,11 +38,11 @@
 \cmidrule(lr){2-9}
 
 & \multirow{4}{*}{0.2\%} & Random Subset
+& \dsacc{48.73}{0.84} & \dsacc{43.26}{1.24}
 &  &
-&  &
-&  &  \\
+&  & \dsacc{39.92}{1.64} \\
 & & K-means Subset
-&  &
+& \dsacc{48.70}{0.69} & \dsacc{44.05}{1.15}
 &  &
 &  &  \\
 & & MKDT & \multicolumn{6}{c}{} \\
@@ -50,11 +50,11 @@
 \cmidrule(lr){2-9}
 
 & \multirow{4}{*}{1\%} & Random Subset
-&  &
+& \dsacc{52.03}{0.81} & \dsacc{46.57}{1.32}
 &  &
 &  &  \\
 & & K-means Subset
-&  &
+& \dsacc{52.17}{0.76} & \dsacc{46.49}{0.77}
 &  &
 &  &  \\
 & & MKDT &  &  &  &  &  &  \\
@@ -66,7 +66,7 @@
 &  &
 &  &  \\
 & & K-means Subset
-&  &
+& \dsacc{52.91}{0.96} & \dsacc{50.50}{0.90}
 &  &
 &  &  \\
 & & MKDT &  &  &  &  &  &  \\
@@ -102,11 +102,11 @@
 \cmidrule(lr){2-9}
 
 & \multirow{4}{*}{0.2\%} & Random Subset
+& \dsacc{57.52}{0.42} & \dsacc{50.58}{1.02}
 &  &
-&  &
-&  &  \\
+&  & \dsacc{46.84}{2.21} \\
 & & K-means Subset
-&  &
+& \dsacc{57.51}{0.36} & \dsacc{50.80}{1.56}
 &  &
 &  &  \\
 & & MKDT & \multicolumn{6}{c}{} \\
@@ -114,11 +114,11 @@
 \cmidrule(lr){2-9}
 
 & \multirow{4}{*}{1\%} & Random Subset
-&  &
+& \dsacc{60.47}{0.61} & \dsacc{53.37}{1.38}
 &  &
 &  &  \\
 & & K-means Subset
-&  &
+& \dsacc{60.70}{0.62} & \dsacc{53.38}{0.96}
 &  &
 &  &  \\
 & & MKDT &  &  &  &  &  &  \\
@@ -130,7 +130,7 @@
 &  &
 &  &  \\
 & & K-means Subset
-&  &
+& \dsacc{61.38}{0.41} & \dsacc{56.64}{0.81}
 &  &
 &  &  \\
 & & MKDT &  &  &  &  &  &  \\
@@ -154,3 +154,9 @@
 \end{tabular}%
 }
 \end{table*}
+
+% Interactive evaluation snapshot: 2026-10-17T21:07:03.847Z.
+% Random: seeds 0--9; k-means: seeds 0--5. Only complete per-cell seed sets are filled.
+% New entries: mean +/- sample SD (ddof=1), 100-epoch frozen linear probes at 1%/5% labels.
+% Sources: Evaluate_benchamrk/random_eval_results_interactive_10seeds/ and
+%          Evaluate_benchamrk/kmeans_eval_results_interactive_6seeds/ (not the 250ep run).

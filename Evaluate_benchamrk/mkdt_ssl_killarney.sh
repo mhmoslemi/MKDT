@@ -1,18 +1,25 @@
 #!/bin/bash
 # SSL only on existing MKDT images: no distillation, evaluation or submission arrays.
 set -euo pipefail
-bench_dir=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)
-launcher="$bench_dir/mkdt_ssl_killarney.sh"
-manifest="$bench_dir/mkdt_ssl_jobs/tasks.tsv"
 
 if [[ ${1:-} == --worker ]]; then
     shift
-    [[ $# == 5 ]] || { echo 'Invalid worker arguments.' >&2; exit 2; }
+    [[ $# == 6 ]] || { echo 'Expected --worker BENCH_DIR TASK VENV DATA_ROOT GENERATED_ROOT OUTPUT_ROOT.' >&2; exit 2; }
     : "${SLURM_JOB_ID:?This worker must run through Slurm}"
     [[ ${SLURM_CLUSTER_NAME:-${CC_CLUSTER:-}} == killarney ]] || {
         echo 'This worker is for Killarney only.' >&2; exit 2;
     }
-    task=$1 venv=$2 data_root=$3 generated_root=$4 output_root=$5
+    # Slurm runs a spool copy of this script. Its BASH_SOURCE directory is NOT
+    # the repository; use the absolute path passed by the submission branch.
+    bench_dir=$1 task=$2 venv=$3 data_root=$4 generated_root=$5 output_root=$6
+    [[ $bench_dir == /* && -d $bench_dir ]] || {
+        echo 'Worker BENCH_DIR must be an existing absolute repository directory.' >&2; exit 2;
+    }
+    bench_dir=$(cd -- "$bench_dir" && pwd -P)
+    for required in "$bench_dir/mkdt_ssl_jobs/worker.py" "$bench_dir/mkdt_ssl_jobs/tasks.tsv" \
+        "$bench_dir/protocol.json" "$venv/bin/activate"; do
+        [[ -r $required ]] || { echo "Missing worker input: $required" >&2; exit 2; }
+    done
     module --force purge
     module load StdEnv/2023 python/3.11.5
     source "$venv/bin/activate"
@@ -23,10 +30,16 @@ if [[ ${1:-} == --worker ]]; then
     cd "$bench_dir"
     printf 'JOB=%s GPU_ALLOCATION=%s CUDA_VISIBLE_DEVICES=%s\n' \
         "$SLURM_JOB_ID" "${SLURM_JOB_GPUS:-unset}" "${CUDA_VISIBLE_DEVICES:-unset}"
+    printf 'MKDT worker: %s\n' "$bench_dir/mkdt_ssl_jobs/worker.py"
     nvidia-smi -L
     exec python "$bench_dir/mkdt_ssl_jobs/worker.py" \
         "$task" "$data_root" "$generated_root" "$output_root"
 fi
+
+# Only the submit-side script location is used to discover the repository.
+bench_dir=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)
+launcher="$bench_dir/mkdt_ssl_killarney.sh"
+manifest="$bench_dir/mkdt_ssl_jobs/tasks.tsv"
 
 case ${1:---submit} in
     --submit) dry_run=0 ;;
@@ -159,7 +172,7 @@ while IFS=$'\t' read -r task source_name model generator subset ssl start count 
         --nodes=1 --ntasks=1 --cpus-per-task=1 --mem=6G --gres=gpu:l40s:1 \
         --time="$walltime" --chdir="$bench_dir" \
         --output="$output_root/logs/%x-%j.out" --error="$output_root/logs/%x-%j.err" \
-        "$launcher" --worker "$task" "$venv" "$data_root" "$generated_root" "$output_root")
+        "$launcher" --worker "$bench_dir" "$task" "$venv" "$data_root" "$generated_root" "$output_root")
     job_id=${job_id%%;*}
     [[ $job_id =~ ^[0-9]+$ ]] || { echo "Unexpected sbatch response: $job_id" >&2; exit 2; }
     printf '%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n' \
