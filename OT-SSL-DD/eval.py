@@ -14,8 +14,8 @@ from torchvision.transforms.functional import to_pil_image
 
 
 SSL_EPOCHS = {
-    "CIFAR10": {0.2: 4000, 1: 8000, 2: 6000},
-    "CIFAR100": {0.2: 10000, 1: 8000, 2: 6000},
+    "CIFAR10": {0.2: 3000, 1: 8000, 2: 6000},
+    "CIFAR100": {0.2: 3000, 1: 8000, 2: 6000},
     "TinyImageNet": {0.2: 6000, 1: 5000, 2: 4000},
 }
 PROBE_EPOCHS = {1: 100, 5: 100}
@@ -207,7 +207,7 @@ def main():
         parser.error("Use --synthetic-checkpoint or --synthetic-root, not both")
     
     checkpoint_path = args.synthetic_checkpoint
-    checkpoint_path = '/home/mmoslem3/scratch/MKDT/OT-SSL-DD/result_both/res_IIC_CIFAR10_ResNet18_0.2percent_final.pt'
+    checkpoint_path = 'method1/res_IIC_CIFAR10_ResNet18_0.2percent_final.pt'
 
     if checkpoint_path is None:
         if args.synthetic_root is None:
