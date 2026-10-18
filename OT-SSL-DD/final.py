@@ -1,8 +1,7 @@
-"""Information-Theoretic Dataset Condensation: Optimizing synthetic pixels as IIC topological anchors.
-Minimizes the negative mutual information between augmented views of real images assigned to synthetic prototypes in random feature spaces."""
+"""Augmented Feature Moment Matching for synthetic dataset condensation.
+Match the mean and covariance of two augmented real and synthetic views in frozen feature spaces."""
 
 import argparse
-import math
 import os
 import random
 
@@ -13,19 +12,6 @@ import torch.nn.functional as F
 from torchvision.utils import save_image
 
 from utils import DiffAugment, ParamDiffAug, evaluate_synset_SSL, get_dataset, get_eval_pool, get_network, get_time
-
-
-# def clear_directory(directory):
-#     """Remove everything inside directory while keeping directory itself."""
-#     for root, directories, files in os.walk(directory, topdown=False):
-#         for filename in files:
-#             os.remove(os.path.join(root, filename))
-#         for dirname in directories:
-#             path = os.path.join(root, dirname)
-#             if os.path.islink(path):
-#                 os.remove(path)
-#             else:
-#                 os.rmdir(path)
 
 
 def set_random_seed(seed):
@@ -101,19 +87,6 @@ def train_encoder_ssl(network, images, augmenter, args, objective_rng):
     return torch.stack(losses).mean().item()
 
 
-def total_variation_loss(img):
-    """Calculates the Total Variation (TV) loss to encourage spatial smoothness and penalize high-frequency noise."""
-    tv_h = torch.mean(torch.abs(img[:, :, 1:, :] - img[:, :, :-1, :]))
-    tv_w = torch.mean(torch.abs(img[:, :, :, 1:] - img[:, :, :, :-1]))
-    return tv_h + tv_w
-
-
-def pixel_mse_loss(images, initial_images, channel_std):
-    """Mean squared pixel drift in [0, 1] RGB units, with a fixed initial target."""
-    # Dataset normalization is (pixels - mean) / std; the mean cancels in a difference.
-    return ((images - initial_images.detach()) * channel_std).square().mean()
-
-
 @torch.no_grad()
 def deepcluster_initialize(dst_train, num_syn, device, seed, channel, num_classes, im_size, model_name='ConvNet'):
     """Extract features with a random network and perform K-Means to initialize synthetic images as cluster centroids."""
@@ -162,56 +135,26 @@ def deepcluster_initialize(dst_train, num_syn, device, seed, channel, num_classe
     return initial_syn_images.to(device)
 
 
-def information_theoretic_loss(features_u, features_v, features_S, tau):
-    """
-    Compute the negative Mutual Information (IIC loss) of cluster assignments.
-    Forces the physical synthetic set S to act as invariant topological anchors for augmented real views.
-    """
-    # L2 normalize features
-    u = F.normalize(features_u, dim=1)
-    v = F.normalize(features_v, dim=1)
-    S = F.normalize(features_S, dim=1)
+def augmented_feature_moment_loss(real_u, real_v, syn_u, syn_v, lambda_cov=1.0):
+    """Match pooled-view means and unbiased covariances; only synthetic features receive gradients."""
+    with torch.no_grad():
+        real = torch.cat((real_u, real_v), dim=0).flatten(1)
+        mean_real = real.mean(dim=0)
+        centered_real = real - mean_real
+        cov_real = centered_real.t() @ centered_real / (len(real) - 1)
 
-    # Cosine similarities [Batch, Num_Syn]
-    sim_u = torch.mm(u, S.t())
-    sim_v = torch.mm(v, S.t())
+    syn = torch.cat((syn_u, syn_v), dim=0).flatten(1)
+    mean_syn = syn.mean(dim=0)
+    centered_syn = syn - mean_syn
+    cov_syn = centered_syn.t() @ centered_syn / (len(syn) - 1)
 
-    # Soft assignments to synthetic prototypes
-    p_u = F.softmax(sim_u / tau, dim=1)
-    p_v = F.softmax(sim_v / tau, dim=1)
-
-    # Joint probability matrix P [Num_Syn, Num_Syn]
-    B = features_u.shape[0]
-    P = torch.mm(p_u.t(), p_v) / B
-
-    # Symmetrize to enforce identical marginals
-    P = (P + P.t()) / 2.0
-    P = torch.clamp(P, min=1e-8)
-
-    # Marginals
-    P_i = P.sum(dim=1, keepdim=True)
-    P_j = P.sum(dim=0, keepdim=True)
-
-    # Mutual Information: \sum P_ij \log( P_ij / (P_i * P_j) )
-    MI = (P * torch.log(P / (P_i * P_j))).sum()
-
-    negative_mi = -MI
-    # Directed soft-Chamfer coverage from every synthetic prototype to the
-    # real batch. Normalizing over dim=0 ensures every prototype contributes.
-    log_batch_size = math.log(B)
-    coverage_u = -tau * (
-        torch.logsumexp(sim_u / tau, dim=0) - log_batch_size
-    ).mean()
-    coverage_v = -tau * (
-        torch.logsumexp(sim_v / tau, dim=0) - log_batch_size
-    ).mean()
-    coverage_loss = 0.5 * (coverage_u + coverage_v)
-
-    return negative_mi, coverage_loss
+    loss_mean = F.mse_loss(mean_syn, mean_real)
+    loss_cov = F.mse_loss(cov_syn, cov_real)
+    return loss_mean + lambda_cov * loss_cov, loss_mean, loss_cov
 
 
 def main():
-    parser = argparse.ArgumentParser(description='Information-Theoretic Dataset Condensation (DeepCluster + IIC)')
+    parser = argparse.ArgumentParser(description='Augmented Feature Moment Matching (DeepCluster + AFMM)')
 
     # Data.
     parser.add_argument('--dataset', default='CIFAR10')
@@ -220,20 +163,16 @@ def main():
     parser.add_argument('--device', choices=['cpu', 'cuda'], default='cuda' if torch.cuda.is_available() else 'cpu')
     parser.add_argument('--seed', type=int, default=0)
 
-    # Information-Theoretic Objective.
+    # Augmented Feature Moment Matching Objective.
     parser.add_argument('--Iteration', type=int, default=1)
     parser.add_argument('--lr_img', type=float, default=0.000, help='Higher LR, decays via CosineAnnealing')
     parser.add_argument('--batch_real', type=int, default=512, help='Slightly noisier batch prevents deep proxy minima')
     parser.add_argument('--num_random_networks', type=int, default=5, help='Fresh samples from P_net per pixel update')
-    parser.add_argument('--temperature', type=float, default=0.2, help='Softmax temperature for prototype assignment')
+    parser.add_argument('--temperature', type=float, default=0.2, help='SimCLR temperature for optional encoder warm-up only')
+    parser.add_argument('--lambda_cov', type=float, default=1.0, help='Covariance MSE weight in the augmented feature moment loss')
     
     # parser.add_argument('--random_models', default='ConvNet,ResNet18', help='Comma-separated P_net support; forces geometric generalization')
     parser.add_argument('--random_models', default='ConvNet', help='Comma-separated P_net support; forces geometric generalization')
-
-    parser.add_argument('--coverage_gamma', type=float, default=0.00, help='Weight of prototype-to-real soft coverage; 0 preserves the original pure-IIC objective')
-    parser.add_argument('--tv_weight', type=float, default=0.0, help='Total Variation penalty to destroy adversarial high-frequencies')
-    parser.add_argument('--pixel_mse_weight', type=float, default=0.0, help='Nonnegative weight for mean pixel MSE to initialization in [0,1] units; 0 disables it')
-
 
     parser.add_argument('--encoder_train_steps', type=int, default=5, help='SimCLR steps on the selected detached images before freezing each sampled encoder; 0 disables adaptation')
     parser.add_argument('--encoder_train_data', choices=['synthetic', 'real'], default='synthetic', help='Images used for the sampled encoder SimCLR warm-up')
@@ -263,7 +202,7 @@ def main():
     random_models = [name.strip() for name in (args.random_models or args.model).split(',') if name.strip()]
     if args.ssl_aug_strategy is None:
         args.ssl_aug_strategy = args.distill_aug_strategy
-    args.method = 'InformationTheoretic_IIC'
+    args.method = 'AFMM'
 
     args.dsa_param = ParamDiffAug()
     args.dsa_param.aug_mode = 'S'
@@ -309,10 +248,8 @@ def main():
     scheduler_img = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer_img, T_max=args.Iteration, eta_min=0.001)
     
     loss_history = []
-    negative_mi_history = []
-    coverage_loss_history = []
-    weighted_coverage_history = []
-    pixel_mse_history = []
+    mean_loss_history = []
+    covariance_loss_history = []
     total_loss_history = []
     encoder_ssl_history = []
     model_eval_pool = get_eval_pool(args.eval_mode, args.model, args.model) if args.num_eval else []
@@ -332,8 +269,7 @@ def main():
     print('Hyper-parameters: \n', args.__dict__)
     print('P_net support: %s' % ', '.join(random_models), flush=True)
     print('Each sampled encoder receives %d SimCLR step(s) on detached %s images before freezing.' % (args.encoder_train_steps, args.encoder_train_data), flush=True)
-    print('Objective: minimize mean(-MI + %g * prototype_coverage) + %g * pixel_MSE_to_initial ([0,1] pixel units).' %
-          (args.coverage_gamma, args.pixel_mse_weight), flush=True)
+    print('Objective: minimize mean(mean_feature_MSE + %g * covariance_MSE) over sampled encoders.' % args.lambda_cov, flush=True)
     # evaluate(0)
     # Evaluation
     # model_train = ConvNet, model_eval = ConvNet, iteration = 0
@@ -348,8 +284,8 @@ def main():
     for iteration in range(1, args.Iteration + 1):
         optimizer_img.zero_grad(set_to_none=True)
         sampled_losses = []
-        sampled_negative_mi_losses = []
-        sampled_coverage_losses = []
+        sampled_mean_losses = []
+        sampled_covariance_losses = []
         sampled_models = []
         sampled_encoder_losses = []
         
@@ -370,7 +306,7 @@ def main():
             encoder_ssl_loss = train_encoder_ssl(network, encoder_train_images, augmenter, args, objective_rng)
             encoder = frozen_embedder(network)
 
-            # ASYMMETRIC AUGMENTATION: Draw independent augmentations for real views only
+            # Draw two independent differentiable views of both real and synthetic images.
             view_u = augmenter(real_imgs, int(objective_rng.integers(0, 2**31 - 1)))
             view_v = augmenter(real_imgs, int(objective_rng.integers(0, 2**31 - 1)))
 
@@ -378,41 +314,33 @@ def main():
                 features_u = encoder(view_u)
                 features_v = encoder(view_v)
                 
-            # Gradients flow ONLY into the synthetic pixels S
-            # No strong augmentation on S during distillation forces clean, stable anchors
-            features_S = encoder(image_syn) 
+            # The encoder is frozen; gradients flow through both synthetic views to S.
+            syn_view_u = augmenter(image_syn, int(objective_rng.integers(0, 2**31 - 1)))
+            syn_view_v = augmenter(image_syn, int(objective_rng.integers(0, 2**31 - 1)))
+            features_syn_u = encoder(syn_view_u)
+            features_syn_v = encoder(syn_view_v)
 
-            # Compute Negative Mutual Information
-            negative_mi, coverage_loss = information_theoretic_loss(
-                features_u, features_v, features_S, tau=args.temperature
+            network_loss, loss_mean, loss_cov = augmented_feature_moment_loss(
+                features_u, features_v, features_syn_u, features_syn_v, lambda_cov=args.lambda_cov
             )
-            if args.coverage_gamma == 0:
-                network_loss = negative_mi
-            else:
-                network_loss = negative_mi + args.coverage_gamma * coverage_loss
+            if not torch.isfinite(network_loss):
+                raise RuntimeError('Non-finite augmented feature moment loss')
             
-            # Gradient descent on negative MI maximizes mutual information.
+            # Average the pixel gradients over sampled frozen encoders.
             (network_loss / args.num_random_networks).backward()
 
             sampled_losses.append(network_loss.detach())
-            sampled_negative_mi_losses.append(negative_mi.detach())
-            sampled_coverage_losses.append(coverage_loss.detach())
+            sampled_mean_losses.append(loss_mean.detach())
+            sampled_covariance_losses.append(loss_cov.detach())
             sampled_encoder_losses.append(encoder_ssl_loss)
             sampled_models.append('%s(s=%d)' % (model_name, network_seed))
-            del encoder, network, network_loss, negative_mi, coverage_loss
-            del features_u, features_v, features_S, view_u, view_v
+            del encoder, network, network_loss, loss_mean, loss_cov
+            del features_u, features_v, features_syn_u, features_syn_v, view_u, view_v, syn_view_u, syn_view_v
 
-        # Add the positive drift penalty ONCE per pixel update, independent of
-        # num_random_networks. The target is the fixed, unaugmented initialization.
-        pixel_mse = pixel_mse_loss(image_syn, image_syn_initial, diag_std)
-        if args.pixel_mse_weight > 0:
-            (args.pixel_mse_weight * pixel_mse).backward()
         objective = torch.stack(sampled_losses).mean().item()
-        negative_mi_value = torch.stack(sampled_negative_mi_losses).mean().item()
-        coverage_value = torch.stack(sampled_coverage_losses).mean().item()
-        weighted_coverage_value = args.coverage_gamma * coverage_value
-        pixel_mse_value = pixel_mse.detach().item()
-        total_loss_value = objective + args.pixel_mse_weight * pixel_mse_value
+        mean_loss_value = torch.stack(sampled_mean_losses).mean().item()
+        covariance_loss_value = torch.stack(sampled_covariance_losses).mean().item()
+        total_loss_value = objective
         encoder_ssl_value = float(np.mean(sampled_encoder_losses))
         optimizer_img.step()
         scheduler_img.step()
@@ -423,75 +351,65 @@ def main():
             drift = ((image_syn - image_syn_initial) * diag_std * 255).square().mean().sqrt().item()
             
         loss_history.append(objective)
-        negative_mi_history.append(negative_mi_value)
-        coverage_loss_history.append(coverage_value)
-        weighted_coverage_history.append(weighted_coverage_value)
-        pixel_mse_history.append(pixel_mse_value)
+        mean_loss_history.append(mean_loss_value)
+        covariance_loss_history.append(covariance_loss_value)
         total_loss_history.append(total_loss_value)
         encoder_ssl_history.append(encoder_ssl_value)
         if iteration % 25 == 0:
             current_lr = scheduler_img.get_last_lr()[0]
-            print('%s iter = %05d, encoder_SSL = %.6f, neg_MI = %.6f, coverage = %.6f, proxy_loss = %.6f, pixel_MSE = %.6f, total_loss = %.6f, pixel drift RMS = %.5f/255, PNG values changed = %.5f%%, lr = %.4f' %
-                (get_time(), iteration, encoder_ssl_value, negative_mi_value, coverage_value, objective, pixel_mse_value, total_loss_value, drift, changed, current_lr), flush=True)
+            print('%s iter = %05d, encoder_SSL = %.6f, mean_MSE = %.6f, covariance_MSE = %.6f, total_loss = %.6f, pixel drift RMS = %.5f/255, PNG values changed = %.5f%%, lr = %.4f' %
+                (get_time(), iteration, encoder_ssl_value, mean_loss_value, covariance_loss_value, total_loss_value, drift, changed, current_lr), flush=True)
 
         # if iteration % 100 == 0:
         #     evaluate(iteration)
 
         if iteration % 50 == 0:
-            grid_path = os.path.join(args.save_path, 'vis_IIC_%s_%s_%gpercent_iter%d_final.png' % (args.dataset, args.model, args.percentage, iteration))
+            grid_path = os.path.join(args.save_path, 'vis_AFMM_%s_%s_%gpercent_iter%d_final.png' % (args.dataset, args.model, args.percentage, iteration))
             visible = (image_syn.detach() * diag_std + diag_mean).clamp(0, 1).cpu()
             save_image(visible, grid_path, nrow=int(np.ceil(np.sqrt(num_syn))))
 
-        # result_path = os.path.join(args.save_path, 'res_IIC_%s_%s_%gpercent.pt' % (args.dataset, args.model, args.percentage))
+        # result_path = os.path.join(args.save_path, 'res_AFMM_%s_%s_%gpercent.pt' % (args.dataset, args.model, args.percentage))
         # torch.save({
         #     'data': image_syn.detach().cpu(),
         #     'method': args.method,
         #     'iteration': args.Iteration,
         #     'loss_history': torch.tensor(loss_history, dtype=torch.float64),
-        #     'pixel_mse_history': torch.tensor(pixel_mse_history, dtype=torch.float64),
         #     'total_loss_history': torch.tensor(total_loss_history, dtype=torch.float64),
         #     'encoder_ssl_history': torch.tensor(encoder_ssl_history, dtype=torch.float64),
         #     'seed': args.seed,
         #     'random_feature_distribution': {'models': random_models, 'samples_per_update': args.num_random_networks, 'encoder_train_steps': args.encoder_train_steps, 'encoder_train_data': args.encoder_train_data, 'encoder_train_lr': args.lr_net, 'encoder_train_batch': args.batch_train, 'encoder_train_method': 'simclr'},
-        #     'iic_params': {'tau': args.temperature, 'strategy': args.distill_aug_strategy, 'batch_real': args.batch_real, 'tv_weight': args.tv_weight,
-        #                 'pixel_mse_weight': args.pixel_mse_weight, 'pixel_mse_space': 'pixels_0_1'}
+        #     'afmm_params': {'lambda_cov': args.lambda_cov, 'strategy': args.distill_aug_strategy, 'batch_real': args.batch_real}
         # }, result_path)
         if iteration % 50 == 0:
-            result_path = os.path.join(args.save_path, 'res_IIC_%s_%s_%gpercent_final.pt' % (args.dataset, args.model, args.percentage))
+            result_path = os.path.join(args.save_path, 'res_AFMM_%s_%s_%gpercent_final.pt' % (args.dataset, args.model, args.percentage))
             torch.save({
                 'data': image_syn.detach().cpu(), 
                 'method': args.method, 
                 'iteration': args.Iteration, 
                 'loss_history': torch.tensor(loss_history, dtype=torch.float64), 
-                'negative_mi_history': torch.tensor(negative_mi_history, dtype=torch.float64),
-                'coverage_loss_history': torch.tensor(coverage_loss_history, dtype=torch.float64),
-                'weighted_coverage_history': torch.tensor(weighted_coverage_history, dtype=torch.float64),
-                'pixel_mse_history': torch.tensor(pixel_mse_history, dtype=torch.float64),
+                'mean_loss_history': torch.tensor(mean_loss_history, dtype=torch.float64),
+                'covariance_loss_history': torch.tensor(covariance_loss_history, dtype=torch.float64),
                 'total_loss_history': torch.tensor(total_loss_history, dtype=torch.float64),
                 'encoder_ssl_history': torch.tensor(encoder_ssl_history, dtype=torch.float64),
                 'seed': args.seed, 
                 'random_feature_distribution': {'models': random_models, 'samples_per_update': args.num_random_networks, 'encoder_train_steps': args.encoder_train_steps, 'encoder_train_data': args.encoder_train_data, 'encoder_train_lr': args.lr_net, 'encoder_train_batch': args.batch_train, 'encoder_train_method': 'simclr'},
-                'iic_params': {'tau': args.temperature, 'coverage_gamma': args.coverage_gamma, 'strategy': args.distill_aug_strategy, 'batch_real': args.batch_real, 'tv_weight': args.tv_weight,
-                            'pixel_mse_weight': args.pixel_mse_weight, 'pixel_mse_space': 'pixels_0_1'}
+                'afmm_params': {'lambda_cov': args.lambda_cov, 'strategy': args.distill_aug_strategy, 'batch_real': args.batch_real}
             }, result_path)
             print('Saved synthetic data to %s' % result_path, flush=True)
 
-    result_path = os.path.join(args.save_path, 'res_IIC_%s_%s_%gpercent_final.pt' % (args.dataset, args.model, args.percentage))
+    result_path = os.path.join(args.save_path, 'res_AFMM_%s_%s_%gpercent_final.pt' % (args.dataset, args.model, args.percentage))
     torch.save({
         'data': image_syn.detach().cpu(), 
         'method': args.method, 
         'iteration': args.Iteration, 
         'loss_history': torch.tensor(loss_history, dtype=torch.float64), 
-        'negative_mi_history': torch.tensor(negative_mi_history, dtype=torch.float64),
-        'coverage_loss_history': torch.tensor(coverage_loss_history, dtype=torch.float64),
-        'weighted_coverage_history': torch.tensor(weighted_coverage_history, dtype=torch.float64),
-        'pixel_mse_history': torch.tensor(pixel_mse_history, dtype=torch.float64),
+        'mean_loss_history': torch.tensor(mean_loss_history, dtype=torch.float64),
+        'covariance_loss_history': torch.tensor(covariance_loss_history, dtype=torch.float64),
         'total_loss_history': torch.tensor(total_loss_history, dtype=torch.float64),
         'encoder_ssl_history': torch.tensor(encoder_ssl_history, dtype=torch.float64),
         'seed': args.seed, 
         'random_feature_distribution': {'models': random_models, 'samples_per_update': args.num_random_networks, 'encoder_train_steps': args.encoder_train_steps, 'encoder_train_data': args.encoder_train_data, 'encoder_train_lr': args.lr_net, 'encoder_train_batch': args.batch_train, 'encoder_train_method': 'simclr'},
-        'iic_params': {'tau': args.temperature, 'coverage_gamma': args.coverage_gamma, 'strategy': args.distill_aug_strategy, 'batch_real': args.batch_real, 'tv_weight': args.tv_weight,
-                    'pixel_mse_weight': args.pixel_mse_weight, 'pixel_mse_space': 'pixels_0_1'}
+        'afmm_params': {'lambda_cov': args.lambda_cov, 'strategy': args.distill_aug_strategy, 'batch_real': args.batch_real}
     }, result_path)
     print('Saved synthetic data to %s' % result_path, flush=True)
 
