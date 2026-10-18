@@ -151,7 +151,7 @@ def evaluate_synset_SSL(it_eval, model, images_train, args, output, normalizatio
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--dataset", choices=list(SSL_EPOCHS), default="CIFAR10")
-    parser.add_argument("--percentage", type=float, default=1)
+    parser.add_argument("--percentage", type=float, default=0.2)
     parser.add_argument("--label-percentage", type=int, choices=list(PROBE_EPOCHS), default=1)
     parser.add_argument("--model", choices=["ConvNet", "ConvNetBN", "VGG11", "VGG11BN", "ResNet18", "ResNet18BN"], default="ConvNet")
     parser.add_argument("--ssl-method", choices=["simclr", "barlowtwins"], default="simclr")
@@ -178,7 +178,10 @@ def main():
         parser.error("Epochs, runs, batches and learning rate must be positive; percentage must be in (0, 100]")
     if args.synthetic_checkpoint is not None and args.synthetic_root is not None:
         parser.error("Use --synthetic-checkpoint or --synthetic-root, not both")
+    
     checkpoint_path = args.synthetic_checkpoint
+    checkpoint_path = '/home/mmoslem3/scratch/MKDT/OT-SSL-DD/result_both/res_IIC_CIFAR10_ResNet18_0.2percent_final.pt'
+
     if checkpoint_path is None:
         if args.synthetic_root is None:
             parser.error("Specify --synthetic-checkpoint (the saved synthetic images)")
