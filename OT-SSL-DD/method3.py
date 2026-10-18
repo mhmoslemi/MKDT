@@ -14,6 +14,9 @@ import torchvision.transforms as T
 from torchvision.utils import save_image
 
 
+VISUAL_SAVE_EVERY = 100  # Distillation iterations; always save the final grid too.
+
+
 # ============================================================================
 # 0. Reproducibility & Utilities
 # ============================================================================
@@ -536,6 +539,9 @@ def distill_method3(
     lambda_tv=2e-3,
     lambda_anchor=0.05,
     device="cuda",
+    out_dir=None,
+    dataset="cifar10",
+    percentage=0.2,
 ):
     """
     Optimizes synthetic images S in [0, 1] space using Self-Bootstrapping
@@ -543,6 +549,10 @@ def distill_method3(
     """
     init_anchor = init_syn_01.clone().detach().to(device)
     syn_01 = nn.Parameter(init_syn_01.clone().detach().to(device))
+
+    if out_dir is not None:
+        os.makedirs(out_dir, exist_ok=True)
+        visual_model = {"convnet": "ConvNet", "vgg11": "VGG11", "resnet18": "ResNet18"}[arch.lower()]
 
     opt_pixels = torch.optim.Adam([syn_01], lr=lr_pixels, betas=(0.5, 0.999))
     scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(opt_pixels, T_max=num_steps)
@@ -614,6 +624,11 @@ def distill_method3(
                 f"L_Shift: {log_stats['l_shift']:.4f} | "
                 f"L_Cov: {log_stats['l_cov']:.4f}"
             )
+
+        if out_dir is not None and (step % VISUAL_SAVE_EVERY == 0 or step == num_steps):
+            grid_path = os.path.join(out_dir, "vis_IIC_%s_%s_%gpercent_iter%d_final.png" % (dataset.upper(), visual_model, percentage, step))
+            visible = syn_01.detach().clamp(0, 1).cpu()  # Already in [0, 1] pixel space.
+            save_image(visible, grid_path, nrow=int(np.ceil(np.sqrt(len(syn_01)))))
 
     return syn_01.detach().cpu()
 
@@ -789,13 +804,23 @@ def main():
         batch_size_real=512,
         lr_pixels=args.lr_pixels,
         device=device,
+        out_dir=args.out_dir,
+        dataset=args.dataset,
+        percentage=args.subset_ratio * 100,
     )
 
-    # Save visual comparison grid (Top row: Init, Bottom row: Distilled, matching Fig. 1)
-    n_vis = min(10, num_syn)
-    vis_grid = torch.cat([init_syn_01[:n_vis], syn_01[:n_vis]], dim=0)
-    save_image(vis_grid, os.path.join(args.out_dir, f"fig1_{args.dataset}_{args.subset_ratio}.png"), nrow=n_vis)
-    torch.save(syn_01, os.path.join(args.out_dir, f"syn_{args.dataset}_{args.subset_ratio}.pt"))
+    # Pixels are already in [0, 1]; identity normalization preserves them in eval.py.
+    torch.save({
+        "data": syn_01,
+        "dataset": args.dataset.upper(),
+        "percentage": args.subset_ratio * 100,
+        "normalization": [[0.0, 0.0, 0.0], [1.0, 1.0, 1.0]],
+        "pixel_space": "unit_rgb",
+        "method": "method3",
+        "generation_arch": args.arch,
+        "seed": args.seed,
+        "iteration": args.distill_steps,
+    }, os.path.join(args.out_dir, f"syn_{args.dataset}_{args.subset_ratio}.pt"))
 
     # 3. Evaluate on both SimCLR and Barlow Twins under 1% and 5% Labeled Regimes (Table 1)
     for ssl_alg in ["simclr", "barlow_twins"]:
