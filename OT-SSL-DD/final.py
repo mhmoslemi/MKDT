@@ -164,18 +164,18 @@ def main():
     parser.add_argument('--seed', type=int, default=0)
 
     # Augmented Feature Moment Matching Objective.
-    parser.add_argument('--Iteration', type=int, default=1)
-    parser.add_argument('--lr_img', type=float, default=0.000, help='Higher LR, decays via CosineAnnealing')
+    parser.add_argument('--Iteration', type=int, default=1000)
+    parser.add_argument('--lr_img', type=float, default=0.005, help='Higher LR, decays via CosineAnnealing')
     parser.add_argument('--batch_real', type=int, default=512, help='Slightly noisier batch prevents deep proxy minima')
-    parser.add_argument('--num_random_networks', type=int, default=5, help='Fresh samples from P_net per pixel update')
+    parser.add_argument('--num_random_networks', type=int, default=1, help='Fresh samples from P_net per pixel update')
     parser.add_argument('--temperature', type=float, default=0.2, help='SimCLR temperature for optional encoder warm-up only')
     parser.add_argument('--lambda_cov', type=float, default=1.0, help='Covariance MSE weight in the augmented feature moment loss')
     
     # parser.add_argument('--random_models', default='ConvNet,ResNet18', help='Comma-separated P_net support; forces geometric generalization')
     parser.add_argument('--random_models', default='ConvNet', help='Comma-separated P_net support; forces geometric generalization')
 
-    parser.add_argument('--encoder_train_steps', type=int, default=5, help='SimCLR steps on the selected detached images before freezing each sampled encoder; 0 disables adaptation')
-    parser.add_argument('--encoder_train_data', choices=['synthetic', 'real'], default='synthetic', help='Images used for the sampled encoder SimCLR warm-up')
+    parser.add_argument('--encoder_train_steps', type=int, default=2, help='SimCLR steps on the selected detached images before freezing each sampled encoder; 0 disables adaptation')
+    parser.add_argument('--encoder_train_data', choices=['synthetic', 'real'], default='real', help='Images used for the sampled encoder SimCLR warm-up')
     parser.add_argument('--distill_aug_strategy', default='color_crop_cutout_flip_scale_rotate')
     parser.add_argument('--distill_aug_mode', choices=['S', 'M'], default='M')
 
@@ -196,7 +196,7 @@ def main():
     parser.add_argument('--batch_linear', type=int, default=256)
 
     # Output.
-    parser.add_argument('--save_path', default='tmo')
+    parser.add_argument('--save_path', default='new')
 
     args = parser.parse_args()
     random_models = [name.strip() for name in (args.random_models or args.model).split(',') if name.strip()]
