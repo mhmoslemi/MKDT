@@ -87,6 +87,7 @@ def evaluate_synset_SSL(it_eval, model, images_train, args, output, normalizatio
     if model not in ("ConvNet", "VGG11", "ResNet18"):
         raise ValueError("Reference evaluation requires ConvNet, VGG11 or ResNet18 (BN), not AP/cover")
 
+    # Fresh benchmark recipe: generation augmentation/temperature/projector args do not enter here.
     protocol = json.loads((ROOT / "Evaluate_benchamrk/protocol.json").read_text())
     protocol["ssl"]["subset_epochs"] = ssl_epochs
     protocol["ssl"]["checkpoint_every_epochs"] = 500

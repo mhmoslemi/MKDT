@@ -2,6 +2,7 @@
 Minimizes the negative mutual information between augmented views of real images assigned to synthetic prototypes in random feature spaces."""
 
 import argparse
+import json
 import math
 import os
 import random
@@ -12,7 +13,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 from torchvision.utils import save_image
 
-from eval import evaluate_synset_SSL
+from eval import ROOT, SyntheticImages, evaluate_synset_SSL, reference_modules
 from utils import DiffAugment, ParamDiffAug, get_dataset, get_network, get_time
 
 
@@ -50,13 +51,25 @@ def _images_from_batch(batch):
     return batch[0] if isinstance(batch, (tuple, list)) else batch
 
 
-def frozen_embedder(network):
-    """Return a frozen random encoder; classifier parameters remain unused."""
+def frozen_embedder(network, normalization=None, encoder_normalization=None):
+    """Return the frozen backbone, without its classifier or SSL projector."""
     module = network.module if isinstance(network, nn.DataParallel) else network
     network.eval()
     for parameter in network.parameters():
         parameter.requires_grad_(False)
-    return module.embed
+    embed = module.encoder if hasattr(module, 'encoder') else module.embed
+    if normalization is None:
+        return embed
+
+    # Keep the IIC pixel gradients while converting OT inputs to the SSL encoder's normalization.
+    device = next(module.parameters()).device
+    mean, std = (torch.tensor(value, device=device).view(1, 3, 1, 1) for value in normalization)
+    encoder_mean, encoder_std = (torch.tensor(value, device=device).view(1, 3, 1, 1) for value in encoder_normalization)
+
+    def normalized_embed(images):
+        return embed((images * std + mean - encoder_mean) / encoder_std)
+
+    return normalized_embed
 
 
 def make_diff_augmenter(strategy, param):
@@ -72,67 +85,86 @@ def make_diff_augmenter(strategy, param):
 
 
 def simclr_loss(features_u, features_v, temperature):
-    """NT-Xent loss for two aligned batches of augmented synthetic images."""
-    features = torch.cat((F.normalize(features_u, dim=1), F.normalize(features_v, dim=1)))
-    logits = features @ features.t() / temperature
-    logits.fill_diagonal_(-torch.inf)
-    targets = (torch.arange(len(features), device=features.device) + len(features_u)) % len(features)
-    return F.cross_entropy(logits, targets)
+    """Use exactly the benchmark NT-Xent implementation."""
+    return reference_modules()['train_ssl'].simclr_loss(features_u, features_v, temperature)
 
 
-def barlow_twins_loss(features_u, features_v, off_diagonal_weight):
-    """Barlow Twins cross-correlation loss for two aligned batches."""
-    features_u = (features_u - features_u.mean(dim=0)) / (features_u.std(dim=0, unbiased=False) + 1e-8)
-    features_v = (features_v - features_v.mean(dim=0)) / (features_v.std(dim=0, unbiased=False) + 1e-8)
-    cross_correlation = features_u.t() @ features_v / features_u.shape[0]
-    diagonal = torch.diagonal(cross_correlation)
-    on_diagonal = (diagonal - 1).square().sum()
-    off_diagonal = (cross_correlation - torch.diag(diagonal)).square().sum()
-    return on_diagonal + off_diagonal_weight * off_diagonal
+def barlow_twins_loss(features_u, features_v, off_diagonal_weight, loss_scale=0.1, eps=1e-5):
+    """Use the benchmark variance normalization, epsilon and loss scaling."""
+    return reference_modules()['train_ssl'].barlow_loss(features_u, features_v, off_diagonal_weight, loss_scale, eps)
 
 
 def encoder_train_loss(features_u, features_v, args):
     """Return the selected SSL objective for sampled-encoder adaptation."""
+    recipe = args.encoder_ssl_protocol['methods'][args.encoder_train_method]
     if args.encoder_train_method == 'simclr':
-        return simclr_loss(features_u, features_v, args.temperature)
+        return simclr_loss(features_u, features_v, recipe['temperature'])
     if args.encoder_train_method == 'barlowtwins':
-        return barlow_twins_loss(features_u, features_v, args.barlow_lambda)
-    if args.encoder_train_method == 'both':
-        simclr = simclr_loss(features_u, features_v, args.temperature)
-        barlow = barlow_twins_loss(features_u, features_v, args.barlow_lambda)
-        return 0.5 * (simclr + barlow)
+        return barlow_twins_loss(features_u, features_v, recipe['lambda'], recipe['loss_scale'], recipe['correlation_eps'])
     raise ValueError('Unknown encoder training method: %s' % args.encoder_train_method)
 
 
-def train_encoder_ssl(network, images, augmenter, args, objective_rng):
-    """Briefly adapt a sampled encoder with SSL while keeping images detached."""
+def train_encoder_ssl(network, images, args, objective_rng, normalization):
+    """Benchmark SSL components, capped at the requested short adaptation budget."""
     if args.encoder_train_steps == 0:
         return 0.0
+    reference = reference_modules()
+    common, data, ssl = reference['common'], reference['data'], reference['train_ssl']
+    protocol = args.encoder_ssl_protocol
+    cfg, recipe = protocol['ssl'], protocol['methods'][args.encoder_train_method]
     module = network.module if isinstance(network, nn.DataParallel) else network
     network.train()
     for parameter in network.parameters():
         parameter.requires_grad_(True)
-    with torch.no_grad():
-        feature_dim = module.embed(images[:min(2, len(images))]).shape[1]
-    projector = nn.Sequential(nn.Linear(feature_dim, args.projection_dim), nn.ReLU(), nn.Linear(args.projection_dim, args.projection_dim)).to(images.device)
-    optimizer = torch.optim.SGD(list(network.parameters()) + list(projector.parameters()), lr=args.lr_net, momentum=0.9, weight_decay=0.0005)
+    mean, std = (torch.tensor(value).view(1, 3, 1, 1) for value in normalization)
+    pixels = images.detach().cpu() * std + mean
+    if not torch.isfinite(pixels).all() or len(pixels) < 2:
+        raise ValueError('Encoder SSL requires at least two finite images')
+    dataset = SyntheticImages(pixels.clamp(0, 1).contiguous())
+    batch_size = min(cfg['batch_size'], len(dataset))
+    seed = int(objective_rng.integers(0, 2**31 - 1))
+    stream = data.loader(data.ImageView(dataset, data.ssl_transform(protocol, args.dataset, args.encoder_train_method)),
+                         batch_size, 0, seed, shuffle=True, drop_last=True)
+    peak = recipe['lr'] * (batch_size / cfg['batch_size'] if cfg['scale_lr_with_batch'] else 1)
+    optimizer = ssl.LARS(network.parameters(), peak, cfg)
+    epochs = math.ceil(args.encoder_train_steps / len(stream))
+    warmup_steps = min(cfg['warmup_epochs'], max(0, epochs - 1)) * len(stream)
     losses = []
-    detached_images = images.detach()
-    batch_size = min(args.batch_train, len(detached_images))
-    for _ in range(args.encoder_train_steps):
-        indices = torch.randperm(len(detached_images), device=detached_images.device)[:batch_size]
-        batch = detached_images[indices]
-        view_u = augmenter(batch, int(objective_rng.integers(0, 2**31 - 1)))
-        view_v = augmenter(batch, int(objective_rng.integers(0, 2**31 - 1)))
-        features_u = projector(module.embed(view_u))
-        features_v = projector(module.embed(view_v))
-        loss = encoder_train_loss(features_u, features_v, args)
-        if not torch.isfinite(loss):
-            raise RuntimeError('Non-finite synthetic encoder warm-up loss')
-        optimizer.zero_grad(set_to_none=True)
-        loss.backward()
-        optimizer.step()
-        losses.append(loss.detach())
+    rng, numpy_rng = common.rng_state(), np.random.get_state()
+    settings = (torch.backends.cuda.matmul.allow_tf32, torch.backends.cudnn.allow_tf32,
+                torch.backends.cudnn.benchmark, torch.backends.cudnn.deterministic)
+    try:
+        torch.backends.cuda.matmul.allow_tf32 = False
+        torch.backends.cudnn.allow_tf32 = False
+        step = 0
+        for epoch in range(epochs):
+            epoch_seed = seed * 1000003 + epoch + 10000
+            common.seed_all(epoch_seed)
+            stream.generator.manual_seed(epoch_seed)
+            for (view_u, view_v), _ in stream:
+                lr = ssl.cosine_lr(step, args.encoder_train_steps, peak, warmup_steps,
+                                   cfg['warmup_start_lr'], cfg['minimum_lr'])
+                for group in optimizer.param_groups:
+                    group['lr'] = lr
+                features_u, features_v = module(view_u.to(images.device), view_v.to(images.device))
+                loss = encoder_train_loss(features_u, features_v, args)
+                if not torch.isfinite(loss):
+                    raise RuntimeError('Non-finite synthetic encoder warm-up loss')
+                optimizer.zero_grad(set_to_none=True)
+                loss.backward()
+                finite = torch.stack([torch.isfinite(parameter.grad).all() for parameter in network.parameters() if parameter.grad is not None]).all()
+                if not finite:
+                    raise RuntimeError('Non-finite synthetic encoder warm-up gradient')
+                optimizer.step()
+                losses.append(loss.detach())
+                step += 1
+                if step == args.encoder_train_steps:
+                    break
+    finally:
+        common.restore_rng(rng)
+        np.random.set_state(numpy_rng)
+        (torch.backends.cuda.matmul.allow_tf32, torch.backends.cudnn.allow_tf32,
+         torch.backends.cudnn.benchmark, torch.backends.cudnn.deterministic) = settings
     return torch.stack(losses).mean().item()
 
 
@@ -267,19 +299,19 @@ def main():
     parser.add_argument('--tv_weight', type=float, default=0.01, help='Total Variation penalty to destroy adversarial high-frequencies')
     parser.add_argument('--pixel_mse_weight', type=float, default=0.0, help='Nonnegative weight for mean pixel MSE to initialization in [0,1] units; 0 disables it')
     parser.add_argument('--encoder_train_steps', type=int, default=5, help='SSL steps on the selected detached images before freezing each sampled encoder; 0 disables adaptation')
-    parser.add_argument('--encoder_train_method', choices=['simclr', 'barlowtwins', 'barlow_twins', 'both'], default='simclr', help='SSL objective for sampled-encoder adaptation; both uses the mean of the SimCLR and Barlow Twins losses')
+    parser.add_argument('--encoder_train_method', choices=['simclr', 'barlowtwins', 'barlow_twins'], default='simclr', help='Benchmark SSL recipe for sampled-encoder adaptation; custom averaged both loss is not used')
     parser.add_argument('--encoder_train_data', choices=['synthetic', 'real'], default='synthetic', help='Images used for the sampled encoder SSL warm-up')
     parser.add_argument('--distill_aug_strategy', default='color_crop_cutout_flip_scale_rotate')
     parser.add_argument('--distill_aug_mode', choices=['S', 'M'], default='M')
 
     # Downstream SSL evaluation.
     parser.add_argument('--model', default='ResNet18')
-    parser.add_argument('--lr_net', type=float, default=0.01)
-    parser.add_argument('--batch_train', type=int, default=256)
+    parser.add_argument('--lr_net', type=float, default=None, help='Encoder adaptation LR override; default is the selected benchmark recipe')
+    parser.add_argument('--batch_train', type=int, default=256, help='Encoder adaptation batch size, capped by available images')
     parser.add_argument('--ssl_method', choices=['simclr', 'barlowtwins'], default='simclr')
     parser.add_argument('--ssl_aug_strategy', default=None, help='Legacy option; reference evaluation uses the benchmark view transforms')
-    parser.add_argument('--projection_dim', type=int, default=128)
-    parser.add_argument('--barlow_lambda', type=float, default=0.005, help='Barlow Twins off-diagonal loss weight')
+    parser.add_argument('--projection_dim', type=int, default=None, help='Encoder adaptation output-dimension override; default is method-specific')
+    parser.add_argument('--barlow_lambda', type=float, default=None, help='Encoder adaptation Barlow off-diagonal weight override; default is the benchmark recipe')
     parser.add_argument('--eval_mode', default='S')
     parser.add_argument('--num_eval', type=int, default=3)
     parser.add_argument('--epoch_eval_train', type=int, default=None, help='Default: SSL_EPOCHS[dataset][percentage]')
@@ -314,8 +346,26 @@ def main():
     if args.encoder_train_method == 'barlow_twins':
         args.encoder_train_method = 'barlowtwins'
     random_models = [name.strip() for name in (args.random_models or args.model).split(',') if name.strip()]
-    if args.ssl_aug_strategy is None:
-        args.ssl_aug_strategy = args.distill_aug_strategy
+    if args.encoder_train_steps < 0:
+        parser.error('encoder_train_steps must be nonnegative')
+    args.encoder_ssl_protocol = None
+    if args.encoder_train_steps:
+        if args.dataset not in SSL_EPOCHS or not random_models:
+            parser.error('Encoder SSL adaptation requires CIFAR10/CIFAR100/TinyImageNet and a nonempty random_models pool')
+        if any(name not in ('ConvNet', 'ConvNetBN', 'VGG11', 'VGG11BN', 'ResNet18', 'ResNet18BN') for name in random_models):
+            parser.error('Encoder SSL adaptation uses the benchmark ConvNet/VGG11/ResNet18 BN backbones')
+        args.encoder_ssl_protocol = json.loads((ROOT / 'Evaluate_benchamrk/protocol.json').read_text())
+        recipe = args.encoder_ssl_protocol['methods'][args.encoder_train_method]
+        args.lr_net = recipe['lr'] if args.lr_net is None else args.lr_net
+        args.projection_dim = recipe['projector'][-1] if args.projection_dim is None else args.projection_dim
+        args.barlow_lambda = args.encoder_ssl_protocol['methods']['barlowtwins']['lambda'] if args.barlow_lambda is None else args.barlow_lambda
+        if args.lr_net <= 0 or args.batch_train < 2 or args.projection_dim < 2 or args.barlow_lambda < 0:
+            parser.error('Invalid encoder SSL learning rate, batch size, projector dimension or Barlow weight')
+        recipe['lr'] = args.lr_net
+        recipe['projector'][-1] = args.projection_dim
+        args.encoder_ssl_protocol['methods']['barlowtwins']['lambda'] = args.barlow_lambda
+        args.encoder_ssl_protocol['ssl']['batch_size'] = args.batch_train
+    # Generation augmentation is independent of the benchmark SSL/probe transforms.
     args.method = 'InformationTheoretic_IIC'
 
     args.dsa_param = ParamDiffAug()
@@ -372,6 +422,7 @@ def main():
     model_eval_pool = ([args.model] if args.eval_mode in ('S', 'SS') else ['ConvNet', 'VGG11', 'ResNet18']) if args.num_eval else []
 
     def evaluate(iteration):
+        # Always use the benchmark recipe, never distill_aug_strategy or dsa_param.
         for model_index, model_eval in enumerate(model_eval_pool):
             print('-------------------------\nEvaluation\nmodel_train = %s, model_eval = %s, iteration = %d' % (args.model, model_eval, iteration))
             accuracies = []
@@ -421,10 +472,18 @@ def main():
         for _ in range(args.num_random_networks):
             model_name = random_models[int(objective_rng.integers(len(random_models)))]
             network_seed = int(objective_rng.integers(0, 2**31 - 1))
-            network = get_network(model_name, channel, num_classes, im_size, seed=network_seed).to(args.device)
+            if args.encoder_train_steps:
+                torch.manual_seed(network_seed)
+                if torch.cuda.is_available():
+                    torch.cuda.manual_seed_all(network_seed)
+                encoder_model = {'ConvNetBN': 'ConvNet', 'VGG11BN': 'VGG11', 'ResNet18BN': 'ResNet18'}.get(model_name, model_name)
+                network = reference_modules()['train_ssl'].SSLModel(
+                    encoder_model, im_size[0], args.encoder_ssl_protocol['methods'][args.encoder_train_method]).to(args.device)
+            else:
+                network = get_network(model_name, channel, num_classes, im_size, seed=network_seed).to(args.device)
             encoder_train_images = image_syn if args.encoder_train_data == 'synthetic' else real_imgs
-            encoder_ssl_loss = train_encoder_ssl(network, encoder_train_images, augmenter, args, objective_rng)
-            encoder = frozen_embedder(network)
+            encoder_ssl_loss = train_encoder_ssl(network, encoder_train_images, args, objective_rng, [mean, std])
+            encoder = frozen_embedder(network, [mean, std], args.encoder_ssl_protocol['normalization'][args.dataset]) if args.encoder_train_steps else frozen_embedder(network)
 
             # ASYMMETRIC AUGMENTATION: Draw independent augmentations for real views only
             view_u = augmenter(real_imgs, int(objective_rng.integers(0, 2**31 - 1)))
@@ -528,6 +587,8 @@ def main():
                 'pixel_mse_history': torch.tensor(pixel_mse_history, dtype=torch.float64),
                 'total_loss_history': torch.tensor(total_loss_history, dtype=torch.float64),
                 'encoder_ssl_history': torch.tensor(encoder_ssl_history, dtype=torch.float64),
+                'encoder_ssl_protocol': args.encoder_ssl_protocol,
+                'encoder_ssl_budget': 'short_adaptation_steps_not_full_pretraining',
                 'seed': args.seed, 
                 'random_feature_distribution': {'models': random_models, 'samples_per_update': args.num_random_networks, 'encoder_train_steps': args.encoder_train_steps, 'encoder_train_data': args.encoder_train_data, 'encoder_train_lr': args.lr_net, 'encoder_train_batch': args.batch_train, 'encoder_train_method': args.encoder_train_method, 'encoder_barlow_lambda': args.barlow_lambda},
                 'iic_params': {'tau': args.temperature, 'coverage_gamma': args.coverage_gamma, 'strategy': args.distill_aug_strategy, 'batch_real': args.batch_real, 'tv_weight': args.tv_weight,
