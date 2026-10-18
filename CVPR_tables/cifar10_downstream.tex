@@ -50,12 +50,12 @@ SimCLR & BT & SimCLR & BT & SimCLR & BT \\
 \cmidrule(lr){2-15}
 
 & \multirow{4}{*}{0.2\%} & Random Subset
+& \dsacc{8.34}{0.75} & \dsacc{10.40}{0.63}
+& \dsacc{2.13}{0.33} & \dsacc{2.37}{0.29}
+& \dsacc{1.23}{0.21} & \dsacc{1.69}{0.28}
 &  &
 &  &
-&  &
-&  &
-&  &
-&  &  \\
+& \dsacc{3.53}{0.38} & \dsacc{4.93}{0.43} \\
 & & K-means Subset
 & \dsacc{7.75}{1.16} & \dsacc{9.93}{0.35}
 & \dsacc{2.03}{0.41} & \dsacc{2.29}{0.32}
@@ -140,12 +140,12 @@ SimCLR & BT & SimCLR & BT & SimCLR & BT \\
 \cmidrule(lr){2-15}
 
 & \multirow{4}{*}{0.2\%} & Random Subset
+& \dsacc{14.43}{0.71} & \dsacc{18.54}{0.83}
+& \dsacc{3.04}{0.54} & \dsacc{3.96}{0.68}
+& \dsacc{1.53}{0.29} & \dsacc{2.57}{0.24}
 &  &
 &  &
-&  &
-&  &
-&  &
-&  &  \\
+& \dsacc{6.65}{0.46} & \dsacc{9.19}{0.73} \\
 & & K-means Subset
 & \dsacc{13.64}{0.89} & \dsacc{17.86}{0.81}
 & \dsacc{2.91}{0.34} & \dsacc{3.86}{0.48}
@@ -219,7 +219,9 @@ SimCLR & BT & SimCLR & BT & SimCLR & BT \\
 }
 \end{table*}
 
-% Interactive evaluation snapshot: 2026-10-18T03:55:12.181Z.
-% K-means: seeds 0--5; only complete per-cell seed sets are filled.
+% Interactive evaluation snapshot: 2026-10-18T04:49:22.159Z.
+% Random: seeds 0--9; k-means: seeds 0--5. Only complete per-cell seed sets are filled.
 % New entries: mean +/- sample SD (ddof=1), 100-epoch frozen linear probes.
-% Source: Evaluate_benchamrk/kmeans_eval_results_interactive_6seeds/ (not the 250ep run).
+% Sources: Evaluate_benchamrk/random_eval_results_interactive_10seeds/ and
+%          Evaluate_benchamrk/kmeans_eval_results_interactive_6seeds/ (not the 250ep run).
+% Random Dogs/Flowers remain unfilled: cross-server metadata fingerprints differ; image equivalence unverified.

@@ -1,5 +1,5 @@
 """Augmented Feature Moment Matching for synthetic dataset condensation.
-Match the mean and covariance of two augmented real and synthetic views in frozen feature spaces."""
+Match joint two-view means and covariances, preserving same-image view pairs in frozen feature spaces."""
 
 import argparse
 import os
@@ -136,14 +136,23 @@ def deepcluster_initialize(dst_train, num_syn, device, seed, channel, num_classe
 
 
 def augmented_feature_moment_loss(real_u, real_v, syn_u, syn_v, lambda_cov=1.0):
-    """Match pooled-view means and unbiased covariances; only synthetic features receive gradients."""
+    """Match joint [u, v] moments, including cross-view covariance, not pooled marginals.
+
+    Each row is the two views of ONE image. Shuffling v alone must change the
+    objective: concatenating views along the batch dimension loses this relation.
+    Real and synthetic batches may differ in size; each needs at least two images.
+    """
+    if len(real_u) != len(real_v) or len(syn_u) != len(syn_v):
+        raise ValueError('AFMM requires aligned view pairs within each dataset')
+    if len(real_u) < 2 or len(syn_u) < 2:
+        raise ValueError('Paired AFMM covariance requires at least two images per dataset')
     with torch.no_grad():
-        real = torch.cat((real_u, real_v), dim=0).flatten(1)
+        real = torch.cat((real_u.flatten(1), real_v.flatten(1)), dim=1)
         mean_real = real.mean(dim=0)
         centered_real = real - mean_real
         cov_real = centered_real.t() @ centered_real / (len(real) - 1)
 
-    syn = torch.cat((syn_u, syn_v), dim=0).flatten(1)
+    syn = torch.cat((syn_u.flatten(1), syn_v.flatten(1)), dim=1)
     mean_syn = syn.mean(dim=0)
     centered_syn = syn - mean_syn
     cov_syn = centered_syn.t() @ centered_syn / (len(syn) - 1)
@@ -202,7 +211,7 @@ def main():
     random_models = [name.strip() for name in (args.random_models or args.model).split(',') if name.strip()]
     if args.ssl_aug_strategy is None:
         args.ssl_aug_strategy = args.distill_aug_strategy
-    args.method = 'AFMM'
+    args.method = 'AFMM_paired'
 
     args.dsa_param = ParamDiffAug()
     args.dsa_param.aug_mode = 'S'
@@ -217,6 +226,8 @@ def main():
     os.makedirs(args.data_path, exist_ok=True)
     channel, im_size, num_classes, _, mean, std, dst_train, _, testloader = get_dataset(args.dataset, args.data_path)
     num_syn = int(len(dst_train) * args.percentage / 100)
+    if num_syn < 2 or args.batch_real < 2:
+        raise ValueError('Paired AFMM requires at least two synthetic images and batch_real >= 2')
 
     # DeepCluster Initialization replacing random subset
     image_syn_init = deepcluster_initialize(
@@ -269,7 +280,7 @@ def main():
     print('Hyper-parameters: \n', args.__dict__)
     print('P_net support: %s' % ', '.join(random_models), flush=True)
     print('Each sampled encoder receives %d SimCLR step(s) on detached %s images before freezing.' % (args.encoder_train_steps, args.encoder_train_data), flush=True)
-    print('Objective: minimize mean(mean_feature_MSE + %g * covariance_MSE) over sampled encoders.' % args.lambda_cov, flush=True)
+    print('Objective: match joint [view1, view2] moments, including cross-view covariance; covariance weight = %g.' % args.lambda_cov, flush=True)
     # evaluate(0)
     # Evaluation
     # model_train = ConvNet, model_eval = ConvNet, iteration = 0
@@ -282,12 +293,14 @@ def main():
     print('%s distillation begins' % get_time(), flush=True)
 
     for iteration in range(1, args.Iteration + 1):
+        log_iteration = iteration % 25 == 0
         optimizer_img.zero_grad(set_to_none=True)
         sampled_losses = []
         sampled_mean_losses = []
         sampled_covariance_losses = []
         sampled_models = []
         sampled_encoder_losses = []
+        sampled_initial_losses = []
         
         # Sample stochastic real batch
         try:
@@ -315,8 +328,10 @@ def main():
                 features_v = encoder(view_v)
                 
             # The encoder is frozen; gradients flow through both synthetic views to S.
-            syn_view_u = augmenter(image_syn, int(objective_rng.integers(0, 2**31 - 1)))
-            syn_view_v = augmenter(image_syn, int(objective_rng.integers(0, 2**31 - 1)))
+            syn_seed_u = int(objective_rng.integers(0, 2**31 - 1))
+            syn_seed_v = int(objective_rng.integers(0, 2**31 - 1))
+            syn_view_u = augmenter(image_syn, syn_seed_u)
+            syn_view_v = augmenter(image_syn, syn_seed_v)
             features_syn_u = encoder(syn_view_u)
             features_syn_v = encoder(syn_view_v)
 
@@ -325,6 +340,17 @@ def main():
             )
             if not torch.isfinite(network_loss):
                 raise RuntimeError('Non-finite augmented feature moment loss')
+
+            if log_iteration:
+                # Compare with initialization using the SAME encoder, target and draws.
+                with torch.no_grad():
+                    initial_u = encoder(augmenter(image_syn_initial, syn_seed_u))
+                    initial_v = encoder(augmenter(image_syn_initial, syn_seed_v))
+                    initial_loss, _, _ = augmented_feature_moment_loss(
+                        features_u, features_v, initial_u, initial_v, lambda_cov=args.lambda_cov
+                    )
+                    sampled_initial_losses.append(initial_loss.item())
+                    del initial_u, initial_v, initial_loss
             
             # Average the pixel gradients over sampled frozen encoders.
             (network_loss / args.num_random_networks).backward()
@@ -342,6 +368,13 @@ def main():
         covariance_loss_value = torch.stack(sampled_covariance_losses).mean().item()
         total_loss_value = objective
         encoder_ssl_value = float(np.mean(sampled_encoder_losses))
+        if image_syn.grad is None or not torch.isfinite(image_syn.grad).all():
+            raise RuntimeError('Missing or non-finite AFMM pixel gradients')
+        if log_iteration:
+            pixel_grad_rms = image_syn.grad.square().mean().sqrt().item()
+            initial_loss_value = float(np.mean(sampled_initial_losses))
+            ratio_to_initial = objective / initial_loss_value if initial_loss_value > 0 else float('nan')
+            step_lr = optimizer_img.param_groups[0]['lr']
         optimizer_img.step()
         scheduler_img.step()
         
@@ -355,20 +388,19 @@ def main():
         covariance_loss_history.append(covariance_loss_value)
         total_loss_history.append(total_loss_value)
         encoder_ssl_history.append(encoder_ssl_value)
-        if iteration % 25 == 0:
-            current_lr = scheduler_img.get_last_lr()[0]
-            print('%s iter = %05d, encoder_SSL = %.6f, mean_MSE = %.6f, covariance_MSE = %.6f, total_loss = %.6f, pixel drift RMS = %.5f/255, PNG values changed = %.5f%%, lr = %.4f' %
-                (get_time(), iteration, encoder_ssl_value, mean_loss_value, covariance_loss_value, total_loss_value, drift, changed, current_lr), flush=True)
+        if log_iteration:
+            print('%s iter = %05d, encoder_SSL = %.6f, mean_MSE = %.6e, joint_covariance_MSE = %.6e, total_loss = %.6e, initial_loss_same_draw = %.6e, ratio_to_initial = %.4f, pixel_grad_RMS = %.3e, pixel drift RMS = %.5f/255, PNG values changed = %.5f%%, lr = %.3e' %
+                (get_time(), iteration, encoder_ssl_value, mean_loss_value, covariance_loss_value, total_loss_value, initial_loss_value, ratio_to_initial, pixel_grad_rms, drift, changed, step_lr), flush=True)
 
         # if iteration % 100 == 0:
         #     evaluate(iteration)
 
         if iteration % 50 == 0:
-            grid_path = os.path.join(args.save_path, 'vis_AFMM_%s_%s_%gpercent_iter%d_final.png' % (args.dataset, args.model, args.percentage, iteration))
+            grid_path = os.path.join(args.save_path, 'vis_AFMM_paired_%s_%s_%gpercent_iter%d_final.png' % (args.dataset, args.model, args.percentage, iteration))
             visible = (image_syn.detach() * diag_std + diag_mean).clamp(0, 1).cpu()
             save_image(visible, grid_path, nrow=int(np.ceil(np.sqrt(num_syn))))
 
-        # result_path = os.path.join(args.save_path, 'res_AFMM_%s_%s_%gpercent.pt' % (args.dataset, args.model, args.percentage))
+        # result_path = os.path.join(args.save_path, 'res_AFMM_paired_%s_%s_%gpercent.pt' % (args.dataset, args.model, args.percentage))
         # torch.save({
         #     'data': image_syn.detach().cpu(),
         #     'method': args.method,
@@ -378,10 +410,10 @@ def main():
         #     'encoder_ssl_history': torch.tensor(encoder_ssl_history, dtype=torch.float64),
         #     'seed': args.seed,
         #     'random_feature_distribution': {'models': random_models, 'samples_per_update': args.num_random_networks, 'encoder_train_steps': args.encoder_train_steps, 'encoder_train_data': args.encoder_train_data, 'encoder_train_lr': args.lr_net, 'encoder_train_batch': args.batch_train, 'encoder_train_method': 'simclr'},
-        #     'afmm_params': {'lambda_cov': args.lambda_cov, 'strategy': args.distill_aug_strategy, 'batch_real': args.batch_real}
+        #     'afmm_params': {'view_statistics': 'paired_joint_v1', 'lambda_cov': args.lambda_cov, 'strategy': args.distill_aug_strategy, 'batch_real': args.batch_real}
         # }, result_path)
         if iteration % 50 == 0:
-            result_path = os.path.join(args.save_path, 'res_AFMM_%s_%s_%gpercent_final.pt' % (args.dataset, args.model, args.percentage))
+            result_path = os.path.join(args.save_path, 'res_AFMM_paired_%s_%s_%gpercent_final.pt' % (args.dataset, args.model, args.percentage))
             torch.save({
                 'data': image_syn.detach().cpu(), 
                 'method': args.method, 
@@ -393,11 +425,11 @@ def main():
                 'encoder_ssl_history': torch.tensor(encoder_ssl_history, dtype=torch.float64),
                 'seed': args.seed, 
                 'random_feature_distribution': {'models': random_models, 'samples_per_update': args.num_random_networks, 'encoder_train_steps': args.encoder_train_steps, 'encoder_train_data': args.encoder_train_data, 'encoder_train_lr': args.lr_net, 'encoder_train_batch': args.batch_train, 'encoder_train_method': 'simclr'},
-                'afmm_params': {'lambda_cov': args.lambda_cov, 'strategy': args.distill_aug_strategy, 'batch_real': args.batch_real}
+                'afmm_params': {'view_statistics': 'paired_joint_v1', 'lambda_cov': args.lambda_cov, 'strategy': args.distill_aug_strategy, 'batch_real': args.batch_real}
             }, result_path)
             print('Saved synthetic data to %s' % result_path, flush=True)
 
-    result_path = os.path.join(args.save_path, 'res_AFMM_%s_%s_%gpercent_final.pt' % (args.dataset, args.model, args.percentage))
+    result_path = os.path.join(args.save_path, 'res_AFMM_paired_%s_%s_%gpercent_final.pt' % (args.dataset, args.model, args.percentage))
     torch.save({
         'data': image_syn.detach().cpu(), 
         'method': args.method, 
@@ -409,7 +441,7 @@ def main():
         'encoder_ssl_history': torch.tensor(encoder_ssl_history, dtype=torch.float64),
         'seed': args.seed, 
         'random_feature_distribution': {'models': random_models, 'samples_per_update': args.num_random_networks, 'encoder_train_steps': args.encoder_train_steps, 'encoder_train_data': args.encoder_train_data, 'encoder_train_lr': args.lr_net, 'encoder_train_batch': args.batch_train, 'encoder_train_method': 'simclr'},
-        'afmm_params': {'lambda_cov': args.lambda_cov, 'strategy': args.distill_aug_strategy, 'batch_real': args.batch_real}
+        'afmm_params': {'view_statistics': 'paired_joint_v1', 'lambda_cov': args.lambda_cov, 'strategy': args.distill_aug_strategy, 'batch_real': args.batch_real}
     }, result_path)
     print('Saved synthetic data to %s' % result_path, flush=True)
 
