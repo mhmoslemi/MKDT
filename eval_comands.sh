@@ -1,0 +1,3 @@
+bash Evaluate_benchamrk/eval_kmeans_interactive.sh
+bash Evaluate_benchamrk/eval_random_interactive.sh
+-

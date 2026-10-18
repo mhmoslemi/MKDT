@@ -1,0 +1,1008 @@
+{
+  "recorded_utc": "2026-10-17",
+  "reference": "Completed current-trainer Vulcan k-means 2% runs, batch 256, one L40S, one CPU, workers=0. Read only the final 100 logged epochs per completed seed. These are NOT measured full-data runtimes.",
+  "statistic": "For each configuration, median across reference seeds of their mean last-100-epoch seconds/step.",
+  "formula": "ceil(median_seconds_per_step * floor(source_training_count / 256) * 1000) + 900 seconds",
+  "caveats": "Extrapolates from small real-data subsets to the full source training split. Full-data I/O, node variability, startup and checkpoint I/O may differ. The 15-minute margin is not a runtime guarantee. No forced short walltime, artificial stages, or automatic resubmissions.",
+  "observed_vulcan_gpu_walltime_max_seconds": 604800,
+  "configurations": [
+    {
+      "source": "CIFAR10",
+      "model": "ConvNet",
+      "ssl": "simclr",
+      "epochs": 1000,
+      "batch_size": 256,
+      "steps_per_epoch": 195,
+      "seconds_per_step": 0.22807237336101632,
+      "estimated_seconds": 44475,
+      "requested_seconds": 45375,
+      "walltime": "12:36:15",
+      "samples": [
+        {
+          "seed": 0,
+          "seconds_per_step": 0.23005991636620213,
+          "log": "Evaluate_benchamrk/kmeans_ssl_checkpoints_cifar10k8k6k_tiny6k5k4k_6seeds/CIFAR10/ConvNet/kmeans/pt2/simclr/seed_000/ssl.jsonl",
+          "first_epoch": 5901,
+          "last_epoch": 6000
+        },
+        {
+          "seed": 1,
+          "seconds_per_step": 0.22918108456147213,
+          "log": "Evaluate_benchamrk/kmeans_ssl_checkpoints_cifar10k8k6k_tiny6k5k4k_6seeds/CIFAR10/ConvNet/kmeans/pt2/simclr/seed_001/ssl.jsonl",
+          "first_epoch": 5901,
+          "last_epoch": 6000
+        },
+        {
+          "seed": 2,
+          "seconds_per_step": 0.22686742187322428,
+          "log": "Evaluate_benchamrk/kmeans_ssl_checkpoints_cifar10k8k6k_tiny6k5k4k_6seeds/CIFAR10/ConvNet/kmeans/pt2/simclr/seed_002/ssl.jsonl",
+          "first_epoch": 5901,
+          "last_epoch": 6000
+        },
+        {
+          "seed": 3,
+          "seconds_per_step": 0.22824056680779903,
+          "log": "Evaluate_benchamrk/kmeans_ssl_checkpoints_cifar10k8k6k_tiny6k5k4k_6seeds/CIFAR10/ConvNet/kmeans/pt2/simclr/seed_003/ssl.jsonl",
+          "first_epoch": 5901,
+          "last_epoch": 6000
+        },
+        {
+          "seed": 4,
+          "seconds_per_step": 0.22718482990128297,
+          "log": "Evaluate_benchamrk/kmeans_ssl_checkpoints_cifar10k8k6k_tiny6k5k4k_6seeds/CIFAR10/ConvNet/kmeans/pt2/simclr/seed_004/ssl.jsonl",
+          "first_epoch": 5901,
+          "last_epoch": 6000
+        },
+        {
+          "seed": 5,
+          "seconds_per_step": 0.2279041799142336,
+          "log": "Evaluate_benchamrk/kmeans_ssl_checkpoints_cifar10k8k6k_tiny6k5k4k_6seeds/CIFAR10/ConvNet/kmeans/pt2/simclr/seed_005/ssl.jsonl",
+          "first_epoch": 5901,
+          "last_epoch": 6000
+        }
+      ],
+      "slurm_walltime": "12:36:15"
+    },
+    {
+      "source": "CIFAR10",
+      "model": "ConvNet",
+      "ssl": "barlowtwins",
+      "epochs": 1000,
+      "batch_size": 256,
+      "steps_per_epoch": 195,
+      "seconds_per_step": 0.22307600947562606,
+      "estimated_seconds": 43500,
+      "requested_seconds": 44400,
+      "walltime": "12:20:00",
+      "samples": [
+        {
+          "seed": 0,
+          "seconds_per_step": 0.22265125351026652,
+          "log": "Evaluate_benchamrk/kmeans_ssl_checkpoints_cifar10k8k6k_tiny6k5k4k_6seeds/CIFAR10/ConvNet/kmeans/pt2/barlowtwins/seed_000/ssl.jsonl",
+          "first_epoch": 5901,
+          "last_epoch": 6000
+        },
+        {
+          "seed": 1,
+          "seconds_per_step": 0.22026922235886257,
+          "log": "Evaluate_benchamrk/kmeans_ssl_checkpoints_cifar10k8k6k_tiny6k5k4k_6seeds/CIFAR10/ConvNet/kmeans/pt2/barlowtwins/seed_001/ssl.jsonl",
+          "first_epoch": 5901,
+          "last_epoch": 6000
+        },
+        {
+          "seed": 2,
+          "seconds_per_step": 0.22290747846166292,
+          "log": "Evaluate_benchamrk/kmeans_ssl_checkpoints_cifar10k8k6k_tiny6k5k4k_6seeds/CIFAR10/ConvNet/kmeans/pt2/barlowtwins/seed_002/ssl.jsonl",
+          "first_epoch": 5901,
+          "last_epoch": 6000
+        },
+        {
+          "seed": 3,
+          "seconds_per_step": 0.22324454048958917,
+          "log": "Evaluate_benchamrk/kmeans_ssl_checkpoints_cifar10k8k6k_tiny6k5k4k_6seeds/CIFAR10/ConvNet/kmeans/pt2/barlowtwins/seed_003/ssl.jsonl",
+          "first_epoch": 5901,
+          "last_epoch": 6000
+        },
+        {
+          "seed": 4,
+          "seconds_per_step": 0.25034262359297527,
+          "log": "Evaluate_benchamrk/kmeans_ssl_checkpoints_cifar10k8k6k_tiny6k5k4k_6seeds/CIFAR10/ConvNet/kmeans/pt2/barlowtwins/seed_004/ssl.jsonl",
+          "first_epoch": 5901,
+          "last_epoch": 6000
+        },
+        {
+          "seed": 5,
+          "seconds_per_step": 0.2500458317141359,
+          "log": "Evaluate_benchamrk/kmeans_ssl_checkpoints_cifar10k8k6k_tiny6k5k4k_6seeds/CIFAR10/ConvNet/kmeans/pt2/barlowtwins/seed_005/ssl.jsonl",
+          "first_epoch": 5901,
+          "last_epoch": 6000
+        }
+      ],
+      "slurm_walltime": "12:20:00"
+    },
+    {
+      "source": "CIFAR10",
+      "model": "VGG11",
+      "ssl": "simclr",
+      "epochs": 1000,
+      "batch_size": 256,
+      "steps_per_epoch": 195,
+      "seconds_per_step": 0.2468349861439007,
+      "estimated_seconds": 48133,
+      "requested_seconds": 49033,
+      "walltime": "13:37:13",
+      "samples": [
+        {
+          "seed": 0,
+          "seconds_per_step": 0.24742990588458877,
+          "log": "Evaluate_benchamrk/kmeans_ssl_checkpoints_cifar10k8k6k_tiny6k5k4k_6seeds/CIFAR10/VGG11/kmeans/pt2/simclr/seed_000/ssl.jsonl",
+          "first_epoch": 5901,
+          "last_epoch": 6000
+        },
+        {
+          "seed": 1,
+          "seconds_per_step": 0.24624006640321264,
+          "log": "Evaluate_benchamrk/kmeans_ssl_checkpoints_cifar10k8k6k_tiny6k5k4k_6seeds/CIFAR10/VGG11/kmeans/pt2/simclr/seed_001/ssl.jsonl",
+          "first_epoch": 5901,
+          "last_epoch": 6000
+        },
+        {
+          "seed": 2,
+          "seconds_per_step": 0.24801427376922222,
+          "log": "Evaluate_benchamrk/kmeans_ssl_checkpoints_cifar10k8k6k_tiny6k5k4k_6seeds/CIFAR10/VGG11/kmeans/pt2/simclr/seed_002/ssl.jsonl",
+          "first_epoch": 5901,
+          "last_epoch": 6000
+        },
+        {
+          "seed": 3,
+          "seconds_per_step": 0.24912903113290666,
+          "log": "Evaluate_benchamrk/kmeans_ssl_checkpoints_cifar10k8k6k_tiny6k5k4k_6seeds/CIFAR10/VGG11/kmeans/pt2/simclr/seed_003/ssl.jsonl",
+          "first_epoch": 5901,
+          "last_epoch": 6000
+        },
+        {
+          "seed": 4,
+          "seconds_per_step": 0.2446778258200114,
+          "log": "Evaluate_benchamrk/kmeans_ssl_checkpoints_cifar10k8k6k_tiny6k5k4k_6seeds/CIFAR10/VGG11/kmeans/pt2/simclr/seed_004/ssl.jsonl",
+          "first_epoch": 5901,
+          "last_epoch": 6000
+        },
+        {
+          "seed": 5,
+          "seconds_per_step": 0.2453096189800029,
+          "log": "Evaluate_benchamrk/kmeans_ssl_checkpoints_cifar10k8k6k_tiny6k5k4k_6seeds/CIFAR10/VGG11/kmeans/pt2/simclr/seed_005/ssl.jsonl",
+          "first_epoch": 5901,
+          "last_epoch": 6000
+        }
+      ],
+      "slurm_walltime": "13:37:13"
+    },
+    {
+      "source": "CIFAR10",
+      "model": "VGG11",
+      "ssl": "barlowtwins",
+      "epochs": 1000,
+      "batch_size": 256,
+      "steps_per_epoch": 195,
+      "seconds_per_step": 0.23970618393272158,
+      "estimated_seconds": 46743,
+      "requested_seconds": 47643,
+      "walltime": "13:14:03",
+      "samples": [
+        {
+          "seed": 0,
+          "seconds_per_step": 0.24471981352816027,
+          "log": "Evaluate_benchamrk/kmeans_ssl_checkpoints_cifar10k8k6k_tiny6k5k4k_6seeds/CIFAR10/VGG11/kmeans/pt2/barlowtwins/seed_000/ssl.jsonl",
+          "first_epoch": 5901,
+          "last_epoch": 6000
+        },
+        {
+          "seed": 1,
+          "seconds_per_step": 0.2430165742027263,
+          "log": "Evaluate_benchamrk/kmeans_ssl_checkpoints_cifar10k8k6k_tiny6k5k4k_6seeds/CIFAR10/VGG11/kmeans/pt2/barlowtwins/seed_001/ssl.jsonl",
+          "first_epoch": 5901,
+          "last_epoch": 6000
+        },
+        {
+          "seed": 2,
+          "seconds_per_step": 0.23984515307005494,
+          "log": "Evaluate_benchamrk/kmeans_ssl_checkpoints_cifar10k8k6k_tiny6k5k4k_6seeds/CIFAR10/VGG11/kmeans/pt2/barlowtwins/seed_002/ssl.jsonl",
+          "first_epoch": 5901,
+          "last_epoch": 6000
+        },
+        {
+          "seed": 3,
+          "seconds_per_step": 0.23938832783761124,
+          "log": "Evaluate_benchamrk/kmeans_ssl_checkpoints_cifar10k8k6k_tiny6k5k4k_6seeds/CIFAR10/VGG11/kmeans/pt2/barlowtwins/seed_003/ssl.jsonl",
+          "first_epoch": 5901,
+          "last_epoch": 6000
+        },
+        {
+          "seed": 4,
+          "seconds_per_step": 0.23956721479538826,
+          "log": "Evaluate_benchamrk/kmeans_ssl_checkpoints_cifar10k8k6k_tiny6k5k4k_6seeds/CIFAR10/VGG11/kmeans/pt2/barlowtwins/seed_004/ssl.jsonl",
+          "first_epoch": 5901,
+          "last_epoch": 6000
+        },
+        {
+          "seed": 5,
+          "seconds_per_step": 0.23934518051488948,
+          "log": "Evaluate_benchamrk/kmeans_ssl_checkpoints_cifar10k8k6k_tiny6k5k4k_6seeds/CIFAR10/VGG11/kmeans/pt2/barlowtwins/seed_005/ssl.jsonl",
+          "first_epoch": 5901,
+          "last_epoch": 6000
+        }
+      ],
+      "slurm_walltime": "13:14:03"
+    },
+    {
+      "source": "CIFAR10",
+      "model": "ResNet18",
+      "ssl": "simclr",
+      "epochs": 1000,
+      "batch_size": 256,
+      "steps_per_epoch": 195,
+      "seconds_per_step": 0.33242429700835296,
+      "estimated_seconds": 64823,
+      "requested_seconds": 65723,
+      "walltime": "18:15:23",
+      "samples": [
+        {
+          "seed": 0,
+          "seconds_per_step": 0.33382496640862275,
+          "log": "Evaluate_benchamrk/kmeans_ssl_checkpoints_cifar10k8k6k_tiny6k5k4k_6seeds/CIFAR10/ResNet18/kmeans/pt2/simclr/seed_000/ssl.jsonl",
+          "first_epoch": 5901,
+          "last_epoch": 6000
+        },
+        {
+          "seed": 1,
+          "seconds_per_step": 0.30923726327406864,
+          "log": "Evaluate_benchamrk/kmeans_ssl_checkpoints_cifar10k8k6k_tiny6k5k4k_6seeds/CIFAR10/ResNet18/kmeans/pt2/simclr/seed_001/ssl.jsonl",
+          "first_epoch": 5901,
+          "last_epoch": 6000
+        },
+        {
+          "seed": 2,
+          "seconds_per_step": 0.3501613294069345,
+          "log": "Evaluate_benchamrk/kmeans_ssl_checkpoints_cifar10k8k6k_tiny6k5k4k_6seeds/CIFAR10/ResNet18/kmeans/pt2/simclr/seed_002/ssl.jsonl",
+          "first_epoch": 5901,
+          "last_epoch": 6000
+        },
+        {
+          "seed": 3,
+          "seconds_per_step": 0.3551812472240999,
+          "log": "Evaluate_benchamrk/kmeans_ssl_checkpoints_cifar10k8k6k_tiny6k5k4k_6seeds/CIFAR10/ResNet18/kmeans/pt2/simclr/seed_003/ssl.jsonl",
+          "first_epoch": 5901,
+          "last_epoch": 6000
+        },
+        {
+          "seed": 4,
+          "seconds_per_step": 0.32669350285548715,
+          "log": "Evaluate_benchamrk/kmeans_ssl_checkpoints_cifar10k8k6k_tiny6k5k4k_6seeds/CIFAR10/ResNet18/kmeans/pt2/simclr/seed_004/ssl.jsonl",
+          "first_epoch": 5901,
+          "last_epoch": 6000
+        },
+        {
+          "seed": 5,
+          "seconds_per_step": 0.3310236276080832,
+          "log": "Evaluate_benchamrk/kmeans_ssl_checkpoints_cifar10k8k6k_tiny6k5k4k_6seeds/CIFAR10/ResNet18/kmeans/pt2/simclr/seed_005/ssl.jsonl",
+          "first_epoch": 5901,
+          "last_epoch": 6000
+        }
+      ],
+      "slurm_walltime": "18:15:23"
+    },
+    {
+      "source": "CIFAR10",
+      "model": "ResNet18",
+      "ssl": "barlowtwins",
+      "epochs": 1000,
+      "batch_size": 256,
+      "steps_per_epoch": 195,
+      "seconds_per_step": 0.29096338437870145,
+      "estimated_seconds": 56738,
+      "requested_seconds": 57638,
+      "walltime": "16:00:38",
+      "samples": [
+        {
+          "seed": 0,
+          "seconds_per_step": 0.2928554695053026,
+          "log": "Evaluate_benchamrk/kmeans_ssl_checkpoints_cifar10k8k6k_tiny6k5k4k_6seeds/CIFAR10/ResNet18/kmeans/pt2/barlowtwins/seed_000/ssl.jsonl",
+          "first_epoch": 5901,
+          "last_epoch": 6000
+        },
+        {
+          "seed": 1,
+          "seconds_per_step": 0.29096656205598265,
+          "log": "Evaluate_benchamrk/kmeans_ssl_checkpoints_cifar10k8k6k_tiny6k5k4k_6seeds/CIFAR10/ResNet18/kmeans/pt2/barlowtwins/seed_001/ssl.jsonl",
+          "first_epoch": 5901,
+          "last_epoch": 6000
+        },
+        {
+          "seed": 2,
+          "seconds_per_step": 0.29096020670142025,
+          "log": "Evaluate_benchamrk/kmeans_ssl_checkpoints_cifar10k8k6k_tiny6k5k4k_6seeds/CIFAR10/ResNet18/kmeans/pt2/barlowtwins/seed_002/ssl.jsonl",
+          "first_epoch": 5901,
+          "last_epoch": 6000
+        },
+        {
+          "seed": 3,
+          "seconds_per_step": 0.2897823915661623,
+          "log": "Evaluate_benchamrk/kmeans_ssl_checkpoints_cifar10k8k6k_tiny6k5k4k_6seeds/CIFAR10/ResNet18/kmeans/pt2/barlowtwins/seed_003/ssl.jsonl",
+          "first_epoch": 5901,
+          "last_epoch": 6000
+        },
+        {
+          "seed": 4,
+          "seconds_per_step": 0.2902042132243514,
+          "log": "Evaluate_benchamrk/kmeans_ssl_checkpoints_cifar10k8k6k_tiny6k5k4k_6seeds/CIFAR10/ResNet18/kmeans/pt2/barlowtwins/seed_004/ssl.jsonl",
+          "first_epoch": 5901,
+          "last_epoch": 6000
+        },
+        {
+          "seed": 5,
+          "seconds_per_step": 0.29119760510046033,
+          "log": "Evaluate_benchamrk/kmeans_ssl_checkpoints_cifar10k8k6k_tiny6k5k4k_6seeds/CIFAR10/ResNet18/kmeans/pt2/barlowtwins/seed_005/ssl.jsonl",
+          "first_epoch": 5901,
+          "last_epoch": 6000
+        }
+      ],
+      "slurm_walltime": "16:00:38"
+    },
+    {
+      "source": "CIFAR100",
+      "model": "ConvNet",
+      "ssl": "simclr",
+      "epochs": 1000,
+      "batch_size": 256,
+      "steps_per_epoch": 195,
+      "seconds_per_step": 0.23005524550254147,
+      "estimated_seconds": 44861,
+      "requested_seconds": 45761,
+      "walltime": "12:42:41",
+      "samples": [
+        {
+          "seed": 0,
+          "seconds_per_step": 0.2312631542965149,
+          "log": "Evaluate_benchamrk/kmeans_ssl_checkpoints_cifar10k8k6k_tiny6k5k4k_6seeds/CIFAR100/ConvNet/kmeans/pt2/simclr/seed_000/ssl.jsonl",
+          "first_epoch": 5901,
+          "last_epoch": 6000
+        },
+        {
+          "seed": 1,
+          "seconds_per_step": 0.230724681733797,
+          "log": "Evaluate_benchamrk/kmeans_ssl_checkpoints_cifar10k8k6k_tiny6k5k4k_6seeds/CIFAR100/ConvNet/kmeans/pt2/simclr/seed_001/ssl.jsonl",
+          "first_epoch": 5901,
+          "last_epoch": 6000
+        },
+        {
+          "seed": 2,
+          "seconds_per_step": 0.22940558730003735,
+          "log": "Evaluate_benchamrk/kmeans_ssl_checkpoints_cifar10k8k6k_tiny6k5k4k_6seeds/CIFAR100/ConvNet/kmeans/pt2/simclr/seed_002/ssl.jsonl",
+          "first_epoch": 5901,
+          "last_epoch": 6000
+        },
+        {
+          "seed": 3,
+          "seconds_per_step": 0.22996459802767885,
+          "log": "Evaluate_benchamrk/kmeans_ssl_checkpoints_cifar10k8k6k_tiny6k5k4k_6seeds/CIFAR100/ConvNet/kmeans/pt2/simclr/seed_003/ssl.jsonl",
+          "first_epoch": 5901,
+          "last_epoch": 6000
+        },
+        {
+          "seed": 4,
+          "seconds_per_step": 0.22958307707682254,
+          "log": "Evaluate_benchamrk/kmeans_ssl_checkpoints_cifar10k8k6k_tiny6k5k4k_6seeds/CIFAR100/ConvNet/kmeans/pt2/simclr/seed_004/ssl.jsonl",
+          "first_epoch": 5901,
+          "last_epoch": 6000
+        },
+        {
+          "seed": 5,
+          "seconds_per_step": 0.2301458929774041,
+          "log": "Evaluate_benchamrk/kmeans_ssl_checkpoints_cifar10k8k6k_tiny6k5k4k_6seeds/CIFAR100/ConvNet/kmeans/pt2/simclr/seed_005/ssl.jsonl",
+          "first_epoch": 5901,
+          "last_epoch": 6000
+        }
+      ],
+      "slurm_walltime": "12:42:41"
+    },
+    {
+      "source": "CIFAR100",
+      "model": "ConvNet",
+      "ssl": "barlowtwins",
+      "epochs": 1000,
+      "batch_size": 256,
+      "steps_per_epoch": 195,
+      "seconds_per_step": 0.22361311809780698,
+      "estimated_seconds": 43605,
+      "requested_seconds": 44505,
+      "walltime": "12:21:45",
+      "samples": [
+        {
+          "seed": 0,
+          "seconds_per_step": 0.2226309922647973,
+          "log": "Evaluate_benchamrk/kmeans_ssl_checkpoints_cifar10k8k6k_tiny6k5k4k_6seeds/CIFAR100/ConvNet/kmeans/pt2/barlowtwins/seed_000/ssl.jsonl",
+          "first_epoch": 5901,
+          "last_epoch": 6000
+        },
+        {
+          "seed": 1,
+          "seconds_per_step": 0.22403388222058615,
+          "log": "Evaluate_benchamrk/kmeans_ssl_checkpoints_cifar10k8k6k_tiny6k5k4k_6seeds/CIFAR100/ConvNet/kmeans/pt2/barlowtwins/seed_001/ssl.jsonl",
+          "first_epoch": 5901,
+          "last_epoch": 6000
+        },
+        {
+          "seed": 2,
+          "seconds_per_step": 0.2231923539750278,
+          "log": "Evaluate_benchamrk/kmeans_ssl_checkpoints_cifar10k8k6k_tiny6k5k4k_6seeds/CIFAR100/ConvNet/kmeans/pt2/barlowtwins/seed_002/ssl.jsonl",
+          "first_epoch": 5901,
+          "last_epoch": 6000
+        },
+        {
+          "seed": 3,
+          "seconds_per_step": 0.22295924212473137,
+          "log": "Evaluate_benchamrk/kmeans_ssl_checkpoints_cifar10k8k6k_tiny6k5k4k_6seeds/CIFAR100/ConvNet/kmeans/pt2/barlowtwins/seed_003/ssl.jsonl",
+          "first_epoch": 5901,
+          "last_epoch": 6000
+        },
+        {
+          "seed": 4,
+          "seconds_per_step": 0.22446449438420435,
+          "log": "Evaluate_benchamrk/kmeans_ssl_checkpoints_cifar10k8k6k_tiny6k5k4k_6seeds/CIFAR100/ConvNet/kmeans/pt2/barlowtwins/seed_004/ssl.jsonl",
+          "first_epoch": 5901,
+          "last_epoch": 6000
+        },
+        {
+          "seed": 5,
+          "seconds_per_step": 0.2241934009672453,
+          "log": "Evaluate_benchamrk/kmeans_ssl_checkpoints_cifar10k8k6k_tiny6k5k4k_6seeds/CIFAR100/ConvNet/kmeans/pt2/barlowtwins/seed_005/ssl.jsonl",
+          "first_epoch": 5901,
+          "last_epoch": 6000
+        }
+      ],
+      "slurm_walltime": "12:21:45"
+    },
+    {
+      "source": "CIFAR100",
+      "model": "VGG11",
+      "ssl": "simclr",
+      "epochs": 1000,
+      "batch_size": 256,
+      "steps_per_epoch": 195,
+      "seconds_per_step": 0.24845128279489775,
+      "estimated_seconds": 48449,
+      "requested_seconds": 49349,
+      "walltime": "13:42:29",
+      "samples": [
+        {
+          "seed": 2,
+          "seconds_per_step": 0.24907911372836677,
+          "log": "Evaluate_benchamrk/kmeans_ssl_checkpoints_cifar10k8k6k_tiny6k5k4k_6seeds/CIFAR100/VGG11/kmeans/pt2/simclr/seed_002/ssl.jsonl",
+          "first_epoch": 5901,
+          "last_epoch": 6000
+        },
+        {
+          "seed": 3,
+          "seconds_per_step": 0.24997504996601494,
+          "log": "Evaluate_benchamrk/kmeans_ssl_checkpoints_cifar10k8k6k_tiny6k5k4k_6seeds/CIFAR100/VGG11/kmeans/pt2/simclr/seed_003/ssl.jsonl",
+          "first_epoch": 5901,
+          "last_epoch": 6000
+        },
+        {
+          "seed": 4,
+          "seconds_per_step": 0.24702529690694064,
+          "log": "Evaluate_benchamrk/kmeans_ssl_checkpoints_cifar10k8k6k_tiny6k5k4k_6seeds/CIFAR100/VGG11/kmeans/pt2/simclr/seed_004/ssl.jsonl",
+          "first_epoch": 5901,
+          "last_epoch": 6000
+        },
+        {
+          "seed": 5,
+          "seconds_per_step": 0.24782345186142873,
+          "log": "Evaluate_benchamrk/kmeans_ssl_checkpoints_cifar10k8k6k_tiny6k5k4k_6seeds/CIFAR100/VGG11/kmeans/pt2/simclr/seed_005/ssl.jsonl",
+          "first_epoch": 5901,
+          "last_epoch": 6000
+        }
+      ],
+      "slurm_walltime": "13:42:29"
+    },
+    {
+      "source": "CIFAR100",
+      "model": "VGG11",
+      "ssl": "barlowtwins",
+      "epochs": 1000,
+      "batch_size": 256,
+      "steps_per_epoch": 195,
+      "seconds_per_step": 0.23990477006106325,
+      "estimated_seconds": 46782,
+      "requested_seconds": 47682,
+      "walltime": "13:14:42",
+      "samples": [
+        {
+          "seed": 2,
+          "seconds_per_step": 0.23925993596358844,
+          "log": "Evaluate_benchamrk/kmeans_ssl_checkpoints_cifar10k8k6k_tiny6k5k4k_6seeds/CIFAR100/VGG11/kmeans/pt2/barlowtwins/seed_002/ssl.jsonl",
+          "first_epoch": 5901,
+          "last_epoch": 6000
+        },
+        {
+          "seed": 3,
+          "seconds_per_step": 0.23882888320678222,
+          "log": "Evaluate_benchamrk/kmeans_ssl_checkpoints_cifar10k8k6k_tiny6k5k4k_6seeds/CIFAR100/VGG11/kmeans/pt2/barlowtwins/seed_003/ssl.jsonl",
+          "first_epoch": 5901,
+          "last_epoch": 6000
+        },
+        {
+          "seed": 4,
+          "seconds_per_step": 0.2405496041585381,
+          "log": "Evaluate_benchamrk/kmeans_ssl_checkpoints_cifar10k8k6k_tiny6k5k4k_6seeds/CIFAR100/VGG11/kmeans/pt2/barlowtwins/seed_004/ssl.jsonl",
+          "first_epoch": 5901,
+          "last_epoch": 6000
+        },
+        {
+          "seed": 5,
+          "seconds_per_step": 0.24094707148770492,
+          "log": "Evaluate_benchamrk/kmeans_ssl_checkpoints_cifar10k8k6k_tiny6k5k4k_6seeds/CIFAR100/VGG11/kmeans/pt2/barlowtwins/seed_005/ssl.jsonl",
+          "first_epoch": 5901,
+          "last_epoch": 6000
+        }
+      ],
+      "slurm_walltime": "13:14:42"
+    },
+    {
+      "source": "CIFAR100",
+      "model": "ResNet18",
+      "ssl": "simclr",
+      "epochs": 1000,
+      "batch_size": 256,
+      "steps_per_epoch": 195,
+      "seconds_per_step": 0.29946116073910767,
+      "estimated_seconds": 58395,
+      "requested_seconds": 59295,
+      "walltime": "16:28:15",
+      "samples": [
+        {
+          "seed": 0,
+          "seconds_per_step": 0.3248670204464967,
+          "log": "Evaluate_benchamrk/kmeans_ssl_checkpoints_cifar10k8k6k_tiny6k5k4k_6seeds/CIFAR100/ResNet18/kmeans/pt2/simclr/seed_000/ssl.jsonl",
+          "first_epoch": 5901,
+          "last_epoch": 6000
+        },
+        {
+          "seed": 1,
+          "seconds_per_step": 0.30337499213560176,
+          "log": "Evaluate_benchamrk/kmeans_ssl_checkpoints_cifar10k8k6k_tiny6k5k4k_6seeds/CIFAR100/ResNet18/kmeans/pt2/simclr/seed_001/ssl.jsonl",
+          "first_epoch": 5901,
+          "last_epoch": 6000
+        },
+        {
+          "seed": 2,
+          "seconds_per_step": 0.30018294039337584,
+          "log": "Evaluate_benchamrk/kmeans_ssl_checkpoints_cifar10k8k6k_tiny6k5k4k_6seeds/CIFAR100/ResNet18/kmeans/pt2/simclr/seed_002/ssl.jsonl",
+          "first_epoch": 5901,
+          "last_epoch": 6000
+        },
+        {
+          "seed": 3,
+          "seconds_per_step": 0.2987393810848395,
+          "log": "Evaluate_benchamrk/kmeans_ssl_checkpoints_cifar10k8k6k_tiny6k5k4k_6seeds/CIFAR100/ResNet18/kmeans/pt2/simclr/seed_003/ssl.jsonl",
+          "first_epoch": 5901,
+          "last_epoch": 6000
+        },
+        {
+          "seed": 4,
+          "seconds_per_step": 0.29619981086968133,
+          "log": "Evaluate_benchamrk/kmeans_ssl_checkpoints_cifar10k8k6k_tiny6k5k4k_6seeds/CIFAR100/ResNet18/kmeans/pt2/simclr/seed_004/ssl.jsonl",
+          "first_epoch": 5901,
+          "last_epoch": 6000
+        },
+        {
+          "seed": 5,
+          "seconds_per_step": 0.29598312297370283,
+          "log": "Evaluate_benchamrk/kmeans_ssl_checkpoints_cifar10k8k6k_tiny6k5k4k_6seeds/CIFAR100/ResNet18/kmeans/pt2/simclr/seed_005/ssl.jsonl",
+          "first_epoch": 5901,
+          "last_epoch": 6000
+        }
+      ],
+      "slurm_walltime": "16:28:15"
+    },
+    {
+      "source": "CIFAR100",
+      "model": "ResNet18",
+      "ssl": "barlowtwins",
+      "epochs": 1000,
+      "batch_size": 256,
+      "steps_per_epoch": 195,
+      "seconds_per_step": 0.29392011438418797,
+      "estimated_seconds": 57315,
+      "requested_seconds": 58215,
+      "walltime": "16:10:15",
+      "samples": [
+        {
+          "seed": 0,
+          "seconds_per_step": 0.29826208592082065,
+          "log": "Evaluate_benchamrk/kmeans_ssl_checkpoints_cifar10k8k6k_tiny6k5k4k_6seeds/CIFAR100/ResNet18/kmeans/pt2/barlowtwins/seed_000/ssl.jsonl",
+          "first_epoch": 5901,
+          "last_epoch": 6000
+        },
+        {
+          "seed": 1,
+          "seconds_per_step": 0.2965844846066708,
+          "log": "Evaluate_benchamrk/kmeans_ssl_checkpoints_cifar10k8k6k_tiny6k5k4k_6seeds/CIFAR100/ResNet18/kmeans/pt2/barlowtwins/seed_001/ssl.jsonl",
+          "first_epoch": 5901,
+          "last_epoch": 6000
+        },
+        {
+          "seed": 2,
+          "seconds_per_step": 0.2922463206108659,
+          "log": "Evaluate_benchamrk/kmeans_ssl_checkpoints_cifar10k8k6k_tiny6k5k4k_6seeds/CIFAR100/ResNet18/kmeans/pt2/barlowtwins/seed_002/ssl.jsonl",
+          "first_epoch": 5901,
+          "last_epoch": 6000
+        },
+        {
+          "seed": 3,
+          "seconds_per_step": 0.2941512921731919,
+          "log": "Evaluate_benchamrk/kmeans_ssl_checkpoints_cifar10k8k6k_tiny6k5k4k_6seeds/CIFAR100/ResNet18/kmeans/pt2/barlowtwins/seed_003/ssl.jsonl",
+          "first_epoch": 5901,
+          "last_epoch": 6000
+        },
+        {
+          "seed": 4,
+          "seconds_per_step": 0.2932853028907751,
+          "log": "Evaluate_benchamrk/kmeans_ssl_checkpoints_cifar10k8k6k_tiny6k5k4k_6seeds/CIFAR100/ResNet18/kmeans/pt2/barlowtwins/seed_004/ssl.jsonl",
+          "first_epoch": 5901,
+          "last_epoch": 6000
+        },
+        {
+          "seed": 5,
+          "seconds_per_step": 0.2936889365951841,
+          "log": "Evaluate_benchamrk/kmeans_ssl_checkpoints_cifar10k8k6k_tiny6k5k4k_6seeds/CIFAR100/ResNet18/kmeans/pt2/barlowtwins/seed_005/ssl.jsonl",
+          "first_epoch": 5901,
+          "last_epoch": 6000
+        }
+      ],
+      "slurm_walltime": "16:10:15"
+    },
+    {
+      "source": "TinyImageNet",
+      "model": "ConvNet",
+      "ssl": "simclr",
+      "epochs": 1000,
+      "batch_size": 256,
+      "steps_per_epoch": 390,
+      "seconds_per_step": 0.4443348756502382,
+      "estimated_seconds": 173291,
+      "requested_seconds": 174191,
+      "walltime": "48:23:11",
+      "samples": [
+        {
+          "seed": 0,
+          "seconds_per_step": 0.4454808726826949,
+          "log": "Evaluate_benchamrk/kmeans_ssl_checkpoints_cifar10k8k6k_tiny6k5k4k_6seeds/TinyImageNet/ConvNet/kmeans/pt2/simclr/seed_000/ssl.jsonl",
+          "first_epoch": 3901,
+          "last_epoch": 4000
+        },
+        {
+          "seed": 1,
+          "seconds_per_step": 0.4499164874405999,
+          "log": "Evaluate_benchamrk/kmeans_ssl_checkpoints_cifar10k8k6k_tiny6k5k4k_6seeds/TinyImageNet/ConvNet/kmeans/pt2/simclr/seed_001/ssl.jsonl",
+          "first_epoch": 3901,
+          "last_epoch": 4000
+        },
+        {
+          "seed": 2,
+          "seconds_per_step": 0.4431888786177816,
+          "log": "Evaluate_benchamrk/kmeans_ssl_checkpoints_cifar10k8k6k_tiny6k5k4k_6seeds/TinyImageNet/ConvNet/kmeans/pt2/simclr/seed_002/ssl.jsonl",
+          "first_epoch": 3901,
+          "last_epoch": 4000
+        },
+        {
+          "seed": 3,
+          "seconds_per_step": 0.45277975929767955,
+          "log": "Evaluate_benchamrk/kmeans_ssl_checkpoints_cifar10k8k6k_tiny6k5k4k_6seeds/TinyImageNet/ConvNet/kmeans/pt2/simclr/seed_003/ssl.jsonl",
+          "first_epoch": 3901,
+          "last_epoch": 4000
+        },
+        {
+          "seed": 4,
+          "seconds_per_step": 0.44030086515604383,
+          "log": "Evaluate_benchamrk/kmeans_ssl_checkpoints_cifar10k8k6k_tiny6k5k4k_6seeds/TinyImageNet/ConvNet/kmeans/pt2/simclr/seed_004/ssl.jsonl",
+          "first_epoch": 3901,
+          "last_epoch": 4000
+        },
+        {
+          "seed": 5,
+          "seconds_per_step": 0.434182664787929,
+          "log": "Evaluate_benchamrk/kmeans_ssl_checkpoints_cifar10k8k6k_tiny6k5k4k_6seeds/TinyImageNet/ConvNet/kmeans/pt2/simclr/seed_005/ssl.jsonl",
+          "first_epoch": 3901,
+          "last_epoch": 4000
+        }
+      ],
+      "slurm_walltime": "2-00:23:11"
+    },
+    {
+      "source": "TinyImageNet",
+      "model": "ConvNet",
+      "ssl": "barlowtwins",
+      "epochs": 1000,
+      "batch_size": 256,
+      "steps_per_epoch": 390,
+      "seconds_per_step": 0.40279308310144446,
+      "estimated_seconds": 157090,
+      "requested_seconds": 157990,
+      "walltime": "43:53:10",
+      "samples": [
+        {
+          "seed": 0,
+          "seconds_per_step": 0.40204292840790007,
+          "log": "Evaluate_benchamrk/kmeans_ssl_checkpoints_cifar10k8k6k_tiny6k5k4k_6seeds/TinyImageNet/ConvNet/kmeans/pt2/barlowtwins/seed_000/ssl.jsonl",
+          "first_epoch": 3901,
+          "last_epoch": 4000
+        },
+        {
+          "seed": 1,
+          "seconds_per_step": 0.4042924365767145,
+          "log": "Evaluate_benchamrk/kmeans_ssl_checkpoints_cifar10k8k6k_tiny6k5k4k_6seeds/TinyImageNet/ConvNet/kmeans/pt2/barlowtwins/seed_001/ssl.jsonl",
+          "first_epoch": 3901,
+          "last_epoch": 4000
+        },
+        {
+          "seed": 2,
+          "seconds_per_step": 0.4035432377949889,
+          "log": "Evaluate_benchamrk/kmeans_ssl_checkpoints_cifar10k8k6k_tiny6k5k4k_6seeds/TinyImageNet/ConvNet/kmeans/pt2/barlowtwins/seed_002/ssl.jsonl",
+          "first_epoch": 3901,
+          "last_epoch": 4000
+        },
+        {
+          "seed": 3,
+          "seconds_per_step": 0.4047616287653467,
+          "log": "Evaluate_benchamrk/kmeans_ssl_checkpoints_cifar10k8k6k_tiny6k5k4k_6seeds/TinyImageNet/ConvNet/kmeans/pt2/barlowtwins/seed_003/ssl.jsonl",
+          "first_epoch": 3901,
+          "last_epoch": 4000
+        },
+        {
+          "seed": 4,
+          "seconds_per_step": 0.401988250726967,
+          "log": "Evaluate_benchamrk/kmeans_ssl_checkpoints_cifar10k8k6k_tiny6k5k4k_6seeds/TinyImageNet/ConvNet/kmeans/pt2/barlowtwins/seed_004/ssl.jsonl",
+          "first_epoch": 3901,
+          "last_epoch": 4000
+        },
+        {
+          "seed": 5,
+          "seconds_per_step": 0.40147402950496014,
+          "log": "Evaluate_benchamrk/kmeans_ssl_checkpoints_cifar10k8k6k_tiny6k5k4k_6seeds/TinyImageNet/ConvNet/kmeans/pt2/barlowtwins/seed_005/ssl.jsonl",
+          "first_epoch": 3901,
+          "last_epoch": 4000
+        }
+      ],
+      "slurm_walltime": "1-19:53:10"
+    },
+    {
+      "source": "TinyImageNet",
+      "model": "VGG11",
+      "ssl": "simclr",
+      "epochs": 1000,
+      "batch_size": 256,
+      "steps_per_epoch": 390,
+      "seconds_per_step": 0.45922862501881484,
+      "estimated_seconds": 179100,
+      "requested_seconds": 180000,
+      "walltime": "50:00:00",
+      "samples": [
+        {
+          "seed": 0,
+          "seconds_per_step": 0.4595109283125826,
+          "log": "Evaluate_benchamrk/kmeans_ssl_checkpoints_cifar10k8k6k_tiny6k5k4k_6seeds/TinyImageNet/VGG11/kmeans/pt2/simclr/seed_000/ssl.jsonl",
+          "first_epoch": 3901,
+          "last_epoch": 4000
+        },
+        {
+          "seed": 1,
+          "seconds_per_step": 0.4549070923456124,
+          "log": "Evaluate_benchamrk/kmeans_ssl_checkpoints_cifar10k8k6k_tiny6k5k4k_6seeds/TinyImageNet/VGG11/kmeans/pt2/simclr/seed_001/ssl.jsonl",
+          "first_epoch": 3901,
+          "last_epoch": 4000
+        },
+        {
+          "seed": 2,
+          "seconds_per_step": 0.46020424363802054,
+          "log": "Evaluate_benchamrk/kmeans_ssl_checkpoints_cifar10k8k6k_tiny6k5k4k_6seeds/TinyImageNet/VGG11/kmeans/pt2/simclr/seed_002/ssl.jsonl",
+          "first_epoch": 3901,
+          "last_epoch": 4000
+        },
+        {
+          "seed": 3,
+          "seconds_per_step": 0.45894632172504707,
+          "log": "Evaluate_benchamrk/kmeans_ssl_checkpoints_cifar10k8k6k_tiny6k5k4k_6seeds/TinyImageNet/VGG11/kmeans/pt2/simclr/seed_003/ssl.jsonl",
+          "first_epoch": 3901,
+          "last_epoch": 4000
+        },
+        {
+          "seed": 4,
+          "seconds_per_step": 0.4550815580159958,
+          "log": "Evaluate_benchamrk/kmeans_ssl_checkpoints_cifar10k8k6k_tiny6k5k4k_6seeds/TinyImageNet/VGG11/kmeans/pt2/simclr/seed_004/ssl.jsonl",
+          "first_epoch": 3901,
+          "last_epoch": 4000
+        },
+        {
+          "seed": 5,
+          "seconds_per_step": 0.45963593552620813,
+          "log": "Evaluate_benchamrk/kmeans_ssl_checkpoints_cifar10k8k6k_tiny6k5k4k_6seeds/TinyImageNet/VGG11/kmeans/pt2/simclr/seed_005/ssl.jsonl",
+          "first_epoch": 3901,
+          "last_epoch": 4000
+        }
+      ],
+      "slurm_walltime": "2-02:00:00"
+    },
+    {
+      "source": "TinyImageNet",
+      "model": "VGG11",
+      "ssl": "barlowtwins",
+      "epochs": 1000,
+      "batch_size": 256,
+      "steps_per_epoch": 390,
+      "seconds_per_step": 0.426173002173725,
+      "estimated_seconds": 166208,
+      "requested_seconds": 167108,
+      "walltime": "46:25:08",
+      "samples": [
+        {
+          "seed": 0,
+          "seconds_per_step": 0.42730237408674193,
+          "log": "Evaluate_benchamrk/kmeans_ssl_checkpoints_cifar10k8k6k_tiny6k5k4k_6seeds/TinyImageNet/VGG11/kmeans/pt2/barlowtwins/seed_000/ssl.jsonl",
+          "first_epoch": 3901,
+          "last_epoch": 4000
+        },
+        {
+          "seed": 1,
+          "seconds_per_step": 0.43081195904740266,
+          "log": "Evaluate_benchamrk/kmeans_ssl_checkpoints_cifar10k8k6k_tiny6k5k4k_6seeds/TinyImageNet/VGG11/kmeans/pt2/barlowtwins/seed_001/ssl.jsonl",
+          "first_epoch": 3901,
+          "last_epoch": 4000
+        },
+        {
+          "seed": 2,
+          "seconds_per_step": 0.4247888496311914,
+          "log": "Evaluate_benchamrk/kmeans_ssl_checkpoints_cifar10k8k6k_tiny6k5k4k_6seeds/TinyImageNet/VGG11/kmeans/pt2/barlowtwins/seed_002/ssl.jsonl",
+          "first_epoch": 3901,
+          "last_epoch": 4000
+        },
+        {
+          "seed": 3,
+          "seconds_per_step": 0.42689948013850626,
+          "log": "Evaluate_benchamrk/kmeans_ssl_checkpoints_cifar10k8k6k_tiny6k5k4k_6seeds/TinyImageNet/VGG11/kmeans/pt2/barlowtwins/seed_003/ssl.jsonl",
+          "first_epoch": 3901,
+          "last_epoch": 4000
+        },
+        {
+          "seed": 4,
+          "seconds_per_step": 0.42544652420894374,
+          "log": "Evaluate_benchamrk/kmeans_ssl_checkpoints_cifar10k8k6k_tiny6k5k4k_6seeds/TinyImageNet/VGG11/kmeans/pt2/barlowtwins/seed_004/ssl.jsonl",
+          "first_epoch": 3901,
+          "last_epoch": 4000
+        },
+        {
+          "seed": 5,
+          "seconds_per_step": 0.4245010816006522,
+          "log": "Evaluate_benchamrk/kmeans_ssl_checkpoints_cifar10k8k6k_tiny6k5k4k_6seeds/TinyImageNet/VGG11/kmeans/pt2/barlowtwins/seed_005/ssl.jsonl",
+          "first_epoch": 3901,
+          "last_epoch": 4000
+        }
+      ],
+      "slurm_walltime": "1-22:25:08"
+    },
+    {
+      "source": "TinyImageNet",
+      "model": "ResNet18",
+      "ssl": "simclr",
+      "epochs": 1000,
+      "batch_size": 256,
+      "steps_per_epoch": 390,
+      "seconds_per_step": 0.6886748240691876,
+      "estimated_seconds": 268584,
+      "requested_seconds": 269484,
+      "walltime": "74:51:24",
+      "samples": [
+        {
+          "seed": 0,
+          "seconds_per_step": 0.6923120450714071,
+          "log": "Evaluate_benchamrk/kmeans_ssl_checkpoints_cifar10k8k6k_tiny6k5k4k_6seeds/TinyImageNet/ResNet18/kmeans/pt2/simclr/seed_000/ssl.jsonl",
+          "first_epoch": 3901,
+          "last_epoch": 4000
+        },
+        {
+          "seed": 1,
+          "seconds_per_step": 0.6850137095652254,
+          "log": "Evaluate_benchamrk/kmeans_ssl_checkpoints_cifar10k8k6k_tiny6k5k4k_6seeds/TinyImageNet/ResNet18/kmeans/pt2/simclr/seed_001/ssl.jsonl",
+          "first_epoch": 3901,
+          "last_epoch": 4000
+        },
+        {
+          "seed": 2,
+          "seconds_per_step": 0.6862934333385368,
+          "log": "Evaluate_benchamrk/kmeans_ssl_checkpoints_cifar10k8k6k_tiny6k5k4k_6seeds/TinyImageNet/ResNet18/kmeans/pt2/simclr/seed_002/ssl.jsonl",
+          "first_epoch": 3901,
+          "last_epoch": 4000
+        },
+        {
+          "seed": 3,
+          "seconds_per_step": 0.6873222483761076,
+          "log": "Evaluate_benchamrk/kmeans_ssl_checkpoints_cifar10k8k6k_tiny6k5k4k_6seeds/TinyImageNet/ResNet18/kmeans/pt2/simclr/seed_003/ssl.jsonl",
+          "first_epoch": 3901,
+          "last_epoch": 4000
+        },
+        {
+          "seed": 4,
+          "seconds_per_step": 0.6919963136381869,
+          "log": "Evaluate_benchamrk/kmeans_ssl_checkpoints_cifar10k8k6k_tiny6k5k4k_6seeds/TinyImageNet/ResNet18/kmeans/pt2/simclr/seed_004/ssl.jsonl",
+          "first_epoch": 3901,
+          "last_epoch": 4000
+        },
+        {
+          "seed": 5,
+          "seconds_per_step": 0.6900273997622675,
+          "log": "Evaluate_benchamrk/kmeans_ssl_checkpoints_cifar10k8k6k_tiny6k5k4k_6seeds/TinyImageNet/ResNet18/kmeans/pt2/simclr/seed_005/ssl.jsonl",
+          "first_epoch": 3901,
+          "last_epoch": 4000
+        }
+      ],
+      "slurm_walltime": "3-02:51:24"
+    },
+    {
+      "source": "TinyImageNet",
+      "model": "ResNet18",
+      "ssl": "barlowtwins",
+      "epochs": 1000,
+      "batch_size": 256,
+      "steps_per_epoch": 390,
+      "seconds_per_step": 0.6565545229607128,
+      "estimated_seconds": 256057,
+      "requested_seconds": 256957,
+      "walltime": "71:22:37",
+      "samples": [
+        {
+          "seed": 0,
+          "seconds_per_step": 0.6647779471546943,
+          "log": "Evaluate_benchamrk/kmeans_ssl_checkpoints_cifar10k8k6k_tiny6k5k4k_6seeds/TinyImageNet/ResNet18/kmeans/pt2/barlowtwins/seed_000/ssl.jsonl",
+          "first_epoch": 3901,
+          "last_epoch": 4000
+        },
+        {
+          "seed": 1,
+          "seconds_per_step": 0.6581812684570573,
+          "log": "Evaluate_benchamrk/kmeans_ssl_checkpoints_cifar10k8k6k_tiny6k5k4k_6seeds/TinyImageNet/ResNet18/kmeans/pt2/barlowtwins/seed_001/ssl.jsonl",
+          "first_epoch": 3901,
+          "last_epoch": 4000
+        },
+        {
+          "seed": 2,
+          "seconds_per_step": 0.6565345672837326,
+          "log": "Evaluate_benchamrk/kmeans_ssl_checkpoints_cifar10k8k6k_tiny6k5k4k_6seeds/TinyImageNet/ResNet18/kmeans/pt2/barlowtwins/seed_002/ssl.jsonl",
+          "first_epoch": 3901,
+          "last_epoch": 4000
+        },
+        {
+          "seed": 3,
+          "seconds_per_step": 0.5811432711906466,
+          "log": "Evaluate_benchamrk/kmeans_ssl_checkpoints_cifar10k8k6k_tiny6k5k4k_6seeds/TinyImageNet/ResNet18/kmeans/pt2/barlowtwins/seed_003/ssl.jsonl",
+          "first_epoch": 3901,
+          "last_epoch": 4000
+        },
+        {
+          "seed": 4,
+          "seconds_per_step": 0.6523964328139222,
+          "log": "Evaluate_benchamrk/kmeans_ssl_checkpoints_cifar10k8k6k_tiny6k5k4k_6seeds/TinyImageNet/ResNet18/kmeans/pt2/barlowtwins/seed_004/ssl.jsonl",
+          "first_epoch": 3901,
+          "last_epoch": 4000
+        },
+        {
+          "seed": 5,
+          "seconds_per_step": 0.6565744786376931,
+          "log": "Evaluate_benchamrk/kmeans_ssl_checkpoints_cifar10k8k6k_tiny6k5k4k_6seeds/TinyImageNet/ResNet18/kmeans/pt2/barlowtwins/seed_005/ssl.jsonl",
+          "first_epoch": 3901,
+          "last_epoch": 4000
+        }
+      ],
+      "slurm_walltime": "2-23:22:37"
+    }
+  ]
+}
