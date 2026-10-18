@@ -5,6 +5,7 @@ import json
 import os
 import statistics
 import sys
+from contextlib import contextmanager
 from datetime import datetime
 from pathlib import Path
 
@@ -72,6 +73,29 @@ class SyntheticImages(torch.utils.data.Dataset):
         return to_pil_image(self.images[index]), -1
 
 
+@contextmanager
+def ssl_progress(module, every, epochs):
+    """Throttle console progress only; keep every epoch in ssl.jsonl."""
+    had_print = 'print' in module.__dict__
+    original_print = module.__dict__.get('print', print)
+
+    def progress_print(*values, **kwargs):
+        if kwargs.get('file') is None and len(values) == 1 and isinstance(values[0], str) and values[0].startswith('SSL '):
+            epoch = json.loads(values[0].split(': ', 1)[1])['epoch']
+            if epoch not in (1, epochs) and epoch % every:
+                return
+        original_print(*values, **kwargs)
+
+    module.print = progress_print
+    try:
+        yield
+    finally:
+        if had_print:
+            module.print = original_print
+        else:
+            del module.print
+
+
 def evaluate_synset_SSL(it_eval, model, images_train, args, output, normalization=None, seed=None):
     """Train a fresh reference SSL encoder and a frozen-encoder linear probe."""
     reference = reference_modules()
@@ -79,10 +103,11 @@ def evaluate_synset_SSL(it_eval, model, images_train, args, output, normalizatio
     seed = args.seed + it_eval if seed is None else seed
     ssl_epochs = args.epoch_eval_train if args.epoch_eval_train is not None else SSL_EPOCHS[args.dataset].get(args.percentage)
     probe_epochs = args.epoch_linear_train if args.epoch_linear_train is not None else PROBE_EPOCHS[args.label_percentage]
+    ssl_log_every = getattr(args, "ssl_log_every", 500)
     if ssl_epochs is None:
         raise ValueError("No SSL epoch schedule for this size; set the SSL epoch override")
-    if min(ssl_epochs, probe_epochs, args.batch_linear) < 1 or args.lr_linear <= 0:
-        raise ValueError("Epochs, batch size and learning rate must be positive")
+    if min(ssl_epochs, probe_epochs, args.batch_linear, ssl_log_every) < 1 or args.lr_linear <= 0:
+        raise ValueError("Epochs, batch size, print interval and learning rate must be positive")
     model = {"ConvNetBN": "ConvNet", "VGG11BN": "VGG11", "ResNet18BN": "ResNet18"}.get(model, model)
     if model not in ("ConvNet", "VGG11", "ResNet18"):
         raise ValueError("Reference evaluation requires ConvNet, VGG11 or ResNet18 (BN), not AP/cover")
@@ -130,9 +155,10 @@ def evaluate_synset_SSL(it_eval, model, images_train, args, output, normalizatio
     try:
         torch.backends.cuda.matmul.allow_tf32 = False
         torch.backends.cudnn.allow_tf32 = False
-        checkpoint, ssl_saved = reference["train_ssl"].train(
-            synthetic, protocol, args.dataset, model, args.ssl_method,
-            seed, output, identity, workers=0, device=args.device)
+        with ssl_progress(reference["train_ssl"], ssl_log_every, ssl_epochs):
+            checkpoint, ssl_saved = reference["train_ssl"].train(
+                synthetic, protocol, args.dataset, model, args.ssl_method,
+                seed, output, identity, workers=0, device=args.device)
         common.atomic_json(output / "ssl_complete.json", dict(
             complete=True, identity=identity, epochs=ssl_saved["epochs"],
             encoder_sha256=ssl_saved["encoder_sha256"], checkpoint_file_sha256=common.file_hash(checkpoint)))
@@ -156,6 +182,7 @@ def main():
     parser.add_argument("--model", choices=["ConvNet", "ConvNetBN", "VGG11", "VGG11BN", "ResNet18", "ResNet18BN"], default="ConvNet")
     parser.add_argument("--ssl-method", choices=["simclr", "barlowtwins"], default="simclr")
     parser.add_argument("--ssl-epochs", dest="epoch_eval_train", type=int, default=None)
+    parser.add_argument("--ssl-log-every", "--print-every", type=int, default=500, help="Print SSL progress every N epochs; always print first/final epochs")
     parser.add_argument("--probe-epochs", dest="epoch_linear_train", type=int, default=None)
     parser.add_argument("--lr-linear", type=float, default=0.1)
     parser.add_argument("--batch-linear", type=int, default=256)
@@ -174,8 +201,8 @@ def main():
         args.epoch_linear_train = PROBE_EPOCHS[args.label_percentage]
     if args.epoch_eval_train is None:
         parser.error("No SSL epoch schedule for this size; set --ssl-epochs explicitly")
-    if min(args.epoch_eval_train, args.epoch_linear_train, args.runs, args.batch_linear) < 1 or args.lr_linear <= 0 or not 0 < args.percentage <= 100:
-        parser.error("Epochs, runs, batches and learning rate must be positive; percentage must be in (0, 100]")
+    if min(args.epoch_eval_train, args.epoch_linear_train, args.runs, args.batch_linear, args.ssl_log_every) < 1 or args.lr_linear <= 0 or not 0 < args.percentage <= 100:
+        parser.error("Epochs, runs, batches, print interval and learning rate must be positive; percentage must be in (0, 100]")
     if args.synthetic_checkpoint is not None and args.synthetic_root is not None:
         parser.error("Use --synthetic-checkpoint or --synthetic-root, not both")
     
