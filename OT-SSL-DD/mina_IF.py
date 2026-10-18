@@ -546,7 +546,7 @@ def main():
         encoder_ssl_history.append(encoder_ssl_value)
         if iteration % 25 == 0:
             current_lr = scheduler_img.get_last_lr()[0]
-            print('%s iter = %05d, encoder_SSL = %.6f, neg_MI = %.6f, coverage = %.6f, pixel_MSE = %.6f, total_loss = %.6f, pixel drift RMS = %.5f/255, PNG values changed = %.5f%%, lr = %.4f' %
+            print('%s iter = %05d, encoder_SSL = %.6f, neg_MI = %.6f, coverage = %.6f, proxy_loss = %.6f, pixel_MSE = %.6f, total_loss = %.6f, pixel drift RMS = %.5f/255, PNG values changed = %.5f%%, lr = %.4f' %
                 (get_time(), iteration, encoder_ssl_value, negative_mi_value, coverage_value, objective, pixel_mse_value, total_loss_value, drift, changed, current_lr), flush=True)
 
         # if iteration % 100 == 0:
