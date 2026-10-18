@@ -12,7 +12,16 @@ import torch.nn as nn
 import torch.nn.functional as F
 from torchvision.utils import save_image
 
-from utils import DiffAugment, ParamDiffAug, evaluate_synset_SSL, get_dataset, get_eval_pool, get_network, get_time
+from eval import evaluate_synset_SSL
+from utils import DiffAugment, ParamDiffAug, get_dataset, get_network, get_time
+
+
+SSL_EPOCHS = {
+    'CIFAR10': {0.2: 10000, 1: 8000, 2: 6000},
+    'CIFAR100': {0.2: 10000, 1: 8000, 2: 6000},
+    'TinyImageNet': {0.2: 6000, 1: 5000, 2: 4000},
+}
+PROBE_EPOCHS = {1: 100, 5: 100}
 
 
 # def clear_directory(directory):
@@ -264,18 +273,18 @@ def main():
     parser.add_argument('--distill_aug_mode', choices=['S', 'M'], default='M')
 
     # Downstream SSL evaluation.
-    parser.add_argument('--model', default='ResNet18_cover')
+    parser.add_argument('--model', default='ResNet18')
     parser.add_argument('--lr_net', type=float, default=0.01)
     parser.add_argument('--batch_train', type=int, default=256)
-    parser.add_argument('--ssl_method', default='simclr')
-    parser.add_argument('--ssl_aug_strategy', default=None)
+    parser.add_argument('--ssl_method', choices=['simclr', 'barlowtwins'], default='simclr')
+    parser.add_argument('--ssl_aug_strategy', default=None, help='Legacy option; reference evaluation uses the benchmark view transforms')
     parser.add_argument('--projection_dim', type=int, default=128)
     parser.add_argument('--barlow_lambda', type=float, default=0.005, help='Barlow Twins off-diagonal loss weight')
     parser.add_argument('--eval_mode', default='S')
     parser.add_argument('--num_eval', type=int, default=3)
-    parser.add_argument('--epoch_eval_train', type=int, default=1200)
+    parser.add_argument('--epoch_eval_train', type=int, default=None, help='Default: SSL_EPOCHS[dataset][percentage]')
     parser.add_argument('--label_percentage', type=float, default=1.0)
-    parser.add_argument('--epoch_linear_train', type=int, default=200)
+    parser.add_argument('--epoch_linear_train', type=int, default=None, help='Default: PROBE_EPOCHS[label_percentage]')
     parser.add_argument('--lr_linear', type=float, default=0.1)
     parser.add_argument('--batch_linear', type=int, default=256)
 
@@ -283,6 +292,25 @@ def main():
     parser.add_argument('--save_path', default='result_both')
 
     args = parser.parse_args()
+    if args.num_eval < 0:
+        parser.error('num_eval must be nonnegative')
+    if args.num_eval:
+        if args.dataset not in SSL_EPOCHS:
+            parser.error('Reference evaluation supports CIFAR10, CIFAR100 and TinyImageNet')
+        if args.epoch_eval_train is None:
+            args.epoch_eval_train = SSL_EPOCHS.get(args.dataset, {}).get(args.percentage)
+        if args.epoch_linear_train is None:
+            args.epoch_linear_train = PROBE_EPOCHS.get(args.label_percentage)
+        if args.epoch_eval_train is None or args.epoch_linear_train is None:
+            parser.error('No evaluation epoch schedule for this dataset/size/label budget; set the epoch overrides explicitly')
+        if args.label_percentage not in PROBE_EPOCHS:
+            parser.error('Reference evaluation supports 1% and 5% labels')
+        if min(args.epoch_eval_train, args.epoch_linear_train, args.batch_linear) < 1 or args.lr_linear <= 0:
+            parser.error('Evaluation epochs, batch size and learning rate must be positive')
+        if args.eval_mode not in ('S', 'SS', 'M'):
+            parser.error('Reference eval_mode must be S/SS (selected model) or M (all three BN models)')
+        if args.model not in ('ConvNet', 'ConvNetBN', 'VGG11', 'VGG11BN', 'ResNet18', 'ResNet18BN'):
+            parser.error('Reference evaluation requires ConvNet, VGG11 or ResNet18 (BN); no AP/cover substitution')
     if args.encoder_train_method == 'barlow_twins':
         args.encoder_train_method = 'barlowtwins'
     random_models = [name.strip() for name in (args.random_models or args.model).split(',') if name.strip()]
@@ -340,7 +368,8 @@ def main():
     pixel_mse_history = []
     total_loss_history = []
     encoder_ssl_history = []
-    model_eval_pool = get_eval_pool(args.eval_mode, args.model, args.model) if args.num_eval else []
+    # Preserve BN during evaluation; the legacy S pool strips the BN suffix.
+    model_eval_pool = ([args.model] if args.eval_mode in ('S', 'SS') else ['ConvNet', 'VGG11', 'ResNet18']) if args.num_eval else []
 
     def evaluate(iteration):
         for model_index, model_eval in enumerate(model_eval_pool):
@@ -348,11 +377,12 @@ def main():
             accuracies = []
             for eval_index in range(args.num_eval):
                 eval_seed = args.seed + 20000 + eval_index
-                set_random_seed(eval_seed)
-                network = get_network(model_eval, channel, num_classes, im_size, seed=eval_seed).to(args.device)
-                _, _, accuracy = evaluate_synset_SSL(eval_index, network, image_syn.detach().clone(), dst_train, testloader, args)
+                output = os.path.join(args.save_path, 'evaluation', 'iter_%05d' % iteration, model_eval, 'seed_%03d' % eval_seed)
+                _, _, accuracy = evaluate_synset_SSL(eval_index, model_eval, image_syn.detach(), args,
+                                                     output, normalization=[mean, std], seed=eval_seed)
                 accuracies.append(float(accuracy))
-            print('Evaluate %d random %s, mean = %.4f std = %.4f\n-------------------------' % (len(accuracies), model_eval, np.mean(accuracies), np.std(accuracies)), flush=True)
+            print('Evaluate %d random %s, mean = %.4f std = %.4f\n-------------------------' %
+                  (len(accuracies), model_eval, np.mean(accuracies), np.std(accuracies, ddof=1) if len(accuracies) > 1 else float('nan')), flush=True)
 
     print('Hyper-parameters: \n', args.__dict__)
     print('P_net support: %s' % ', '.join(random_models), flush=True)
@@ -486,6 +516,9 @@ def main():
             result_path = os.path.join(args.save_path, 'res_IIC_%s_%s_%gpercent_final.pt' % (args.dataset, args.model, args.percentage))
             torch.save({
                 'data': image_syn.detach().cpu(), 
+                'dataset': args.dataset,
+                'percentage': args.percentage,
+                'normalization': [mean, std],
                 'method': args.method, 
                 'iteration': args.Iteration, 
                 'loss_history': torch.tensor(loss_history, dtype=torch.float64), 

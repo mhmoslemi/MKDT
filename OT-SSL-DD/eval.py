@@ -1,4 +1,6 @@
 import argparse
+import hashlib
+import importlib.util
 import json
 import os
 import statistics
@@ -6,65 +8,206 @@ import sys
 from datetime import datetime
 from pathlib import Path
 
-ROOT = Path("/home/mmoslem3/scratch/MKDT")
-sys.path.insert(0, str(ROOT / "benchmarks"))
-
 import torch
-import benchmark_cifar10 as bench
+from torchvision.transforms.functional import to_pil_image
+
+
+SSL_EPOCHS = {
+    "CIFAR10": {0.2: 10000, 1: 8000, 2: 6000},
+    "CIFAR100": {0.2: 10000, 1: 8000, 2: 6000},
+    "TinyImageNet": {0.2: 6000, 1: 5000, 2: 4000},
+}
+PROBE_EPOCHS = {1: 100, 5: 100}
+
+# Undo OT utils.get_dataset normalization before applying the benchmark transforms.
+SYNTHETIC_NORMALIZATION = {
+    "CIFAR10": [[0.4914, 0.4822, 0.4465], [0.2023, 0.1994, 0.2010]],
+    "CIFAR100": [[0.5071, 0.4866, 0.4409], [0.2673, 0.2564, 0.2762]],
+    "TinyImageNet": [[0.485, 0.456, 0.406], [0.229, 0.224, 0.225]],
+}
+
+ROOT = Path(__file__).resolve().parents[1]
+_REFERENCE = None
+
+
+def reference_modules():
+    """Reuse benchmark functions without replacing OT's imported networks/utils."""
+    global _REFERENCE
+    if _REFERENCE is None:
+        paths = {
+            "networks": ROOT / "networks.py",
+            "downstream_data": ROOT / "benchmarks/downstream_data.py",
+            **{name: ROOT / "Evaluate_benchamrk" / (name + ".py")
+               for name in ("common", "data", "train_ssl", "evaluate")},
+        }
+        previous = {name: sys.modules.get(name) for name in paths}
+        search_path = sys.path[:]
+        modules = {}
+        try:
+            for name, path in paths.items():
+                spec = importlib.util.spec_from_file_location(name, path)
+                module = importlib.util.module_from_spec(spec)
+                sys.modules[name] = module
+                spec.loader.exec_module(module)
+                modules[name] = module
+        finally:
+            sys.path[:] = search_path
+            for name, module in previous.items():
+                if module is None:
+                    sys.modules.pop(name, None)
+                else:
+                    sys.modules[name] = module
+        _REFERENCE = modules
+    return _REFERENCE
+
+
+class SyntheticImages(torch.utils.data.Dataset):
+    def __init__(self, images):
+        self.images = images
+
+    def __len__(self):
+        return len(self.images)
+
+    def __getitem__(self, index):
+        return to_pil_image(self.images[index]), -1
+
+
+def evaluate_synset_SSL(it_eval, model, images_train, args, output, normalization=None, seed=None):
+    """Train a fresh reference SSL encoder and a frozen-encoder linear probe."""
+    reference = reference_modules()
+    common, data = reference["common"], reference["data"]
+    seed = args.seed + it_eval if seed is None else seed
+    ssl_epochs = args.epoch_eval_train if args.epoch_eval_train is not None else SSL_EPOCHS[args.dataset].get(args.percentage)
+    probe_epochs = args.epoch_linear_train if args.epoch_linear_train is not None else PROBE_EPOCHS[args.label_percentage]
+    if ssl_epochs is None:
+        raise ValueError("No SSL epoch schedule for this size; set the SSL epoch override")
+    if min(ssl_epochs, probe_epochs, args.batch_linear) < 1 or args.lr_linear <= 0:
+        raise ValueError("Epochs, batch size and learning rate must be positive")
+    model = {"ConvNetBN": "ConvNet", "VGG11BN": "VGG11", "ResNet18BN": "ResNet18"}.get(model, model)
+    if model not in ("ConvNet", "VGG11", "ResNet18"):
+        raise ValueError("Reference evaluation requires ConvNet, VGG11 or ResNet18 (BN), not AP/cover")
+
+    protocol = json.loads((ROOT / "Evaluate_benchamrk/protocol.json").read_text())
+    protocol["ssl"]["subset_epochs"] = ssl_epochs
+    protocol["ssl"]["checkpoint_every_epochs"] = 500
+    protocol["evaluation"].update(epochs=probe_epochs, lr=args.lr_linear, batch_size=args.batch_linear)
+    size = protocol["input_size"][args.dataset]
+    count = int(data.SOURCE_COUNTS[args.dataset] * args.percentage / 100)
+    if not isinstance(images_train, torch.Tensor) or images_train.shape != (count, 3, size, size) or count < 2:
+        raise ValueError("Synthetic images must match the dataset, percentage and native resolution")
+    images = images_train.detach().cpu().contiguous()
+    if not images.is_floating_point() or not torch.isfinite(images).all():
+        raise ValueError("Synthetic images must be finite, normalized floating-point tensors")
+    normalization = SYNTHETIC_NORMALIZATION[args.dataset] if normalization is None else normalization
+    mean, std = (torch.tensor(value).view(1, 3, 1, 1) for value in normalization)
+    if not torch.isfinite(mean).all() or not torch.isfinite(std).all() or (std <= 0).any():
+        raise ValueError("Invalid synthetic normalization")
+    pixels = images * std + mean
+    clipped_fraction = float(((pixels < 0) | (pixels > 1)).float().mean())
+    synthetic = SyntheticImages(pixels.clamp(0, 1).contiguous())
+
+    train_set = data.RawDataset(args.data_path, args.dataset, True)
+    test_set = data.RawDataset(args.data_path, args.dataset, False)
+    signature = dict(protocol=protocol, source=args.dataset, model=model, ssl=args.ssl_method,
+                     subset=args.percentage, selection_method="ours", source_fingerprint=train_set.fingerprint,
+                     synthetic_sha256=hashlib.sha256(images.numpy().tobytes()).hexdigest(),
+                     synthetic_dtype=str(images.dtype), synthetic_normalization=normalization,
+                     clipped_fraction=clipped_fraction, pixel_policy="denormalize_clamp_then_PIL_uint8",
+                     code_hashes=common.code_hashes(), evaluation_driver_sha256=common.file_hash(__file__))
+    identity = dict(signature=common.digest_json(signature), seed=seed, selection_method="ours")
+    output = Path(output)
+    output.mkdir(parents=True, exist_ok=False)
+    common.atomic_json(output / "config.json", dict(signature=signature, identity=identity))
+    print("Reference SSL: %s/%s/%s, SSL epochs=%d, probe epochs=%d, labels=%g%%" %
+          (args.dataset, model, args.ssl_method, ssl_epochs, probe_epochs, args.label_percentage), flush=True)
+
+    # Do not let evaluation alter the distillation RNGs or numerical settings.
+    import numpy as np
+    rng, numpy_rng = common.rng_state(), np.random.get_state()
+    settings = (torch.backends.cuda.matmul.allow_tf32, torch.backends.cudnn.allow_tf32,
+                torch.backends.cudnn.benchmark, torch.backends.cudnn.deterministic)
+    try:
+        torch.backends.cuda.matmul.allow_tf32 = False
+        torch.backends.cudnn.allow_tf32 = False
+        checkpoint, ssl_saved = reference["train_ssl"].train(
+            synthetic, protocol, args.dataset, model, args.ssl_method,
+            seed, output, identity, workers=0, device=args.device)
+        common.atomic_json(output / "ssl_complete.json", dict(
+            complete=True, identity=identity, epochs=ssl_saved["epochs"],
+            encoder_sha256=ssl_saved["encoder_sha256"], checkpoint_file_sha256=common.file_hash(checkpoint)))
+        result = reference["evaluate"].linear_probe(
+            checkpoint, identity, protocol, args.dataset, args.dataset,
+            train_set, test_set, args.label_percentage, seed,
+            output / ("%s_lbl%g.json" % (args.dataset, args.label_percentage)), workers=0, device=args.device)
+    finally:
+        common.restore_rng(rng)
+        np.random.set_state(numpy_rng)
+        (torch.backends.cuda.matmul.allow_tf32, torch.backends.cudnn.allow_tf32,
+         torch.backends.cudnn.benchmark, torch.backends.cudnn.deterministic) = settings
+    return checkpoint, result, result["accuracy_percent"] / 100
 
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--percentage", type=int, choices=[1, 2, 5], default=1)
-    parser.add_argument("--label-percentage", type=int, choices=[1, 5], default=1)
-    parser.add_argument("--model", choices=["ConvNet", "VGG11", "ResNet18"], default="ConvNet")
+    parser.add_argument("--dataset", choices=list(SSL_EPOCHS), default="CIFAR10")
+    parser.add_argument("--percentage", type=float, default=1)
+    parser.add_argument("--label-percentage", type=int, choices=list(PROBE_EPOCHS), default=1)
+    parser.add_argument("--model", choices=["ConvNet", "ConvNetBN", "VGG11", "VGG11BN", "ResNet18", "ResNet18BN"], default="ConvNet")
     parser.add_argument("--ssl-method", choices=["simclr", "barlowtwins"], default="simclr")
-    parser.add_argument("--ssl-epochs", type=int, default=5000)
-    parser.add_argument("--probe-epochs", type=int, default=500)
-    parser.add_argument("--ssl-log-every", type=int, default=500)
+    parser.add_argument("--ssl-epochs", dest="epoch_eval_train", type=int, default=None)
+    parser.add_argument("--probe-epochs", dest="epoch_linear_train", type=int, default=None)
+    parser.add_argument("--lr-linear", type=float, default=0.1)
+    parser.add_argument("--batch-linear", type=int, default=256)
     parser.add_argument("--runs", type=int, default=3)
     parser.add_argument("--seed", type=int, default=0)
-    parser.add_argument("--data-path", default="/scratch/mmoslem3/data")
-    # parser.add_argument("--synthetic-root", default=str(ROOT / "benchmarks/ours/batch_20261008T195254Z_EkW378/yiweilu_mCLPIh/synthetic"))
-    parser.add_argument("--synthetic-root", default=str(ROOT / "benchmarks/ours/batch_20261008T195254Z_EkW378/yiweilu_mCLPIh/synthetic"))
-    # 
-    parser.add_argument("--save-path", default=None)
+    parser.add_argument("--device", choices=["cuda", "cpu"], default="cuda")
+    parser.add_argument("--data-path", default=str(ROOT.parent / "data"))
+    parser.add_argument("--synthetic-checkpoint", type=Path, default=None)
+    parser.add_argument("--synthetic-root", type=Path, default=None, help="Legacy sizeN/res_IIC_DATASET_ConvNet_Npercent.pt layout")
+    parser.add_argument("--save-path", type=Path, default=None)
     args = parser.parse_args()
 
-
-
+    if args.epoch_eval_train is None:
+        args.epoch_eval_train = SSL_EPOCHS[args.dataset].get(args.percentage)
+    if args.epoch_linear_train is None:
+        args.epoch_linear_train = PROBE_EPOCHS[args.label_percentage]
+    if args.epoch_eval_train is None:
+        parser.error("No SSL epoch schedule for this size; set --ssl-epochs explicitly")
+    if min(args.epoch_eval_train, args.epoch_linear_train, args.runs, args.batch_linear) < 1 or args.lr_linear <= 0 or not 0 < args.percentage <= 100:
+        parser.error("Epochs, runs, batches and learning rate must be positive; percentage must be in (0, 100]")
+    if args.synthetic_checkpoint is not None and args.synthetic_root is not None:
+        parser.error("Use --synthetic-checkpoint or --synthetic-root, not both")
+    checkpoint_path = args.synthetic_checkpoint
+    if checkpoint_path is None:
+        if args.synthetic_root is None:
+            parser.error("Specify --synthetic-checkpoint (the saved synthetic images)")
+        checkpoint_path = args.synthetic_root / f"size{args.percentage:g}" / f"res_IIC_{args.dataset}_ConvNet_{args.percentage:g}percent.pt"
 
     torch.set_num_threads(int(os.environ.get("SLURM_CPUS_PER_TASK", "1")))
-    ssl_epochs = args.ssl_epochs
-    probe_epochs = args.probe_epochs
-    checkpoint_path = Path(args.synthetic_root) / f"size{args.percentage}" / f"res_IIC_CIFAR10_ConvNet_{args.percentage}percent.pt"
-    checkpoint_path = '/home/mmoslem3/scratch/MKDT/OT-SSL-DD/result_joint_view_mmd/res_JointViewMMD_CIFAR10_ResNet18_cover_1percent_final.pt'
-    synthetic = torch.load(checkpoint_path, map_location="cpu", weights_only=True)["data"].to("cuda")
-    if synthetic.shape != (500 * args.percentage, 3, 32, 32):
-        raise ValueError(f"Unexpected synthetic shape: {tuple(synthetic.shape)}")
-
+    saved = torch.load(checkpoint_path, map_location="cpu", weights_only=True)
+    if saved.get("dataset", args.dataset) != args.dataset or saved.get("percentage", args.percentage) != args.percentage:
+        raise ValueError("Synthetic checkpoint metadata disagrees with the requested dataset/percentage")
     stamp = datetime.now().strftime("%Y%m%d_%H%M%S_%f")
-    output = Path(args.save_path) if args.save_path else ROOT / "benchmarks/ours" / f"manual_{stamp}"
+    output = args.save_path if args.save_path else ROOT / "OT-SSL-DD/eval_results" / f"manual_{stamp}"
     output.mkdir(parents=True, exist_ok=False)
-    config = dict(vars(args), ssl_epochs=ssl_epochs, probe_epochs=probe_epochs, batch_size=256, lr_ssl=0.01, lr_probe=0.1, momentum=0.9, weight_decay=0.0005, temperature=0.2, barlow_lambda=0.005, projection_dim=128, augmentation='color_crop_cutout_flip_scale_rotate', augmentation_mode="S", synthetic_checkpoint=str(checkpoint_path), std_ddof=1)
-    bench.write_json(output / "config.json", config)
+    config = {key: str(value) if isinstance(value, Path) else value for key, value in vars(args).items()}
+    config.update(synthetic_checkpoint=str(checkpoint_path.resolve()), save_path=str(output.resolve()), std_ddof=1)
+    common = reference_modules()["common"]
+    common.atomic_json(output / "config.json", config)
     print(json.dumps(config, indent=2), flush=True)
-
-    train, labels, test, test_labels = bench.load_data(args.data_path, "cuda")
-    labels_cpu = labels.cpu().numpy()
     accuracies = []
 
-    for seed in range(args.seed, args.seed + args.runs):
-        chosen = torch.tensor(bench.labeled_indices(labels_cpu, args.label_percentage, seed), device="cuda")
-        network = bench.get_network(args.model, 3, 10, (32, 32), seed=seed + 3000)
-        bench.train_ssl(network, synthetic, args.ssl_method, ssl_epochs, seed, log_every=args.ssl_log_every)
-        accuracy = bench.linear_probe(network, train[chosen], labels[chosen], test, test_labels, probe_epochs, seed)
-        accuracies.append(accuracy)
-        bench.write_json(output / f"seed_{seed:03d}.json", dict(seed=seed, accuracy_percent=accuracy, labeled_indices=chosen.cpu().tolist()))
-        summary = dict(config=config, completed_runs=len(accuracies), expected_runs=args.runs, complete=len(accuracies) == args.runs, accuracies_percent=accuracies, mean_percent=statistics.mean(accuracies), std_percent=statistics.stdev(accuracies) if len(accuracies) > 1 else None)
-        bench.write_json(output / "summary.json", summary)
-        print(f"seed={seed} accuracy={accuracy:.2f}%", flush=True)
-        del network
+    for run in range(args.runs):
+        seed = args.seed + run
+        _, _, accuracy = evaluate_synset_SSL(run, args.model, saved["data"], args,
+                                             output / f"seed_{seed:03d}", saved.get("normalization"))
+        accuracies.append(accuracy * 100)
+        summary = dict(config=config, completed_runs=len(accuracies), expected_runs=args.runs,
+                       complete=len(accuracies) == args.runs, accuracies_percent=accuracies,
+                       mean_percent=statistics.mean(accuracies),
+                       std_percent=statistics.stdev(accuracies) if len(accuracies) > 1 else None)
+        common.atomic_json(output / "summary.json", summary)
+        print(f"seed={seed} accuracy={accuracy * 100:.2f}%", flush=True)
 
     std = f"{summary['std_percent']:.2f}" if summary["std_percent"] is not None else "N/A"
     print(f"Mean ± sample std: {summary['mean_percent']:.2f} ± {std}%")
