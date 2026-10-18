@@ -289,10 +289,10 @@ def main():
     parser.add_argument('--seed', type=int, default=0)
 
     # Information-Theoretic Objective.
-    parser.add_argument('--Iteration', type=int, default=500)
-    parser.add_argument('--lr_img', type=float, default=0.005, help='Higher LR, decays via CosineAnnealing')
+    parser.add_argument('--Iteration', type=int, default=600)
+    parser.add_argument('--lr_img', type=float, default=0.01, help='Higher LR, decays via CosineAnnealing')
     parser.add_argument('--batch_real', type=int, default=512)
-    parser.add_argument('--num_random_networks', type=int, default=5)
+    parser.add_argument('--num_random_networks', type=int, default=2)
     parser.add_argument('--temperature', type=float, default=0.2, help='Softmax temperature for prototype assignment')
     parser.add_argument('--shift_weight', type=float, default=2.0, help='Weight for intra-pair directional view-shift alignment')
     
@@ -302,7 +302,7 @@ def main():
 
 
     parser.add_argument('--random_models', default='ConvNet', help='Comma-separated P_net support')
-    parser.add_argument('--encoder_train_steps', type=int, default=0, help='SSL steps on detached images before freezing')
+    parser.add_argument('--encoder_train_steps', type=int, default=2, help='SSL steps on detached images before freezing')
     parser.add_argument('--encoder_train_method', choices=['simclr', 'barlowtwins', 'barlow_twins'], default='simclr')
     parser.add_argument('--encoder_train_data', choices=['synthetic', 'real'], default='synthetic')
     parser.add_argument('--distill_aug_strategy', default='color_crop_cutout_flip_scale_rotate')

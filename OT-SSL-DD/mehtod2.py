@@ -315,7 +315,7 @@ def main():
     parser.add_argument('--pixel_mse_weight', type=float, default=0.0)
     parser.add_argument('--coverage_gamma', type=float, default=0.0, help='Weight of prototype-to-real soft coverage')
 
-    parser.add_argument('--encoder_train_steps', type=int, default=0)
+    parser.add_argument('--encoder_train_steps', type=int, default=3)
     parser.add_argument('--encoder_train_method', choices=['simclr', 'barlowtwins', 'barlow_twins'], default='simclr')
     parser.add_argument('--encoder_train_data', choices=['synthetic', 'real'], default='synthetic')
     parser.add_argument('--distill_aug_strategy', default='color_crop_cutout_flip_scale_rotate')
