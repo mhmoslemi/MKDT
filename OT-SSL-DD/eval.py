@@ -187,6 +187,7 @@ def main():
             parser.error("Specify --synthetic-checkpoint (the saved synthetic images)")
         checkpoint_path = args.synthetic_root / f"size{args.percentage:g}" / f"res_IIC_{args.dataset}_ConvNet_{args.percentage:g}percent.pt"
 
+    checkpoint_path = Path(checkpoint_path)
     torch.set_num_threads(int(os.environ.get("SLURM_CPUS_PER_TASK", "1")))
     saved = torch.load(checkpoint_path, map_location="cpu", weights_only=True)
     if saved.get("dataset", args.dataset) != args.dataset or saved.get("percentage", args.percentage) != args.percentage:
