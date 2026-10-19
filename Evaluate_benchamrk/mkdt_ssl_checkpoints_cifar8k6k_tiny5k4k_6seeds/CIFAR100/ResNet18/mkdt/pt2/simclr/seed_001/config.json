@@ -1,0 +1,256 @@
+{
+  "identity": {
+    "seed": 1,
+    "selection": {
+      "clipped_fraction": 0.8966920375823975,
+      "count": 1000,
+      "file_sha256": "fa3ab1b9f2c890839a7062a6f920e64414eb05c403a72d88d6a10ce1afe75901",
+      "generator": "ConvNet",
+      "path": "/scratch/mmoslem3/MKDT/benchmarks/mkdt_multidataset/results/batch_20261010T160046Z_Y6dqZS/synthetic/generated/ConvNet/CIFAR100/CIFAR100_2pct/images_5000.pt",
+      "pixel_policy": "clamp_to_unit_rgb",
+      "quantization": "float_to_PIL_uint8_for_reference_augmentations",
+      "space": "repository_normalized"
+    },
+    "selection_method": "mkdt",
+    "signature": "da37ead64f3184c00009665f0d4d93390f6924cad2bc3326651c60384ff2a46e"
+  },
+  "signature": {
+    "code_hashes": {
+      "Evaluate_benchamrk/common.py": "67fcd33f581a34a7f764431b6761ac120cb080d4b2ea0d69b95074565a224f8b",
+      "Evaluate_benchamrk/data.py": "befcf535679e449b3544ae9b8578325e53f7995179591042315d8937cd55f6d9",
+      "Evaluate_benchamrk/evaluate.py": "2b2162a56878f48ade39d2b80d4316511f20a72d29eaa2cf70fe023d88ad722f",
+      "Evaluate_benchamrk/plan.py": "c6d9bd33b36d1d235a2f6af291b3a0a82187b1eea3a10b90a7f57317d8eee83e",
+      "Evaluate_benchamrk/run.py": "1c2b8d29ab47966f1178c9f04b3e1b7c72bd2f55fb65a32c32c77c3730faf45b",
+      "Evaluate_benchamrk/test_protocol.py": "f018562437924ced1d890343a4e898f10e48c50a63920d337031194671c4e43d",
+      "Evaluate_benchamrk/train_ssl.py": "3670781eb0f0f838ced6cc7ca9775791d4d52683fe25e489239f012937dc1a79",
+      "benchmarks/downstream_data.py": "081fe26e5dc81c96ce8e8ffe5a412302663de4a9d095684c5b37e7c615b4a6fd",
+      "networks.py": "0c15ff3ef11f21df752e2a9a17851ab8c8a52ddc3969380682ea8bfcec1968fc"
+    },
+    "generator": "ConvNet",
+    "input_scope": "saved_synthetic_images_only",
+    "model": "ResNet18",
+    "protocol": {
+      "evaluation": {
+        "baseline": "frozen_random_encoder",
+        "batch_size": 256,
+        "checkpoint_selection": "final_epoch_no_test_selection",
+        "epochs": 100,
+        "full_data_sanity_label_percentage": 100,
+        "head_init_std": 0.01,
+        "label_percentages": [
+          1,
+          5
+        ],
+        "label_policy": "exact",
+        "lr": 0.1,
+        "momentum": 0.9,
+        "normalize_using": "source_statistics",
+        "optimizer": "sgd",
+        "schedule": "cosine_per_step",
+        "test_resize_ratio": 1.1428571428571428,
+        "test_transform": "resize_short_side_and_center_crop",
+        "train_transform": "random_resized_crop_and_flip",
+        "warmup_epochs": 0,
+        "weight_decay": 0.0
+      },
+      "full_seeds": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "input_size": {
+        "CIFAR10": 32,
+        "CIFAR100": 32,
+        "TinyImageNet": 64
+      },
+      "methods": {
+        "barlowtwins": {
+          "blur_probabilities": [
+            0.0,
+            0.0
+          ],
+          "color_jitter": [
+            0.4,
+            0.4,
+            0.2,
+            0.1
+          ],
+          "correlation_eps": 1e-05,
+          "lambda": 0.0051,
+          "loss_scale": 0.1,
+          "lr": 0.3,
+          "projector": [
+            2048,
+            2048,
+            2048
+          ],
+          "projector_batchnorm": true,
+          "projector_bias": true,
+          "solarize_probabilities": [
+            0.0,
+            0.2
+          ]
+        },
+        "simclr": {
+          "blur_probabilities": [
+            0.5,
+            0.5
+          ],
+          "color_jitter": [
+            0.8,
+            0.8,
+            0.8,
+            0.2
+          ],
+          "lr": 0.4,
+          "projector": [
+            2048,
+            256
+          ],
+          "projector_batchnorm": false,
+          "projector_bias": true,
+          "solarize_probabilities": [
+            0.0,
+            0.0
+          ],
+          "temperature": 0.2
+        }
+      },
+      "models": [
+        "ConvNet",
+        "VGG11",
+        "ResNet18"
+      ],
+      "normalization": {
+        "CIFAR10": [
+          [
+            0.4914,
+            0.4822,
+            0.4465
+          ],
+          [
+            0.247,
+            0.2435,
+            0.2616
+          ]
+        ],
+        "CIFAR100": [
+          [
+            0.5071,
+            0.4865,
+            0.4409
+          ],
+          [
+            0.2673,
+            0.2564,
+            0.2762
+          ]
+        ],
+        "TinyImageNet": [
+          [
+            0.485,
+            0.456,
+            0.406
+          ],
+          [
+            0.229,
+            0.224,
+            0.225
+          ]
+        ]
+      },
+      "references": {
+        "barlow_official": "https://github.com/facebookresearch/barlowtwins",
+        "cifar_barlow": "https://github.com/vturrisi/solo-learn/blob/main/scripts/pretrain/cifar/barlow.yaml",
+        "cifar_simclr": "https://github.com/vturrisi/solo-learn/blob/main/scripts/pretrain/cifar/simclr.yaml",
+        "simclr_official": "https://github.com/google-research/simclr"
+      },
+      "selection": {
+        "batch_size": 256,
+        "distance_chunk_size": 1024,
+        "feature_model": "random_ConvNetGAP_BN",
+        "feature_normalization": "l2",
+        "feature_seed_offset": 2000,
+        "iterations": 50,
+        "method": "kmeans",
+        "unique_exemplars": true
+      },
+      "sources": [
+        "CIFAR10",
+        "CIFAR100",
+        "TinyImageNet"
+      ],
+      "ssl": {
+        "batch_size": 256,
+        "blur_sigma": [
+          0.1,
+          2.0
+        ],
+        "checkpoint_every_epochs": 500,
+        "color_probability": 0.8,
+        "crop_ratio": [
+          0.75,
+          1.3333333333333333
+        ],
+        "crop_scale": [
+          0.08,
+          1.0
+        ],
+        "exclude_bias_and_norm": true,
+        "flip_probability": 0.5,
+        "full_epochs": 1000,
+        "grayscale_probability": 0.2,
+        "interpolation": "bicubic",
+        "lars_clip": true,
+        "lars_eps": 1e-08,
+        "lars_eta": 0.02,
+        "minimum_lr": 0.0,
+        "momentum": 0.9,
+        "optimizer": "lars",
+        "precision": "float32",
+        "scale_lr_with_batch": true,
+        "schedule": "warmup_cosine_per_step",
+        "small_batch_policy": "min_dataset_size_no_replacement",
+        "subset_epochs": 6000,
+        "warmup_epochs": 10,
+        "warmup_start_lr": 3e-05,
+        "weight_decay": 0.0001
+      },
+      "subset_percentages": [
+        0.2,
+        1,
+        2,
+        5
+      ],
+      "subset_seeds": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "version": "ssl_reference_v1"
+    },
+    "seed_scope": "ssl_initialization_not_distillation",
+    "selection_method": "mkdt",
+    "source": "CIFAR100",
+    "source_fingerprint": "091c775676ae5172a0a29eaf9c37f6a6b601efefc7376b95ef622082ae2a9c14",
+    "ssl": "simclr",
+    "ssl_worker": "mkdt_ssl_jobs/worker.py",
+    "ssl_worker_sha256": "324151798daf48e622d2350e58dcd646391afa057ebb567714274405c4c13b22",
+    "subset": 2,
+    "synthetic": {
+      "clipped_fraction": 0.8966920375823975,
+      "count": 1000,
+      "file_sha256": "fa3ab1b9f2c890839a7062a6f920e64414eb05c403a72d88d6a10ce1afe75901",
+      "generator": "ConvNet",
+      "path": "/scratch/mmoslem3/MKDT/benchmarks/mkdt_multidataset/results/batch_20261010T160046Z_Y6dqZS/synthetic/generated/ConvNet/CIFAR100/CIFAR100_2pct/images_5000.pt",
+      "pixel_policy": "clamp_to_unit_rgb",
+      "quantization": "float_to_PIL_uint8_for_reference_augmentations",
+      "space": "repository_normalized"
+    }
+  }
+}
