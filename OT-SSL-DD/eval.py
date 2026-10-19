@@ -207,7 +207,7 @@ def main():
         parser.error("Use --synthetic-checkpoint or --synthetic-root, not both")
     
     checkpoint_path = args.synthetic_checkpoint
-    checkpoint_path = 'agents/res_IIC_CIFAR10_ResNet18_0.2percent_final.pt'
+    checkpoint_path = 'result/res_DDJEPA_CIFAR10_ConvNet_0.2percent_final.pt'
 
     if checkpoint_path is None:
         if args.synthetic_root is None:

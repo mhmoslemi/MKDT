@@ -1,0 +1,16 @@
+Traceback (most recent call last):
+  File "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/train_ssl.py", line 186, in train
+    print(line, file=log)
+OSError: [Errno 5] Input/output error
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/full_ssl_jobs/worker.py", line 125, in <module>
+    main()
+  File "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/full_ssl_jobs/worker.py", line 100, in main
+    checkpoint, metadata = train(base, protocol, source, model, method,
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/train_ssl.py", line 149, in train
+    with (output / 'ssl.jsonl').open('a', buffering=1) as log:
+OSError: [Errno 5] Input/output error
