@@ -288,17 +288,21 @@ def main():
     parser.add_argument('--seed', type=int, default=0)
 
     # Information-Theoretic Objective.
-    parser.add_argument('--Iteration', type=int, default=1000)
+    parser.add_argument('--Iteration', type=int, default=800)
     parser.add_argument('--lr_img', type=float, default=0.005, help='Higher LR, decays via CosineAnnealing')
     parser.add_argument('--batch_real', type=int, default=512, help='Slightly noisier batch prevents deep proxy minima')
-    parser.add_argument('--num_random_networks', type=int, default=20, help='Fresh samples from P_net per pixel update')
-    parser.add_argument('--temperature', type=float, default=0.2, help='Softmax temperature for prototype assignment')
-    parser.add_argument('--coverage_gamma', type=float, default=0.00, help='Weight of prototype-to-real soft coverage; 0 preserves the original pure-IIC objective')
+    parser.add_argument('--num_random_networks', type=int, default=5, help='Fresh samples from P_net per pixel update')
+    parser.add_argument('--temperature', type=float, default=1, help='Softmax temperature for prototype assignment')
     # parser.add_argument('--random_models', default='ConvNet,ResNet18BN', help='Comma-separated P_net support; forces geometric generalization')
     parser.add_argument('--random_models', default='ConvNet', help='Comma-separated P_net support; forces geometric generalization')
+
+
     parser.add_argument('--tv_weight', type=float, default=0.0, help='Total Variation penalty to destroy adversarial high-frequencies')
     parser.add_argument('--pixel_mse_weight', type=float, default=0.0, help='Nonnegative weight for mean pixel MSE to initialization in [0,1] units; 0 disables it')
-    parser.add_argument('--encoder_train_steps', type=int, default=0, help='SSL steps on the selected detached images before freezing each sampled encoder; 0 disables adaptation')
+    parser.add_argument('--coverage_gamma', type=float, default=0.00, help='Weight of prototype-to-real soft coverage; 0 preserves the original pure-IIC objective')
+
+
+    parser.add_argument('--encoder_train_steps', type=int, default=10, help='SSL steps on the selected detached images before freezing each sampled encoder; 0 disables adaptation')
     parser.add_argument('--encoder_train_method', choices=['simclr', 'barlowtwins', 'barlow_twins'], default='simclr', help='Benchmark SSL recipe for sampled-encoder adaptation; custom averaged both loss is not used')
     parser.add_argument('--encoder_train_data', choices=['synthetic', 'real'], default='synthetic', help='Images used for the sampled encoder SSL warm-up')
     parser.add_argument('--distill_aug_strategy', default='color_crop_cutout_flip_scale_rotate')
@@ -321,7 +325,7 @@ def main():
     parser.add_argument('--batch_linear', type=int, default=256)
 
     # Output.
-    parser.add_argument('--save_path', default='result_both')
+    parser.add_argument('--save_path', default='result')
 
     args = parser.parse_args()
     if args.num_eval < 0:
