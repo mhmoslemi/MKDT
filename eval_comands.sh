@@ -1,3 +1,7 @@
 bash Evaluate_benchamrk/eval_kmeans_interactive.sh
 bash Evaluate_benchamrk/eval_random_interactive.sh
--
+
+
+bash Evaluate_benchamrk/eval_full_cifar10_interactive.sh
+bash Evaluate_benchamrk/eval_full_cifar100_interactive.sh
+bash Evaluate_benchamrk/eval_full_tinyimagenet_interactive.sh
