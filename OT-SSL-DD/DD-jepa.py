@@ -44,7 +44,7 @@ class JEPANet(nn.Module):
         # Predictor (P): takes concatenated [phi(u), action] and predicts phi(v)
         self.predictor = nn.Sequential(
             nn.Linear(self.feat_dim + action_dim, 512, bias=False),
-            nn.BatchNorm1d(512),
+            nn.LayerNorm(512),
             nn.ReLU(inplace=True),
             nn.Linear(512, self.feat_dim, bias=True)
         )
@@ -111,21 +111,13 @@ def jepa_loss(net, img_batch, y_u, x_u, h_u, w_u, y_v, x_v, h_v, w_v, fourier_ba
     pred_v = net.forward_predict(phi_u, psi_a)
     
     # Crucial: Stop-gradient on the target phi_v to prevent representation collapse
-    loss = F.mse_loss(pred_v, phi_v.detach())
+    loss = (pred_v - phi_v.detach()).square().sum(dim=1).mean()
     return loss
 
 def distance_wb(g0, g1):
-    d = 0
-    for ig0, ig1 in zip(g0, g1):
-        if len(ig0.shape) == 4: 
-            ig0 = ig0.view(ig0.shape[0], -1)
-            ig1 = ig1.view(ig1.shape[0], -1)
-        elif len(ig0.shape) == 1: 
-            ig0 = ig0.unsqueeze(0)
-            ig1 = ig1.unsqueeze(0)
-        cos = torch.sum(ig0 * ig1, dim=-1) / (torch.norm(ig0, dim=-1) * torch.norm(ig1, dim=-1) + 1e-8)
-        d += (1.0 - cos).sum()
-    return d
+    real_gradient = torch.cat([gradient.reshape(-1) for gradient in g0])
+    synthetic_gradient = torch.cat([gradient.reshape(-1) for gradient in g1])
+    return 1.0 - F.cosine_similarity(real_gradient, synthetic_gradient, dim=0, eps=1e-8)
 
 # ============================================================================
 # 4. Main Script
@@ -143,6 +135,7 @@ def main():
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
     channel, im_size, num_classes, mean, std, dst_train = get_dataset(args.dataset, '/home/mmoslem3/scratch/data')
+    percentage = args.num_syn * 100 / len(dst_train)
     images_all = torch.cat([dst_train[i][0].unsqueeze(0) for i in range(len(dst_train))], dim=0)
     
     print('%s build synthetic dataset...' % get_time())
@@ -150,8 +143,12 @@ def main():
     image_syn = images_all[idx].clone().to(device)
     image_syn_initial = image_syn.detach().clone()
     image_syn.requires_grad = True
-    # optimizer_img = torch.optim.SGD([image_syn], lr=args.lr_img, momentum=0.5)
-    optimizer_img = torch.optim.Adam([image_syn], lr=args.lr_img)
+    optimizer_img = torch.optim.SGD([image_syn], lr=args.lr_img, momentum=0.5)
+    diag_mean = torch.tensor(mean, device=device).view(1, channel, 1, 1)
+    diag_std = torch.tensor(std, device=device).view(1, channel, 1, 1)
+    pixel_min = -diag_mean / diag_std
+    pixel_max = (1 - diag_mean) / diag_std
+    match_batch = min(args.batch_real, args.num_syn)
 
     # Maintain a live network (this stops the adversarial cheating)
     action_dim = 4 * 2 * args.fourier_bands
@@ -163,11 +160,11 @@ def main():
         net.train()
         
         # 1. Sample Identical Actions for DSA
-        y_u, x_u, h_u, w_u = sample_actions(args.batch_real, device=device)
-        y_v, x_v, h_v, w_v = sample_actions(args.batch_real, device=device)
+        y_u, x_u, h_u, w_u = sample_actions(match_batch, device=device)
+        y_v, x_v, h_v, w_v = sample_actions(match_batch, device=device)
         
         # 2. Real Gradient (X)
-        idx = np.random.randint(0, len(images_all), args.batch_real)
+        idx = np.random.randint(0, len(images_all), match_batch)
         img_real = images_all[idx].to(device)
         
         net.zero_grad()
@@ -175,15 +172,15 @@ def main():
         gw_real = torch.autograd.grad(loss_real, net.parameters())
         gw_real = list((g.detach() for g in gw_real))
         
-        # 3. Synthetic Gradient (S) - Note: Must broadcast actions to match num_syn
-        if args.num_syn != args.batch_real:
-            y_u_S, x_u_S, h_u_S, w_u_S = sample_actions(args.num_syn, device=device)
-            y_v_S, x_v_S, h_v_S, w_v_S = sample_actions(args.num_syn, device=device)
+        # 3. Synthetic Gradient (S), using exactly the same actions as X
+        if match_batch == args.num_syn:
+            synthetic_indices = None
+            img_syn = image_syn
         else:
-            y_u_S, x_u_S, h_u_S, w_u_S = y_u, x_u, h_u, w_u
-            y_v_S, x_v_S, h_v_S, w_v_S = y_v, x_v, h_v, w_v
+            synthetic_indices = torch.randperm(args.num_syn, device=device)[:match_batch]
+            img_syn = image_syn[synthetic_indices]
 
-        loss_syn = jepa_loss(net, image_syn, y_u_S, x_u_S, h_u_S, w_u_S, y_v_S, x_v_S, h_v_S, w_v_S, args.fourier_bands, im_size)
+        loss_syn = jepa_loss(net, img_syn, y_u, x_u, h_u, w_u, y_v, x_v, h_v, w_v, args.fourier_bands, im_size)
         gw_syn = torch.autograd.grad(loss_syn, net.parameters(), create_graph=True)
         
         # 4. Match Gradients & Update Pixels
@@ -191,25 +188,37 @@ def main():
         optimizer_img.zero_grad()
         loss_match.backward()
         optimizer_img.step()
+        with torch.no_grad():
+            image_syn.copy_(torch.maximum(torch.minimum(image_syn, pixel_max), pixel_min))
         
         # 5. Network Update (Trains the JEPA framework so pixels can't cheat)
+        img_syn_train = image_syn.detach() if synthetic_indices is None else image_syn[synthetic_indices].detach()
         optimizer_net.zero_grad()
-        loss_train = jepa_loss(net, image_syn.detach(), y_u_S, x_u_S, h_u_S, w_u_S, y_v_S, x_v_S, h_v_S, w_v_S, args.fourier_bands, im_size)
+        loss_train = jepa_loss(net, img_syn_train, y_u, x_u, h_u, w_u, y_v, x_v, h_v, w_v, args.fourier_bands, im_size)
         loss_train.backward()
         optimizer_net.step()
 
         if it % 50 == 0:
             with torch.no_grad():
-                diag_std = torch.tensor(std, device=device).view(1, channel, 1, 1)
                 pixel_change = ((image_syn - image_syn_initial) * diag_std * 255).square().mean().sqrt().item()
             print('iter = %05d, Gradient Match Loss = %.4f, JEPA Net Loss = %.4f, RMS = %.2f/255' % 
                   (it, loss_match.item(), loss_train.item(), pixel_change))
 
-        if it % 500 == 0:
+        if it % 500 == 0 or it == args.Iteration:
             os.makedirs('result', exist_ok=True)
-            diag_mean = torch.tensor(mean, device=device).view(1, channel, 1, 1)
             visible = (image_syn.detach() * diag_std + diag_mean).clamp(0, 1).cpu()
             save_image(visible, f'result/syn_jepa_dsa_iter{it}.png', nrow=int(np.ceil(np.sqrt(args.num_syn))))
+            result_path = 'result/res_DDJEPA_%s_ConvNet_%gpercent_final.pt' % (args.dataset, percentage)
+            torch.save({
+                'data': image_syn.detach().cpu(),
+                'dataset': args.dataset,
+                'percentage': percentage,
+                'normalization': [mean, std],
+                'method': 'DDJEPA',
+                'iteration': it,
+                'num_syn': args.num_syn,
+            }, result_path)
+            print('Saved synthetic data to %s' % result_path, flush=True)
 
 if __name__ == '__main__':
     main()
