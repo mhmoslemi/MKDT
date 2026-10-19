@@ -127,7 +127,7 @@ def main():
     parser.add_argument('--dataset', type=str, default='CIFAR10')
     parser.add_argument('--num_syn', type=int, default=100)
     parser.add_argument('--Iteration', type=int, default=5000)
-    parser.add_argument('--lr_img', type=float, default=0.1)
+    parser.add_argument('--lr_img', type=float, default=0.001)
     parser.add_argument('--lr_net', type=float, default=0.01)
     parser.add_argument('--batch_real', type=int, default=256)
     parser.add_argument('--fourier_bands', type=int, default=4)
@@ -143,7 +143,8 @@ def main():
     image_syn = images_all[idx].clone().to(device)
     image_syn_initial = image_syn.detach().clone()
     image_syn.requires_grad = True
-    optimizer_img = torch.optim.SGD([image_syn], lr=args.lr_img, momentum=0.5)
+    # optimizer_img = torch.optim.SGD([image_syn], lr=args.lr_img, momentum=0.5)
+    optimizer_img = torch.optim.Adam([image_syn], lr=args.lr_img)
     diag_mean = torch.tensor(mean, device=device).view(1, channel, 1, 1)
     diag_std = torch.tensor(std, device=device).view(1, channel, 1, 1)
     pixel_min = -diag_mean / diag_std
