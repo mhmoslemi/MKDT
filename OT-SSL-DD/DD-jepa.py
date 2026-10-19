@@ -126,11 +126,11 @@ def main():
     parser = argparse.ArgumentParser(description='JEPA Action-Conditional Dataset Distillation')
     parser.add_argument('--dataset', type=str, default='CIFAR10')
     parser.add_argument('--num_syn', type=int, default=100)
-    parser.add_argument('--Iteration', type=int, default=5000)
-    parser.add_argument('--lr_img', type=float, default=0.001)
+    parser.add_argument('--Iteration', type=int, default=20000)
+    parser.add_argument('--lr_img', type=float, default=0.5)
     parser.add_argument('--lr_net', type=float, default=0.01)
-    parser.add_argument('--batch_real', type=int, default=256)
-    parser.add_argument('--fourier_bands', type=int, default=4)
+    parser.add_argument('--batch_real', type=int, default=512)
+    parser.add_argument('--fourier_bands', type=int, default=12)
     args = parser.parse_args()
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
@@ -143,8 +143,8 @@ def main():
     image_syn = images_all[idx].clone().to(device)
     image_syn_initial = image_syn.detach().clone()
     image_syn.requires_grad = True
-    # optimizer_img = torch.optim.SGD([image_syn], lr=args.lr_img, momentum=0.5)
-    optimizer_img = torch.optim.Adam([image_syn], lr=args.lr_img)
+    optimizer_img = torch.optim.SGD([image_syn], lr=args.lr_img, momentum=0.9)
+    # optimizer_img = torch.optim.Adam([image_syn], lr=args.lr_img)
     diag_mean = torch.tensor(mean, device=device).view(1, channel, 1, 1)
     diag_std = torch.tensor(std, device=device).view(1, channel, 1, 1)
     pixel_min = -diag_mean / diag_std
@@ -199,13 +199,13 @@ def main():
         loss_train.backward()
         optimizer_net.step()
 
-        if it % 50 == 0:
+        if it % 100 == 0:
             with torch.no_grad():
                 pixel_change = ((image_syn - image_syn_initial) * diag_std * 255).square().mean().sqrt().item()
             print('iter = %05d, Gradient Match Loss = %.4f, JEPA Net Loss = %.4f, RMS = %.2f/255' % 
                   (it, loss_match.item(), loss_train.item(), pixel_change))
 
-        if it % 500 == 0 or it == args.Iteration:
+        if it % 1000 == 0 or it == args.Iteration:
             os.makedirs('result', exist_ok=True)
             visible = (image_syn.detach() * diag_std + diag_mean).clamp(0, 1).cpu()
             save_image(visible, f'result/syn_jepa_dsa_iter{it}.png', nrow=int(np.ceil(np.sqrt(args.num_syn))))
