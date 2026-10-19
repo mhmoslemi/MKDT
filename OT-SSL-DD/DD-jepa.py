@@ -150,7 +150,8 @@ def main():
     image_syn = images_all[idx].clone().to(device)
     image_syn_initial = image_syn.detach().clone()
     image_syn.requires_grad = True
-    optimizer_img = torch.optim.SGD([image_syn], lr=args.lr_img, momentum=0.5)
+    # optimizer_img = torch.optim.SGD([image_syn], lr=args.lr_img, momentum=0.5)
+    optimizer_img = torch.optim.Adam([image_syn], lr=args.lr_img)
 
     # Maintain a live network (this stops the adversarial cheating)
     action_dim = 4 * 2 * args.fourier_bands
