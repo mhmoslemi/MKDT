@@ -47,10 +47,16 @@ task	source	model	method	subset	ssl	seed	target	labels	seconds
 12	TinyImageNet	ConvNet	random	0.2	simclr	1	TinyImageNet	5	156.75169750489295
 12	CIFAR10	ConvNet	random	0.2	simclr	1	CIFAR10	1	9.555141486926004
 12	CIFAR10	ConvNet	random	0.2	simclr	1	CIFAR10	5	43.976063454989344
+13	TinyImageNet	ConvNet	random	0.2	simclr	2	TinyImageNet	1	33.04616270889528
+13	TinyImageNet	ConvNet	random	0.2	simclr	2	TinyImageNet	5	157.3772016700823
 13	CIFAR10	ConvNet	random	0.2	simclr	2	CIFAR10	1	9.560837713070214
 13	CIFAR10	ConvNet	random	0.2	simclr	2	CIFAR10	5	43.99557063099928
+14	TinyImageNet	ConvNet	random	0.2	simclr	3	TinyImageNet	1	32.866122716106474
+14	TinyImageNet	ConvNet	random	0.2	simclr	3	TinyImageNet	5	156.75987295689993
 14	CIFAR10	ConvNet	random	0.2	simclr	3	CIFAR10	1	9.557750358013436
 14	CIFAR10	ConvNet	random	0.2	simclr	3	CIFAR10	5	43.90142890298739
+15	TinyImageNet	ConvNet	random	0.2	simclr	4	TinyImageNet	1	33.08562979102135
+15	TinyImageNet	ConvNet	random	0.2	simclr	4	TinyImageNet	5	157.16279118903913
 15	CIFAR10	ConvNet	random	0.2	simclr	4	CIFAR10	1	9.41578222392127
 15	CIFAR10	ConvNet	random	0.2	simclr	4	CIFAR10	5	43.79208402778022
 16	CIFAR10	ConvNet	random	0.2	simclr	5	CIFAR10	1	9.544730350142345
@@ -143,6 +149,20 @@ task	source	model	method	subset	ssl	seed	target	labels	seconds
 59	CIFAR10	ConvNet	random	2	simclr	8	CIFAR10	5	44.67054358613677
 60	CIFAR10	ConvNet	random	2	simclr	9	CIFAR10	1	9.710731300991029
 60	CIFAR10	ConvNet	random	2	simclr	9	CIFAR10	5	44.985169536899775
+61	CIFAR100	ResNet18	random	0.2	barlowtwins	0	CIFAR100	1	20.130743046989664
+61	CIFAR100	ResNet18	random	0.2	barlowtwins	0	CIFAR100	5	92.49825272196904
+61	CIFAR100	ResNet18	random	0.2	barlowtwins	0	Aircraft	1	119.41709748515859
+61	CIFAR100	ResNet18	random	0.2	barlowtwins	0	Aircraft	5	374.1802423479967
+61	CIFAR100	ResNet18	random	0.2	barlowtwins	0	CIFAR10	1	20.01357469591312
+61	CIFAR100	ResNet18	random	0.2	barlowtwins	0	CIFAR10	5	91.35058918502182
+61	CIFAR100	ResNet18	random	0.2	barlowtwins	0	CUB2011	1	53.73486028495245
+61	CIFAR100	ResNet18	random	0.2	barlowtwins	0	CUB2011	5	120.2614408750087
+61	CIFAR100	ResNet18	random	0.2	barlowtwins	0	Dogs	1	72.84705076203682
+61	CIFAR100	ResNet18	random	0.2	barlowtwins	0	Dogs	5	177.27097104978748
+61	CIFAR100	ResNet18	random	0.2	barlowtwins	0	Flowers	1	43.97147150011733
+61	CIFAR100	ResNet18	random	0.2	barlowtwins	0	Flowers	5	46.92005010321736
+61	CIFAR100	ResNet18	random	0.2	barlowtwins	0	TinyImageNet	1	50.92061766702682
+61	CIFAR100	ResNet18	random	0.2	barlowtwins	0	TinyImageNet	5	238.89116584090516
 61	CIFAR10	ResNet18	random	0.2	barlowtwins	0	CIFAR10	1	11.537366342032328
 61	CIFAR10	ResNet18	random	0.2	barlowtwins	0	CIFAR10	5	52.794587581884116
 61	CIFAR10	ResNet18	random	0.2	barlowtwins	0	Aircraft	1	93.3881002671551
@@ -905,6 +925,8 @@ task	source	model	method	subset	ssl	seed	target	labels	seconds
 104	CIFAR10	ResNet18	random	2	barlowtwins	3	TinyImageNet	5	236.7938165499363
 104	CIFAR10	VGG11	random	2	barlowtwins	3	CIFAR10	1	18.32461751298979
 104	CIFAR10	VGG11	random	2	barlowtwins	3	CIFAR10	5	84.30319140804932
+104	CIFAR100	ConvNet	random	2	barlowtwins	3	CIFAR100	1	9.415459003066644
+104	CIFAR100	ConvNet	random	2	barlowtwins	3	CIFAR100	5	43.38251173798926
 105	CIFAR10	ResNet18	random	2	barlowtwins	4	CIFAR10	1	19.90539186098613
 105	CIFAR10	ResNet18	random	2	barlowtwins	4	CIFAR10	5	91.06915615010075
 105	CIFAR10	ResNet18	random	2	barlowtwins	4	Aircraft	1	118.10382627486251
@@ -921,6 +943,8 @@ task	source	model	method	subset	ssl	seed	target	labels	seconds
 105	CIFAR10	ResNet18	random	2	barlowtwins	4	TinyImageNet	5	237.0589811471291
 105	CIFAR10	VGG11	random	2	barlowtwins	4	CIFAR10	1	18.15796732204035
 105	CIFAR10	VGG11	random	2	barlowtwins	4	CIFAR10	5	84.10312674101442
+105	CIFAR100	ConvNet	random	2	barlowtwins	4	CIFAR100	1	9.401820536935702
+105	CIFAR100	ConvNet	random	2	barlowtwins	4	CIFAR100	5	43.106250983895734
 106	CIFAR10	ResNet18	random	2	barlowtwins	5	CIFAR10	1	19.816110253101215
 106	CIFAR10	ResNet18	random	2	barlowtwins	5	CIFAR10	5	91.01349122985266
 106	CIFAR10	ResNet18	random	2	barlowtwins	5	Aircraft	1	107.9377242999617
@@ -953,6 +977,8 @@ task	source	model	method	subset	ssl	seed	target	labels	seconds
 107	CIFAR10	ResNet18	random	2	barlowtwins	6	TinyImageNet	5	236.98491650493816
 107	CIFAR10	VGG11	random	2	barlowtwins	6	CIFAR10	1	18.196138810832053
 107	CIFAR10	VGG11	random	2	barlowtwins	6	CIFAR10	5	84.04654259094968
+107	CIFAR100	ConvNet	random	2	barlowtwins	6	CIFAR100	1	9.404867255827412
+107	CIFAR100	ConvNet	random	2	barlowtwins	6	CIFAR100	5	43.43877696595155
 108	CIFAR10	ResNet18	random	2	barlowtwins	7	CIFAR10	1	19.924296671990305
 108	CIFAR10	ResNet18	random	2	barlowtwins	7	CIFAR10	5	91.95407875697128
 108	CIFAR10	ResNet18	random	2	barlowtwins	7	Aircraft	1	113.71720677893609
@@ -969,6 +995,8 @@ task	source	model	method	subset	ssl	seed	target	labels	seconds
 108	CIFAR10	ResNet18	random	2	barlowtwins	7	TinyImageNet	5	236.72791910194792
 108	CIFAR10	VGG11	random	2	barlowtwins	7	CIFAR10	1	18.24179859715514
 108	CIFAR10	VGG11	random	2	barlowtwins	7	CIFAR10	5	84.040597936837
+108	CIFAR100	ConvNet	random	2	barlowtwins	7	CIFAR100	1	9.42243483196944
+108	CIFAR100	ConvNet	random	2	barlowtwins	7	CIFAR100	5	43.33517117286101
 109	CIFAR10	ResNet18	random	2	barlowtwins	8	CIFAR10	1	19.911614801967517
 109	CIFAR10	ResNet18	random	2	barlowtwins	8	CIFAR10	5	90.949277079897
 109	CIFAR10	ResNet18	random	2	barlowtwins	8	Aircraft	1	113.3457634288352
@@ -985,6 +1013,8 @@ task	source	model	method	subset	ssl	seed	target	labels	seconds
 109	CIFAR10	ResNet18	random	2	barlowtwins	8	TinyImageNet	5	231.96210002992302
 109	CIFAR10	VGG11	random	2	barlowtwins	8	CIFAR10	1	18.14782187109813
 109	CIFAR10	VGG11	random	2	barlowtwins	8	CIFAR10	5	84.13039703387767
+109	CIFAR100	ConvNet	random	2	barlowtwins	8	CIFAR100	1	9.425586234079674
+109	CIFAR100	ConvNet	random	2	barlowtwins	8	CIFAR100	5	43.38304839795455
 110	CIFAR10	ResNet18	random	2	barlowtwins	9	CIFAR10	1	19.49885309790261
 110	CIFAR10	ResNet18	random	2	barlowtwins	9	CIFAR10	5	89.31280749803409
 110	CIFAR10	ResNet18	random	2	barlowtwins	9	Aircraft	1	121.58425850095227
@@ -1001,6 +1031,8 @@ task	source	model	method	subset	ssl	seed	target	labels	seconds
 110	CIFAR10	ResNet18	random	2	barlowtwins	9	TinyImageNet	5	232.14470639801584
 110	CIFAR10	VGG11	random	2	barlowtwins	9	CIFAR10	1	18.183708993019536
 110	CIFAR10	VGG11	random	2	barlowtwins	9	CIFAR10	5	84.10885733691975
+110	CIFAR100	ConvNet	random	2	barlowtwins	9	CIFAR100	1	9.426187525037676
+110	CIFAR100	ConvNet	random	2	barlowtwins	9	CIFAR100	5	43.19531795196235
 111	CIFAR10	ResNet18	random	2	simclr	0	CIFAR10	1	19.517945847008377
 111	CIFAR10	ResNet18	random	2	simclr	0	CIFAR10	5	89.51615974400192
 111	CIFAR10	ResNet18	random	2	simclr	0	Aircraft	1	109.52614659094252
@@ -1017,6 +1049,8 @@ task	source	model	method	subset	ssl	seed	target	labels	seconds
 111	CIFAR10	ResNet18	random	2	simclr	0	TinyImageNet	5	231.72303723893128
 111	CIFAR10	VGG11	random	2	simclr	0	CIFAR10	1	18.143440569983795
 111	CIFAR10	VGG11	random	2	simclr	0	CIFAR10	5	84.28851136309095
+111	CIFAR100	ConvNet	random	2	simclr	0	CIFAR100	1	9.356608645059168
+111	CIFAR100	ConvNet	random	2	simclr	0	CIFAR100	5	43.40139626106247
 112	CIFAR10	ResNet18	random	2	simclr	1	CIFAR10	1	19.465997904073447
 112	CIFAR10	ResNet18	random	2	simclr	1	CIFAR10	5	89.15603454899974
 112	CIFAR10	ResNet18	random	2	simclr	1	Aircraft	1	114.70490057999268
@@ -1033,6 +1067,8 @@ task	source	model	method	subset	ssl	seed	target	labels	seconds
 112	CIFAR10	ResNet18	random	2	simclr	1	TinyImageNet	5	232.05723640602082
 112	CIFAR10	VGG11	random	2	simclr	1	CIFAR10	1	18.22294455510564
 112	CIFAR10	VGG11	random	2	simclr	1	CIFAR10	5	84.28170134406537
+112	CIFAR100	ConvNet	random	2	simclr	1	CIFAR100	1	9.410965852905065
+112	CIFAR100	ConvNet	random	2	simclr	1	CIFAR100	5	43.545154453022406
 113	CIFAR10	ResNet18	random	2	simclr	2	CIFAR10	1	19.462829370051622
 113	CIFAR10	ResNet18	random	2	simclr	2	CIFAR10	5	89.15075905900449
 113	CIFAR10	ResNet18	random	2	simclr	2	Aircraft	1	114.38574670697562
@@ -1049,6 +1085,8 @@ task	source	model	method	subset	ssl	seed	target	labels	seconds
 113	CIFAR10	ResNet18	random	2	simclr	2	TinyImageNet	5	231.86426125792786
 113	CIFAR10	VGG11	random	2	simclr	2	CIFAR10	1	18.235609104158357
 113	CIFAR10	VGG11	random	2	simclr	2	CIFAR10	5	84.1310182379093
+113	CIFAR100	ConvNet	random	2	simclr	2	CIFAR100	1	9.420119401998818
+113	CIFAR100	ConvNet	random	2	simclr	2	CIFAR100	5	43.65099095297046
 114	CIFAR10	ResNet18	random	2	simclr	3	CIFAR10	1	19.522672154940665
 114	CIFAR10	ResNet18	random	2	simclr	3	CIFAR10	5	89.29546378203668
 114	CIFAR10	ResNet18	random	2	simclr	3	Aircraft	1	109.38333377079107
@@ -1065,6 +1103,8 @@ task	source	model	method	subset	ssl	seed	target	labels	seconds
 114	CIFAR10	ResNet18	random	2	simclr	3	TinyImageNet	5	234.55495314393193
 114	CIFAR10	VGG11	random	2	simclr	3	CIFAR10	1	18.705862088827416
 114	CIFAR10	VGG11	random	2	simclr	3	CIFAR10	5	83.88182271178812
+114	CIFAR100	ConvNet	random	2	simclr	3	CIFAR100	1	9.503168846014887
+114	CIFAR100	ConvNet	random	2	simclr	3	CIFAR100	5	43.477897751145065
 115	CIFAR10	ResNet18	random	2	simclr	4	CIFAR10	1	19.574559720931575
 115	CIFAR10	ResNet18	random	2	simclr	4	CIFAR10	5	90.05655743088573
 115	CIFAR10	ResNet18	random	2	simclr	4	Aircraft	1	115.64283310784958
@@ -1081,6 +1121,8 @@ task	source	model	method	subset	ssl	seed	target	labels	seconds
 115	CIFAR10	ResNet18	random	2	simclr	4	TinyImageNet	5	140.37735505611636
 115	CIFAR10	VGG11	random	2	simclr	4	CIFAR10	1	18.11977925687097
 115	CIFAR10	VGG11	random	2	simclr	4	CIFAR10	5	84.02220795699395
+115	CIFAR100	ConvNet	random	2	simclr	4	CIFAR100	1	9.43275411403738
+115	CIFAR100	ConvNet	random	2	simclr	4	CIFAR100	5	43.2865537640173
 116	CIFAR10	ResNet18	random	2	simclr	5	CIFAR10	1	11.410446299938485
 116	CIFAR10	ResNet18	random	2	simclr	5	CIFAR10	5	51.86994706396945
 116	CIFAR10	ResNet18	random	2	simclr	5	Aircraft	1	83.35472766612656
@@ -1097,6 +1139,8 @@ task	source	model	method	subset	ssl	seed	target	labels	seconds
 116	CIFAR10	ResNet18	random	2	simclr	5	TinyImageNet	5	142.44854860007763
 116	CIFAR10	VGG11	random	2	simclr	5	CIFAR10	1	18.147720092907548
 116	CIFAR10	VGG11	random	2	simclr	5	CIFAR10	5	83.9412377178669
+116	CIFAR100	ConvNet	random	2	simclr	5	CIFAR100	1	9.369059409946203
+116	CIFAR100	ConvNet	random	2	simclr	5	CIFAR100	5	43.2084989848081
 117	CIFAR10	ResNet18	random	2	simclr	6	CIFAR10	1	11.437131538055837
 117	CIFAR10	ResNet18	random	2	simclr	6	CIFAR10	5	52.05641194502823
 117	CIFAR10	ResNet18	random	2	simclr	6	Aircraft	1	88.08137263311073
@@ -1113,6 +1157,8 @@ task	source	model	method	subset	ssl	seed	target	labels	seconds
 117	CIFAR10	ResNet18	random	2	simclr	6	TinyImageNet	5	234.54821596690454
 117	CIFAR10	VGG11	random	2	simclr	6	CIFAR10	1	18.160310676088557
 117	CIFAR10	VGG11	random	2	simclr	6	CIFAR10	5	84.1499367649667
+117	CIFAR100	ConvNet	random	2	simclr	6	CIFAR100	1	9.381512401159853
+117	CIFAR100	ConvNet	random	2	simclr	6	CIFAR100	5	86.1772234949749
 118	CIFAR10	ResNet18	random	2	simclr	7	CIFAR10	1	19.587889125104994
 118	CIFAR10	ResNet18	random	2	simclr	7	CIFAR10	5	90.12044780096039
 118	CIFAR10	ResNet18	random	2	simclr	7	Aircraft	1	108.80195283703506
@@ -1129,6 +1175,8 @@ task	source	model	method	subset	ssl	seed	target	labels	seconds
 118	CIFAR10	ResNet18	random	2	simclr	7	TinyImageNet	5	234.2686614508275
 118	CIFAR10	VGG11	random	2	simclr	7	CIFAR10	1	18.137276565888897
 118	CIFAR10	VGG11	random	2	simclr	7	CIFAR10	5	84.05022411816753
+118	CIFAR100	ConvNet	random	2	simclr	7	CIFAR100	1	18.40575069002807
+118	CIFAR100	ConvNet	random	2	simclr	7	CIFAR100	5	84.45760258799419
 119	CIFAR10	ResNet18	random	2	simclr	8	CIFAR10	1	19.67108093900606
 119	CIFAR10	ResNet18	random	2	simclr	8	CIFAR10	5	90.08346277591772
 119	CIFAR10	ResNet18	random	2	simclr	8	Aircraft	1	112.4479219969362
@@ -1145,6 +1193,8 @@ task	source	model	method	subset	ssl	seed	target	labels	seconds
 119	CIFAR10	ResNet18	random	2	simclr	8	TinyImageNet	5	235.26864360715263
 119	CIFAR10	VGG11	random	2	simclr	8	CIFAR10	1	18.142810011981055
 119	CIFAR10	VGG11	random	2	simclr	8	CIFAR10	5	84.10588950105011
+119	CIFAR100	ConvNet	random	2	simclr	8	CIFAR100	1	18.331690532853827
+119	CIFAR100	ConvNet	random	2	simclr	8	CIFAR100	5	84.714207025012
 120	CIFAR10	ResNet18	random	2	simclr	9	CIFAR10	1	19.718296884093434
 120	CIFAR10	ResNet18	random	2	simclr	9	CIFAR10	5	90.60597667307593
 120	CIFAR10	ResNet18	random	2	simclr	9	Aircraft	1	121.48460909118876
@@ -1161,3 +1211,5 @@ task	source	model	method	subset	ssl	seed	target	labels	seconds
 120	CIFAR10	ResNet18	random	2	simclr	9	TinyImageNet	5	237.19010795187205
 120	CIFAR10	VGG11	random	2	simclr	9	CIFAR10	1	18.087424469878897
 120	CIFAR10	VGG11	random	2	simclr	9	CIFAR10	5	83.99447548086755
+120	CIFAR100	ConvNet	random	2	simclr	9	CIFAR100	1	18.27333851484582
+120	CIFAR100	ConvNet	random	2	simclr	9	CIFAR100	5	84.46089006005786
