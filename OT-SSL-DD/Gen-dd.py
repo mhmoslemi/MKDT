@@ -138,20 +138,48 @@ def mmd_update(z, generator, teachers, normalizations, real_distributions, bandw
     return loss_avg
 
 
+def resume_distillation(path, z, optimizer, expected, common):
+    if not os.path.exists(path):
+        return 0, []
+    saved = torch.load(path, map_location='cpu', weights_only=True)
+    for key, value in expected.items():
+        if saved.get(key) != value:
+            raise ValueError('Cannot resume: checkpoint %s differs from this run'%key)
+    latents = saved['latents']
+    iteration = saved['iteration']
+    history = saved['loss_history'].tolist()
+    if (latents.shape != z.shape or not torch.isfinite(latents).all()
+            or not isinstance(iteration, int) or iteration < 0 or len(history) != iteration):
+        raise ValueError('Cannot resume: invalid latents, iteration or loss history')
+    with torch.no_grad():
+        z.copy_(latents)
+    if 'optimizer_z' in saved:
+        optimizer.load_state_dict(saved['optimizer_z'])
+    else:
+        # shortcut: old checkpoints lack Adam state; only future saves resume it exactly.
+        print('WARNING: old checkpoint has no Adam state; continuing saved latents with fresh Adam.')
+    if 'rng_state' in saved:
+        common.restore_rng(saved['rng_state'])
+    else:
+        print('WARNING: old checkpoint has no RNG state; augmentation sequence will restart.')
+    print('Resumed distillation at iteration %d: %s'%(iteration, path))
+    return iteration, history
+
+
 def main():
 
     parser = argparse.ArgumentParser(description='Generative Latent Feature Matching')
     parser.add_argument('--dataset', type=str, default='CIFAR10', help='dataset')
-    parser.add_argument('--model', type=str, default='ConvNet', help='saved teacher architecture')
+    parser.add_argument('--model', type=str, default='ResNet18BN', help='saved teacher architecture')
     parser.add_argument('--percentage', type=float, default=0.2, help='synthetic images as a percentage of the real training set')
     parser.add_argument('--teacher_ssl', type=str, default='simclr', help='saved teacher SSL method')
     parser.add_argument('--teacher_seeds', type=int, nargs='+', default=[0, 1, 2])
     parser.add_argument('--teacher_path', type=str, default=str(ROOT / 'Evaluate_benchamrk/full_ssl_checkpoints_1000ep_3seeds'))
     parser.add_argument('--num_exp', type=int, default=1, help='the number of distillation experiments')
     parser.add_argument('--seed', type=int, default=0)
-    parser.add_argument('--Iteration', type=int, default=7000, help='latent optimization iterations')
+    parser.add_argument('--Iteration', type=int, default=20000, help='latent optimization iterations')
     parser.add_argument('--lr_z', type=float, default=0.05, help='learning rate for latent vectors')
-    parser.add_argument('--batch_real', type=int, default=256, help='batch size for VAE training and real feature extraction')
+    parser.add_argument('--batch_real', type=int, default=512, help='batch size for VAE training and real feature extraction')
     parser.add_argument('--batch_syn', type=int, default=512, help='synthetic images per forward/backward pass')
     parser.add_argument('--latent_dim', type=int, default=None)
     parser.add_argument('--vae_epochs', type=int, default=None)
@@ -164,9 +192,10 @@ def main():
     parser.add_argument('--train_vae', action='store_true', help='train the VAE instead of reusing vae_path')
     parser.add_argument('--mmd', action='store_true', help='per-teacher kernel MMD using the saved 350-epoch residual VAE')
     parser.add_argument('--mmd_batch_real', type=int, default=256, help='cached real features sampled per MMD update')
-    parser.add_argument('--aug_strategy', type=str, default='color_crop_flip_scale')
-    parser.add_argument('--cov_weight', type=float, default=1.0)
-    parser.add_argument('--save_every', type=int, default=1000)
+    parser.add_argument('--aug_strategy', type=str, default='color_crop_cutout_flip_scale_rotate')
+    parser.add_argument('--cov_weight', type=float, default=2.0)
+    parser.add_argument('--save_every', type=int, default=2000)
+    parser.add_argument('--resume', action='store_true', help='resume saved experiments and skip completed ones')
     parser.add_argument('--data_path', type=str, default=str(ROOT.parent / 'data'))
     parser.add_argument('--cache_path', type=str, default=str(ROOT / 'OT-SSL-DD/gen_dd_cache'))
     parser.add_argument('--save_path', type=str, default=str(ROOT / 'OT-SSL-DD/result_GenerativeFeatureMatching'))
@@ -384,10 +413,24 @@ def main():
         ''' Z is the only optimized variable in the distillation loop '''
         z = torch.randn(num_syn, args.latent_dim, device=args.device, requires_grad=True)
         optimizer_z = torch.optim.Adam([z], lr=args.lr_z)
+        result_path = os.path.join(args.save_path, 'res_GFM_%s_%s_%gpercent_exp%d.pt'%(args.dataset, args.model, args.percentage, exp))
+        start_iteration = 0
         loss_history = []
+        if args.resume:
+            start_iteration, loss_history = resume_distillation(
+                result_path, z, optimizer_z, {
+                    'dataset': args.dataset, 'percentage': args.percentage, 'seed': args.seed + exp,
+                    'method': 'GenerativeMMD' if args.mmd else 'GenerativeAugmentedMomentMatching',
+                    'teacher_ssl': args.teacher_ssl, 'teacher_checkpoints': teacher_checkpoints,
+                    'vae_path': args.vae_path, 'vae_epoch': vae_epoch,
+                    'augmentation': args.aug_strategy, 'covariance_weight': args.cov_weight,
+                    'target_path': target_path}, common)
+        if start_iteration >= args.Iteration:
+            print('Already complete: %s (%d iterations)'%(result_path, start_iteration))
+            continue
         print('%s latent distillation begins, synthetic images = %d'%(get_time(), num_syn))
 
-        for it in range(1, args.Iteration+1):
+        for it in range(start_iteration+1, args.Iteration+1):
 
             ''' generate two views and match their teacher-feature means and covariances '''
             optimizer_z.zero_grad()
@@ -424,9 +467,9 @@ def main():
 
                 save_name = os.path.join(args.save_path, 'vis_GFM_%s_%s_%gpercent_exp%d_iter%d.png'%(args.dataset, args.model, args.percentage, exp, it))
                 save_image(pixels, save_name, nrow=int(np.ceil(np.sqrt(num_syn))))
-                result_path = os.path.join(args.save_path, 'res_GFM_%s_%s_%gpercent_exp%d.pt'%(args.dataset, args.model, args.percentage, exp))
-                torch.save({
+                common.atomic_save(result_path, {
                     'data': image_syn, 'latents': selected_z,
+                    'optimizer_z': optimizer_z.state_dict(), 'rng_state': common.rng_state(),
                     'dataset': args.dataset, 'percentage': args.percentage,
                     'normalization': [mean, std],
                     'method': 'GenerativeMMD' if args.mmd else 'GenerativeAugmentedMomentMatching',
@@ -443,7 +486,7 @@ def main():
                     'mmd_bandwidths': [value.item() for value in bandwidths],
                     'mmd_kernel_scales': [0.25, 0.5, 1.0, 2.0, 4.0],
                     'mmd_batch_real': args.mmd_batch_real,
-                    'vae_architecture': 'residual' if args.residual_vae else 'basic'}, result_path)
+                    'vae_architecture': 'residual' if args.residual_vae else 'basic'})
                 print('Saved synthetic data to %s'%result_path)
 
 

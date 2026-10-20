@@ -14,7 +14,7 @@ from torchvision.transforms.functional import to_pil_image
 
 
 SSL_EPOCHS = {
-    # "CIFAR10": {0.2: 10000, 1: 8000, 2: 6000},
+    # "CIFAR10": {0.2: 2000, 1: 8000, 2: 6000},
     "CIFAR10": {0.2: 2000, 1: 8000, 2: 6000},
     "CIFAR100": {0.2: 3000, 1: 8000, 2: 6000},
     "TinyImageNet": {0.2: 6000, 1: 5000, 2: 4000},
@@ -208,14 +208,13 @@ def main():
         parser.error("Use --synthetic-checkpoint or --synthetic-root, not both")
     
     checkpoint_path = args.synthetic_checkpoint
-    checkpoint_path = '/home/mmoslem3/scratch/MKDT/OT-SSL-DD/result_GenerativeFeatureMatching/res_GFM_CIFAR10_ResNet18_0.2percent_exp0.pt'
+    checkpoint_path = '/scratch/mmoslem3/MKDT/OT-SSL-DD/result_SADM2/res_SADM_CIFAR10_ResNet18BN_0.2percent_exp0.pt'
 
 
-
-    if checkpoint_path is None:
-        if args.synthetic_root is None:
-            parser.error("Specify --synthetic-checkpoint (the saved synthetic images)")
-        checkpoint_path = args.synthetic_root / f"size{args.percentage:g}" / f"res_IIC_{args.dataset}_ConvNet_{args.percentage:g}percent.pt"
+    # if checkpoint_path is None:
+    #     if args.synthetic_root is None:
+    #         parser.error("Specify --synthetic-checkpoint (the saved synthetic images)")
+    #     checkpoint_path = args.synthetic_root / f"size{args.percentage:g}" / f"res_IIC_{args.dataset}_ConvNet_{args.percentage:g}percent.pt"
 
     checkpoint_path = Path(checkpoint_path)
     torch.set_num_threads(int(os.environ.get("SLURM_CPUS_PER_TASK", "1")))
