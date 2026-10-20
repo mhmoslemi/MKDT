@@ -136,6 +136,11 @@ def resume_distillation(path, images, momentum, optimizer, expected, common):
 #  'image_optimizer': 'sgd', 'momentum': 0.5, 'batch_real': 256, 'batch_syn': 256, 'aug_strategy': 'color_crop_cutout_flip_scale_rotate', 
 
 
+# $ python Gen-dd2.py  41.26
+# Hyper-parameters: 
+#  {'dataset': 'CIFAR10', 'model': 'ResNet18BN', 'percentage': 0.2, 'teacher_source': 'random', 'teacher_ssl': 'simclr', 'teacher_seeds': [0], 'teacher_path': '/scratch/mmoslem3/MKDT/Evaluate_benchamrk/full_ssl_checkpoints_1000ep_3seeds', 'feature_layer': 'layer3', 'topk': 3, 'lambda_all': 1, 'lambda_top': 2, 'Iteration': 5000, 'lr_img': 1, 'image_optimizer': 'sgd', 'momentum': 0.9, 'batch_real': 512, 'batch_syn': 1024, 'aug_strategy': 'color_crop_cutout_flip_scale_rotate', 'save_every': 500, 'num_exp': 1, 'seed': 0, 'resume': False, 'device': 'cuda', 'data_path': '/scratch/mmoslem3/data', 'save_path': '/scratch/mmoslem3/MKDT/OT-SSL-DD/result_SADM2'}
+
+
 def main():
     parser = argparse.ArgumentParser(description='2D Semantically Aligned Distribution Matching')
     parser.add_argument('--dataset', choices=['CIFAR10', 'CIFAR100', 'TinyImageNet'], default='CIFAR10')
@@ -149,7 +154,7 @@ def main():
     parser.add_argument('--topk', type=int, default=3)
     parser.add_argument('--lambda_all', type=float, default=1)
     parser.add_argument('--lambda_top', type=float, default=2)
-    parser.add_argument('--Iteration', type=int, default=5000)
+    parser.add_argument('--Iteration', type=int, default=8000)
     parser.add_argument('--lr_img', type=float, default=1)
     parser.add_argument('--image_optimizer', choices=['manual', 'sgd', 'adam'], default='sgd')
     parser.add_argument('--momentum', type=float, default=0.9)
@@ -301,7 +306,7 @@ def main():
                 synthetic_features = teacher((synthetic_view - teacher_mean) / teacher_std)
                 teacher_loss, teacher_all, teacher_top = sadm_loss(
                     real_features, synthetic_features, args.topk, args.lambda_all, args.lambda_top)
-                loss = 100*(loss + teacher_loss / len(teachers))
+                loss = 100* (loss + teacher_loss / len(teachers))
                 loss_all = loss_all + teacher_all.detach() / len(teachers)
                 loss_top = loss_top + teacher_top.detach() / len(teachers)
 
