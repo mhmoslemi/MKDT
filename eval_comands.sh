@@ -23,3 +23,24 @@ bash Evaluate_benchamrk/eval_mkdt_interactive.sh
 bash Evaluate_benchamrk/eval_mkdt_cifar10_interactive.sh
 bash Evaluate_benchamrk/eval_mkdt_cifar100_interactive.sh
 bash Evaluate_benchamrk/eval_mkdt_tinyimagenet_interactive.sh
+
+
+
+bash Evaluate_benchamrk/eval_kmeans_cifar10_interactive.sh done 
+bash Evaluate_benchamrk/eval_kmeans_cifar100_interactive.sh done 
+bash Evaluate_benchamrk/eval_kmeans_tinyimagenet_interactive.sh
+
+
+
+
+# CIFAR-10
+bash Evaluate_benchamrk/eval_mkdt_cifar10_main_interactive.sh
+bash Evaluate_benchamrk/eval_mkdt_cifar10_downstream_interactive.sh
+
+# CIFAR-100
+bash Evaluate_benchamrk/eval_mkdt_cifar100_main_interactive.sh
+bash Evaluate_benchamrk/eval_mkdt_cifar100_downstream_interactive.sh
+
+# TinyImageNet
+bash Evaluate_benchamrk/eval_mkdt_tinyimagenet_main_interactive.sh
+bash Evaluate_benchamrk/eval_mkdt_tinyimagenet_downstream_interactive.sh

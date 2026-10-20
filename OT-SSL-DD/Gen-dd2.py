@@ -155,10 +155,10 @@ def main():
     parser.add_argument('--lambda_all', type=float, default=1)
     parser.add_argument('--lambda_top', type=float, default=2)
     parser.add_argument('--Iteration', type=int, default=8000)
-    parser.add_argument('--lr_img', type=float, default=1)
+    parser.add_argument('--lr_img', type=float, default=0.5)
     parser.add_argument('--image_optimizer', choices=['manual', 'sgd', 'adam'], default='sgd')
     parser.add_argument('--momentum', type=float, default=0.9)
-    parser.add_argument('--batch_real', type=int, default=512)
+    parser.add_argument('--batch_real', type=int, default=4096)
     parser.add_argument('--batch_syn', type=int, default=1024)
     parser.add_argument('--aug_strategy', default='color_crop_cutout_flip_scale_rotate')
     parser.add_argument('--save_every', type=int, default=500)
@@ -306,7 +306,7 @@ def main():
                 synthetic_features = teacher((synthetic_view - teacher_mean) / teacher_std)
                 teacher_loss, teacher_all, teacher_top = sadm_loss(
                     real_features, synthetic_features, args.topk, args.lambda_all, args.lambda_top)
-                loss = 100* (loss + teacher_loss / len(teachers))
+                loss =  (loss + teacher_loss / len(teachers))
                 loss_all = loss_all + teacher_all.detach() / len(teachers)
                 loss_top = loss_top + teacher_top.detach() / len(teachers)
 
