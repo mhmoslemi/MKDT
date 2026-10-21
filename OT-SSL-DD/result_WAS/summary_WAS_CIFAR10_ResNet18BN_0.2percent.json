@@ -1,0 +1,57 @@
+{
+  "complete": true,
+  "results": [
+    {
+      "accuracies_percent": [
+        37.59
+      ],
+      "complete": true,
+      "completed_runs": 1,
+      "config": {
+        "Iteration": 8000,
+        "batch_linear": 256,
+        "batch_real": 512,
+        "batch_syn": 512,
+        "data_path": "/scratch/mmoslem3/data",
+        "dataset": "CIFAR10",
+        "device": "cuda",
+        "epoch_eval_train": 2000,
+        "epoch_linear_train": 100,
+        "experiment": "positive-negative",
+        "generation_experiment": 0,
+        "init": "real",
+        "label_percentage": 1,
+        "lambda_neg": 1,
+        "lr_img": 0.002,
+        "lr_linear": 0.1,
+        "model": "ResNet18BN",
+        "momentum": 0.9,
+        "negative_pairs": 65536,
+        "num_exp": 1,
+        "optimizer": "adam",
+        "percentage": 0.2,
+        "real_pairs": 8192,
+        "resume": false,
+        "runs": 1,
+        "save_every": 500,
+        "save_path": "/scratch/mmoslem3/MKDT/OT-SSL-DD/result_WAS/evaluation/positive-negative/exp_000_20261020_213534_189336",
+        "seed": 0,
+        "ssl_log_every": 100,
+        "ssl_method": "simclr",
+        "std_ddof": 1,
+        "synthetic_checkpoint": "/scratch/mmoslem3/MKDT/OT-SSL-DD/result_WAS/res_WAS_CIFAR10_ResNet18BN_0.2percent_positive-negative_exp0.pt",
+        "teacher_path": "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/full_ssl_checkpoints_1000ep_3seeds",
+        "teacher_seeds": [
+          0,
+          1,
+          2
+        ],
+        "teacher_source": "random",
+        "teacher_ssl": "simclr"
+      },
+      "expected_runs": 1,
+      "mean_percent": 37.59,
+      "std_percent": null
+    }
+  ]
+}

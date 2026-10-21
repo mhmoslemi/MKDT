@@ -1,0 +1,117 @@
+{
+  "checkpoint": "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/mkdt_ssl_checkpoints_cifar8k6k_tiny5k4k_6seeds/CIFAR10/ResNet18/mkdt/pt1/simclr/seed_005/encoder.pt",
+  "checkpoint_file_sha256": "65fac9b19827eeac9b9338f755fdfac0a93cab6b7e1ec09dfd9eb63599b22c94",
+  "checkpoint_retained": true,
+  "complete": true,
+  "driver_hashes": {
+    "eval_jobs/interactive_mkdt.py": "cb9358d5eab00fe5dc57f83dc10fd3f782a7d6c6b791cb959272b99b1411630f",
+    "eval_jobs/mkdt.py": "cb9de146bda935bb4a760e242338d06c452eb254a6bc5e8cb53a2b04329d86ba",
+    "eval_jobs/report.py": "97877e2f8344f4d1514e0fec239403d0fe0cc70554baf56d5fecf8832a9869e7",
+    "eval_jobs/worker.py": "cf6076b99a6af3c188582acae7fb215fdb0cb46bf120c075758228f3a00f66a5",
+    "mkdt_ssl_jobs/worker.py": "324151798daf48e622d2350e58dcd646391afa057ebb567714274405c4c13b22",
+    "protocol.json": "088b30569317c167f7f2a77a1f889d593b620ea31bdc93c5120b183c71e4a570",
+    "table_coverage.tsv": "645814b63037766940475d83939c65247c12aa38b0da982f57beaf505a933609"
+  },
+  "encoder_sha256": "9e28e0df51096aaa21c0504ea4b12dc5b39ac8d4cbc63ae4ec57219fb30466ca",
+  "evaluation_code_hashes": {
+    "Evaluate_benchamrk/common.py": "67fcd33f581a34a7f764431b6761ac120cb080d4b2ea0d69b95074565a224f8b",
+    "Evaluate_benchamrk/data.py": "befcf535679e449b3544ae9b8578325e53f7995179591042315d8937cd55f6d9",
+    "Evaluate_benchamrk/evaluate.py": "2b2162a56878f48ade39d2b80d4316511f20a72d29eaa2cf70fe023d88ad722f",
+    "Evaluate_benchamrk/plan.py": "c6d9bd33b36d1d235a2f6af291b3a0a82187b1eea3a10b90a7f57317d8eee83e",
+    "Evaluate_benchamrk/run.py": "1c2b8d29ab47966f1178c9f04b3e1b7c72bd2f55fb65a32c32c77c3730faf45b",
+    "Evaluate_benchamrk/test_protocol.py": "f018562437924ced1d890343a4e898f10e48c50a63920d337031194671c4e43d",
+    "Evaluate_benchamrk/train_ssl.py": "3670781eb0f0f838ced6cc7ca9775791d4d52683fe25e489239f012937dc1a79",
+    "benchmarks/downstream_data.py": "081fe26e5dc81c96ce8e8ffe5a412302663de4a9d095684c5b37e7c615b4a6fd",
+    "networks.py": "0c15ff3ef11f21df752e2a9a17851ab8c8a52ddc3969380682ea8bfcec1968fc"
+  },
+  "evaluations": [
+    [
+      "CIFAR10",
+      1
+    ],
+    [
+      "CIFAR10",
+      5
+    ],
+    [
+      "Aircraft",
+      1
+    ],
+    [
+      "Aircraft",
+      5
+    ],
+    [
+      "CIFAR100",
+      1
+    ],
+    [
+      "CIFAR100",
+      5
+    ],
+    [
+      "CUB2011",
+      1
+    ],
+    [
+      "CUB2011",
+      5
+    ],
+    [
+      "Dogs",
+      1
+    ],
+    [
+      "Dogs",
+      5
+    ],
+    [
+      "Flowers",
+      1
+    ],
+    [
+      "Flowers",
+      5
+    ],
+    [
+      "TinyImageNet",
+      1
+    ],
+    [
+      "TinyImageNet",
+      5
+    ]
+  ],
+  "identity": {
+    "seed": 5,
+    "selection": {
+      "clipped_fraction": 0.0861731767654419,
+      "count": 500,
+      "file_sha256": "db2cb86627960e119f7b3f3805453662a711e60d0b27dd316116c04c4a87661c",
+      "generator": "ConvNet",
+      "path": "/scratch/mmoslem3/MKDT/benchmarks/mkdt_multidataset/results/batch_20261010T160046Z_Y6dqZS/synthetic/generated/ConvNet/CIFAR10/CIFAR10_1pct/images_5000.pt",
+      "pixel_policy": "clamp_to_unit_rgb",
+      "quantization": "float_to_PIL_uint8_for_reference_augmentations",
+      "space": "repository_normalized"
+    },
+    "selection_method": "mkdt",
+    "signature": "1c108cf8fa1be6aca6ed76876c3c4d00d084111f8b89326ced79fbc264ad0d41"
+  },
+  "result_hashes": {
+    "Aircraft_lbl1.json": "360ed5a66a489648a9560c1959421c77e3758a363c680fb1edd8f694e0379a0f",
+    "Aircraft_lbl5.json": "50d8b3181d9f3066ac6d3acd2b25f9dcd2cb4d21865b829a785a468d7fe04431",
+    "CIFAR100_lbl1.json": "3923e5eae511338130b280a8edeff1ab3823150abbb2415e8c2f0aa72afa388f",
+    "CIFAR100_lbl5.json": "992a2a44af3a20a44d242c9e59b37216c79030c8cfefaa6ca8f1ecc3d384cc39",
+    "CIFAR10_lbl1.json": "4d72515459e5329a69b9234869107636164fcb9626449ac81642e61bb96e8e00",
+    "CIFAR10_lbl5.json": "53e6f67e98ad4f37abc064b4cf168f3f7caffec1287a997774c30b6646047cfe",
+    "CUB2011_lbl1.json": "8e3d63aaa4f23e58eb99878a0ea0bc97e8d1acccdbb7bb663a1197423aff1dd6",
+    "CUB2011_lbl5.json": "648b98934713f3bc5ad72f7cf598ed3df6f5ae2737073b583d70a20f8da8f630",
+    "Dogs_lbl1.json": "098bf4e0c995f310cfe478fadccf6a56e72b74e7b1be0711f42136e7da955783",
+    "Dogs_lbl5.json": "0e604241d7e4b72f13ffb2553eb125634b27e91fadbde3a5329f04fc879ed6df",
+    "Flowers_lbl1.json": "86c9f4bfc229a3a5b17010780f978c7623e6a153f8fc7522e790220ba2abb6fb",
+    "Flowers_lbl5.json": "2c35f7e11f70d2253245bed11884882d514d3bd563e4c94b5659e60ac566cff5",
+    "TinyImageNet_lbl1.json": "4c236c806842af2607e5ca5110ae43abb982154f66d84f1d700078201d906ea1",
+    "TinyImageNet_lbl5.json": "7d696c5b2d120f8b68088ddb8f378af5d850565de40a7a98511b6cec2b494ac6"
+  },
+  "ssl_epochs": 8000
+}
