@@ -1,0 +1,35 @@
+Run inside the existing Vulcan GPU allocation:
+  bash Evaluate_benchamrk/eval_full_tinyimagenet_interactive.sh
+
+The original 100-epoch frozen-linear-probe implementation and all its hyperparameters
+are unchanged. Main: all three backbones. Downstream: ResNet18 only. Labels: 1%, 5%.
+Existing completed probe JSONs are validated and reused in the original result root:
+  Evaluate_benchamrk/full_eval_results_interactive_3seeds_TinyImageNet/
+
+User-approved final snapshots: epoch 950 from training.pt for these timed-out runs:
+  ConvNet/Barlow Twins seeds 0,2
+  ResNet18/Barlow Twins seeds 0,2
+  ResNet18/SimCLR seeds 0,2
+  VGG11/Barlow Twins seed 1
+  VGG11/SimCLR seed 2
+Encoder-only copies are derived into the evaluation output. Training files remain
+untouched; accepted epochs and source checkpoint hashes are recorded explicitly.
+
+VGG11/SimCLR seed 1 (last log epoch 180) is excluded. Encoder seeds 0 and 2 each
+receive two probes per labeled fraction. Probe seeds are 0,10000 and 2,10002; each
+probe seed controls labeled-subset sampling, head initialization and augmentation.
+Existing seed-0 probes are reused as that encoder's first run. The second runs are
+stored under each encoder's probe_repeat_001/ directory.
+
+All other configurations require the original three SSL seeds, one probe each.
+VGG11/SimCLR cells use the mean and sample SD across four probes from TWO encoders.
+Reports retain expected_seeds=2 and expected_probe_runs=4 for those two cells;
+these are not four independent SSL training seeds.
+
+Totals: 17 encoders; 110 probes; 36 logical table cells. Missing checkpoints are
+skipped and interruptions retain completed probe JSONs. The same command resumes.
+The original plan.json contract is preserved. plan_tiny_final.json records the
+accepted snapshots, effective schedule, probe seeds and extension code hash.
+
+The launcher runs small CPU fixture checks on the allocated node before evaluation.
+No jobs are submitted and no SSL training is started by this launcher.

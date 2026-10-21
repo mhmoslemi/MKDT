@@ -34,9 +34,9 @@
 \cmidrule(lr){2-9}
 
 & 100\% & Full Data
-& \dsacc{10.17}{0.39} &
+& \dsacc{10.17}{0.39} & \dsacc{12.67}{1.08}
 &  &
-&  &  \\
+&  & \dsacc{29.32}{0.58} \\
 \cmidrule(lr){2-9}
 
 & \multirow{4}{*}{0.2\%} & Random Subset &  & \dsacc{5.50}{0.34} &  &  &  &  \\
@@ -51,7 +51,7 @@
 &  &  \\
 & & K-means Subset
 & \dsacc{8.71}{0.35} & \dsacc{7.53}{0.54}
-&  & \dsacc{8.30}{0.36}
+& \dsacc{6.06}{0.56} & \dsacc{8.30}{0.36}
 & \dsacc{9.16}{0.36} & \dsacc{10.63}{0.23} \\
 & & MKDT &  &  &  &  &  &  \\
 & & Ours & & & & & & \\
@@ -63,7 +63,7 @@
 &  &  \\
 & & K-means Subset
 & \dsacc{9.14}{0.43} & \dsacc{7.95}{0.46}
-&  &
+& \dsacc{8.76}{0.32} & \dsacc{10.16}{0.41}
 & \dsacc{10.70}{0.41} & \dsacc{12.49}{0.50} \\
 & & MKDT &  &  &  &  &  &  \\
 & & Ours & & & & & & \\
@@ -92,9 +92,9 @@
 \cmidrule(lr){2-9}
 
 & 100\% & Full Data
-& \dsacc{18.76}{0.65} &
+& \dsacc{18.76}{0.65} & \dsacc{21.77}{0.46}
 &  &
-&  &  \\
+&  & \dsacc{40.75}{0.11} \\
 \cmidrule(lr){2-9}
 
 & \multirow{4}{*}{0.2\%} & Random Subset &  & \dsacc{9.61}{0.32} &  &  &  &  \\
@@ -109,7 +109,7 @@
 &  &  \\
 & & K-means Subset
 & \dsacc{15.37}{0.33} & \dsacc{13.26}{0.43}
-&  & \dsacc{13.91}{0.36}
+& \dsacc{10.81}{0.56} & \dsacc{13.91}{0.36}
 & \dsacc{15.79}{0.33} & \dsacc{19.17}{0.66} \\
 & & MKDT &  &  &  &  &  &  \\
 & & Ours & & & & & & \\
@@ -121,7 +121,7 @@
 &  &  \\
 & & K-means Subset
 & \dsacc{15.44}{0.48} & \dsacc{13.45}{0.57}
-&  &
+& \dsacc{13.73}{0.32} & \dsacc{15.93}{0.29}
 & \dsacc{17.94}{0.31} & \dsacc{22.23}{0.28} \\
 & & MKDT &  &  &  &  &  &  \\
 & & Ours & & & & & & \\
@@ -145,8 +145,10 @@
 }
 \end{table*}
 
-% Interactive evaluation snapshot: 2026-10-20T22:42:54Z.
+% Interactive evaluation snapshot: 2026-10-21T17:44:49Z.
 % K-means: seeds 0--5; full data: seeds 0--2. Only complete per-cell seed sets are filled.
 % New entries: mean +/- sample SD (ddof=1), 100-epoch frozen linear probes at 1%/5% labels.
 % Sources: Evaluate_benchamrk/kmeans_eval_results_interactive_6seeds/ (not the 250ep run) and
 %          Evaluate_benchamrk/full_eval_results_interactive_3seeds_TinyImageNet/.
+% Full data includes explicitly accepted epoch-950 timeout snapshots; requested SSL budget was 1000 epochs.
+% VGG11/SimCLR uses encoder seeds 0,2 with two probes each (four probe runs, two SSL seeds); fill only once all four runs are complete.

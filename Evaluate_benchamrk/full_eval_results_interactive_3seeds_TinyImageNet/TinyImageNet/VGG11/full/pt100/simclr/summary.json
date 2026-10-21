@@ -1,20 +1,40 @@
 {
+  "aggregation": "mean and sample SD across four probes from two SSL encoders",
   "complete": false,
+  "encoder_seeds": [
+    0,
+    2
+  ],
+  "extension_driver_hashes": {
+    "eval_jobs/interactive_full_tiny.py": "18a634efef4d9f94ce7a1dff6c8e4cd52e52da4af4310976257172388e8d5bfb"
+  },
+  "probe_repeats_per_encoder": 2,
   "results": [
     {
       "accuracies_percent": [
         24.98
       ],
       "complete": false,
+      "completed_probe_runs": 1,
       "completed_seeds": 1,
       "disabled": "False",
-      "expected_seeds": 3,
+      "expected_probe_runs": 4,
+      "expected_seeds": 2,
       "labels": "1",
       "latex": "",
       "line": "36",
       "mean_percent": "",
       "method": "full",
       "model": "VGG11",
+      "probe_repeats_per_encoder": 2,
+      "probe_runs": [
+        {
+          "accuracy_percent": 24.98,
+          "encoder_seed": 0,
+          "probe_repeat": 0,
+          "probe_seed": 0
+        }
+      ],
       "scripts": "scripts/TinyImageNet_VGG11_full_pt100_simclr_seed0.sh;scripts/TinyImageNet_VGG11_full_pt100_simclr_seed1.sh;scripts/TinyImageNet_VGG11_full_pt100_simclr_seed2.sh;scripts/TinyImageNet_VGG11_full_pt100_simclr_seed3.sh;scripts/TinyImageNet_VGG11_full_pt100_simclr_seed4.sh",
       "seeds": [
         0
@@ -31,15 +51,26 @@
         34.97
       ],
       "complete": false,
+      "completed_probe_runs": 1,
       "completed_seeds": 1,
       "disabled": "False",
-      "expected_seeds": 3,
+      "expected_probe_runs": 4,
+      "expected_seeds": 2,
       "labels": "5",
       "latex": "",
       "line": "94",
       "mean_percent": "",
       "method": "full",
       "model": "VGG11",
+      "probe_repeats_per_encoder": 2,
+      "probe_runs": [
+        {
+          "accuracy_percent": 34.97,
+          "encoder_seed": 0,
+          "probe_repeat": 0,
+          "probe_seed": 0
+        }
+      ],
       "scripts": "scripts/TinyImageNet_VGG11_full_pt100_simclr_seed0.sh;scripts/TinyImageNet_VGG11_full_pt100_simclr_seed1.sh;scripts/TinyImageNet_VGG11_full_pt100_simclr_seed2.sh;scripts/TinyImageNet_VGG11_full_pt100_simclr_seed3.sh;scripts/TinyImageNet_VGG11_full_pt100_simclr_seed4.sh",
       "seeds": [
         0

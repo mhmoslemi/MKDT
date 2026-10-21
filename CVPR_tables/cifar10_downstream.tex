@@ -83,7 +83,7 @@ SimCLR & BT & SimCLR & BT & SimCLR & BT \\
 & \dsacc{2.69}{0.42} & \dsacc{3.58}{1.07}
 & \dsacc{3.61}{0.34} & \dsacc{7.04}{0.63} \\
 
-& & MKDT &  & \dsacc{11.60}{0.38} &  & \dsacc{2.31}{0.20} &  & \dsacc{1.73}{0.09} &  & \dsacc{2.45}{0.18} &  & \dsacc{3.55}{0.58} &  & \dsacc{5.86}{0.43} \\
+& & MKDT & \dsacc{6.85}{0.62} & \dsacc{11.60}{0.38} & \dsacc{1.84}{0.32} & \dsacc{2.31}{0.20} & \dsacc{1.02}{0.23} & \dsacc{1.73}{0.09} & \dsacc{1.43}{0.16} & \dsacc{2.45}{0.18} & \dsacc{2.48}{0.32} & \dsacc{3.55}{0.58} & \dsacc{2.98}{0.20} & \dsacc{5.86}{0.43} \\
 & & Ours & \multicolumn{12}{c}{} \\
 \cmidrule(lr){2-15}
 
@@ -101,7 +101,7 @@ SimCLR & BT & SimCLR & BT & SimCLR & BT \\
 & \dsacc{2.31}{0.30} & \dsacc{2.95}{0.28}
 & \dsacc{2.97}{0.45} & \dsacc{4.16}{0.90}
 & \dsacc{4.70}{0.12} & \dsacc{8.60}{0.30} \\
-& & MKDT &  &  &  &  &  &  &  &  &  &  &  &  \\
+& & MKDT & \dsacc{8.33}{0.89} & \dsacc{13.85}{0.55} & \dsacc{2.21}{0.21} & \dsacc{2.98}{0.25} & \dsacc{1.07}{0.18} & \dsacc{1.77}{0.10} & \dsacc{1.68}{0.27} & \dsacc{2.68}{0.32} & \dsacc{2.72}{0.42} & \dsacc{3.72}{0.70} & \dsacc{3.48}{0.23} & \dsacc{7.62}{0.42} \\
 & & Ours & \multicolumn{12}{c}{} \\
 % BEGIN DISABLED: 5% pretraining subset
 % \cmidrule(lr){2-15}
@@ -173,7 +173,7 @@ SimCLR & BT & SimCLR & BT & SimCLR & BT \\
 & \dsacc{4.43}{0.73} & \dsacc{9.78}{1.74}
 & \dsacc{7.25}{0.43} & \dsacc{12.64}{0.91} \\
 
-& & MKDT &  & \dsacc{20.75}{0.87} &  & \dsacc{4.59}{0.30} &  & \dsacc{2.90}{0.24} &  & \dsacc{4.25}{0.40} &  & \dsacc{8.61}{0.95} &  & \dsacc{11.01}{0.42} \\
+& & MKDT & \dsacc{13.24}{0.85} & \dsacc{20.75}{0.87} & \dsacc{2.36}{0.20} & \dsacc{4.59}{0.30} & \dsacc{1.23}{0.17} & \dsacc{2.90}{0.24} & \dsacc{2.73}{0.22} & \dsacc{4.25}{0.40} & \dsacc{4.09}{0.72} & \dsacc{8.61}{0.95} & \dsacc{5.91}{0.64} & \dsacc{11.01}{0.42} \\
 & & Ours & \multicolumn{12}{c}{} \\
 \cmidrule(lr){2-15}
 
@@ -191,7 +191,7 @@ SimCLR & BT & SimCLR & BT & SimCLR & BT \\
 & \dsacc{3.84}{0.24} & \dsacc{5.96}{0.38}
 & \dsacc{6.04}{1.09} & \dsacc{11.51}{1.70}
 & \dsacc{9.24}{0.27} & \dsacc{15.93}{0.45} \\
-& & MKDT &  &  &  &  &  &  &  &  &  &  &  &  \\
+& & MKDT & \dsacc{14.83}{0.36} & \dsacc{24.08}{0.53} & \dsacc{3.10}{0.42} & \dsacc{5.15}{0.34} & \dsacc{1.44}{0.25} & \dsacc{2.80}{0.27} & \dsacc{3.15}{0.35} & \dsacc{5.13}{0.39} & \dsacc{4.40}{0.75} & \dsacc{9.44}{0.68} & \dsacc{7.14}{0.44} & \dsacc{13.79}{0.37} \\
 & & Ours & \multicolumn{12}{c}{} \\
 % BEGIN DISABLED: 5% pretraining subset
 % \cmidrule(lr){2-15}
@@ -219,10 +219,11 @@ SimCLR & BT & SimCLR & BT & SimCLR & BT \\
 }
 \end{table*}
 
-% Interactive evaluation snapshot: 2026-10-20T23:41:46Z.
+% Interactive evaluation snapshot: 2026-10-21T17:44:49Z.
 % Random: seeds 0--9; k-means/MKDT: seeds 0--5; full data: seeds 0--2. Only complete per-cell seed sets are filled.
 % New entries: mean +/- sample SD (ddof=1), 100-epoch frozen linear probes.
 % Sources: Evaluate_benchamrk/random_eval_results_interactive_10seeds/,
 %          Evaluate_benchamrk/kmeans_eval_results_interactive_6seeds/ (not the 250ep run),
 %          Evaluate_benchamrk/mkdt_eval_results_interactive_6seeds/, and Evaluate_benchamrk/full_eval_results_interactive_3seeds_CIFAR10/.
 % Random Dogs/Flowers remain unfilled: cross-server metadata fingerprints differ; image equivalence unverified.
+% MKDT 2% SimCLR downstream: all six complete.json markers/result hashes verified directly; synchronized table_summary.tsv is stale.

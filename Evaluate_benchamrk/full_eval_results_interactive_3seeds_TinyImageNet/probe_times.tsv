@@ -1,15 +1,89 @@
-task	source	model	method	subset	ssl	seed	target	labels	seconds
-TinyImageNet	TinyImageNet	ConvNet	full	100	barlowtwins	1	TinyImageNet	1	37.39290434587747
-TinyImageNet	TinyImageNet	ConvNet	full	100	barlowtwins	1	TinyImageNet	5	174.69990781322122
-TinyImageNet	TinyImageNet	ConvNet	full	100	simclr	0	TinyImageNet	1	36.7738195322454
-TinyImageNet	TinyImageNet	ConvNet	full	100	simclr	0	TinyImageNet	5	175.02574133733287
-TinyImageNet	TinyImageNet	ConvNet	full	100	simclr	1	TinyImageNet	1	36.77104336582124
-TinyImageNet	TinyImageNet	ConvNet	full	100	simclr	1	TinyImageNet	5	175.34398827282712
-TinyImageNet	TinyImageNet	ConvNet	full	100	simclr	2	TinyImageNet	1	36.749176194891334
-TinyImageNet	TinyImageNet	ConvNet	full	100	simclr	2	TinyImageNet	5	174.85503025120124
-TinyImageNet	TinyImageNet	VGG11	full	100	barlowtwins	0	TinyImageNet	1	37.14013091893867
-TinyImageNet	TinyImageNet	VGG11	full	100	barlowtwins	0	TinyImageNet	5	177.29969824384898
-TinyImageNet	TinyImageNet	VGG11	full	100	barlowtwins	2	TinyImageNet	1	37.27268040413037
-TinyImageNet	TinyImageNet	VGG11	full	100	barlowtwins	2	TinyImageNet	5	176.37577737728134
-TinyImageNet	TinyImageNet	VGG11	full	100	simclr	0	TinyImageNet	1	37.049289024434984
-TinyImageNet	TinyImageNet	VGG11	full	100	simclr	0	TinyImageNet	5	176.51466877106577
+task	source	model	method	subset	ssl	seed	target	labels	seconds	encoder_seed	probe_repeat	probe_seed
+TinyImageNet	TinyImageNet	ConvNet	full	100	barlowtwins	0	TinyImageNet	1	37.52524129394442	0	0	0
+TinyImageNet	TinyImageNet	ConvNet	full	100	barlowtwins	0	TinyImageNet	5	175.06669436208904	0	0	0
+TinyImageNet	TinyImageNet	ConvNet	full	100	barlowtwins	1	TinyImageNet	1	37.39290434587747	1	0	1
+TinyImageNet	TinyImageNet	ConvNet	full	100	barlowtwins	1	TinyImageNet	5	174.69990781322122	1	0	1
+TinyImageNet	TinyImageNet	ConvNet	full	100	barlowtwins	2	TinyImageNet	1	36.793253222480416	2	0	2
+TinyImageNet	TinyImageNet	ConvNet	full	100	barlowtwins	2	TinyImageNet	5	175.68636863771826	2	0	2
+TinyImageNet	TinyImageNet	ConvNet	full	100	simclr	0	TinyImageNet	1	36.7738195322454	0	0	0
+TinyImageNet	TinyImageNet	ConvNet	full	100	simclr	0	TinyImageNet	5	175.02574133733287	0	0	0
+TinyImageNet	TinyImageNet	ConvNet	full	100	simclr	1	TinyImageNet	1	36.77104336582124	1	0	1
+TinyImageNet	TinyImageNet	ConvNet	full	100	simclr	1	TinyImageNet	5	175.34398827282712	1	0	1
+TinyImageNet	TinyImageNet	ConvNet	full	100	simclr	2	TinyImageNet	1	36.749176194891334	2	0	2
+TinyImageNet	TinyImageNet	ConvNet	full	100	simclr	2	TinyImageNet	5	174.85503025120124	2	0	2
+TinyImageNet	TinyImageNet	ResNet18	full	100	barlowtwins	0	TinyImageNet	1	50.039753468707204	0	0	0
+TinyImageNet	TinyImageNet	ResNet18	full	100	barlowtwins	0	TinyImageNet	5	236.68803760316223	0	0	0
+TinyImageNet	TinyImageNet	ResNet18	full	100	barlowtwins	0	Aircraft	1	86.70199482794851	0	0	0
+TinyImageNet	TinyImageNet	ResNet18	full	100	barlowtwins	0	Aircraft	5	296.7371302228421	0	0	0
+TinyImageNet	TinyImageNet	ResNet18	full	100	barlowtwins	0	CIFAR10	1	22.98159791249782	0	0	0
+TinyImageNet	TinyImageNet	ResNet18	full	100	barlowtwins	0	CIFAR10	5	100.36092512961477	0	0	0
+TinyImageNet	TinyImageNet	ResNet18	full	100	barlowtwins	0	CIFAR100	1	23.024605148471892	0	0	0
+TinyImageNet	TinyImageNet	ResNet18	full	100	barlowtwins	0	CIFAR100	5	100.56027749087662	0	0	0
+TinyImageNet	TinyImageNet	ResNet18	full	100	barlowtwins	0	CUB2011	1	34.61292420141399	0	0	0
+TinyImageNet	TinyImageNet	ResNet18	full	100	barlowtwins	0	CUB2011	5	100.11870485823601	0	0	0
+TinyImageNet	TinyImageNet	ResNet18	full	100	barlowtwins	0	Dogs	1	49.82593765668571	0	0	0
+TinyImageNet	TinyImageNet	ResNet18	full	100	barlowtwins	0	Dogs	5	150.22802996542305	0	0	0
+TinyImageNet	TinyImageNet	ResNet18	full	100	barlowtwins	0	Flowers	1	27.1198204504326	0	0	0
+TinyImageNet	TinyImageNet	ResNet18	full	100	barlowtwins	0	Flowers	5	37.861045588739216	0	0	0
+TinyImageNet	TinyImageNet	ResNet18	full	100	barlowtwins	1	TinyImageNet	1	50.601839195005596	1	0	1
+TinyImageNet	TinyImageNet	ResNet18	full	100	barlowtwins	1	TinyImageNet	5	237.48261597100645	1	0	1
+TinyImageNet	TinyImageNet	ResNet18	full	100	barlowtwins	1	Aircraft	1	93.17515783710405	1	0	1
+TinyImageNet	TinyImageNet	ResNet18	full	100	barlowtwins	1	Aircraft	5	306.8790777232498	1	0	1
+TinyImageNet	TinyImageNet	ResNet18	full	100	barlowtwins	1	CIFAR10	1	23.173090120777488	1	0	1
+TinyImageNet	TinyImageNet	ResNet18	full	100	barlowtwins	1	CIFAR10	5	100.99293864611536	1	0	1
+TinyImageNet	TinyImageNet	ResNet18	full	100	barlowtwins	1	CIFAR100	1	23.137445062864572	1	0	1
+TinyImageNet	TinyImageNet	ResNet18	full	100	barlowtwins	1	CIFAR100	5	101.13993775425479	1	0	1
+TinyImageNet	TinyImageNet	ResNet18	full	100	barlowtwins	1	CUB2011	1	39.61658941023052	1	0	1
+TinyImageNet	TinyImageNet	ResNet18	full	100	barlowtwins	1	CUB2011	5	100.60152160935104	1	0	1
+TinyImageNet	TinyImageNet	ResNet18	full	100	barlowtwins	1	Dogs	1	53.9033836890012	1	0	1
+TinyImageNet	TinyImageNet	ResNet18	full	100	barlowtwins	1	Dogs	5	151.14807639783248	1	0	1
+TinyImageNet	TinyImageNet	ResNet18	full	100	barlowtwins	1	Flowers	1	30.473918989300728	1	0	1
+TinyImageNet	TinyImageNet	ResNet18	full	100	barlowtwins	1	Flowers	5	38.623926144093275	1	0	1
+TinyImageNet	TinyImageNet	ResNet18	full	100	barlowtwins	2	TinyImageNet	1	50.04690194223076	2	0	2
+TinyImageNet	TinyImageNet	ResNet18	full	100	barlowtwins	2	TinyImageNet	5	236.73490384593606	2	0	2
+TinyImageNet	TinyImageNet	ResNet18	full	100	barlowtwins	2	Aircraft	1	90.65855707321316	2	0	2
+TinyImageNet	TinyImageNet	ResNet18	full	100	barlowtwins	2	Aircraft	5	301.14591104350984	2	0	2
+TinyImageNet	TinyImageNet	ResNet18	full	100	barlowtwins	2	CIFAR10	1	23.020787090063095	2	0	2
+TinyImageNet	TinyImageNet	ResNet18	full	100	barlowtwins	2	CIFAR10	5	100.55528324842453	2	0	2
+TinyImageNet	TinyImageNet	ResNet18	full	100	barlowtwins	2	CIFAR100	1	23.112559848465025	2	0	2
+TinyImageNet	TinyImageNet	ResNet18	full	100	barlowtwins	2	CIFAR100	5	100.65840527508408	2	0	2
+TinyImageNet	TinyImageNet	ResNet18	full	100	barlowtwins	2	CUB2011	1	37.11867755651474	2	0	2
+TinyImageNet	TinyImageNet	ResNet18	full	100	barlowtwins	2	CUB2011	5	103.81596956588328	2	0	2
+TinyImageNet	TinyImageNet	ResNet18	full	100	barlowtwins	2	Dogs	1	49.59945508185774	2	0	2
+TinyImageNet	TinyImageNet	ResNet18	full	100	barlowtwins	2	Dogs	5	152.01345005910844	2	0	2
+TinyImageNet	TinyImageNet	ResNet18	full	100	barlowtwins	2	Flowers	1	27.23152583744377	2	0	2
+TinyImageNet	TinyImageNet	ResNet18	full	100	barlowtwins	2	Flowers	5	38.98817731719464	2	0	2
+TinyImageNet	TinyImageNet	ResNet18	full	100	simclr	0	TinyImageNet	1	50.102750493213534	0	0	0
+TinyImageNet	TinyImageNet	ResNet18	full	100	simclr	0	TinyImageNet	5	237.27627038769424	0	0	0
+TinyImageNet	TinyImageNet	ResNet18	full	100	simclr	0	Aircraft	1	87.493019124493	0	0	0
+TinyImageNet	TinyImageNet	ResNet18	full	100	simclr	0	Aircraft	5	296.59648265410215	0	0	0
+TinyImageNet	TinyImageNet	ResNet18	full	100	simclr	0	CIFAR10	1	23.129864524118602	0	0	0
+TinyImageNet	TinyImageNet	ResNet18	full	100	simclr	0	CIFAR10	5	100.70669832173735	0	0	0
+TinyImageNet	TinyImageNet	ResNet18	full	100	simclr	0	CIFAR100	1	23.145881650969386	0	0	0
+TinyImageNet	TinyImageNet	ResNet18	full	100	simclr	0	CIFAR100	5	101.04542952775955	0	0	0
+TinyImageNet	TinyImageNet	ResNet18	full	100	simclr	0	CUB2011	1	35.01871003955603	0	0	0
+TinyImageNet	TinyImageNet	ResNet18	full	100	simclr	0	CUB2011	5	102.07431743480265	0	0	0
+TinyImageNet	TinyImageNet	ResNet18	full	100	simclr	0	Dogs	1	50.50072161387652	0	0	0
+TinyImageNet	TinyImageNet	ResNet18	full	100	simclr	0	Dogs	5	151.62782431673259	0	0	0
+TinyImageNet	TinyImageNet	ResNet18	full	100	simclr	0	Flowers	1	27.233497759327292	0	0	0
+TinyImageNet	TinyImageNet	ResNet18	full	100	simclr	0	Flowers	5	39.09263603575528	0	0	0
+TinyImageNet	TinyImageNet	ResNet18	full	100	simclr	1	TinyImageNet	1	50.53781768120825	1	0	1
+TinyImageNet	TinyImageNet	ResNet18	full	100	simclr	1	TinyImageNet	5	235.35553967300802	1	0	1
+TinyImageNet	TinyImageNet	ResNet18	full	100	simclr	1	Aircraft	1	94.45097690587863	1	0	1
+TinyImageNet	TinyImageNet	ResNet18	full	100	simclr	1	Aircraft	5	305.46981845609844	1	0	1
+TinyImageNet	TinyImageNet	ResNet18	full	100	simclr	1	CIFAR10	1	22.983916730154306	1	0	1
+TinyImageNet	TinyImageNet	ResNet18	full	100	simclr	1	CIFAR10	5	100.30468612676486	1	0	1
+TinyImageNet	TinyImageNet	ResNet18	full	100	simclr	1	CIFAR100	1	23.060497692786157	1	0	1
+TinyImageNet	TinyImageNet	ResNet18	full	100	simclr	1	CIFAR100	5	100.60636204620823	1	0	1
+TinyImageNet	TinyImageNet	ResNet18	full	100	simclr	1	CUB2011	1	42.63772857375443	1	0	1
+TinyImageNet	TinyImageNet	ResNet18	full	100	simclr	1	CUB2011	5	102.7280526123941	1	0	1
+TinyImageNet	TinyImageNet	ResNet18	full	100	simclr	1	Dogs	1	57.554215357638896	1	0	1
+TinyImageNet	TinyImageNet	ResNet18	full	100	simclr	1	Dogs	5	150.93171703116968	1	0	1
+TinyImageNet	TinyImageNet	ResNet18	full	100	simclr	1	Flowers	1	33.19281601998955	1	0	1
+TinyImageNet	TinyImageNet	ResNet18	full	100	simclr	1	Flowers	5	39.25228165788576	1	0	1
+TinyImageNet	TinyImageNet	VGG11	full	100	barlowtwins	0	TinyImageNet	1	37.14013091893867	0	0	0
+TinyImageNet	TinyImageNet	VGG11	full	100	barlowtwins	0	TinyImageNet	5	177.29969824384898	0	0	0
+TinyImageNet	TinyImageNet	VGG11	full	100	barlowtwins	2	TinyImageNet	1	37.27268040413037	2	0	2
+TinyImageNet	TinyImageNet	VGG11	full	100	barlowtwins	2	TinyImageNet	5	176.37577737728134	2	0	2
+TinyImageNet	TinyImageNet	VGG11	full	100	simclr	0	TinyImageNet	1	37.049289024434984	0	0	0
+TinyImageNet	TinyImageNet	VGG11	full	100	simclr	0	TinyImageNet	5	176.51466877106577	0	0	0
