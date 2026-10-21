@@ -261,9 +261,9 @@ def main():
     parser.add_argument('--percentage', type=float, default=1)
     parser.add_argument('--experiment', choices=['random', 'positive', 'positive-negative', 'all'],
                         default='positive-negative')
-    parser.add_argument('--init', choices=['noise', 'real'], default='noise')
+    parser.add_argument('--init', choices=['noise', 'real'], default='real')
     parser.add_argument('--lambda_neg', '--lambda-neg', type=float, default=1)
-    parser.add_argument('--teacher_source', choices=['pretrained', 'random'], default='pretrained')
+    parser.add_argument('--teacher_source', choices=['pretrained', 'random'], default='random')
     parser.add_argument('--teacher_ssl', choices=['simclr', 'barlowtwins'], default='simclr')
     parser.add_argument('--teacher_seeds', type=int, nargs='+', default=[0, 1, 2])
     parser.add_argument('--teacher_path', default=str(
