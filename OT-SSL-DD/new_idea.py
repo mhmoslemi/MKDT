@@ -139,6 +139,7 @@ def resume_distillation(path, images, optimizer, expected, common):
 # using saved teacher, 
 # (ENV) mmoslem3@rack15-04:~/scratch/MKDT/OT-SSL-DD$ python new_idea.py 
 # Hyper-parameters: 
+# Hyper-parameters: 
 #  {'dataset': 'CIFAR10', 'model': 'ResNet18BN', 'percentage': 0.2, 'teacher_source': 'pretrained', 'teacher_ssl': 'simclr', 'teacher_seeds': [0], 'teacher_path': '/scratch/mmoslem3/MKDT/Evaluate_benchamrk/full_ssl_checkpoints_1000ep_3seeds', 'K_views': 8, 'lambda_all': 1, 'lambda_top': 2, 'Iteration': 8000, 'lr_img': 0.5, 'momentum': 0.9, 'batch_real': 2048, 'batch_syn': 1024, 'save_every': 500, 'num_exp': 1, 'label_percentage': 1, 'ssl_method': 'simclr', 'epoch_eval_train': 2000, 'ssl_log_every': 100, 'epoch_linear_train': 100, 'lr_linear': 0.1, 'batch_linear': 256, 'runs': 1, 'seed': 0, 'resume': False, 'device': 'cuda', 'data_path': '/scratch/mmoslem3/data', 'save_path': '/scratch/mmoslem3/MKDT/OT-SSL-DD/result_new_idea'}
 # for 500 iter: 41.51
 

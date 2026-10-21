@@ -15,7 +15,7 @@ from torchvision.transforms.functional import to_pil_image
 
 SSL_EPOCHS = {
     # "CIFAR10": {0.2: 2000, 1: 8000, 2: 6000},
-    "CIFAR10": {0.2: 10000, 1: 8000, 2: 6000},
+    "CIFAR10": {0.2: 2000, 1: 4000, 2: 6000},
     "CIFAR100": {0.2: 3000, 1: 8000, 2: 6000},
     "TinyImageNet": {0.2: 6000, 1: 5000, 2: 4000},
 }
@@ -180,7 +180,7 @@ def main():
     parser.add_argument("--dataset", choices=list(SSL_EPOCHS), default="CIFAR10")
     parser.add_argument("--percentage", type=float, default=0.2)
     parser.add_argument("--label-percentage", type=int, choices=list(PROBE_EPOCHS), default=1)
-    parser.add_argument("--model", choices=["ConvNet", "ConvNetBN", "VGG11", "VGG11BN", "ResNet18", "ResNet18BN"], default="ResNet18BN")
+    parser.add_argument("--model", choices=["ConvNet", "ConvNetBN", "VGG11", "VGG11BN", "ResNet18", "ResNet18BN"], default="ConvNet")
     parser.add_argument("--ssl-method", choices=["simclr", "barlowtwins"], default="simclr")
     parser.add_argument("--ssl-epochs", dest="epoch_eval_train", type=int, default=None)
     parser.add_argument("--ssl-log-every", "--print-every", type=int, default=100, help="Print SSL progress every N epochs; always print first/final epochs")
