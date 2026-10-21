@@ -52,12 +52,12 @@
 & \multirow{4}{*}{1\%} & Random Subset
 & \dsacc{52.03}{0.81} & \dsacc{46.57}{1.32}
 & \dsacc{45.54}{2.28} & \dsacc{31.64}{4.47}
-&  &  \\
+& \dsacc{47.80}{0.91} & \dsacc{49.34}{1.10} \\
 & & K-means Subset
 & \dsacc{52.17}{0.76} & \dsacc{46.49}{0.77}
 & \dsacc{43.63}{3.64} & \dsacc{27.97}{6.29}
 & \dsacc{46.86}{0.91} & \dsacc{48.98}{2.37} \\
-& & MKDT & \dsacc{49.62}{0.53} & \dsacc{46.72}{1.20} &  &  & \dsacc{36.92}{1.27} & \dsacc{43.66}{0.62} \\
+& & MKDT & \dsacc{49.62}{0.53} & \dsacc{46.72}{1.20} & \dsacc{37.41}{0.55} & \dsacc{25.07}{5.92} & \dsacc{36.92}{1.27} & \dsacc{43.66}{0.62} \\
 & & Ours &  &  &  &  &  &  \\
 \cmidrule(lr){2-9}
 
@@ -69,7 +69,7 @@
 & \dsacc{52.91}{0.96} & \dsacc{50.50}{0.90}
 & \dsacc{49.31}{1.13} & \dsacc{42.48}{1.63}
 & \dsacc{52.98}{0.57} & \dsacc{56.98}{1.13} \\
-& & MKDT &  & \dsacc{50.43}{0.97} &  &  & \dsacc{39.43}{0.64} & \dsacc{49.24}{0.76} \\
+& & MKDT &  & \dsacc{50.43}{0.97} & \dsacc{24.87}{1.36} &  & \dsacc{39.43}{0.64} & \dsacc{49.24}{0.76} \\
 & & Ours &  &  &  &  &  &  \\
 % BEGIN DISABLED: 5% pretraining subset
 % \cmidrule(lr){2-9}
@@ -116,12 +116,12 @@
 & \multirow{4}{*}{1\%} & Random Subset
 & \dsacc{60.47}{0.61} & \dsacc{53.37}{1.38}
 & \dsacc{50.46}{2.03} & \dsacc{32.27}{5.60}
-&  &  \\
+& \dsacc{52.05}{1.00} & \dsacc{56.46}{0.90} \\
 & & K-means Subset
 & \dsacc{60.70}{0.62} & \dsacc{53.38}{0.96}
 & \dsacc{48.03}{3.95} & \dsacc{28.80}{5.85}
 & \dsacc{51.80}{0.93} & \dsacc{56.25}{2.23} \\
-& & MKDT & \dsacc{58.59}{0.32} & \dsacc{53.28}{0.69} &  &  & \dsacc{43.01}{1.50} & \dsacc{51.19}{1.66} \\
+& & MKDT & \dsacc{58.59}{0.32} & \dsacc{53.28}{0.69} & \dsacc{42.81}{0.80} & \dsacc{25.27}{5.84} & \dsacc{43.01}{1.50} & \dsacc{51.19}{1.66} \\
 & & Ours &  &  &  &  &  &  \\
 \cmidrule(lr){2-9}
 
@@ -133,7 +133,7 @@
 & \dsacc{61.38}{0.41} & \dsacc{56.64}{0.81}
 & \dsacc{52.09}{0.93} & \dsacc{47.24}{1.46}
 & \dsacc{57.77}{0.37} & \dsacc{63.18}{0.55} \\
-& & MKDT &  & \dsacc{57.89}{0.47} &  &  & \dsacc{46.18}{1.02} & \dsacc{57.13}{0.42} \\
+& & MKDT &  & \dsacc{57.89}{0.47} & \dsacc{28.49}{2.09} &  & \dsacc{46.18}{1.02} & \dsacc{57.13}{0.42} \\
 & & Ours &  &  &  &  &  &  \\
 % BEGIN DISABLED: 5% pretraining subset
 % \cmidrule(lr){2-9}
@@ -155,8 +155,8 @@
 }
 \end{table*}
 
-% Interactive evaluation snapshot: 2026-10-21T17:44:49Z.
-% Random: seeds 0--9; k-means/MKDT: seeds 0--5; full data: seeds 0--2. Only complete per-cell seed sets are filled.
+% Interactive evaluation snapshot: 2026-10-21T20:17:40Z.
+% Random: seeds 0--9, except CIFAR-10 ResNet18 1% uses available seeds 0--8; k-means/MKDT: seeds 0--5; full data: seeds 0--2.
 % New entries: mean +/- sample SD (ddof=1), 100-epoch frozen linear probes at 1%/5% labels.
 % Sources: Evaluate_benchamrk/random_eval_results_interactive_10seeds/,
 %          Evaluate_benchamrk/kmeans_eval_results_interactive_6seeds/ (not the 250ep run),

@@ -4,7 +4,7 @@
 \centering
 \def\dsacc#1#2{$#1${\footnotesize$\pm #2$}}
 \def\oldacc#1#2{\textcolor{red}{\dsacc{#1}{#2}}}
-\caption{Tiny ImageNet main results.}
+\caption{Tiny ImageNet main results. Full-data VGG11+SimCLR reports four probe runs from two SSL encoders; other full-data entries use three SSL encoders.}
 
 
 \label{tab:tinyimagenet-all}
@@ -35,11 +35,11 @@
 
 & 100\% & Full Data
 & \dsacc{10.17}{0.39} & \dsacc{12.67}{1.08}
-&  &
-&  & \dsacc{29.32}{0.58} \\
+& \dsacc{24.44}{0.40} & \dsacc{27.40}{0.51}
+& \dsacc{28.78}{0.57} & \dsacc{29.32}{0.58} \\
 \cmidrule(lr){2-9}
 
-& \multirow{4}{*}{0.2\%} & Random Subset &  & \dsacc{5.50}{0.34} &  &  &  &  \\
+& \multirow{4}{*}{0.2\%} & Random Subset & \dsacc{7.64}{0.34} & \dsacc{5.50}{0.34} &  &  &  &  \\
 & & K-means Subset & \dsacc{7.79}{0.30} & \dsacc{5.49}{0.34} & \dsacc{5.33}{0.41} & \dsacc{4.00}{0.64} & \dsacc{5.61}{0.54} & \dsacc{6.54}{0.69} \\
 & & MKDT & \multicolumn{6}{c}{} \\
 & & Ours & \multicolumn{6}{c}{} \\
@@ -93,11 +93,11 @@
 
 & 100\% & Full Data
 & \dsacc{18.76}{0.65} & \dsacc{21.77}{0.46}
-&  &
-&  & \dsacc{40.75}{0.11} \\
+& \dsacc{34.55}{0.35} & \dsacc{35.54}{0.14}
+& \dsacc{39.81}{0.68} & \dsacc{40.75}{0.11} \\
 \cmidrule(lr){2-9}
 
-& \multirow{4}{*}{0.2\%} & Random Subset &  & \dsacc{9.61}{0.32} &  &  &  &  \\
+& \multirow{4}{*}{0.2\%} & Random Subset & \dsacc{14.03}{0.42} & \dsacc{9.61}{0.32} &  &  &  &  \\
 & & K-means Subset & \dsacc{14.47}{0.20} & \dsacc{9.79}{0.31} & \dsacc{9.94}{0.70} & \dsacc{6.95}{1.08} & \dsacc{10.82}{0.70} & \dsacc{12.30}{1.09} \\
 & & MKDT & \multicolumn{6}{c}{} \\
 & & Ours & \multicolumn{6}{c}{} \\
@@ -145,10 +145,11 @@
 }
 \end{table*}
 
-% Interactive evaluation snapshot: 2026-10-21T17:44:49Z.
-% K-means: seeds 0--5; full data: seeds 0--2. Only complete per-cell seed sets are filled.
+% Interactive evaluation snapshot: 2026-10-21T18:53:37Z.
+% Random: seeds 0--9; k-means: seeds 0--5; full data: seeds 0--2 except VGG11/SimCLR below. Only complete per-cell seed sets are filled.
 % New entries: mean +/- sample SD (ddof=1), 100-epoch frozen linear probes at 1%/5% labels.
-% Sources: Evaluate_benchamrk/kmeans_eval_results_interactive_6seeds/ (not the 250ep run) and
+% Sources: Evaluate_benchamrk/random_eval_results_interactive_10seeds/,
+%          Evaluate_benchamrk/kmeans_eval_results_interactive_6seeds/ (not the 250ep run) and
 %          Evaluate_benchamrk/full_eval_results_interactive_3seeds_TinyImageNet/.
 % Full data includes explicitly accepted epoch-950 timeout snapshots; requested SSL budget was 1000 epochs.
-% VGG11/SimCLR uses encoder seeds 0,2 with two probes each (four probe runs, two SSL seeds); fill only once all four runs are complete.
+% VGG11/SimCLR uses encoder seeds 0,2 with two probes each (four probe runs, two SSL seeds); all four runs are complete.

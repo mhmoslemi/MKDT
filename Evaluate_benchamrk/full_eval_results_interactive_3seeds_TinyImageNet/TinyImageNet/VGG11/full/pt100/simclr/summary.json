@@ -1,6 +1,6 @@
 {
   "aggregation": "mean and sample SD across four probes from two SSL encoders",
-  "complete": false,
+  "complete": true,
   "encoder_seeds": [
     0,
     2
@@ -12,18 +12,19 @@
   "results": [
     {
       "accuracies_percent": [
-        24.98
+        24.98,
+        24.27
       ],
-      "complete": false,
-      "completed_probe_runs": 1,
-      "completed_seeds": 1,
+      "complete": true,
+      "completed_probe_runs": 4,
+      "completed_seeds": 2,
       "disabled": "False",
       "expected_probe_runs": 4,
       "expected_seeds": 2,
       "labels": "1",
-      "latex": "",
+      "latex": "\\dsacc{24.44}{0.40}",
       "line": "36",
-      "mean_percent": "",
+      "mean_percent": 24.435000000000002,
       "method": "full",
       "model": "VGG11",
       "probe_repeats_per_encoder": 2,
@@ -33,33 +34,53 @@
           "encoder_seed": 0,
           "probe_repeat": 0,
           "probe_seed": 0
+        },
+        {
+          "accuracy_percent": 24.27,
+          "encoder_seed": 2,
+          "probe_repeat": 0,
+          "probe_seed": 2
+        },
+        {
+          "accuracy_percent": 24.44,
+          "encoder_seed": 0,
+          "probe_repeat": 1,
+          "probe_seed": 10000
+        },
+        {
+          "accuracy_percent": 24.05,
+          "encoder_seed": 2,
+          "probe_repeat": 1,
+          "probe_seed": 10002
         }
       ],
       "scripts": "scripts/TinyImageNet_VGG11_full_pt100_simclr_seed0.sh;scripts/TinyImageNet_VGG11_full_pt100_simclr_seed1.sh;scripts/TinyImageNet_VGG11_full_pt100_simclr_seed2.sh;scripts/TinyImageNet_VGG11_full_pt100_simclr_seed3.sh;scripts/TinyImageNet_VGG11_full_pt100_simclr_seed4.sh",
       "seeds": [
-        0
+        0,
+        2
       ],
       "source": "TinyImageNet",
       "ssl": "simclr",
-      "std_percent": "",
+      "std_percent": 0.3968626966596886,
       "subset": "100",
       "table": "tinyimagenet_main.tex",
       "target": "TinyImageNet"
     },
     {
       "accuracies_percent": [
-        34.97
+        34.97,
+        34.19
       ],
-      "complete": false,
-      "completed_probe_runs": 1,
-      "completed_seeds": 1,
+      "complete": true,
+      "completed_probe_runs": 4,
+      "completed_seeds": 2,
       "disabled": "False",
       "expected_probe_runs": 4,
       "expected_seeds": 2,
       "labels": "5",
-      "latex": "",
+      "latex": "\\dsacc{34.55}{0.35}",
       "line": "94",
-      "mean_percent": "",
+      "mean_percent": 34.552499999999995,
       "method": "full",
       "model": "VGG11",
       "probe_repeats_per_encoder": 2,
@@ -69,15 +90,34 @@
           "encoder_seed": 0,
           "probe_repeat": 0,
           "probe_seed": 0
+        },
+        {
+          "accuracy_percent": 34.19,
+          "encoder_seed": 2,
+          "probe_repeat": 0,
+          "probe_seed": 2
+        },
+        {
+          "accuracy_percent": 34.69,
+          "encoder_seed": 0,
+          "probe_repeat": 1,
+          "probe_seed": 10000
+        },
+        {
+          "accuracy_percent": 34.36,
+          "encoder_seed": 2,
+          "probe_repeat": 1,
+          "probe_seed": 10002
         }
       ],
       "scripts": "scripts/TinyImageNet_VGG11_full_pt100_simclr_seed0.sh;scripts/TinyImageNet_VGG11_full_pt100_simclr_seed1.sh;scripts/TinyImageNet_VGG11_full_pt100_simclr_seed2.sh;scripts/TinyImageNet_VGG11_full_pt100_simclr_seed3.sh;scripts/TinyImageNet_VGG11_full_pt100_simclr_seed4.sh",
       "seeds": [
-        0
+        0,
+        2
       ],
       "source": "TinyImageNet",
       "ssl": "simclr",
-      "std_percent": "",
+      "std_percent": 0.347215111038292,
       "subset": "100",
       "table": "tinyimagenet_main.tex",
       "target": "TinyImageNet"

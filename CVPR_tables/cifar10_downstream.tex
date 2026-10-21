@@ -68,12 +68,12 @@ SimCLR & BT & SimCLR & BT & SimCLR & BT \\
 \cmidrule(lr){2-15}
 
 & \multirow{4}{*}{1\%} & Random Subset
-&  &
-&  &
-&  &
-&  &
-&  &
-&  &  \\
+& \dsacc{8.63}{0.61} & \dsacc{14.20}{0.47}
+& \dsacc{2.09}{0.42} & \dsacc{2.99}{0.31}
+& \dsacc{1.26}{0.14} & \dsacc{1.99}{0.29}
+& \dsacc{1.75}{0.35} & \dsacc{2.59}{0.29}
+& \dsacc{2.96}{0.33} & \dsacc{3.64}{0.67}
+& \dsacc{3.62}{0.36} & \dsacc{7.20}{0.43} \\
 
 & & K-means Subset
 & \dsacc{8.57}{0.53} & \dsacc{13.58}{1.16}
@@ -158,12 +158,12 @@ SimCLR & BT & SimCLR & BT & SimCLR & BT \\
 \cmidrule(lr){2-15}
 
 & \multirow{4}{*}{1\%} & Random Subset
-&  &
-&  &
-&  &
-&  &
-&  &
-&  &  \\
+& \dsacc{15.58}{0.79} & \dsacc{23.90}{0.88}
+& \dsacc{3.02}{0.58} & \dsacc{5.25}{0.32}
+& \dsacc{1.55}{0.25} & \dsacc{3.33}{0.27}
+& \dsacc{3.01}{0.35} & \dsacc{5.01}{0.30}
+& \dsacc{4.27}{0.52} & \dsacc{9.30}{1.63}
+& \dsacc{7.05}{0.59} & \dsacc{13.19}{0.41} \\
 
 & & K-means Subset
 & \dsacc{15.37}{0.75} & \dsacc{23.21}{1.14}
@@ -219,11 +219,11 @@ SimCLR & BT & SimCLR & BT & SimCLR & BT \\
 }
 \end{table*}
 
-% Interactive evaluation snapshot: 2026-10-21T17:44:49Z.
-% Random: seeds 0--9; k-means/MKDT: seeds 0--5; full data: seeds 0--2. Only complete per-cell seed sets are filled.
+% Interactive evaluation snapshot: 2026-10-21T20:17:40Z.
+% Random: seeds 0--9, except CIFAR-10 ResNet18 1% uses available seeds 0--8; k-means/MKDT: seeds 0--5; full data: seeds 0--2.
 % New entries: mean +/- sample SD (ddof=1), 100-epoch frozen linear probes.
 % Sources: Evaluate_benchamrk/random_eval_results_interactive_10seeds/,
 %          Evaluate_benchamrk/kmeans_eval_results_interactive_6seeds/ (not the 250ep run),
 %          Evaluate_benchamrk/mkdt_eval_results_interactive_6seeds/, and Evaluate_benchamrk/full_eval_results_interactive_3seeds_CIFAR10/.
-% Random Dogs/Flowers remain unfilled: cross-server metadata fingerprints differ; image equivalence unverified.
+% Random Dogs/Flowers use the available Killarney evaluations; cross-server image equivalence remains unverified.
 % MKDT 2% SimCLR downstream: all six complete.json markers/result hashes verified directly; synchronized table_summary.tsv is stale.
