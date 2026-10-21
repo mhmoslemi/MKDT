@@ -39,15 +39,15 @@ def ssl_augmentation(protocol, dataset, method):
     return nn.ModuleList(views)
 
 
-def similarity_distributions(images, encoder, views, normalization, negatives=True):
+def similarity_distributions(first_images, second_images, encoder, normalization, negatives=True):
     mean, std = normalization
-    first = F.normalize(encoder((views[0](images) - mean) / std), dim=1)
-    second = F.normalize(encoder((views[1](images) - mean) / std), dim=1)
+    first = F.normalize(encoder((first_images - mean) / std), dim=1)
+    second = F.normalize(encoder((second_images - mean) / std), dim=1)
     positive = (first * second).sum(1)
     negative = positive.new_empty(0)
     if negatives:
         similarities = first @ second.t()
-        different_images = ~torch.eye(len(images), device=images.device, dtype=torch.bool)
+        different_images = ~torch.eye(len(first), device=first.device, dtype=torch.bool)
         negative = similarities[different_images]
     return positive, negative
 
@@ -90,6 +90,29 @@ def dataset_pixels(dataset, indices, mean, std):
     return normalized.float() * std + mean
 
 
+@torch.no_grad()
+def prepare_random_teacher(encoder, dataset, views, normalization, mean, std, args):
+    batch_norms = [module for module in encoder.modules() if isinstance(module, nn.BatchNorm2d)]
+    momentums = [module.momentum for module in batch_norms]
+    for module in batch_norms:
+        # Zero residual BN scales are useful for SSL training, not a frozen random teacher.
+        nn.init.ones_(module.weight)
+        module.reset_running_stats()
+        module.momentum = None
+        module.train()
+    teacher_mean, teacher_std = normalization
+    batch_size = min(args.batch_real, len(dataset))
+    for start in range(0, args.real_pairs, batch_size):
+        count = min(batch_size, args.real_pairs - start)
+        indices = torch.randperm(len(dataset))[:count]
+        pixels = dataset_pixels(dataset, indices, mean, std).to(args.device)
+        for view in views:
+            encoder((view(pixels) - teacher_mean) / teacher_std)
+    for module, momentum in zip(batch_norms, momentums):
+        module.momentum = momentum
+    encoder.eval()
+
+
 def real_distributions(args, dataset, teachers, normalizations, teacher_identity,
                        views, mean, std, negatives, common):
     identity = {
@@ -121,7 +144,8 @@ def real_distributions(args, dataset, teachers, normalizations, teacher_identity
                 indices = torch.randperm(len(dataset))[:count]
                 pixels = dataset_pixels(dataset, indices, mean, std).to(args.device)
                 positive, negative = similarity_distributions(
-                    pixels, teacher, views, normalization, negatives and count > 1)
+                    views[0](pixels), views[1](pixels), teacher, normalization,
+                    negatives and count > 1)
                 positive_samples.append(positive.cpu())
                 if len(negative):
                     keep = min(len(negative), math.ceil(args.negative_pairs * count / args.real_pairs))
@@ -194,7 +218,8 @@ def distill(args, experiment, exp, dataset, im_size, mean, std, teachers, normal
         'batch_syn': args.batch_syn, 'feature_layer': 'encoder_output_before_projector',
         'dis_metric': 'exact_empirical_1d_wasserstein_squared',
         'augmentation_method': args.ssl_method,
-        'augmentation_backend': 'kornia_tensor_benchmark_recipe'}
+        'augmentation_backend': 'kornia_tensor_benchmark_recipe',
+        'teacher_reduction': 'mean_all_teachers'}
     result_path = Path(args.save_path) / ('res_WAS_%s_%s_%gpercent_%s_exp%d.pt'
                                         % (args.dataset, args.model, args.percentage, experiment, exp))
     start, history = 0, []
@@ -219,17 +244,18 @@ def distill(args, experiment, exp, dataset, im_size, mean, std, teachers, normal
     print('%s %s begins: %d images, %d iterations'
           % (get_time(), experiment, num_syn, final_iteration), flush=True)
     for iteration in range(start + 1, final_iteration + 1):
-        teacher_index = torch.randint(len(teachers), (1,)).item()
         indices = torch.randperm(num_syn, device=args.device)[:min(args.batch_syn, num_syn)]
         selected = [images[index] for index in indices.tolist()]
         synthetic = torch.stack(selected)
         optimizer.zero_grad(set_to_none=True)
-        positive, negative = similarity_distributions(
-            synthetic, teachers[teacher_index], views, normalizations[teacher_index],
-            negative_weight > 0)
-        positive_loss = wasserstein_loss(positive, targets[teacher_index]['positive'])
-        negative_loss = (wasserstein_loss(negative, targets[teacher_index]['negative'])
-                         if negative_weight > 0 else positive_loss.new_zeros(()))
+        first_images, second_images = views[0](synthetic), views[1](synthetic)
+        positive_loss, negative_loss = synthetic.new_zeros(()), synthetic.new_zeros(())
+        for teacher, normalization, target in zip(teachers, normalizations, targets):
+            positive, negative = similarity_distributions(
+                first_images, second_images, teacher, normalization, negative_weight > 0)
+            positive_loss = positive_loss + wasserstein_loss(positive, target['positive']) / len(teachers)
+            if negative_weight > 0:
+                negative_loss = negative_loss + wasserstein_loss(negative, target['negative']) / len(teachers)
         loss = positive_loss + negative_weight * negative_loss
         if not torch.isfinite(loss):
             raise FloatingPointError('Non-finite Wasserstein loss')
@@ -341,7 +367,12 @@ def main():
                 encoder, _ = common.build_encoder(args.model.removesuffix('BN'), im_size[0])
                 encoder = encoder.to(args.device).eval().requires_grad_(False)
                 normalization = protocol['normalization'][args.dataset]
+                prepare_random_teacher(
+                    encoder, dataset, views,
+                    tuple(torch.tensor(value, device=args.device).view(1, channel, 1, 1)
+                          for value in normalization), mean, std, args)
                 identity = {'source': 'fixed_random', 'seed': args.seed + seed,
+                            'batchnorm_statistics': 'calibrated_on_real_augmented_images',
                             'sha256': common.state_hash(encoder)}
             teachers.append(encoder)
             normalizations.append(tuple(torch.tensor(value, device=args.device).view(1, channel, 1, 1)
