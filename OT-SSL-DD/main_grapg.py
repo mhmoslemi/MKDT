@@ -2,16 +2,19 @@ import os
 import math
 import copy
 import argparse
+import sys
 import numpy as np
 import torch
 from torchvision.utils import save_image
+from eval import ROOT
 from utils import (
     get_dataset, get_network, get_eval_pool, evaluate_synset_SSL,
     get_time, ParamDiffAug
 )
+sys.path.append(str(ROOT / '_extra'))
 from ssl_gradient_matching import (
     SSLReference, MetaTask, draw_view_seeds, mean_parameter_gradients,
-    meta_gradient_and_backward, meta_backtracking_step,
+    meta_gradient_and_backward, meta_backtracking_step, sampled_meta_loss, MetaStepResult,
 )
 
 def clear_directory(directory):
@@ -38,7 +41,10 @@ def main():
 
     # -------------------- Distillation --------------------
     parser.add_argument('--Iteration', type=int, default=1000, help='training iterations')
-    parser.add_argument('--lr_img', type=float, default=4, help='maximum pixel-step RMS in 0-255 units on EVERY iteration; backtracking may reduce it')
+    parser.add_argument('--lr_img', type=float, default=0.001, help='Adam learning rate; RMS ceiling in /255 units with projected optimizer')
+    parser.add_argument('--image_optimizer', choices=['adam', 'projected'], default='adam')
+    parser.add_argument('--dsa', action=argparse.BooleanOptionalAction, default=True)
+    parser.add_argument('--dsa_strategy', '--dsa-strategy', default=None)
     parser.add_argument('--batch_real', type=int, default=256, help='batch size for real data')
     parser.add_argument('--num_reference_nets', '--num_random_nets', dest='num_reference_nets', type=int, default=3, help='number of temporary SSL learners (old flag retained as an alias)')
     parser.add_argument('--num_aug_pairs', type=int, default=2, help='independent view pairs averaged in each synthetic step and real-query loss')
@@ -95,14 +101,14 @@ def main():
     )
     args.reference_initial_steps = [index * initial_age_spacing for index in range(args.num_reference_nets)]
     args.method = 'SSLMetaLearning'
-    args.image_optimizer = 'projected_gradient_with_independent_guard'
     args.device = 'cuda' if torch.cuda.is_available() else 'cpu'
     args.dsa_param = ParamDiffAug()
-    args.dsa = False
+    if args.dsa:
+        args.dsa_param.aug_mode = 'S'
+    if args.dsa_strategy is not None:
+        args.ssl_aug_strategy = args.dsa_strategy
 
     os.makedirs(args.save_path, exist_ok=True)
-    clear_directory(args.save_path)
-    print('Cleared all previous files from %s' % args.save_path, flush=True)
     os.makedirs(args.data_path, exist_ok=True)
 
     channel, im_size, num_classes, class_names, mean, std, dst_train, dst_test, testloader = get_dataset(args.dataset, args.data_path)
@@ -113,7 +119,7 @@ def main():
         parser.error('at least four real training images are required for disjoint query and guard batches')
     args.match_batch_size = min(args.batch_real, args.batch_train, num_syn)
     args.query_batch_size = min(args.batch_real, len(dst_train) // 2)
-    model_eval_pool = get_eval_pool(args.eval_mode, args.model, args.model)
+    model_eval_pool = get_eval_pool(args.eval_mode, args.model, args.model) if args.num_eval else []
 
     accs_all_exps = dict()
     for key in model_eval_pool:
@@ -142,10 +148,12 @@ def main():
     image_syn_init_uint8 = ((image_syn_init * diag_std + diag_mean) * 255 + 0.5).clamp(0, 255).to(torch.uint8)
     pixel_min = (0.0 - diag_mean) / diag_std
     pixel_max = (1.0 - diag_mean) / diag_std
+    optimizer_img = torch.optim.Adam([image_syn], lr=args.lr_img) if args.image_optimizer == 'adam' else None
 
     def save_checkpoint(iteration):
         payload = {
             'data': image_syn.detach().cpu().clone(), 'method': args.method,
+            'dataset': args.dataset, 'percentage': args.percentage, 'normalization': [mean, std],
             'iteration': iteration, 'seed': args.seed, 'args': {
                 key: value for key, value in vars(args).items() if key != 'dsa_param'
             },
@@ -184,7 +192,7 @@ def main():
 
     ''' training '''
     trial_step = None
-    augmentation_rng = np.random.default_rng()
+    augmentation_rng = np.random.default_rng(args.seed)
     reference_generations = [0] * args.num_reference_nets
 
     def build_reference(index, warmup=0):
@@ -207,8 +215,9 @@ def main():
     print('Objective: mean_learner L_SSL(real_query; SGD(learner, synthetic_images))', flush=True)
     print(f'Batches: synthetic = {args.match_batch_size}, real query = guard = {args.query_batch_size}', flush=True)
     print(f'Reference initial ages: {args.reference_initial_steps}; subsequent restarts begin at age 0', flush=True)
-    print(f'Pixel-step RMS limit: {args.lr_img:g}/255 on every iteration', flush=True)
-    print('Acceptance requires lower real-query SSL on the optimization batch AND an independent guard batch.', flush=True)
+    print('Image optimizer: %s, lr_img = %g' % (args.image_optimizer, args.lr_img), flush=True)
+    if args.image_optimizer == 'projected':
+        print('Acceptance requires lower real-query SSL on the optimization batch AND an independent guard batch.', flush=True)
     print('Learners advance on synthetic images after each outer iteration; query/guard images come only from the training split.', flush=True)
 
     def sample_meta_tasks(reference):
@@ -218,11 +227,12 @@ def main():
         tasks = []
         for query_indices in indices.split(args.query_batch_size):
             synthetic_indices = torch.randperm(num_syn, generator=synthetic_generator)[:args.match_batch_size].to(args.device)
+            support_views = draw_view_seeds(augmentation_rng, args.num_aug_pairs)
             tasks.append(MetaTask(
                 reference=reference, indices=synthetic_indices,
-                support_views=draw_view_seeds(augmentation_rng, args.num_aug_pairs),
+                support_views=support_views,
                 query_images=images_all[query_indices].to(args.device),
-                query_views=draw_view_seeds(augmentation_rng, args.num_aug_pairs),
+                query_views=support_views if args.dsa else draw_view_seeds(augmentation_rng, args.num_aug_pairs),
             ))
         return tasks
 
@@ -255,9 +265,17 @@ def main():
         image_before_step = image_syn.detach().clone()
         gradient_rms = image_syn.grad.square().mean().sqrt().item()
         loss_before = averages['loss']
-        step_result = meta_backtracking_step(
-            image_syn, sampled_tasks, guard_tasks, args, pixel_min, pixel_max, diag_std, loss_before, trial_step,
-        )
+        if optimizer_img is not None:
+            optimizer_img.step()
+            with torch.no_grad():
+                image_syn.copy_(torch.maximum(torch.minimum(image_syn, pixel_max), pixel_min))
+            step_result = MetaStepResult(
+                loss_after=sampled_meta_loss(image_syn, sampled_tasks, args),
+                step_size=args.lr_img, trials=1, accepted=True, reason='adam')
+        else:
+            step_result = meta_backtracking_step(
+                image_syn, sampled_tasks, guard_tasks, args, pixel_min, pixel_max, diag_std, loss_before, trial_step,
+            )
         # Advance on the current synthetic data, including after a rejected image
         # edit. This is the same SGD step modeled by the one-step meta-objective.
         # Neither query nor guard data enters the learner's actual SGD update.
@@ -289,7 +307,7 @@ def main():
                     f'query_gain_from_SGD = {averages["query_before_sgd"] - step_result.loss_after:.6f}, '
                     f'synthetic_SSL_before = {averages["synthetic_ssl"]:.4f}, '
                     f'image_grad_RMS = {gradient_rms:.3e}, reference_steps = {reference_ages}, '
-                    f'step_RMS_255 = {step_rms_255:.4f}, drift_RMS_255 = {drift_rms_255:.4f}, '
+                    f'step_RMS = {step_rms_255:.4f}/255, drift_RMS = {drift_rms_255:.4f}/255, '
                     f'step_size = {step_result.step_size:.3e}, trials = {step_result.trials}, '
                     f'accepted = {step_result.accepted}, reason = {step_result.reason}, '
                     f'PNG values changed = {changed_pct:.5f}%',

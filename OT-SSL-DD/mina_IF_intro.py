@@ -12,6 +12,8 @@ import torch.nn as nn
 import torch.nn.functional as F
 from PIL import Image, ImageDraw
 from torchvision.utils import save_image
+from dm_dsa import make_diff_augmenter as dm_augmenter
+from dd_teachers import teacher_arguments, load_teacher
 
 from utils import DiffAugment, ParamDiffAug, evaluate_synset_SSL, get_dataset, get_eval_pool, get_network, get_time
 
@@ -39,8 +41,10 @@ def frozen_embedder(network):
     return module.embed
 
 
-def make_diff_augmenter(strategy, param):
+def make_diff_augmenter(strategy, param, dsa=False):
     """Build a seeded differentiable augmenter with independent per-image draws."""
+    if dsa:
+        return dm_augmenter(strategy, param)
     cuda_devices = list(range(torch.cuda.device_count()))
 
     def augment(images, seed):
@@ -213,7 +217,8 @@ def main():
     parser.add_argument('--pixel_mse_weight', type=float, default=0.0, help='Nonnegative weight for mean pixel MSE to initialization in [0,1] units; 0 disables it')
     parser.add_argument('--encoder_train_steps', type=int, default=2, help='SimCLR steps on the selected detached images before freezing each sampled encoder; 0 disables adaptation')
     parser.add_argument('--encoder_train_data', choices=['synthetic', 'real'], default='synthetic', help='Images used for the sampled encoder SimCLR warm-up')
-    parser.add_argument('--distill_aug_strategy', default='color_crop_cutout_flip_scale_rotate')
+    parser.add_argument('--distill_aug_strategy', '--dsa_strategy', '--dsa-strategy', default='color_crop_cutout_flip_scale_rotate')
+    parser.add_argument('--dsa', action=argparse.BooleanOptionalAction, default=True)
     parser.add_argument('--distill_aug_mode', choices=['S', 'M'], default='M')
 
     # Downstream SSL evaluation.
@@ -235,7 +240,10 @@ def main():
     # Output.
     parser.add_argument('--save_path', default='res_test')
 
+    teacher_arguments(parser)
     args = parser.parse_args()
+    if args.teacher_source == 'pretrained':
+        args.encoder_train_steps = 0
     random_models = [name.strip() for name in (args.random_models or args.model).split(',') if name.strip()]
     if args.ssl_aug_strategy is None:
         args.ssl_aug_strategy = args.distill_aug_strategy
@@ -244,14 +252,14 @@ def main():
     args.dsa_param = ParamDiffAug()
     args.dsa_param.aug_mode = 'S'
     distill_dsa_param = ParamDiffAug()
-    distill_dsa_param.aug_mode = args.distill_aug_mode
-    args.dsa = False
+    distill_dsa_param.aug_mode = 'S' if args.dsa else args.distill_aug_mode
     set_random_seed(args.seed)
 
     os.makedirs(args.save_path, exist_ok=True)
     os.makedirs(args.data_path, exist_ok=True)
     channel, im_size, num_classes, _, mean, std, dst_train, _, testloader = get_dataset(args.dataset, args.data_path)
     num_syn = int(len(dst_train) * args.percentage / 100)
+    pretrained_teacher = load_teacher(args, mean, std, im_size)
 
     # DeepCluster Initialization replacing random subset
     image_syn_init, original_indices, original_labels = deepcluster_initialize(
@@ -275,12 +283,12 @@ def main():
     real_loader = torch.utils.data.DataLoader(dst_train, batch_size=args.batch_real, shuffle=True, num_workers=0, pin_memory=args.device == 'cuda', drop_last=True)
     real_iter = iter(real_loader)
     
-    augmenter = make_diff_augmenter(args.distill_aug_strategy, distill_dsa_param)
+    augmenter = make_diff_augmenter(args.distill_aug_strategy, distill_dsa_param, args.dsa)
     objective_rng = np.random.default_rng(args.seed + 10_000)
     
     # Optimizer & Scheduler Setup
     optimizer_img = torch.optim.Adam([image_syn], lr=args.lr_img)
-    scheduler_img = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer_img, T_max=args.Iteration, eta_min=0.005)
+    scheduler_img = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer_img, T_max=args.Iteration, eta_min=args.lr_img)
     
     loss_history = []
     pixel_mse_history = []
@@ -333,7 +341,9 @@ def main():
         for _ in range(args.num_random_networks):
             model_name = random_models[int(objective_rng.integers(len(random_models)))]
             network_seed = int(objective_rng.integers(0, 2**31 - 1))
-            network = get_network(model_name, channel, num_classes, im_size, seed=network_seed).to(args.device)
+            if pretrained_teacher is not None:
+                network_seed = args.teacher_seed
+            network = pretrained_teacher if pretrained_teacher is not None else get_network(model_name, channel, num_classes, im_size, seed=network_seed).to(args.device)
             encoder_train_images = image_syn if args.encoder_train_data == 'synthetic' else real_imgs
             encoder_ssl_loss = train_encoder_ssl(network, encoder_train_images, augmenter, args, objective_rng)
             encoder = frozen_embedder(network)
@@ -467,6 +477,8 @@ def main():
         'original_labels': original_labels,
         'method': args.method, 
         'iteration': args.Iteration, 
+        'dataset': args.dataset, 'percentage': args.percentage, 'normalization': [mean, std],
+        'dsa': args.dsa, 'teacher_source': args.teacher_source, 'teacher_seed': args.teacher_seed,
         'loss_history': torch.tensor(loss_history, dtype=torch.float64), 
         'pixel_mse_history': torch.tensor(pixel_mse_history, dtype=torch.float64),
         'total_loss_history': torch.tensor(total_loss_history, dtype=torch.float64),

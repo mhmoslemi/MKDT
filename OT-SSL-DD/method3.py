@@ -12,6 +12,8 @@ from torch.utils.data import DataLoader, TensorDataset, Subset
 import torchvision
 import torchvision.transforms as T
 from torchvision.utils import save_image
+from dm_dsa import DMDSA
+from eval import ROOT, reference_modules
 
 
 VISUAL_SAVE_EVERY = 100  # Distillation iterations; always save the final grid too.
@@ -182,12 +184,30 @@ class VGG11CIFAR(nn.Module):
         return self.forward_features(x, multi_stage=False)
 
 
+class BenchmarkResNet(nn.Module):
+    def __init__(self):
+        super().__init__()
+        self.encoder, self.feat_dim = reference_modules()['common'].build_encoder('ResNet18', 32)
+        self.multi_dim = 64 + 128 + 256 + 512
+
+    def forward_features(self, images, multi_stage=False):
+        features = []
+        images = F.relu(self.encoder.bn1(self.encoder.conv1(images)))
+        for name in ('layer1', 'layer2', 'layer3', 'layer4'):
+            images = getattr(self.encoder, name)(images)
+            features.append(F.normalize(F.adaptive_avg_pool2d(images, 1).flatten(1), dim=-1))
+        return F.normalize(torch.cat(features, dim=-1), dim=-1) if multi_stage else features[-1]
+
+    def forward(self, images):
+        return self.forward_features(images)
+
+
 def build_backbone(arch="convnet"):
     arch = arch.lower()
     if arch == "convnet":
         return ConvNet(width=128, depth=3)
     elif arch == "resnet18":
-        return ResNet18CIFAR()
+        return BenchmarkResNet()
     elif arch == "vgg11":
         return VGG11CIFAR()
     else:
@@ -278,6 +298,16 @@ class DiffSSLAugment(nn.Module):
         u = normalize_cifar(self._color_jitter(u))
         v = normalize_cifar(self._color_jitter(v))
         return u, v
+
+
+class DSAViews(nn.Module):
+    def __init__(self, strategy):
+        super().__init__()
+        self.augmentation = DMDSA(strategy, [0.4914, 0.4822, 0.4465], [0.2023, 0.1994, 0.2010])
+
+    def forward(self, images, seeds=None):
+        seeds = DMDSA.seeds(2) if seeds is None else seeds
+        return tuple(normalize_cifar(self.augmentation(images, seed)) for seed in seeds)
 
 
 # ============================================================================
@@ -542,6 +572,8 @@ def distill_method3(
     out_dir=None,
     dataset="cifar10",
     percentage=0.2,
+    dsa=True,
+    dsa_strategy='color_crop_cutout_flip_scale_rotate',
 ):
     """
     Optimizes synthetic images S in [0, 1] space using Self-Bootstrapping
@@ -554,12 +586,15 @@ def distill_method3(
         os.makedirs(out_dir, exist_ok=True)
         visual_model = {"convnet": "ConvNet", "vgg11": "VGG11", "resnet18": "ResNet18"}[arch.lower()]
 
-    opt_pixels = torch.optim.Adam([syn_01], lr=lr_pixels, betas=(0.5, 0.999))
-    scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(opt_pixels, T_max=num_steps)
+    opt_pixels = torch.optim.Adam([syn_01], lr=lr_pixels)
+    scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(opt_pixels, T_max=num_steps, eta_min=lr_pixels)
 
     # Disjoint crops on S ensure different parts of s_k represent distinct views
     aug_syn = DiffSSLAugment(img_size=32, scale=(0.45, 0.85), disjoint_crops=True).to(device)
     aug_real = DiffSSLAugment(img_size=32, scale=(0.45, 0.85), disjoint_crops=False).to(device)
+    if dsa:
+        aug_syn = DSAViews(dsa_strategy).to(device)
+        aug_real = DSAViews(dsa_strategy).to(device)
 
     pool = SelfBootstrappingStudentPool(
         arch=arch, pool_size=3, max_age=150, lr_student=1e-3, device=device
@@ -579,11 +614,16 @@ def distill_method3(
         pool.step_on_synthetic(syn_01.detach().clamp(0.0, 1.0), aug_syn, inner_steps=2)
 
         # 2. Sample augmented views for real batch X and synthetic set S
-        with torch.no_grad():
-            u_real, v_real = aug_real(x_real_01)
-
         syn_clamped = torch.clamp(syn_01, 0.0, 1.0)
-        u_syn, v_syn = aug_syn(syn_clamped)
+        if dsa:
+            seeds = DMDSA.seeds(2)
+            with torch.no_grad():
+                u_real, v_real = aug_real(x_real_01, seeds)
+            u_syn, v_syn = aug_syn(syn_clamped, seeds)
+        else:
+            with torch.no_grad():
+                u_real, v_real = aug_real(x_real_01)
+            u_syn, v_syn = aug_syn(syn_clamped)
 
         # 3. Compute Bipartite MI + View-Shift + Dual-Subspace loss across student pool
         opt_pixels.zero_grad()
@@ -617,12 +657,14 @@ def distill_method3(
             syn_01.data.clamp_(0.0, 1.0)
 
         if step == 1 or step % 50 == 0 or step == num_steps:
+            with torch.no_grad():
+                pixel_change = (syn_01 - init_anchor).square().mean().sqrt().mul(255).item()
             print(
                 f"[Distill Step {step:04d}/{num_steps}] "
                 f"MI: {log_stats['mi']:.4f} | "
                 f"L_MI: {log_stats['l_mi']:.4f} | "
                 f"L_Shift: {log_stats['l_shift']:.4f} | "
-                f"L_Cov: {log_stats['l_cov']:.4f}"
+                f"L_Cov: {log_stats['l_cov']:.4f} | RMS: {pixel_change:.2f}/255"
             )
 
         if out_dir is not None and (step % VISUAL_SAVE_EVERY == 0 or step == num_steps):
@@ -772,21 +814,31 @@ def load_dataset_tensors(dataset_name="cifar10", data_root="/home/mmoslem3/scrat
 
 def main():
     parser = argparse.ArgumentParser(description="SSL-DD Method 3 Full Pipeline")
-    parser.add_argument("--dataset", type=str, default="cifar10", choices=["cifar10", "cifar100"])
+    parser.add_argument("--dataset", type=str.lower, default="cifar10", choices=["cifar10", "cifar100"])
+    parser.add_argument("--percentage", type=float, default=None)
+    parser.add_argument("--model", choices=['ConvNetBN', 'VGG11BN', 'ResNet18BN'], default=None)
     parser.add_argument("--subset_ratio", type=float, default=0.002, help="0.002 (0.2%), 0.01 (1%), or 0.02 (2%)")
     parser.add_argument("--arch", type=str, default="convnet", choices=["convnet", "vgg11", "resnet18"])
-    parser.add_argument("--distill_steps", type=int, default=1000)
+    parser.add_argument("--distill_steps", "--Iteration", type=int, default=8000)
     parser.add_argument("--pretrain_epochs", type=int, default=100)
-    parser.add_argument("--lr_pixels", type=float, default=0.02)
+    parser.add_argument("--lr_pixels", "--lr_img", type=float, default=0.001)
     parser.add_argument("--seed", type=int, default=42)
-    parser.add_argument("--out_dir", type=str, default="./outputs_method3")
+    parser.add_argument("--out_dir", "--save_path", type=str, default="./outputs_method3")
+    parser.add_argument("--dsa", action=argparse.BooleanOptionalAction, default=True)
+    parser.add_argument("--dsa_strategy", '--dsa-strategy', default='color_crop_cutout_flip_scale_rotate')
+    parser.add_argument("--num_eval", type=int, default=1)
+    parser.add_argument("--data_path", default=str(ROOT.parent / 'data'))
     args = parser.parse_args()
+    if args.percentage is not None:
+        args.subset_ratio = args.percentage / 100
+    if args.model is not None:
+        args.arch = args.model.removesuffix('BN').lower()
 
     set_seed(args.seed)
     os.makedirs(args.out_dir, exist_ok=True)
     device = "cuda" if torch.cuda.is_available() else "cpu"
 
-    x_tr, y_tr, x_te, y_te, num_classes = load_dataset_tensors(args.dataset)
+    x_tr, y_tr, x_te, y_te, num_classes = load_dataset_tensors(args.dataset, args.data_path)
     num_syn = int(len(x_tr) * args.subset_ratio)
     print(f"=== SSL-DD Method 3 | Dataset: {args.dataset} | Subset: {args.subset_ratio*100:.1f}% ({num_syn} imgs) | Arch: {args.arch} ===")
 
@@ -807,6 +859,8 @@ def main():
         out_dir=args.out_dir,
         dataset=args.dataset,
         percentage=args.subset_ratio * 100,
+        dsa=args.dsa,
+        dsa_strategy=args.dsa_strategy,
     )
 
     # Pixels are already in [0, 1]; identity normalization preserves them in eval.py.
@@ -820,7 +874,12 @@ def main():
         "generation_arch": args.arch,
         "seed": args.seed,
         "iteration": args.distill_steps,
+        "dsa": args.dsa,
+        "dsa_strategy": args.dsa_strategy,
+        "optimizer": "adam", "lr_img": args.lr_pixels,
     }, os.path.join(args.out_dir, f"syn_{args.dataset}_{args.subset_ratio}.pt"))
+    if args.num_eval == 0:
+        return
 
     # 3. Evaluate on both SimCLR and Barlow Twins under 1% and 5% Labeled Regimes (Table 1)
     for ssl_alg in ["simclr", "barlow_twins"]:

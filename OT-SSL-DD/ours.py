@@ -14,6 +14,8 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from torchvision.utils import save_image
+from dm_dsa import make_diff_augmenter as dm_augmenter
+from dd_teachers import teacher_arguments, load_teacher
 
 from utils import DiffAugment, ParamDiffAug, evaluate_synset_SSL, get_dataset, get_eval_pool, get_network, get_time
 
@@ -40,8 +42,10 @@ def frozen_embedder(network):
     return module.embed
 
 
-def make_diff_augmenter(strategy, param):
+def make_diff_augmenter(strategy, param, dsa=False):
     """Build a seeded differentiable augmenter with independent per-image draws."""
+    if dsa:
+        return dm_augmenter(strategy, param)
     cuda_devices = list(range(torch.cuda.device_count()))
 
     def augment(images, seed):
@@ -276,7 +280,8 @@ def main():
     parser.add_argument('--encoder_train_steps', type=int, default=5, help='Optional detached SSL warm-up; 0 uses fresh untrained encoders')
     parser.add_argument('--encoder_train_method', choices=['simclr', 'barlowtwins', 'barlow_twins', 'both'], default='simclr')
     parser.add_argument('--encoder_train_data', choices=['synthetic', 'real'], default='synthetic')
-    parser.add_argument('--distill_aug_strategy', default='color_crop_cutout_flip_scale_rotate')
+    parser.add_argument('--distill_aug_strategy', '--dsa_strategy', '--dsa-strategy', default='color_crop_cutout_flip_scale_rotate')
+    parser.add_argument('--dsa', action=argparse.BooleanOptionalAction, default=True)
     parser.add_argument('--distill_aug_mode', choices=['S', 'M'], default='M')
 
     # Downstream SSL evaluation.
@@ -299,7 +304,10 @@ def main():
     # Output.
     parser.add_argument('--save_path', default='result_joint_view_mmd')
 
+    teacher_arguments(parser)
     args = parser.parse_args()
+    if args.teacher_source == 'pretrained':
+        args.encoder_train_steps = 0
     if args.encoder_train_method == 'barlow_twins':
         args.encoder_train_method = 'barlowtwins'
     random_models = [name.strip() for name in (args.random_models or args.model).split(',') if name.strip()]
@@ -332,14 +340,14 @@ def main():
     args.dsa_param = ParamDiffAug()
     args.dsa_param.aug_mode = 'S'
     distill_dsa_param = ParamDiffAug()
-    distill_dsa_param.aug_mode = args.distill_aug_mode
-    args.dsa = False
+    distill_dsa_param.aug_mode = 'S' if args.dsa else args.distill_aug_mode
     set_random_seed(args.seed)
 
     os.makedirs(args.save_path, exist_ok=True)
     os.makedirs(args.data_path, exist_ok=True)
     channel, im_size, num_classes, _, mean, std, dst_train, _, testloader = get_dataset(args.dataset, args.data_path)
     num_syn = int(len(dst_train) * args.percentage / 100)
+    pretrained_teacher = load_teacher(args, mean, std, im_size)
     if len(dst_train) < 2 or num_syn < 1:
         parser.error('The dataset must contain at least two images and the requested synthetic set must be nonempty')
     if num_syn < 2 and (args.mmd_estimator == 'unbiased' or args.encoder_train_steps > 0):
@@ -364,11 +372,11 @@ def main():
 
     real_loader = torch.utils.data.DataLoader(dst_train, batch_size=min(args.batch_real, len(dst_train)), shuffle=True, num_workers=0, pin_memory=args.device == 'cuda', drop_last=True)
     real_iter = iter(real_loader)
-    augmenter = make_diff_augmenter(args.distill_aug_strategy, distill_dsa_param)
+    augmenter = make_diff_augmenter(args.distill_aug_strategy, distill_dsa_param, args.dsa)
     objective_rng = np.random.default_rng(args.seed + 10_000)
 
     optimizer_img = torch.optim.Adam([image_syn], lr=args.lr_img)
-    scheduler_img = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer_img, T_max=args.Iteration, eta_min=min(0.001, args.lr_img))
+    scheduler_img = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer_img, T_max=args.Iteration, eta_min=args.lr_img)
 
     loss_history = []
     real_real_history = []
@@ -426,16 +434,19 @@ def main():
         for _ in range(args.num_random_networks):
             model_name = random_models[int(objective_rng.integers(len(random_models)))]
             network_seed = int(objective_rng.integers(0, 2**31 - 1))
-            network = get_network(model_name, channel, num_classes, im_size, seed=network_seed).to(args.device)
+            if pretrained_teacher is not None:
+                network_seed = args.teacher_seed
+            network = pretrained_teacher if pretrained_teacher is not None else get_network(model_name, channel, num_classes, im_size, seed=network_seed).to(args.device)
             encoder_train_images = image_syn if args.encoder_train_data == 'synthetic' else real_imgs
             encoder_ssl_loss = train_encoder_ssl(network, encoder_train_images, augmenter, args, objective_rng)
             encoder = frozen_embedder(network)
 
             # Each pair contains two independent augmentations of ONE source
-            # image. The two datasets have independent augmentation draws.
+            # image. DSA shares each view's draw across the two datasets.
+            real_seed_u, real_seed_v = objective_rng.integers(0, 100000, size=2).tolist()
             with torch.no_grad():
-                real_view_u = augmenter(real_imgs, int(objective_rng.integers(0, 2**31 - 1)))
-                real_view_v = augmenter(real_imgs, int(objective_rng.integers(0, 2**31 - 1)))
+                real_view_u = augmenter(real_imgs, real_seed_u)
+                real_view_v = augmenter(real_imgs, real_seed_v)
                 features_real_u = encoder(real_view_u)
                 features_real_v = encoder(real_view_v)
 
@@ -448,8 +459,9 @@ def main():
 
             # Gradients pass through BOTH synthetic augmentations and the
             # frozen encoder into the selected synthetic pixels.
-            syn_view_u = augmenter(syn_imgs, int(objective_rng.integers(0, 2**31 - 1)))
-            syn_view_v = augmenter(syn_imgs, int(objective_rng.integers(0, 2**31 - 1)))
+            syn_seed_u, syn_seed_v = (real_seed_u, real_seed_v) if args.dsa else objective_rng.integers(0, 2**31 - 1, size=2).tolist()
+            syn_view_u = augmenter(syn_imgs, syn_seed_u)
+            syn_view_v = augmenter(syn_imgs, syn_seed_v)
             features_syn_u = encoder(syn_view_u)
             features_syn_v = encoder(syn_view_v)
 
@@ -527,6 +539,8 @@ def main():
                 'data': image_syn.detach().cpu(),
                 'method': args.method,
                 'iteration': iteration,
+                'dataset': args.dataset, 'percentage': args.percentage, 'normalization': [mean, std],
+                'dsa': args.dsa, 'teacher_source': args.teacher_source, 'teacher_seed': args.teacher_seed,
                 'loss_history': torch.tensor(loss_history, dtype=torch.float64),
                 'real_real_history': torch.tensor(real_real_history, dtype=torch.float64),
                 'syn_syn_history': torch.tensor(syn_syn_history, dtype=torch.float64),

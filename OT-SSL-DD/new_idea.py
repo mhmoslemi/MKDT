@@ -15,6 +15,7 @@ from torchvision.utils import save_image
 from eval import (PROBE_EPOCHS, ROOT, SSL_EPOCHS, evaluate_synset_SSL,
                   reference_modules)
 from utils import get_dataset, get_time
+from dm_dsa import DMDSA
 
 
 class SpatialFeatures(nn.Module):
@@ -51,10 +52,13 @@ def ssl_augmentation(size):
     )
 
 
-def sorted_orbit_features(images, encoder, augmentation, views, mean, std):
+def sorted_orbit_features(images, encoder, augmentation, views, mean, std, seeds=None):
     """Return the channel-sorted augmentation orbit [B, K*H*W, C] and rank 1."""
     batch = len(images)
-    augmented = augmentation(images.repeat_interleave(views, dim=0))
+    if isinstance(augmentation, DMDSA):
+        augmented = torch.stack([augmentation(images, seed) for seed in seeds], dim=1).flatten(0, 1)
+    else:
+        augmented = augmentation(images.repeat_interleave(views, dim=0))
     features = encoder((augmented - mean) / std)
     if features.ndim != 4 or features.shape[0] != batch * views:
         raise ValueError('Pre-pooling features must have shape [B*K, C, H, W]')
@@ -154,6 +158,8 @@ def main():
     parser.add_argument('--teacher_path', default=str(
         ROOT / 'Evaluate_benchamrk/full_ssl_checkpoints_1000ep_3seeds'))
     parser.add_argument('--K_views', type=int, default=8)
+    parser.add_argument('--dsa', action=argparse.BooleanOptionalAction, default=True)
+    parser.add_argument('--dsa_strategy', '--dsa-strategy', default='color_crop_cutout_flip_scale_rotate')
     parser.add_argument('--lambda_all', type=float, default=0.8)
     parser.add_argument('--lambda_top', type=float, default=0.5)
     parser.add_argument('--Iteration', type=int, default=8000)
@@ -212,7 +218,8 @@ def main():
     mean_cpu = torch.tensor(mean).view(1, channel, 1, 1)
     std_cpu = torch.tensor(std).view(1, channel, 1, 1)
     random_normalization = (mean_cpu.to(args.device), std_cpu.to(args.device))
-    augmentation = ssl_augmentation(im_size[0]).to(args.device)
+    augmentation = (DMDSA(args.dsa_strategy, mean, std) if args.dsa
+                    else ssl_augmentation(im_size[0])).to(args.device)
     expected = {
         'dataset': args.dataset,
         'model': args.model,
@@ -224,7 +231,9 @@ def main():
                           else 'pre_classifier_spatial_map'),
         'lambda_all': args.lambda_all,
         'lambda_top': args.lambda_top,
-        'augmentation': 'random_resized_crop_flip_color_jitter_grayscale',
+        'augmentation': (augmentation.configuration() if args.dsa
+                         else 'random_resized_crop_flip_color_jitter_grayscale'),
+        'dsa': args.dsa,
         'kernel': 'single_rbf_joint_mean_squared_distance',
         'lr_img': args.lr_img,
         'momentum': args.momentum,
@@ -309,14 +318,15 @@ def main():
             selected_images = [images[index] for index in synthetic_indices.tolist()]
             optimizer_img.zero_grad(set_to_none=True)
             synthetic_batch = torch.stack(selected_images)
+            view_seeds = DMDSA.seeds(args.K_views) if args.dsa else None
 
             with torch.no_grad():
                 real_sorted, real_top = sorted_orbit_features(
                     real_pixels, teacher, augmentation, args.K_views,
-                    teacher_mean, teacher_std)
+                    teacher_mean, teacher_std, view_seeds)
             synthetic_sorted, synthetic_top = sorted_orbit_features(
                 synthetic_batch, teacher, augmentation, args.K_views,
-                teacher_mean, teacher_std)
+                teacher_mean, teacher_std, view_seeds)
             loss, loss_all, loss_top = orbit_loss(
                 real_sorted, real_top, synthetic_sorted, synthetic_top,
                 args.lambda_all, args.lambda_top)

@@ -208,13 +208,10 @@ def main():
         parser.error("Use --synthetic-checkpoint or --synthetic-root, not both")
     
     checkpoint_path = args.synthetic_checkpoint
-    checkpoint_path = '/scratch/mmoslem3/MKDT/OT-SSL-DD/result_hier/res_CCDM_CIFAR10_ConvNetBN_0.2percent_exp0.pt'
-
-
-    # if checkpoint_path is None:
-    #     if args.synthetic_root is None:
-    #         parser.error("Specify --synthetic-checkpoint (the saved synthetic images)")
-    #     checkpoint_path = args.synthetic_root / f"size{args.percentage:g}" / f"res_IIC_{args.dataset}_ConvNet_{args.percentage:g}percent.pt"
+    if checkpoint_path is None:
+        if args.synthetic_root is None:
+            parser.error("Specify --synthetic-checkpoint (the saved synthetic images)")
+        checkpoint_path = args.synthetic_root / f"size{args.percentage:g}" / f"res_IIC_{args.dataset}_ConvNet_{args.percentage:g}percent.pt"
 
     checkpoint_path = Path(checkpoint_path)
     torch.set_num_threads(int(os.environ.get("SLURM_CPUS_PER_TASK", "1")))

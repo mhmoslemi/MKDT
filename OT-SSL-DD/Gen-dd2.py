@@ -9,6 +9,7 @@ from torchvision.utils import save_image
 
 from eval import ROOT, reference_modules
 from utils import DiffAugment, ParamDiffAug, get_dataset, get_time
+from dm_dsa import DMDSA
 
 
 KERNEL_SCALES = (0.25, 0.5, 1.0, 2.0, 4.0)
@@ -144,7 +145,7 @@ def resume_distillation(path, images, momentum, optimizer, expected, common):
 def main():
     parser = argparse.ArgumentParser(description='2D Semantically Aligned Distribution Matching')
     parser.add_argument('--dataset', choices=['CIFAR10', 'CIFAR100', 'TinyImageNet'], default='CIFAR10')
-    parser.add_argument('--model', choices=['ResNet18'], default='ResNet18BN')
+    parser.add_argument('--model', choices=['ResNet18', 'ResNet18BN'], default='ResNet18BN')
     parser.add_argument('--percentage', type=float, default=0.2)
     parser.add_argument('--teacher_source', choices=['pretrained', 'random'], default='random')
     parser.add_argument('--teacher_ssl', choices=['simclr', 'barlowtwins'], default='simclr')
@@ -160,7 +161,9 @@ def main():
     parser.add_argument('--momentum', type=float, default=0.9)
     parser.add_argument('--batch_real', type=int, default=4096)
     parser.add_argument('--batch_syn', type=int, default=1024)
-    parser.add_argument('--aug_strategy', default='color_crop_cutout_flip_scale_rotate')
+    parser.add_argument('--dsa', action=argparse.BooleanOptionalAction, default=True)
+    parser.add_argument('--aug_strategy', '--dsa_strategy', '--dsa-strategy',
+                        default='color_crop_cutout_flip_scale_rotate')
     parser.add_argument('--save_every', type=int, default=500)
     parser.add_argument('--num_exp', type=int, default=1)
     parser.add_argument('--seed', type=int, default=0)
@@ -193,8 +196,11 @@ def main():
     mean_cpu = torch.tensor(mean).view(1, channel, 1, 1)
     std_cpu = torch.tensor(std).view(1, channel, 1, 1)
 
-    augmentation = ParamDiffAug()
-    augmentation.aug_mode = 'M'
+    if args.dsa:
+        augmentation = DMDSA(args.aug_strategy, mean, std).to(args.device)
+    else:
+        augmentation = ParamDiffAug()
+        augmentation.aug_mode = 'M'
     expected = {
         'dataset': args.dataset,
         'model': args.model,
@@ -206,6 +212,8 @@ def main():
         'lambda_all': args.lambda_all,
         'lambda_top': args.lambda_top,
         'augmentation': args.aug_strategy,
+        'dsa': args.dsa,
+        'dsa_settings': augmentation.configuration() if args.dsa else None,
         'lr_img': args.lr_img,
         'batch_real': args.batch_real,
         'batch_syn': args.batch_syn,
@@ -255,7 +263,7 @@ def main():
         common.seed_all(exp_seed)
         initial_indices = torch.randperm(len(train_set))[:num_syn]
         initial_pixels = dataset_pixels(train_set, initial_indices, mean_cpu, std_cpu).to(args.device).clamp_(0, 1)
-        images = nn.ParameterList(nn.Parameter(image) for image in initial_pixels)
+        images = nn.ParameterList(nn.Parameter(image.clone()) for image in initial_pixels)
         pixel_momentum = torch.zeros_like(initial_pixels) if args.image_optimizer == 'manual' else None
         optimizer_img = None
         if args.image_optimizer == 'sgd':
@@ -294,8 +302,13 @@ def main():
             else:
                 optimizer_img.zero_grad(set_to_none=True)
                 synthetic_batch = torch.stack(selected_images)
-            real_view = DiffAugment(real_pixels, args.aug_strategy, param=augmentation)
-            synthetic_view = DiffAugment(synthetic_batch, args.aug_strategy, param=augmentation)
+            if args.dsa:
+                seed = DMDSA.seeds(1)[0]
+                real_view = augmentation(real_pixels, seed)
+                synthetic_view = augmentation(synthetic_batch, seed)
+            else:
+                real_view = DiffAugment(real_pixels, args.aug_strategy, param=augmentation)
+                synthetic_view = DiffAugment(synthetic_batch, args.aug_strategy, param=augmentation)
 
             loss = synthetic_batch.new_zeros(())
             loss_all = synthetic_batch.new_zeros(())
@@ -329,8 +342,10 @@ def main():
             loss_history.append([loss.item(), loss_all.item(), loss_top.item()])
 
             if iteration % 100 == 0:
-                print('%s iter = %05d, loss = %.6f, all = %.6f, top = %.6f'
-                      % (get_time(), iteration, loss.item(), loss_all.item(), loss_top.item()))
+                with torch.no_grad():
+                    pixel_change = (torch.stack(list(images)) - initial_pixels).square().mean().sqrt().mul(255).item()
+                print('%s iter = %05d, loss = %.6f, all = %.6f, top = %.6f, RMS = %.2f/255'
+                      % (get_time(), iteration, loss.item(), loss_all.item(), loss_top.item(), pixel_change), flush=True)
 
             if iteration % args.save_every == 0 or iteration == args.Iteration:
                 pixels_cpu = torch.stack([image.detach().cpu() for image in images])

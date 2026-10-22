@@ -8,38 +8,29 @@ import argparse
 import math
 import os
 import random
+import sys
+from datetime import datetime
+from pathlib import Path
 
 import numpy as np
 import torch
 from torchvision.utils import save_image
 
+from dm_dsa import DMDSA
+from eval import ROOT, evaluate_synset_SSL, reference_modules
+from utils import get_dataset, get_time, ParamDiffAug, DiffAugment, AUGMENT_FNS
+
+sys.path.append(str(ROOT / '_extra'))
 from scattering_moments import (
     ScatteringFeatures,
     backward_scattering_moments,
     backward_scattering_views,
     compute_real_moments,
 )
-from utils import (
-    get_dataset, get_network, get_eval_pool, evaluate_synset_SSL, get_time,
-    ParamDiffAug, DiffAugment, AUGMENT_FNS,
-)
 
 #  random ConvNet, mean = 0.4066 std = 0.0104
 
 # Evaluate 6 random ConvNet, mean = 0.3763 std = 0.0113
-
-def clear_directory(directory):
-    """Remove everything inside directory while keeping directory itself."""
-    for root, directories, files in os.walk(directory, topdown=False):
-        for filename in files:
-            os.remove(os.path.join(root, filename))
-        for dirname in directories:
-            path = os.path.join(root, dirname)
-            if os.path.islink(path):
-                os.remove(path)
-            else:
-                os.rmdir(path)
-
 
 def set_random_seed(seed):
     """Seed every RNG used by distillation and SSL evaluation."""
@@ -62,13 +53,14 @@ def configure_determinism(seed):
 class AugmentedScattering(torch.nn.Module):
     """One sampled Siamese DSA transform, replayed through the pixel gradient."""
 
-    def __init__(self, scattering, strategy, mode, replay_seed):
+    def __init__(self, scattering, strategy, mode, replay_seed, dsa=None):
         super().__init__()
         self.scattering = scattering
         self.strategy = strategy
         self.replay_seed = replay_seed
         self.param = ParamDiffAug()
         self.param.aug_mode = mode
+        self.dsa = dsa
         self.cuda_devices = list(range(torch.cuda.device_count()))
 
     def forward(self, images):
@@ -79,9 +71,12 @@ class AugmentedScattering(torch.nn.Module):
             # CPU augmentation permits scale/rotate pixel backpropagation under
             # strict deterministic algorithms (CUDA grid_sample backward does
             # not). Device copies retain the gradient to the original pixels.
-            augmented = DiffAugment(
-                images.cpu(), self.strategy, seed=self.replay_seed, param=self.param
-            )
+            if self.dsa is not None:
+                augmented = self.dsa.normalized(images.cpu(), self.replay_seed)
+            else:
+                augmented = DiffAugment(
+                    images.cpu(), self.strategy, seed=self.replay_seed, param=self.param
+                )
         return self.scattering(augmented.to(images.device))
 
 
@@ -90,14 +85,15 @@ def main():
 
     # -------------------- Data --------------------
     parser.add_argument('--dataset', type=str, default='CIFAR10', help='dataset')
-    parser.add_argument('--percentage', type=int, default=1, help='percentage of total data size')
-    parser.add_argument('--data_path', type=str, default='/home/mmoslem3/scratch/data', help='dataset path')
+    parser.add_argument('--percentage', type=float, default=0.2, help='percentage of total data size')
+    parser.add_argument('--data_path', type=str, default=str(ROOT.parent / 'data'), help='dataset path')
     parser.add_argument('--device', choices=['cpu', 'cuda'], default='cuda' if torch.cuda.is_available() else 'cpu')
     parser.add_argument('--seed', type=int, default=0, help='seed for distillation initialization and evaluation')
 
     # -------------------- Distillation --------------------
-    parser.add_argument('--Iteration', type=int, default=4000, help='number of synthetic pixel updates')
-    parser.add_argument('--lr_img', type=float, default=0.5, help='Adam learning rate for synthetic pixels')
+    parser.add_argument('--Iteration', type=int, default=8000, help='number of synthetic pixel updates')
+    parser.add_argument('--lr_img', type=float, default=0.001, help='Adam learning rate for synthetic pixels')
+    parser.add_argument('--save_every', type=int, default=500)
     parser.add_argument('--batch_real', type=int, default=4096, help='batch size for caching full real moments')
     parser.add_argument('--batch_syn', type=int, default=512, help='synthetic scattering batch size; moments use all images')
     parser.add_argument('--scattering_J', type=int, default=2, help='log2 scattering scale (at least 2)')
@@ -105,36 +101,31 @@ def main():
     parser.add_argument('--gamma', type=float, default=5.0, help='weight of squared mean distance; covariance weight is 1')
     parser.add_argument('--covariance_block_size', type=int, default=1024, help='rows per exact covariance-loss block')
     parser.add_argument('--distill_aug_views', type=int, default=2, help='fresh views per update; clean-only mode requires 0 together with --pair_weight 0')
-    parser.add_argument('--distill_aug_strategy', type=str, default='color_crop_cutout_flip_scale_rotate', help='DSA operations for distillation views')
+    parser.add_argument('--distill_aug_strategy', '--dsa_strategy', '--dsa-strategy', type=str, default='color_crop_cutout_flip_scale_rotate', help='DSA operations for distillation views')
     parser.add_argument('--distill_aug_mode', choices=['S', 'M'], default='M', help='S: sample one operation group per view; M: compose all listed groups')
+    parser.add_argument('--dsa', action=argparse.BooleanOptionalAction, default=True)
     parser.add_argument('--pair_weight', type=float, default=1.0, help='weight of summed paired-view cross-covariance losses; 0 disables')
 
     # -------------------- SSL evaluation --------------------
-    parser.add_argument('--model', type=str, default='ConvNet', help='evaluation model')
-    parser.add_argument('--lr_net', type=float, default=0.01, help='SSL evaluation learning rate')
-    parser.add_argument('--batch_train', type=int, default=256, help='batch size for SSL evaluation')
-    parser.add_argument('--ssl_method', type=str, default='simclr', help='simclr/barlowtwins')
-    parser.add_argument('--ssl_aug_strategy', type=str, default=None, help='defaults to --distill_aug_strategy; must match it when augmented distillation is enabled')
-    parser.add_argument('--projection_dim', type=int, default=128, help='projection dimension for SSL evaluation')
-    parser.add_argument('--temperature', type=float, default=0.5, help='temperature for SimCLR')
-    parser.add_argument('--barlow_lambda', type=float, default=0.005, help='off-diagonal weight for Barlow Twins')
-    parser.add_argument('--eval_mode', type=str, default='S', help='evaluation architecture pool')
-    parser.add_argument('--num_eval', type=int, default=4, help='number of random evaluation networks; 0 skips evaluation')
-    parser.add_argument('--epoch_eval_train', type=int, default=1000, help='SSL evaluation epochs')
-    parser.add_argument('--label_percentage', type=float, default=1.0, help='percentage of labeled data for linear probing')
-    parser.add_argument('--epoch_linear_train', type=int, default=100, help='epochs to train the linear probe')
-    parser.add_argument('--lr_linear', type=float, default=0.1, help='learning rate for the linear probe')
-    parser.add_argument('--batch_linear', type=int, default=256, help='batch size for the linear probe')
+    parser.add_argument('--model', choices=['ConvNet', 'ConvNetBN', 'ResNet18', 'ResNet18BN', 'VGG11', 'VGG11BN'], default='ResNet18BN')
+    parser.add_argument('--ssl_method', '--ssl-method', choices=['simclr', 'barlowtwins'], default='simclr')
+    parser.add_argument('--num_eval', '--runs', type=int, default=1, help='number of evaluation seeds; 0 skips evaluation')
+    parser.add_argument('--epoch_eval_train', '--ssl-epochs', type=int, default=None)
+    parser.add_argument('--ssl-log-every', type=int, default=100)
+    parser.add_argument('--label_percentage', '--label-percentage', type=int, choices=[1, 5], default=1)
+    parser.add_argument('--epoch_linear_train', '--probe-epochs', type=int, default=100)
+    parser.add_argument('--lr_linear', '--lr-linear', type=float, default=0.1)
+    parser.add_argument('--batch_linear', '--batch-linear', type=int, default=256)
 
     # -------------------- Output --------------------
-    parser.add_argument('--save_path', type=str, default='result', help='path to save results')
+    parser.add_argument('--save_path', type=str, default=str(ROOT / 'OT-SSL-DD/result_Scattering'), help='path to save results')
 
     args = parser.parse_args()
     if not 0 < args.percentage <= 100:
         parser.error('--percentage must be in (0, 100].')
     if args.Iteration < 0 or args.num_eval < 0:
         parser.error('--Iteration and --num_eval must be nonnegative.')
-    if min(args.batch_real, args.batch_syn, args.covariance_block_size) < 1:
+    if min(args.batch_real, args.batch_syn, args.covariance_block_size, args.save_every) < 1:
         parser.error('Scattering and covariance batch sizes must be positive.')
     if not math.isfinite(args.gamma) or args.gamma < 0:
         parser.error('--gamma must be finite and nonnegative.')
@@ -153,35 +144,25 @@ def main():
             parser.error('Augmented covariance needs --batch_real >= 2.')
         if set(args.distill_aug_strategy.split('_')) - set(AUGMENT_FNS):
             parser.error('--distill_aug_strategy must contain groups from: ' + ', '.join(AUGMENT_FNS))
-    if args.ssl_aug_strategy is None:
-        args.ssl_aug_strategy = args.distill_aug_strategy
-    if args.distill_aug_views and args.ssl_aug_strategy != args.distill_aug_strategy:
-        parser.error('SSL evaluation and distillation must use the same augmentation strategy.')
     args.method = 'Scattering'
-    args.dsa_param = ParamDiffAug()
-    args.dsa_param.aug_mode = args.distill_aug_mode
-    args.ssl_aug_mode = args.distill_aug_mode
-    args.dsa = False
+    if args.dsa:
+        args.distill_aug_mode = 'S'
     configure_determinism(args.seed)
 
     os.makedirs(args.save_path, exist_ok=True)
-    clear_directory(args.save_path)
-    print('Cleared all previous files from %s' % args.save_path, flush=True)
-    os.makedirs(args.data_path, exist_ok=True)
 
     channel, im_size, num_classes, _, mean, std, dst_train, _, testloader = get_dataset(args.dataset, args.data_path)
     num_syn = int(len(dst_train) * args.percentage / 100)
     if len(dst_train) < 2 or num_syn < 2:
         parser.error('Unbiased covariance requires at least two real and two synthetic images; increase --percentage.')
     scattering = ScatteringFeatures(im_size, J=args.scattering_J, L=args.scattering_L).to(args.device).eval()
-    model_eval_pool = get_eval_pool(args.eval_mode, args.model, args.model) if args.num_eval else []
-    accs_all_exps = {model: [] for model in model_eval_pool}
-    baseline_accs = {}
+    augmentation = DMDSA(args.distill_aug_strategy, mean, std) if args.dsa else None
     print('Hyper-parameters: \n', args.__dict__)
 
     # Keep the real dataset on the host; only scattering batches go to the device.
     indices = np.random.RandomState(args.seed).permutation(len(dst_train))[:num_syn]
     image_syn = torch.stack([dst_train[int(i)][0] for i in indices]).to(args.device).detach().requires_grad_(True)
+    image_syn_initial = image_syn.detach().clone()
     diag_mean = torch.tensor(mean, device=args.device).view(1, channel, 1, 1)
     diag_std = torch.tensor(std, device=args.device).view(1, channel, 1, 1)
 
@@ -189,38 +170,6 @@ def main():
         return ((images * diag_std + diag_mean) * 255 + 0.5).clamp(0, 255).to(torch.uint8)
 
     image_syn_init_uint8 = to_uint8(image_syn.detach())
-
-    def evaluate(iteration, record=False):
-        for model_index, model_eval in enumerate(model_eval_pool):
-            print('-------------------------\nEvaluation\nmodel_eval = %s, iteration = %d' % (model_eval, iteration))
-            accs = []
-            for it_eval in range(args.num_eval):
-                eval_index = model_index * args.num_eval + it_eval
-                network_seed = args.seed + eval_index
-                training_seed = args.seed + 1_000_000 + eval_index
-                net_eval = get_network(
-                    model_eval, channel, num_classes, im_size, seed=network_seed
-                ).to(args.device)
-                set_random_seed(training_seed)
-                _, _, acc_test = evaluate_synset_SSL(
-                    it_eval, net_eval, image_syn.detach().clone(), dst_train, testloader, args
-                )
-                accs.append(float(acc_test))
-            print('Evaluate %d random %s, mean = %.4f std = %.4f\n-------------------------' % (
-                len(accs), model_eval, np.mean(accs), np.std(accs)
-            ))
-            if iteration == 0:
-                baseline_accs[model_eval] = list(accs)
-            else:
-                differences = 100 * (np.asarray(accs) - np.asarray(baseline_accs[model_eval]))
-                print('Gain over initial subset with matched evaluation seeds: mean = %+.3f pp, std = %.3f pp, per seed = %s' % (
-                    np.mean(differences), np.std(differences),
-                    ', '.join('%+.3f' % difference for difference in differences),
-                ), flush=True)
-            if record:
-                accs_all_exps[model_eval].extend(accs)
-
-    # evaluate(0, record=args.Iteration == 0)
 
     # Phi is fixed, so the full-dataset real statistics are computed only once.
     # Inputs use the same dataset normalization as the downstream SSL evaluator.
@@ -235,15 +184,40 @@ def main():
     )
     real_mean, real_covariance = compute_real_moments(scattering, real_loader, args.device)
 
-    # This generator intentionally has no fixed seed: augmented batches and
-    # transforms are freshly sampled independently of initialization/evaluation.
-    augmentation_rng = np.random.default_rng()
+    augmentation_rng = np.random.default_rng(args.seed)
     pair_count = args.distill_aug_views * (args.distill_aug_views - 1) // 2
     print('Loss = clean + sum of %d view moment losses + %.4g * sum of %d cross-view covariance losses (real batch size %d)' % (
         args.distill_aug_views, args.pair_weight, pair_count, min(args.batch_real, len(dst_train))
     ), flush=True)
     print('%s distillation begins' % get_time(), flush=True)
     optimizer_img = torch.optim.Adam([image_syn], lr=args.lr_img)
+    common = reference_modules()['common']
+    save_name = os.path.join(args.save_path, 'res_Scattering-SSL_%s_%s_%gpercent.pt' % (
+        args.dataset, args.model, args.percentage
+    ))
+
+    def save(iteration):
+        preview = os.path.join(args.save_path, 'vis_%s_%s_%s_%gpercent_iter%d.png' % (
+            args.method, args.dataset, args.model, args.percentage, iteration
+        ))
+        pixels = (image_syn.detach() * diag_std + diag_mean).clamp(0, 1).cpu()
+        save_image(pixels, preview, nrow=int(np.ceil(np.sqrt(num_syn))))
+        common.atomic_save(save_name, {
+            'data': image_syn.detach().cpu(), 'normalization': [mean, std],
+            'dataset': args.dataset, 'model': args.model, 'percentage': args.percentage,
+            'method': args.method, 'iteration': iteration,
+            'scattering': {'J': args.scattering_J, 'L': args.scattering_L, 'max_order': 2},
+            'gamma': args.gamma, 'pair_weight': args.pair_weight, 'seed': args.seed,
+            'dsa': args.dsa,
+            'augmentation': augmentation.configuration() if args.dsa else None,
+            'optimizer': 'adam', 'lr_img': args.lr_img,
+            'distill_augmentation': {
+                'views': args.distill_aug_views, 'strategy': args.distill_aug_strategy,
+                'mode': args.distill_aug_mode, 'batch_real': args.batch_real, 'seed': args.seed,
+                'cross_view_pairs': 'all_unordered_pairs_with_corresponding_image_rows',
+            },
+        })
+        print('Saved synthetic data to %s' % save_name, flush=True)
 
 
     for it in range(1, args.Iteration + 1):
@@ -268,7 +242,7 @@ def main():
                 # synthetic, and backward passes. Resample on the next view.
                 view = AugmentedScattering(
                     scattering, args.distill_aug_strategy, args.distill_aug_mode,
-                    replay_seed=int(augmentation_rng.integers(0, 2 ** 31)),
+                    replay_seed=int(augmentation_rng.integers(0, 100000)), dsa=augmentation,
                 )
                 views.append(view)
                 with torch.no_grad():
@@ -290,56 +264,37 @@ def main():
         with torch.no_grad():
             if not torch.isfinite(image_syn).all().item():
                 raise FloatingPointError('Synthetic pixel update is non-finite; reduce --lr_img.')
+            image_syn.copy_(torch.maximum(torch.minimum(image_syn, (1 - diag_mean) / diag_std), -diag_mean / diag_std))
             changed = (to_uint8(image_syn) != image_syn_init_uint8).float().mean().item() * 100
+            pixel_change = ((image_syn - image_syn_initial) * diag_std * 255).square().mean().sqrt().item()
         if it%5 == 0 or it ==1:
-            print('%s iter = %05d, loss = %.10f, covariance = %.10f, mean = %.10f, pair = %.10f, weighted pair = %.10f, clean = %.10f, augmented views = %s, PNG values changed = %.5f%%' % (
+            print('%s iter = %05d, loss = %.10f, covariance = %.10f, mean = %.10f, pair = %.10f, weighted pair = %.10f, clean = %.10f, augmented views = %s, PNG values changed = %.5f%%, RMS = %.2f/255' % (
                 get_time(), it, loss.item(), covariance_loss.item(), mean_loss.item(),
                 pair_loss.item(), args.pair_weight * pair_loss.item(),
-                clean_loss, ', '.join('%.10f' % value for value in view_losses), changed
+                clean_loss, ', '.join('%.10f' % value for value in view_losses), changed, pixel_change
             ), flush=True)
 
-        if it % 500 == 0 and it != args.Iteration:
-            evaluate(it)
-        if it % 25 == 0 or it == args.Iteration:
-            save_name = os.path.join(args.save_path, 'vis_%s_%s_%s_%dpercent_iter%d.png' % (
-                args.method, args.dataset, args.model, args.percentage, it
-            ))
-            image_syn_vis = (image_syn.detach() * diag_std + diag_mean).clamp(0, 1).cpu()
-            save_image(image_syn_vis, save_name, nrow=int(np.ceil(np.sqrt(num_syn))))
-
-    # Save before final evaluation so distilled images survive an evaluation failure.
-    save_name = os.path.join(args.save_path, 'res_Scattering-SSL_%s_%s_%dpercent.pt' % (
-        args.dataset, args.model, args.percentage
-    ))
-    torch.save({
-        'data': image_syn.detach().cpu(),
-        'method': args.method,
-        'iteration': args.Iteration,
-        'scattering': {'J': args.scattering_J, 'L': args.scattering_L, 'max_order': 2},
-        'gamma': args.gamma,
-        'pair_weight': args.pair_weight,
-        'seed': args.seed,
-        'baseline_accs': baseline_accs,
-        'evaluation_augmentation': {'strategy': args.ssl_aug_strategy, 'mode': args.ssl_aug_mode},
-        'distill_augmentation': {
-            'views': args.distill_aug_views,
-            'strategy': args.distill_aug_strategy,
-            'mode': args.distill_aug_mode,
-            'batch_real': args.batch_real,
-            'fixed_seed': False,
-            'cross_view_pairs': 'all_unordered_pairs_with_corresponding_image_rows',
-        },
-    }, save_name)
-    print('Saved synthetic data to %s' % save_name)
+        if it % args.save_every == 0 or it == args.Iteration:
+            save(it)
+    if args.Iteration == 0:
+        save(0)
 
     # Release the dense target before training the final evaluation networks.
     del real_mean, real_covariance, scattering
-    if args.Iteration > 0:
-        evaluate(args.Iteration, record=True)
-    for model_eval, accs in accs_all_exps.items():
-        print('Scattering distillation, evaluate %d random %s, mean = %.2f%% std = %.2f%%' % (
-            len(accs), model_eval, np.mean(accs) * 100, np.std(accs) * 100
-        ))
+    torch.use_deterministic_algorithms(False)
+    saved = torch.load(save_name, map_location='cpu', weights_only=True)
+    output = Path(args.save_path) / 'evaluation' / datetime.now().strftime('%Y%m%d_%H%M%S_%f')
+    accuracies = []
+    for run in range(args.num_eval):
+        _, _, accuracy = evaluate_synset_SSL(run, args.model, saved['data'], args,
+                                             output / ('seed_%03d' % (args.seed + run)), saved['normalization'])
+        accuracies.append(accuracy * 100)
+        common.atomic_json(output / 'summary.json', {
+            'config': dict(vars(args), synthetic_checkpoint=str(Path(save_name).resolve())),
+            'complete': len(accuracies) == args.num_eval, 'accuracies_percent': accuracies,
+            'mean_percent': float(np.mean(accuracies)),
+        })
+        print('RESULT seed=%d accuracy=%.2f%%' % (args.seed + run, accuracy * 100), flush=True)
 
 
 if __name__ == '__main__':

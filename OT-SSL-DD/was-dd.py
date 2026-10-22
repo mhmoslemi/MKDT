@@ -11,6 +11,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from torchvision.utils import save_image
+from dm_dsa import DMDSA
 
 from eval import (PROBE_EPOCHS, ROOT, SSL_EPOCHS, evaluate_synset_SSL,
                   reference_modules)
@@ -201,7 +202,8 @@ def distill(args, experiment, exp, dataset, im_size, mean, std, teachers, normal
     else:
         initial_pixels = torch.rand(num_syn, 3, *im_size)
     initial_pixels.clamp_(0, 1)
-    images = nn.ParameterList(nn.Parameter(image.to(args.device)) for image in initial_pixels)
+    initial_pixels = initial_pixels.to(args.device)
+    images = nn.ParameterList(nn.Parameter(image.clone()) for image in initial_pixels)
     if args.optimizer == 'sgd':
         optimizer = torch.optim.SGD(images, lr=args.lr_img, momentum=args.momentum)
     else:
@@ -219,7 +221,11 @@ def distill(args, experiment, exp, dataset, im_size, mean, std, teachers, normal
         'dis_metric': 'exact_empirical_1d_wasserstein_squared',
         'augmentation_method': args.ssl_method,
         'augmentation_backend': 'kornia_tensor_benchmark_recipe',
+        'dsa': args.dsa,
+        'dsa_settings': views[0].configuration() if args.dsa else None,
         'teacher_reduction': 'mean_all_teachers'}
+    if args.dsa:
+        identity['augmentation_backend'] = 'main_DM_realreal_DSA'
     result_path = Path(args.save_path) / ('res_WAS_%s_%s_%gpercent_%s_exp%d.pt'
                                         % (args.dataset, args.model, args.percentage, experiment, exp))
     start, history = 0, []
@@ -248,9 +254,24 @@ def distill(args, experiment, exp, dataset, im_size, mean, std, teachers, normal
         selected = [images[index] for index in indices.tolist()]
         synthetic = torch.stack(selected)
         optimizer.zero_grad(set_to_none=True)
-        first_images, second_images = views[0](synthetic), views[1](synthetic)
+        if args.dsa:
+            seeds = DMDSA.seeds(2)
+            first_images, second_images = views[0](synthetic, seeds[0]), views[1](synthetic, seeds[1])
+            indices_real = torch.randperm(len(dataset))[:min(args.batch_real, len(dataset))]
+            real_pixels = dataset_pixels(dataset, indices_real, mean, std).to(args.device)
+            with torch.no_grad():
+                real_first, real_second = views[0](real_pixels, seeds[0]), views[1](real_pixels, seeds[1])
+        else:
+            first_images, second_images = views[0](synthetic), views[1](synthetic)
         positive_loss, negative_loss = synthetic.new_zeros(()), synthetic.new_zeros(())
         for teacher, normalization, target in zip(teachers, normalizations, targets):
+            if args.dsa:
+                with torch.no_grad():
+                    real_positive, real_negative = similarity_distributions(
+                        real_first, real_second, teacher, normalization, negative_weight > 0)
+                    target = {'positive': quantile_target(real_positive.sort().values, len(synthetic))}
+                    if negative_weight > 0:
+                        target['negative'] = quantile_target(real_negative.sort().values, len(synthetic) * (len(synthetic) - 1))
             positive, negative = similarity_distributions(
                 first_images, second_images, teacher, normalization, negative_weight > 0)
             positive_loss = positive_loss + wasserstein_loss(positive, target['positive']) / len(teachers)
@@ -269,8 +290,10 @@ def distill(args, experiment, exp, dataset, im_size, mean, std, teachers, normal
                 image.clamp_(0, 1)
         history.append([loss.item(), positive_loss.item(), negative_loss.item()])
         if iteration % 50 == 0 or iteration == 1:
-            print('%s iter = %05d, loss = %.6f, positive = %.6f, negative = %.6f'
-                  % (get_time(), iteration, loss.item(), positive_loss.item(), negative_loss.item()),
+            with torch.no_grad():
+                pixel_change = (torch.stack(list(images)) - initial_pixels).square().mean().sqrt().mul(255).item()
+            print('%s iter = %05d, loss = %.6f, positive = %.6f, negative = %.6f, RMS = %.2f/255'
+                  % (get_time(), iteration, loss.item(), positive_loss.item(), negative_loss.item(), pixel_change),
                   flush=True)
         if iteration % args.save_every == 0 or iteration == final_iteration:
             save(iteration)
@@ -302,6 +325,8 @@ def main():
     parser.add_argument('--momentum', type=float, default=0.9, help='SGD momentum with --optimizer sgd')
     parser.add_argument('--batch_real', type=int, default=512)
     parser.add_argument('--batch_syn', type=int, default=512)
+    parser.add_argument('--dsa', action=argparse.BooleanOptionalAction, default=True)
+    parser.add_argument('--dsa_strategy', '--dsa-strategy', default='color_crop_cutout_flip_scale_rotate')
     parser.add_argument('--save_every', type=int, default=500)
     parser.add_argument('--num_exp', type=int, default=1)
     parser.add_argument('--label-percentage', type=int, choices=list(PROBE_EPOCHS), default=1)
@@ -347,7 +372,8 @@ def main():
     mean = torch.tensor(mean).view(1, channel, 1, 1)
     std = torch.tensor(std).view(1, channel, 1, 1)
     protocol = json.loads((ROOT / 'Evaluate_benchamrk/protocol.json').read_text())
-    views = ssl_augmentation(protocol, args.dataset, args.ssl_method).to(args.device)
+    views = (nn.ModuleList([DMDSA(args.dsa_strategy, mean, std) for _ in range(2)]) if args.dsa
+             else ssl_augmentation(protocol, args.dataset, args.ssl_method)).to(args.device)
     experiments = ['random', 'positive', 'positive-negative'] if args.experiment == 'all' else [args.experiment]
     negatives = 'positive-negative' in experiments and args.lambda_neg > 0
     teachers, normalizations, teacher_identity, targets = [], [], [], []
@@ -378,11 +404,17 @@ def main():
             normalizations.append(tuple(torch.tensor(value, device=args.device).view(1, channel, 1, 1)
                                         for value in normalization))
             teacher_identity.append({**identity, 'normalization': normalization})
-        distributions, target_path = real_distributions(
-            args, dataset, teachers, normalizations, teacher_identity,
-            views, mean, std, negatives, common)
+        if args.dsa:
+            distributions = [None] * len(teachers)
+        else:
+            distributions, target_path = real_distributions(
+                args, dataset, teachers, normalizations, teacher_identity,
+                views, mean, std, negatives, common)
         batch = min(args.batch_syn, num_syn)
         for distribution in distributions:
+            if args.dsa:
+                targets.append(None)
+                continue
             target = {'positive': tuple(value.to(args.device)
                                        for value in quantile_target(distribution['positive'], batch))}
             if negatives:

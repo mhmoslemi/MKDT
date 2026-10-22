@@ -14,7 +14,7 @@ from utils import transport_barycentric_loss
 # random , test acc = 0.3993 2%
 # random , test acc = 0.3895 1%
 
-def main():
+def _legacy_main():
 
     parser = argparse.ArgumentParser(description='Parameter Processing')
 
@@ -350,6 +350,12 @@ def main():
         accs = accs_all_exps[key]
         print('Train on %s, evaluate %d random %s, mean  = %.2f%%  std = %.2f%%'%(args.model, len(accs), key, np.mean(accs)*100, np.std(accs)*100))
 
+
+
+def main():
+    # Reuse the updated teacher/DSA/eval driver, retaining this file's barycentric loss.
+    from main_SSL import main as run_ot
+    run_ot(loss_function=transport_barycentric_loss, method='OTBarycentric')
 
 
 if __name__ == '__main__':

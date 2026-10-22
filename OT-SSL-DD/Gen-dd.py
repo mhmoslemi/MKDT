@@ -8,6 +8,7 @@ import torch.nn.functional as F
 from torchvision.utils import save_image
 from eval import ROOT, reference_modules
 from utils import get_dataset, get_time, DiffAugment, ParamDiffAug
+from dm_dsa import DMDSA
 
 
 class VAE(nn.Module):
@@ -110,21 +111,36 @@ def mmd_loss(features_syn, features_real, bandwidth, real_kernel):
             - 2 * mmd_kernel(features_syn, features_real, bandwidth).mean() + real_kernel)
 
 
-def mmd_features(latents, generator, net, normalization, batch_size):
+def mmd_features(latents, generator, net, normalization, batch_size, augmentation=None, seed=None):
     mean, std = normalization
-    return torch.cat([net((generator(batch) - mean) / std) for batch in latents.split(batch_size)])
+    features = []
+    for batch in latents.split(batch_size):
+        images = generator(batch)
+        if augmentation is not None:
+            images = augmentation(images, seed)
+        features.append(net((images - mean) / std))
+    return torch.cat(features)
 
 
-def mmd_update(z, generator, teachers, normalizations, real_distributions, bandwidths, args):
+def mmd_update(z, generator, teachers, normalizations, real_distributions, bandwidths, args,
+               real_pixels=None, augmentation=None, seed=None):
     loss_avg = 0
-    for net, normalization, distribution, bandwidth in zip(teachers, normalizations, real_distributions, bandwidths):
-        order = torch.randperm(len(distribution))[:args.mmd_batch_real]
-        real = distribution[order].to(args.device)
+    for teacher_index, (net, normalization) in enumerate(zip(teachers, normalizations)):
+        if augmentation is not None:
+            teacher_mean, teacher_std = normalization
+            with torch.no_grad():
+                real = F.normalize(net((augmentation(real_pixels, seed) - teacher_mean) / teacher_std), dim=1)
+                bandwidth = torch.pdist(real[:min(512, len(real))]).square().median().clamp_min(1e-6)
+        else:
+            distribution = real_distributions[teacher_index]
+            bandwidth = bandwidths[teacher_index]
+            order = torch.randperm(len(distribution))[:args.mmd_batch_real]
+            real = distribution[order].to(args.device)
         with torch.no_grad():
             real_kernel = mmd_kernel(real, real, bandwidth).mean()
         ''' compute the joint feature gradient, then backpropagate in image batches '''
         with torch.no_grad():
-            features = mmd_features(z, generator, net, normalization, args.batch_syn)
+            features = mmd_features(z, generator, net, normalization, args.batch_syn, augmentation, seed)
         features.requires_grad_(True)
         loss = mmd_loss(features, real, bandwidth, real_kernel) / len(teachers)
         gradient = torch.autograd.grad(loss, features)[0]
@@ -132,6 +148,8 @@ def mmd_update(z, generator, teachers, normalizations, real_distributions, bandw
         for start in range(0, len(z), args.batch_syn):
             end = min(start + args.batch_syn, len(z))
             images = generator(z[start:end])
+            if augmentation is not None:
+                images = augmentation(images, seed)
             features_syn = net((images - teacher_mean) / teacher_std)
             features_syn.backward(gradient[start:end])
         loss_avg += loss.item()
@@ -191,8 +209,11 @@ def main():
     parser.add_argument('--vae_ema', type=float, default=0.999, help='residual VAE EMA decay')
     parser.add_argument('--train_vae', action='store_true', help='train the VAE instead of reusing vae_path')
     parser.add_argument('--mmd', action='store_true', help='per-teacher kernel MMD using the saved 350-epoch residual VAE')
-    parser.add_argument('--mmd_batch_real', type=int, default=256, help='cached real features sampled per MMD update')
-    parser.add_argument('--aug_strategy', type=str, default='color_crop_cutout_flip_scale_rotate')
+    parser.add_argument('--mmd_batch_real', type=int, default=256,
+                        help='real examples per MMD update; fresh images with DSA, cached features otherwise')
+    parser.add_argument('--dsa', action=argparse.BooleanOptionalAction, default=True)
+    parser.add_argument('--aug_strategy', '--dsa_strategy', '--dsa-strategy',
+                        type=str, default='color_crop_cutout_flip_scale_rotate')
     parser.add_argument('--cov_weight', type=float, default=2.0)
     parser.add_argument('--save_every', type=int, default=2000)
     parser.add_argument('--resume', action='store_true', help='resume saved experiments and skip completed ones')
@@ -201,6 +222,8 @@ def main():
     parser.add_argument('--save_path', type=str, default=str(ROOT / 'OT-SSL-DD/result_GenerativeFeatureMatching'))
 
     args = parser.parse_args()
+    if args.dsa and args.mmd and args.mmd_batch_real < 2:
+        parser.error('DSA MMD requires at least two --mmd_batch_real images')
     if args.mmd:
         args.residual_vae = True
     if args.latent_dim is None:
@@ -230,11 +253,13 @@ def main():
     data_mean = torch.tensor(mean, device=args.device).view(1, channel, 1, 1)
     data_std = torch.tensor(std, device=args.device).view(1, channel, 1, 1)
     num_syn = int(len(dst_train) * args.percentage / 100)
+    augmentation = DMDSA(args.aug_strategy, mean, std).to(args.device) if args.dsa else None
+    dsa_settings = augmentation.configuration() if args.dsa else None
 
     ''' load the three frozen full-data SSL teachers '''
     teachers, normalizations, teacher_checkpoints, teacher_hashes = [], [], [], []
     for seed in args.teacher_seeds:
-        checkpoint = os.path.join(args.teacher_path, args.dataset, args.model, 'full', 'pt100', args.teacher_ssl, 'seed_%03d'%seed, 'encoder.pt')
+        checkpoint = os.path.join(args.teacher_path, args.dataset, args.model.removesuffix('BN'), 'full', 'pt100', args.teacher_ssl, 'seed_%03d'%seed, 'encoder.pt')
         net, _, saved = common.load_encoder(checkpoint, device=args.device)
         teachers.append(net)
         teacher_mean, teacher_std = (torch.tensor(value, device=args.device).view(1, channel, 1, 1) for value in saved['normalization'])
@@ -245,7 +270,7 @@ def main():
 
     ''' cache separate real feature distributions for MMD '''
     feature_paths, real_distributions, bandwidths = [], [], []
-    if args.mmd:
+    if args.mmd and not args.dsa:
         for net, normalization, teacher_hash in zip(teachers, normalizations, teacher_hashes):
             feature_key = common.digest_json({
                 'dataset': args.dataset, 'data_path': os.path.abspath(args.data_path),
@@ -281,7 +306,7 @@ def main():
         'version': 1, 'dataset': args.dataset, 'data_path': os.path.abspath(args.data_path),
         'teachers': teacher_hashes, 'seed': args.seed, 'augmentation': args.aug_strategy})
     target_path = os.path.join(args.cache_path, 'augmented_moments_%s_%s.pt'%(args.dataset, target_key))
-    if args.mmd:
+    if args.mmd or args.dsa:
         target_path = None
     elif os.path.exists(target_path):
         saved_moments = torch.load(target_path, map_location=args.device, weights_only=True)
@@ -424,6 +449,7 @@ def main():
                     'teacher_ssl': args.teacher_ssl, 'teacher_checkpoints': teacher_checkpoints,
                     'vae_path': args.vae_path, 'vae_epoch': vae_epoch,
                     'augmentation': args.aug_strategy, 'covariance_weight': args.cov_weight,
+                    'dsa': args.dsa, 'dsa_settings': dsa_settings,
                     'target_path': target_path}, common)
         if start_iteration >= args.Iteration:
             print('Already complete: %s (%d iterations)'%(result_path, start_iteration))
@@ -435,20 +461,45 @@ def main():
             ''' generate two views and match their teacher-feature means and covariances '''
             optimizer_z.zero_grad()
             loss_avg = 0
+            real_pixels, view_seeds = None, None
+            if args.dsa:
+                batch_size = args.mmd_batch_real if args.mmd else args.batch_real
+                indices = torch.randperm(len(dst_train))[:min(batch_size, len(dst_train))]
+                if hasattr(dst_train, 'data') and dst_train.data.ndim == 4:
+                    real_pixels = torch.as_tensor(dst_train.data[indices.numpy()], device=args.device)
+                    real_pixels = real_pixels.permute(0, 3, 1, 2).float() / 255
+                else:
+                    images = (dst_train.images[indices] if hasattr(dst_train, 'images')
+                              else torch.stack([dst_train[int(index)][0] for index in indices]))
+                    real_pixels = images.to(args.device) * data_std + data_mean
+                view_seeds = DMDSA.seeds(2)
             if args.mmd:
-                loss_avg = mmd_update(z, generator, teachers, normalizations, real_distributions, bandwidths, args)
+                loss_avg = mmd_update(z, generator, teachers, normalizations, real_distributions, bandwidths, args,
+                                      real_pixels, augmentation, view_seeds[0] if args.dsa else None)
             else:
                 image_syn = torch.cat([generator(batch) for batch in z.split(args.batch_syn)])
-                first = DiffAugment(image_syn.clone(), args.aug_strategy, param=moment_param)
-                second = DiffAugment(image_syn.clone(), args.aug_strategy, param=moment_param)
+                if args.dsa:
+                    real_first, real_second = [augmentation(real_pixels, seed) for seed in view_seeds]
+                    first, second = [augmentation(image_syn, seed) for seed in view_seeds]
+                else:
+                    first = DiffAugment(image_syn.clone(), args.aug_strategy, param=moment_param)
+                    second = DiffAugment(image_syn.clone(), args.aug_strategy, param=moment_param)
                 loss = 0
                 for teacher_index, (net, (teacher_mean, teacher_std)) in enumerate(zip(teachers, normalizations)):
+                    if args.dsa:
+                        with torch.no_grad():
+                            real_features = torch.cat([
+                                net((real_first - teacher_mean) / teacher_std),
+                                net((real_second - teacher_mean) / teacher_std)])
+                            real_mean, real_covariance = feature_moments(real_features)
+                    else:
+                        real_mean, real_covariance = real_means[teacher_index], real_covariances[teacher_index]
                     features = torch.cat([
                         net((first - teacher_mean) / teacher_std),
                         net((second - teacher_mean) / teacher_std)])
                     synthetic_mean, synthetic_covariance = feature_moments(features)
-                    mean_loss = (synthetic_mean - real_means[teacher_index]).square().sum()
-                    covariance_loss = (synthetic_covariance - real_covariances[teacher_index]).square().sum()
+                    mean_loss = (synthetic_mean - real_mean).square().sum()
+                    covariance_loss = (synthetic_covariance - real_covariance).square().sum()
                     loss = loss + (mean_loss + args.cov_weight * covariance_loss) / len(teachers)
                 loss.backward()
                 loss_avg = loss.item()
@@ -481,6 +532,7 @@ def main():
                     'vae_path': args.vae_path, 'vae_epoch': vae_epoch,
                     'dis_metric': 'mmd' if args.mmd else 'augmented_moments',
                     'augmentation': args.aug_strategy,
+                    'dsa': args.dsa, 'dsa_settings': dsa_settings,
                     'covariance_weight': args.cov_weight,
                     'mmd_feature_paths': feature_paths,
                     'mmd_bandwidths': [value.item() for value in bandwidths],

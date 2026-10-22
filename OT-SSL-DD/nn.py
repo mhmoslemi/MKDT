@@ -40,6 +40,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 from scipy.optimize import linear_sum_assignment
 from torchvision.utils import save_image
+from dm_dsa import make_diff_augmenter as dm_augmenter
 
 from utils import DiffAugment, ParamDiffAug, get_dataset, get_network, get_time
 
@@ -67,7 +68,9 @@ def seeded_torch(seed):
         yield
 
 
-def make_diff_augmenter(strategy, param):
+def make_diff_augmenter(strategy, param, dsa=False):
+    if dsa:
+        return dm_augmenter(strategy, param)
     def augment(images, seed):
         with seeded_torch(seed):
             # seed=-1 gives independent per-image draws, not Siamese batch draws.
@@ -328,6 +331,10 @@ def match_response_distributions(probe, dataset, image_syn, augmenter, args, obj
                   for _ in range(args.response_batches)]
     syn_draws = [make_draw(len(image_syn), args.effective_batch_size, objective_rng, replacement)
                  for _ in range(args.response_batches)]
+    if args.dsa:
+        for real_draw, syn_draw in zip(real_draws, syn_draws):
+            for name in ('view_u_seed', 'view_v_seed', 'model_seed'):
+                syn_draw[name] = real_draw[name]
     real_responses, syn_responses = None, None
     real_ssl, syn_ssl = [], []
 
@@ -550,7 +557,8 @@ def main():
     parser.add_argument('--temperature', type=float, default=0.2)
     parser.add_argument('--barlow_lambda', type=float, default=0.005)
     parser.add_argument('--barlow_eps', type=float, default=1e-5)
-    parser.add_argument('--distill_aug_strategy', default='color_crop_cutout_flip_scale_rotate')
+    parser.add_argument('--distill_aug_strategy', '--dsa_strategy', '--dsa-strategy', default='color_crop_cutout_flip_scale_rotate')
+    parser.add_argument('--dsa', action=argparse.BooleanOptionalAction, default=True)
     parser.add_argument('--distill_aug_mode', choices=['S', 'M'], default='M')
 
     # Initialization and output follow final.py; evaluation stays external.
@@ -618,9 +626,11 @@ def main():
         return ((images * diag_std + diag_mean) * 255 + 0.5).clamp(0, 255).to(torch.uint8)
 
     initial_uint8 = to_uint8(image_syn_initial)
+    if args.dsa:
+        args.distill_aug_mode = 'S'
     distill_dsa_param = ParamDiffAug()
-    distill_dsa_param.aug_mode = args.distill_aug_mode
-    augmenter = make_diff_augmenter(args.distill_aug_strategy, distill_dsa_param)
+    distill_dsa_param.aug_mode = 'S' if args.dsa else args.distill_aug_mode
+    augmenter = make_diff_augmenter(args.distill_aug_strategy, distill_dsa_param, args.dsa)
     optimizer_img = torch.optim.Adam([image_syn], lr=args.lr_img)
     scheduler_img = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer_img, T_max=args.Iteration, eta_min=args.lr_img_min)
     histories = {name: [] for name in (

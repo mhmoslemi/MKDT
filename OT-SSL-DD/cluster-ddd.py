@@ -15,6 +15,7 @@ from torchvision.utils import save_image
 from eval import (PROBE_EPOCHS, ROOT, SSL_EPOCHS, evaluate_synset_SSL,
                   reference_modules)
 from utils import get_dataset, get_time
+from dm_dsa import DMDSA
 
 
 # Every cluster is represented by the same number of synthetic images.
@@ -168,6 +169,27 @@ def cluster_index(membership, clusters):
     return members, counts, offsets, flat
 
 
+def cluster_relation_views(args, dataset, members, counts, offsets, flat, cluster,
+                           count, views, mean, std, seeds=None):
+    positions = torch.randint(counts[cluster].item(), (count,))
+    first_indices = members[cluster][positions]
+    shifts = torch.randint(1, counts[cluster].item(), (count,))
+    second_indices = members[cluster][(positions + shifts) % counts[cluster]]
+    other_clusters = torch.randint(args.clusters - 1, (count,))
+    other_clusters += (other_clusters >= cluster).long()
+    positions_outside = (torch.rand(count) * counts[other_clusters]).long()
+    third_indices = flat[offsets[other_clusters] + positions_outside]
+    anchors = dataset_pixels(dataset, first_indices, mean, std).to(args.device)
+    inside = dataset_pixels(dataset, second_indices, mean, std).to(args.device)
+    outside = dataset_pixels(dataset, third_indices, mean, std).to(args.device)
+
+    def augment(images, view):
+        return views[view](images, seeds[view]) if seeds is not None else views[view](images)
+
+    return torch.cat((augment(anchors, 0), augment(anchors, 1),
+                      augment(inside, 1), augment(outside, 1)))
+
+
 @torch.no_grad()
 def real_distributions(args, dataset, teachers, normalizations, teacher_identity,
                        membership, cluster_path, views, mean, std, protocol, common):
@@ -195,25 +217,9 @@ def real_distributions(args, dataset, teachers, normalizations, teacher_identity
             samples = {'positive': [], 'intra': [], 'inter': []}
             for start in range(0, args.real_pairs_per_cluster, args.batch_real):
                 count = min(args.batch_real, args.real_pairs_per_cluster - start)
-                # Positive: two augmentations of the identical real image.
-                positions = torch.randint(counts[cluster].item(), (count,))
-                first_indices = members[cluster][positions]
-
-                # Intra negative: a different real image inside the same cluster.
-                shifts = torch.randint(1, counts[cluster].item(), (count,))
-                second_indices = members[cluster][(positions + shifts) % counts[cluster]]
-
-                # Inter negative: sample an outside cluster uniformly, then an image.
-                other_clusters = torch.randint(args.clusters - 1, (count,))
-                other_clusters += (other_clusters >= cluster).long()
-                positions_outside = (torch.rand(count) * counts[other_clusters]).long()
-                third_indices = flat[offsets[other_clusters] + positions_outside]
-
-                anchors = dataset_pixels(dataset, first_indices, mean, std).to(args.device)
-                inside = dataset_pixels(dataset, second_indices, mean, std).to(args.device)
-                outside = dataset_pixels(dataset, third_indices, mean, std).to(args.device)
-                augmented = torch.cat((views[0](anchors), views[1](anchors),
-                                       views[1](inside), views[1](outside)))
+                augmented = cluster_relation_views(
+                    args, dataset, members, counts, offsets, flat, cluster,
+                    count, views, mean, std)
                 first, positive, intra, inter = encode(
                     teacher, augmented, normalization).split(count)
                 samples['positive'].append((first * positive).sum(dim=1).cpu())
@@ -313,7 +319,10 @@ def distill(args, experiment, exp, dataset, im_size, mean, std, membership,
     else:
         initial_pixels = torch.rand(num_syn, 3, *im_size)
     initial_pixels.clamp_(0, 1)
-    images = nn.ParameterList(nn.Parameter(image.to(args.device)) for image in initial_pixels)
+    if args.dsa and experiment != 'random':
+        members, counts, offsets, flat = cluster_index(membership, args.clusters)
+    initial_pixels = initial_pixels.to(args.device)
+    images = nn.ParameterList(nn.Parameter(image.clone()) for image in initial_pixels)
     if args.optimizer == 'sgd':
         optimizer = torch.optim.SGD(images, lr=args.lr_img, momentum=args.momentum)
     else:
@@ -334,7 +343,11 @@ def distill(args, experiment, exp, dataset, im_size, mean, std, membership,
         'feature_layer': 'encoder_output_before_projector',
         'augmentation_method': args.ssl_method,
         'augmentation_backend': 'kornia_tensor_benchmark_recipe',
+        'dsa': args.dsa,
+        'dsa_settings': views[0].configuration() if args.dsa else None,
         'teacher_reduction': 'mean_all_teachers'}
+    if args.dsa:
+        identity['augmentation_backend'] = 'main_DM_realreal_DSA'
     result_path = Path(args.save_path) / ('res_CRMMD_%s_%s_%dimages_%s_exp%d.pt'
                                          % (args.dataset, args.model, num_syn, experiment, exp))
     start, history = 0, []
@@ -364,14 +377,23 @@ def distill(args, experiment, exp, dataset, im_size, mean, std, membership,
     for iteration in range(start + 1, final_iteration + 1):
         optimizer.zero_grad(set_to_none=True)
         synthetic = torch.stack(list(images))
-        # Resample the downstream SSL augmentation pipeline every iteration.
-        augmented = [(views[0](synthetic), views[1](synthetic))
-                     for _ in range(args.view_repeats)]
+        if args.dsa:
+            view_seeds = [DMDSA.seeds(2) for _ in range(args.view_repeats)]
+            augmented = [(views[0](synthetic, seeds[0]), views[1](synthetic, seeds[1]))
+                         for seeds in view_seeds]
+            with torch.no_grad():
+                real_augmented = [[cluster_relation_views(
+                    args, dataset, members, counts, offsets, flat, cluster,
+                    args.batch_real, views, mean, std, seeds) for seeds in view_seeds]
+                    for cluster in range(args.clusters)]
+        else:
+            augmented = [(views[0](synthetic), views[1](synthetic))
+                         for _ in range(args.view_repeats)]
         positive_loss = synthetic.new_zeros(())
         intra_loss = synthetic.new_zeros(())
         inter_loss = synthetic.new_zeros(())
 
-        for teacher, normalization, teacher_targets in zip(teachers, normalizations, targets):
+        for teacher_index, (teacher, normalization) in enumerate(zip(teachers, normalizations)):
             relations = [{'positive': [], 'intra': [], 'inter': []}
                          for _ in range(args.clusters)]
             for first_images, second_images in augmented:
@@ -384,6 +406,17 @@ def distill(args, experiment, exp, dataset, im_size, mean, std, membership,
                         relations[cluster][name].append(distribution[name])
 
             for cluster in range(args.clusters):
+                if args.dsa:
+                    real_values = {'positive': [], 'intra': [], 'inter': []}
+                    with torch.no_grad():
+                        for real_views in real_augmented[cluster]:
+                            first, positive, intra, inter = encode(teacher, real_views, normalization).chunk(4)
+                            real_values['positive'].append((first * positive).sum(1))
+                            real_values['intra'].append((first * intra).sum(1))
+                            real_values['inter'].append((first * inter).sum(1))
+                    real_values = {name: torch.cat(values) for name, values in real_values.items()}
+                else:
+                    real_values = targets[teacher_index][cluster]
                 for name, accumulator in (('positive', 'positive_loss'),
                                           ('intra', 'intra_loss'), ('inter', 'inter_loss')):
                     if name == 'intra' and args.lambda_intra == 0:
@@ -391,7 +424,7 @@ def distill(args, experiment, exp, dataset, im_size, mean, std, membership,
                     if name == 'inter' and args.lambda_inter == 0:
                         continue
                     synthetic_values = torch.cat(relations[cluster][name])
-                    loss = mmd_loss(teacher_targets[cluster][name], synthetic_values,
+                    loss = mmd_loss(real_values[name], synthetic_values,
                                     args.mmd_sigmas, args.mmd_samples)
                     if accumulator == 'positive_loss':
                         positive_loss = positive_loss + loss
@@ -417,9 +450,11 @@ def distill(args, experiment, exp, dataset, im_size, mean, std, membership,
                 image.clamp_(0, 1)
         history.append([loss.item(), positive_loss.item(), intra_loss.item(), inter_loss.item()])
         if iteration % 50 == 0 or iteration == 1:
-            print('%s iter = %05d, loss = %.6f, pos = %.6f, intra = %.6f, inter = %.6f'
+            with torch.no_grad():
+                pixel_change = (torch.stack(list(images)) - initial_pixels).square().mean().sqrt().mul(255).item()
+            print('%s iter = %05d, loss = %.6f, pos = %.6f, intra = %.6f, inter = %.6f, RMS = %.2f/255'
                   % (get_time(), iteration, loss.item(), positive_loss.item(),
-                     intra_loss.item(), inter_loss.item()), flush=True)
+                     intra_loss.item(), inter_loss.item(), pixel_change), flush=True)
         if iteration % args.save_every == 0 or iteration == final_iteration:
             save(iteration)
     if final_iteration == 0 or start >= final_iteration:
@@ -445,6 +480,8 @@ def main():
     parser.add_argument('--mmd_sigmas', type=float, nargs='+', default=[0.05, 0.1, 0.2, 0.4])
     parser.add_argument('--mmd_samples', type=int, default=256)
     parser.add_argument('--view_repeats', type=int, default=2)
+    parser.add_argument('--dsa', action=argparse.BooleanOptionalAction, default=True)
+    parser.add_argument('--dsa_strategy', '--dsa-strategy', default='color_crop_cutout_flip_scale_rotate')
     parser.add_argument('--teacher_source', choices=['pretrained', 'random'], default='pretrained')
     parser.add_argument('--teacher_ssl', choices=['simclr', 'barlowtwins'], default='simclr')
     parser.add_argument('--teacher_seeds', type=int, nargs='+', default=[0])
@@ -452,8 +489,10 @@ def main():
     parser.add_argument('--teacher_path', default=str(
         ROOT / 'Evaluate_benchamrk/full_ssl_checkpoints_1000ep_3seeds'))
     parser.add_argument('--bn_calibration_pairs', type=int, default=8192)
-    parser.add_argument('--real_pairs_per_cluster', type=int, default=512)
-    parser.add_argument('--batch_real', type=int, default=128)
+    parser.add_argument('--real_pairs_per_cluster', type=int, default=512,
+                        help='cached real relations per cluster with --no-dsa')
+    parser.add_argument('--batch_real', type=int, default=128,
+                        help='real examples per cluster/step with DSA; cache batch size with --no-dsa')
     parser.add_argument('--Iteration', type=int, default=8000)
     parser.add_argument('--lr_img', type=float, default=0.005)
     parser.add_argument('--optimizer', choices=['adam', 'sgd'], default='adam')
@@ -518,7 +557,8 @@ def main():
     mean = torch.tensor(mean).view(1, channel, 1, 1)
     std = torch.tensor(std).view(1, channel, 1, 1)
     protocol = json.loads((ROOT / 'Evaluate_benchamrk/protocol.json').read_text())
-    views = ssl_augmentation(protocol, args.dataset, args.ssl_method).to(args.device)
+    views = (nn.ModuleList([DMDSA(args.dsa_strategy, mean, std) for _ in range(2)])
+             if args.dsa else ssl_augmentation(protocol, args.dataset, args.ssl_method)).to(args.device)
     experiments = ['random', 'full'] if args.experiment == 'all' else [args.experiment]
     teachers, normalizations, teacher_identity, targets = [], [], [], []
     membership, cluster_path, target_path = None, None, None
@@ -562,12 +602,13 @@ def main():
         if (torch.bincount(membership, minlength=args.clusters).min().item()
                 < args.num_syn // args.clusters and args.init == 'real'):
             parser.error('Some clusters have fewer real images than synthetic initialization slots')
-        distributions, target_path = real_distributions(
-            args, dataset, teachers, normalizations, teacher_identity,
-            membership, cluster_path, views, mean, std, protocol, common)
-        targets = [[{name: values.to(args.device) for name, values in cluster.items()}
-                    for cluster in teacher_distributions]
-                   for teacher_distributions in distributions]
+        if not args.dsa:
+            distributions, target_path = real_distributions(
+                args, dataset, teachers, normalizations, teacher_identity,
+                membership, cluster_path, views, mean, std, protocol, common)
+            targets = [[{name: values.to(args.device) for name, values in cluster.items()}
+                        for cluster in teacher_distributions]
+                       for teacher_distributions in distributions]
 
     summaries = []
     for exp in range(args.num_exp):

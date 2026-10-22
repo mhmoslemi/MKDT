@@ -1,0 +1,23 @@
+Hyper-parameters: 
+ {'dataset': 'CIFAR10', 'percentage': 0.2, 'data_path': '/scratch/mmoslem3/data', 'Iteration': 8000, 'lr_img': 0.001, 'batch_real': 256, 'save_every': 500, 'seed': 0, 'device': 'cuda', 'dsa': True, 'dsa_strategy': 'color_crop_cutout_flip_scale_rotate', 'model': 'ResNet18BN', 'teacher_ssl': 'simclr', 'teacher_seed': 0, 'teacher_path': '/scratch/mmoslem3/MKDT/Evaluate_benchamrk/full_ssl_checkpoints_1000ep_3seeds', 'temperature': 0.5, 'ot_lambda': 0.01, 'sinkhorn_iterations': 100, 'ssl_method': 'simclr', 'num_eval': 1, 'epoch_eval_train': 2000, 'ssl_log_every': 100, 'label_percentage': 1, 'epoch_linear_train': 100, 'lr_linear': 0.1, 'batch_linear': 256, 'save_path': '/home/mmoslem3/scratch/MKDT/OT-SSL-DD/result_main_SSL_20261022T043128Z_dsa_', 'geometry_weight': 0.0}
+Loaded teacher seed 0: /scratch/mmoslem3/MKDT/Evaluate_benchamrk/full_ssl_checkpoints_1000ep_3seeds/CIFAR10/ResNet18/full/pt100/simclr/seed_000/encoder.pt
+[2026-10-21 22:31:46] training begins
+[2026-10-21 22:31:49] iter = 00001, loss = 3.871211, RMS = 0.05/255
+[2026-10-21 22:34:55] iter = 00100, loss = 3.801218, RMS = 1.68/255
+[2026-10-21 22:38:00] iter = 00200, loss = 3.676529, RMS = 2.85/255
+[2026-10-21 22:41:07] iter = 00300, loss = 3.672701, RMS = 3.71/255
+[2026-10-21 22:44:17] iter = 00400, loss = 3.644751, RMS = 4.40/255
+[2026-10-21 22:47:24] iter = 00500, loss = 3.632960, RMS = 4.98/255
+Saved synthetic data to /home/mmoslem3/scratch/MKDT/OT-SSL-DD/result_main_SSL_20261022T043128Z_dsa_/res_OT-SSL_CIFAR10_ResNet18BN_0.2percent.pt
+[2026-10-21 22:50:34] iter = 00600, loss = 3.817051, RMS = 5.49/255
+[2026-10-21 22:53:39] iter = 00700, loss = 3.717428, RMS = 5.92/255
+[2026-10-21 22:56:42] iter = 00800, loss = 3.774841, RMS = 6.33/255
+[2026-10-21 23:00:00] iter = 00900, loss = 3.669481, RMS = 6.73/255
+[2026-10-21 23:03:21] iter = 01000, loss = 3.639915, RMS = 7.11/255
+Saved synthetic data to /home/mmoslem3/scratch/MKDT/OT-SSL-DD/result_main_SSL_20261022T043128Z_dsa_/res_OT-SSL_CIFAR10_ResNet18BN_0.2percent.pt
+[2026-10-21 23:06:34] iter = 01100, loss = 3.640675, RMS = 7.43/255
+[2026-10-21 23:09:46] iter = 01200, loss = 3.592225, RMS = 7.74/255
+[2026-10-21 23:13:00] iter = 01300, loss = 3.601685, RMS = 8.06/255
+[2026-10-21 23:16:07] iter = 01400, loss = 3.613753, RMS = 8.33/255
+[2026-10-21 23:19:11] iter = 01500, loss = 3.646648, RMS = 8.58/255
+Saved synthetic data to /home/mmoslem3/scratch/MKDT/OT-SSL-DD/result_main_SSL_20261022T043128Z_dsa_/res_OT-SSL_CIFAR10_ResNet18BN_0.2percent.pt

@@ -7,6 +7,8 @@ import torch.nn as nn
 import torch.nn.functional as F
 from torchvision import datasets, transforms
 from torchvision.utils import save_image
+from dm_dsa import DMDSA
+from eval import ROOT, reference_modules
 
 def get_time():
     return str(time.strftime("[%Y-%m-%d %H:%M:%S]", time.localtime()))
@@ -27,19 +29,23 @@ def get_dataset(dataset, data_path):
 # 2. JEPA Network (Backbone + Action Predictor)
 # ============================================================================
 class JEPANet(nn.Module):
-    def __init__(self, channel, net_width=128, net_depth=3, action_dim=32, im_size=(32,32)):
+    def __init__(self, channel, net_width=128, net_depth=3, action_dim=32, im_size=(32,32), model=None):
         super(JEPANet, self).__init__()
         # Backbone (phi)
-        layers = []
-        in_channels = channel
-        for d in range(net_depth):
-            layers.append(nn.Conv2d(in_channels, net_width, kernel_size=3, padding=1))
-            layers.append(nn.InstanceNorm2d(net_width))
-            layers.append(nn.ReLU(inplace=True))
-            layers.append(nn.AvgPool2d(kernel_size=2, stride=2))
-            in_channels = net_width
-        self.features = nn.Sequential(*layers)
-        self.feat_dim = net_width * (im_size[0] // (2**net_depth)) * (im_size[1] // (2**net_depth))
+        if model is None:
+            layers = []
+            in_channels = channel
+            for d in range(net_depth):
+                layers.append(nn.Conv2d(in_channels, net_width, kernel_size=3, padding=1))
+                layers.append(nn.InstanceNorm2d(net_width))
+                layers.append(nn.ReLU(inplace=True))
+                layers.append(nn.AvgPool2d(kernel_size=2, stride=2))
+                in_channels = net_width
+            self.features = nn.Sequential(*layers)
+            self.feat_dim = net_width * (im_size[0] // (2**net_depth)) * (im_size[1] // (2**net_depth))
+        else:
+            self.features, self.feat_dim = reference_modules()['common'].build_encoder(
+                model.removesuffix('BN'), im_size[0])
         
         # Predictor (P): takes concatenated [phi(u), action] and predicts phi(v)
         self.predictor = nn.Sequential(
@@ -125,16 +131,21 @@ def distance_wb(g0, g1):
 def main():
     parser = argparse.ArgumentParser(description='JEPA Action-Conditional Dataset Distillation')
     parser.add_argument('--dataset', type=str, default='CIFAR10')
+    parser.add_argument('--model', choices=['ConvNetBN', 'ResNet18BN', 'VGG11BN'], default=None)
     parser.add_argument('--num_syn', type=int, default=100)
     parser.add_argument('--Iteration', type=int, default=20000)
-    parser.add_argument('--lr_img', type=float, default=0.5)
+    parser.add_argument('--lr_img', type=float, default=0.005)
     parser.add_argument('--lr_net', type=float, default=0.01)
     parser.add_argument('--batch_real', type=int, default=512)
     parser.add_argument('--fourier_bands', type=int, default=12)
+    parser.add_argument('--dsa', action=argparse.BooleanOptionalAction, default=True)
+    parser.add_argument('--dsa_strategy', '--dsa-strategy', default='color_crop_cutout_flip_scale_rotate')
+    parser.add_argument('--data_path', default=str(ROOT.parent / 'data'))
+    parser.add_argument('--save_path', default='result')
     args = parser.parse_args()
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
-    channel, im_size, num_classes, mean, std, dst_train = get_dataset(args.dataset, '/home/mmoslem3/scratch/data')
+    channel, im_size, num_classes, mean, std, dst_train = get_dataset(args.dataset, args.data_path)
     percentage = args.num_syn * 100 / len(dst_train)
     images_all = torch.cat([dst_train[i][0].unsqueeze(0) for i in range(len(dst_train))], dim=0)
     
@@ -143,21 +154,21 @@ def main():
     image_syn = images_all[idx].clone().to(device)
     image_syn_initial = image_syn.detach().clone()
     image_syn.requires_grad = True
-    optimizer_img = torch.optim.SGD([image_syn], lr=args.lr_img, momentum=0.9)
-    # optimizer_img = torch.optim.Adam([image_syn], lr=args.lr_img)
+    optimizer_img = torch.optim.Adam([image_syn], lr=args.lr_img)
     diag_mean = torch.tensor(mean, device=device).view(1, channel, 1, 1)
     diag_std = torch.tensor(std, device=device).view(1, channel, 1, 1)
     pixel_min = -diag_mean / diag_std
     pixel_max = (1 - diag_mean) / diag_std
     match_batch = min(args.batch_real, args.num_syn)
+    augmentation = DMDSA(args.dsa_strategy, mean, std).to(device) if args.dsa else None
 
     # Maintain a live network (this stops the adversarial cheating)
     action_dim = 4 * 2 * args.fourier_bands
-    net = JEPANet(channel, action_dim=action_dim, im_size=im_size).to(device)
+    net = JEPANet(channel, action_dim=action_dim, im_size=im_size, model=args.model).to(device)
     optimizer_net = torch.optim.SGD(net.parameters(), lr=args.lr_net, momentum=0.9)
 
     print('%s training begins' % get_time())
-    for it in range(args.Iteration + 1):
+    for it in range(1, args.Iteration + 1):
         net.train()
         
         # 1. Sample Identical Actions for DSA
@@ -167,6 +178,9 @@ def main():
         # 2. Real Gradient (X)
         idx = np.random.randint(0, len(images_all), match_batch)
         img_real = images_all[idx].to(device)
+        dsa_seed = DMDSA.seeds(1)[0] if args.dsa else None
+        if args.dsa:
+            img_real = augmentation.normalized(img_real, dsa_seed)
         
         net.zero_grad()
         loss_real = jepa_loss(net, img_real, y_u, x_u, h_u, w_u, y_v, x_v, h_v, w_v, args.fourier_bands, im_size)
@@ -181,6 +195,8 @@ def main():
             synthetic_indices = torch.randperm(args.num_syn, device=device)[:match_batch]
             img_syn = image_syn[synthetic_indices]
 
+        if args.dsa:
+            img_syn = augmentation.normalized(img_syn, dsa_seed)
         loss_syn = jepa_loss(net, img_syn, y_u, x_u, h_u, w_u, y_v, x_v, h_v, w_v, args.fourier_bands, im_size)
         gw_syn = torch.autograd.grad(loss_syn, net.parameters(), create_graph=True)
         
@@ -194,6 +210,8 @@ def main():
         
         # 5. Network Update (Trains the JEPA framework so pixels can't cheat)
         img_syn_train = image_syn.detach() if synthetic_indices is None else image_syn[synthetic_indices].detach()
+        if args.dsa:
+            img_syn_train = augmentation.normalized(img_syn_train, dsa_seed)
         optimizer_net.zero_grad()
         loss_train = jepa_loss(net, img_syn_train, y_u, x_u, h_u, w_u, y_v, x_v, h_v, w_v, args.fourier_bands, im_size)
         loss_train.backward()
@@ -206,18 +224,21 @@ def main():
                   (it, loss_match.item(), loss_train.item(), pixel_change))
 
         if it % 1000 == 0 or it == args.Iteration:
-            os.makedirs('result', exist_ok=True)
+            os.makedirs(args.save_path, exist_ok=True)
             visible = (image_syn.detach() * diag_std + diag_mean).clamp(0, 1).cpu()
-            save_image(visible, f'result/syn_jepa_dsa_iter{it}.png', nrow=int(np.ceil(np.sqrt(args.num_syn))))
-            result_path = 'result/res_DDJEPA_%s_ConvNet_%gpercent_final.pt' % (args.dataset, percentage)
+            save_image(visible, os.path.join(args.save_path, f'syn_jepa_dsa_iter{it}.png'), nrow=int(np.ceil(np.sqrt(args.num_syn))))
+            result_path = os.path.join(args.save_path, 'res_DDJEPA_%s_%s_%gpercent_final.pt' % (args.dataset, args.model or 'ConvNet', percentage))
             torch.save({
                 'data': image_syn.detach().cpu(),
                 'dataset': args.dataset,
+                'model': args.model or 'ConvNet',
                 'percentage': percentage,
                 'normalization': [mean, std],
                 'method': 'DDJEPA',
                 'iteration': it,
                 'num_syn': args.num_syn,
+                'dsa': args.dsa,
+                'augmentation': augmentation.configuration() if args.dsa else 'jepa_action_crops',
             }, result_path)
             print('Saved synthetic data to %s' % result_path, flush=True)
 

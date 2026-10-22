@@ -153,11 +153,10 @@ def parameter_gradients(reference, images, seeds, args, create_graph=False):
         images = images.detach()
     with torch.enable_grad(), reference.matching_mode(), torch.random.fork_rng(devices=cuda_rng_devices()):
         torch.manual_seed(seeds[0])
-        view1 = DiffAugment(images, args.ssl_aug_strategy, seed=-1, param=args.dsa_param)
+        view1 = DiffAugment(images, args.ssl_aug_strategy, seed=int(seeds[0]) if getattr(args, 'dsa', False) else -1, param=args.dsa_param)
         torch.manual_seed(seeds[1])
-        view2 = DiffAugment(images, args.ssl_aug_strategy, seed=-1, param=args.dsa_param)
-        # seed=-1 above keeps independently sampled transforms for each image,
-        # as in evaluation. Replaying the outer seed reproduces the whole batch.
+        view2 = DiffAugment(images, args.ssl_aug_strategy, seed=int(seeds[1]) if getattr(args, 'dsa', False) else -1, param=args.dsa_param)
+        # DSA shares the transform across the batch; the legacy path uses per-image draws.
         torch.manual_seed(seeds[2])
         z1 = reference.projector(reference.encoder.embed(view1))
         z2 = reference.projector(reference.encoder.embed(view2))
@@ -210,9 +209,9 @@ def query_ssl_loss(task, weights, seeds, args):
     buffers = {name: buffer.detach().clone() for name, buffer in reference.model.named_buffers()}
     with reference.matching_mode(), torch.random.fork_rng(devices=cuda_rng_devices()):
         torch.manual_seed(seeds[0])
-        view1 = DiffAugment(task.query_images, args.ssl_aug_strategy, seed=-1, param=args.dsa_param)
+        view1 = DiffAugment(task.query_images, args.ssl_aug_strategy, seed=int(seeds[0]) if getattr(args, 'dsa', False) else -1, param=args.dsa_param)
         torch.manual_seed(seeds[1])
-        view2 = DiffAugment(task.query_images, args.ssl_aug_strategy, seed=-1, param=args.dsa_param)
+        view2 = DiffAugment(task.query_images, args.ssl_aug_strategy, seed=int(seeds[1]) if getattr(args, 'dsa', False) else -1, param=args.dsa_param)
         torch.manual_seed(seeds[2])
         z1 = functional_call(reference.model, (weights, buffers), (view1,))
         z2 = functional_call(reference.model, (weights, buffers), (view2,))
