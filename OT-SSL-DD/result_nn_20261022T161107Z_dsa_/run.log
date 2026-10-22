@@ -1,0 +1,46 @@
+Using batch size 100 for BOTH real and synthetic updates: only 100 distinct synthetic images exist.
+Initializing 100 images with random-feature K-Means on ResNet18BN...
+Hyper-parameters:
+ {'dataset': 'CIFAR10', 'percentage': 0.2, 'data_path': '/home/mmoslem3/scratch/data', 'device': 'cuda', 'seed': 0, 'Iteration': 8000, 'lr_img': 0.001, 'lr_img_min': 0.001, 'response_batches': 4, 'batch_train': 512, 'batch_sampling': 'without_replacement', 'random_models': 'ResNet18BN', 'ssl_method': 'simclr', 'pool_size': 6, 'num_random_networks': 4, 'probe_max_steps': 100, 'encoder_train_steps': 1, 'lr_net': 0.01, 'momentum': 0.9, 'weight_decay': 0.0005, 'projection_dim': 128, 'temperature': 0.2, 'barlow_lambda': 0.005, 'barlow_eps': 1e-05, 'distill_aug_strategy': 'color_crop_cutout_flip_scale_rotate', 'dsa': True, 'distill_aug_mode': 'S', 'init': 'kmeans', 'init_batch_size': 256, 'model': 'ResNet18BN', 'save_path': '/home/mmoslem3/scratch/MKDT/OT-SSL-DD/result_nn_20261022T161107Z_dsa_', 'save_every': 50, 'log_every': 25, 'method': 'SSRD', 'effective_batch_size': 100}
+Objective: empirical W2 of whole-batch SSL state responses; exact assignment, no labels.
+Occupancy approximation: evolving synthetic-only learner pool; previous learner steps are detached.
+Evaluation is external and unchanged. Saved images use the original dataset normalization.
+Saved synthetic data to /home/mmoslem3/scratch/MKDT/OT-SSL-DD/result_nn_20261022T161107Z_dsa_/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 0); visualization: /home/mmoslem3/scratch/MKDT/OT-SSL-DD/result_nn_20261022T161107Z_dsa_/vis_SSRD_CIFAR10_ResNet18BN_0.2percent_iter0.png
+Prepared ResNet18BN/simclr learner, seed=357381689, age=0
+Prepared ResNet18BN/simclr learner, seed=1109584189, age=16
+Prepared ResNet18BN/simclr learner, seed=1777365824, age=33
+Prepared ResNet18BN/simclr learner, seed=1521547686, age=50
+Prepared ResNet18BN/simclr learner, seed=1582075031, age=66
+Prepared ResNet18BN/simclr learner, seed=1803697087, age=83
+[2026-10-22 10:36:56] distillation begins
+[2026-10-22 10:37:07] iter = 00001, response_W2_squared = 5.498013e+01, assignment_cost = 5.498013e+01, real_SSL = 1.855915, synthetic_SSL = 1.368760, probe_age = 45.5, pixel_grad_RMS = 7.377e-04, pixel drift RMS = 0.05104/255, PNG values changed = 0.00000%, lr = 1.000e-03
+[2026-10-22 10:41:27] iter = 00025, response_W2_squared = 7.687198e+01, assignment_cost = 7.687198e+01, real_SSL = 1.872277, synthetic_SSL = 1.413943, probe_age = 49.2, pixel_grad_RMS = 1.219e-03, pixel drift RMS = 0.30623/255, PNG values changed = 9.81087%, lr = 1.000e-03
+[2026-10-22 10:45:59] iter = 00050, response_W2_squared = 8.693968e+01, assignment_cost = 8.693969e+01, real_SSL = 2.763480, synthetic_SSL = 2.344687, probe_age = 32.0, pixel_grad_RMS = 4.949e-03, pixel drift RMS = 0.44855/255, PNG values changed = 27.07780%, lr = 1.000e-03
+Saved synthetic data to /home/mmoslem3/scratch/MKDT/OT-SSL-DD/result_nn_20261022T161107Z_dsa_/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 50); visualization: /home/mmoslem3/scratch/MKDT/OT-SSL-DD/result_nn_20261022T161107Z_dsa_/vis_SSRD_CIFAR10_ResNet18BN_0.2percent_iter50.png
+[2026-10-22 10:50:32] iter = 00075, response_W2_squared = 1.473069e+02, assignment_cost = 1.473069e+02, real_SSL = 2.043351, synthetic_SSL = 1.215928, probe_age = 68.8, pixel_grad_RMS = 2.613e-03, pixel drift RMS = 0.55311/255, PNG values changed = 36.46484%, lr = 1.000e-03
+[2026-10-22 10:55:05] iter = 00100, response_W2_squared = 6.130133e+01, assignment_cost = 6.130133e+01, real_SSL = 2.836573, synthetic_SSL = 2.454128, probe_age = 29.5, pixel_grad_RMS = 1.946e-03, pixel drift RMS = 0.64799/255, PNG values changed = 43.20280%, lr = 1.000e-03
+Saved synthetic data to /home/mmoslem3/scratch/MKDT/OT-SSL-DD/result_nn_20261022T161107Z_dsa_/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 100); visualization: /home/mmoslem3/scratch/MKDT/OT-SSL-DD/result_nn_20261022T161107Z_dsa_/vis_SSRD_CIFAR10_ResNet18BN_0.2percent_iter100.png
+Using batch size 100 for BOTH real and synthetic updates: only 100 distinct synthetic images exist.
+Old checkpoint has no Adam state; continuing saved images with fresh Adam and resume-relative drift.
+Resuming saved iteration 100 -> 8000; temporary learner pool restarts.
+Hyper-parameters:
+ {'dataset': 'CIFAR10', 'percentage': 0.2, 'data_path': '/home/mmoslem3/scratch/data', 'device': 'cuda', 'seed': 0, 'Iteration': 8000, 'lr_img': 0.001, 'lr_img_min': 0.001, 'response_batches': 4, 'batch_train': 512, 'batch_sampling': 'without_replacement', 'random_models': 'ResNet18BN', 'ssl_method': 'simclr', 'pool_size': 6, 'num_random_networks': 4, 'probe_max_steps': 100, 'encoder_train_steps': 1, 'lr_net': 0.01, 'momentum': 0.9, 'weight_decay': 0.0005, 'projection_dim': 128, 'temperature': 0.2, 'barlow_lambda': 0.005, 'barlow_eps': 1e-05, 'distill_aug_strategy': 'color_crop_cutout_flip_scale_rotate', 'dsa': True, 'distill_aug_mode': 'S', 'init': 'kmeans', 'init_batch_size': 256, 'model': 'ResNet18BN', 'save_path': '/home/mmoslem3/scratch/MKDT/OT-SSL-DD/result_nn_20261022T161107Z_dsa_', 'save_every': 50, 'resume': '/home/mmoslem3/scratch/MKDT/OT-SSL-DD/result_nn_20261022T161107Z_dsa_/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt', 'log_every': 25, 'method': 'SSRD', 'effective_batch_size': 100}
+Objective: empirical W2 of whole-batch SSL state responses; exact assignment, no labels.
+Occupancy approximation: evolving synthetic-only learner pool; previous learner steps are detached.
+Evaluation is external and unchanged. Saved images use the original dataset normalization.
+Prepared ResNet18BN/simclr learner, seed=357381689, age=0
+Prepared ResNet18BN/simclr learner, seed=1109584189, age=16
+Prepared ResNet18BN/simclr learner, seed=1777365824, age=33
+Prepared ResNet18BN/simclr learner, seed=1521547686, age=50
+Prepared ResNet18BN/simclr learner, seed=1582075031, age=66
+Prepared ResNet18BN/simclr learner, seed=1803697087, age=83
+[2026-10-22 11:33:20] distillation begins
+[2026-10-22 11:37:53] iter = 00125, response_W2_squared = 7.761135e+01, assignment_cost = 7.761135e+01, real_SSL = 1.846019, synthetic_SSL = 1.359748, probe_age = 49.2, pixel_grad_RMS = 1.505e-03, pixel drift RMS = 0.31147/255, PNG values changed = 25.60319%, lr = 1.000e-03
+[2026-10-22 11:42:28] iter = 00150, response_W2_squared = 9.423819e+01, assignment_cost = 9.423819e+01, real_SSL = 2.772577, synthetic_SSL = 2.348755, probe_age = 32.0, pixel_grad_RMS = 5.792e-03, pixel drift RMS = 0.45476/255, PNG values changed = 36.26693%, lr = 1.000e-03
+Saved synthetic data to /home/mmoslem3/scratch/MKDT/OT-SSL-DD/result_nn_20261022T161107Z_dsa_/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 150); visualization: /home/mmoslem3/scratch/MKDT/OT-SSL-DD/result_nn_20261022T161107Z_dsa_/vis_SSRD_CIFAR10_ResNet18BN_0.2percent_iter150.png
+[2026-10-22 11:47:03] iter = 00175, response_W2_squared = 1.649232e+02, assignment_cost = 1.649232e+02, real_SSL = 2.036985, synthetic_SSL = 1.182678, probe_age = 68.8, pixel_grad_RMS = 2.294e-03, pixel drift RMS = 0.57270/255, PNG values changed = 43.86784%, lr = 1.000e-03
+[2026-10-22 11:51:39] iter = 00200, response_W2_squared = 5.789160e+01, assignment_cost = 5.789160e+01, real_SSL = 2.824531, synthetic_SSL = 2.430831, probe_age = 29.5, pixel_grad_RMS = 1.647e-03, pixel drift RMS = 0.66844/255, PNG values changed = 49.25781%, lr = 1.000e-03
+Saved synthetic data to /home/mmoslem3/scratch/MKDT/OT-SSL-DD/result_nn_20261022T161107Z_dsa_/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 200); visualization: /home/mmoslem3/scratch/MKDT/OT-SSL-DD/result_nn_20261022T161107Z_dsa_/vis_SSRD_CIFAR10_ResNet18BN_0.2percent_iter200.png
+[2026-10-22 11:56:13] iter = 00225, response_W2_squared = 9.302079e+01, assignment_cost = 9.302079e+01, real_SSL = 1.965255, synthetic_SSL = 1.330275, probe_age = 57.0, pixel_grad_RMS = 6.052e-03, pixel drift RMS = 0.71890/255, PNG values changed = 51.67058%, lr = 1.000e-03
+[2026-10-22 12:00:48] iter = 00250, response_W2_squared = 9.614297e+01, assignment_cost = 9.614297e+01, real_SSL = 1.817605, synthetic_SSL = 1.172213, probe_age = 64.5, pixel_grad_RMS = 9.260e-04, pixel drift RMS = 0.77268/255, PNG values changed = 54.00814%, lr = 1.000e-03
+Saved synthetic data to /home/mmoslem3/scratch/MKDT/OT-SSL-DD/result_nn_20261022T161107Z_dsa_/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 250); visualization: /home/mmoslem3/scratch/MKDT/OT-SSL-DD/result_nn_20261022T161107Z_dsa_/vis_SSRD_CIFAR10_ResNet18BN_0.2percent_iter250.png

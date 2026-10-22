@@ -3,7 +3,8 @@ set -euo pipefail
 cd -- "$(dirname -- "${BASH_SOURCE[0]}")"
 source ./dsa_launch_common.sh
 
-run_method main_grapg.py res_SSLMetaLearning_CIFAR10_ResNet18BN_0.2percent.pt \
+RUN_DIR="$PWD/result_main_grapg_20261022T043137Z_dsa_" run_method main_grapg.py res_SSLMetaLearning_CIFAR10_ResNet18BN_0.2percent.pt \
+    --resume "$PWD/result_main_grapg_20261022T043137Z_dsa_/res_SSLMetaLearning_CIFAR10_ResNet18BN_0.2percent.pt" --Iteration 6000 \
     --image_optimizer adam --num_eval 0
 run_method method3.py syn_cifar10_0.002.pt --num_eval 0
 run_method nn.py res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt \

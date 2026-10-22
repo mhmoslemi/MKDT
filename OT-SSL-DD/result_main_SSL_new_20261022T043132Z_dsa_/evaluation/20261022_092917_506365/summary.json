@@ -1,0 +1,41 @@
+{
+  "accuracies_percent": [
+    39.28
+  ],
+  "complete": true,
+  "config": {
+    "Iteration": 7500,
+    "batch_linear": 256,
+    "batch_real": 4096,
+    "batch_syn": 512,
+    "covariance_block_size": 1024,
+    "data_path": "/scratch/mmoslem3/data",
+    "dataset": "CIFAR10",
+    "device": "cuda",
+    "distill_aug_mode": "S",
+    "distill_aug_strategy": "color_crop_cutout_flip_scale_rotate",
+    "distill_aug_views": 2,
+    "dsa": true,
+    "epoch_eval_train": 2000,
+    "epoch_linear_train": 100,
+    "gamma": 5.0,
+    "label_percentage": 1,
+    "lr_img": 0.001,
+    "lr_linear": 0.1,
+    "method": "Scattering",
+    "model": "ResNet18BN",
+    "num_eval": 1,
+    "pair_weight": 1.0,
+    "percentage": 0.2,
+    "resume": "/home/mmoslem3/scratch/MKDT/OT-SSL-DD/result_main_SSL_new_20261022T043132Z_dsa_/res_Scattering-SSL_CIFAR10_ResNet18BN_0.2percent.pt",
+    "save_every": 500,
+    "save_path": "/home/mmoslem3/scratch/MKDT/OT-SSL-DD/result_main_SSL_new_20261022T043132Z_dsa_",
+    "scattering_J": 2,
+    "scattering_L": 8,
+    "seed": 0,
+    "ssl_log_every": 100,
+    "ssl_method": "simclr",
+    "synthetic_checkpoint": "/scratch/mmoslem3/MKDT/OT-SSL-DD/result_main_SSL_new_20261022T043132Z_dsa_/res_Scattering-SSL_CIFAR10_ResNet18BN_0.2percent.pt"
+  },
+  "mean_percent": 39.28
+}

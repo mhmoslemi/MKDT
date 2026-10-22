@@ -1,0 +1,220 @@
+Hyper-parameters: 
+ {'dataset': 'CIFAR10', 'model': 'ResNet18BN', 'percentage': 0.2, 'experiment': 'positive-negative', 'init': 'real', 'lambda_neg': 1, 'teacher_source': 'pretrained', 'teacher_ssl': 'simclr', 'teacher_seeds': [0], 'teacher_path': '/scratch/mmoslem3/MKDT/Evaluate_benchamrk/full_ssl_checkpoints_1000ep_3seeds', 'real_pairs': 8192, 'negative_pairs': 65536, 'Iteration': 8000, 'lr_img': 0.001, 'optimizer': 'adam', 'momentum': 0.9, 'batch_real': 512, 'batch_syn': 512, 'dsa': True, 'dsa_strategy': 'color_crop_cutout_flip_scale_rotate', 'save_every': 500, 'num_exp': 1, 'label_percentage': 1, 'ssl_method': 'simclr', 'epoch_eval_train': 2000, 'ssl_log_every': 100, 'epoch_linear_train': 100, 'lr_linear': 0.1, 'batch_linear': 256, 'runs': 1, 'seed': 0, 'resume': False, 'device': 'cuda', 'data_path': '/scratch/mmoslem3/data', 'save_path': '/home/mmoslem3/scratch/MKDT/OT-SSL-DD/result_was-dd_20261022T211008Z_dsa_'}
+Loaded teacher seed 0: /scratch/mmoslem3/MKDT/Evaluate_benchamrk/full_ssl_checkpoints_1000ep_3seeds/CIFAR10/ResNet18/full/pt100/simclr/seed_000/encoder.pt
+
+================== Exp 0 / positive-negative ==================
+
+[2026-10-22 15:51:52] positive-negative begins: 100 images, 8000 iterations
+[2026-10-22 15:51:53] iter = 00001, loss = 0.000055, positive = 0.000033, negative = 0.000021, RMS = 0.23/255
+[2026-10-22 15:51:56] iter = 00050, loss = 0.000030, positive = 0.000022, negative = 0.000008, RMS = 1.78/255
+[2026-10-22 15:51:59] iter = 00100, loss = 0.000080, positive = 0.000077, negative = 0.000003, RMS = 2.18/255
+[2026-10-22 15:52:02] iter = 00150, loss = 0.000112, positive = 0.000100, negative = 0.000012, RMS = 2.82/255
+[2026-10-22 15:52:05] iter = 00200, loss = 0.000727, positive = 0.000646, negative = 0.000081, RMS = 3.15/255
+[2026-10-22 15:52:08] iter = 00250, loss = 0.000062, positive = 0.000056, negative = 0.000005, RMS = 3.50/255
+[2026-10-22 15:52:11] iter = 00300, loss = 0.000123, positive = 0.000115, negative = 0.000009, RMS = 3.72/255
+[2026-10-22 15:52:14] iter = 00350, loss = 0.000100, positive = 0.000085, negative = 0.000015, RMS = 4.11/255
+[2026-10-22 15:52:17] iter = 00400, loss = 0.000331, positive = 0.000324, negative = 0.000007, RMS = 4.43/255
+[2026-10-22 15:52:20] iter = 00450, loss = 0.000164, positive = 0.000122, negative = 0.000042, RMS = 4.65/255
+[2026-10-22 15:52:23] iter = 00500, loss = 0.000431, positive = 0.000410, negative = 0.000021, RMS = 4.82/255
+Saved synthetic data to /home/mmoslem3/scratch/MKDT/OT-SSL-DD/result_was-dd_20261022T211008Z_dsa_/res_WAS_CIFAR10_ResNet18BN_0.2percent_positive-negative_exp0.pt
+[2026-10-22 15:52:26] iter = 00550, loss = 0.000225, positive = 0.000207, negative = 0.000018, RMS = 4.98/255
+[2026-10-22 15:52:29] iter = 00600, loss = 0.000081, positive = 0.000062, negative = 0.000018, RMS = 5.09/255
+[2026-10-22 15:52:32] iter = 00650, loss = 0.000077, positive = 0.000059, negative = 0.000018, RMS = 5.26/255
+[2026-10-22 15:52:35] iter = 00700, loss = 0.000090, positive = 0.000053, negative = 0.000037, RMS = 5.37/255
+[2026-10-22 15:52:38] iter = 00750, loss = 0.000061, positive = 0.000058, negative = 0.000003, RMS = 5.48/255
+[2026-10-22 15:52:41] iter = 00800, loss = 0.000506, positive = 0.000494, negative = 0.000012, RMS = 5.73/255
+[2026-10-22 15:52:44] iter = 00850, loss = 0.000699, positive = 0.000691, negative = 0.000008, RMS = 5.98/255
+[2026-10-22 15:52:47] iter = 00900, loss = 0.000479, positive = 0.000421, negative = 0.000058, RMS = 6.18/255
+[2026-10-22 15:52:50] iter = 00950, loss = 0.000083, positive = 0.000069, negative = 0.000014, RMS = 6.35/255
+[2026-10-22 15:52:53] iter = 01000, loss = 0.000627, positive = 0.000617, negative = 0.000010, RMS = 6.57/255
+Saved synthetic data to /home/mmoslem3/scratch/MKDT/OT-SSL-DD/result_was-dd_20261022T211008Z_dsa_/res_WAS_CIFAR10_ResNet18BN_0.2percent_positive-negative_exp0.pt
+[2026-10-22 15:52:56] iter = 01050, loss = 0.000154, positive = 0.000142, negative = 0.000012, RMS = 6.68/255
+[2026-10-22 15:52:59] iter = 01100, loss = 0.000022, positive = 0.000018, negative = 0.000004, RMS = 6.77/255
+[2026-10-22 15:53:02] iter = 01150, loss = 0.000113, positive = 0.000108, negative = 0.000006, RMS = 6.85/255
+[2026-10-22 15:53:05] iter = 01200, loss = 0.000058, positive = 0.000041, negative = 0.000017, RMS = 7.04/255
+[2026-10-22 15:53:08] iter = 01250, loss = 0.000109, positive = 0.000093, negative = 0.000015, RMS = 7.27/255
+[2026-10-22 15:53:11] iter = 01300, loss = 0.000471, positive = 0.000463, negative = 0.000008, RMS = 7.43/255
+[2026-10-22 15:53:14] iter = 01350, loss = 0.000685, positive = 0.000682, negative = 0.000003, RMS = 7.54/255
+[2026-10-22 15:53:17] iter = 01400, loss = 0.000069, positive = 0.000056, negative = 0.000013, RMS = 7.66/255
+[2026-10-22 15:53:20] iter = 01450, loss = 0.000419, positive = 0.000399, negative = 0.000020, RMS = 7.75/255
+[2026-10-22 15:53:23] iter = 01500, loss = 0.000048, positive = 0.000043, negative = 0.000005, RMS = 7.84/255
+Saved synthetic data to /home/mmoslem3/scratch/MKDT/OT-SSL-DD/result_was-dd_20261022T211008Z_dsa_/res_WAS_CIFAR10_ResNet18BN_0.2percent_positive-negative_exp0.pt
+[2026-10-22 15:53:26] iter = 01550, loss = 0.000052, positive = 0.000046, negative = 0.000006, RMS = 7.93/255
+[2026-10-22 15:53:29] iter = 01600, loss = 0.000280, positive = 0.000275, negative = 0.000006, RMS = 8.00/255
+[2026-10-22 15:53:32] iter = 01650, loss = 0.000063, positive = 0.000025, negative = 0.000038, RMS = 8.12/255
+[2026-10-22 15:53:35] iter = 01700, loss = 0.000032, positive = 0.000019, negative = 0.000013, RMS = 8.21/255
+[2026-10-22 15:53:38] iter = 01750, loss = 0.000246, positive = 0.000231, negative = 0.000015, RMS = 8.31/255
+[2026-10-22 15:53:41] iter = 01800, loss = 0.000270, positive = 0.000258, negative = 0.000013, RMS = 8.42/255
+[2026-10-22 15:53:44] iter = 01850, loss = 0.000371, positive = 0.000315, negative = 0.000055, RMS = 8.50/255
+[2026-10-22 15:53:47] iter = 01900, loss = 0.000015, positive = 0.000008, negative = 0.000007, RMS = 8.60/255
+[2026-10-22 15:53:50] iter = 01950, loss = 0.000210, positive = 0.000204, negative = 0.000006, RMS = 8.66/255
+[2026-10-22 15:53:53] iter = 02000, loss = 0.000578, positive = 0.000535, negative = 0.000042, RMS = 8.75/255
+Saved synthetic data to /home/mmoslem3/scratch/MKDT/OT-SSL-DD/result_was-dd_20261022T211008Z_dsa_/res_WAS_CIFAR10_ResNet18BN_0.2percent_positive-negative_exp0.pt
+[2026-10-22 15:53:56] iter = 02050, loss = 0.000023, positive = 0.000020, negative = 0.000004, RMS = 8.91/255
+[2026-10-22 15:53:59] iter = 02100, loss = 0.000031, positive = 0.000024, negative = 0.000007, RMS = 8.97/255
+[2026-10-22 15:54:02] iter = 02150, loss = 0.000143, positive = 0.000137, negative = 0.000005, RMS = 9.09/255
+[2026-10-22 15:54:05] iter = 02200, loss = 0.000384, positive = 0.000378, negative = 0.000006, RMS = 9.16/255
+[2026-10-22 15:54:08] iter = 02250, loss = 0.000048, positive = 0.000042, negative = 0.000005, RMS = 9.25/255
+[2026-10-22 15:54:11] iter = 02300, loss = 0.000342, positive = 0.000337, negative = 0.000006, RMS = 9.31/255
+[2026-10-22 15:54:14] iter = 02350, loss = 0.000031, positive = 0.000026, negative = 0.000005, RMS = 9.38/255
+[2026-10-22 15:54:17] iter = 02400, loss = 0.000348, positive = 0.000339, negative = 0.000009, RMS = 9.47/255
+[2026-10-22 15:54:20] iter = 02450, loss = 0.000586, positive = 0.000570, negative = 0.000015, RMS = 9.54/255
+[2026-10-22 15:54:23] iter = 02500, loss = 0.000124, positive = 0.000115, negative = 0.000008, RMS = 9.63/255
+Saved synthetic data to /home/mmoslem3/scratch/MKDT/OT-SSL-DD/result_was-dd_20261022T211008Z_dsa_/res_WAS_CIFAR10_ResNet18BN_0.2percent_positive-negative_exp0.pt
+[2026-10-22 15:54:26] iter = 02550, loss = 0.000115, positive = 0.000100, negative = 0.000014, RMS = 9.73/255
+[2026-10-22 15:54:29] iter = 02600, loss = 0.000179, positive = 0.000167, negative = 0.000013, RMS = 9.83/255
+[2026-10-22 15:54:32] iter = 02650, loss = 0.000077, positive = 0.000064, negative = 0.000012, RMS = 9.89/255
+[2026-10-22 15:54:35] iter = 02700, loss = 0.000115, positive = 0.000113, negative = 0.000002, RMS = 9.95/255
+[2026-10-22 15:54:38] iter = 02750, loss = 0.000048, positive = 0.000034, negative = 0.000014, RMS = 10.02/255
+[2026-10-22 15:54:41] iter = 02800, loss = 0.000279, positive = 0.000243, negative = 0.000035, RMS = 10.07/255
+[2026-10-22 15:54:44] iter = 02850, loss = 0.000016, positive = 0.000004, negative = 0.000012, RMS = 10.19/255
+[2026-10-22 15:54:47] iter = 02900, loss = 0.000130, positive = 0.000118, negative = 0.000012, RMS = 10.30/255
+[2026-10-22 15:54:50] iter = 02950, loss = 0.000058, positive = 0.000049, negative = 0.000008, RMS = 10.35/255
+[2026-10-22 15:54:53] iter = 03000, loss = 0.000059, positive = 0.000021, negative = 0.000038, RMS = 10.37/255
+Saved synthetic data to /home/mmoslem3/scratch/MKDT/OT-SSL-DD/result_was-dd_20261022T211008Z_dsa_/res_WAS_CIFAR10_ResNet18BN_0.2percent_positive-negative_exp0.pt
+[2026-10-22 15:54:56] iter = 03050, loss = 0.000095, positive = 0.000050, negative = 0.000045, RMS = 10.40/255
+[2026-10-22 15:54:59] iter = 03100, loss = 0.000313, positive = 0.000261, negative = 0.000052, RMS = 10.47/255
+[2026-10-22 15:55:02] iter = 03150, loss = 0.000492, positive = 0.000459, negative = 0.000033, RMS = 10.54/255
+[2026-10-22 15:55:04] iter = 03200, loss = 0.000056, positive = 0.000051, negative = 0.000006, RMS = 10.69/255
+[2026-10-22 15:55:07] iter = 03250, loss = 0.000106, positive = 0.000099, negative = 0.000007, RMS = 10.76/255
+[2026-10-22 15:55:10] iter = 03300, loss = 0.000227, positive = 0.000221, negative = 0.000006, RMS = 10.79/255
+[2026-10-22 15:55:13] iter = 03350, loss = 0.000085, positive = 0.000066, negative = 0.000018, RMS = 10.86/255
+[2026-10-22 15:55:16] iter = 03400, loss = 0.000011, positive = 0.000001, negative = 0.000011, RMS = 10.95/255
+[2026-10-22 15:55:19] iter = 03450, loss = 0.000293, positive = 0.000288, negative = 0.000005, RMS = 11.01/255
+[2026-10-22 15:55:22] iter = 03500, loss = 0.000019, positive = 0.000011, negative = 0.000008, RMS = 11.10/255
+Saved synthetic data to /home/mmoslem3/scratch/MKDT/OT-SSL-DD/result_was-dd_20261022T211008Z_dsa_/res_WAS_CIFAR10_ResNet18BN_0.2percent_positive-negative_exp0.pt
+[2026-10-22 15:55:25] iter = 03550, loss = 0.000079, positive = 0.000069, negative = 0.000010, RMS = 11.18/255
+[2026-10-22 15:55:28] iter = 03600, loss = 0.000124, positive = 0.000071, negative = 0.000052, RMS = 11.24/255
+[2026-10-22 15:55:31] iter = 03650, loss = 0.000048, positive = 0.000040, negative = 0.000007, RMS = 11.28/255
+[2026-10-22 15:55:34] iter = 03700, loss = 0.000279, positive = 0.000258, negative = 0.000021, RMS = 11.35/255
+[2026-10-22 15:55:37] iter = 03750, loss = 0.000100, positive = 0.000089, negative = 0.000011, RMS = 11.42/255
+[2026-10-22 15:55:40] iter = 03800, loss = 0.000549, positive = 0.000524, negative = 0.000025, RMS = 11.46/255
+[2026-10-22 15:55:43] iter = 03850, loss = 0.000013, positive = 0.000010, negative = 0.000003, RMS = 11.59/255
+[2026-10-22 15:55:46] iter = 03900, loss = 0.000026, positive = 0.000018, negative = 0.000007, RMS = 11.68/255
+[2026-10-22 15:55:49] iter = 03950, loss = 0.000079, positive = 0.000053, negative = 0.000026, RMS = 11.79/255
+[2026-10-22 15:55:52] iter = 04000, loss = 0.000466, positive = 0.000449, negative = 0.000017, RMS = 11.87/255
+Saved synthetic data to /home/mmoslem3/scratch/MKDT/OT-SSL-DD/result_was-dd_20261022T211008Z_dsa_/res_WAS_CIFAR10_ResNet18BN_0.2percent_positive-negative_exp0.pt
+[2026-10-22 15:55:55] iter = 04050, loss = 0.000057, positive = 0.000041, negative = 0.000015, RMS = 11.95/255
+[2026-10-22 15:55:58] iter = 04100, loss = 0.000544, positive = 0.000497, negative = 0.000047, RMS = 12.02/255
+[2026-10-22 15:56:02] iter = 04150, loss = 0.000177, positive = 0.000172, negative = 0.000005, RMS = 12.10/255
+[2026-10-22 15:56:04] iter = 04200, loss = 0.000078, positive = 0.000066, negative = 0.000012, RMS = 12.15/255
+[2026-10-22 15:56:07] iter = 04250, loss = 0.000450, positive = 0.000439, negative = 0.000011, RMS = 12.20/255
+[2026-10-22 15:56:10] iter = 04300, loss = 0.000524, positive = 0.000497, negative = 0.000026, RMS = 12.29/255
+[2026-10-22 15:56:13] iter = 04350, loss = 0.000018, positive = 0.000016, negative = 0.000003, RMS = 12.34/255
+[2026-10-22 15:56:16] iter = 04400, loss = 0.000344, positive = 0.000298, negative = 0.000046, RMS = 12.42/255
+[2026-10-22 15:56:19] iter = 04450, loss = 0.000050, positive = 0.000027, negative = 0.000023, RMS = 12.48/255
+[2026-10-22 15:56:22] iter = 04500, loss = 0.000210, positive = 0.000191, negative = 0.000019, RMS = 12.54/255
+Saved synthetic data to /home/mmoslem3/scratch/MKDT/OT-SSL-DD/result_was-dd_20261022T211008Z_dsa_/res_WAS_CIFAR10_ResNet18BN_0.2percent_positive-negative_exp0.pt
+[2026-10-22 15:56:25] iter = 04550, loss = 0.000010, positive = 0.000001, negative = 0.000009, RMS = 12.64/255
+[2026-10-22 15:56:29] iter = 04600, loss = 0.000238, positive = 0.000234, negative = 0.000004, RMS = 12.70/255
+[2026-10-22 15:56:32] iter = 04650, loss = 0.000027, positive = 0.000021, negative = 0.000006, RMS = 12.74/255
+[2026-10-22 15:56:34] iter = 04700, loss = 0.000360, positive = 0.000329, negative = 0.000031, RMS = 12.80/255
+[2026-10-22 15:56:38] iter = 04750, loss = 0.000145, positive = 0.000137, negative = 0.000008, RMS = 12.85/255
+[2026-10-22 15:56:41] iter = 04800, loss = 0.000079, positive = 0.000073, negative = 0.000006, RMS = 12.93/255
+[2026-10-22 15:56:44] iter = 04850, loss = 0.000119, positive = 0.000072, negative = 0.000046, RMS = 12.98/255
+[2026-10-22 15:56:47] iter = 04900, loss = 0.000386, positive = 0.000373, negative = 0.000013, RMS = 13.05/255
+[2026-10-22 15:56:50] iter = 04950, loss = 0.000876, positive = 0.000819, negative = 0.000057, RMS = 13.13/255
+[2026-10-22 15:56:53] iter = 05000, loss = 0.000211, positive = 0.000181, negative = 0.000030, RMS = 13.23/255
+Saved synthetic data to /home/mmoslem3/scratch/MKDT/OT-SSL-DD/result_was-dd_20261022T211008Z_dsa_/res_WAS_CIFAR10_ResNet18BN_0.2percent_positive-negative_exp0.pt
+[2026-10-22 15:56:56] iter = 05050, loss = 0.000207, positive = 0.000178, negative = 0.000029, RMS = 13.27/255
+[2026-10-22 15:56:59] iter = 05100, loss = 0.000353, positive = 0.000340, negative = 0.000013, RMS = 13.35/255
+[2026-10-22 15:57:02] iter = 05150, loss = 0.000707, positive = 0.000700, negative = 0.000008, RMS = 13.44/255
+[2026-10-22 15:57:05] iter = 05200, loss = 0.000193, positive = 0.000190, negative = 0.000004, RMS = 13.52/255
+[2026-10-22 15:57:08] iter = 05250, loss = 0.000025, positive = 0.000022, negative = 0.000003, RMS = 13.60/255
+[2026-10-22 15:57:11] iter = 05300, loss = 0.000070, positive = 0.000042, negative = 0.000028, RMS = 13.67/255
+[2026-10-22 15:57:13] iter = 05350, loss = 0.000546, positive = 0.000540, negative = 0.000006, RMS = 13.72/255
+[2026-10-22 15:57:16] iter = 05400, loss = 0.000047, positive = 0.000042, negative = 0.000005, RMS = 13.79/255
+[2026-10-22 15:57:20] iter = 05450, loss = 0.000059, positive = 0.000046, negative = 0.000014, RMS = 13.84/255
+[2026-10-22 15:57:23] iter = 05500, loss = 0.000340, positive = 0.000253, negative = 0.000087, RMS = 13.91/255
+Saved synthetic data to /home/mmoslem3/scratch/MKDT/OT-SSL-DD/result_was-dd_20261022T211008Z_dsa_/res_WAS_CIFAR10_ResNet18BN_0.2percent_positive-negative_exp0.pt
+[2026-10-22 15:57:26] iter = 05550, loss = 0.000096, positive = 0.000086, negative = 0.000010, RMS = 13.98/255
+[2026-10-22 15:57:29] iter = 05600, loss = 0.000121, positive = 0.000115, negative = 0.000006, RMS = 14.04/255
+[2026-10-22 15:57:31] iter = 05650, loss = 0.000016, positive = 0.000010, negative = 0.000006, RMS = 14.08/255
+[2026-10-22 15:57:34] iter = 05700, loss = 0.000061, positive = 0.000049, negative = 0.000012, RMS = 14.11/255
+[2026-10-22 15:57:37] iter = 05750, loss = 0.000121, positive = 0.000113, negative = 0.000007, RMS = 14.16/255
+[2026-10-22 15:57:40] iter = 05800, loss = 0.000431, positive = 0.000383, negative = 0.000048, RMS = 14.21/255
+[2026-10-22 15:57:43] iter = 05850, loss = 0.000038, positive = 0.000026, negative = 0.000012, RMS = 14.26/255
+[2026-10-22 15:57:46] iter = 05900, loss = 0.000077, positive = 0.000055, negative = 0.000022, RMS = 14.29/255
+[2026-10-22 15:57:49] iter = 05950, loss = 0.000004, positive = 0.000000, negative = 0.000004, RMS = 14.36/255
+[2026-10-22 15:57:52] iter = 06000, loss = 0.000012, positive = 0.000006, negative = 0.000007, RMS = 14.40/255
+Saved synthetic data to /home/mmoslem3/scratch/MKDT/OT-SSL-DD/result_was-dd_20261022T211008Z_dsa_/res_WAS_CIFAR10_ResNet18BN_0.2percent_positive-negative_exp0.pt
+[2026-10-22 15:57:55] iter = 06050, loss = 0.000245, positive = 0.000227, negative = 0.000018, RMS = 14.49/255
+[2026-10-22 15:57:58] iter = 06100, loss = 0.000333, positive = 0.000323, negative = 0.000010, RMS = 14.53/255
+[2026-10-22 15:58:01] iter = 06150, loss = 0.000035, positive = 0.000031, negative = 0.000004, RMS = 14.58/255
+[2026-10-22 15:58:04] iter = 06200, loss = 0.000458, positive = 0.000419, negative = 0.000039, RMS = 14.63/255
+[2026-10-22 15:58:07] iter = 06250, loss = 0.000164, positive = 0.000161, negative = 0.000003, RMS = 14.70/255
+[2026-10-22 15:58:10] iter = 06300, loss = 0.000364, positive = 0.000304, negative = 0.000059, RMS = 14.74/255
+[2026-10-22 15:58:13] iter = 06350, loss = 0.000009, positive = 0.000004, negative = 0.000005, RMS = 14.81/255
+[2026-10-22 15:58:16] iter = 06400, loss = 0.000227, positive = 0.000218, negative = 0.000009, RMS = 14.91/255
+[2026-10-22 15:58:19] iter = 06450, loss = 0.000060, positive = 0.000010, negative = 0.000050, RMS = 14.96/255
+[2026-10-22 15:58:22] iter = 06500, loss = 0.000120, positive = 0.000111, negative = 0.000008, RMS = 15.05/255
+Saved synthetic data to /home/mmoslem3/scratch/MKDT/OT-SSL-DD/result_was-dd_20261022T211008Z_dsa_/res_WAS_CIFAR10_ResNet18BN_0.2percent_positive-negative_exp0.pt
+[2026-10-22 15:58:25] iter = 06550, loss = 0.000055, positive = 0.000045, negative = 0.000010, RMS = 15.10/255
+[2026-10-22 15:58:28] iter = 06600, loss = 0.000045, positive = 0.000030, negative = 0.000016, RMS = 15.14/255
+[2026-10-22 15:58:31] iter = 06650, loss = 0.000063, positive = 0.000036, negative = 0.000027, RMS = 15.18/255
+[2026-10-22 15:58:34] iter = 06700, loss = 0.000057, positive = 0.000045, negative = 0.000012, RMS = 15.25/255
+[2026-10-22 15:58:37] iter = 06750, loss = 0.001180, positive = 0.001159, negative = 0.000021, RMS = 15.30/255
+[2026-10-22 15:58:40] iter = 06800, loss = 0.000062, positive = 0.000057, negative = 0.000005, RMS = 15.36/255
+[2026-10-22 15:58:43] iter = 06850, loss = 0.000154, positive = 0.000105, negative = 0.000049, RMS = 15.43/255
+[2026-10-22 15:58:46] iter = 06900, loss = 0.000040, positive = 0.000028, negative = 0.000012, RMS = 15.49/255
+[2026-10-22 15:58:49] iter = 06950, loss = 0.000108, positive = 0.000101, negative = 0.000007, RMS = 15.56/255
+[2026-10-22 15:58:52] iter = 07000, loss = 0.000087, positive = 0.000084, negative = 0.000002, RMS = 15.59/255
+Saved synthetic data to /home/mmoslem3/scratch/MKDT/OT-SSL-DD/result_was-dd_20261022T211008Z_dsa_/res_WAS_CIFAR10_ResNet18BN_0.2percent_positive-negative_exp0.pt
+[2026-10-22 15:58:55] iter = 07050, loss = 0.000185, positive = 0.000173, negative = 0.000012, RMS = 15.66/255
+[2026-10-22 15:58:58] iter = 07100, loss = 0.000076, positive = 0.000044, negative = 0.000031, RMS = 15.71/255
+[2026-10-22 15:59:01] iter = 07150, loss = 0.000378, positive = 0.000372, negative = 0.000006, RMS = 15.75/255
+[2026-10-22 15:59:04] iter = 07200, loss = 0.000096, positive = 0.000087, negative = 0.000009, RMS = 15.80/255
+[2026-10-22 15:59:07] iter = 07250, loss = 0.000073, positive = 0.000064, negative = 0.000008, RMS = 15.87/255
+[2026-10-22 15:59:10] iter = 07300, loss = 0.000090, positive = 0.000068, negative = 0.000022, RMS = 15.92/255
+[2026-10-22 15:59:13] iter = 07350, loss = 0.000025, positive = 0.000018, negative = 0.000006, RMS = 15.93/255
+[2026-10-22 15:59:16] iter = 07400, loss = 0.000159, positive = 0.000148, negative = 0.000011, RMS = 15.98/255
+[2026-10-22 15:59:19] iter = 07450, loss = 0.000061, positive = 0.000054, negative = 0.000007, RMS = 16.01/255
+[2026-10-22 15:59:22] iter = 07500, loss = 0.000133, positive = 0.000132, negative = 0.000001, RMS = 16.07/255
+Saved synthetic data to /home/mmoslem3/scratch/MKDT/OT-SSL-DD/result_was-dd_20261022T211008Z_dsa_/res_WAS_CIFAR10_ResNet18BN_0.2percent_positive-negative_exp0.pt
+[2026-10-22 15:59:25] iter = 07550, loss = 0.000489, positive = 0.000454, negative = 0.000035, RMS = 16.08/255
+[2026-10-22 15:59:28] iter = 07600, loss = 0.000165, positive = 0.000161, negative = 0.000003, RMS = 16.14/255
+[2026-10-22 15:59:31] iter = 07650, loss = 0.000198, positive = 0.000193, negative = 0.000005, RMS = 16.20/255
+[2026-10-22 15:59:34] iter = 07700, loss = 0.000105, positive = 0.000067, negative = 0.000038, RMS = 16.24/255
+[2026-10-22 15:59:37] iter = 07750, loss = 0.000095, positive = 0.000091, negative = 0.000004, RMS = 16.29/255
+[2026-10-22 15:59:40] iter = 07800, loss = 0.000067, positive = 0.000060, negative = 0.000008, RMS = 16.36/255
+[2026-10-22 15:59:43] iter = 07850, loss = 0.000080, positive = 0.000079, negative = 0.000001, RMS = 16.41/255
+[2026-10-22 15:59:46] iter = 07900, loss = 0.000066, positive = 0.000052, negative = 0.000015, RMS = 16.46/255
+[2026-10-22 15:59:49] iter = 07950, loss = 0.000250, positive = 0.000243, negative = 0.000007, RMS = 16.52/255
+[2026-10-22 15:59:52] iter = 08000, loss = 0.000091, positive = 0.000078, negative = 0.000013, RMS = 16.58/255
+Saved synthetic data to /home/mmoslem3/scratch/MKDT/OT-SSL-DD/result_was-dd_20261022T211008Z_dsa_/res_WAS_CIFAR10_ResNet18BN_0.2percent_positive-negative_exp0.pt
+Reference SSL: CIFAR10/ResNet18/simclr, SSL epochs=2000, probe epochs=100, labels=1%
+SSL CIFAR10/ResNet18/simclr seed=0: {"epoch": 1, "steps": 1, "lr": 3e-05, "loss": 5.253477096557617, "examples": 100, "projector_std": 0.05928753316402435, "seconds": 0.17117431201040745}
+SSL CIFAR10/ResNet18/simclr seed=0: {"epoch": 100, "steps": 100, "lr": 0.15547935399253915, "loss": 5.0423197746276855, "examples": 100, "projector_std": 0.8292833566665649, "seconds": 0.12753707822412252}
+SSL CIFAR10/ResNet18/simclr seed=0: {"epoch": 200, "steps": 200, "lr": 0.15279469632432452, "loss": 4.900528430938721, "examples": 100, "projector_std": 1.083733320236206, "seconds": 0.12827653624117374}
+SSL CIFAR10/ResNet18/simclr seed=0: {"epoch": 300, "steps": 300, "lr": 0.14825107247179797, "loss": 4.948100566864014, "examples": 100, "projector_std": 1.0155975818634033, "seconds": 0.1302090734243393}
+SSL CIFAR10/ResNet18/simclr seed=0: {"epoch": 400, "steps": 400, "lr": 0.1419615998508841, "loss": 4.9578046798706055, "examples": 100, "projector_std": 1.1574331521987915, "seconds": 0.1295237997546792}
+SSL CIFAR10/ResNet18/simclr seed=0: {"epoch": 500, "steps": 500, "lr": 0.13408286028118277, "loss": 4.77121114730835, "examples": 100, "projector_std": 1.2340402603149414, "seconds": 0.12886174861341715}
+SSL CIFAR10/ResNet18/simclr seed=0: {"epoch": 600, "steps": 600, "lr": 0.12481100174716497, "loss": 4.619036674499512, "examples": 100, "projector_std": 1.1253151893615723, "seconds": 0.12857695668935776}
+SSL CIFAR10/ResNet18/simclr seed=0: {"epoch": 700, "steps": 700, "lr": 0.11437685512573152, "loss": 4.336744785308838, "examples": 100, "projector_std": 1.1751821041107178, "seconds": 0.1285772891715169}
+SSL CIFAR10/ResNet18/simclr seed=0: {"epoch": 800, "steps": 800, "lr": 0.10304018745339412, "loss": 4.372760772705078, "examples": 100, "projector_std": 1.1731826066970825, "seconds": 0.12851008120924234}
+SSL CIFAR10/ResNet18/simclr seed=0: {"epoch": 900, "steps": 900, "lr": 0.09108323480292474, "loss": 4.181950092315674, "examples": 100, "projector_std": 1.21745765209198, "seconds": 0.13088604249060154}
+SSL CIFAR10/ResNet18/simclr seed=0: {"epoch": 1000, "steps": 1000, "lr": 0.07880367577406086, "loss": 3.6684207916259766, "examples": 100, "projector_std": 1.2362568378448486, "seconds": 0.13120955228805542}
+SSL CIFAR10/ResNet18/simclr seed=0: {"epoch": 1100, "steps": 1100, "lr": 0.06650722052924594, "loss": 3.796126127243042, "examples": 100, "projector_std": 1.0994675159454346, "seconds": 0.13147250656038523}
+SSL CIFAR10/ResNet18/simclr seed=0: {"epoch": 1200, "steps": 1200, "lr": 0.054499999876722965, "loss": 3.541992425918579, "examples": 100, "projector_std": 0.9637740254402161, "seconds": 0.1269963039085269}
+SSL CIFAR10/ResNet18/simclr seed=0: {"epoch": 1300, "steps": 1300, "lr": 0.04308094388128897, "loss": 3.2077648639678955, "examples": 100, "projector_std": 0.8864157199859619, "seconds": 0.1291595995426178}
+SSL CIFAR10/ResNet18/simclr seed=0: {"epoch": 1400, "steps": 1400, "lr": 0.03253433974373928, "loss": 3.141587495803833, "examples": 100, "projector_std": 0.8186618089675903, "seconds": 0.13005125988274813}
+SSL CIFAR10/ResNet18/simclr seed=0: {"epoch": 1500, "steps": 1500, "lr": 0.023122754226979538, "loss": 2.930828332901001, "examples": 100, "projector_std": 0.721311092376709, "seconds": 0.1264591133221984}
+SSL CIFAR10/ResNet18/simclr seed=0: {"epoch": 1600, "steps": 1600, "lr": 0.015080496831083607, "loss": 2.7688398361206055, "examples": 100, "projector_std": 0.634519100189209, "seconds": 0.129150184802711}
+SSL CIFAR10/ResNet18/simclr seed=0: {"epoch": 1700, "steps": 1700, "lr": 0.008607786457164555, "loss": 2.847722053527832, "examples": 100, "projector_std": 0.5848232507705688, "seconds": 0.12922928109765053}
+SSL CIFAR10/ResNet18/simclr seed=0: {"epoch": 1800, "steps": 1800, "lr": 0.0038657667859693257, "loss": 2.7443063259124756, "examples": 100, "projector_std": 0.5504131317138672, "seconds": 0.12881042901426554}
+SSL CIFAR10/ResNet18/simclr seed=0: {"epoch": 1900, "steps": 1900, "lr": 0.0009724944676255294, "loss": 2.6639633178710938, "examples": 100, "projector_std": 0.5331735610961914, "seconds": 0.1295388238504529}
+SSL CIFAR10/ResNet18/simclr seed=0: {"epoch": 2000, "steps": 2000, "lr": 0.0, "loss": 2.75679087638855, "examples": 100, "projector_std": 0.5365588665008545, "seconds": 0.12876749970018864}
+PROBE CIFAR10 lbl=1 seed=0: {'epoch': 10, 'lr': 0.09776754757575974, 'loss': 1.6707165002822877, 'train_accuracy_percent': 39.6}
+PROBE CIFAR10 lbl=1 seed=0: {'epoch': 20, 'lr': 0.09081878607071997, 'loss': 1.5724467792510985, 'train_accuracy_percent': 42.0}
+PROBE CIFAR10 lbl=1 seed=0: {'epoch': 30, 'lr': 0.0798344744144428, 'loss': 1.5345203571319581, 'train_accuracy_percent': 46.0}
+PROBE CIFAR10 lbl=1 seed=0: {'epoch': 40, 'lr': 0.06590057681196192, 'loss': 1.5355754976272582, 'train_accuracy_percent': 46.6}
+PROBE CIFAR10 lbl=1 seed=0: {'epoch': 50, 'lr': 0.05039466834548567, 'loss': 1.4844570398330688, 'train_accuracy_percent': 47.8}
+PROBE CIFAR10 lbl=1 seed=0: {'epoch': 60, 'lr': 0.03484974098465636, 'loss': 1.435698115348816, 'train_accuracy_percent': 49.4}
+PROBE CIFAR10 lbl=1 seed=0: {'epoch': 70, 'lr': 0.020802644302934683, 'loss': 1.4729898624420166, 'train_accuracy_percent': 50.0}
+PROBE CIFAR10 lbl=1 seed=0: {'epoch': 80, 'lr': 0.00964214481190074, 'loss': 1.4506380672454835, 'train_accuracy_percent': 50.6}
+PROBE CIFAR10 lbl=1 seed=0: {'epoch': 90, 'lr': 0.0024716255306108607, 'loss': 1.4329647932052612, 'train_accuracy_percent': 48.4}
+PROBE CIFAR10 lbl=1 seed=0: {'epoch': 100, 'lr': 0.0, 'loss': 1.4168605937957763, 'train_accuracy_percent': 52.8}
+RESULT CIFAR10 lbl=1 seed=0: 39.4400
+positive-negative seed=0 accuracy=39.44%
+Saved evaluation: /home/mmoslem3/scratch/MKDT/OT-SSL-DD/result_was-dd_20261022T211008Z_dsa_/evaluation/positive-negative/exp_000_20261022_155952_288962
+positive-negative exp=0: 39.44 ± N/A%

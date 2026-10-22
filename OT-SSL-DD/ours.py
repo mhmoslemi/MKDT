@@ -16,6 +16,7 @@ import torch.nn.functional as F
 from torchvision.utils import save_image
 from dm_dsa import make_diff_augmenter as dm_augmenter
 from dd_teachers import teacher_arguments, load_teacher
+from eval import reference_modules
 
 from utils import DiffAugment, ParamDiffAug, evaluate_synset_SSL, get_dataset, get_eval_pool, get_network, get_time
 
@@ -303,6 +304,8 @@ def main():
 
     # Output.
     parser.add_argument('--save_path', default='result_joint_view_mmd')
+    parser.add_argument('--resume', default=None, help='continue the saved synthetic tensor and iteration')
+    parser.add_argument('--save_every', type=int, default=500, help='save PT and PNG every this many updates')
 
     teacher_arguments(parser)
     args = parser.parse_args()
@@ -323,6 +326,8 @@ def main():
         parser.error('--percentage must be in (0, 100]')
     if args.Iteration < 1 or args.num_random_networks < 1:
         parser.error('--Iteration and --num_random_networks must be positive')
+    if args.save_every < 1:
+        parser.error('--save_every must be positive')
     if args.batch_real < 2 or args.mmd_bandwidth_samples < 2 or args.batch_syn < 0:
         parser.error('--batch_real and --mmd_bandwidth_samples must be >= 2; --batch_syn must be >= 0')
     if args.mmd_estimator == 'unbiased' and args.batch_syn == 1:
@@ -353,12 +358,31 @@ def main():
     if num_syn < 2 and (args.mmd_estimator == 'unbiased' or args.encoder_train_steps > 0):
         parser.error('Unbiased MMD and optional SSL warm-up require at least two synthetic images')
 
-    # Keep the original random-feature K-Means initialization.
-    image_syn_init = deepcluster_initialize(
-        dst_train, num_syn, args.device, args.seed, channel, num_classes, im_size, model_name=random_models[0]
-    )
+    resumed = torch.load(args.resume, map_location='cpu', weights_only=True) if args.resume else None
+    start_iteration = 0
+    if resumed is not None:
+        if (any(resumed[key] != getattr(args, key) for key in
+                ('dataset', 'percentage', 'seed', 'dsa', 'teacher_source', 'teacher_seed'))
+                or resumed['random_feature_distribution']['models'] != random_models
+                or resumed['normalization'] != [mean, std]
+                or tuple(resumed['data'].shape) != (num_syn, channel, *im_size)
+                or not torch.isfinite(resumed['data']).all().item()):
+            raise ValueError('Resume checkpoint does not match this run or contains invalid images')
+        start_iteration = resumed['iteration']
+        if not 0 <= start_iteration <= args.Iteration:
+            raise ValueError('Resume iteration exceeds the requested stopping iteration')
+        if args.pixel_mse_weight and 'image_syn_initial' not in resumed:
+            raise ValueError('Cannot restore the original pixel-MSE anchor from this checkpoint')
+        image_syn_init = resumed['data'].to(args.device).detach().clone()
+    else:
+        # Keep the original random-feature K-Means initialization for new runs.
+        image_syn_init = deepcluster_initialize(
+            dst_train, num_syn, args.device, args.seed, channel, num_classes, im_size, model_name=random_models[0]
+        )
     image_syn = image_syn_init.detach().requires_grad_(True)
     image_syn_initial = image_syn.detach().clone()
+    if resumed is not None and 'image_syn_initial' in resumed:
+        image_syn_initial = resumed['image_syn_initial'].to(args.device)
 
     diag_mean = torch.tensor(mean, device=args.device).view(1, channel, 1, 1)
     diag_std = torch.tensor(std, device=args.device).view(1, channel, 1, 1)
@@ -377,6 +401,14 @@ def main():
 
     optimizer_img = torch.optim.Adam([image_syn], lr=args.lr_img)
     scheduler_img = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer_img, T_max=args.Iteration, eta_min=args.lr_img)
+    if resumed is not None:
+        if 'optimizer_state' in resumed:
+            optimizer_img.load_state_dict(resumed['optimizer_state'])
+            scheduler_img.load_state_dict(resumed['scheduler_state'])
+            objective_rng.bit_generator.state = resumed['objective_rng']
+        else:
+            print('Old checkpoint has no optimizer state: continuing saved images with fresh Adam; drift is measured from resume.', flush=True)
+        print('Resuming saved iteration %d -> %d from %s' % (start_iteration, args.Iteration, args.resume), flush=True)
 
     loss_history = []
     real_real_history = []
@@ -387,6 +419,15 @@ def main():
     pixel_mse_history = []
     total_loss_history = []
     encoder_ssl_history = []
+    if resumed is not None:
+        for name, history in (
+            ('loss_history', loss_history), ('real_real_history', real_real_history),
+            ('syn_syn_history', syn_syn_history), ('real_syn_history', real_syn_history),
+            ('bandwidth_history', bandwidth_history), ('tv_history', tv_history),
+            ('pixel_mse_history', pixel_mse_history), ('total_loss_history', total_loss_history),
+            ('encoder_ssl_history', encoder_ssl_history),
+        ):
+            history.extend(resumed[name].tolist())
     model_eval_pool = get_eval_pool(args.eval_mode, args.model, args.model) if args.num_eval else []
 
     def evaluate(iteration):
@@ -415,7 +456,7 @@ def main():
 
     print('%s distillation begins' % get_time(), flush=True)
 
-    for iteration in range(1, args.Iteration + 1):
+    for iteration in range(start_iteration + 1, args.Iteration + 1):
         optimizer_img.zero_grad(set_to_none=True)
         sampled_losses = []
         sampled_real_real = []
@@ -528,14 +569,14 @@ def main():
         # if iteration % 100 == 0:
         #     evaluate(iteration)
 
-        if iteration % 100 == 0 or iteration == args.Iteration:
+        if iteration % args.save_every == 0 or iteration == args.Iteration:
             grid_path = os.path.join(args.save_path, 'vis_JointViewMMD_%s_%s_%gpercent_iter%d_final.png' % (args.dataset, args.model, args.percentage, iteration))
             visible = (image_syn.detach() * diag_std + diag_mean).clamp(0, 1).cpu()
             save_image(visible, grid_path, nrow=int(np.ceil(np.sqrt(num_syn))))
 
-        if iteration % 200 == 0 or iteration == args.Iteration:
+        if iteration % args.save_every == 0 or iteration == args.Iteration:
             result_path = os.path.join(args.save_path, 'res_JointViewMMD_%s_%s_%gpercent_final.pt' % (args.dataset, args.model, args.percentage))
-            torch.save({
+            reference_modules()['common'].atomic_save(result_path, {
                 'data': image_syn.detach().cpu(),
                 'method': args.method,
                 'iteration': iteration,
@@ -551,6 +592,11 @@ def main():
                 'total_loss_history': torch.tensor(total_loss_history, dtype=torch.float64),
                 'encoder_ssl_history': torch.tensor(encoder_ssl_history, dtype=torch.float64),
                 'seed': args.seed,
+                'model': args.model, 'resumed_from': args.resume,
+                'optimizer_state': optimizer_img.state_dict(),
+                'scheduler_state': scheduler_img.state_dict(),
+                'objective_rng': objective_rng.bit_generator.state,
+                'image_syn_initial': image_syn_initial.detach().cpu(),
                 'random_feature_distribution': {
                     'models': random_models,
                     'samples_per_update': args.num_random_networks,
@@ -578,7 +624,7 @@ def main():
                     'pixel_mse_weight': args.pixel_mse_weight,
                     'regularizer_space': 'pixels_0_1',
                 },
-            }, result_path)
+            })
             print('Saved synthetic data to %s' % result_path, flush=True)
 
 

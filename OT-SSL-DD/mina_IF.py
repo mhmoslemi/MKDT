@@ -331,6 +331,7 @@ def main():
 
     # Output.
     parser.add_argument('--save_path', default='result')
+    parser.add_argument('--resume', default=None, help='continue saved synthetic images and iteration')
 
     teacher_arguments(parser)
     args = parser.parse_args()
@@ -394,13 +395,31 @@ def main():
     num_syn = int(len(dst_train) * args.percentage / 100)
     pretrained_teacher = load_teacher(args, mean, std, im_size)
 
-    # DeepCluster Initialization replacing random subset
-    image_syn_init = deepcluster_initialize(
-        dst_train, num_syn, args.device, args.seed, channel, num_classes, im_size, model_name=random_models[0]
-    )
+    resumed = torch.load(args.resume, map_location='cpu', weights_only=True) if args.resume else None
+    start_iteration = 0
+    if resumed is not None:
+        if (any(resumed[key] != getattr(args, key) for key in
+                ('dataset', 'percentage', 'seed', 'dsa', 'teacher_source', 'teacher_seed', 'method'))
+                or resumed['normalization'] != [mean, std]
+                or resumed['random_feature_distribution']['models'] != random_models
+                or tuple(resumed['data'].shape) != (num_syn, channel, *im_size)
+                or not torch.isfinite(resumed['data']).all().item()):
+            raise ValueError('Resume checkpoint does not match this run or contains invalid images')
+        start_iteration = resumed['iteration']
+        if not 0 <= start_iteration <= args.Iteration:
+            raise ValueError('Resume iteration exceeds the requested stopping iteration')
+        if args.pixel_mse_weight and 'image_syn_initial' not in resumed:
+            raise ValueError('Original pixel-MSE anchor is missing from the resume checkpoint')
+        image_syn_init = resumed['data'].to(args.device).detach().clone()
+    else:
+        image_syn_init = deepcluster_initialize(
+            dst_train, num_syn, args.device, args.seed, channel, num_classes, im_size, model_name=random_models[0]
+        )
     
     image_syn = image_syn_init.detach().requires_grad_(True)
     image_syn_initial = image_syn.detach().clone()
+    if resumed is not None and 'image_syn_initial' in resumed:
+        image_syn_initial = resumed['image_syn_initial'].to(args.device)
     
     diag_mean = torch.tensor(mean, device=args.device).view(1, channel, 1, 1)
     diag_std = torch.tensor(std, device=args.device).view(1, channel, 1, 1)
@@ -422,6 +441,14 @@ def main():
     # Optimizer & Scheduler Setup
     optimizer_img = torch.optim.Adam([image_syn], lr=args.lr_img)
     scheduler_img = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer_img, T_max=args.Iteration, eta_min=args.lr_img)
+    if resumed is not None:
+        if 'optimizer_state' in resumed:
+            optimizer_img.load_state_dict(resumed['optimizer_state'])
+            scheduler_img.load_state_dict(resumed['scheduler_state'])
+            objective_rng.bit_generator.state = resumed['objective_rng']
+        else:
+            print('Old checkpoint has no Adam state; continuing saved images with fresh Adam and resume-relative drift.', flush=True)
+        print('Resuming saved iteration %d -> %d from %s' % (start_iteration, args.Iteration, args.resume), flush=True)
     
     loss_history = []
     negative_mi_history = []
@@ -430,6 +457,14 @@ def main():
     pixel_mse_history = []
     total_loss_history = []
     encoder_ssl_history = []
+    if resumed is not None:
+        for name, history in (
+            ('loss_history', loss_history), ('negative_mi_history', negative_mi_history),
+            ('coverage_loss_history', coverage_loss_history), ('weighted_coverage_history', weighted_coverage_history),
+            ('pixel_mse_history', pixel_mse_history), ('total_loss_history', total_loss_history),
+            ('encoder_ssl_history', encoder_ssl_history),
+        ):
+            history.extend(resumed[name].tolist())
     # Preserve BN during evaluation; the legacy S pool strips the BN suffix.
     model_eval_pool = ([args.model] if args.eval_mode in ('S', 'SS') else ['ConvNet', 'VGG11', 'ResNet18']) if args.num_eval else []
 
@@ -464,7 +499,7 @@ def main():
 
     print('%s distillation begins' % get_time(), flush=True)
 
-    for iteration in range(1, args.Iteration + 1):
+    for iteration in range(start_iteration + 1, args.Iteration + 1):
         optimizer_img.zero_grad(set_to_none=True)
         sampled_losses = []
         sampled_negative_mi_losses = []
@@ -587,7 +622,7 @@ def main():
             # }, result_path)
         if iteration % 50 == 0 or iteration == args.Iteration:
             result_path = os.path.join(args.save_path, 'res_IIC_%s_%s_%gpercent_final.pt' % (args.dataset, args.model, args.percentage))
-            torch.save({
+            reference_modules()['common'].atomic_save(result_path, {
                 'data': image_syn.detach().cpu(), 
                 'dataset': args.dataset,
                 'percentage': args.percentage,
@@ -605,10 +640,15 @@ def main():
                 'encoder_ssl_protocol': args.encoder_ssl_protocol,
                 'encoder_ssl_budget': 'short_adaptation_steps_not_full_pretraining',
                 'seed': args.seed, 
+                'model': args.model, 'resumed_from': args.resume,
+                'optimizer_state': optimizer_img.state_dict(),
+                'scheduler_state': scheduler_img.state_dict(),
+                'objective_rng': objective_rng.bit_generator.state,
+                'image_syn_initial': image_syn_initial.detach().cpu(),
                 'random_feature_distribution': {'models': random_models, 'samples_per_update': args.num_random_networks, 'encoder_train_steps': args.encoder_train_steps, 'encoder_train_data': args.encoder_train_data, 'encoder_train_lr': args.lr_net, 'encoder_train_batch': args.batch_train, 'encoder_train_method': args.encoder_train_method, 'encoder_barlow_lambda': args.barlow_lambda},
                 'iic_params': {'tau': args.temperature, 'coverage_gamma': args.coverage_gamma, 'strategy': args.distill_aug_strategy, 'batch_real': args.batch_real, 'tv_weight': args.tv_weight,
                             'pixel_mse_weight': args.pixel_mse_weight, 'pixel_mse_space': 'pixels_0_1'}
-            }, result_path)
+            })
             print('Saved synthetic data to %s' % result_path, flush=True)
 
 

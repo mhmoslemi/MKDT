@@ -1,0 +1,225 @@
+Loaded fixed teacher seed 0: /scratch/mmoslem3/MKDT/Evaluate_benchamrk/full_ssl_checkpoints_1000ep_3seeds/CIFAR10/ResNet18/full/pt100/simclr/seed_000/encoder.pt
+Initializing 100 synthetic prototypes via DeepCluster K-Means on ResNet18BN...
+Hyper-parameters: 
+ {'dataset': 'CIFAR10', 'percentage': 0.2, 'data_path': '/home/mmoslem3/scratch/data', 'device': 'cuda', 'seed': 0, 'Iteration': 8000, 'lr_img': 0.001, 'batch_real': 512, 'num_random_networks': 5, 'temperature': 0.2, 'random_models': 'ResNet18BN', 'tv_weight': 0.01, 'pixel_mse_weight': 0.0, 'encoder_train_steps': 0, 'encoder_train_data': 'synthetic', 'distill_aug_strategy': 'color_crop_cutout_flip_scale_rotate', 'dsa': True, 'distill_aug_mode': 'M', 'model': 'ResNet18BN', 'lr_net': 0.01, 'batch_train': 256, 'ssl_method': 'simclr', 'ssl_aug_strategy': 'color_crop_cutout_flip_scale_rotate', 'projection_dim': 128, 'barlow_lambda': 0.005, 'eval_mode': 'S', 'num_eval': 0, 'epoch_eval_train': 1200, 'label_percentage': 1.0, 'epoch_linear_train': 200, 'lr_linear': 0.1, 'batch_linear': 256, 'save_path': '/home/mmoslem3/scratch/MKDT/OT-SSL-DD/result_mina_IF_intro_20261022T151749Z_dsa_', 'teacher_source': 'pretrained', 'teacher_seed': 0, 'teacher_ssl': 'simclr', 'teacher_path': '/scratch/mmoslem3/MKDT/Evaluate_benchamrk/full_ssl_checkpoints_1000ep_3seeds', 'method': 'InformationTheoretic_IIC', 'dsa_param': <utils.ParamDiffAug object at 0x769c4ed75e50>}
+P_net support: ResNet18BN
+Each sampled encoder receives 0 SimCLR step(s) on detached synthetic images before freezing.
+Objective: minimize mean(-MI) + 0 * pixel_MSE_to_initial ([0,1] pixel units).
+[2026-10-22 09:52:15] distillation begins
+[2026-10-22 09:52:28] iter = 00050, encoder_SSL = 0.000000, neg_MI = -0.031210, pixel_MSE = 0.000030, total_loss = -0.031210, pixel drift RMS = 1.40846/255, PNG values changed = 79.02800%, lr = 0.0010
+[2026-10-22 09:52:41] iter = 00100, encoder_SSL = 0.000000, neg_MI = -0.028913, pixel_MSE = 0.000081, total_loss = -0.028913, pixel drift RMS = 2.30914/255, PNG values changed = 84.53353%, lr = 0.0010
+[2026-10-22 09:52:55] iter = 00150, encoder_SSL = 0.000000, neg_MI = -0.049829, pixel_MSE = 0.000137, total_loss = -0.049829, pixel drift RMS = 2.99509/255, PNG values changed = 86.87989%, lr = 0.0010
+[2026-10-22 09:53:08] iter = 00200, encoder_SSL = 0.000000, neg_MI = -0.046110, pixel_MSE = 0.000190, total_loss = -0.046110, pixel drift RMS = 3.52738/255, PNG values changed = 88.11458%, lr = 0.0010
+[2026-10-22 09:53:21] iter = 00250, encoder_SSL = 0.000000, neg_MI = -0.054706, pixel_MSE = 0.000239, total_loss = -0.054706, pixel drift RMS = 3.95058/255, PNG values changed = 88.99870%, lr = 0.0010
+[2026-10-22 09:53:34] iter = 00300, encoder_SSL = 0.000000, neg_MI = -0.057306, pixel_MSE = 0.000285, total_loss = -0.057306, pixel drift RMS = 4.30886/255, PNG values changed = 89.70345%, lr = 0.0010
+[2026-10-22 09:53:47] iter = 00350, encoder_SSL = 0.000000, neg_MI = -0.060598, pixel_MSE = 0.000325, total_loss = -0.060598, pixel drift RMS = 4.60159/255, PNG values changed = 90.13900%, lr = 0.0010
+[2026-10-22 09:54:00] iter = 00400, encoder_SSL = 0.000000, neg_MI = -0.064195, pixel_MSE = 0.000364, total_loss = -0.064195, pixel drift RMS = 4.87187/255, PNG values changed = 90.50749%, lr = 0.0010
+[2026-10-22 09:54:13] iter = 00450, encoder_SSL = 0.000000, neg_MI = -0.051955, pixel_MSE = 0.000400, total_loss = -0.051955, pixel drift RMS = 5.10478/255, PNG values changed = 90.80371%, lr = 0.0010
+[2026-10-22 09:54:26] iter = 00500, encoder_SSL = 0.000000, neg_MI = -0.055143, pixel_MSE = 0.000434, total_loss = -0.055143, pixel drift RMS = 5.31615/255, PNG values changed = 91.13444%, lr = 0.0010
+[2026-10-22 09:54:39] iter = 00550, encoder_SSL = 0.000000, neg_MI = -0.048382, pixel_MSE = 0.000466, total_loss = -0.048382, pixel drift RMS = 5.50547/255, PNG values changed = 91.29916%, lr = 0.0010
+[2026-10-22 09:54:52] iter = 00600, encoder_SSL = 0.000000, neg_MI = -0.064764, pixel_MSE = 0.000497, total_loss = -0.064764, pixel drift RMS = 5.68847/255, PNG values changed = 91.46127%, lr = 0.0010
+[2026-10-22 09:55:06] iter = 00650, encoder_SSL = 0.000000, neg_MI = -0.059534, pixel_MSE = 0.000527, total_loss = -0.059534, pixel drift RMS = 5.85478/255, PNG values changed = 91.71159%, lr = 0.0010
+[2026-10-22 09:55:19] iter = 00700, encoder_SSL = 0.000000, neg_MI = -0.049299, pixel_MSE = 0.000556, total_loss = -0.049299, pixel drift RMS = 6.01356/255, PNG values changed = 91.87240%, lr = 0.0010
+[2026-10-22 09:55:32] iter = 00750, encoder_SSL = 0.000000, neg_MI = -0.068611, pixel_MSE = 0.000583, total_loss = -0.068611, pixel drift RMS = 6.15815/255, PNG values changed = 92.00521%, lr = 0.0010
+[2026-10-22 09:55:45] iter = 00800, encoder_SSL = 0.000000, neg_MI = -0.058335, pixel_MSE = 0.000609, total_loss = -0.058335, pixel drift RMS = 6.29382/255, PNG values changed = 92.14942%, lr = 0.0010
+[2026-10-22 09:55:58] iter = 00850, encoder_SSL = 0.000000, neg_MI = -0.067240, pixel_MSE = 0.000634, total_loss = -0.067240, pixel drift RMS = 6.42320/255, PNG values changed = 92.25977%, lr = 0.0010
+[2026-10-22 09:56:11] iter = 00900, encoder_SSL = 0.000000, neg_MI = -0.075276, pixel_MSE = 0.000658, total_loss = -0.075276, pixel drift RMS = 6.54343/255, PNG values changed = 92.40332%, lr = 0.0010
+[2026-10-22 09:56:24] iter = 00950, encoder_SSL = 0.000000, neg_MI = -0.069737, pixel_MSE = 0.000682, total_loss = -0.069737, pixel drift RMS = 6.65934/255, PNG values changed = 92.50977%, lr = 0.0010
+[2026-10-22 09:56:38] iter = 01000, encoder_SSL = 0.000000, neg_MI = -0.075160, pixel_MSE = 0.000704, total_loss = -0.075160, pixel drift RMS = 6.76621/255, PNG values changed = 92.63574%, lr = 0.0010
+[2026-10-22 09:56:51] iter = 01050, encoder_SSL = 0.000000, neg_MI = -0.069570, pixel_MSE = 0.000725, total_loss = -0.069570, pixel drift RMS = 6.87024/255, PNG values changed = 92.69825%, lr = 0.0010
+[2026-10-22 09:57:04] iter = 01100, encoder_SSL = 0.000000, neg_MI = -0.081263, pixel_MSE = 0.000747, total_loss = -0.081263, pixel drift RMS = 6.97036/255, PNG values changed = 92.80567%, lr = 0.0010
+[2026-10-22 09:57:17] iter = 01150, encoder_SSL = 0.000000, neg_MI = -0.083914, pixel_MSE = 0.000767, total_loss = -0.083914, pixel drift RMS = 7.06620/255, PNG values changed = 92.84603%, lr = 0.0010
+[2026-10-22 09:57:30] iter = 01200, encoder_SSL = 0.000000, neg_MI = -0.079490, pixel_MSE = 0.000788, total_loss = -0.079490, pixel drift RMS = 7.15851/255, PNG values changed = 92.89095%, lr = 0.0010
+[2026-10-22 09:57:43] iter = 01250, encoder_SSL = 0.000000, neg_MI = -0.073392, pixel_MSE = 0.000808, total_loss = -0.073392, pixel drift RMS = 7.24885/255, PNG values changed = 92.95769%, lr = 0.0010
+[2026-10-22 09:57:56] iter = 01300, encoder_SSL = 0.000000, neg_MI = -0.078629, pixel_MSE = 0.000827, total_loss = -0.078629, pixel drift RMS = 7.33260/255, PNG values changed = 93.01856%, lr = 0.0010
+[2026-10-22 09:58:09] iter = 01350, encoder_SSL = 0.000000, neg_MI = -0.060017, pixel_MSE = 0.000845, total_loss = -0.060017, pixel drift RMS = 7.41499/255, PNG values changed = 93.07943%, lr = 0.0010
+[2026-10-22 09:58:22] iter = 01400, encoder_SSL = 0.000000, neg_MI = -0.053162, pixel_MSE = 0.000864, total_loss = -0.053162, pixel drift RMS = 7.49504/255, PNG values changed = 93.12500%, lr = 0.0010
+[2026-10-22 09:58:36] iter = 01450, encoder_SSL = 0.000000, neg_MI = -0.082055, pixel_MSE = 0.000881, total_loss = -0.082055, pixel drift RMS = 7.57046/255, PNG values changed = 93.20866%, lr = 0.0010
+[2026-10-22 09:58:49] iter = 01500, encoder_SSL = 0.000000, neg_MI = -0.058214, pixel_MSE = 0.000899, total_loss = -0.058214, pixel drift RMS = 7.64665/255, PNG values changed = 93.27376%, lr = 0.0010
+[2026-10-22 09:59:02] iter = 01550, encoder_SSL = 0.000000, neg_MI = -0.056533, pixel_MSE = 0.000916, total_loss = -0.056533, pixel drift RMS = 7.71967/255, PNG values changed = 93.31934%, lr = 0.0010
+[2026-10-22 09:59:15] iter = 01600, encoder_SSL = 0.000000, neg_MI = -0.042675, pixel_MSE = 0.000933, total_loss = -0.042675, pixel drift RMS = 7.79209/255, PNG values changed = 93.34766%, lr = 0.0010
+[2026-10-22 09:59:28] iter = 01650, encoder_SSL = 0.000000, neg_MI = -0.063687, pixel_MSE = 0.000950, total_loss = -0.063687, pixel drift RMS = 7.85925/255, PNG values changed = 93.42415%, lr = 0.0010
+[2026-10-22 09:59:41] iter = 01700, encoder_SSL = 0.000000, neg_MI = -0.066872, pixel_MSE = 0.000966, total_loss = -0.066872, pixel drift RMS = 7.92571/255, PNG values changed = 93.43165%, lr = 0.0010
+[2026-10-22 09:59:54] iter = 01750, encoder_SSL = 0.000000, neg_MI = -0.068533, pixel_MSE = 0.000982, total_loss = -0.068533, pixel drift RMS = 7.99116/255, PNG values changed = 93.50781%, lr = 0.0010
+[2026-10-22 10:00:07] iter = 01800, encoder_SSL = 0.000000, neg_MI = -0.049132, pixel_MSE = 0.000998, total_loss = -0.049132, pixel drift RMS = 8.05799/255, PNG values changed = 93.55046%, lr = 0.0010
+[2026-10-22 10:00:20] iter = 01850, encoder_SSL = 0.000000, neg_MI = -0.074045, pixel_MSE = 0.001014, total_loss = -0.074045, pixel drift RMS = 8.12087/255, PNG values changed = 93.60449%, lr = 0.0010
+[2026-10-22 10:00:33] iter = 01900, encoder_SSL = 0.000000, neg_MI = -0.063122, pixel_MSE = 0.001029, total_loss = -0.063122, pixel drift RMS = 8.18138/255, PNG values changed = 93.64193%, lr = 0.0010
+[2026-10-22 10:00:46] iter = 01950, encoder_SSL = 0.000000, neg_MI = -0.074962, pixel_MSE = 0.001045, total_loss = -0.074962, pixel drift RMS = 8.24293/255, PNG values changed = 93.66179%, lr = 0.0010
+[2026-10-22 10:01:00] iter = 02000, encoder_SSL = 0.000000, neg_MI = -0.078588, pixel_MSE = 0.001060, total_loss = -0.078588, pixel drift RMS = 8.30174/255, PNG values changed = 93.72917%, lr = 0.0010
+[2026-10-22 10:01:13] iter = 02050, encoder_SSL = 0.000000, neg_MI = -0.083446, pixel_MSE = 0.001075, total_loss = -0.083446, pixel drift RMS = 8.36094/255, PNG values changed = 93.75163%, lr = 0.0010
+[2026-10-22 10:01:26] iter = 02100, encoder_SSL = 0.000000, neg_MI = -0.090476, pixel_MSE = 0.001090, total_loss = -0.090476, pixel drift RMS = 8.42038/255, PNG values changed = 93.83333%, lr = 0.0010
+[2026-10-22 10:01:39] iter = 02150, encoder_SSL = 0.000000, neg_MI = -0.066041, pixel_MSE = 0.001105, total_loss = -0.066041, pixel drift RMS = 8.47692/255, PNG values changed = 93.81934%, lr = 0.0010
+[2026-10-22 10:01:52] iter = 02200, encoder_SSL = 0.000000, neg_MI = -0.088622, pixel_MSE = 0.001120, total_loss = -0.088622, pixel drift RMS = 8.53566/255, PNG values changed = 93.87728%, lr = 0.0010
+[2026-10-22 10:02:05] iter = 02250, encoder_SSL = 0.000000, neg_MI = -0.079651, pixel_MSE = 0.001134, total_loss = -0.079651, pixel drift RMS = 8.58939/255, PNG values changed = 93.93555%, lr = 0.0010
+[2026-10-22 10:02:18] iter = 02300, encoder_SSL = 0.000000, neg_MI = -0.077537, pixel_MSE = 0.001148, total_loss = -0.077537, pixel drift RMS = 8.64223/255, PNG values changed = 93.96908%, lr = 0.0010
+[2026-10-22 10:02:31] iter = 02350, encoder_SSL = 0.000000, neg_MI = -0.103675, pixel_MSE = 0.001162, total_loss = -0.103675, pixel drift RMS = 8.69471/255, PNG values changed = 93.95410%, lr = 0.0010
+[2026-10-22 10:02:44] iter = 02400, encoder_SSL = 0.000000, neg_MI = -0.082450, pixel_MSE = 0.001176, total_loss = -0.082450, pixel drift RMS = 8.74426/255, PNG values changed = 94.02670%, lr = 0.0010
+[2026-10-22 10:02:57] iter = 02450, encoder_SSL = 0.000000, neg_MI = -0.063113, pixel_MSE = 0.001189, total_loss = -0.063113, pixel drift RMS = 8.79540/255, PNG values changed = 94.06185%, lr = 0.0010
+[2026-10-22 10:03:10] iter = 02500, encoder_SSL = 0.000000, neg_MI = -0.089959, pixel_MSE = 0.001203, total_loss = -0.089959, pixel drift RMS = 8.84662/255, PNG values changed = 94.10807%, lr = 0.0010
+[2026-10-22 10:03:23] iter = 02550, encoder_SSL = 0.000000, neg_MI = -0.067119, pixel_MSE = 0.001217, total_loss = -0.067119, pixel drift RMS = 8.89663/255, PNG values changed = 94.15984%, lr = 0.0010
+[2026-10-22 10:03:36] iter = 02600, encoder_SSL = 0.000000, neg_MI = -0.064590, pixel_MSE = 0.001231, total_loss = -0.064590, pixel drift RMS = 8.94802/255, PNG values changed = 94.13737%, lr = 0.0010
+[2026-10-22 10:03:50] iter = 02650, encoder_SSL = 0.000000, neg_MI = -0.074996, pixel_MSE = 0.001244, total_loss = -0.074996, pixel drift RMS = 8.99487/255, PNG values changed = 94.19434%, lr = 0.0010
+[2026-10-22 10:04:03] iter = 02700, encoder_SSL = 0.000000, neg_MI = -0.082757, pixel_MSE = 0.001257, total_loss = -0.082757, pixel drift RMS = 9.04220/255, PNG values changed = 94.18327%, lr = 0.0010
+[2026-10-22 10:04:16] iter = 02750, encoder_SSL = 0.000000, neg_MI = -0.085639, pixel_MSE = 0.001270, total_loss = -0.085639, pixel drift RMS = 9.09022/255, PNG values changed = 94.25358%, lr = 0.0010
+[2026-10-22 10:04:29] iter = 02800, encoder_SSL = 0.000000, neg_MI = -0.073242, pixel_MSE = 0.001283, total_loss = -0.073242, pixel drift RMS = 9.13395/255, PNG values changed = 94.25066%, lr = 0.0010
+[2026-10-22 10:04:42] iter = 02850, encoder_SSL = 0.000000, neg_MI = -0.067221, pixel_MSE = 0.001295, total_loss = -0.067221, pixel drift RMS = 9.17850/255, PNG values changed = 94.29492%, lr = 0.0010
+[2026-10-22 10:04:55] iter = 02900, encoder_SSL = 0.000000, neg_MI = -0.058469, pixel_MSE = 0.001308, total_loss = -0.058469, pixel drift RMS = 9.22251/255, PNG values changed = 94.34733%, lr = 0.0010
+[2026-10-22 10:05:08] iter = 02950, encoder_SSL = 0.000000, neg_MI = -0.082139, pixel_MSE = 0.001321, total_loss = -0.082139, pixel drift RMS = 9.26753/255, PNG values changed = 94.34017%, lr = 0.0010
+[2026-10-22 10:05:21] iter = 03000, encoder_SSL = 0.000000, neg_MI = -0.086812, pixel_MSE = 0.001332, total_loss = -0.086812, pixel drift RMS = 9.30843/255, PNG values changed = 94.36231%, lr = 0.0010
+[2026-10-22 10:05:34] iter = 03050, encoder_SSL = 0.000000, neg_MI = -0.049980, pixel_MSE = 0.001344, total_loss = -0.049980, pixel drift RMS = 9.35010/255, PNG values changed = 94.37826%, lr = 0.0010
+[2026-10-22 10:05:47] iter = 03100, encoder_SSL = 0.000000, neg_MI = -0.080986, pixel_MSE = 0.001357, total_loss = -0.080986, pixel drift RMS = 9.39268/255, PNG values changed = 94.37923%, lr = 0.0010
+[2026-10-22 10:06:00] iter = 03150, encoder_SSL = 0.000000, neg_MI = -0.080601, pixel_MSE = 0.001368, total_loss = -0.080601, pixel drift RMS = 9.43381/255, PNG values changed = 94.40235%, lr = 0.0010
+[2026-10-22 10:06:13] iter = 03200, encoder_SSL = 0.000000, neg_MI = -0.070791, pixel_MSE = 0.001380, total_loss = -0.070791, pixel drift RMS = 9.47500/255, PNG values changed = 94.41309%, lr = 0.0010
+[2026-10-22 10:06:26] iter = 03250, encoder_SSL = 0.000000, neg_MI = -0.064891, pixel_MSE = 0.001392, total_loss = -0.064891, pixel drift RMS = 9.51518/255, PNG values changed = 94.45248%, lr = 0.0010
+[2026-10-22 10:06:39] iter = 03300, encoder_SSL = 0.000000, neg_MI = -0.064977, pixel_MSE = 0.001404, total_loss = -0.064977, pixel drift RMS = 9.55406/255, PNG values changed = 94.46549%, lr = 0.0010
+[2026-10-22 10:06:53] iter = 03350, encoder_SSL = 0.000000, neg_MI = -0.084001, pixel_MSE = 0.001415, total_loss = -0.084001, pixel drift RMS = 9.59414/255, PNG values changed = 94.50163%, lr = 0.0010
+[2026-10-22 10:07:06] iter = 03400, encoder_SSL = 0.000000, neg_MI = -0.071746, pixel_MSE = 0.001426, total_loss = -0.071746, pixel drift RMS = 9.63098/255, PNG values changed = 94.51758%, lr = 0.0010
+[2026-10-22 10:07:19] iter = 03450, encoder_SSL = 0.000000, neg_MI = -0.070768, pixel_MSE = 0.001437, total_loss = -0.070768, pixel drift RMS = 9.66799/255, PNG values changed = 94.53809%, lr = 0.0010
+[2026-10-22 10:07:32] iter = 03500, encoder_SSL = 0.000000, neg_MI = -0.067426, pixel_MSE = 0.001449, total_loss = -0.067426, pixel drift RMS = 9.70643/255, PNG values changed = 94.54200%, lr = 0.0010
+[2026-10-22 10:07:45] iter = 03550, encoder_SSL = 0.000000, neg_MI = -0.063662, pixel_MSE = 0.001460, total_loss = -0.063662, pixel drift RMS = 9.74380/255, PNG values changed = 94.60612%, lr = 0.0010
+[2026-10-22 10:07:58] iter = 03600, encoder_SSL = 0.000000, neg_MI = -0.081775, pixel_MSE = 0.001470, total_loss = -0.081775, pixel drift RMS = 9.77861/255, PNG values changed = 94.60222%, lr = 0.0010
+[2026-10-22 10:08:11] iter = 03650, encoder_SSL = 0.000000, neg_MI = -0.087283, pixel_MSE = 0.001482, total_loss = -0.087283, pixel drift RMS = 9.81726/255, PNG values changed = 94.58822%, lr = 0.0010
+[2026-10-22 10:08:24] iter = 03700, encoder_SSL = 0.000000, neg_MI = -0.083280, pixel_MSE = 0.001494, total_loss = -0.083280, pixel drift RMS = 9.85596/255, PNG values changed = 94.66407%, lr = 0.0010
+[2026-10-22 10:08:37] iter = 03750, encoder_SSL = 0.000000, neg_MI = -0.059128, pixel_MSE = 0.001505, total_loss = -0.059128, pixel drift RMS = 9.89193/255, PNG values changed = 94.61882%, lr = 0.0010
+[2026-10-22 10:08:50] iter = 03800, encoder_SSL = 0.000000, neg_MI = -0.066044, pixel_MSE = 0.001516, total_loss = -0.066044, pixel drift RMS = 9.92938/255, PNG values changed = 94.68588%, lr = 0.0010
+[2026-10-22 10:09:03] iter = 03850, encoder_SSL = 0.000000, neg_MI = -0.064384, pixel_MSE = 0.001527, total_loss = -0.064384, pixel drift RMS = 9.96409/255, PNG values changed = 94.67579%, lr = 0.0010
+[2026-10-22 10:09:16] iter = 03900, encoder_SSL = 0.000000, neg_MI = -0.079421, pixel_MSE = 0.001537, total_loss = -0.079421, pixel drift RMS = 9.99815/255, PNG values changed = 94.71094%, lr = 0.0010
+[2026-10-22 10:09:30] iter = 03950, encoder_SSL = 0.000000, neg_MI = -0.075257, pixel_MSE = 0.001549, total_loss = -0.075257, pixel drift RMS = 10.03523/255, PNG values changed = 94.72526%, lr = 0.0010
+[2026-10-22 10:09:43] iter = 04000, encoder_SSL = 0.000000, neg_MI = -0.064039, pixel_MSE = 0.001559, total_loss = -0.064039, pixel drift RMS = 10.06818/255, PNG values changed = 94.75749%, lr = 0.0010
+[2026-10-22 10:09:56] iter = 04050, encoder_SSL = 0.000000, neg_MI = -0.074018, pixel_MSE = 0.001569, total_loss = -0.074018, pixel drift RMS = 10.10201/255, PNG values changed = 94.77084%, lr = 0.0010
+[2026-10-22 10:10:09] iter = 04100, encoder_SSL = 0.000000, neg_MI = -0.065976, pixel_MSE = 0.001579, total_loss = -0.065976, pixel drift RMS = 10.13459/255, PNG values changed = 94.79134%, lr = 0.0010
+[2026-10-22 10:10:22] iter = 04150, encoder_SSL = 0.000000, neg_MI = -0.061057, pixel_MSE = 0.001590, total_loss = -0.061057, pixel drift RMS = 10.16829/255, PNG values changed = 94.80209%, lr = 0.0010
+[2026-10-22 10:10:35] iter = 04200, encoder_SSL = 0.000000, neg_MI = -0.091565, pixel_MSE = 0.001601, total_loss = -0.091565, pixel drift RMS = 10.20294/255, PNG values changed = 94.79655%, lr = 0.0010
+[2026-10-22 10:10:48] iter = 04250, encoder_SSL = 0.000000, neg_MI = -0.083062, pixel_MSE = 0.001611, total_loss = -0.083062, pixel drift RMS = 10.23442/255, PNG values changed = 94.84147%, lr = 0.0010
+[2026-10-22 10:11:01] iter = 04300, encoder_SSL = 0.000000, neg_MI = -0.074180, pixel_MSE = 0.001621, total_loss = -0.074180, pixel drift RMS = 10.26859/255, PNG values changed = 94.83757%, lr = 0.0010
+[2026-10-22 10:11:14] iter = 04350, encoder_SSL = 0.000000, neg_MI = -0.087786, pixel_MSE = 0.001631, total_loss = -0.087786, pixel drift RMS = 10.29917/255, PNG values changed = 94.86914%, lr = 0.0010
+[2026-10-22 10:11:27] iter = 04400, encoder_SSL = 0.000000, neg_MI = -0.077413, pixel_MSE = 0.001642, total_loss = -0.077413, pixel drift RMS = 10.33322/255, PNG values changed = 94.88640%, lr = 0.0010
+[2026-10-22 10:11:41] iter = 04450, encoder_SSL = 0.000000, neg_MI = -0.085850, pixel_MSE = 0.001651, total_loss = -0.085850, pixel drift RMS = 10.36300/255, PNG values changed = 94.91569%, lr = 0.0010
+[2026-10-22 10:11:54] iter = 04500, encoder_SSL = 0.000000, neg_MI = -0.092108, pixel_MSE = 0.001661, total_loss = -0.092108, pixel drift RMS = 10.39326/255, PNG values changed = 94.92936%, lr = 0.0010
+[2026-10-22 10:12:07] iter = 04550, encoder_SSL = 0.000000, neg_MI = -0.057542, pixel_MSE = 0.001671, total_loss = -0.057542, pixel drift RMS = 10.42398/255, PNG values changed = 94.93946%, lr = 0.0010
+[2026-10-22 10:12:20] iter = 04600, encoder_SSL = 0.000000, neg_MI = -0.058255, pixel_MSE = 0.001680, total_loss = -0.058255, pixel drift RMS = 10.45326/255, PNG values changed = 94.97103%, lr = 0.0010
+[2026-10-22 10:12:33] iter = 04650, encoder_SSL = 0.000000, neg_MI = -0.070132, pixel_MSE = 0.001691, total_loss = -0.070132, pixel drift RMS = 10.48657/255, PNG values changed = 94.97461%, lr = 0.0010
+[2026-10-22 10:12:46] iter = 04700, encoder_SSL = 0.000000, neg_MI = -0.069513, pixel_MSE = 0.001700, total_loss = -0.069513, pixel drift RMS = 10.51568/255, PNG values changed = 94.97624%, lr = 0.0010
+[2026-10-22 10:12:59] iter = 04750, encoder_SSL = 0.000000, neg_MI = -0.064486, pixel_MSE = 0.001711, total_loss = -0.064486, pixel drift RMS = 10.54795/255, PNG values changed = 94.99089%, lr = 0.0010
+[2026-10-22 10:13:12] iter = 04800, encoder_SSL = 0.000000, neg_MI = -0.083116, pixel_MSE = 0.001720, total_loss = -0.083116, pixel drift RMS = 10.57661/255, PNG values changed = 95.00912%, lr = 0.0010
+[2026-10-22 10:13:25] iter = 04850, encoder_SSL = 0.000000, neg_MI = -0.080476, pixel_MSE = 0.001730, total_loss = -0.080476, pixel drift RMS = 10.60608/255, PNG values changed = 95.02507%, lr = 0.0010
+[2026-10-22 10:13:38] iter = 04900, encoder_SSL = 0.000000, neg_MI = -0.069886, pixel_MSE = 0.001740, total_loss = -0.069886, pixel drift RMS = 10.63599/255, PNG values changed = 95.01270%, lr = 0.0010
+[2026-10-22 10:13:51] iter = 04950, encoder_SSL = 0.000000, neg_MI = -0.078076, pixel_MSE = 0.001749, total_loss = -0.078076, pixel drift RMS = 10.66605/255, PNG values changed = 95.03353%, lr = 0.0010
+[2026-10-22 10:14:04] iter = 05000, encoder_SSL = 0.000000, neg_MI = -0.077234, pixel_MSE = 0.001759, total_loss = -0.077234, pixel drift RMS = 10.69380/255, PNG values changed = 95.07064%, lr = 0.0010
+[2026-10-22 10:14:18] iter = 05050, encoder_SSL = 0.000000, neg_MI = -0.078191, pixel_MSE = 0.001768, total_loss = -0.078191, pixel drift RMS = 10.72239/255, PNG values changed = 95.09017%, lr = 0.0010
+[2026-10-22 10:14:31] iter = 05100, encoder_SSL = 0.000000, neg_MI = -0.061009, pixel_MSE = 0.001777, total_loss = -0.061009, pixel drift RMS = 10.75056/255, PNG values changed = 95.09408%, lr = 0.0010
+[2026-10-22 10:14:44] iter = 05150, encoder_SSL = 0.000000, neg_MI = -0.070613, pixel_MSE = 0.001786, total_loss = -0.070613, pixel drift RMS = 10.77784/255, PNG values changed = 95.10840%, lr = 0.0010
+[2026-10-22 10:14:57] iter = 05200, encoder_SSL = 0.000000, neg_MI = -0.034852, pixel_MSE = 0.001796, total_loss = -0.034852, pixel drift RMS = 10.80670/255, PNG values changed = 95.11361%, lr = 0.0010
+[2026-10-22 10:15:10] iter = 05250, encoder_SSL = 0.000000, neg_MI = -0.056390, pixel_MSE = 0.001805, total_loss = -0.056390, pixel drift RMS = 10.83530/255, PNG values changed = 95.14356%, lr = 0.0010
+[2026-10-22 10:15:23] iter = 05300, encoder_SSL = 0.000000, neg_MI = -0.087875, pixel_MSE = 0.001815, total_loss = -0.087875, pixel drift RMS = 10.86446/255, PNG values changed = 95.13900%, lr = 0.0010
+[2026-10-22 10:15:36] iter = 05350, encoder_SSL = 0.000000, neg_MI = -0.059554, pixel_MSE = 0.001824, total_loss = -0.059554, pixel drift RMS = 10.89068/255, PNG values changed = 95.14518%, lr = 0.0010
+[2026-10-22 10:15:49] iter = 05400, encoder_SSL = 0.000000, neg_MI = -0.093817, pixel_MSE = 0.001833, total_loss = -0.093817, pixel drift RMS = 10.91746/255, PNG values changed = 95.20378%, lr = 0.0010
+[2026-10-22 10:16:02] iter = 05450, encoder_SSL = 0.000000, neg_MI = -0.061859, pixel_MSE = 0.001843, total_loss = -0.061859, pixel drift RMS = 10.94705/255, PNG values changed = 95.17090%, lr = 0.0010
+[2026-10-22 10:16:15] iter = 05500, encoder_SSL = 0.000000, neg_MI = -0.078104, pixel_MSE = 0.001851, total_loss = -0.078104, pixel drift RMS = 10.97193/255, PNG values changed = 95.21680%, lr = 0.0010
+[2026-10-22 10:16:28] iter = 05550, encoder_SSL = 0.000000, neg_MI = -0.071439, pixel_MSE = 0.001861, total_loss = -0.071439, pixel drift RMS = 10.99984/255, PNG values changed = 95.23568%, lr = 0.0010
+[2026-10-22 10:16:41] iter = 05600, encoder_SSL = 0.000000, neg_MI = -0.070759, pixel_MSE = 0.001869, total_loss = -0.070759, pixel drift RMS = 11.02506/255, PNG values changed = 95.23763%, lr = 0.0010
+[2026-10-22 10:16:54] iter = 05650, encoder_SSL = 0.000000, neg_MI = -0.086286, pixel_MSE = 0.001878, total_loss = -0.086286, pixel drift RMS = 11.05226/255, PNG values changed = 95.25326%, lr = 0.0010
+[2026-10-22 10:17:08] iter = 05700, encoder_SSL = 0.000000, neg_MI = -0.072891, pixel_MSE = 0.001887, total_loss = -0.072891, pixel drift RMS = 11.07718/255, PNG values changed = 95.25065%, lr = 0.0010
+[2026-10-22 10:17:21] iter = 05750, encoder_SSL = 0.000000, neg_MI = -0.089424, pixel_MSE = 0.001896, total_loss = -0.089424, pixel drift RMS = 11.10407/255, PNG values changed = 95.28711%, lr = 0.0010
+[2026-10-22 10:17:34] iter = 05800, encoder_SSL = 0.000000, neg_MI = -0.078583, pixel_MSE = 0.001905, total_loss = -0.078583, pixel drift RMS = 11.13024/255, PNG values changed = 95.29688%, lr = 0.0010
+[2026-10-22 10:17:47] iter = 05850, encoder_SSL = 0.000000, neg_MI = -0.091406, pixel_MSE = 0.001914, total_loss = -0.091406, pixel drift RMS = 11.15595/255, PNG values changed = 95.34506%, lr = 0.0010
+[2026-10-22 10:18:00] iter = 05900, encoder_SSL = 0.000000, neg_MI = -0.066619, pixel_MSE = 0.001923, total_loss = -0.066619, pixel drift RMS = 11.18168/255, PNG values changed = 95.32325%, lr = 0.0010
+[2026-10-22 10:18:13] iter = 05950, encoder_SSL = 0.000000, neg_MI = -0.081824, pixel_MSE = 0.001931, total_loss = -0.081824, pixel drift RMS = 11.20549/255, PNG values changed = 95.34408%, lr = 0.0010
+[2026-10-22 10:18:26] iter = 06000, encoder_SSL = 0.000000, neg_MI = -0.094097, pixel_MSE = 0.001940, total_loss = -0.094097, pixel drift RMS = 11.23200/255, PNG values changed = 95.34571%, lr = 0.0010
+[2026-10-22 10:18:39] iter = 06050, encoder_SSL = 0.000000, neg_MI = -0.073278, pixel_MSE = 0.001948, total_loss = -0.073278, pixel drift RMS = 11.25637/255, PNG values changed = 95.34473%, lr = 0.0010
+[2026-10-22 10:18:52] iter = 06100, encoder_SSL = 0.000000, neg_MI = -0.062550, pixel_MSE = 0.001957, total_loss = -0.062550, pixel drift RMS = 11.28179/255, PNG values changed = 95.33561%, lr = 0.0010
+[2026-10-22 10:19:06] iter = 06150, encoder_SSL = 0.000000, neg_MI = -0.060627, pixel_MSE = 0.001966, total_loss = -0.060627, pixel drift RMS = 11.30612/255, PNG values changed = 95.35092%, lr = 0.0010
+[2026-10-22 10:19:19] iter = 06200, encoder_SSL = 0.000000, neg_MI = -0.095505, pixel_MSE = 0.001974, total_loss = -0.095505, pixel drift RMS = 11.33045/255, PNG values changed = 95.37696%, lr = 0.0010
+[2026-10-22 10:19:32] iter = 06250, encoder_SSL = 0.000000, neg_MI = -0.063006, pixel_MSE = 0.001983, total_loss = -0.063006, pixel drift RMS = 11.35478/255, PNG values changed = 95.39160%, lr = 0.0010
+[2026-10-22 10:19:45] iter = 06300, encoder_SSL = 0.000000, neg_MI = -0.083382, pixel_MSE = 0.001991, total_loss = -0.083382, pixel drift RMS = 11.37927/255, PNG values changed = 95.37012%, lr = 0.0010
+[2026-10-22 10:19:58] iter = 06350, encoder_SSL = 0.000000, neg_MI = -0.060786, pixel_MSE = 0.002000, total_loss = -0.060786, pixel drift RMS = 11.40388/255, PNG values changed = 95.37500%, lr = 0.0010
+[2026-10-22 10:20:11] iter = 06400, encoder_SSL = 0.000000, neg_MI = -0.065302, pixel_MSE = 0.002008, total_loss = -0.065302, pixel drift RMS = 11.42762/255, PNG values changed = 95.40039%, lr = 0.0010
+[2026-10-22 10:20:24] iter = 06450, encoder_SSL = 0.000000, neg_MI = -0.064239, pixel_MSE = 0.002016, total_loss = -0.064239, pixel drift RMS = 11.45025/255, PNG values changed = 95.42318%, lr = 0.0010
+[2026-10-22 10:20:37] iter = 06500, encoder_SSL = 0.000000, neg_MI = -0.089984, pixel_MSE = 0.002025, total_loss = -0.089984, pixel drift RMS = 11.47475/255, PNG values changed = 95.42871%, lr = 0.0010
+[2026-10-22 10:20:51] iter = 06550, encoder_SSL = 0.000000, neg_MI = -0.070291, pixel_MSE = 0.002033, total_loss = -0.070291, pixel drift RMS = 11.49849/255, PNG values changed = 95.42285%, lr = 0.0010
+[2026-10-22 10:21:04] iter = 06600, encoder_SSL = 0.000000, neg_MI = -0.066476, pixel_MSE = 0.002042, total_loss = -0.066476, pixel drift RMS = 11.52324/255, PNG values changed = 95.46419%, lr = 0.0010
+[2026-10-22 10:21:17] iter = 06650, encoder_SSL = 0.000000, neg_MI = -0.078771, pixel_MSE = 0.002049, total_loss = -0.078771, pixel drift RMS = 11.54418/255, PNG values changed = 95.43197%, lr = 0.0010
+[2026-10-22 10:21:30] iter = 06700, encoder_SSL = 0.000000, neg_MI = -0.081517, pixel_MSE = 0.002058, total_loss = -0.081517, pixel drift RMS = 11.56770/255, PNG values changed = 95.42285%, lr = 0.0010
+[2026-10-22 10:21:43] iter = 06750, encoder_SSL = 0.000000, neg_MI = -0.095023, pixel_MSE = 0.002065, total_loss = -0.095023, pixel drift RMS = 11.58960/255, PNG values changed = 95.45280%, lr = 0.0010
+[2026-10-22 10:21:56] iter = 06800, encoder_SSL = 0.000000, neg_MI = -0.081874, pixel_MSE = 0.002074, total_loss = -0.081874, pixel drift RMS = 11.61235/255, PNG values changed = 95.43620%, lr = 0.0010
+[2026-10-22 10:22:09] iter = 06850, encoder_SSL = 0.000000, neg_MI = -0.075981, pixel_MSE = 0.002082, total_loss = -0.075981, pixel drift RMS = 11.63530/255, PNG values changed = 95.45671%, lr = 0.0010
+[2026-10-22 10:22:22] iter = 06900, encoder_SSL = 0.000000, neg_MI = -0.072951, pixel_MSE = 0.002090, total_loss = -0.072951, pixel drift RMS = 11.65719/255, PNG values changed = 95.48438%, lr = 0.0010
+[2026-10-22 10:22:35] iter = 06950, encoder_SSL = 0.000000, neg_MI = -0.086843, pixel_MSE = 0.002097, total_loss = -0.086843, pixel drift RMS = 11.67879/255, PNG values changed = 95.50521%, lr = 0.0010
+[2026-10-22 10:22:48] iter = 07000, encoder_SSL = 0.000000, neg_MI = -0.084678, pixel_MSE = 0.002105, total_loss = -0.084678, pixel drift RMS = 11.69958/255, PNG values changed = 95.48926%, lr = 0.0010
+[2026-10-22 10:23:01] iter = 07050, encoder_SSL = 0.000000, neg_MI = -0.085852, pixel_MSE = 0.002112, total_loss = -0.085852, pixel drift RMS = 11.72043/255, PNG values changed = 95.51107%, lr = 0.0010
+[2026-10-22 10:23:14] iter = 07100, encoder_SSL = 0.000000, neg_MI = -0.072463, pixel_MSE = 0.002121, total_loss = -0.072463, pixel drift RMS = 11.74318/255, PNG values changed = 95.51367%, lr = 0.0010
+[2026-10-22 10:23:28] iter = 07150, encoder_SSL = 0.000000, neg_MI = -0.077426, pixel_MSE = 0.002129, total_loss = -0.077426, pixel drift RMS = 11.76529/255, PNG values changed = 95.51367%, lr = 0.0010
+[2026-10-22 10:23:41] iter = 07200, encoder_SSL = 0.000000, neg_MI = -0.083172, pixel_MSE = 0.002136, total_loss = -0.083172, pixel drift RMS = 11.78586/255, PNG values changed = 95.50358%, lr = 0.0010
+[2026-10-22 10:23:54] iter = 07250, encoder_SSL = 0.000000, neg_MI = -0.061208, pixel_MSE = 0.002144, total_loss = -0.061208, pixel drift RMS = 11.80869/255, PNG values changed = 95.52019%, lr = 0.0010
+[2026-10-22 10:24:07] iter = 07300, encoder_SSL = 0.000000, neg_MI = -0.078473, pixel_MSE = 0.002153, total_loss = -0.078473, pixel drift RMS = 11.83157/255, PNG values changed = 95.52084%, lr = 0.0010
+[2026-10-22 10:24:20] iter = 07350, encoder_SSL = 0.000000, neg_MI = -0.075314, pixel_MSE = 0.002160, total_loss = -0.075314, pixel drift RMS = 11.85248/255, PNG values changed = 95.53581%, lr = 0.0010
+[2026-10-22 10:24:33] iter = 07400, encoder_SSL = 0.000000, neg_MI = -0.060889, pixel_MSE = 0.002167, total_loss = -0.060889, pixel drift RMS = 11.87238/255, PNG values changed = 95.52962%, lr = 0.0010
+[2026-10-22 10:24:46] iter = 07450, encoder_SSL = 0.000000, neg_MI = -0.072390, pixel_MSE = 0.002175, total_loss = -0.072390, pixel drift RMS = 11.89234/255, PNG values changed = 95.54167%, lr = 0.0010
+[2026-10-22 10:24:59] iter = 07500, encoder_SSL = 0.000000, neg_MI = -0.076156, pixel_MSE = 0.002182, total_loss = -0.076156, pixel drift RMS = 11.91285/255, PNG values changed = 95.52019%, lr = 0.0010
+[2026-10-22 10:25:12] iter = 07550, encoder_SSL = 0.000000, neg_MI = -0.091041, pixel_MSE = 0.002190, total_loss = -0.091041, pixel drift RMS = 11.93489/255, PNG values changed = 95.52116%, lr = 0.0010
+[2026-10-22 10:25:25] iter = 07600, encoder_SSL = 0.000000, neg_MI = -0.078106, pixel_MSE = 0.002198, total_loss = -0.078106, pixel drift RMS = 11.95518/255, PNG values changed = 95.53483%, lr = 0.0010
+[2026-10-22 10:25:38] iter = 07650, encoder_SSL = 0.000000, neg_MI = -0.085109, pixel_MSE = 0.002205, total_loss = -0.085109, pixel drift RMS = 11.97556/255, PNG values changed = 95.52084%, lr = 0.0010
+[2026-10-22 10:25:52] iter = 07700, encoder_SSL = 0.000000, neg_MI = -0.066848, pixel_MSE = 0.002213, total_loss = -0.066848, pixel drift RMS = 11.99641/255, PNG values changed = 95.51433%, lr = 0.0010
+[2026-10-22 10:26:05] iter = 07750, encoder_SSL = 0.000000, neg_MI = -0.081052, pixel_MSE = 0.002221, total_loss = -0.081052, pixel drift RMS = 12.01728/255, PNG values changed = 95.54394%, lr = 0.0010
+[2026-10-22 10:26:18] iter = 07800, encoder_SSL = 0.000000, neg_MI = -0.079304, pixel_MSE = 0.002228, total_loss = -0.079304, pixel drift RMS = 12.03769/255, PNG values changed = 95.53874%, lr = 0.0010
+[2026-10-22 10:26:31] iter = 07850, encoder_SSL = 0.000000, neg_MI = -0.099795, pixel_MSE = 0.002236, total_loss = -0.099795, pixel drift RMS = 12.05821/255, PNG values changed = 95.53320%, lr = 0.0010
+[2026-10-22 10:26:44] iter = 07900, encoder_SSL = 0.000000, neg_MI = -0.070359, pixel_MSE = 0.002244, total_loss = -0.070359, pixel drift RMS = 12.07948/255, PNG values changed = 95.52702%, lr = 0.0010
+[2026-10-22 10:26:57] iter = 07950, encoder_SSL = 0.000000, neg_MI = -0.085509, pixel_MSE = 0.002251, total_loss = -0.085509, pixel drift RMS = 12.09838/255, PNG values changed = 95.56283%, lr = 0.0010
+[2026-10-22 10:27:10] iter = 08000, encoder_SSL = 0.000000, neg_MI = -0.054764, pixel_MSE = 0.002259, total_loss = -0.054764, pixel drift RMS = 12.12017/255, PNG values changed = 95.58073%, lr = 0.0010
+Saved synthetic data to /home/mmoslem3/scratch/MKDT/OT-SSL-DD/result_mina_IF_intro_20261022T151749Z_dsa_/res_IIC_CIFAR10_ResNet18BN_0.2percent.pt
+{
+  "dataset": "CIFAR10",
+  "percentage": 0.2,
+  "label_percentage": 1,
+  "model": "ResNet18BN",
+  "ssl_method": "simclr",
+  "epoch_eval_train": 2000,
+  "ssl_log_every": 100,
+  "epoch_linear_train": 100,
+  "lr_linear": 0.1,
+  "batch_linear": 256,
+  "runs": 1,
+  "seed": 0,
+  "device": "cuda",
+  "data_path": "/scratch/mmoslem3/data",
+  "synthetic_checkpoint": "/scratch/mmoslem3/MKDT/OT-SSL-DD/result_mina_IF_intro_20261022T151749Z_dsa_/res_IIC_CIFAR10_ResNet18BN_0.2percent.pt",
+  "synthetic_root": null,
+  "save_path": "/scratch/mmoslem3/MKDT/OT-SSL-DD/result_mina_IF_intro_20261022T151749Z_dsa_/evaluation",
+  "std_ddof": 1
+}
+Reference SSL: CIFAR10/ResNet18/simclr, SSL epochs=2000, probe epochs=100, labels=1%
+SSL CIFAR10/ResNet18/simclr seed=0: {"epoch": 1, "steps": 1, "lr": 3e-05, "loss": 5.243266582489014, "examples": 100, "projector_std": 0.06117415055632591, "seconds": 0.5738690104335546}
+SSL CIFAR10/ResNet18/simclr seed=0: {"epoch": 100, "steps": 100, "lr": 0.15547935399253915, "loss": 4.995355129241943, "examples": 100, "projector_std": 1.0119835138320923, "seconds": 0.12588792014867067}
+SSL CIFAR10/ResNet18/simclr seed=0: {"epoch": 200, "steps": 200, "lr": 0.15279469632432452, "loss": 4.764455795288086, "examples": 100, "projector_std": 1.3540809154510498, "seconds": 0.12626042775809765}
+SSL CIFAR10/ResNet18/simclr seed=0: {"epoch": 300, "steps": 300, "lr": 0.14825107247179797, "loss": 4.847233772277832, "examples": 100, "projector_std": 1.4636504650115967, "seconds": 0.1282480238005519}
+SSL CIFAR10/ResNet18/simclr seed=0: {"epoch": 400, "steps": 400, "lr": 0.1419615998508841, "loss": 4.697841644287109, "examples": 100, "projector_std": 1.484459400177002, "seconds": 0.12815523333847523}
+SSL CIFAR10/ResNet18/simclr seed=0: {"epoch": 500, "steps": 500, "lr": 0.13408286028118277, "loss": 4.707663536071777, "examples": 100, "projector_std": 1.393622636795044, "seconds": 0.1271123243495822}
+SSL CIFAR10/ResNet18/simclr seed=0: {"epoch": 600, "steps": 600, "lr": 0.12481100174716497, "loss": 4.522686958312988, "examples": 100, "projector_std": 1.5117182731628418, "seconds": 0.12741281185299158}
+SSL CIFAR10/ResNet18/simclr seed=0: {"epoch": 700, "steps": 700, "lr": 0.11437685512573152, "loss": 4.257390022277832, "examples": 100, "projector_std": 1.4759128093719482, "seconds": 0.12765472009778023}
+SSL CIFAR10/ResNet18/simclr seed=0: {"epoch": 800, "steps": 800, "lr": 0.10304018745339412, "loss": 4.294705867767334, "examples": 100, "projector_std": 1.5178862810134888, "seconds": 0.12778750713914633}
+SSL CIFAR10/ResNet18/simclr seed=0: {"epoch": 900, "steps": 900, "lr": 0.09108323480292474, "loss": 4.066741943359375, "examples": 100, "projector_std": 1.5394220352172852, "seconds": 0.12932629883289337}
+SSL CIFAR10/ResNet18/simclr seed=0: {"epoch": 1000, "steps": 1000, "lr": 0.07880367577406086, "loss": 3.8447399139404297, "examples": 100, "projector_std": 1.4653294086456299, "seconds": 0.1297654202207923}
+SSL CIFAR10/ResNet18/simclr seed=0: {"epoch": 1100, "steps": 1100, "lr": 0.06650722052924594, "loss": 4.119034290313721, "examples": 100, "projector_std": 1.3129220008850098, "seconds": 0.1298396373167634}
+SSL CIFAR10/ResNet18/simclr seed=0: {"epoch": 1200, "steps": 1200, "lr": 0.054499999876722965, "loss": 3.57993221282959, "examples": 100, "projector_std": 1.3415486812591553, "seconds": 0.12512066401541233}
+SSL CIFAR10/ResNet18/simclr seed=0: {"epoch": 1300, "steps": 1300, "lr": 0.04308094388128897, "loss": 3.6550493240356445, "examples": 100, "projector_std": 1.1243534088134766, "seconds": 0.1273873271420598}
+SSL CIFAR10/ResNet18/simclr seed=0: {"epoch": 1400, "steps": 1400, "lr": 0.03253433974373928, "loss": 3.2248854637145996, "examples": 100, "projector_std": 1.0740207433700562, "seconds": 0.12871927116066217}
+SSL CIFAR10/ResNet18/simclr seed=0: {"epoch": 1500, "steps": 1500, "lr": 0.023122754226979538, "loss": 3.2013845443725586, "examples": 100, "projector_std": 1.0020406246185303, "seconds": 0.12554998230189085}
+SSL CIFAR10/ResNet18/simclr seed=0: {"epoch": 1600, "steps": 1600, "lr": 0.015080496831083607, "loss": 2.994478702545166, "examples": 100, "projector_std": 0.9393465518951416, "seconds": 0.12796013429760933}
+SSL CIFAR10/ResNet18/simclr seed=0: {"epoch": 1700, "steps": 1700, "lr": 0.008607786457164555, "loss": 2.9244625568389893, "examples": 100, "projector_std": 0.8861187696456909, "seconds": 0.12808481603860855}
+SSL CIFAR10/ResNet18/simclr seed=0: {"epoch": 1800, "steps": 1800, "lr": 0.0038657667859693257, "loss": 3.0767107009887695, "examples": 100, "projector_std": 0.8144960999488831, "seconds": 0.12723753973841667}
+SSL CIFAR10/ResNet18/simclr seed=0: {"epoch": 1900, "steps": 1900, "lr": 0.0009724944676255294, "loss": 2.8488757610321045, "examples": 100, "projector_std": 0.7935738563537598, "seconds": 0.12820675875991583}
+SSL CIFAR10/ResNet18/simclr seed=0: {"epoch": 2000, "steps": 2000, "lr": 0.0, "loss": 2.932664155960083, "examples": 100, "projector_std": 0.7913740277290344, "seconds": 0.12742879707366228}
+PROBE CIFAR10 lbl=1 seed=0: {'epoch': 10, 'lr': 0.09776754757575974, 'loss': 1.662962561607361, 'train_accuracy_percent': 41.4}
+PROBE CIFAR10 lbl=1 seed=0: {'epoch': 20, 'lr': 0.09081878607071997, 'loss': 1.5219897546768189, 'train_accuracy_percent': 43.4}
+PROBE CIFAR10 lbl=1 seed=0: {'epoch': 30, 'lr': 0.0798344744144428, 'loss': 1.5021089506149292, 'train_accuracy_percent': 48.0}
+PROBE CIFAR10 lbl=1 seed=0: {'epoch': 40, 'lr': 0.06590057681196192, 'loss': 1.4819285020828248, 'train_accuracy_percent': 48.6}
+PROBE CIFAR10 lbl=1 seed=0: {'epoch': 50, 'lr': 0.05039466834548567, 'loss': 1.4842183847427368, 'train_accuracy_percent': 51.4}
+PROBE CIFAR10 lbl=1 seed=0: {'epoch': 60, 'lr': 0.03484974098465636, 'loss': 1.4637525157928466, 'train_accuracy_percent': 46.4}
+PROBE CIFAR10 lbl=1 seed=0: {'epoch': 70, 'lr': 0.020802644302934683, 'loss': 1.459079447746277, 'train_accuracy_percent': 50.8}
+PROBE CIFAR10 lbl=1 seed=0: {'epoch': 80, 'lr': 0.00964214481190074, 'loss': 1.402450086593628, 'train_accuracy_percent': 50.6}
+PROBE CIFAR10 lbl=1 seed=0: {'epoch': 90, 'lr': 0.0024716255306108607, 'loss': 1.457628951072693, 'train_accuracy_percent': 48.2}
+PROBE CIFAR10 lbl=1 seed=0: {'epoch': 100, 'lr': 0.0, 'loss': 1.3958696146011353, 'train_accuracy_percent': 53.2}
+RESULT CIFAR10 lbl=1 seed=0: 42.1600
+seed=0 accuracy=42.16%
+Mean ± sample std: 42.16 ± N/A%
+Saved: /home/mmoslem3/scratch/MKDT/OT-SSL-DD/result_mina_IF_intro_20261022T151749Z_dsa_/evaluation

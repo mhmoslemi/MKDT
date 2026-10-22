@@ -1,0 +1,39 @@
+{
+  "accuracies_percent": [
+    42.36
+  ],
+  "complete": true,
+  "config": {
+    "Iteration": 5500,
+    "batch_linear": 256,
+    "batch_real": 256,
+    "data_path": "/scratch/mmoslem3/data",
+    "dataset": "CIFAR10",
+    "device": "cuda",
+    "dsa": true,
+    "dsa_strategy": "color_crop_cutout_flip_scale_rotate",
+    "epoch_eval_train": 2000,
+    "epoch_linear_train": 100,
+    "geometry_weight": 0.0,
+    "label_percentage": 1,
+    "lr_img": 0.001,
+    "lr_linear": 0.1,
+    "model": "ResNet18BN",
+    "num_eval": 1,
+    "ot_lambda": 0.01,
+    "percentage": 0.2,
+    "resume": "/home/mmoslem3/scratch/MKDT/OT-SSL-DD/result_main_SSL_20261022T043128Z_dsa_/res_OT-SSL_CIFAR10_ResNet18BN_0.2percent.pt",
+    "save_every": 500,
+    "save_path": "/home/mmoslem3/scratch/MKDT/OT-SSL-DD/result_main_SSL_20261022T043128Z_dsa_",
+    "seed": 0,
+    "sinkhorn_iterations": 100,
+    "ssl_log_every": 100,
+    "ssl_method": "simclr",
+    "synthetic_checkpoint": "/scratch/mmoslem3/MKDT/OT-SSL-DD/result_main_SSL_20261022T043128Z_dsa_/res_OT-SSL_CIFAR10_ResNet18BN_0.2percent.pt",
+    "teacher_path": "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/full_ssl_checkpoints_1000ep_3seeds",
+    "teacher_seed": 0,
+    "teacher_ssl": "simclr",
+    "temperature": 0.5
+  },
+  "mean_percent": 42.36
+}

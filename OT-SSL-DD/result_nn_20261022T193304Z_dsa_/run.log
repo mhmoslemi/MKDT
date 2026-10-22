@@ -1,0 +1,16 @@
+Using batch size 100 for BOTH real and synthetic updates: only 100 distinct synthetic images exist.
+Initializing 100 images with random-feature K-Means on ResNet18BN...
+Hyper-parameters:
+ {'dataset': 'CIFAR10', 'percentage': 0.2, 'data_path': '/home/mmoslem3/scratch/data', 'device': 'cuda', 'seed': 0, 'Iteration': 1000, 'lr_img': 0.0002, 'lr_img_min': 0.0002, 'response_batches': 4, 'batch_train': 512, 'batch_sampling': 'without_replacement', 'random_models': 'ResNet18BN', 'ssl_method': 'simclr', 'pool_size': 6, 'num_random_networks': 4, 'probe_max_steps': 100, 'encoder_train_steps': 1, 'lr_net': 0.01, 'momentum': 0.9, 'weight_decay': 0.0005, 'projection_dim': 128, 'temperature': 0.2, 'barlow_lambda': 0.005, 'barlow_eps': 1e-05, 'distill_aug_strategy': 'color_crop_cutout_flip_scale_rotate', 'dsa': True, 'distill_aug_mode': 'S', 'init': 'kmeans', 'init_batch_size': 256, 'model': 'ResNet18BN', 'save_path': '/home/mmoslem3/scratch/MKDT/OT-SSL-DD/result_nn_20261022T193304Z_dsa_', 'save_every': 50, 'resume': None, 'log_every': 25, 'method': 'SSRD', 'effective_batch_size': 100}
+Objective: empirical W2 of whole-batch SSL state responses; exact assignment, no labels.
+Occupancy approximation: evolving synthetic-only learner pool; previous learner steps are detached.
+Evaluation is external and unchanged. Saved images use the original dataset normalization.
+Saved synthetic data to /home/mmoslem3/scratch/MKDT/OT-SSL-DD/result_nn_20261022T193304Z_dsa_/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 0); visualization: /home/mmoslem3/scratch/MKDT/OT-SSL-DD/result_nn_20261022T193304Z_dsa_/vis_SSRD_CIFAR10_ResNet18BN_0.2percent_iter0.png
+Prepared ResNet18BN/simclr learner, seed=357381689, age=0
+Prepared ResNet18BN/simclr learner, seed=1109584189, age=16
+Prepared ResNet18BN/simclr learner, seed=1777365824, age=33
+Prepared ResNet18BN/simclr learner, seed=1521547686, age=50
+Prepared ResNet18BN/simclr learner, seed=1582075031, age=66
+Prepared ResNet18BN/simclr learner, seed=1803697087, age=83
+[2026-10-22 13:33:32] distillation begins
+[2026-10-22 13:33:43] iter = 00001, response_W2_squared = 5.498013e+01, assignment_cost = 5.498013e+01, real_SSL = 1.855915, synthetic_SSL = 1.368760, probe_age = 45.5, pixel_grad_RMS = 7.377e-04, pixel drift RMS = 0.01021/255, PNG values changed = 0.00000%, lr = 2.000e-04

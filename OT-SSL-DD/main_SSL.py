@@ -41,6 +41,7 @@ def main(loss_function=transport_soft_assignment_loss, method='OTSoftAssignment'
     parser.add_argument('--lr_img', type=float, default=0.001, help='Adam learning rate for synthetic images')
     parser.add_argument('--batch_real', type=int, default=256, help='batch size for real data')
     parser.add_argument('--save_every', type=int, default=500)
+    parser.add_argument('--resume', type=str, default=None, help='continue synthetic images from this checkpoint')
     parser.add_argument('--seed', type=int, default=0)
     parser.add_argument('--device', choices=['cuda', 'cpu'], default='cuda')
     parser.add_argument('--dsa', action=argparse.BooleanOptionalAction, default=True)
@@ -98,6 +99,18 @@ def main(loss_function=transport_soft_assignment_loss, method='OTSoftAssignment'
     ''' initialize the synthetic data '''
     image_syn = get_images(num_syn).detach().clone().requires_grad_(True)
     image_syn_init = image_syn.detach().clone()
+    start_iteration = 0
+    resumed = torch.load(args.resume, map_location='cpu', weights_only=True) if args.resume else None
+    if resumed is not None:
+        if (any(resumed[key] != getattr(args, key) for key in ('dataset', 'model', 'percentage', 'seed', 'dsa'))
+                or resumed['data'].shape != image_syn.shape):
+            raise ValueError('Resume checkpoint does not match this run')
+        start_iteration = resumed['iteration']
+        if not 0 <= start_iteration <= args.Iteration:
+            raise ValueError('Resume iteration exceeds the requested stopping iteration')
+        with torch.no_grad():
+            image_syn.copy_(resumed['data'].to(args.device))
+        image_syn_init = resumed.get('image_syn_init', image_syn_init).to(args.device)
     diag_mean = torch.tensor(mean, device=args.device).view(1, channel, 1, 1)
     diag_std = torch.tensor(std, device=args.device).view(1, channel, 1, 1)
     augmentation = DMDSA(args.dsa_strategy, mean, std).to(args.device) if args.dsa else None
@@ -113,9 +126,15 @@ def main(loss_function=transport_soft_assignment_loss, method='OTSoftAssignment'
 
     ''' training '''
     optimizer_img = torch.optim.Adam([image_syn], lr=args.lr_img)
+    if resumed is not None:
+        if 'optimizer_state' in resumed:
+            optimizer_img.load_state_dict(resumed['optimizer_state'])
+        else:
+            print('Resume checkpoint has no Adam state; continuing saved images with fresh Adam.', flush=True)
+        print('Resuming iteration %d -> %d from %s' % (start_iteration, args.Iteration, args.resume), flush=True)
     result_path = Path(args.save_path) / ('res_OT-SSL_%s_%s_%gpercent.pt' % (args.dataset, args.model, args.percentage))
     print('%s training begins' % get_time(), flush=True)
-    for it in range(1, args.Iteration + 1):
+    for it in range(start_iteration + 1, args.Iteration + 1):
         synthetic_view = image_syn
         seed = DMDSA.seeds(1)[0] if args.dsa else None
         if args.dsa:
@@ -151,11 +170,15 @@ def main(loss_function=transport_soft_assignment_loss, method='OTSoftAssignment'
                 'teacher_checkpoint': str(checkpoint), 'teacher_sha256': teacher_saved['encoder_sha256'],
                 'dsa': args.dsa, 'augmentation': augmentation.configuration() if args.dsa else None,
                 'optimizer': 'adam', 'lr_img': args.lr_img,
+                'optimizer_state': optimizer_img.state_dict(), 'image_syn_init': image_syn_init.detach().cpu(),
+                'resumed_from': args.resume,
             })
             print('Saved synthetic data to %s' % result_path, flush=True)
 
     ''' evaluate the exact saved synthetic data '''
-    del teacher, output_syn, output_real, loss, optimizer_img
+    if start_iteration < args.Iteration:
+        del output_syn, output_real, loss
+    del teacher, optimizer_img
     saved = torch.load(result_path, map_location='cpu', weights_only=True)
     output = Path(args.save_path) / 'evaluation' / datetime.now().strftime('%Y%m%d_%H%M%S_%f')
     accuracies = []

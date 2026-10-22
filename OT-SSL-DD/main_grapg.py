@@ -41,6 +41,7 @@ def main():
 
     # -------------------- Distillation --------------------
     parser.add_argument('--Iteration', type=int, default=1000, help='training iterations')
+    parser.add_argument('--resume', type=str, default=None, help='continue saved synthetic images; temporary learners restart')
     parser.add_argument('--lr_img', type=float, default=0.001, help='Adam learning rate; RMS ceiling in /255 units with projected optimizer')
     parser.add_argument('--image_optimizer', choices=['adam', 'projected'], default='adam')
     parser.add_argument('--dsa', action=argparse.BooleanOptionalAction, default=True)
@@ -142,6 +143,19 @@ def main():
     ''' initialize the synthetic data '''
     image_syn = get_images(num_syn).detach().clone().requires_grad_(True)
     image_syn_init = image_syn.detach().clone()
+    start_iteration = 0
+    resumed = torch.load(args.resume, map_location='cpu', weights_only=True) if args.resume else None
+    if resumed is not None:
+        settings = resumed['args']
+        if (any(settings[key] != getattr(args, key) for key in ('dataset', 'model', 'percentage', 'seed', 'dsa'))
+                or resumed['data'].shape != image_syn.shape):
+            raise ValueError('Resume checkpoint does not match this run')
+        start_iteration = resumed['iteration']
+        if not 0 <= start_iteration <= args.Iteration:
+            raise ValueError('Resume iteration exceeds the requested stopping iteration')
+        with torch.no_grad():
+            image_syn.copy_(resumed['data'].to(args.device))
+        image_syn_init = resumed.get('image_syn_init', image_syn_init).to(args.device)
     
     diag_mean = torch.tensor(mean, device=args.device).view(1, channel, 1, 1)
     diag_std = torch.tensor(std, device=args.device).view(1, channel, 1, 1)
@@ -149,6 +163,12 @@ def main():
     pixel_min = (0.0 - diag_mean) / diag_std
     pixel_max = (1.0 - diag_mean) / diag_std
     optimizer_img = torch.optim.Adam([image_syn], lr=args.lr_img) if args.image_optimizer == 'adam' else None
+    if resumed is not None:
+        if optimizer_img is not None and resumed.get('optimizer_state') is not None:
+            optimizer_img.load_state_dict(resumed['optimizer_state'])
+        else:
+            print('Resume checkpoint has no Adam state; continuing saved images with a fresh image optimizer.', flush=True)
+        print('Resuming images at iteration %d -> %d; temporary learners restart.' % (start_iteration, args.Iteration), flush=True)
 
     def save_checkpoint(iteration):
         payload = {
@@ -157,6 +177,8 @@ def main():
             'iteration': iteration, 'seed': args.seed, 'args': {
                 key: value for key, value in vars(args).items() if key != 'dsa_param'
             },
+            'optimizer_state': optimizer_img.state_dict() if optimizer_img is not None else None,
+            'image_syn_init': image_syn_init.detach().cpu(), 'resumed_from': args.resume,
         }
         stem = 'res_%s_%s_%s_%gpercent' % (args.method, args.dataset, args.model, args.percentage)
         # Preserve initialization and every checkpoint, even when a later step
@@ -166,7 +188,8 @@ def main():
         torch.save(payload, os.path.join(args.save_path, stem + '.pt'))
         print(f'{get_time()} saved synthetic data to {archive_path}', flush=True)
 
-    save_checkpoint(0)
+    if resumed is None:
+        save_checkpoint(0)
 
     def evaluate_checkpoint(iteration):
         checkpoint_accs = {}
@@ -236,7 +259,7 @@ def main():
             ))
         return tasks
 
-    for it in range(1, args.Iteration + 1):
+    for it in range(start_iteration + 1, args.Iteration + 1):
         image_syn.grad = None
         averages = dict(loss=0.0, query_before_sgd=0.0, synthetic_ssl=0.0)
         sampled_tasks = []

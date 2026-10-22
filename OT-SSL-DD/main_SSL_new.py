@@ -94,6 +94,7 @@ def main():
     parser.add_argument('--Iteration', type=int, default=8000, help='number of synthetic pixel updates')
     parser.add_argument('--lr_img', type=float, default=0.001, help='Adam learning rate for synthetic pixels')
     parser.add_argument('--save_every', type=int, default=500)
+    parser.add_argument('--resume', type=str, default=None, help='continue synthetic images from this checkpoint')
     parser.add_argument('--batch_real', type=int, default=4096, help='batch size for caching full real moments')
     parser.add_argument('--batch_syn', type=int, default=512, help='synthetic scattering batch size; moments use all images')
     parser.add_argument('--scattering_J', type=int, default=2, help='log2 scattering scale (at least 2)')
@@ -163,13 +164,25 @@ def main():
     indices = np.random.RandomState(args.seed).permutation(len(dst_train))[:num_syn]
     image_syn = torch.stack([dst_train[int(i)][0] for i in indices]).to(args.device).detach().requires_grad_(True)
     image_syn_initial = image_syn.detach().clone()
+    start_iteration = 0
+    resumed = torch.load(args.resume, map_location='cpu', weights_only=True) if args.resume else None
+    if resumed is not None:
+        if (any(resumed[key] != getattr(args, key) for key in ('dataset', 'model', 'percentage', 'seed', 'dsa'))
+                or resumed['data'].shape != image_syn.shape):
+            raise ValueError('Resume checkpoint does not match this run')
+        start_iteration = resumed['iteration']
+        if not 0 <= start_iteration <= args.Iteration:
+            raise ValueError('Resume iteration exceeds the requested stopping iteration')
+        with torch.no_grad():
+            image_syn.copy_(resumed['data'].to(args.device))
+        image_syn_initial = resumed.get('image_syn_init', image_syn_initial).to(args.device)
     diag_mean = torch.tensor(mean, device=args.device).view(1, channel, 1, 1)
     diag_std = torch.tensor(std, device=args.device).view(1, channel, 1, 1)
 
     def to_uint8(images):
         return ((images * diag_std + diag_mean) * 255 + 0.5).clamp(0, 255).to(torch.uint8)
 
-    image_syn_init_uint8 = to_uint8(image_syn.detach())
+    image_syn_init_uint8 = to_uint8(image_syn_initial)
 
     # Phi is fixed, so the full-dataset real statistics are computed only once.
     # Inputs use the same dataset normalization as the downstream SSL evaluator.
@@ -191,6 +204,14 @@ def main():
     ), flush=True)
     print('%s distillation begins' % get_time(), flush=True)
     optimizer_img = torch.optim.Adam([image_syn], lr=args.lr_img)
+    if resumed is not None:
+        if 'optimizer_state' in resumed:
+            optimizer_img.load_state_dict(resumed['optimizer_state'])
+        else:
+            print('Resume checkpoint has no Adam state; continuing saved images with fresh Adam.', flush=True)
+        if 'augmentation_rng' in resumed:
+            augmentation_rng.bit_generator.state = resumed['augmentation_rng']
+        print('Resuming iteration %d -> %d from %s' % (start_iteration, args.Iteration, args.resume), flush=True)
     common = reference_modules()['common']
     save_name = os.path.join(args.save_path, 'res_Scattering-SSL_%s_%s_%gpercent.pt' % (
         args.dataset, args.model, args.percentage
@@ -211,6 +232,8 @@ def main():
             'dsa': args.dsa,
             'augmentation': augmentation.configuration() if args.dsa else None,
             'optimizer': 'adam', 'lr_img': args.lr_img,
+            'optimizer_state': optimizer_img.state_dict(), 'image_syn_init': image_syn_initial.detach().cpu(),
+            'augmentation_rng': augmentation_rng.bit_generator.state, 'resumed_from': args.resume,
             'distill_augmentation': {
                 'views': args.distill_aug_views, 'strategy': args.distill_aug_strategy,
                 'mode': args.distill_aug_mode, 'batch_real': args.batch_real, 'seed': args.seed,
@@ -220,7 +243,7 @@ def main():
         print('Saved synthetic data to %s' % save_name, flush=True)
 
 
-    for it in range(1, args.Iteration + 1):
+    for it in range(start_iteration + 1, args.Iteration + 1):
         optimizer_img.zero_grad(set_to_none=True)
         loss, mean_loss, covariance_loss = backward_scattering_moments(
             image_syn, scattering, real_mean, real_covariance,

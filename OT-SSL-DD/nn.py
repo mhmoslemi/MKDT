@@ -480,7 +480,8 @@ def deepcluster_initialize(dst_train, num_syn, device, seed, channel, num_classe
     return torch.stack([_images_from_batch(dst_train[index]) for index in chosen]).to(device)
 
 
-def save_synthetic(iteration, image_syn, args, mean, std, histories, random_models, methods, final=False):
+def save_synthetic(iteration, image_syn, args, mean, std, histories, random_models, methods, final=False,
+                   training_state=None):
     """Keep visualization snapshots, numbered .pt files, and eval.py's latest path."""
     images = image_syn.detach().cpu().contiguous()
     if not torch.isfinite(images).all():
@@ -512,6 +513,8 @@ def save_synthetic(iteration, image_syn, args, mean, std, histories, random_mode
     )
     for name, values in histories.items():
         saved[name] = torch.tensor(values, dtype=torch.float64)
+    if training_state is not None:
+        saved.update(training_state)
 
     base = 'res_IIC_%s_%s_%gpercent' % (args.dataset, args.model, args.percentage)
     snapshot_path = os.path.join(args.save_path, base + '_.pt')
@@ -567,6 +570,7 @@ def main():
     parser.add_argument('--model', default='ResNet18', help='Model label in the existing evaluator-compatible filename')
     parser.add_argument('--save_path', default='agents')
     parser.add_argument('--save_every', type=int, default=50)
+    parser.add_argument('--resume', default=None, help='continue saved images and iteration; learner pool restarts')
     parser.add_argument('--log_every', type=int, default=25)
     args = parser.parse_args()
 
@@ -609,7 +613,21 @@ def main():
               (args.effective_batch_size, num_syn), flush=True)
 
     objective_rng = np.random.default_rng(args.seed + 10_000)
-    if args.init == 'kmeans':
+    resumed = torch.load(args.resume, map_location='cpu', weights_only=True) if args.resume else None
+    start_iteration = 0
+    if resumed is not None:
+        settings = resumed['config']
+        if (any(settings[key] != getattr(args, key) for key in
+                ('dataset', 'model', 'percentage', 'seed', 'dsa', 'random_models', 'ssl_method'))
+                or resumed['normalization'] != [list(mean), list(std)]
+                or tuple(resumed['data'].shape) != (num_syn, channel, *im_size)
+                or not torch.isfinite(resumed['data']).all().item()):
+            raise ValueError('Resume checkpoint does not match this run or contains invalid images')
+        start_iteration = resumed['iteration']
+        if not 0 <= start_iteration <= args.Iteration:
+            raise ValueError('Resume iteration exceeds the requested stopping iteration')
+        image_syn_init = resumed['data'].to(args.device).detach().clone()
+    elif args.init == 'kmeans':
         image_syn_init = deepcluster_initialize(dst_train, num_syn, args.device, args.seed,
                                                 channel, num_classes, im_size, random_models[0], args.init_batch_size)
     else:
@@ -617,6 +635,8 @@ def main():
         image_syn_init = torch.stack([_images_from_batch(dst_train[int(index)]) for index in indices]).to(args.device)
     image_syn = image_syn_init.detach().clone().requires_grad_(True)
     image_syn_initial = image_syn.detach().clone()
+    if resumed is not None and 'image_syn_initial' in resumed:
+        image_syn_initial = resumed['image_syn_initial'].to(args.device)
     del image_syn_init
     diag_mean = torch.tensor(mean, device=args.device).view(1, channel, 1, 1)
     diag_std = torch.tensor(std, device=args.device).view(1, channel, 1, 1)
@@ -636,12 +656,24 @@ def main():
     histories = {name: [] for name in (
         'loss_history', 'total_loss_history', 'assignment_loss_history', 'real_ssl_history',
         'synthetic_ssl_history', 'encoder_ssl_history', 'real_response_energy_history', 'probe_age_history')}
+    if resumed is not None:
+        for name in histories:
+            histories[name] = resumed[name].tolist()
+        if 'optimizer_state' in resumed:
+            optimizer_img.load_state_dict(resumed['optimizer_state'])
+            scheduler_img.load_state_dict(resumed['scheduler_state'])
+            objective_rng.bit_generator.state = resumed['objective_rng']
+        else:
+            print('Old checkpoint has no Adam state; continuing saved images with fresh Adam and resume-relative drift.', flush=True)
+        print('Resuming saved iteration %d -> %d; temporary learner pool restarts.' %
+              (start_iteration, args.Iteration), flush=True)
 
     print('Hyper-parameters:\n', args.__dict__, flush=True)
     print('Objective: empirical W2 of whole-batch SSL state responses; exact assignment, no labels.', flush=True)
     print('Occupancy approximation: evolving synthetic-only learner pool; previous learner steps are detached.', flush=True)
     print('Evaluation is external and unchanged. Saved images use the original dataset normalization.', flush=True)
-    save_synthetic(0, image_syn, args, mean, std, histories, random_models, methods)
+    if resumed is None:
+        save_synthetic(0, image_syn, args, mean, std, histories, random_models, methods)
 
     pool = []
     for model_name in random_models:
@@ -656,7 +688,7 @@ def main():
                 print('Prepared %s/%s learner, seed=%d, age=%d' % (model_name, method, seed, probe['age']), flush=True)
 
     print('%s distillation begins' % get_time(), flush=True)
-    for iteration in range(1, args.Iteration + 1):
+    for iteration in range(start_iteration + 1, args.Iteration + 1):
         optimizer_img.zero_grad(set_to_none=True)
         selected = objective_rng.choice(len(pool), size=args.num_random_networks, replace=False).tolist()
         sampled = []
@@ -710,7 +742,13 @@ def main():
                    pixel_grad_rms, drift, changed, step_lr), flush=True)
         if iteration % args.save_every == 0 or iteration == args.Iteration:
             save_synthetic(iteration, image_syn, args, mean, std, histories, random_models, methods,
-                           final=iteration == args.Iteration)
+                           final=iteration == args.Iteration, training_state={
+                               'optimizer_state': optimizer_img.state_dict(),
+                               'scheduler_state': scheduler_img.state_dict(),
+                               'objective_rng': objective_rng.bit_generator.state,
+                               'image_syn_initial': image_syn_initial.detach().cpu(),
+                               'resumed_from': args.resume,
+                           })
 
 
 if __name__ == '__main__':
