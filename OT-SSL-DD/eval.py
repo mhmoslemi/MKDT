@@ -191,8 +191,9 @@ def main():
     parser.add_argument("--seed", type=int, default=0)
     parser.add_argument("--device", choices=["cuda", "cpu"], default="cuda")
     parser.add_argument("--data-path", default=str(ROOT.parent / "data"))
-    parser.add_argument("--synthetic-checkpoint", type=Path, default=None)
-    parser.add_argument("--synthetic-root", type=Path, default=None, help="Legacy sizeN/res_IIC_DATASET_ConvNet_Npercent.pt layout")
+    synthetic_source = parser.add_mutually_exclusive_group()
+    synthetic_source.add_argument("--synthetic-checkpoint", type=Path, default=Path("method_final_oneteacher/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt"))
+    synthetic_source.add_argument("--synthetic-root", type=Path, default=None, help="Legacy sizeN/res_IIC_DATASET_ConvNet_Npercent.pt layout")
     parser.add_argument("--save-path", type=Path, default=None)
     args = parser.parse_args()
 
@@ -204,14 +205,12 @@ def main():
         parser.error("No SSL epoch schedule for this size; set --ssl-epochs explicitly")
     if min(args.epoch_eval_train, args.epoch_linear_train, args.runs, args.batch_linear, args.ssl_log_every) < 1 or args.lr_linear <= 0 or not 0 < args.percentage <= 100:
         parser.error("Epochs, runs, batches, print interval and learning rate must be positive; percentage must be in (0, 100]")
-    if args.synthetic_checkpoint is not None and args.synthetic_root is not None:
-        parser.error("Use --synthetic-checkpoint or --synthetic-root, not both")
     
     checkpoint_path = args.synthetic_checkpoint
-    if checkpoint_path is None:
-        if args.synthetic_root is None:
-            parser.error("Specify --synthetic-checkpoint (the saved synthetic images)")
+    if args.synthetic_root is not None:
         checkpoint_path = args.synthetic_root / f"size{args.percentage:g}" / f"res_IIC_{args.dataset}_ConvNet_{args.percentage:g}percent.pt"
+
+
 
     checkpoint_path = Path(checkpoint_path)
     torch.set_num_threads(int(os.environ.get("SLURM_CPUS_PER_TASK", "1")))

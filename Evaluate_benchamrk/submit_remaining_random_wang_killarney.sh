@@ -1,6 +1,6 @@
 #!/bin/bash
 # Remaining RANDOM SSL only, on Killarney, all Wang. Run with bash, not sbatch.
-# Audit: 34 cancelled pending + 16 CUDA failures + 3 missing-log jobs = 53 jobs / 78 seeds.
+# Audit: 33 cancelled pending + 16 CUDA failures + 3 missing-log jobs = 52 jobs / 76 seeds.
 # Explicitly EXCLUDED at the user's request: timeout jobs 6341234,6341239,6341277,
 # 6341333,6341334,6341336,6341390. Their files/recorded epochs are not modified.
 # No MKDT, evaluation, cancellation, deletion, or training-code changes.
@@ -47,7 +47,6 @@ tasks=(
     '6341244 CIFAR10 ResNet18 2 simclr 8 2 6000 04:47:05'
     '6341249 CIFAR10 ResNet18 2 barlowtwins 8 2 6000 04:42:57'
     '6341274 CIFAR100 ConvNet 2 simclr 8 2 6000 04:01:37'
-    '6341279 CIFAR100 ConvNet 2 barlowtwins 8 2 6000 03:57:29'
     '6341305 CIFAR100 VGG11 2 simclr 8 2 6000 04:16:26'
     '6341310 CIFAR100 VGG11 2 barlowtwins 8 2 6000 04:08:04'
     '6341326 CIFAR100 ResNet18 1 barlowtwins 0 2 8000 02:16:34'
@@ -112,7 +111,7 @@ for old in 6341184 6341185 6341186 6341326 6341327 6341328 6341329 6341330 \
     excluded[$node]=1
 done
 exclude_nodes=$(printf '%s\n' "${!excluded[@]}" | sort | paste -sd, -)
-printf 'All Wang; maximum 53 jobs / 78 seeds. Excluded GPU-failure nodes: %s\n' "$exclude_nodes"
+printf 'All Wang; maximum 52 jobs / 76 seeds. Excluded GPU-failure nodes: %s\n' "$exclude_nodes"
 exec 9>"$output_root/.remaining_random_wang.lock"
 flock -n 9 || { echo 'Another copy of this launcher is running.' >&2; exit 2; }
 queue=$(squeue -h -u "$(id -un)" -o '%i|%j')
@@ -158,5 +157,5 @@ for task in "${tasks[@]}"; do
         "$job" "$source_name" "$model" "$subset" "$ssl" "$tag" "$walltime" "$account"
     submitted=$((submitted + 1))
 done
-printf 'DONE: submitted %s of 53 remaining random jobs. Receipt: %s\n' "$submitted" "$receipt"
+printf 'DONE: submitted %s of 52 remaining random jobs. Receipt: %s\n' "$submitted" "$receipt"
 echo 'The seven accepted timeout cases were not submitted or modified.'

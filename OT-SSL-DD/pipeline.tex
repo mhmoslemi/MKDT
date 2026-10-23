@@ -1,0 +1,94 @@
+% Manuscript section; requires amsmath and amssymb.
+\section{Method}
+\label{sec:vt_method}
+
+Given an unlabeled dataset $\mathcal{X}$, we optimize a small synthetic set
+$\mathcal{S}=\{s_j\}_{j=1}^{M}$ using a frozen, self-supervised teacher $E$.
+The synthetic images serve as learnable prototypes: they should organize real
+images across augmentations and reproduce their feature changes between views.
+Figure~\ref{fig:vt_pipeline} summarizes the pipeline.
+
+We initialize the prototypes with representative real images. A separate,
+randomly initialized encoder extracts features from the training set; K-means
+groups these features into $M$ clusters, and the real image nearest each center
+initializes one prototype. This encoder is then discarded. The pretrained
+teacher supplies all subsequent distillation features, without updating its
+weights or using class labels.
+
+Each iteration samples a real minibatch $\{x_i\}_{i=1}^{B}$ and two
+differentiable augmentation draws $t_1,t_2$. Each draw is shared between the real
+and synthetic sets. Writing $f(x)=E(x)/\|E(x)\|_2$, the resulting features are
+\begin{equation}
+\begin{aligned}
+ u_i=f(t_1(x_i)), &\qquad v_i=f(t_2(x_i)),\\
+ a_j=f(t_1(s_j)), &\qquad b_j=f(t_2(s_j)).
+\end{aligned}
+\label{eq:vt_features}
+\end{equation}
+Thus, $(u_i,v_i)$ is a real view pair and $(a_j,b_j)$ is a synthetic view pair.
+Each real feature is assigned softly to the synthetic prototypes in its view:
+\begin{equation}
+ p^1_{ij}=\operatorname{softmax}_{j}(u_i^\top a_j/\tau),\qquad
+ p^2_{ij}=\operatorname{softmax}_{j}(v_i^\top b_j/\tau).
+\label{eq:vt_assignments}
+\end{equation}
+Here $\tau$ controls assignment sharpness. To make these assignments informative
+across views, we maximize the mutual information of their joint distribution:
+\begin{equation}
+\begin{aligned}
+ P&=\operatorname{sym}\!\left((p^1)^\top p^2/B\right),\\
+ I(P)&=\sum_{j,k}P_{jk}\log\frac{P_{jk}}{P_{j\cdot}P_{\cdot k}}.
+\end{aligned}
+\label{eq:vt_information}
+\end{equation}
+We use $\operatorname{sym}(A)=(A+A^\top)/2$; $P_{j\cdot}$ and $P_{\cdot k}$
+are its row and column marginals. This objective favors assignments that are
+predictive across views without assigning every real image to one prototype.
+
+We also require each synthetic pair to change like the real pairs it represents.
+The average assignment $r_{ij}=(p^1_{ij}+p^2_{ij})/2$ measures the responsibility
+of prototype $j$ for real pair $i$. Normalizing across real pairs gives
+$w_{ij}=r_{ij}/(\sum_{\ell}r_{\ell j}+\epsilon)$.
+Each pair is summarized by two quantities: its displacement and its cosine
+similarity. For a synthetic pair and its weighted real targets, these are
+\begin{equation}
+\begin{aligned}
+ \delta_j &= a_j-b_j,
+ &\bar\delta_j &= \sum_i w_{ij}(u_i-v_i),\\
+ c_j &= a_j^\top b_j,
+ &\bar c_j &= \sum_i w_{ij}(u_i^\top v_i).
+\end{aligned}
+\label{eq:vt_targets}
+\end{equation}
+Displacement captures the direction and magnitude of feature movement, while
+cosine similarity measures how strongly the views still agree. We match them:
+\begin{equation}
+\begin{aligned}
+ \mathcal{L}_{\mathrm{move}}
+ &=\frac{1}{Md}\sum_j\|\delta_j-\bar\delta_j\|_2^2,\\
+ \mathcal{L}_{\mathrm{agree}}
+ &=\frac{1}{M}\sum_j\rho(c_j-\bar c_j),
+\end{aligned}
+\label{eq:vt_matching}
+\end{equation}
+where $d$ is the feature dimension and $\rho$ is smooth-$\ell_1$ with unit
+threshold. The complete objective, with our experimental weights, is
+\begin{equation}
+ \boxed{\mathcal{L}=-I(P)+2\mathcal{L}_{\mathrm{move}}
+                         +\mathcal{L}_{\mathrm{agree}}.}
+\label{eq:vt_objective}
+\end{equation}
+Real features are fixed during backpropagation, but the responsibilities
+$w_{ij}$ remain differentiable through the synthetic assignments. We average
+this objective over independent augmentation-pair draws and take one Adam step
+on the synthetic pixels, backpropagating through the frozen teacher and the
+augmentations. We clip the images to the valid range and repeat with a new
+minibatch and new transformations. No network weights are optimized.
+
+For the evaluated CIFAR-10 setting, $M=100$, $B=512$, and $\tau=0.2$.
+We average two augmentation-pair draws per iteration and optimize for
+$8{,}000$ iterations with a constant Adam learning rate of $10^{-3}$ on
+dataset-normalized pixels. The teacher is a full-data SimCLR ResNet-18 with
+BatchNorm. DSA samples one operation group per view from color, crop, cutout,
+flip, scale, and rotation. After distillation, the saved images train a fresh
+SSL encoder; the teacher is not reused as the evaluation encoder.

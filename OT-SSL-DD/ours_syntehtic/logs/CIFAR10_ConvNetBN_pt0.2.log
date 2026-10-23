@@ -1,0 +1,12 @@
+=== CIFAR10 / ConvNetBN / 0.2% / 10000 iterations: 2026-10-23T18:37:14Z ===
+Loaded fixed teacher seed 0: /scratch/mmoslem3/MKDT/OT-SSL-DD/../Evaluate_benchamrk/full_ssl_checkpoints_1000ep_3seeds/CIFAR10/ConvNet/full/pt100/simclr/seed_000/encoder.pt
+Initializing 100 synthetic prototypes via DeepCluster K-Means on ConvNetBN...
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic/CIFAR10/ConvNetBN/pt0.2/res_IIC_CIFAR10_ConvNetBN_0.2percent_final.pt (iteration 0/10000)
+Hyper-parameters: 
+ {'dataset': 'CIFAR10', 'percentage': 0.2, 'data_path': '/home/mmoslem3/scratch/data', 'device': 'cuda', 'seed': 0, 'Iteration': 10000, 'lr_img': 0.001, 'batch_real': 1024, 'temperature': 0.2, 'disp_weight': 0.0, 'pair_weight': 0.0, 'num_random_networks': 1, 'random_models': 'ConvNetBN', 'distill_aug_strategy': 'color_crop_cutout_flip_scale_rotate', 'dsa': True, 'distill_aug_mode': 'M', 'teacher_source': 'pretrained', 'teacher_seed': [0], 'teacher_ssl': 'simclr', 'teacher_path': '/scratch/mmoslem3/MKDT/OT-SSL-DD/../Evaluate_benchamrk/full_ssl_checkpoints_1000ep_3seeds', 'model': 'ConvNetBN', 'ssl_method': 'simclr', 'eval_mode': 'S', 'num_eval': 0, 'epoch_eval_train': 10000, 'label_percentage': 1.0, 'lr_linear': 0.1, 'batch_linear': 256, 'save_path': '/scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic/CIFAR10/ConvNetBN/pt0.2', 'resume': True, 'save_every': 100, 'feature_batch': 128}
+P_net support: ConvNetBN
+Objective: sum teacher losses (-MI + 0 * displacement + 0 * pair_similarity), averaged over 1 augmentation draw(s).
+[2026-10-23 12:37:27] distillation begins
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic/CIFAR10/ConvNetBN/pt0.2/res_IIC_CIFAR10_ConvNetBN_0.2percent_final.pt (iteration 1/10000)
+[2026-10-23 12:37:30] iter = 00025, neg_MI = -0.001414, displacement = 0.000148, pair_similarity = 0.001566, total_loss = -0.001414, pixel drift RMS = 0.69013/255
+[2026-10-23 12:37:33] iter = 00050, neg_MI = -0.001948, displacement = 0.000189, pair_similarity = 0.001998, total_loss = -0.001948, pixel drift RMS = 1.39149/255

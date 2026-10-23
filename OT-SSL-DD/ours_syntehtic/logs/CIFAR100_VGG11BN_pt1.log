@@ -1,0 +1,411 @@
+=== CIFAR100 / VGG11BN / 1% / 8000 iterations: 2026-10-23T17:50:35Z ===
+Loaded fixed teacher seed 0: /scratch/mmoslem3/MKDT/OT-SSL-DD/../Evaluate_benchamrk/full_ssl_checkpoints_1000ep_3seeds/CIFAR100/VGG11/full/pt100/simclr/seed_000/encoder.pt
+Initializing 500 synthetic prototypes via DeepCluster K-Means on VGG11BN...
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic/CIFAR100/VGG11BN/pt1/res_IIC_CIFAR100_VGG11BN_1percent_final.pt (iteration 0/8000)
+Hyper-parameters: 
+ {'dataset': 'CIFAR100', 'percentage': 1.0, 'data_path': '/home/mmoslem3/scratch/data', 'device': 'cuda', 'seed': 0, 'Iteration': 8000, 'lr_img': 0.001, 'batch_real': 1024, 'temperature': 0.2, 'disp_weight': 0.0, 'pair_weight': 0.0, 'num_random_networks': 1, 'random_models': 'VGG11BN', 'distill_aug_strategy': 'color_crop_cutout_flip_scale_rotate', 'dsa': True, 'distill_aug_mode': 'M', 'teacher_source': 'pretrained', 'teacher_seed': [0], 'teacher_ssl': 'simclr', 'teacher_path': '/scratch/mmoslem3/MKDT/OT-SSL-DD/../Evaluate_benchamrk/full_ssl_checkpoints_1000ep_3seeds', 'model': 'VGG11BN', 'ssl_method': 'simclr', 'eval_mode': 'S', 'num_eval': 0, 'epoch_eval_train': 10000, 'label_percentage': 1.0, 'lr_linear': 0.1, 'batch_linear': 256, 'save_path': '/scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic/CIFAR100/VGG11BN/pt1', 'resume': True, 'save_every': 100, 'feature_batch': 128}
+P_net support: VGG11BN
+Objective: sum teacher losses (-MI + 0 * displacement + 0 * pair_similarity), averaged over 1 augmentation draw(s).
+[2026-10-23 11:50:48] distillation begins
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic/CIFAR100/VGG11BN/pt1/res_IIC_CIFAR100_VGG11BN_1percent_final.pt (iteration 1/8000)
+[2026-10-23 11:50:52] iter = 00025, neg_MI = -0.008662, displacement = 0.000254, pair_similarity = 0.000986, total_loss = -0.008662, pixel drift RMS = 0.70361/255
+[2026-10-23 11:50:56] iter = 00050, neg_MI = -0.010392, displacement = 0.000767, pair_similarity = 0.008056, total_loss = -0.010392, pixel drift RMS = 1.38328/255
+[2026-10-23 11:51:00] iter = 00075, neg_MI = -0.011472, displacement = 0.000584, pair_similarity = 0.004028, total_loss = -0.011472, pixel drift RMS = 2.05827/255
+[2026-10-23 11:51:04] iter = 00100, neg_MI = -0.011768, displacement = 0.000439, pair_similarity = 0.002947, total_loss = -0.011768, pixel drift RMS = 2.66342/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic/CIFAR100/VGG11BN/pt1/res_IIC_CIFAR100_VGG11BN_1percent_final.pt (iteration 100/8000)
+[2026-10-23 11:51:07] iter = 00125, neg_MI = -0.015138, displacement = 0.000421, pair_similarity = 0.002320, total_loss = -0.015138, pixel drift RMS = 3.22558/255
+[2026-10-23 11:51:11] iter = 00150, neg_MI = -0.014484, displacement = 0.000640, pair_similarity = 0.005902, total_loss = -0.014484, pixel drift RMS = 3.78160/255
+[2026-10-23 11:51:15] iter = 00175, neg_MI = -0.019214, displacement = 0.000185, pair_similarity = 0.000721, total_loss = -0.019214, pixel drift RMS = 4.26704/255
+[2026-10-23 11:51:19] iter = 00200, neg_MI = -0.019700, displacement = 0.000326, pair_similarity = 0.000829, total_loss = -0.019700, pixel drift RMS = 4.70412/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic/CIFAR100/VGG11BN/pt1/res_IIC_CIFAR100_VGG11BN_1percent_final.pt (iteration 200/8000)
+[2026-10-23 11:51:23] iter = 00225, neg_MI = -0.021661, displacement = 0.000190, pair_similarity = 0.000898, total_loss = -0.021661, pixel drift RMS = 5.11222/255
+[2026-10-23 11:51:26] iter = 00250, neg_MI = -0.022335, displacement = 0.000488, pair_similarity = 0.005989, total_loss = -0.022335, pixel drift RMS = 5.50338/255
+[2026-10-23 11:51:30] iter = 00275, neg_MI = -0.022822, displacement = 0.000615, pair_similarity = 0.006738, total_loss = -0.022822, pixel drift RMS = 5.87877/255
+[2026-10-23 11:51:34] iter = 00300, neg_MI = -0.039055, displacement = 0.000081, pair_similarity = 0.000133, total_loss = -0.039055, pixel drift RMS = 6.19212/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic/CIFAR100/VGG11BN/pt1/res_IIC_CIFAR100_VGG11BN_1percent_final.pt (iteration 300/8000)
+[2026-10-23 11:51:38] iter = 00325, neg_MI = -0.014990, displacement = 0.001081, pair_similarity = 0.011988, total_loss = -0.014990, pixel drift RMS = 6.48793/255
+[2026-10-23 11:51:42] iter = 00350, neg_MI = -0.031859, displacement = 0.000099, pair_similarity = 0.000165, total_loss = -0.031859, pixel drift RMS = 6.78432/255
+[2026-10-23 11:51:45] iter = 00375, neg_MI = -0.040152, displacement = 0.000123, pair_similarity = 0.000185, total_loss = -0.040152, pixel drift RMS = 7.05920/255
+[2026-10-23 11:51:49] iter = 00400, neg_MI = -0.032342, displacement = 0.000184, pair_similarity = 0.000399, total_loss = -0.032342, pixel drift RMS = 7.32547/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic/CIFAR100/VGG11BN/pt1/res_IIC_CIFAR100_VGG11BN_1percent_final.pt (iteration 400/8000)
+[2026-10-23 11:51:53] iter = 00425, neg_MI = -0.042836, displacement = 0.000124, pair_similarity = 0.000196, total_loss = -0.042836, pixel drift RMS = 7.59032/255
+[2026-10-23 11:51:57] iter = 00450, neg_MI = -0.024944, displacement = 0.000568, pair_similarity = 0.008754, total_loss = -0.024944, pixel drift RMS = 7.84311/255
+[2026-10-23 11:52:01] iter = 00475, neg_MI = -0.037389, displacement = 0.000161, pair_similarity = 0.000289, total_loss = -0.037389, pixel drift RMS = 8.07913/255
+[2026-10-23 11:52:04] iter = 00500, neg_MI = -0.043705, displacement = 0.000178, pair_similarity = 0.000535, total_loss = -0.043705, pixel drift RMS = 8.29885/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic/CIFAR100/VGG11BN/pt1/res_IIC_CIFAR100_VGG11BN_1percent_final.pt (iteration 500/8000)
+[2026-10-23 11:52:08] iter = 00525, neg_MI = -0.030982, displacement = 0.000335, pair_similarity = 0.002158, total_loss = -0.030982, pixel drift RMS = 8.50671/255
+[2026-10-23 11:52:12] iter = 00550, neg_MI = -0.015766, displacement = 0.000972, pair_similarity = 0.014803, total_loss = -0.015766, pixel drift RMS = 8.70019/255
+[2026-10-23 11:52:16] iter = 00575, neg_MI = -0.039966, displacement = 0.000220, pair_similarity = 0.001535, total_loss = -0.039966, pixel drift RMS = 8.87513/255
+[2026-10-23 11:52:20] iter = 00600, neg_MI = -0.042723, displacement = 0.000112, pair_similarity = 0.000147, total_loss = -0.042723, pixel drift RMS = 9.07610/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic/CIFAR100/VGG11BN/pt1/res_IIC_CIFAR100_VGG11BN_1percent_final.pt (iteration 600/8000)
+[2026-10-23 11:52:24] iter = 00625, neg_MI = -0.033266, displacement = 0.000170, pair_similarity = 0.000512, total_loss = -0.033266, pixel drift RMS = 9.26990/255
+[2026-10-23 11:52:27] iter = 00650, neg_MI = -0.034927, displacement = 0.000443, pair_similarity = 0.009524, total_loss = -0.034927, pixel drift RMS = 9.45134/255
+[2026-10-23 11:52:31] iter = 00675, neg_MI = -0.027379, displacement = 0.000563, pair_similarity = 0.005203, total_loss = -0.027379, pixel drift RMS = 9.61802/255
+[2026-10-23 11:52:35] iter = 00700, neg_MI = -0.033841, displacement = 0.000272, pair_similarity = 0.001311, total_loss = -0.033841, pixel drift RMS = 9.77934/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic/CIFAR100/VGG11BN/pt1/res_IIC_CIFAR100_VGG11BN_1percent_final.pt (iteration 700/8000)
+[2026-10-23 11:52:39] iter = 00725, neg_MI = -0.014386, displacement = 0.001070, pair_similarity = 0.011905, total_loss = -0.014386, pixel drift RMS = 9.93482/255
+[2026-10-23 11:52:42] iter = 00750, neg_MI = -0.035863, displacement = 0.000515, pair_similarity = 0.003426, total_loss = -0.035863, pixel drift RMS = 10.09734/255
+[2026-10-23 11:52:46] iter = 00775, neg_MI = -0.039807, displacement = 0.000213, pair_similarity = 0.000767, total_loss = -0.039807, pixel drift RMS = 10.25267/255
+[2026-10-23 11:52:50] iter = 00800, neg_MI = -0.034422, displacement = 0.000225, pair_similarity = 0.001089, total_loss = -0.034422, pixel drift RMS = 10.40692/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic/CIFAR100/VGG11BN/pt1/res_IIC_CIFAR100_VGG11BN_1percent_final.pt (iteration 800/8000)
+[2026-10-23 11:52:54] iter = 00825, neg_MI = -0.038982, displacement = 0.000189, pair_similarity = 0.000922, total_loss = -0.038982, pixel drift RMS = 10.54306/255
+[2026-10-23 11:52:57] iter = 00850, neg_MI = -0.043658, displacement = 0.000078, pair_similarity = 0.000210, total_loss = -0.043658, pixel drift RMS = 10.68013/255
+[2026-10-23 11:53:01] iter = 00875, neg_MI = -0.022634, displacement = 0.000836, pair_similarity = 0.012094, total_loss = -0.022634, pixel drift RMS = 10.82011/255
+[2026-10-23 11:53:05] iter = 00900, neg_MI = -0.034997, displacement = 0.000347, pair_similarity = 0.000905, total_loss = -0.034997, pixel drift RMS = 10.96488/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic/CIFAR100/VGG11BN/pt1/res_IIC_CIFAR100_VGG11BN_1percent_final.pt (iteration 900/8000)
+[2026-10-23 11:53:09] iter = 00925, neg_MI = -0.020320, displacement = 0.000803, pair_similarity = 0.007488, total_loss = -0.020320, pixel drift RMS = 11.09348/255
+[2026-10-23 11:53:13] iter = 00950, neg_MI = -0.025268, displacement = 0.000554, pair_similarity = 0.009451, total_loss = -0.025268, pixel drift RMS = 11.22285/255
+[2026-10-23 11:53:17] iter = 00975, neg_MI = -0.059289, displacement = 0.000000, pair_similarity = 0.000000, total_loss = -0.059289, pixel drift RMS = 11.34894/255
+[2026-10-23 11:53:21] iter = 01000, neg_MI = -0.043886, displacement = 0.000216, pair_similarity = 0.000445, total_loss = -0.043886, pixel drift RMS = 11.47892/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic/CIFAR100/VGG11BN/pt1/res_IIC_CIFAR100_VGG11BN_1percent_final.pt (iteration 1000/8000)
+[2026-10-23 11:53:25] iter = 01025, neg_MI = -0.023326, displacement = 0.000691, pair_similarity = 0.009271, total_loss = -0.023326, pixel drift RMS = 11.60447/255
+[2026-10-23 11:53:28] iter = 01050, neg_MI = -0.020317, displacement = 0.000832, pair_similarity = 0.009091, total_loss = -0.020317, pixel drift RMS = 11.72748/255
+[2026-10-23 11:53:32] iter = 01075, neg_MI = -0.034099, displacement = 0.000360, pair_similarity = 0.001307, total_loss = -0.034099, pixel drift RMS = 11.84842/255
+[2026-10-23 11:53:36] iter = 01100, neg_MI = -0.038402, displacement = 0.000315, pair_similarity = 0.001222, total_loss = -0.038402, pixel drift RMS = 11.95937/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic/CIFAR100/VGG11BN/pt1/res_IIC_CIFAR100_VGG11BN_1percent_final.pt (iteration 1100/8000)
+[2026-10-23 11:53:40] iter = 01125, neg_MI = -0.040633, displacement = 0.000235, pair_similarity = 0.001174, total_loss = -0.040633, pixel drift RMS = 12.06534/255
+[2026-10-23 11:53:44] iter = 01150, neg_MI = -0.051271, displacement = 0.000201, pair_similarity = 0.000574, total_loss = -0.051271, pixel drift RMS = 12.17796/255
+[2026-10-23 11:53:47] iter = 01175, neg_MI = -0.036058, displacement = 0.000509, pair_similarity = 0.009964, total_loss = -0.036058, pixel drift RMS = 12.28370/255
+[2026-10-23 11:53:51] iter = 01200, neg_MI = -0.037260, displacement = 0.000331, pair_similarity = 0.000837, total_loss = -0.037260, pixel drift RMS = 12.39037/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic/CIFAR100/VGG11BN/pt1/res_IIC_CIFAR100_VGG11BN_1percent_final.pt (iteration 1200/8000)
+[2026-10-23 11:53:55] iter = 01225, neg_MI = -0.037360, displacement = 0.000212, pair_similarity = 0.002008, total_loss = -0.037360, pixel drift RMS = 12.49149/255
+[2026-10-23 11:53:59] iter = 01250, neg_MI = -0.040573, displacement = 0.000078, pair_similarity = 0.000081, total_loss = -0.040573, pixel drift RMS = 12.59446/255
+[2026-10-23 11:54:03] iter = 01275, neg_MI = -0.050456, displacement = 0.000068, pair_similarity = 0.000095, total_loss = -0.050456, pixel drift RMS = 12.69862/255
+[2026-10-23 11:54:06] iter = 01300, neg_MI = -0.053621, displacement = 0.000087, pair_similarity = 0.000125, total_loss = -0.053621, pixel drift RMS = 12.78362/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic/CIFAR100/VGG11BN/pt1/res_IIC_CIFAR100_VGG11BN_1percent_final.pt (iteration 1300/8000)
+[2026-10-23 11:54:10] iter = 01325, neg_MI = -0.026659, displacement = 0.000678, pair_similarity = 0.007622, total_loss = -0.026659, pixel drift RMS = 12.87282/255
+[2026-10-23 11:54:14] iter = 01350, neg_MI = -0.033625, displacement = 0.000411, pair_similarity = 0.003183, total_loss = -0.033625, pixel drift RMS = 12.97006/255
+[2026-10-23 11:54:18] iter = 01375, neg_MI = -0.040971, displacement = 0.000338, pair_similarity = 0.002165, total_loss = -0.040971, pixel drift RMS = 13.06489/255
+[2026-10-23 11:54:22] iter = 01400, neg_MI = -0.037620, displacement = 0.000333, pair_similarity = 0.004700, total_loss = -0.037620, pixel drift RMS = 13.15142/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic/CIFAR100/VGG11BN/pt1/res_IIC_CIFAR100_VGG11BN_1percent_final.pt (iteration 1400/8000)
+[2026-10-23 11:54:26] iter = 01425, neg_MI = -0.052165, displacement = 0.000000, pair_similarity = 0.000000, total_loss = -0.052165, pixel drift RMS = 13.24154/255
+[2026-10-23 11:54:29] iter = 01450, neg_MI = -0.030692, displacement = 0.000670, pair_similarity = 0.009815, total_loss = -0.030692, pixel drift RMS = 13.33416/255
+[2026-10-23 11:54:33] iter = 01475, neg_MI = -0.026310, displacement = 0.000585, pair_similarity = 0.006702, total_loss = -0.026310, pixel drift RMS = 13.42292/255
+[2026-10-23 11:54:37] iter = 01500, neg_MI = -0.029781, displacement = 0.000510, pair_similarity = 0.008993, total_loss = -0.029781, pixel drift RMS = 13.50012/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic/CIFAR100/VGG11BN/pt1/res_IIC_CIFAR100_VGG11BN_1percent_final.pt (iteration 1500/8000)
+[2026-10-23 11:54:41] iter = 01525, neg_MI = -0.039704, displacement = 0.000256, pair_similarity = 0.001350, total_loss = -0.039704, pixel drift RMS = 13.58694/255
+[2026-10-23 11:54:44] iter = 01550, neg_MI = -0.036432, displacement = 0.000033, pair_similarity = 0.000060, total_loss = -0.036432, pixel drift RMS = 13.66718/255
+[2026-10-23 11:54:48] iter = 01575, neg_MI = -0.044925, displacement = 0.000339, pair_similarity = 0.002420, total_loss = -0.044925, pixel drift RMS = 13.75075/255
+[2026-10-23 11:54:52] iter = 01600, neg_MI = -0.047987, displacement = 0.000133, pair_similarity = 0.000289, total_loss = -0.047987, pixel drift RMS = 13.83300/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic/CIFAR100/VGG11BN/pt1/res_IIC_CIFAR100_VGG11BN_1percent_final.pt (iteration 1600/8000)
+[2026-10-23 11:54:56] iter = 01625, neg_MI = -0.031639, displacement = 0.000510, pair_similarity = 0.002227, total_loss = -0.031639, pixel drift RMS = 13.90814/255
+[2026-10-23 11:54:59] iter = 01650, neg_MI = -0.016910, displacement = 0.001208, pair_similarity = 0.018569, total_loss = -0.016910, pixel drift RMS = 13.99114/255
+[2026-10-23 11:55:03] iter = 01675, neg_MI = -0.036034, displacement = 0.000439, pair_similarity = 0.004627, total_loss = -0.036034, pixel drift RMS = 14.06560/255
+[2026-10-23 11:55:07] iter = 01700, neg_MI = -0.052154, displacement = 0.000116, pair_similarity = 0.000274, total_loss = -0.052154, pixel drift RMS = 14.14065/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic/CIFAR100/VGG11BN/pt1/res_IIC_CIFAR100_VGG11BN_1percent_final.pt (iteration 1700/8000)
+[2026-10-23 11:55:11] iter = 01725, neg_MI = -0.034980, displacement = 0.000411, pair_similarity = 0.002279, total_loss = -0.034980, pixel drift RMS = 14.21020/255
+[2026-10-23 11:55:14] iter = 01750, neg_MI = -0.042944, displacement = 0.000222, pair_similarity = 0.000595, total_loss = -0.042944, pixel drift RMS = 14.28283/255
+[2026-10-23 11:55:18] iter = 01775, neg_MI = -0.021199, displacement = 0.000759, pair_similarity = 0.008237, total_loss = -0.021199, pixel drift RMS = 14.34425/255
+[2026-10-23 11:55:22] iter = 01800, neg_MI = -0.049041, displacement = 0.000389, pair_similarity = 0.001212, total_loss = -0.049041, pixel drift RMS = 14.41528/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic/CIFAR100/VGG11BN/pt1/res_IIC_CIFAR100_VGG11BN_1percent_final.pt (iteration 1800/8000)
+[2026-10-23 11:55:26] iter = 01825, neg_MI = -0.056266, displacement = 0.000000, pair_similarity = 0.000000, total_loss = -0.056266, pixel drift RMS = 14.49571/255
+[2026-10-23 11:55:29] iter = 01850, neg_MI = -0.045579, displacement = 0.000247, pair_similarity = 0.001608, total_loss = -0.045579, pixel drift RMS = 14.57087/255
+[2026-10-23 11:55:33] iter = 01875, neg_MI = -0.049526, displacement = 0.000170, pair_similarity = 0.000572, total_loss = -0.049526, pixel drift RMS = 14.64426/255
+[2026-10-23 11:55:37] iter = 01900, neg_MI = -0.054137, displacement = 0.000075, pair_similarity = 0.000460, total_loss = -0.054137, pixel drift RMS = 14.71722/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic/CIFAR100/VGG11BN/pt1/res_IIC_CIFAR100_VGG11BN_1percent_final.pt (iteration 1900/8000)
+[2026-10-23 11:55:41] iter = 01925, neg_MI = -0.045620, displacement = 0.000119, pair_similarity = 0.000234, total_loss = -0.045620, pixel drift RMS = 14.78802/255
+[2026-10-23 11:55:45] iter = 01950, neg_MI = -0.051505, displacement = 0.000116, pair_similarity = 0.000164, total_loss = -0.051505, pixel drift RMS = 14.84900/255
+[2026-10-23 11:55:49] iter = 01975, neg_MI = -0.054765, displacement = 0.000034, pair_similarity = 0.000032, total_loss = -0.054765, pixel drift RMS = 14.91562/255
+[2026-10-23 11:55:52] iter = 02000, neg_MI = -0.035539, displacement = 0.000480, pair_similarity = 0.008349, total_loss = -0.035539, pixel drift RMS = 14.98162/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic/CIFAR100/VGG11BN/pt1/res_IIC_CIFAR100_VGG11BN_1percent_final.pt (iteration 2000/8000)
+[2026-10-23 11:55:56] iter = 02025, neg_MI = -0.042086, displacement = 0.000293, pair_similarity = 0.000796, total_loss = -0.042086, pixel drift RMS = 15.04195/255
+[2026-10-23 11:56:00] iter = 02050, neg_MI = -0.033273, displacement = 0.000473, pair_similarity = 0.010118, total_loss = -0.033273, pixel drift RMS = 15.10960/255
+[2026-10-23 11:56:04] iter = 02075, neg_MI = -0.039147, displacement = 0.000437, pair_similarity = 0.008029, total_loss = -0.039147, pixel drift RMS = 15.17359/255
+[2026-10-23 11:56:07] iter = 02100, neg_MI = -0.035811, displacement = 0.000237, pair_similarity = 0.000423, total_loss = -0.035811, pixel drift RMS = 15.23660/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic/CIFAR100/VGG11BN/pt1/res_IIC_CIFAR100_VGG11BN_1percent_final.pt (iteration 2100/8000)
+[2026-10-23 11:56:11] iter = 02125, neg_MI = -0.048465, displacement = 0.000154, pair_similarity = 0.000451, total_loss = -0.048465, pixel drift RMS = 15.30519/255
+[2026-10-23 11:56:15] iter = 02150, neg_MI = -0.044984, displacement = 0.000220, pair_similarity = 0.000946, total_loss = -0.044984, pixel drift RMS = 15.37480/255
+[2026-10-23 11:56:19] iter = 02175, neg_MI = -0.051583, displacement = 0.000030, pair_similarity = 0.000079, total_loss = -0.051583, pixel drift RMS = 15.44441/255
+[2026-10-23 11:56:23] iter = 02200, neg_MI = -0.033837, displacement = 0.000430, pair_similarity = 0.009195, total_loss = -0.033837, pixel drift RMS = 15.50186/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic/CIFAR100/VGG11BN/pt1/res_IIC_CIFAR100_VGG11BN_1percent_final.pt (iteration 2200/8000)
+[2026-10-23 11:56:26] iter = 02225, neg_MI = -0.035845, displacement = 0.000650, pair_similarity = 0.009632, total_loss = -0.035845, pixel drift RMS = 15.56439/255
+[2026-10-23 11:56:30] iter = 02250, neg_MI = -0.045629, displacement = 0.000175, pair_similarity = 0.002854, total_loss = -0.045629, pixel drift RMS = 15.62320/255
+[2026-10-23 11:56:34] iter = 02275, neg_MI = -0.044159, displacement = 0.000164, pair_similarity = 0.000317, total_loss = -0.044159, pixel drift RMS = 15.67586/255
+[2026-10-23 11:56:38] iter = 02300, neg_MI = -0.035767, displacement = 0.000541, pair_similarity = 0.006798, total_loss = -0.035767, pixel drift RMS = 15.72991/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic/CIFAR100/VGG11BN/pt1/res_IIC_CIFAR100_VGG11BN_1percent_final.pt (iteration 2300/8000)
+[2026-10-23 11:56:42] iter = 02325, neg_MI = -0.031823, displacement = 0.000557, pair_similarity = 0.006896, total_loss = -0.031823, pixel drift RMS = 15.78638/255
+[2026-10-23 11:56:45] iter = 02350, neg_MI = -0.041443, displacement = 0.000210, pair_similarity = 0.001077, total_loss = -0.041443, pixel drift RMS = 15.83938/255
+[2026-10-23 11:56:49] iter = 02375, neg_MI = -0.055392, displacement = 0.000130, pair_similarity = 0.000560, total_loss = -0.055392, pixel drift RMS = 15.89963/255
+[2026-10-23 11:56:53] iter = 02400, neg_MI = -0.037944, displacement = 0.000260, pair_similarity = 0.000435, total_loss = -0.037944, pixel drift RMS = 15.95879/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic/CIFAR100/VGG11BN/pt1/res_IIC_CIFAR100_VGG11BN_1percent_final.pt (iteration 2400/8000)
+[2026-10-23 11:56:57] iter = 02425, neg_MI = -0.045282, displacement = 0.000132, pair_similarity = 0.000212, total_loss = -0.045282, pixel drift RMS = 16.02015/255
+[2026-10-23 11:57:01] iter = 02450, neg_MI = -0.041779, displacement = 0.000367, pair_similarity = 0.004437, total_loss = -0.041779, pixel drift RMS = 16.07961/255
+[2026-10-23 11:57:04] iter = 02475, neg_MI = -0.047765, displacement = 0.000228, pair_similarity = 0.000495, total_loss = -0.047765, pixel drift RMS = 16.13806/255
+[2026-10-23 11:57:08] iter = 02500, neg_MI = -0.038930, displacement = 0.000363, pair_similarity = 0.006507, total_loss = -0.038930, pixel drift RMS = 16.19004/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic/CIFAR100/VGG11BN/pt1/res_IIC_CIFAR100_VGG11BN_1percent_final.pt (iteration 2500/8000)
+[2026-10-23 11:57:12] iter = 02525, neg_MI = -0.037157, displacement = 0.000421, pair_similarity = 0.006209, total_loss = -0.037157, pixel drift RMS = 16.23943/255
+[2026-10-23 11:57:16] iter = 02550, neg_MI = -0.033929, displacement = 0.000536, pair_similarity = 0.011344, total_loss = -0.033929, pixel drift RMS = 16.29145/255
+[2026-10-23 11:57:20] iter = 02575, neg_MI = -0.042157, displacement = 0.000160, pair_similarity = 0.001588, total_loss = -0.042157, pixel drift RMS = 16.35272/255
+[2026-10-23 11:57:24] iter = 02600, neg_MI = -0.027232, displacement = 0.000698, pair_similarity = 0.007972, total_loss = -0.027232, pixel drift RMS = 16.40429/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic/CIFAR100/VGG11BN/pt1/res_IIC_CIFAR100_VGG11BN_1percent_final.pt (iteration 2600/8000)
+[2026-10-23 11:57:28] iter = 02625, neg_MI = -0.042882, displacement = 0.000277, pair_similarity = 0.002648, total_loss = -0.042882, pixel drift RMS = 16.45433/255
+[2026-10-23 11:57:31] iter = 02650, neg_MI = -0.025904, displacement = 0.000657, pair_similarity = 0.006025, total_loss = -0.025904, pixel drift RMS = 16.50806/255
+[2026-10-23 11:57:35] iter = 02675, neg_MI = -0.018089, displacement = 0.001019, pair_similarity = 0.016640, total_loss = -0.018089, pixel drift RMS = 16.56062/255
+[2026-10-23 11:57:39] iter = 02700, neg_MI = -0.048724, displacement = 0.000193, pair_similarity = 0.000295, total_loss = -0.048724, pixel drift RMS = 16.61161/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic/CIFAR100/VGG11BN/pt1/res_IIC_CIFAR100_VGG11BN_1percent_final.pt (iteration 2700/8000)
+[2026-10-23 11:57:42] iter = 02725, neg_MI = -0.044887, displacement = 0.000362, pair_similarity = 0.006370, total_loss = -0.044887, pixel drift RMS = 16.66463/255
+[2026-10-23 11:57:46] iter = 02750, neg_MI = -0.041662, displacement = 0.000298, pair_similarity = 0.005222, total_loss = -0.041662, pixel drift RMS = 16.72112/255
+[2026-10-23 11:57:50] iter = 02775, neg_MI = -0.038897, displacement = 0.000351, pair_similarity = 0.001060, total_loss = -0.038897, pixel drift RMS = 16.77516/255
+[2026-10-23 11:57:54] iter = 02800, neg_MI = -0.042578, displacement = 0.000248, pair_similarity = 0.000545, total_loss = -0.042578, pixel drift RMS = 16.82390/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic/CIFAR100/VGG11BN/pt1/res_IIC_CIFAR100_VGG11BN_1percent_final.pt (iteration 2800/8000)
+[2026-10-23 11:57:58] iter = 02825, neg_MI = -0.045911, displacement = 0.000115, pair_similarity = 0.000307, total_loss = -0.045911, pixel drift RMS = 16.86886/255
+[2026-10-23 11:58:01] iter = 02850, neg_MI = -0.043384, displacement = 0.000303, pair_similarity = 0.000699, total_loss = -0.043384, pixel drift RMS = 16.91391/255
+[2026-10-23 11:58:05] iter = 02875, neg_MI = -0.040077, displacement = 0.000348, pair_similarity = 0.007215, total_loss = -0.040077, pixel drift RMS = 16.96408/255
+[2026-10-23 11:58:09] iter = 02900, neg_MI = -0.052686, displacement = 0.000000, pair_similarity = 0.000000, total_loss = -0.052686, pixel drift RMS = 17.00994/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic/CIFAR100/VGG11BN/pt1/res_IIC_CIFAR100_VGG11BN_1percent_final.pt (iteration 2900/8000)
+[2026-10-23 11:58:13] iter = 02925, neg_MI = -0.040434, displacement = 0.000434, pair_similarity = 0.005433, total_loss = -0.040434, pixel drift RMS = 17.05884/255
+[2026-10-23 11:58:17] iter = 02950, neg_MI = -0.025568, displacement = 0.000691, pair_similarity = 0.007837, total_loss = -0.025568, pixel drift RMS = 17.10333/255
+[2026-10-23 11:58:20] iter = 02975, neg_MI = -0.048540, displacement = 0.000180, pair_similarity = 0.000669, total_loss = -0.048540, pixel drift RMS = 17.15192/255
+[2026-10-23 11:58:24] iter = 03000, neg_MI = -0.028527, displacement = 0.000650, pair_similarity = 0.007016, total_loss = -0.028527, pixel drift RMS = 17.19399/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic/CIFAR100/VGG11BN/pt1/res_IIC_CIFAR100_VGG11BN_1percent_final.pt (iteration 3000/8000)
+[2026-10-23 11:58:28] iter = 03025, neg_MI = -0.036992, displacement = 0.000272, pair_similarity = 0.003183, total_loss = -0.036992, pixel drift RMS = 17.23818/255
+[2026-10-23 11:58:32] iter = 03050, neg_MI = -0.057130, displacement = 0.000073, pair_similarity = 0.000159, total_loss = -0.057130, pixel drift RMS = 17.28366/255
+[2026-10-23 11:58:36] iter = 03075, neg_MI = -0.061165, displacement = 0.000073, pair_similarity = 0.000153, total_loss = -0.061165, pixel drift RMS = 17.33312/255
+[2026-10-23 11:58:39] iter = 03100, neg_MI = -0.041742, displacement = 0.000287, pair_similarity = 0.000645, total_loss = -0.041742, pixel drift RMS = 17.37925/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic/CIFAR100/VGG11BN/pt1/res_IIC_CIFAR100_VGG11BN_1percent_final.pt (iteration 3100/8000)
+[2026-10-23 11:58:43] iter = 03125, neg_MI = -0.034782, displacement = 0.000342, pair_similarity = 0.001485, total_loss = -0.034782, pixel drift RMS = 17.41968/255
+[2026-10-23 11:58:47] iter = 03150, neg_MI = -0.019842, displacement = 0.000926, pair_similarity = 0.014672, total_loss = -0.019842, pixel drift RMS = 17.46771/255
+[2026-10-23 11:58:50] iter = 03175, neg_MI = -0.024958, displacement = 0.000845, pair_similarity = 0.011483, total_loss = -0.024958, pixel drift RMS = 17.51411/255
+[2026-10-23 11:58:54] iter = 03200, neg_MI = -0.037748, displacement = 0.000302, pair_similarity = 0.001586, total_loss = -0.037748, pixel drift RMS = 17.55654/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic/CIFAR100/VGG11BN/pt1/res_IIC_CIFAR100_VGG11BN_1percent_final.pt (iteration 3200/8000)
+[2026-10-23 11:58:58] iter = 03225, neg_MI = -0.027966, displacement = 0.000624, pair_similarity = 0.006885, total_loss = -0.027966, pixel drift RMS = 17.59922/255
+[2026-10-23 11:59:02] iter = 03250, neg_MI = -0.025302, displacement = 0.000802, pair_similarity = 0.007710, total_loss = -0.025302, pixel drift RMS = 17.63885/255
+[2026-10-23 11:59:06] iter = 03275, neg_MI = -0.039874, displacement = 0.000182, pair_similarity = 0.000404, total_loss = -0.039874, pixel drift RMS = 17.68059/255
+[2026-10-23 11:59:09] iter = 03300, neg_MI = -0.057479, displacement = 0.000000, pair_similarity = 0.000000, total_loss = -0.057479, pixel drift RMS = 17.72601/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic/CIFAR100/VGG11BN/pt1/res_IIC_CIFAR100_VGG11BN_1percent_final.pt (iteration 3300/8000)
+[2026-10-23 11:59:13] iter = 03325, neg_MI = -0.041005, displacement = 0.000446, pair_similarity = 0.003192, total_loss = -0.041005, pixel drift RMS = 17.76788/255
+[2026-10-23 11:59:17] iter = 03350, neg_MI = -0.049994, displacement = 0.000177, pair_similarity = 0.000620, total_loss = -0.049994, pixel drift RMS = 17.80586/255
+[2026-10-23 11:59:20] iter = 03375, neg_MI = -0.042778, displacement = 0.000251, pair_similarity = 0.000488, total_loss = -0.042778, pixel drift RMS = 17.84648/255
+[2026-10-23 11:59:24] iter = 03400, neg_MI = -0.043627, displacement = 0.000303, pair_similarity = 0.002962, total_loss = -0.043627, pixel drift RMS = 17.88340/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic/CIFAR100/VGG11BN/pt1/res_IIC_CIFAR100_VGG11BN_1percent_final.pt (iteration 3400/8000)
+[2026-10-23 11:59:28] iter = 03425, neg_MI = -0.041161, displacement = 0.000258, pair_similarity = 0.001463, total_loss = -0.041161, pixel drift RMS = 17.91853/255
+[2026-10-23 11:59:31] iter = 03450, neg_MI = -0.046689, displacement = 0.000261, pair_similarity = 0.001606, total_loss = -0.046689, pixel drift RMS = 17.95429/255
+[2026-10-23 11:59:35] iter = 03475, neg_MI = -0.048985, displacement = 0.000300, pair_similarity = 0.000909, total_loss = -0.048985, pixel drift RMS = 17.99292/255
+[2026-10-23 11:59:39] iter = 03500, neg_MI = -0.038327, displacement = 0.000508, pair_similarity = 0.006285, total_loss = -0.038327, pixel drift RMS = 18.03288/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic/CIFAR100/VGG11BN/pt1/res_IIC_CIFAR100_VGG11BN_1percent_final.pt (iteration 3500/8000)
+[2026-10-23 11:59:43] iter = 03525, neg_MI = -0.031868, displacement = 0.000526, pair_similarity = 0.003982, total_loss = -0.031868, pixel drift RMS = 18.08063/255
+[2026-10-23 11:59:46] iter = 03550, neg_MI = -0.040884, displacement = 0.000225, pair_similarity = 0.001070, total_loss = -0.040884, pixel drift RMS = 18.12449/255
+[2026-10-23 11:59:50] iter = 03575, neg_MI = -0.045996, displacement = 0.000300, pair_similarity = 0.002089, total_loss = -0.045996, pixel drift RMS = 18.16708/255
+[2026-10-23 11:59:54] iter = 03600, neg_MI = -0.051453, displacement = 0.000145, pair_similarity = 0.000295, total_loss = -0.051453, pixel drift RMS = 18.20566/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic/CIFAR100/VGG11BN/pt1/res_IIC_CIFAR100_VGG11BN_1percent_final.pt (iteration 3600/8000)
+[2026-10-23 11:59:58] iter = 03625, neg_MI = -0.024250, displacement = 0.000819, pair_similarity = 0.009095, total_loss = -0.024250, pixel drift RMS = 18.24634/255
+[2026-10-23 12:00:01] iter = 03650, neg_MI = -0.047086, displacement = 0.000083, pair_similarity = 0.000132, total_loss = -0.047086, pixel drift RMS = 18.28324/255
+[2026-10-23 12:00:05] iter = 03675, neg_MI = -0.036863, displacement = 0.000377, pair_similarity = 0.001390, total_loss = -0.036863, pixel drift RMS = 18.32090/255
+[2026-10-23 12:00:09] iter = 03700, neg_MI = -0.051251, displacement = 0.000262, pair_similarity = 0.001406, total_loss = -0.051251, pixel drift RMS = 18.36493/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic/CIFAR100/VGG11BN/pt1/res_IIC_CIFAR100_VGG11BN_1percent_final.pt (iteration 3700/8000)
+[2026-10-23 12:00:13] iter = 03725, neg_MI = -0.026882, displacement = 0.000581, pair_similarity = 0.004762, total_loss = -0.026882, pixel drift RMS = 18.40239/255
+[2026-10-23 12:00:17] iter = 03750, neg_MI = -0.043651, displacement = 0.000192, pair_similarity = 0.001503, total_loss = -0.043651, pixel drift RMS = 18.44551/255
+[2026-10-23 12:00:20] iter = 03775, neg_MI = -0.046527, displacement = 0.000284, pair_similarity = 0.000685, total_loss = -0.046527, pixel drift RMS = 18.48201/255
+[2026-10-23 12:00:24] iter = 03800, neg_MI = -0.062109, displacement = 0.000059, pair_similarity = 0.000046, total_loss = -0.062109, pixel drift RMS = 18.51725/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic/CIFAR100/VGG11BN/pt1/res_IIC_CIFAR100_VGG11BN_1percent_final.pt (iteration 3800/8000)
+[2026-10-23 12:00:28] iter = 03825, neg_MI = -0.048692, displacement = 0.000257, pair_similarity = 0.001844, total_loss = -0.048692, pixel drift RMS = 18.55684/255
+[2026-10-23 12:00:32] iter = 03850, neg_MI = -0.041580, displacement = 0.000426, pair_similarity = 0.010113, total_loss = -0.041580, pixel drift RMS = 18.59325/255
+[2026-10-23 12:00:35] iter = 03875, neg_MI = -0.052412, displacement = 0.000071, pair_similarity = 0.000114, total_loss = -0.052412, pixel drift RMS = 18.63432/255
+[2026-10-23 12:00:39] iter = 03900, neg_MI = -0.035497, displacement = 0.000481, pair_similarity = 0.010673, total_loss = -0.035497, pixel drift RMS = 18.67608/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic/CIFAR100/VGG11BN/pt1/res_IIC_CIFAR100_VGG11BN_1percent_final.pt (iteration 3900/8000)
+[2026-10-23 12:00:43] iter = 03925, neg_MI = -0.041125, displacement = 0.000202, pair_similarity = 0.002040, total_loss = -0.041125, pixel drift RMS = 18.71676/255
+[2026-10-23 12:00:47] iter = 03950, neg_MI = -0.046812, displacement = 0.000385, pair_similarity = 0.001574, total_loss = -0.046812, pixel drift RMS = 18.74994/255
+[2026-10-23 12:00:51] iter = 03975, neg_MI = -0.045663, displacement = 0.000241, pair_similarity = 0.000570, total_loss = -0.045663, pixel drift RMS = 18.78556/255
+[2026-10-23 12:00:55] iter = 04000, neg_MI = -0.038279, displacement = 0.000410, pair_similarity = 0.003644, total_loss = -0.038279, pixel drift RMS = 18.82255/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic/CIFAR100/VGG11BN/pt1/res_IIC_CIFAR100_VGG11BN_1percent_final.pt (iteration 4000/8000)
+[2026-10-23 12:00:59] iter = 04025, neg_MI = -0.049363, displacement = 0.000215, pair_similarity = 0.001822, total_loss = -0.049363, pixel drift RMS = 18.86321/255
+[2026-10-23 12:01:02] iter = 04050, neg_MI = -0.043042, displacement = 0.000411, pair_similarity = 0.008856, total_loss = -0.043042, pixel drift RMS = 18.90369/255
+[2026-10-23 12:01:06] iter = 04075, neg_MI = -0.041511, displacement = 0.000229, pair_similarity = 0.003833, total_loss = -0.041511, pixel drift RMS = 18.94299/255
+[2026-10-23 12:01:10] iter = 04100, neg_MI = -0.043019, displacement = 0.000258, pair_similarity = 0.001761, total_loss = -0.043019, pixel drift RMS = 18.97664/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic/CIFAR100/VGG11BN/pt1/res_IIC_CIFAR100_VGG11BN_1percent_final.pt (iteration 4100/8000)
+[2026-10-23 12:01:14] iter = 04125, neg_MI = -0.036727, displacement = 0.000480, pair_similarity = 0.003859, total_loss = -0.036727, pixel drift RMS = 19.00978/255
+[2026-10-23 12:01:17] iter = 04150, neg_MI = -0.033249, displacement = 0.000529, pair_similarity = 0.005235, total_loss = -0.033249, pixel drift RMS = 19.04169/255
+[2026-10-23 12:01:21] iter = 04175, neg_MI = -0.058189, displacement = 0.000098, pair_similarity = 0.000340, total_loss = -0.058189, pixel drift RMS = 19.07384/255
+[2026-10-23 12:01:25] iter = 04200, neg_MI = -0.035954, displacement = 0.000130, pair_similarity = 0.000888, total_loss = -0.035954, pixel drift RMS = 19.10788/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic/CIFAR100/VGG11BN/pt1/res_IIC_CIFAR100_VGG11BN_1percent_final.pt (iteration 4200/8000)
+[2026-10-23 12:01:29] iter = 04225, neg_MI = -0.036988, displacement = 0.000390, pair_similarity = 0.003050, total_loss = -0.036988, pixel drift RMS = 19.14247/255
+[2026-10-23 12:01:33] iter = 04250, neg_MI = -0.047757, displacement = 0.000158, pair_similarity = 0.000201, total_loss = -0.047757, pixel drift RMS = 19.17500/255
+[2026-10-23 12:01:36] iter = 04275, neg_MI = -0.041455, displacement = 0.000290, pair_similarity = 0.001274, total_loss = -0.041455, pixel drift RMS = 19.21190/255
+[2026-10-23 12:01:40] iter = 04300, neg_MI = -0.043927, displacement = 0.000269, pair_similarity = 0.001016, total_loss = -0.043927, pixel drift RMS = 19.24573/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic/CIFAR100/VGG11BN/pt1/res_IIC_CIFAR100_VGG11BN_1percent_final.pt (iteration 4300/8000)
+[2026-10-23 12:01:44] iter = 04325, neg_MI = -0.029360, displacement = 0.000448, pair_similarity = 0.004053, total_loss = -0.029360, pixel drift RMS = 19.28521/255
+[2026-10-23 12:01:48] iter = 04350, neg_MI = -0.036743, displacement = 0.000247, pair_similarity = 0.000598, total_loss = -0.036743, pixel drift RMS = 19.31685/255
+[2026-10-23 12:01:51] iter = 04375, neg_MI = -0.041160, displacement = 0.000244, pair_similarity = 0.001557, total_loss = -0.041160, pixel drift RMS = 19.35009/255
+[2026-10-23 12:01:55] iter = 04400, neg_MI = -0.043338, displacement = 0.000228, pair_similarity = 0.000381, total_loss = -0.043338, pixel drift RMS = 19.38227/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic/CIFAR100/VGG11BN/pt1/res_IIC_CIFAR100_VGG11BN_1percent_final.pt (iteration 4400/8000)
+[2026-10-23 12:01:59] iter = 04425, neg_MI = -0.019086, displacement = 0.000774, pair_similarity = 0.006313, total_loss = -0.019086, pixel drift RMS = 19.41504/255
+[2026-10-23 12:02:03] iter = 04450, neg_MI = -0.041120, displacement = 0.000359, pair_similarity = 0.002021, total_loss = -0.041120, pixel drift RMS = 19.44541/255
+[2026-10-23 12:02:07] iter = 04475, neg_MI = -0.041718, displacement = 0.000291, pair_similarity = 0.001226, total_loss = -0.041718, pixel drift RMS = 19.47676/255
+[2026-10-23 12:02:11] iter = 04500, neg_MI = -0.055323, displacement = 0.000144, pair_similarity = 0.000448, total_loss = -0.055323, pixel drift RMS = 19.51480/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic/CIFAR100/VGG11BN/pt1/res_IIC_CIFAR100_VGG11BN_1percent_final.pt (iteration 4500/8000)
+[2026-10-23 12:02:14] iter = 04525, neg_MI = -0.043315, displacement = 0.000240, pair_similarity = 0.000398, total_loss = -0.043315, pixel drift RMS = 19.55138/255
+[2026-10-23 12:02:18] iter = 04550, neg_MI = -0.039692, displacement = 0.000283, pair_similarity = 0.003848, total_loss = -0.039692, pixel drift RMS = 19.58595/255
+[2026-10-23 12:02:22] iter = 04575, neg_MI = -0.032128, displacement = 0.000466, pair_similarity = 0.010555, total_loss = -0.032128, pixel drift RMS = 19.62125/255
+[2026-10-23 12:02:26] iter = 04600, neg_MI = -0.036773, displacement = 0.000427, pair_similarity = 0.008488, total_loss = -0.036773, pixel drift RMS = 19.64894/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic/CIFAR100/VGG11BN/pt1/res_IIC_CIFAR100_VGG11BN_1percent_final.pt (iteration 4600/8000)
+[2026-10-23 12:02:30] iter = 04625, neg_MI = -0.048284, displacement = 0.000221, pair_similarity = 0.000972, total_loss = -0.048284, pixel drift RMS = 19.68142/255
+[2026-10-23 12:02:33] iter = 04650, neg_MI = -0.038416, displacement = 0.000243, pair_similarity = 0.000982, total_loss = -0.038416, pixel drift RMS = 19.71555/255
+[2026-10-23 12:02:37] iter = 04675, neg_MI = -0.039562, displacement = 0.000172, pair_similarity = 0.001459, total_loss = -0.039562, pixel drift RMS = 19.74798/255
+[2026-10-23 12:02:41] iter = 04700, neg_MI = -0.047097, displacement = 0.000232, pair_similarity = 0.000970, total_loss = -0.047097, pixel drift RMS = 19.78124/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic/CIFAR100/VGG11BN/pt1/res_IIC_CIFAR100_VGG11BN_1percent_final.pt (iteration 4700/8000)
+[2026-10-23 12:02:45] iter = 04725, neg_MI = -0.048168, displacement = 0.000290, pair_similarity = 0.000899, total_loss = -0.048168, pixel drift RMS = 19.80898/255
+[2026-10-23 12:02:48] iter = 04750, neg_MI = -0.059318, displacement = 0.000049, pair_similarity = 0.000149, total_loss = -0.059318, pixel drift RMS = 19.84166/255
+[2026-10-23 12:02:52] iter = 04775, neg_MI = -0.051058, displacement = 0.000279, pair_similarity = 0.002196, total_loss = -0.051058, pixel drift RMS = 19.87461/255
+[2026-10-23 12:02:56] iter = 04800, neg_MI = -0.020241, displacement = 0.000994, pair_similarity = 0.015231, total_loss = -0.020241, pixel drift RMS = 19.90895/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic/CIFAR100/VGG11BN/pt1/res_IIC_CIFAR100_VGG11BN_1percent_final.pt (iteration 4800/8000)
+[2026-10-23 12:03:00] iter = 04825, neg_MI = -0.025909, displacement = 0.000637, pair_similarity = 0.007348, total_loss = -0.025909, pixel drift RMS = 19.93899/255
+[2026-10-23 12:03:04] iter = 04850, neg_MI = -0.032540, displacement = 0.000622, pair_similarity = 0.007683, total_loss = -0.032540, pixel drift RMS = 19.97192/255
+[2026-10-23 12:03:08] iter = 04875, neg_MI = -0.042324, displacement = 0.000203, pair_similarity = 0.000903, total_loss = -0.042324, pixel drift RMS = 20.00474/255
+[2026-10-23 12:03:11] iter = 04900, neg_MI = -0.042159, displacement = 0.000331, pair_similarity = 0.000997, total_loss = -0.042159, pixel drift RMS = 20.03694/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic/CIFAR100/VGG11BN/pt1/res_IIC_CIFAR100_VGG11BN_1percent_final.pt (iteration 4900/8000)
+[2026-10-23 12:03:15] iter = 04925, neg_MI = -0.017218, displacement = 0.001209, pair_similarity = 0.020759, total_loss = -0.017218, pixel drift RMS = 20.06704/255
+[2026-10-23 12:03:19] iter = 04950, neg_MI = -0.029373, displacement = 0.000509, pair_similarity = 0.010327, total_loss = -0.029373, pixel drift RMS = 20.09864/255
+[2026-10-23 12:03:23] iter = 04975, neg_MI = -0.045033, displacement = 0.000236, pair_similarity = 0.002788, total_loss = -0.045033, pixel drift RMS = 20.13079/255
+[2026-10-23 12:03:27] iter = 05000, neg_MI = -0.048807, displacement = 0.000154, pair_similarity = 0.000315, total_loss = -0.048807, pixel drift RMS = 20.16269/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic/CIFAR100/VGG11BN/pt1/res_IIC_CIFAR100_VGG11BN_1percent_final.pt (iteration 5000/8000)
+[2026-10-23 12:03:30] iter = 05025, neg_MI = -0.051282, displacement = 0.000227, pair_similarity = 0.000473, total_loss = -0.051282, pixel drift RMS = 20.19097/255
+[2026-10-23 12:03:34] iter = 05050, neg_MI = -0.049793, displacement = 0.000049, pair_similarity = 0.000035, total_loss = -0.049793, pixel drift RMS = 20.22603/255
+[2026-10-23 12:03:38] iter = 05075, neg_MI = -0.036825, displacement = 0.000481, pair_similarity = 0.010731, total_loss = -0.036825, pixel drift RMS = 20.25705/255
+[2026-10-23 12:03:42] iter = 05100, neg_MI = -0.036370, displacement = 0.000458, pair_similarity = 0.003969, total_loss = -0.036370, pixel drift RMS = 20.29210/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic/CIFAR100/VGG11BN/pt1/res_IIC_CIFAR100_VGG11BN_1percent_final.pt (iteration 5100/8000)
+[2026-10-23 12:03:45] iter = 05125, neg_MI = -0.042317, displacement = 0.000202, pair_similarity = 0.000738, total_loss = -0.042317, pixel drift RMS = 20.32130/255
+[2026-10-23 12:03:49] iter = 05150, neg_MI = -0.025980, displacement = 0.000775, pair_similarity = 0.010553, total_loss = -0.025980, pixel drift RMS = 20.35321/255
+[2026-10-23 12:03:53] iter = 05175, neg_MI = -0.041626, displacement = 0.000349, pair_similarity = 0.006386, total_loss = -0.041626, pixel drift RMS = 20.37911/255
+[2026-10-23 12:03:57] iter = 05200, neg_MI = -0.039529, displacement = 0.000384, pair_similarity = 0.003563, total_loss = -0.039529, pixel drift RMS = 20.40300/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic/CIFAR100/VGG11BN/pt1/res_IIC_CIFAR100_VGG11BN_1percent_final.pt (iteration 5200/8000)
+[2026-10-23 12:04:00] iter = 05225, neg_MI = -0.042713, displacement = 0.000271, pair_similarity = 0.001283, total_loss = -0.042713, pixel drift RMS = 20.43507/255
+[2026-10-23 12:04:04] iter = 05250, neg_MI = -0.045769, displacement = 0.000157, pair_similarity = 0.000851, total_loss = -0.045769, pixel drift RMS = 20.46304/255
+[2026-10-23 12:04:08] iter = 05275, neg_MI = -0.039463, displacement = 0.000345, pair_similarity = 0.004188, total_loss = -0.039463, pixel drift RMS = 20.49821/255
+[2026-10-23 12:04:12] iter = 05300, neg_MI = -0.055839, displacement = 0.000000, pair_similarity = 0.000000, total_loss = -0.055839, pixel drift RMS = 20.53321/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic/CIFAR100/VGG11BN/pt1/res_IIC_CIFAR100_VGG11BN_1percent_final.pt (iteration 5300/8000)
+[2026-10-23 12:04:16] iter = 05325, neg_MI = -0.035656, displacement = 0.000297, pair_similarity = 0.004454, total_loss = -0.035656, pixel drift RMS = 20.56274/255
+[2026-10-23 12:04:20] iter = 05350, neg_MI = -0.044840, displacement = 0.000402, pair_similarity = 0.006969, total_loss = -0.044840, pixel drift RMS = 20.59039/255
+[2026-10-23 12:04:23] iter = 05375, neg_MI = -0.039306, displacement = 0.000322, pair_similarity = 0.003795, total_loss = -0.039306, pixel drift RMS = 20.62028/255
+[2026-10-23 12:04:27] iter = 05400, neg_MI = -0.024718, displacement = 0.000868, pair_similarity = 0.015541, total_loss = -0.024718, pixel drift RMS = 20.64821/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic/CIFAR100/VGG11BN/pt1/res_IIC_CIFAR100_VGG11BN_1percent_final.pt (iteration 5400/8000)
+[2026-10-23 12:04:31] iter = 05425, neg_MI = -0.032762, displacement = 0.000456, pair_similarity = 0.003334, total_loss = -0.032762, pixel drift RMS = 20.67234/255
+[2026-10-23 12:04:35] iter = 05450, neg_MI = -0.052400, displacement = 0.000175, pair_similarity = 0.000220, total_loss = -0.052400, pixel drift RMS = 20.69880/255
+[2026-10-23 12:04:39] iter = 05475, neg_MI = -0.041544, displacement = 0.000388, pair_similarity = 0.003317, total_loss = -0.041544, pixel drift RMS = 20.72556/255
+[2026-10-23 12:04:42] iter = 05500, neg_MI = -0.036118, displacement = 0.000274, pair_similarity = 0.001270, total_loss = -0.036118, pixel drift RMS = 20.75521/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic/CIFAR100/VGG11BN/pt1/res_IIC_CIFAR100_VGG11BN_1percent_final.pt (iteration 5500/8000)
+[2026-10-23 12:04:46] iter = 05525, neg_MI = -0.062937, displacement = 0.000070, pair_similarity = 0.000143, total_loss = -0.062937, pixel drift RMS = 20.78229/255
+[2026-10-23 12:04:50] iter = 05550, neg_MI = -0.052761, displacement = 0.000000, pair_similarity = 0.000000, total_loss = -0.052761, pixel drift RMS = 20.80838/255
+[2026-10-23 12:04:54] iter = 05575, neg_MI = -0.049291, displacement = 0.000172, pair_similarity = 0.000728, total_loss = -0.049291, pixel drift RMS = 20.83512/255
+[2026-10-23 12:04:58] iter = 05600, neg_MI = -0.036030, displacement = 0.000529, pair_similarity = 0.009271, total_loss = -0.036030, pixel drift RMS = 20.86473/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic/CIFAR100/VGG11BN/pt1/res_IIC_CIFAR100_VGG11BN_1percent_final.pt (iteration 5600/8000)
+[2026-10-23 12:05:02] iter = 05625, neg_MI = -0.059596, displacement = 0.000011, pair_similarity = 0.000002, total_loss = -0.059596, pixel drift RMS = 20.89183/255
+[2026-10-23 12:05:05] iter = 05650, neg_MI = -0.046254, displacement = 0.000189, pair_similarity = 0.000413, total_loss = -0.046254, pixel drift RMS = 20.91534/255
+[2026-10-23 12:05:09] iter = 05675, neg_MI = -0.063050, displacement = 0.000000, pair_similarity = 0.000000, total_loss = -0.063050, pixel drift RMS = 20.94334/255
+[2026-10-23 12:05:13] iter = 05700, neg_MI = -0.031440, displacement = 0.000547, pair_similarity = 0.006711, total_loss = -0.031440, pixel drift RMS = 20.97206/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic/CIFAR100/VGG11BN/pt1/res_IIC_CIFAR100_VGG11BN_1percent_final.pt (iteration 5700/8000)
+[2026-10-23 12:05:17] iter = 05725, neg_MI = -0.020243, displacement = 0.001120, pair_similarity = 0.017107, total_loss = -0.020243, pixel drift RMS = 21.00217/255
+[2026-10-23 12:05:21] iter = 05750, neg_MI = -0.024953, displacement = 0.000747, pair_similarity = 0.006362, total_loss = -0.024953, pixel drift RMS = 21.02883/255
+[2026-10-23 12:05:24] iter = 05775, neg_MI = -0.054224, displacement = 0.000075, pair_similarity = 0.000082, total_loss = -0.054224, pixel drift RMS = 21.05992/255
+[2026-10-23 12:05:28] iter = 05800, neg_MI = -0.058235, displacement = 0.000000, pair_similarity = 0.000000, total_loss = -0.058235, pixel drift RMS = 21.08730/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic/CIFAR100/VGG11BN/pt1/res_IIC_CIFAR100_VGG11BN_1percent_final.pt (iteration 5800/8000)
+[2026-10-23 12:05:32] iter = 05825, neg_MI = -0.017245, displacement = 0.001102, pair_similarity = 0.016509, total_loss = -0.017245, pixel drift RMS = 21.11341/255
+[2026-10-23 12:05:36] iter = 05850, neg_MI = -0.044875, displacement = 0.000343, pair_similarity = 0.003023, total_loss = -0.044875, pixel drift RMS = 21.14433/255
+[2026-10-23 12:05:40] iter = 05875, neg_MI = -0.035730, displacement = 0.000397, pair_similarity = 0.004258, total_loss = -0.035730, pixel drift RMS = 21.17192/255
+[2026-10-23 12:05:43] iter = 05900, neg_MI = -0.039939, displacement = 0.000334, pair_similarity = 0.001802, total_loss = -0.039939, pixel drift RMS = 21.19915/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic/CIFAR100/VGG11BN/pt1/res_IIC_CIFAR100_VGG11BN_1percent_final.pt (iteration 5900/8000)
+[2026-10-23 12:05:47] iter = 05925, neg_MI = -0.053394, displacement = 0.000208, pair_similarity = 0.000779, total_loss = -0.053394, pixel drift RMS = 21.22363/255
+[2026-10-23 12:05:51] iter = 05950, neg_MI = -0.060606, displacement = 0.000074, pair_similarity = 0.000186, total_loss = -0.060606, pixel drift RMS = 21.25033/255
+[2026-10-23 12:05:55] iter = 05975, neg_MI = -0.027329, displacement = 0.000540, pair_similarity = 0.006055, total_loss = -0.027329, pixel drift RMS = 21.27679/255
+[2026-10-23 12:05:59] iter = 06000, neg_MI = -0.044410, displacement = 0.000220, pair_similarity = 0.001555, total_loss = -0.044410, pixel drift RMS = 21.30154/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic/CIFAR100/VGG11BN/pt1/res_IIC_CIFAR100_VGG11BN_1percent_final.pt (iteration 6000/8000)
+[2026-10-23 12:06:03] iter = 06025, neg_MI = -0.059853, displacement = 0.000038, pair_similarity = 0.000102, total_loss = -0.059853, pixel drift RMS = 21.33283/255
+[2026-10-23 12:06:06] iter = 06050, neg_MI = -0.033416, displacement = 0.000462, pair_similarity = 0.004737, total_loss = -0.033416, pixel drift RMS = 21.35613/255
+[2026-10-23 12:06:10] iter = 06075, neg_MI = -0.042325, displacement = 0.000367, pair_similarity = 0.004993, total_loss = -0.042325, pixel drift RMS = 21.38402/255
+[2026-10-23 12:06:14] iter = 06100, neg_MI = -0.043850, displacement = 0.000170, pair_similarity = 0.000255, total_loss = -0.043850, pixel drift RMS = 21.40881/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic/CIFAR100/VGG11BN/pt1/res_IIC_CIFAR100_VGG11BN_1percent_final.pt (iteration 6100/8000)
+[2026-10-23 12:06:18] iter = 06125, neg_MI = -0.046456, displacement = 0.000221, pair_similarity = 0.000455, total_loss = -0.046456, pixel drift RMS = 21.43345/255
+[2026-10-23 12:06:21] iter = 06150, neg_MI = -0.043049, displacement = 0.000078, pair_similarity = 0.000537, total_loss = -0.043049, pixel drift RMS = 21.45468/255
+[2026-10-23 12:06:25] iter = 06175, neg_MI = -0.046180, displacement = 0.000238, pair_similarity = 0.001206, total_loss = -0.046180, pixel drift RMS = 21.47883/255
+[2026-10-23 12:06:29] iter = 06200, neg_MI = -0.047021, displacement = 0.000190, pair_similarity = 0.000647, total_loss = -0.047021, pixel drift RMS = 21.50789/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic/CIFAR100/VGG11BN/pt1/res_IIC_CIFAR100_VGG11BN_1percent_final.pt (iteration 6200/8000)
+[2026-10-23 12:06:33] iter = 06225, neg_MI = -0.048641, displacement = 0.000232, pair_similarity = 0.000685, total_loss = -0.048641, pixel drift RMS = 21.53541/255
+[2026-10-23 12:06:37] iter = 06250, neg_MI = -0.059699, displacement = 0.000125, pair_similarity = 0.000223, total_loss = -0.059699, pixel drift RMS = 21.56297/255
+[2026-10-23 12:06:41] iter = 06275, neg_MI = -0.049126, displacement = 0.000063, pair_similarity = 0.000066, total_loss = -0.049126, pixel drift RMS = 21.59279/255
+[2026-10-23 12:06:44] iter = 06300, neg_MI = -0.054108, displacement = 0.000071, pair_similarity = 0.000044, total_loss = -0.054108, pixel drift RMS = 21.61579/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic/CIFAR100/VGG11BN/pt1/res_IIC_CIFAR100_VGG11BN_1percent_final.pt (iteration 6300/8000)
+[2026-10-23 12:06:48] iter = 06325, neg_MI = -0.051938, displacement = 0.000064, pair_similarity = 0.000063, total_loss = -0.051938, pixel drift RMS = 21.63959/255
+[2026-10-23 12:06:52] iter = 06350, neg_MI = -0.063573, displacement = 0.000111, pair_similarity = 0.000200, total_loss = -0.063573, pixel drift RMS = 21.66921/255
+[2026-10-23 12:06:56] iter = 06375, neg_MI = -0.045747, displacement = 0.000348, pair_similarity = 0.001446, total_loss = -0.045747, pixel drift RMS = 21.69716/255
+[2026-10-23 12:06:59] iter = 06400, neg_MI = -0.056060, displacement = 0.000074, pair_similarity = 0.000090, total_loss = -0.056060, pixel drift RMS = 21.72383/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic/CIFAR100/VGG11BN/pt1/res_IIC_CIFAR100_VGG11BN_1percent_final.pt (iteration 6400/8000)
+[2026-10-23 12:07:03] iter = 06425, neg_MI = -0.036843, displacement = 0.000223, pair_similarity = 0.003263, total_loss = -0.036843, pixel drift RMS = 21.74661/255
+[2026-10-23 12:07:07] iter = 06450, neg_MI = -0.018797, displacement = 0.001081, pair_similarity = 0.014677, total_loss = -0.018797, pixel drift RMS = 21.77108/255
+[2026-10-23 12:07:11] iter = 06475, neg_MI = -0.036481, displacement = 0.000455, pair_similarity = 0.009495, total_loss = -0.036481, pixel drift RMS = 21.79318/255
+[2026-10-23 12:07:15] iter = 06500, neg_MI = -0.044706, displacement = 0.000282, pair_similarity = 0.001699, total_loss = -0.044706, pixel drift RMS = 21.81701/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic/CIFAR100/VGG11BN/pt1/res_IIC_CIFAR100_VGG11BN_1percent_final.pt (iteration 6500/8000)
+[2026-10-23 12:07:19] iter = 06525, neg_MI = -0.046072, displacement = 0.000283, pair_similarity = 0.005262, total_loss = -0.046072, pixel drift RMS = 21.83934/255
+[2026-10-23 12:07:22] iter = 06550, neg_MI = -0.046616, displacement = 0.000181, pair_similarity = 0.000448, total_loss = -0.046616, pixel drift RMS = 21.86463/255
+[2026-10-23 12:07:26] iter = 06575, neg_MI = -0.044346, displacement = 0.000214, pair_similarity = 0.001366, total_loss = -0.044346, pixel drift RMS = 21.88857/255
+[2026-10-23 12:07:30] iter = 06600, neg_MI = -0.045268, displacement = 0.000334, pair_similarity = 0.003343, total_loss = -0.045268, pixel drift RMS = 21.91310/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic/CIFAR100/VGG11BN/pt1/res_IIC_CIFAR100_VGG11BN_1percent_final.pt (iteration 6600/8000)
+[2026-10-23 12:07:34] iter = 06625, neg_MI = -0.034937, displacement = 0.000240, pair_similarity = 0.001342, total_loss = -0.034937, pixel drift RMS = 21.93810/255
+[2026-10-23 12:07:38] iter = 06650, neg_MI = -0.031051, displacement = 0.000503, pair_similarity = 0.005999, total_loss = -0.031051, pixel drift RMS = 21.96276/255
+[2026-10-23 12:07:42] iter = 06675, neg_MI = -0.052844, displacement = 0.000183, pair_similarity = 0.000445, total_loss = -0.052844, pixel drift RMS = 21.98787/255
+[2026-10-23 12:07:45] iter = 06700, neg_MI = -0.037182, displacement = 0.000342, pair_similarity = 0.001162, total_loss = -0.037182, pixel drift RMS = 22.01182/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic/CIFAR100/VGG11BN/pt1/res_IIC_CIFAR100_VGG11BN_1percent_final.pt (iteration 6700/8000)
+[2026-10-23 12:07:49] iter = 06725, neg_MI = -0.046627, displacement = 0.000240, pair_similarity = 0.000854, total_loss = -0.046627, pixel drift RMS = 22.03821/255
+[2026-10-23 12:07:53] iter = 06750, neg_MI = -0.036721, displacement = 0.000360, pair_similarity = 0.001284, total_loss = -0.036721, pixel drift RMS = 22.06189/255
+[2026-10-23 12:07:56] iter = 06775, neg_MI = -0.036805, displacement = 0.000406, pair_similarity = 0.003757, total_loss = -0.036805, pixel drift RMS = 22.08012/255
+[2026-10-23 12:08:00] iter = 06800, neg_MI = -0.044622, displacement = 0.000270, pair_similarity = 0.003865, total_loss = -0.044622, pixel drift RMS = 22.10023/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic/CIFAR100/VGG11BN/pt1/res_IIC_CIFAR100_VGG11BN_1percent_final.pt (iteration 6800/8000)
+[2026-10-23 12:08:04] iter = 06825, neg_MI = -0.057888, displacement = 0.000103, pair_similarity = 0.000277, total_loss = -0.057888, pixel drift RMS = 22.12607/255
+[2026-10-23 12:08:08] iter = 06850, neg_MI = -0.043223, displacement = 0.000345, pair_similarity = 0.003169, total_loss = -0.043223, pixel drift RMS = 22.14450/255
+[2026-10-23 12:08:11] iter = 06875, neg_MI = -0.040835, displacement = 0.000452, pair_similarity = 0.002860, total_loss = -0.040835, pixel drift RMS = 22.16749/255
+[2026-10-23 12:08:15] iter = 06900, neg_MI = -0.038435, displacement = 0.000429, pair_similarity = 0.004241, total_loss = -0.038435, pixel drift RMS = 22.19137/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic/CIFAR100/VGG11BN/pt1/res_IIC_CIFAR100_VGG11BN_1percent_final.pt (iteration 6900/8000)
+[2026-10-23 12:08:19] iter = 06925, neg_MI = -0.038784, displacement = 0.000297, pair_similarity = 0.001263, total_loss = -0.038784, pixel drift RMS = 22.21858/255
+[2026-10-23 12:08:23] iter = 06950, neg_MI = -0.066903, displacement = 0.000000, pair_similarity = 0.000000, total_loss = -0.066903, pixel drift RMS = 22.24174/255
+[2026-10-23 12:08:27] iter = 06975, neg_MI = -0.045237, displacement = 0.000140, pair_similarity = 0.000683, total_loss = -0.045237, pixel drift RMS = 22.26412/255
+[2026-10-23 12:08:30] iter = 07000, neg_MI = -0.045675, displacement = 0.000229, pair_similarity = 0.000667, total_loss = -0.045675, pixel drift RMS = 22.28295/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic/CIFAR100/VGG11BN/pt1/res_IIC_CIFAR100_VGG11BN_1percent_final.pt (iteration 7000/8000)
+[2026-10-23 12:08:34] iter = 07025, neg_MI = -0.049211, displacement = 0.000181, pair_similarity = 0.000811, total_loss = -0.049211, pixel drift RMS = 22.30556/255
+[2026-10-23 12:08:38] iter = 07050, neg_MI = -0.052545, displacement = 0.000216, pair_similarity = 0.000747, total_loss = -0.052545, pixel drift RMS = 22.32969/255
+[2026-10-23 12:08:41] iter = 07075, neg_MI = -0.016946, displacement = 0.001013, pair_similarity = 0.017034, total_loss = -0.016946, pixel drift RMS = 22.34879/255
+[2026-10-23 12:08:45] iter = 07100, neg_MI = -0.019019, displacement = 0.001150, pair_similarity = 0.018248, total_loss = -0.019019, pixel drift RMS = 22.37265/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic/CIFAR100/VGG11BN/pt1/res_IIC_CIFAR100_VGG11BN_1percent_final.pt (iteration 7100/8000)
+[2026-10-23 12:08:49] iter = 07125, neg_MI = -0.056624, displacement = 0.000041, pair_similarity = 0.000031, total_loss = -0.056624, pixel drift RMS = 22.39731/255
+[2026-10-23 12:08:52] iter = 07150, neg_MI = -0.025158, displacement = 0.000753, pair_similarity = 0.007134, total_loss = -0.025158, pixel drift RMS = 22.41826/255
+[2026-10-23 12:08:56] iter = 07175, neg_MI = -0.034448, displacement = 0.000460, pair_similarity = 0.005200, total_loss = -0.034448, pixel drift RMS = 22.44049/255
+[2026-10-23 12:09:00] iter = 07200, neg_MI = -0.041695, displacement = 0.000175, pair_similarity = 0.000469, total_loss = -0.041695, pixel drift RMS = 22.46578/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic/CIFAR100/VGG11BN/pt1/res_IIC_CIFAR100_VGG11BN_1percent_final.pt (iteration 7200/8000)
+[2026-10-23 12:09:04] iter = 07225, neg_MI = -0.052422, displacement = 0.000193, pair_similarity = 0.000519, total_loss = -0.052422, pixel drift RMS = 22.48852/255
+[2026-10-23 12:09:07] iter = 07250, neg_MI = -0.052220, displacement = 0.000139, pair_similarity = 0.000908, total_loss = -0.052220, pixel drift RMS = 22.50905/255
+[2026-10-23 12:09:11] iter = 07275, neg_MI = -0.040148, displacement = 0.000447, pair_similarity = 0.005154, total_loss = -0.040148, pixel drift RMS = 22.52842/255
+[2026-10-23 12:09:15] iter = 07300, neg_MI = -0.036811, displacement = 0.000494, pair_similarity = 0.011162, total_loss = -0.036811, pixel drift RMS = 22.55307/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic/CIFAR100/VGG11BN/pt1/res_IIC_CIFAR100_VGG11BN_1percent_final.pt (iteration 7300/8000)
+[2026-10-23 12:09:19] iter = 07325, neg_MI = -0.041083, displacement = 0.000287, pair_similarity = 0.000979, total_loss = -0.041083, pixel drift RMS = 22.57967/255
+[2026-10-23 12:09:23] iter = 07350, neg_MI = -0.053636, displacement = 0.000141, pair_similarity = 0.001733, total_loss = -0.053636, pixel drift RMS = 22.60094/255
+[2026-10-23 12:09:27] iter = 07375, neg_MI = -0.052185, displacement = 0.000085, pair_similarity = 0.000119, total_loss = -0.052185, pixel drift RMS = 22.62031/255
+[2026-10-23 12:09:30] iter = 07400, neg_MI = -0.045219, displacement = 0.000085, pair_similarity = 0.000075, total_loss = -0.045219, pixel drift RMS = 22.64173/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic/CIFAR100/VGG11BN/pt1/res_IIC_CIFAR100_VGG11BN_1percent_final.pt (iteration 7400/8000)
+[2026-10-23 12:09:34] iter = 07425, neg_MI = -0.033825, displacement = 0.000430, pair_similarity = 0.003738, total_loss = -0.033825, pixel drift RMS = 22.66175/255
+[2026-10-23 12:09:38] iter = 07450, neg_MI = -0.034484, displacement = 0.000438, pair_similarity = 0.002745, total_loss = -0.034484, pixel drift RMS = 22.68430/255
+[2026-10-23 12:09:42] iter = 07475, neg_MI = -0.039024, displacement = 0.000334, pair_similarity = 0.001885, total_loss = -0.039024, pixel drift RMS = 22.70626/255
+[2026-10-23 12:09:45] iter = 07500, neg_MI = -0.040053, displacement = 0.000363, pair_similarity = 0.006551, total_loss = -0.040053, pixel drift RMS = 22.73188/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic/CIFAR100/VGG11BN/pt1/res_IIC_CIFAR100_VGG11BN_1percent_final.pt (iteration 7500/8000)
+[2026-10-23 12:09:49] iter = 07525, neg_MI = -0.043273, displacement = 0.000255, pair_similarity = 0.001344, total_loss = -0.043273, pixel drift RMS = 22.75428/255
+[2026-10-23 12:09:53] iter = 07550, neg_MI = -0.050194, displacement = 0.000069, pair_similarity = 0.000122, total_loss = -0.050194, pixel drift RMS = 22.77532/255
+[2026-10-23 12:09:57] iter = 07575, neg_MI = -0.052332, displacement = 0.000210, pair_similarity = 0.002979, total_loss = -0.052332, pixel drift RMS = 22.79810/255
+[2026-10-23 12:10:00] iter = 07600, neg_MI = -0.045241, displacement = 0.000264, pair_similarity = 0.000792, total_loss = -0.045241, pixel drift RMS = 22.82058/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic/CIFAR100/VGG11BN/pt1/res_IIC_CIFAR100_VGG11BN_1percent_final.pt (iteration 7600/8000)
+[2026-10-23 12:10:04] iter = 07625, neg_MI = -0.053939, displacement = 0.000137, pair_similarity = 0.000230, total_loss = -0.053939, pixel drift RMS = 22.84002/255
+[2026-10-23 12:10:08] iter = 07650, neg_MI = -0.032309, displacement = 0.000490, pair_similarity = 0.005922, total_loss = -0.032309, pixel drift RMS = 22.85988/255
+[2026-10-23 12:10:12] iter = 07675, neg_MI = -0.041357, displacement = 0.000324, pair_similarity = 0.002753, total_loss = -0.041357, pixel drift RMS = 22.88247/255
+[2026-10-23 12:10:16] iter = 07700, neg_MI = -0.050658, displacement = 0.000187, pair_similarity = 0.000389, total_loss = -0.050658, pixel drift RMS = 22.90375/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic/CIFAR100/VGG11BN/pt1/res_IIC_CIFAR100_VGG11BN_1percent_final.pt (iteration 7700/8000)
+[2026-10-23 12:10:20] iter = 07725, neg_MI = -0.034804, displacement = 0.000533, pair_similarity = 0.009673, total_loss = -0.034804, pixel drift RMS = 22.92418/255
+[2026-10-23 12:10:23] iter = 07750, neg_MI = -0.048136, displacement = 0.000184, pair_similarity = 0.000313, total_loss = -0.048136, pixel drift RMS = 22.94817/255
+[2026-10-23 12:10:27] iter = 07775, neg_MI = -0.049502, displacement = 0.000108, pair_similarity = 0.000708, total_loss = -0.049502, pixel drift RMS = 22.97110/255
+[2026-10-23 12:10:31] iter = 07800, neg_MI = -0.044694, displacement = 0.000212, pair_similarity = 0.000674, total_loss = -0.044694, pixel drift RMS = 22.98821/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic/CIFAR100/VGG11BN/pt1/res_IIC_CIFAR100_VGG11BN_1percent_final.pt (iteration 7800/8000)
+[2026-10-23 12:10:35] iter = 07825, neg_MI = -0.019604, displacement = 0.001153, pair_similarity = 0.022181, total_loss = -0.019604, pixel drift RMS = 23.00878/255
+[2026-10-23 12:10:38] iter = 07850, neg_MI = -0.041121, displacement = 0.000383, pair_similarity = 0.006778, total_loss = -0.041121, pixel drift RMS = 23.02848/255
+[2026-10-23 12:10:42] iter = 07875, neg_MI = -0.053639, displacement = 0.000079, pair_similarity = 0.000067, total_loss = -0.053639, pixel drift RMS = 23.05089/255
+[2026-10-23 12:10:46] iter = 07900, neg_MI = -0.060017, displacement = 0.000064, pair_similarity = 0.000139, total_loss = -0.060017, pixel drift RMS = 23.07388/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic/CIFAR100/VGG11BN/pt1/res_IIC_CIFAR100_VGG11BN_1percent_final.pt (iteration 7900/8000)
+[2026-10-23 12:10:50] iter = 07925, neg_MI = -0.064059, displacement = 0.000021, pair_similarity = 0.000008, total_loss = -0.064059, pixel drift RMS = 23.09334/255
+[2026-10-23 12:10:53] iter = 07950, neg_MI = -0.035791, displacement = 0.000311, pair_similarity = 0.003403, total_loss = -0.035791, pixel drift RMS = 23.11611/255
+[2026-10-23 12:10:57] iter = 07975, neg_MI = -0.026389, displacement = 0.000699, pair_similarity = 0.011268, total_loss = -0.026389, pixel drift RMS = 23.13485/255
+[2026-10-23 12:11:01] iter = 08000, neg_MI = -0.052923, displacement = 0.000093, pair_similarity = 0.000251, total_loss = -0.052923, pixel drift RMS = 23.15606/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic/CIFAR100/VGG11BN/pt1/res_IIC_CIFAR100_VGG11BN_1percent_final.pt (iteration 8000/8000)
+DONE: /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic/CIFAR100/VGG11BN/pt1/res_IIC_CIFAR100_VGG11BN_1percent_final.pt

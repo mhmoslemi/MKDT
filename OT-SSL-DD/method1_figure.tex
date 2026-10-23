@@ -1,0 +1,14 @@
+% Place the PDF beside the main manuscript or set its graphics path.
+\begin{figure*}[t]
+  \centering
+  \includegraphics[width=\textwidth]{method1_pipeline.pdf}
+  \caption{\textbf{Paired-view prototype distillation.}
+  Representative real images initialize the synthetic set once. Real and
+  synthetic images receive the same two augmentation draws and pass through a
+  shared frozen teacher. We maximize mutual information between real-to-synthetic
+  prototype assignments and match synthetic view-pair displacement and cosine
+  similarity to responsibility-weighted real targets. Solid arrows show forward
+  computation. The dashed return arrow indicates backpropagation through the
+  frozen teacher and augmentations to update synthetic pixels only.}
+  \label{fig:vt_pipeline}
+\end{figure*}
