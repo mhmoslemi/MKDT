@@ -13,6 +13,7 @@ import hashlib
 import json
 import os
 from pathlib import Path
+import re
 import sys
 import time
 import traceback
@@ -26,10 +27,98 @@ import torch
 from common import atomic_json, code_hashes, exclusive_run, file_hash
 from data import RawDataset
 from interactive_random import Tee
+from evaluate import linear_probe
+from plan import table_cells
 from report import report
-from worker import build_plan, evaluate_seed
+from worker import build_plan, evaluate_seed, expected_protocol, read, validate_checkpoint
 
 SOURCES = ('CIFAR10', 'CIFAR100', 'TinyImageNet')
+
+
+def cell_key(cell):
+    return tuple(str(cell[key]) for key in ('source', 'model', 'subset', 'ssl', 'target', 'labels'))
+
+
+def filled_random_cells(source):
+    slug = {'CIFAR10': 'cifar10', 'CIFAR100': 'cifar100', 'TinyImageNet': 'tinyimagenet'}[source]
+    filled = set()
+    for scope in ('main', 'downstream'):
+        path = BENCH.parent / 'CVPR_tables' / f'{slug}_{scope}.tex'
+        lines = path.read_text().splitlines()
+        rows = {}
+        for cell in table_cells(path):
+            if cell['method'] == 'random' and not cell['disabled']:
+                rows.setdefault(cell['line'], []).append(cell)
+        for number, cells in rows.items():
+            row = []
+            for line in lines[number - 1:]:
+                if line.lstrip().startswith('%'):
+                    continue
+                row.append(line)
+                if row[-1].rstrip().endswith('\\\\'):
+                    break
+            text = re.sub(r'\\\\\s*$', '', ' '.join(row))
+            values = text.split('Random Subset', 1)[1].strip().removeprefix('&').split('&')
+            if len(values) == 1 and re.fullmatch(r'\s*\\multicolumn\{\d+\}\{c\}\{\}\s*', values[0]):
+                continue
+            if len(values) != len(cells):
+                raise ValueError(f'Unexpected random table row: {path}:{number}')
+            for cell, value in zip(cells, values):
+                if re.search(r'\\(?:dsacc|oldacc)\{\d+(?:\.\d+)?\}\{\d+(?:\.\d+)?\}', value):
+                    filled.add(cell_key(cell))
+    return filled
+
+
+def evaluate_pending_seed(unit, pending, plan, root, datasets, hashes, driver_hashes, worker_hash):
+    if len(pending) == len(unit['cells']):
+        return evaluate_seed(unit, plan, root, datasets, hashes, driver_hashes, worker_hash)
+    source = Path(plan['checkpoint_root']) / unit['relative']
+    output = root / unit['relative']
+    protocol = expected_protocol('random', unit['source'], unit['subset'])
+    with exclusive_run(output), exclusive_run(source):
+        config, saved, checksum = validate_checkpoint(source, unit, 'random', protocol, hashes, worker_hash)
+        if datasets(unit['source'])[0].fingerprint != config['signature']['source_fingerprint']:
+            raise ValueError('Source training split differs from the SSL training split')
+        if (output / 'config.json').exists() and read(output / 'config.json') != config:
+            raise ValueError('Refusing to mix checkpoint configurations in one output directory')
+        atomic_json(output / 'config.json', config)
+        identity = config['identity']
+        for cell in pending:
+            target, labels = cell['target'], int(cell['labels'])
+            train_set, test_set = datasets(target)
+            result = linear_probe(source / 'encoder.pt', identity, protocol, unit['source'], target,
+                                  train_set, test_set, labels, unit['seed'],
+                                  output / 'evaluations' / f'{target}_lbl{labels}.json', 0, 'cuda')
+            if not result.get('complete') or not result['encoder_unchanged'] or result['encoder_sha256'] != saved['encoder_sha256']:
+                raise ValueError('Incomplete probe or changed encoder')
+        if file_hash(source / 'encoder.pt') != checksum:
+            raise ValueError('SSL checkpoint changed during evaluation')
+
+        # Preserve the original full-encoder marker contract; never mark absent skipped probes complete.
+        result_hashes = {}
+        requested = [[cell['target'], int(cell['labels'])] for cell in unit['cells']]
+        for target, labels in requested:
+            path = output / 'evaluations' / f'{target}_lbl{labels}.json'
+            if not path.is_file():
+                return
+            result = read(path)
+            expected = result['expected']
+            if (not result.get('complete') or not result.get('encoder_unchanged')
+                    or result['encoder_sha256'] != saved['encoder_sha256']
+                    or expected['identity'] != identity or expected['source'] != unit['source']
+                    or expected['target'] != target or expected['label_percentage'] != labels
+                    or expected['seed'] != unit['seed'] or expected['evaluation'] != protocol['evaluation']
+                    or expected['evaluation_code_hashes'] != hashes):
+                raise ValueError(f'Incompatible saved probe: {path}')
+            result_hashes[path.name] = file_hash(path)
+        marker = {'complete': True, 'identity': identity, 'encoder_sha256': saved['encoder_sha256'],
+                  'checkpoint_file_sha256': checksum, 'checkpoint_retained': True,
+                  'checkpoint': str(source / 'encoder.pt'), 'evaluations': requested,
+                  'evaluation_code_hashes': hashes, 'driver_hashes': driver_hashes,
+                  'ssl_epochs': saved['epochs'], 'result_hashes': result_hashes}
+        if (output / 'complete.json').exists() and read(output / 'complete.json') != marker:
+            raise ValueError('Completed evaluation provenance differs from this run')
+        atomic_json(output / 'complete.json', marker)
 
 
 def evaluation_contract(args):
@@ -68,7 +157,9 @@ def run(args, root, session, plan, hashes, driver_hashes, worker_hash):
     if len(units) != 180:
         raise ValueError(f'Expected 180 random encoders for {args.source}, found {len(units)}')
 
-    counts = {'evaluated_encoders': 0, 'already_complete': 0, 'missing_checkpoint': 0}
+    filled = filled_random_cells(args.source)
+    assert filled <= {cell_key(cell) for unit in units for cell in unit['cells']}, 'TeX cells do not match the evaluation plan'
+    counts = {'evaluated_encoders': 0, 'already_complete': 0, 'missing_checkpoint': 0, 'tex_filled_encoders': 0}
     failures = []
     interrupted = False
     started = time.monotonic()
@@ -78,8 +169,17 @@ def run(args, root, session, plan, hashes, driver_hashes, worker_hash):
           'batch<=256, cosine LR.', flush=True)
     print('Labels: 1% and 5%; main on all 3 backbones, downstream on ResNet18 only.', flush=True)
     print('Completed probe JSONs are validated and reused.', flush=True)
+    print(f'TeX skip list: {len(filled)} filled random cells; only blank cells are evaluated.', flush=True)
+    if all(cell_key(cell) in filled for unit in units for cell in unit['cells']):
+        print(f'All random cells for {args.source} are filled in TeX. Nothing to evaluate.', flush=True)
+        return 0
     try:
         for unit in units:
+            pending = [cell for cell in unit['cells'] if cell_key(cell) not in filled]
+            if not pending:
+                counts['tex_filled_encoders'] += 1
+                print('SKIP filled in TeX:', unit['relative'], flush=True)
+                continue
             folder = args.checkpoints / unit['relative']
             missing = [name for name in ('config.json', 'encoder.pt', 'ssl_complete.json')
                        if not (folder / name).is_file() or not (folder / name).stat().st_size]
@@ -91,11 +191,11 @@ def run(args, root, session, plan, hashes, driver_hashes, worker_hash):
             complete_before = (output / 'complete.json').is_file()
             saved_probes = sum(
                 (output / 'evaluations' / f"{cell['target']}_lbl{cell['labels']}.json").is_file()
-                for cell in unit['cells'])
-            print(f'CHECK {unit["relative"]}: {saved_probes}/{len(unit["cells"])} '
-                  'probes already saved', flush=True)
+                for cell in pending)
+            print(f'CHECK {unit["relative"]}: {saved_probes}/{len(pending)} pending-cell '
+                  f'probes already saved; {len(unit["cells"]) - len(pending)} cells skipped from TeX', flush=True)
             try:
-                evaluate_seed(unit, plan, root, datasets, hashes, driver_hashes, worker_hash)
+                evaluate_pending_seed(unit, pending, plan, root, datasets, hashes, driver_hashes, worker_hash)
                 counts['already_complete' if complete_before else 'evaluated_encoders'] += 1
                 print('SKIP already evaluated:' if complete_before else 'DONE:',
                       unit['relative'], flush=True)

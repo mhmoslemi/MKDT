@@ -44,3 +44,34 @@ bash Evaluate_benchamrk/eval_mkdt_cifar100_downstream_interactive.sh
 # TinyImageNet
 bash Evaluate_benchamrk/eval_mkdt_tinyimagenet_main_interactive.sh
 bash Evaluate_benchamrk/eval_mkdt_tinyimagenet_downstream_interactive.sh
+
+
+
+-----
+
+
+bash OT-SSL-DD/run_ours_cifar10.sh
+bash OT-SSL-DD/run_ours_cifar100.sh
+bash OT-SSL-DD/run_ours_tinyimagenet.sh
+
+
+bash Evaluate_benchamrk/eval_ours_cifar10_interactive.sh
+bash Evaluate_benchamrk/eval_ours_cifar100_interactive.sh
+bash Evaluate_benchamrk/eval_ours_tinyimagenet_interactive.sh
+
+
+bash Evaluate_benchamrk/eval_ours_cifar10_interactive.sh
+bash Evaluate_benchamrk/eval_ours_cifar100_interactive.sh
+bash Evaluate_benchamrk/eval_ours_tinyimagenet_interactive.sh
+
+
+
+bash Evaluate_benchamrk/eval_ours_cifar10_resnet18bn_interactive.sh
+bash Evaluate_benchamrk/eval_ours_cifar10_vgg11bn_interactive.sh
+bash Evaluate_benchamrk/eval_ours_cifar10_convnetbn_interactive.sh
+bash Evaluate_benchamrk/eval_ours_cifar100_resnet18bn_interactive.sh
+bash Evaluate_benchamrk/eval_ours_cifar100_vgg11bn_interactive.sh
+bash Evaluate_benchamrk/eval_ours_cifar100_convnetbn_interactive.sh
+bash Evaluate_benchamrk/eval_ours_tinyimagenet_resnet18bn_interactive.sh
+bash Evaluate_benchamrk/eval_ours_tinyimagenet_vgg11bn_interactive.sh
+bash Evaluate_benchamrk/eval_ours_tinyimagenet_convnetbn_interactive.sh
