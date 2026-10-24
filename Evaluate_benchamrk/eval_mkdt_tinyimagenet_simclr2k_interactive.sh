@@ -6,5 +6,5 @@ output="$bench_dir/mkdt_eval_results_simclr2k_2ssl3probes"
 export PYTHONUNBUFFERED=1 PYTHONDONTWRITEBYTECODE=1
 export OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 NUMEXPR_NUM_THREADS=1
 mkdir -p "$output/logs"
-python -u "$bench_dir/eval_jobs/interactive_mkdt_2k.py" TinyImageNet --output "$output" "$@" 2>&1 |
+python -u "$bench_dir/eval_jobs/interactive_mkdt_2k_main.py" TinyImageNet --output "$output" "$@" 2>&1 |
     tee -a "$output/logs/TinyImageNet.log" | awk -f "$bench_dir/eval_jobs/ssl_console.awk"

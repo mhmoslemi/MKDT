@@ -114,3 +114,8 @@ bash Evaluate_benchamrk/eval_ours_tinyimagenet_barlowtwins_downstream_interactiv
 # bash Evaluate_benchamrk/eval_ours_tinyimagenet_resnet18bn_interactive.sh
 # bash Evaluate_benchamrk/eval_ours_tinyimagenet_vgg11bn_interactive.sh
 # bash Evaluate_benchamrk/eval_ours_tinyimagenet_convnetbn_interactive.sh
+
+
+bash Evaluate_benchamrk/eval_mkdt_cifar10_simclr2k_interactive.sh
+bash Evaluate_benchamrk/eval_mkdt_cifar100_simclr2k_interactive.sh
+bash Evaluate_benchamrk/eval_mkdt_tinyimagenet_simclr2k_interactive.sh

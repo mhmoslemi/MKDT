@@ -5,11 +5,22 @@ from pathlib import Path
 import statistics
 import tempfile
 import unittest
+from unittest.mock import patch
 
 import interactive_mkdt_2k as mkdt
+import interactive_mkdt_2k_main as main_only
 
 
 class MKDT2kTests(unittest.TestCase):
+    def test_main_only_targets_and_report(self):
+        for source, model in itertools.product(mkdt.SOURCES, mkdt.MODELS):
+            self.assertEqual(main_only.main_targets(source, model), (source,))
+        main = {'source': 'CIFAR10', 'target': 'CIFAR10'}
+        downstream = {'source': 'CIFAR10', 'target': 'Aircraft'}
+        with patch.object(main_only, 'original_write_tsv') as write:
+            main_only.write_main_tsv(Path('table_summary.tsv'), ['source', 'target'], [main, downstream])
+        self.assertEqual(write.call_args.args[2], [main])
+
     def test_all_settings_keep_the_requested_budgets(self):
         for source, size in itertools.product(mkdt.SOURCES, mkdt.SIZES):
             protocol = mkdt.protocol_for(source, size)
