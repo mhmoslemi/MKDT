@@ -15,7 +15,7 @@ from torchvision.transforms.functional import to_pil_image
 
 SSL_EPOCHS = {
     # "CIFAR10": {0.2: 2000, 1: 8000, 2: 6000},
-    "CIFAR10": {0.2: 2000, 1: 4000, 2: 6000},
+    "CIFAR10": {0.2: 2000, 1: 2000, 2: 4000},
     "CIFAR100": {0.2: 3000, 1: 8000, 2: 6000},
     "TinyImageNet": {0.2: 6000, 1: 5000, 2: 4000},
 }
@@ -187,7 +187,7 @@ def evaluate_synset_SSL(it_eval, model, images_train, args, output, normalizatio
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--dataset", choices=list(SSL_EPOCHS), default="CIFAR10")
-    parser.add_argument("--percentage", type=float, default=0.2)
+    parser.add_argument("--percentage", type=float, default=2)
     parser.add_argument("--label-percentage", type=int, choices=list(PROBE_EPOCHS), default=1)
     parser.add_argument("--model", choices=["ConvNet", "ConvNetBN", "VGG11", "VGG11BN", "ResNet18", "ResNet18BN"], default="ResNet18BN")
     parser.add_argument("--ssl-method", choices=["simclr", "barlowtwins"], default="simclr")
@@ -201,7 +201,7 @@ def main():
     parser.add_argument("--device", choices=["cuda", "cpu"], default="cuda")
     parser.add_argument("--data-path", default=str(ROOT.parent / "data"))
     synthetic_source = parser.add_mutually_exclusive_group()
-    synthetic_source.add_argument("--synthetic-checkpoint", type=Path, default=Path("/home/mmoslem3/scratch/MKDT/OT-SSL-DD/ours_syntehtic/CIFAR10/ResNet18BN/pt0.2/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt"))
+    synthetic_source.add_argument("--synthetic-checkpoint", type=Path, default=Path("/scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic/CIFAR10/ResNet18BN/pt2/res_IIC_CIFAR10_ResNet18BN_2percent_final.pt"))
     synthetic_source.add_argument("--synthetic-root", type=Path, default=None, help="Legacy sizeN/res_IIC_DATASET_ConvNet_Npercent.pt layout")
     synthetic_source.add_argument("--random-subset", action="store_true", help="Use randomly selected real training images instead of a synthetic checkpoint")
     parser.add_argument("--save-path", type=Path, default=None)
@@ -225,6 +225,12 @@ def main():
     checkpoint_path = None if args.random_subset else Path(checkpoint_path)
     torch.set_num_threads(int(os.environ.get("SLURM_CPUS_PER_TASK", "1")))
     saved = {} if args.random_subset else torch.load(checkpoint_path, map_location="cpu", weights_only=True)
+    if isinstance(saved, torch.Tensor):
+        # MKDT images_*.pt files are raw tensors normalized by the root dataset loader.
+        _, mean, std = reference_modules()["data"].SPECS[args.dataset]
+        saved = {"data": saved, "normalization": [mean, std]}
+    elif not isinstance(saved, dict):
+        raise ValueError("Synthetic checkpoint must contain an image tensor or a dictionary with a data key")
     if saved.get("dataset", args.dataset) != args.dataset or saved.get("percentage", args.percentage) != args.percentage:
         raise ValueError("Synthetic checkpoint metadata disagrees with the requested dataset/percentage")
     stamp = datetime.now().strftime("%Y%m%d_%H%M%S_%f")

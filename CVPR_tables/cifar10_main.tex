@@ -57,7 +57,7 @@
 & \dsacc{52.17}{0.76} & \dsacc{46.49}{0.77}
 & \dsacc{43.63}{3.64} & \dsacc{27.97}{6.29}
 & \dsacc{46.86}{0.91} & \dsacc{48.98}{2.37} \\
-& & MKDT & \dsacc{49.62}{0.53} & \dsacc{46.72}{1.20} & \dsacc{37.41}{0.55} & \dsacc{25.07}{5.92} & \dsacc{36.92}{1.27} & \dsacc{43.66}{0.62} \\
+& & MKDT &  & \dsacc{46.72}{1.20} &  & \dsacc{25.07}{5.92} &  & \dsacc{43.66}{0.62} \\
 & & Ours &  &  &  &  & \dsacc{50.04}{0.61} & \dsacc{50.54}{1.17} \\
 \cmidrule(lr){2-9}
 
@@ -69,7 +69,7 @@
 & \dsacc{52.91}{0.96} & \dsacc{50.50}{0.90}
 & \dsacc{49.31}{1.13} & \dsacc{42.48}{1.63}
 & \dsacc{52.98}{0.57} & \dsacc{56.98}{1.13} \\
-& & MKDT &  & \dsacc{50.43}{0.97} & \dsacc{24.87}{1.36} &  & \dsacc{39.43}{0.64} & \dsacc{49.24}{0.76} \\
+& & MKDT &  & \dsacc{50.43}{0.97} &  &  &  & \dsacc{49.24}{0.76} \\
 & & Ours &  &  &  &  & \dsacc{55.80}{0.67}  &  \\
 % BEGIN DISABLED: 5% pretraining subset
 % \cmidrule(lr){2-9}
@@ -121,7 +121,7 @@
 & \dsacc{60.70}{0.62} & \dsacc{53.38}{0.96}
 & \dsacc{48.03}{3.95} & \dsacc{28.80}{5.85}
 & \dsacc{51.80}{0.93} & \dsacc{56.25}{2.23} \\
-& & MKDT & \dsacc{58.59}{0.32} & \dsacc{53.28}{0.69} & \dsacc{42.81}{0.80} & \dsacc{25.27}{5.84} & \dsacc{43.01}{1.50} & \dsacc{51.19}{1.66} \\
+& & MKDT &  & \dsacc{53.28}{0.69} &  & \dsacc{25.27}{5.84} &  & \dsacc{51.19}{1.66} \\
 & & Ours &  &  &  &  & \dsacc{55.62}{0.44} & \dsacc{57.80}{1.14} \\
 \cmidrule(lr){2-9}
 
@@ -133,7 +133,7 @@
 & \dsacc{61.38}{0.41} & \dsacc{56.64}{0.81}
 & \dsacc{52.09}{0.93} & \dsacc{47.24}{1.46}
 & \dsacc{57.77}{0.37} & \dsacc{63.18}{0.55} \\
-& & MKDT &  & \dsacc{57.89}{0.47} & \dsacc{28.49}{2.09} &  & \dsacc{46.18}{1.02} & \dsacc{57.13}{0.42} \\
+& & MKDT &  & \dsacc{57.89}{0.47} &  &  &  & \dsacc{57.13}{0.42} \\
 & & Ours &  &  &  &  & \dsacc{58.72}{0.58}  &  \\
 % BEGIN DISABLED: 5% pretraining subset
 % \cmidrule(lr){2-9}
@@ -163,3 +163,5 @@
 %          Evaluate_benchamrk/mkdt_eval_results_interactive_6seeds/, and Evaluate_benchamrk/full_eval_results_interactive_3seeds_CIFAR10/.
 % Ours: complete 2 SSL seeds (0,1) x 3 probe seeds (0,1,2); SimCLR 2000 / Barlow Twins 10000 SSL epochs.
 % Ours source: Evaluate_benchamrk/ours_eval_results_simclr2k_barlow10k_2ssl3probes_main/.
+% MKDT SimCLR: superseded values cleared; replacement uses 2,000 SSL epochs, 2 SSL seeds x 3 probe seeds.
+% Replacement results: Evaluate_benchamrk/mkdt_eval_results_simclr2k_2ssl3probes.

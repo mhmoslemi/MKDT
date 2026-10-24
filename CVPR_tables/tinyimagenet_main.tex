@@ -53,7 +53,7 @@
 & \dsacc{8.71}{0.35} & \dsacc{7.53}{0.54}
 & \dsacc{6.06}{0.56} & \dsacc{8.30}{0.36}
 & \dsacc{9.16}{0.36} & \dsacc{10.63}{0.23} \\
-& & MKDT & \dsacc{6.21}{0.21} &  & \dsacc{5.01}{0.32} &  &  & \dsacc{5.90}{0.43} \\
+& & MKDT &  &  &  &  &  & \dsacc{5.90}{0.43} \\
 & & Ours & & & & & & \\
 \cmidrule(lr){2-9}
 
@@ -65,7 +65,7 @@
 & \dsacc{9.14}{0.43} & \dsacc{7.95}{0.46}
 & \dsacc{8.76}{0.32} & \dsacc{10.16}{0.41}
 & \dsacc{10.70}{0.41} & \dsacc{12.49}{0.50} \\
-& & MKDT & \dsacc{11.81}{0.11} &  &  &  &  &  \\
+& & MKDT &  &  &  &  &  &  \\
 & & Ours & & & & & & \\
 % BEGIN DISABLED: 5% pretraining subset
 % \cmidrule(lr){2-9}
@@ -111,7 +111,7 @@
 & \dsacc{15.37}{0.33} & \dsacc{13.26}{0.43}
 & \dsacc{10.81}{0.56} & \dsacc{13.91}{0.36}
 & \dsacc{15.79}{0.33} & \dsacc{19.17}{0.66} \\
-& & MKDT & \dsacc{11.81}{0.11} &  & \dsacc{9.18}{0.44} &  &  & \dsacc{11.78}{0.48} \\
+& & MKDT &  &  &  &  &  & \dsacc{11.78}{0.48} \\
 & & Ours & & & & & & \\
 \cmidrule(lr){2-9}
 
@@ -156,3 +156,5 @@
 % VGG11/SimCLR uses encoder seeds 0,2 with two probes each (four probe runs, two SSL seeds); all four runs are complete.
 % Ours: complete 2 SSL seeds (0,1) x 3 probe seeds (0,1,2); SimCLR 2000 / Barlow Twins 10000 SSL epochs.
 % Ours source: Evaluate_benchamrk/ours_eval_results_simclr2k_barlow10k_2ssl3probes_main/.
+% MKDT SimCLR: superseded values cleared; replacement uses 2,000 SSL epochs, 2 SSL seeds x 3 probe seeds.
+% Replacement results: Evaluate_benchamrk/mkdt_eval_results_simclr2k_2ssl3probes.

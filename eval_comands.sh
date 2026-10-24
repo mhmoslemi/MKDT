@@ -1,4 +1,13 @@
 
+bash Evaluate_benchamrk/recover_mkdt_cifar10_interactive.sh
+bash Evaluate_benchamrk/recover_mkdt_cifar100_interactive.sh
+bash Evaluate_benchamrk/recover_mkdt_tinyimagenet_interactive.sh
+
+
+
+------
+
+
 bash Evaluate_benchamrk/eval_random_interactive.sh
 
 bash Evaluate_benchamrk/eval_random_cifar10_interactive.sh
