@@ -1,0 +1,160 @@
+=== TinyImageNet / ResNet18BN / 2% / 6000 iterations / teacher seed 1: 2026-10-24T09:29:43Z ===
+Loaded fixed teacher seed 1: /scratch/mmoslem3/MKDT/OT-SSL-DD/../Evaluate_benchamrk/full_ssl_checkpoints_1000ep_3seeds/TinyImageNet/ResNet18/full/pt100/simclr/seed_001/encoder.pt
+Initializing 2000 synthetic prototypes via DeepCluster K-Means on ResNet18BN...
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic/TinyImageNet/ResNet18BN/pt2/res_IIC_TinyImageNet_ResNet18BN_2percent_final.pt (iteration 0/6000)
+Hyper-parameters: 
+ {'dataset': 'TinyImageNet', 'percentage': 2.0, 'data_path': '/home/mmoslem3/scratch/data', 'device': 'cuda', 'seed': 0, 'Iteration': 6000, 'lr_img': 0.001, 'batch_real': 1024, 'temperature': 0.2, 'disp_weight': 0.0, 'pair_weight': 0.0, 'num_random_networks': 1, 'random_models': 'ResNet18BN', 'distill_aug_strategy': 'color_crop_cutout_flip_scale_rotate', 'dsa': True, 'distill_aug_mode': 'M', 'teacher_source': 'pretrained', 'teacher_seed': [1], 'teacher_ssl': 'simclr', 'teacher_path': '/scratch/mmoslem3/MKDT/OT-SSL-DD/../Evaluate_benchamrk/full_ssl_checkpoints_1000ep_3seeds', 'model': 'ResNet18BN', 'ssl_method': 'simclr', 'eval_mode': 'S', 'num_eval': 0, 'epoch_eval_train': 10000, 'label_percentage': 1.0, 'lr_linear': 0.1, 'batch_linear': 256, 'save_path': '/scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic/TinyImageNet/ResNet18BN/pt2', 'resume': True, 'save_every': 100, 'feature_batch': 128}
+P_net support: ResNet18BN
+Objective: sum teacher losses (-MI + 0 * displacement + 0 * pair_similarity), averaged over 1 augmentation draw(s).
+[2026-10-24 03:31:49] distillation begins
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic/TinyImageNet/ResNet18BN/pt2/res_IIC_TinyImageNet_ResNet18BN_2percent_final.pt (iteration 1/6000)
+[2026-10-24 03:32:50] iter = 00025, neg_MI = -0.005952, displacement = 0.000225, pair_similarity = 0.000794, total_loss = -0.005952, pixel drift RMS = 0.37320/255
+[2026-10-24 03:33:47] iter = 00050, neg_MI = -0.007068, displacement = 0.000452, pair_similarity = 0.005159, total_loss = -0.007068, pixel drift RMS = 0.74707/255
+[2026-10-24 03:34:43] iter = 00075, neg_MI = -0.006313, displacement = 0.000425, pair_similarity = 0.001979, total_loss = -0.006313, pixel drift RMS = 1.11755/255
+[2026-10-24 03:35:40] iter = 00100, neg_MI = -0.010676, displacement = 0.000292, pair_similarity = 0.002750, total_loss = -0.010676, pixel drift RMS = 1.47214/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic/TinyImageNet/ResNet18BN/pt2/res_IIC_TinyImageNet_ResNet18BN_2percent_final.pt (iteration 100/6000)
+[2026-10-24 03:36:38] iter = 00125, neg_MI = -0.010261, displacement = 0.000356, pair_similarity = 0.001371, total_loss = -0.010261, pixel drift RMS = 1.79475/255
+[2026-10-24 03:37:34] iter = 00150, neg_MI = -0.014834, displacement = 0.000448, pair_similarity = 0.005790, total_loss = -0.014834, pixel drift RMS = 2.09240/255
+[2026-10-24 03:38:31] iter = 00175, neg_MI = -0.016348, displacement = 0.000180, pair_similarity = 0.000992, total_loss = -0.016348, pixel drift RMS = 2.36508/255
+[2026-10-24 03:39:27] iter = 00200, neg_MI = -0.018176, displacement = 0.000089, pair_similarity = 0.000070, total_loss = -0.018176, pixel drift RMS = 2.62558/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic/TinyImageNet/ResNet18BN/pt2/res_IIC_TinyImageNet_ResNet18BN_2percent_final.pt (iteration 200/6000)
+[2026-10-24 03:40:26] iter = 00225, neg_MI = -0.021271, displacement = 0.000149, pair_similarity = 0.000506, total_loss = -0.021271, pixel drift RMS = 2.88121/255
+[2026-10-24 03:41:22] iter = 00250, neg_MI = -0.020398, displacement = 0.000455, pair_similarity = 0.006883, total_loss = -0.020398, pixel drift RMS = 3.11860/255
+[2026-10-24 03:42:18] iter = 00275, neg_MI = -0.009918, displacement = 0.000823, pair_similarity = 0.010791, total_loss = -0.009918, pixel drift RMS = 3.35510/255
+[2026-10-24 03:43:13] iter = 00300, neg_MI = -0.031407, displacement = 0.000087, pair_similarity = 0.000142, total_loss = -0.031407, pixel drift RMS = 3.55551/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic/TinyImageNet/ResNet18BN/pt2/res_IIC_TinyImageNet_ResNet18BN_2percent_final.pt (iteration 300/6000)
+[2026-10-24 03:44:11] iter = 00325, neg_MI = -0.018704, displacement = 0.000687, pair_similarity = 0.013929, total_loss = -0.018704, pixel drift RMS = 3.74077/255
+[2026-10-24 03:45:08] iter = 00350, neg_MI = -0.030334, displacement = 0.000088, pair_similarity = 0.000104, total_loss = -0.030334, pixel drift RMS = 3.92733/255
+[2026-10-24 03:46:04] iter = 00375, neg_MI = -0.033663, displacement = 0.000078, pair_similarity = 0.000059, total_loss = -0.033663, pixel drift RMS = 4.10100/255
+[2026-10-24 03:47:01] iter = 00400, neg_MI = -0.027990, displacement = 0.000138, pair_similarity = 0.000255, total_loss = -0.027990, pixel drift RMS = 4.26194/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic/TinyImageNet/ResNet18BN/pt2/res_IIC_TinyImageNet_ResNet18BN_2percent_final.pt (iteration 400/6000)
+[2026-10-24 03:47:59] iter = 00425, neg_MI = -0.038087, displacement = 0.000068, pair_similarity = 0.000045, total_loss = -0.038087, pixel drift RMS = 4.42379/255
+[2026-10-24 03:48:55] iter = 00450, neg_MI = -0.025216, displacement = 0.000452, pair_similarity = 0.009544, total_loss = -0.025216, pixel drift RMS = 4.58196/255
+[2026-10-24 03:49:51] iter = 00475, neg_MI = -0.034114, displacement = 0.000110, pair_similarity = 0.000129, total_loss = -0.034114, pixel drift RMS = 4.73844/255
+[2026-10-24 03:50:47] iter = 00500, neg_MI = -0.034775, displacement = 0.000181, pair_similarity = 0.000680, total_loss = -0.034775, pixel drift RMS = 4.88478/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic/TinyImageNet/ResNet18BN/pt2/res_IIC_TinyImageNet_ResNet18BN_2percent_final.pt (iteration 500/6000)
+[2026-10-24 03:51:45] iter = 00525, neg_MI = -0.026390, displacement = 0.000240, pair_similarity = 0.001508, total_loss = -0.026390, pixel drift RMS = 5.01275/255
+[2026-10-24 03:52:42] iter = 00550, neg_MI = -0.030585, displacement = 0.000271, pair_similarity = 0.003079, total_loss = -0.030585, pixel drift RMS = 5.14511/255
+[2026-10-24 03:53:39] iter = 00575, neg_MI = -0.037393, displacement = 0.000176, pair_similarity = 0.001297, total_loss = -0.037393, pixel drift RMS = 5.26660/255
+[2026-10-24 03:54:35] iter = 00600, neg_MI = -0.040700, displacement = 0.000075, pair_similarity = 0.000061, total_loss = -0.040700, pixel drift RMS = 5.39648/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic/TinyImageNet/ResNet18BN/pt2/res_IIC_TinyImageNet_ResNet18BN_2percent_final.pt (iteration 600/6000)
+[2026-10-24 03:55:33] iter = 00625, neg_MI = -0.032220, displacement = 0.000119, pair_similarity = 0.000227, total_loss = -0.032220, pixel drift RMS = 5.52000/255
+[2026-10-24 03:56:30] iter = 00650, neg_MI = -0.033245, displacement = 0.000446, pair_similarity = 0.010909, total_loss = -0.033245, pixel drift RMS = 5.63659/255
+[2026-10-24 03:57:26] iter = 00675, neg_MI = -0.011642, displacement = 0.000860, pair_similarity = 0.017555, total_loss = -0.011642, pixel drift RMS = 5.74516/255
+[2026-10-24 03:58:22] iter = 00700, neg_MI = -0.038124, displacement = 0.000122, pair_similarity = 0.000254, total_loss = -0.038124, pixel drift RMS = 5.85205/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic/TinyImageNet/ResNet18BN/pt2/res_IIC_TinyImageNet_ResNet18BN_2percent_final.pt (iteration 700/6000)
+[2026-10-24 03:59:20] iter = 00725, neg_MI = -0.028691, displacement = 0.000352, pair_similarity = 0.002364, total_loss = -0.028691, pixel drift RMS = 5.95549/255
+=== TinyImageNet / ResNet18BN / 2% / 6000 iterations / teacher seed 1: 2026-10-24T15:53:30Z ===
+Loaded fixed teacher seed 1: /scratch/mmoslem3/MKDT/OT-SSL-DD/../Evaluate_benchamrk/full_ssl_checkpoints_1000ep_3seeds/TinyImageNet/ResNet18/full/pt100/simclr/seed_001/encoder.pt
+RESUME iteration 700 -> 6000, including Adam, sampling and RNG state: /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic/TinyImageNet/ResNet18BN/pt2/res_IIC_TinyImageNet_ResNet18BN_2percent_final.pt
+Hyper-parameters: 
+ {'dataset': 'TinyImageNet', 'percentage': 2.0, 'data_path': '/home/mmoslem3/scratch/data', 'device': 'cuda', 'seed': 0, 'Iteration': 6000, 'lr_img': 0.001, 'batch_real': 1024, 'temperature': 0.2, 'disp_weight': 0.0, 'pair_weight': 0.0, 'num_random_networks': 1, 'random_models': 'ResNet18BN', 'distill_aug_strategy': 'color_crop_cutout_flip_scale_rotate', 'dsa': True, 'distill_aug_mode': 'M', 'teacher_source': 'pretrained', 'teacher_seed': [1], 'teacher_ssl': 'simclr', 'teacher_path': '/scratch/mmoslem3/MKDT/OT-SSL-DD/../Evaluate_benchamrk/full_ssl_checkpoints_1000ep_3seeds', 'model': 'ResNet18BN', 'ssl_method': 'simclr', 'eval_mode': 'S', 'num_eval': 0, 'epoch_eval_train': 10000, 'label_percentage': 1.0, 'lr_linear': 0.1, 'batch_linear': 256, 'save_path': '/scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic/TinyImageNet/ResNet18BN/pt2', 'resume': True, 'save_every': 100, 'feature_batch': 128}
+P_net support: ResNet18BN
+Objective: sum teacher losses (-MI + 0 * displacement + 0 * pair_similarity), averaged over 1 augmentation draw(s).
+[2026-10-24 09:53:35] distillation begins
+[2026-10-24 09:54:34] iter = 00725, neg_MI = -0.028691, displacement = 0.000352, pair_similarity = 0.002364, total_loss = -0.028691, pixel drift RMS = 5.95549/255
+[2026-10-24 09:55:32] iter = 00750, neg_MI = -0.031005, displacement = 0.000254, pair_similarity = 0.000957, total_loss = -0.031005, pixel drift RMS = 6.06637/255
+[2026-10-24 09:56:29] iter = 00775, neg_MI = -0.040764, displacement = 0.000215, pair_similarity = 0.001040, total_loss = -0.040764, pixel drift RMS = 6.17363/255
+[2026-10-24 09:57:27] iter = 00800, neg_MI = -0.035859, displacement = 0.000169, pair_similarity = 0.001090, total_loss = -0.035859, pixel drift RMS = 6.27856/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic/TinyImageNet/ResNet18BN/pt2/res_IIC_TinyImageNet_ResNet18BN_2percent_final.pt (iteration 800/6000)
+[2026-10-24 09:58:27] iter = 00825, neg_MI = -0.035229, displacement = 0.000157, pair_similarity = 0.001122, total_loss = -0.035229, pixel drift RMS = 6.37052/255
+[2026-10-24 09:59:24] iter = 00850, neg_MI = -0.051743, displacement = 0.000052, pair_similarity = 0.000168, total_loss = -0.051743, pixel drift RMS = 6.45951/255
+[2026-10-24 10:00:22] iter = 00875, neg_MI = -0.021699, displacement = 0.000924, pair_similarity = 0.017830, total_loss = -0.021699, pixel drift RMS = 6.55564/255
+[2026-10-24 10:01:19] iter = 00900, neg_MI = -0.028929, displacement = 0.000330, pair_similarity = 0.002273, total_loss = -0.028929, pixel drift RMS = 6.65179/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic/TinyImageNet/ResNet18BN/pt2/res_IIC_TinyImageNet_ResNet18BN_2percent_final.pt (iteration 900/6000)
+[2026-10-24 10:02:18] iter = 00925, neg_MI = -0.013699, displacement = 0.000768, pair_similarity = 0.011519, total_loss = -0.013699, pixel drift RMS = 6.74082/255
+[2026-10-24 10:03:16] iter = 00950, neg_MI = -0.029186, displacement = 0.000451, pair_similarity = 0.012985, total_loss = -0.029186, pixel drift RMS = 6.82759/255
+[2026-10-24 10:04:14] iter = 00975, neg_MI = -0.047957, displacement = 0.000000, pair_similarity = 0.000000, total_loss = -0.047957, pixel drift RMS = 6.91516/255
+[2026-10-24 10:05:13] iter = 01000, neg_MI = -0.041851, displacement = 0.000146, pair_similarity = 0.000265, total_loss = -0.041851, pixel drift RMS = 7.00091/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic/TinyImageNet/ResNet18BN/pt2/res_IIC_TinyImageNet_ResNet18BN_2percent_final.pt (iteration 1000/6000)
+[2026-10-24 10:06:12] iter = 01025, neg_MI = -0.017037, displacement = 0.000822, pair_similarity = 0.011471, total_loss = -0.017037, pixel drift RMS = 7.08633/255
+[2026-10-24 10:07:10] iter = 01050, neg_MI = -0.028760, displacement = 0.000382, pair_similarity = 0.003018, total_loss = -0.028760, pixel drift RMS = 7.16918/255
+[2026-10-24 10:08:07] iter = 01075, neg_MI = -0.037193, displacement = 0.000182, pair_similarity = 0.000304, total_loss = -0.037193, pixel drift RMS = 7.25203/255
+[2026-10-24 10:09:04] iter = 01100, neg_MI = -0.045324, displacement = 0.000058, pair_similarity = 0.000041, total_loss = -0.045324, pixel drift RMS = 7.33151/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic/TinyImageNet/ResNet18BN/pt2/res_IIC_TinyImageNet_ResNet18BN_2percent_final.pt (iteration 1100/6000)
+[2026-10-24 10:10:03] iter = 01125, neg_MI = -0.041546, displacement = 0.000107, pair_similarity = 0.000365, total_loss = -0.041546, pixel drift RMS = 7.40423/255
+[2026-10-24 10:11:01] iter = 01150, neg_MI = -0.043845, displacement = 0.000197, pair_similarity = 0.000842, total_loss = -0.043845, pixel drift RMS = 7.48455/255
+[2026-10-24 10:11:59] iter = 01175, neg_MI = -0.038360, displacement = 0.000462, pair_similarity = 0.011854, total_loss = -0.038360, pixel drift RMS = 7.55548/255
+[2026-10-24 10:12:56] iter = 01200, neg_MI = -0.038293, displacement = 0.000056, pair_similarity = 0.000029, total_loss = -0.038293, pixel drift RMS = 7.63149/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic/TinyImageNet/ResNet18BN/pt2/res_IIC_TinyImageNet_ResNet18BN_2percent_final.pt (iteration 1200/6000)
+[2026-10-24 10:13:56] iter = 01225, neg_MI = -0.034847, displacement = 0.000213, pair_similarity = 0.003365, total_loss = -0.034847, pixel drift RMS = 7.69917/255
+[2026-10-24 10:14:53] iter = 01250, neg_MI = -0.041372, displacement = 0.000062, pair_similarity = 0.000054, total_loss = -0.041372, pixel drift RMS = 7.77062/255
+[2026-10-24 10:15:51] iter = 01275, neg_MI = -0.049867, displacement = 0.000065, pair_similarity = 0.000081, total_loss = -0.049867, pixel drift RMS = 7.84222/255
+[2026-10-24 10:16:48] iter = 01300, neg_MI = -0.050510, displacement = 0.000057, pair_similarity = 0.000040, total_loss = -0.050510, pixel drift RMS = 7.90290/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic/TinyImageNet/ResNet18BN/pt2/res_IIC_TinyImageNet_ResNet18BN_2percent_final.pt (iteration 1300/6000)
+[2026-10-24 10:17:48] iter = 01325, neg_MI = -0.020438, displacement = 0.000534, pair_similarity = 0.011879, total_loss = -0.020438, pixel drift RMS = 7.96326/255
+[2026-10-24 10:18:46] iter = 01350, neg_MI = -0.016115, displacement = 0.000672, pair_similarity = 0.013324, total_loss = -0.016115, pixel drift RMS = 8.03242/255
+[2026-10-24 10:19:44] iter = 01375, neg_MI = -0.048230, displacement = 0.000206, pair_similarity = 0.000523, total_loss = -0.048230, pixel drift RMS = 8.09816/255
+[2026-10-24 10:20:42] iter = 01400, neg_MI = -0.034948, displacement = 0.000355, pair_similarity = 0.006489, total_loss = -0.034948, pixel drift RMS = 8.16022/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic/TinyImageNet/ResNet18BN/pt2/res_IIC_TinyImageNet_ResNet18BN_2percent_final.pt (iteration 1400/6000)
+[2026-10-24 10:21:41] iter = 01425, neg_MI = -0.049878, displacement = 0.000000, pair_similarity = 0.000000, total_loss = -0.049878, pixel drift RMS = 8.22443/255
+[2026-10-24 10:22:38] iter = 01450, neg_MI = -0.033008, displacement = 0.000545, pair_similarity = 0.011544, total_loss = -0.033008, pixel drift RMS = 8.29119/255
+[2026-10-24 10:23:35] iter = 01475, neg_MI = -0.017411, displacement = 0.000611, pair_similarity = 0.013803, total_loss = -0.017411, pixel drift RMS = 8.35459/255
+[2026-10-24 10:24:31] iter = 01500, neg_MI = -0.032019, displacement = 0.000439, pair_similarity = 0.012724, total_loss = -0.032019, pixel drift RMS = 8.40786/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic/TinyImageNet/ResNet18BN/pt2/res_IIC_TinyImageNet_ResNet18BN_2percent_final.pt (iteration 1500/6000)
+[2026-10-24 10:25:31] iter = 01525, neg_MI = -0.038447, displacement = 0.000159, pair_similarity = 0.000413, total_loss = -0.038447, pixel drift RMS = 8.46291/255
+[2026-10-24 10:26:28] iter = 01550, neg_MI = -0.036987, displacement = 0.000030, pair_similarity = 0.000021, total_loss = -0.036987, pixel drift RMS = 8.51723/255
+[2026-10-24 10:27:25] iter = 01575, neg_MI = -0.036243, displacement = 0.000214, pair_similarity = 0.001912, total_loss = -0.036243, pixel drift RMS = 8.57757/255
+[2026-10-24 10:28:23] iter = 01600, neg_MI = -0.045553, displacement = 0.000131, pair_similarity = 0.000403, total_loss = -0.045553, pixel drift RMS = 8.63638/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic/TinyImageNet/ResNet18BN/pt2/res_IIC_TinyImageNet_ResNet18BN_2percent_final.pt (iteration 1600/6000)
+[2026-10-24 10:29:23] iter = 01625, neg_MI = -0.045611, displacement = 0.000150, pair_similarity = 0.000363, total_loss = -0.045611, pixel drift RMS = 8.69236/255
+[2026-10-24 10:30:21] iter = 01650, neg_MI = -0.026981, displacement = 0.000362, pair_similarity = 0.004333, total_loss = -0.026981, pixel drift RMS = 8.75489/255
+[2026-10-24 10:31:18] iter = 01675, neg_MI = -0.035684, displacement = 0.000307, pair_similarity = 0.007295, total_loss = -0.035684, pixel drift RMS = 8.80891/255
+[2026-10-24 10:32:15] iter = 01700, neg_MI = -0.038061, displacement = 0.000128, pair_similarity = 0.000594, total_loss = -0.038061, pixel drift RMS = 8.85849/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic/TinyImageNet/ResNet18BN/pt2/res_IIC_TinyImageNet_ResNet18BN_2percent_final.pt (iteration 1700/6000)
+[2026-10-24 10:33:15] iter = 01725, neg_MI = -0.039331, displacement = 0.000247, pair_similarity = 0.000717, total_loss = -0.039331, pixel drift RMS = 8.90564/255
+[2026-10-24 10:34:12] iter = 01750, neg_MI = -0.045218, displacement = 0.000186, pair_similarity = 0.000521, total_loss = -0.045218, pixel drift RMS = 8.95645/255
+[2026-10-24 10:35:08] iter = 01775, neg_MI = -0.019526, displacement = 0.000595, pair_similarity = 0.008435, total_loss = -0.019526, pixel drift RMS = 8.99739/255
+[2026-10-24 10:36:06] iter = 01800, neg_MI = -0.046486, displacement = 0.000119, pair_similarity = 0.000204, total_loss = -0.046486, pixel drift RMS = 9.04800/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic/TinyImageNet/ResNet18BN/pt2/res_IIC_TinyImageNet_ResNet18BN_2percent_final.pt (iteration 1800/6000)
+[2026-10-24 10:37:06] iter = 01825, neg_MI = -0.049507, displacement = 0.000000, pair_similarity = 0.000000, total_loss = -0.049507, pixel drift RMS = 9.10236/255
+[2026-10-24 10:38:04] iter = 01850, neg_MI = -0.047212, displacement = 0.000124, pair_similarity = 0.000328, total_loss = -0.047212, pixel drift RMS = 9.15507/255
+[2026-10-24 10:39:02] iter = 01875, neg_MI = -0.049034, displacement = 0.000098, pair_similarity = 0.000161, total_loss = -0.049034, pixel drift RMS = 9.20789/255
+[2026-10-24 10:40:00] iter = 01900, neg_MI = -0.049626, displacement = 0.000040, pair_similarity = 0.000215, total_loss = -0.049626, pixel drift RMS = 9.26117/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic/TinyImageNet/ResNet18BN/pt2/res_IIC_TinyImageNet_ResNet18BN_2percent_final.pt (iteration 1900/6000)
+[2026-10-24 10:40:59] iter = 01925, neg_MI = -0.045620, displacement = 0.000117, pair_similarity = 0.000305, total_loss = -0.045620, pixel drift RMS = 9.31015/255
+[2026-10-24 10:41:57] iter = 01950, neg_MI = -0.050730, displacement = 0.000067, pair_similarity = 0.000063, total_loss = -0.050730, pixel drift RMS = 9.35599/255
+[2026-10-24 10:42:54] iter = 01975, neg_MI = -0.056815, displacement = 0.000047, pair_similarity = 0.000058, total_loss = -0.056815, pixel drift RMS = 9.40252/255
+[2026-10-24 10:43:52] iter = 02000, neg_MI = -0.038350, displacement = 0.000403, pair_similarity = 0.009309, total_loss = -0.038350, pixel drift RMS = 9.44833/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic/TinyImageNet/ResNet18BN/pt2/res_IIC_TinyImageNet_ResNet18BN_2percent_final.pt (iteration 2000/6000)
+[2026-10-24 10:44:50] iter = 02025, neg_MI = -0.049697, displacement = 0.000039, pair_similarity = 0.000024, total_loss = -0.049697, pixel drift RMS = 9.49051/255
+[2026-10-24 10:45:48] iter = 02050, neg_MI = -0.039207, displacement = 0.000414, pair_similarity = 0.010809, total_loss = -0.039207, pixel drift RMS = 9.53326/255
+[2026-10-24 10:46:45] iter = 02075, neg_MI = -0.045145, displacement = 0.000372, pair_similarity = 0.007956, total_loss = -0.045145, pixel drift RMS = 9.57842/255
+[2026-10-24 10:47:42] iter = 02100, neg_MI = -0.042843, displacement = 0.000123, pair_similarity = 0.000213, total_loss = -0.042843, pixel drift RMS = 9.62703/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic/TinyImageNet/ResNet18BN/pt2/res_IIC_TinyImageNet_ResNet18BN_2percent_final.pt (iteration 2100/6000)
+[2026-10-24 10:48:41] iter = 02125, neg_MI = -0.046831, displacement = 0.000097, pair_similarity = 0.000141, total_loss = -0.046831, pixel drift RMS = 9.68139/255
+[2026-10-24 10:49:39] iter = 02150, neg_MI = -0.047580, displacement = 0.000122, pair_similarity = 0.000233, total_loss = -0.047580, pixel drift RMS = 9.72893/255
+[2026-10-24 10:50:36] iter = 02175, neg_MI = -0.049298, displacement = 0.000041, pair_similarity = 0.000245, total_loss = -0.049298, pixel drift RMS = 9.77935/255
+[2026-10-24 10:51:34] iter = 02200, neg_MI = -0.039178, displacement = 0.000371, pair_similarity = 0.011493, total_loss = -0.039178, pixel drift RMS = 9.82313/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic/TinyImageNet/ResNet18BN/pt2/res_IIC_TinyImageNet_ResNet18BN_2percent_final.pt (iteration 2200/6000)
+[2026-10-24 10:52:33] iter = 02225, neg_MI = -0.039385, displacement = 0.000426, pair_similarity = 0.011325, total_loss = -0.039385, pixel drift RMS = 9.86829/255
+[2026-10-24 10:53:31] iter = 02250, neg_MI = -0.053248, displacement = 0.000108, pair_similarity = 0.001847, total_loss = -0.053248, pixel drift RMS = 9.91189/255
+[2026-10-24 10:54:28] iter = 02275, neg_MI = -0.049529, displacement = 0.000114, pair_similarity = 0.000185, total_loss = -0.049529, pixel drift RMS = 9.94992/255
+[2026-10-24 10:55:26] iter = 02300, neg_MI = -0.041827, displacement = 0.000355, pair_similarity = 0.007249, total_loss = -0.041827, pixel drift RMS = 9.99244/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic/TinyImageNet/ResNet18BN/pt2/res_IIC_TinyImageNet_ResNet18BN_2percent_final.pt (iteration 2300/6000)
+[2026-10-24 10:56:26] iter = 02325, neg_MI = -0.024664, displacement = 0.000671, pair_similarity = 0.014805, total_loss = -0.024664, pixel drift RMS = 10.03421/255
+[2026-10-24 10:57:22] iter = 02350, neg_MI = -0.040065, displacement = 0.000167, pair_similarity = 0.000993, total_loss = -0.040065, pixel drift RMS = 10.07181/255
+[2026-10-24 10:58:21] iter = 02375, neg_MI = -0.052087, displacement = 0.000082, pair_similarity = 0.000106, total_loss = -0.052087, pixel drift RMS = 10.11381/255
+[2026-10-24 10:59:18] iter = 02400, neg_MI = -0.043523, displacement = 0.000114, pair_similarity = 0.000238, total_loss = -0.043523, pixel drift RMS = 10.15674/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic/TinyImageNet/ResNet18BN/pt2/res_IIC_TinyImageNet_ResNet18BN_2percent_final.pt (iteration 2400/6000)
+[2026-10-24 11:00:19] iter = 02425, neg_MI = -0.041341, displacement = 0.000163, pair_similarity = 0.000364, total_loss = -0.041341, pixel drift RMS = 10.20074/255
+[2026-10-24 11:01:17] iter = 02450, neg_MI = -0.041082, displacement = 0.000314, pair_similarity = 0.004246, total_loss = -0.041082, pixel drift RMS = 10.24632/255
+[2026-10-24 11:02:15] iter = 02475, neg_MI = -0.049471, displacement = 0.000115, pair_similarity = 0.000176, total_loss = -0.049471, pixel drift RMS = 10.28797/255
+[2026-10-24 11:03:12] iter = 02500, neg_MI = -0.040954, displacement = 0.000341, pair_similarity = 0.007961, total_loss = -0.040954, pixel drift RMS = 10.32538/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic/TinyImageNet/ResNet18BN/pt2/res_IIC_TinyImageNet_ResNet18BN_2percent_final.pt (iteration 2500/6000)
+[2026-10-24 11:04:12] iter = 02525, neg_MI = -0.016876, displacement = 0.000835, pair_similarity = 0.015227, total_loss = -0.016876, pixel drift RMS = 10.36097/255
+[2026-10-24 11:05:09] iter = 02550, neg_MI = -0.034476, displacement = 0.000415, pair_similarity = 0.013918, total_loss = -0.034476, pixel drift RMS = 10.39612/255
+[2026-10-24 11:06:08] iter = 02575, neg_MI = -0.051048, displacement = 0.000152, pair_similarity = 0.001657, total_loss = -0.051048, pixel drift RMS = 10.44127/255
+[2026-10-24 11:07:06] iter = 02600, neg_MI = -0.038296, displacement = 0.000279, pair_similarity = 0.001888, total_loss = -0.038296, pixel drift RMS = 10.48102/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic/TinyImageNet/ResNet18BN/pt2/res_IIC_TinyImageNet_ResNet18BN_2percent_final.pt (iteration 2600/6000)
+[2026-10-24 11:08:05] iter = 02625, neg_MI = -0.041695, displacement = 0.000298, pair_similarity = 0.004272, total_loss = -0.041695, pixel drift RMS = 10.52008/255
+[2026-10-24 11:09:02] iter = 02650, neg_MI = -0.041329, displacement = 0.000205, pair_similarity = 0.000844, total_loss = -0.041329, pixel drift RMS = 10.55754/255
+[2026-10-24 11:09:59] iter = 02675, neg_MI = -0.031570, displacement = 0.000355, pair_similarity = 0.005418, total_loss = -0.031570, pixel drift RMS = 10.59563/255
+[2026-10-24 11:10:57] iter = 02700, neg_MI = -0.042744, displacement = 0.000130, pair_similarity = 0.000236, total_loss = -0.042744, pixel drift RMS = 10.63401/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic/TinyImageNet/ResNet18BN/pt2/res_IIC_TinyImageNet_ResNet18BN_2percent_final.pt (iteration 2700/6000)
+[2026-10-24 11:11:57] iter = 02725, neg_MI = -0.044575, displacement = 0.000319, pair_similarity = 0.006984, total_loss = -0.044575, pixel drift RMS = 10.67247/255
+[2026-10-24 11:12:56] iter = 02750, neg_MI = -0.039314, displacement = 0.000263, pair_similarity = 0.006029, total_loss = -0.039314, pixel drift RMS = 10.71131/255
+[2026-10-24 11:13:53] iter = 02775, neg_MI = -0.036800, displacement = 0.000224, pair_similarity = 0.001041, total_loss = -0.036800, pixel drift RMS = 10.75166/255
+[2026-10-24 11:14:51] iter = 02800, neg_MI = -0.051550, displacement = 0.000112, pair_similarity = 0.000170, total_loss = -0.051550, pixel drift RMS = 10.78934/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic/TinyImageNet/ResNet18BN/pt2/res_IIC_TinyImageNet_ResNet18BN_2percent_final.pt (iteration 2800/6000)
+[2026-10-24 11:15:50] iter = 02825, neg_MI = -0.052317, displacement = 0.000115, pair_similarity = 0.000344, total_loss = -0.052317, pixel drift RMS = 10.82345/255

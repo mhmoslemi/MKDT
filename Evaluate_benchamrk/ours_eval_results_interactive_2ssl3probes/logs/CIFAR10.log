@@ -10311,3 +10311,43 @@ RESULT TinyImageNet lbl=5 seed=2: 5.0900
 RUN PROBE Aircraft lbl1, SSL seed=0, probe seed=0
 PROBE Aircraft lbl=1 seed=0: {'epoch': 10, 'lr': 0.09797464868072488, 'loss': 4.461275100708008, 'train_accuracy_percent': 10.606060606060606}
 PROBE Aircraft lbl=1 seed=0: {'epoch': 20, 'lr': 0.09118382907149164, 'loss': 4.225128650665283, 'train_accuracy_percent': 18.181818181818183}
+MAIN TABLE ONLY: no downstream datasets or probes.
+Two SSL encoders per METHOD; three probes per encoder; six results per cell.
+SimCLR/Barlow, targets and 1%/5% label budgets are averaged separately.
+SSL resumes from the latest 500-epoch checkpoint. Completed probes are reused; an interrupted head restarts.
+SSL CHECK CIFAR10/ResNet18BN/pt0.2/simclr seed=0, epochs=10000
+REUSE PROBE CIFAR10 lbl1, SSL seed=0, probe seed=0
+CELL CIFAR10/ResNet18BN/pt0.2/simclr -> CIFAR10 lbl1: 40.38 +/- 0.50 (6 probes)
+REUSE PROBE CIFAR10 lbl1, SSL seed=0, probe seed=1
+CELL CIFAR10/ResNet18BN/pt0.2/simclr -> CIFAR10 lbl1: 40.38 +/- 0.50 (6 probes)
+REUSE PROBE CIFAR10 lbl1, SSL seed=0, probe seed=2
+CELL CIFAR10/ResNet18BN/pt0.2/simclr -> CIFAR10 lbl1: 40.38 +/- 0.50 (6 probes)
+REUSE PROBE CIFAR10 lbl5, SSL seed=0, probe seed=0
+CELL CIFAR10/ResNet18BN/pt0.2/simclr -> CIFAR10 lbl1: 40.38 +/- 0.50 (6 probes)
+REUSE PROBE CIFAR10 lbl5, SSL seed=0, probe seed=1
+CELL CIFAR10/ResNet18BN/pt0.2/simclr -> CIFAR10 lbl1: 40.38 +/- 0.50 (6 probes)
+REUSE PROBE CIFAR10 lbl5, SSL seed=0, probe seed=2
+CELL CIFAR10/ResNet18BN/pt0.2/simclr -> CIFAR10 lbl1: 40.38 +/- 0.50 (6 probes)
+SSL CHECK CIFAR10/ResNet18BN/pt0.2/simclr seed=1, epochs=10000
+REUSE PROBE CIFAR10 lbl1, SSL seed=1, probe seed=0
+CELL CIFAR10/ResNet18BN/pt0.2/simclr -> CIFAR10 lbl1: 40.38 +/- 0.50 (6 probes)
+REUSE PROBE CIFAR10 lbl1, SSL seed=1, probe seed=1
+CELL CIFAR10/ResNet18BN/pt0.2/simclr -> CIFAR10 lbl1: 40.38 +/- 0.50 (6 probes)
+REUSE PROBE CIFAR10 lbl1, SSL seed=1, probe seed=2
+CELL CIFAR10/ResNet18BN/pt0.2/simclr -> CIFAR10 lbl1: 40.38 +/- 0.50 (6 probes)
+RUN PROBE CIFAR10 lbl5, SSL seed=1, probe seed=0
+PROBE CIFAR10 lbl=5 seed=0: {'epoch': 10, 'lr': 0.09759636527645632, 'loss': 1.7510745817184448, 'train_accuracy_percent': 43.92}
+PROBE CIFAR10 lbl=5 seed=0: {'epoch': 20, 'lr': 0.0905246588405146, 'loss': 1.6517684591293336, 'train_accuracy_percent': 44.8}
+PROBE CIFAR10 lbl=5 seed=0: {'epoch': 30, 'lr': 0.07947823644532198, 'loss': 1.611267213821411, 'train_accuracy_percent': 46.32}
+PROBE CIFAR10 lbl=5 seed=0: {'epoch': 40, 'lr': 0.06554054685128856, 'loss': 1.589396780204773, 'train_accuracy_percent': 46.28}
+PROBE CIFAR10 lbl=5 seed=0: {'epoch': 50, 'lr': 0.05007861840237923, 'loss': 1.592181360054016, 'train_accuracy_percent': 44.96}
+PROBE CIFAR10 lbl=5 seed=0: {'epoch': 60, 'lr': 0.03460897894916861, 'loss': 1.5885285634994506, 'train_accuracy_percent': 46.04}
+PROBE CIFAR10 lbl=5 seed=0: {'epoch': 70, 'lr': 0.020648912648459073, 'loss': 1.5778468713760376, 'train_accuracy_percent': 45.48}
+PROBE CIFAR10 lbl=5 seed=0: {'epoch': 80, 'lr': 0.009567642583312259, 'loss': 1.5731534809112548, 'train_accuracy_percent': 46.52}
+PROBE CIFAR10 lbl=5 seed=0: {'epoch': 90, 'lr': 0.002452035422983734, 'loss': 1.5648749155044557, 'train_accuracy_percent': 47.28}
+PROBE CIFAR10 lbl=5 seed=0: {'epoch': 100, 'lr': 0.0, 'loss': 1.5660739864349364, 'train_accuracy_percent': 46.64}
+RESULT CIFAR10 lbl=5 seed=0: 43.9400
+CELL CIFAR10/ResNet18BN/pt0.2/simclr -> CIFAR10 lbl1: 40.38 +/- 0.50 (6 probes)
+RUN PROBE CIFAR10 lbl5, SSL seed=1, probe seed=1
+PROBE CIFAR10 lbl=5 seed=1: {'epoch': 10, 'lr': 0.09759636527645632, 'loss': 1.7724176889419556, 'train_accuracy_percent': 41.04}
+PROBE CIFAR10 lbl=5 seed=1: {'epoch': 20, 'lr': 0.0905246588405146, 'loss': 1.66563118019104, 'train_accuracy_percent': 43.44}

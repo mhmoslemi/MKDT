@@ -46,7 +46,7 @@
 & \dsacc{7.41}{0.47} & \dsacc{2.29}{0.80}
 & \dsacc{8.89}{0.53} & \dsacc{9.99}{0.60} \\
 & & MKDT & \multicolumn{6}{c}{} \\
-& & Ours & \multicolumn{6}{c}{} \\
+& & Ours &  &  &  &  & \dsacc{11.14}{0.40} & \dsacc{10.73}{1.44} \\
 \cmidrule(lr){2-9}
 
 & \multirow{4}{*}{1\%} & Random Subset
@@ -58,7 +58,7 @@
 & \dsacc{9.81}{1.02} & \dsacc{4.06}{2.34}
 & \dsacc{11.57}{1.32} & \dsacc{13.93}{1.34} \\
 & & MKDT & \dsacc{15.00}{0.41} & \dsacc{12.42}{0.64} & \dsacc{5.87}{0.91} & \dsacc{2.41}{0.65} & \dsacc{8.90}{0.66} & \dsacc{11.99}{0.70} \\
-& & Ours &  &  &  &  &  &  \\
+& & Ours &  &  &  &  & \dsacc{13.70}{0.62} & \dsacc{15.49}{0.88} \\
 \cmidrule(lr){2-9}
 
 & \multirow{4}{*}{2\%} & Random Subset
@@ -110,7 +110,7 @@
 & \dsacc{12.54}{0.62} & \dsacc{3.37}{1.21}
 & \dsacc{15.55}{0.72} & \dsacc{17.79}{1.04} \\
 & & MKDT & \multicolumn{6}{c}{} \\
-& & Ours & \multicolumn{6}{c}{} \\
+& & Ours &  &  &  &  & \dsacc{17.38}{0.30} & \dsacc{18.37}{2.34} \\
 \cmidrule(lr){2-9}
 
 & \multirow{4}{*}{1\%} & Random Subset
@@ -122,7 +122,7 @@
 & \dsacc{15.44}{1.74} & \dsacc{6.18}{3.31}
 & \dsacc{19.96}{1.03} & \dsacc{23.73}{1.60} \\
 & & MKDT & \dsacc{26.18}{0.45} & \dsacc{21.78}{0.36} & \dsacc{10.43}{1.77} & \dsacc{3.19}{0.93} & \dsacc{16.04}{0.63} & \dsacc{21.56}{0.48} \\
-& & Ours &  &  &  &  &  &  \\
+& & Ours &  &  &  &  & \dsacc{21.38}{0.23} & \dsacc{25.31}{0.14} \\
 \cmidrule(lr){2-9}
 
 & \multirow{4}{*}{2\%} & Random Subset
@@ -161,3 +161,5 @@
 % Sources: Evaluate_benchamrk/random_eval_results_interactive_10seeds/,
 %          Evaluate_benchamrk/kmeans_eval_results_interactive_6seeds/ (not the 250ep run),
 %          Evaluate_benchamrk/mkdt_eval_results_interactive_6seeds/, and Evaluate_benchamrk/full_eval_results_interactive_3seeds_CIFAR100/.
+% Ours: complete 2 SSL seeds (0,1) x 3 probe seeds (0,1,2); SimCLR 2000 / Barlow Twins 10000 SSL epochs.
+% Ours source: Evaluate_benchamrk/ours_eval_results_simclr2k_barlow10k_2ssl3probes_main/.

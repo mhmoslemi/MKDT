@@ -120,28 +120,37 @@ def evaluate_synset_SSL(it_eval, model, images_train, args, output, normalizatio
     protocol["evaluation"].update(epochs=probe_epochs, lr=args.lr_linear, batch_size=args.batch_linear)
     size = protocol["input_size"][args.dataset]
     count = int(data.SOURCE_COUNTS[args.dataset] * args.percentage / 100)
-    if not isinstance(images_train, torch.Tensor) or images_train.shape != (count, 3, size, size) or count < 2:
-        raise ValueError("Synthetic images must match the dataset, percentage and native resolution")
-    images = images_train.detach().cpu().contiguous()
-    if not images.is_floating_point() or not torch.isfinite(images).all():
-        raise ValueError("Synthetic images must be finite, normalized floating-point tensors")
-    normalization = SYNTHETIC_NORMALIZATION[args.dataset] if normalization is None else normalization
-    mean, std = (torch.tensor(value).view(1, 3, 1, 1) for value in normalization)
-    if not torch.isfinite(mean).all() or not torch.isfinite(std).all() or (std <= 0).any():
-        raise ValueError("Invalid synthetic normalization")
-    pixels = images * std + mean
-    clipped_fraction = float(((pixels < 0) | (pixels > 1)).float().mean())
-    synthetic = SyntheticImages(pixels.clamp(0, 1).contiguous())
-
     train_set = data.RawDataset(args.data_path, args.dataset, True)
     test_set = data.RawDataset(args.data_path, args.dataset, False)
+    selection_method = "random" if getattr(args, "random_subset", False) else "ours"
+    if selection_method == "random":
+        synthetic, selection = data.select_subset(
+            train_set, "random", args.percentage, seed, protocol,
+            Path(output).parent / "selections", workers=0, device=args.device)
+        assert len(synthetic) == count
+        image_metadata = dict(selection=selection, pixel_policy="original_PIL_uint8")
+        print("Random subset: %d distinct training images, selection seed=%d" % (count, seed), flush=True)
+    else:
+        if not isinstance(images_train, torch.Tensor) or images_train.shape != (count, 3, size, size) or count < 2:
+            raise ValueError("Synthetic images must match the dataset, percentage and native resolution")
+        images = images_train.detach().cpu().contiguous()
+        if not images.is_floating_point() or not torch.isfinite(images).all():
+            raise ValueError("Synthetic images must be finite, normalized floating-point tensors")
+        normalization = SYNTHETIC_NORMALIZATION[args.dataset] if normalization is None else normalization
+        mean, std = (torch.tensor(value).view(1, 3, 1, 1) for value in normalization)
+        if not torch.isfinite(mean).all() or not torch.isfinite(std).all() or (std <= 0).any():
+            raise ValueError("Invalid synthetic normalization")
+        pixels = images * std + mean
+        clipped_fraction = float(((pixels < 0) | (pixels > 1)).float().mean())
+        synthetic = SyntheticImages(pixels.clamp(0, 1).contiguous())
+        image_metadata = dict(synthetic_sha256=hashlib.sha256(images.numpy().tobytes()).hexdigest(),
+                              synthetic_dtype=str(images.dtype), synthetic_normalization=normalization,
+                              clipped_fraction=clipped_fraction, pixel_policy="denormalize_clamp_then_PIL_uint8")
     signature = dict(protocol=protocol, source=args.dataset, model=model, ssl=args.ssl_method,
-                     subset=args.percentage, selection_method="ours", source_fingerprint=train_set.fingerprint,
-                     synthetic_sha256=hashlib.sha256(images.numpy().tobytes()).hexdigest(),
-                     synthetic_dtype=str(images.dtype), synthetic_normalization=normalization,
-                     clipped_fraction=clipped_fraction, pixel_policy="denormalize_clamp_then_PIL_uint8",
+                     subset=args.percentage, selection_method=selection_method, source_fingerprint=train_set.fingerprint,
+                     **image_metadata,
                      code_hashes=common.code_hashes(), evaluation_driver_sha256=common.file_hash(__file__))
-    identity = dict(signature=common.digest_json(signature), seed=seed, selection_method="ours")
+    identity = dict(signature=common.digest_json(signature), seed=seed, selection_method=selection_method)
     output = Path(output)
     output.mkdir(parents=True, exist_ok=False)
     common.atomic_json(output / "config.json", dict(signature=signature, identity=identity))
@@ -180,7 +189,7 @@ def main():
     parser.add_argument("--dataset", choices=list(SSL_EPOCHS), default="CIFAR10")
     parser.add_argument("--percentage", type=float, default=0.2)
     parser.add_argument("--label-percentage", type=int, choices=list(PROBE_EPOCHS), default=1)
-    parser.add_argument("--model", choices=["ConvNet", "ConvNetBN", "VGG11", "VGG11BN", "ResNet18", "ResNet18BN"], default="ConvNetBN")
+    parser.add_argument("--model", choices=["ConvNet", "ConvNetBN", "VGG11", "VGG11BN", "ResNet18", "ResNet18BN"], default="ResNet18BN")
     parser.add_argument("--ssl-method", choices=["simclr", "barlowtwins"], default="simclr")
     parser.add_argument("--ssl-epochs", dest="epoch_eval_train", type=int, default=None)
     parser.add_argument("--ssl-log-every", "--print-every", type=int, default=100, help="Print SSL progress every N epochs; always print first/final epochs")
@@ -192,8 +201,9 @@ def main():
     parser.add_argument("--device", choices=["cuda", "cpu"], default="cuda")
     parser.add_argument("--data-path", default=str(ROOT.parent / "data"))
     synthetic_source = parser.add_mutually_exclusive_group()
-    synthetic_source.add_argument("--synthetic-checkpoint", type=Path, default=Path("method_final_oneteacher/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt"))
+    synthetic_source.add_argument("--synthetic-checkpoint", type=Path, default=Path("/home/mmoslem3/scratch/MKDT/OT-SSL-DD/ours_syntehtic/CIFAR10/ResNet18BN/pt0.2/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt"))
     synthetic_source.add_argument("--synthetic-root", type=Path, default=None, help="Legacy sizeN/res_IIC_DATASET_ConvNet_Npercent.pt layout")
+    synthetic_source.add_argument("--random-subset", action="store_true", help="Use randomly selected real training images instead of a synthetic checkpoint")
     parser.add_argument("--save-path", type=Path, default=None)
     args = parser.parse_args()
 
@@ -212,16 +222,18 @@ def main():
 
 
 
-    checkpoint_path = Path(checkpoint_path)
+    checkpoint_path = None if args.random_subset else Path(checkpoint_path)
     torch.set_num_threads(int(os.environ.get("SLURM_CPUS_PER_TASK", "1")))
-    saved = torch.load(checkpoint_path, map_location="cpu", weights_only=True)
+    saved = {} if args.random_subset else torch.load(checkpoint_path, map_location="cpu", weights_only=True)
     if saved.get("dataset", args.dataset) != args.dataset or saved.get("percentage", args.percentage) != args.percentage:
         raise ValueError("Synthetic checkpoint metadata disagrees with the requested dataset/percentage")
     stamp = datetime.now().strftime("%Y%m%d_%H%M%S_%f")
-    output = args.save_path if args.save_path else ROOT / "OT-SSL-DD/eval_results" / f"manual_{stamp}"
+    prefix = "random" if args.random_subset else "manual"
+    output = args.save_path if args.save_path else ROOT / "OT-SSL-DD/eval_results" / f"{prefix}_{stamp}"
     output.mkdir(parents=True, exist_ok=False)
     config = {key: str(value) if isinstance(value, Path) else value for key, value in vars(args).items()}
-    config.update(synthetic_checkpoint=str(checkpoint_path.resolve()), save_path=str(output.resolve()), std_ddof=1)
+    config.update(synthetic_checkpoint=str(checkpoint_path.resolve()) if checkpoint_path else None,
+                  save_path=str(output.resolve()), std_ddof=1)
     common = reference_modules()["common"]
     common.atomic_json(output / "config.json", config)
     print(json.dumps(config, indent=2), flush=True)
@@ -229,7 +241,7 @@ def main():
 
     for run in range(args.runs):
         seed = args.seed + run
-        _, _, accuracy = evaluate_synset_SSL(run, args.model, saved["data"], args,
+        _, _, accuracy = evaluate_synset_SSL(run, args.model, saved.get("data"), args,
                                              output / f"seed_{seed:03d}", saved.get("normalization"))
         accuracies.append(accuracy * 100)
         summary = dict(config=config, completed_runs=len(accuracies), expected_runs=args.runs,

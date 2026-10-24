@@ -51,18 +51,36 @@ bash Evaluate_benchamrk/eval_mkdt_tinyimagenet_downstream_interactive.sh
 
 
 bash OT-SSL-DD/run_ours_cifar10.sh
-bash OT-SSL-DD/run_ours_cifar100.sh
+
+
 bash OT-SSL-DD/run_ours_tinyimagenet.sh
 
 
-bash Evaluate_benchamrk/eval_ours_cifar10_interactive.sh
-bash Evaluate_benchamrk/eval_ours_cifar100_interactive.sh
-bash Evaluate_benchamrk/eval_ours_tinyimagenet_interactive.sh
+bash OT-SSL-DD/run_ours_cifar10.sh
+bash OT-SSL-DD/run_ours_cifar100.sh
+bash OT-SSL-DD/run_ours_tinyimagenet.sh
+
+bash OT-SSL-DD/run_ours_all.sh
 
 
-bash Evaluate_benchamrk/eval_ours_cifar10_interactive.sh
-bash Evaluate_benchamrk/eval_ours_cifar100_interactive.sh
-bash Evaluate_benchamrk/eval_ours_tinyimagenet_interactive.sh
+# bash Evaluate_benchamrk/eval_ours_cifar10_interactive.sh
+# bash Evaluate_benchamrk/eval_ours_cifar100_interactive.sh
+# bash Evaluate_benchamrk/eval_ours_tinyimagenet_interactive.sh
+
+bash Evaluate_benchamrk/eval_ours_cifar10_2k10k_interactive.sh
+bash Evaluate_benchamrk/eval_ours_cifar100_2k10k_interactive.sh
+bash Evaluate_benchamrk/eval_ours_tinyimagenet_2k10k_interactive.sh
+
+MAKING
+
+bash OT-SSL-DD/run_ours_all.sh
+
+bash OT-SSL-DD/run_ours_cifar10.sh
+bash OT-SSL-DD/run_ours_cifar100.sh
+bash OT-SSL-DD/run_ours_tinyimagenet.sh
+# bash Evaluate_benchamrk/eval_ours_cifar10_interactive.sh
+# bash Evaluate_benchamrk/eval_ours_cifar100_interactive.sh
+# bash Evaluate_benchamrk/eval_ours_tinyimagenet_interactive.sh
 
 
 
