@@ -126,3 +126,143 @@ PROBE Aircraft lbl=1 seed=2: {'epoch': 70, 'lr': 0.0209971545214401, 'loss': 1.0
 PROBE Aircraft lbl=1 seed=2: {'epoch': 80, 'lr': 0.009736487123447069, 'loss': 1.0976762771606445, 'train_accuracy_percent': 78.78787878787878}
 PROBE Aircraft lbl=1 seed=2: {'epoch': 90, 'lr': 0.002496444112952734, 'loss': 0.8198992609977722, 'train_accuracy_percent': 81.81818181818181}
 PROBE Aircraft lbl=1 seed=2: {'epoch': 100, 'lr': 0.0, 'loss': 0.43685102462768555, 'train_accuracy_percent': 89.39393939393939}
+RESULT Aircraft lbl=1 seed=2: 2.0702
+CELL CIFAR100/ResNet18BN/pt0.2/barlowtwins -> CIFAR10 lbl1: 38.97 +/- 3.29 (6 probes)
+CELL CIFAR100/ResNet18BN/pt0.2/barlowtwins -> CIFAR10 lbl5: 45.75 +/- 3.85 (6 probes)
+CELL CIFAR100/ResNet18BN/pt0.2/barlowtwins -> TinyImageNet lbl1: 4.89 +/- 0.68 (6 probes)
+CELL CIFAR100/ResNet18BN/pt0.2/barlowtwins -> TinyImageNet lbl5: 8.95 +/- 1.06 (6 probes)
+CELL CIFAR100/ResNet18BN/pt0.2/barlowtwins -> Aircraft lbl1: 2.08 +/- 0.22 (6 probes)
+CELL CIFAR100/ResNet18BN/pt0.2/barlowtwins -> Aircraft lbl5: 3.58 +/- 0.50 (6 probes)
+CELL CIFAR100/ResNet18BN/pt0.2/barlowtwins -> Dogs lbl5: 3.43 +/- 0.40 (6 probes)
+CELL CIFAR100/ResNet18BN/pt0.2/barlowtwins -> Flowers lbl1: 3.08 +/- 0.46 (6 probes)
+CELL CIFAR100/ResNet18BN/pt0.2/barlowtwins -> Flowers lbl5: 7.21 +/- 1.15 (6 probes)
+COMPLETE: dp3_ours_CIFAR100_p0p2_barlowtwins_s1_Aircraft_l1
+DOWNSTREAM ONLY: {'kind': 'ours', 'source': 'CIFAR100', 'subset': 0.2, 'ssl': 'barlowtwins', 'seed': 1, 'epochs': 10000, 'checkpoint_dir': 'ours_eval_results_simclr2k_barlow10k_2ssl3probes_main/CIFAR100/ResNet18BN/pt0.2/barlowtwins/ssl_seed_001', 'output_dir': 'ours_eval_results_simclr2k_barlow10k_2ssl3probes_downstream/CIFAR100/ResNet18BN/pt0.2/barlowtwins/ssl_seed_001'} probes: [{'target': 'CUB2011', 'labels': 1, 'seed': 0}, {'target': 'CUB2011', 'labels': 1, 'seed': 1}, {'target': 'CUB2011', 'labels': 1, 'seed': 2}]
+PROBE CUB2011 lbl=1 seed=0: {'epoch': 10, 'lr': 0.09797464868072488, 'loss': 0.7780008912086487, 'train_accuracy_percent': 77.96610169491525}
+PROBE CUB2011 lbl=1 seed=0: {'epoch': 20, 'lr': 0.09118382907149164, 'loss': 1.149402141571045, 'train_accuracy_percent': 69.49152542372882}
+PROBE CUB2011 lbl=1 seed=0: {'epoch': 30, 'lr': 0.08028048435688334, 'loss': 1.1104658842086792, 'train_accuracy_percent': 71.1864406779661}
+PROBE CUB2011 lbl=1 seed=0: {'epoch': 40, 'lr': 0.06635339816587109, 'loss': 0.9274890422821045, 'train_accuracy_percent': 77.96610169491525}
+PROBE CUB2011 lbl=1 seed=0: {'epoch': 50, 'lr': 0.0507932981917404, 'loss': 0.5391332507133484, 'train_accuracy_percent': 84.7457627118644}
+PROBE CUB2011 lbl=1 seed=0: {'epoch': 60, 'lr': 0.035153981233586276, 'loss': 0.266811728477478, 'train_accuracy_percent': 94.91525423728814}
+PROBE CUB2011 lbl=1 seed=0: {'epoch': 70, 'lr': 0.0209971545214401, 'loss': 0.4004138112068176, 'train_accuracy_percent': 91.52542372881356}
+PROBE CUB2011 lbl=1 seed=0: {'epoch': 80, 'lr': 0.009736487123447069, 'loss': 0.3038496971130371, 'train_accuracy_percent': 96.61016949152543}
+PROBE CUB2011 lbl=1 seed=0: {'epoch': 90, 'lr': 0.002496444112952734, 'loss': 0.08870797604322433, 'train_accuracy_percent': 98.30508474576271}
+PROBE CUB2011 lbl=1 seed=0: {'epoch': 100, 'lr': 0.0, 'loss': 0.11631133407354355, 'train_accuracy_percent': 96.61016949152543}
+RESULT CUB2011 lbl=1 seed=0: 1.2599
+CELL CIFAR100/ResNet18BN/pt0.2/barlowtwins -> CIFAR10 lbl1: 38.97 +/- 3.29 (6 probes)
+CELL CIFAR100/ResNet18BN/pt0.2/barlowtwins -> CIFAR10 lbl5: 45.75 +/- 3.85 (6 probes)
+CELL CIFAR100/ResNet18BN/pt0.2/barlowtwins -> TinyImageNet lbl1: 4.89 +/- 0.68 (6 probes)
+CELL CIFAR100/ResNet18BN/pt0.2/barlowtwins -> TinyImageNet lbl5: 8.95 +/- 1.06 (6 probes)
+CELL CIFAR100/ResNet18BN/pt0.2/barlowtwins -> Aircraft lbl1: 2.08 +/- 0.22 (6 probes)
+CELL CIFAR100/ResNet18BN/pt0.2/barlowtwins -> Aircraft lbl5: 3.58 +/- 0.50 (6 probes)
+CELL CIFAR100/ResNet18BN/pt0.2/barlowtwins -> Dogs lbl5: 3.43 +/- 0.40 (6 probes)
+CELL CIFAR100/ResNet18BN/pt0.2/barlowtwins -> Flowers lbl1: 3.08 +/- 0.46 (6 probes)
+CELL CIFAR100/ResNet18BN/pt0.2/barlowtwins -> Flowers lbl5: 7.21 +/- 1.15 (6 probes)
+PROBE CUB2011 lbl=1 seed=1: {'epoch': 10, 'lr': 0.09797464868072488, 'loss': 0.809710681438446, 'train_accuracy_percent': 81.35593220338983}
+PROBE CUB2011 lbl=1 seed=1: {'epoch': 20, 'lr': 0.09118382907149164, 'loss': 1.030664086341858, 'train_accuracy_percent': 81.35593220338983}
+PROBE CUB2011 lbl=1 seed=1: {'epoch': 30, 'lr': 0.08028048435688334, 'loss': 1.6465352773666382, 'train_accuracy_percent': 67.79661016949153}
+PROBE CUB2011 lbl=1 seed=1: {'epoch': 40, 'lr': 0.06635339816587109, 'loss': 0.8311479091644287, 'train_accuracy_percent': 81.35593220338983}
+PROBE CUB2011 lbl=1 seed=1: {'epoch': 50, 'lr': 0.0507932981917404, 'loss': 0.5694732666015625, 'train_accuracy_percent': 79.66101694915254}
+PROBE CUB2011 lbl=1 seed=1: {'epoch': 60, 'lr': 0.035153981233586276, 'loss': 0.3926151692867279, 'train_accuracy_percent': 88.13559322033899}
+PROBE CUB2011 lbl=1 seed=1: {'epoch': 70, 'lr': 0.0209971545214401, 'loss': 0.46165305376052856, 'train_accuracy_percent': 88.13559322033899}
+PROBE CUB2011 lbl=1 seed=1: {'epoch': 80, 'lr': 0.009736487123447069, 'loss': 0.17054927349090576, 'train_accuracy_percent': 93.22033898305085}
+PROBE CUB2011 lbl=1 seed=1: {'epoch': 90, 'lr': 0.002496444112952734, 'loss': 0.2149614840745926, 'train_accuracy_percent': 93.22033898305085}
+PROBE CUB2011 lbl=1 seed=1: {'epoch': 100, 'lr': 0.0, 'loss': 0.17846639454364777, 'train_accuracy_percent': 96.61016949152543}
+RESULT CUB2011 lbl=1 seed=1: 1.1736
+CELL CIFAR100/ResNet18BN/pt0.2/barlowtwins -> CIFAR10 lbl1: 38.97 +/- 3.29 (6 probes)
+CELL CIFAR100/ResNet18BN/pt0.2/barlowtwins -> CIFAR10 lbl5: 45.75 +/- 3.85 (6 probes)
+CELL CIFAR100/ResNet18BN/pt0.2/barlowtwins -> TinyImageNet lbl1: 4.89 +/- 0.68 (6 probes)
+CELL CIFAR100/ResNet18BN/pt0.2/barlowtwins -> TinyImageNet lbl5: 8.95 +/- 1.06 (6 probes)
+CELL CIFAR100/ResNet18BN/pt0.2/barlowtwins -> Aircraft lbl1: 2.08 +/- 0.22 (6 probes)
+CELL CIFAR100/ResNet18BN/pt0.2/barlowtwins -> Aircraft lbl5: 3.58 +/- 0.50 (6 probes)
+CELL CIFAR100/ResNet18BN/pt0.2/barlowtwins -> Dogs lbl5: 3.43 +/- 0.40 (6 probes)
+CELL CIFAR100/ResNet18BN/pt0.2/barlowtwins -> Flowers lbl1: 3.08 +/- 0.46 (6 probes)
+CELL CIFAR100/ResNet18BN/pt0.2/barlowtwins -> Flowers lbl5: 7.21 +/- 1.15 (6 probes)
+PROBE CUB2011 lbl=1 seed=2: {'epoch': 10, 'lr': 0.09797464868072488, 'loss': 0.9389627575874329, 'train_accuracy_percent': 79.66101694915254}
+PROBE CUB2011 lbl=1 seed=2: {'epoch': 20, 'lr': 0.09118382907149164, 'loss': 0.5191305875778198, 'train_accuracy_percent': 79.66101694915254}
+PROBE CUB2011 lbl=1 seed=2: {'epoch': 30, 'lr': 0.08028048435688334, 'loss': 1.39201021194458, 'train_accuracy_percent': 72.88135593220339}
+PROBE CUB2011 lbl=1 seed=2: {'epoch': 40, 'lr': 0.06635339816587109, 'loss': 0.7738534808158875, 'train_accuracy_percent': 86.44067796610169}
+PROBE CUB2011 lbl=1 seed=2: {'epoch': 50, 'lr': 0.0507932981917404, 'loss': 0.5794644951820374, 'train_accuracy_percent': 88.13559322033899}
+PROBE CUB2011 lbl=1 seed=2: {'epoch': 60, 'lr': 0.035153981233586276, 'loss': 0.659429669380188, 'train_accuracy_percent': 74.57627118644068}
+PROBE CUB2011 lbl=1 seed=2: {'epoch': 70, 'lr': 0.0209971545214401, 'loss': 0.6691756248474121, 'train_accuracy_percent': 83.05084745762711}
+PROBE CUB2011 lbl=1 seed=2: {'epoch': 80, 'lr': 0.009736487123447069, 'loss': 0.5913927555084229, 'train_accuracy_percent': 84.7457627118644}
+PROBE CUB2011 lbl=1 seed=2: {'epoch': 90, 'lr': 0.002496444112952734, 'loss': 0.20137713849544525, 'train_accuracy_percent': 96.61016949152543}
+PROBE CUB2011 lbl=1 seed=2: {'epoch': 100, 'lr': 0.0, 'loss': 0.05365409702062607, 'train_accuracy_percent': 98.30508474576271}
+RESULT CUB2011 lbl=1 seed=2: 1.6569
+CELL CIFAR100/ResNet18BN/pt0.2/barlowtwins -> CIFAR10 lbl1: 38.97 +/- 3.29 (6 probes)
+CELL CIFAR100/ResNet18BN/pt0.2/barlowtwins -> CIFAR10 lbl5: 45.75 +/- 3.85 (6 probes)
+CELL CIFAR100/ResNet18BN/pt0.2/barlowtwins -> TinyImageNet lbl1: 4.89 +/- 0.68 (6 probes)
+CELL CIFAR100/ResNet18BN/pt0.2/barlowtwins -> TinyImageNet lbl5: 8.95 +/- 1.06 (6 probes)
+CELL CIFAR100/ResNet18BN/pt0.2/barlowtwins -> Aircraft lbl1: 2.08 +/- 0.22 (6 probes)
+CELL CIFAR100/ResNet18BN/pt0.2/barlowtwins -> Aircraft lbl5: 3.58 +/- 0.50 (6 probes)
+CELL CIFAR100/ResNet18BN/pt0.2/barlowtwins -> CUB2011 lbl1: 1.50 +/- 0.23 (6 probes)
+CELL CIFAR100/ResNet18BN/pt0.2/barlowtwins -> Dogs lbl5: 3.43 +/- 0.40 (6 probes)
+CELL CIFAR100/ResNet18BN/pt0.2/barlowtwins -> Flowers lbl1: 3.08 +/- 0.46 (6 probes)
+CELL CIFAR100/ResNet18BN/pt0.2/barlowtwins -> Flowers lbl5: 7.21 +/- 1.15 (6 probes)
+COMPLETE: dp3_ours_CIFAR100_p0p2_barlowtwins_s1_CUB2011_l1
+DOWNSTREAM ONLY: {'kind': 'ours', 'source': 'CIFAR100', 'subset': 0.2, 'ssl': 'barlowtwins', 'seed': 1, 'epochs': 10000, 'checkpoint_dir': 'ours_eval_results_simclr2k_barlow10k_2ssl3probes_main/CIFAR100/ResNet18BN/pt0.2/barlowtwins/ssl_seed_001', 'output_dir': 'ours_eval_results_simclr2k_barlow10k_2ssl3probes_downstream/CIFAR100/ResNet18BN/pt0.2/barlowtwins/ssl_seed_001'} probes: [{'target': 'CUB2011', 'labels': 5, 'seed': 0}, {'target': 'CUB2011', 'labels': 5, 'seed': 1}, {'target': 'CUB2011', 'labels': 5, 'seed': 2}]
+PROBE CUB2011 lbl=5 seed=0: {'epoch': 10, 'lr': 0.09776754757575974, 'loss': 11.194689278618547, 'train_accuracy_percent': 14.046822742474916}
+PROBE CUB2011 lbl=5 seed=0: {'epoch': 20, 'lr': 0.09081878607071997, 'loss': 12.64801802683036, 'train_accuracy_percent': 20.066889632107024}
+PROBE CUB2011 lbl=5 seed=0: {'epoch': 30, 'lr': 0.0798344744144428, 'loss': 9.20457358982252, 'train_accuracy_percent': 29.431438127090303}
+PROBE CUB2011 lbl=5 seed=0: {'epoch': 40, 'lr': 0.06590057681196192, 'loss': 4.874619130705511, 'train_accuracy_percent': 38.12709030100334}
+PROBE CUB2011 lbl=5 seed=0: {'epoch': 50, 'lr': 0.05039466834548567, 'loss': 3.345220313821748, 'train_accuracy_percent': 47.15719063545151}
+PROBE CUB2011 lbl=5 seed=0: {'epoch': 60, 'lr': 0.03484974098465636, 'loss': 2.0866478095485217, 'train_accuracy_percent': 59.531772575250834}
+PROBE CUB2011 lbl=5 seed=0: {'epoch': 70, 'lr': 0.020802644302934683, 'loss': 1.3031846847023851, 'train_accuracy_percent': 66.88963210702342}
+PROBE CUB2011 lbl=5 seed=0: {'epoch': 80, 'lr': 0.00964214481190074, 'loss': 0.9977270434532676, 'train_accuracy_percent': 76.5886287625418}
+PROBE CUB2011 lbl=5 seed=0: {'epoch': 90, 'lr': 0.0024716255306108607, 'loss': 1.0733070963601206, 'train_accuracy_percent': 76.5886287625418}
+PROBE CUB2011 lbl=5 seed=0: {'epoch': 100, 'lr': 0.0, 'loss': 0.9816986778906756, 'train_accuracy_percent': 76.25418060200668}
+RESULT CUB2011 lbl=5 seed=0: 2.0884
+CELL CIFAR100/ResNet18BN/pt0.2/barlowtwins -> CIFAR10 lbl1: 38.97 +/- 3.29 (6 probes)
+CELL CIFAR100/ResNet18BN/pt0.2/barlowtwins -> CIFAR10 lbl5: 45.75 +/- 3.85 (6 probes)
+CELL CIFAR100/ResNet18BN/pt0.2/barlowtwins -> TinyImageNet lbl1: 4.89 +/- 0.68 (6 probes)
+CELL CIFAR100/ResNet18BN/pt0.2/barlowtwins -> TinyImageNet lbl5: 8.95 +/- 1.06 (6 probes)
+CELL CIFAR100/ResNet18BN/pt0.2/barlowtwins -> Aircraft lbl1: 2.08 +/- 0.22 (6 probes)
+CELL CIFAR100/ResNet18BN/pt0.2/barlowtwins -> Aircraft lbl5: 3.58 +/- 0.50 (6 probes)
+CELL CIFAR100/ResNet18BN/pt0.2/barlowtwins -> CUB2011 lbl1: 1.50 +/- 0.23 (6 probes)
+CELL CIFAR100/ResNet18BN/pt0.2/barlowtwins -> Dogs lbl5: 3.43 +/- 0.40 (6 probes)
+CELL CIFAR100/ResNet18BN/pt0.2/barlowtwins -> Flowers lbl1: 3.08 +/- 0.46 (6 probes)
+CELL CIFAR100/ResNet18BN/pt0.2/barlowtwins -> Flowers lbl5: 7.21 +/- 1.15 (6 probes)
+PROBE CUB2011 lbl=5 seed=1: {'epoch': 10, 'lr': 0.09776754757575974, 'loss': 11.937819254438216, 'train_accuracy_percent': 11.705685618729097}
+PROBE CUB2011 lbl=5 seed=1: {'epoch': 20, 'lr': 0.09081878607071997, 'loss': 15.125415483047332, 'train_accuracy_percent': 20.735785953177256}
+PROBE CUB2011 lbl=5 seed=1: {'epoch': 30, 'lr': 0.0798344744144428, 'loss': 8.011221697497927, 'train_accuracy_percent': 28.42809364548495}
+PROBE CUB2011 lbl=5 seed=1: {'epoch': 40, 'lr': 0.06590057681196192, 'loss': 5.737334827116899, 'train_accuracy_percent': 41.47157190635451}
+PROBE CUB2011 lbl=5 seed=1: {'epoch': 50, 'lr': 0.05039466834548567, 'loss': 3.2078310271170625, 'train_accuracy_percent': 51.17056856187291}
+PROBE CUB2011 lbl=5 seed=1: {'epoch': 60, 'lr': 0.03484974098465636, 'loss': 2.056266348896218, 'train_accuracy_percent': 63.21070234113712}
+PROBE CUB2011 lbl=5 seed=1: {'epoch': 70, 'lr': 0.020802644302934683, 'loss': 1.3881732480581788, 'train_accuracy_percent': 69.23076923076923}
+PROBE CUB2011 lbl=5 seed=1: {'epoch': 80, 'lr': 0.00964214481190074, 'loss': 1.008534455379116, 'train_accuracy_percent': 77.92642140468227}
+PROBE CUB2011 lbl=5 seed=1: {'epoch': 90, 'lr': 0.0024716255306108607, 'loss': 1.0132111867135982, 'train_accuracy_percent': 75.25083612040133}
+PROBE CUB2011 lbl=5 seed=1: {'epoch': 100, 'lr': 0.0, 'loss': 1.0246668569619042, 'train_accuracy_percent': 76.25418060200668}
+RESULT CUB2011 lbl=5 seed=1: 2.0021
+CELL CIFAR100/ResNet18BN/pt0.2/barlowtwins -> CIFAR10 lbl1: 38.97 +/- 3.29 (6 probes)
+CELL CIFAR100/ResNet18BN/pt0.2/barlowtwins -> CIFAR10 lbl5: 45.75 +/- 3.85 (6 probes)
+CELL CIFAR100/ResNet18BN/pt0.2/barlowtwins -> TinyImageNet lbl1: 4.89 +/- 0.68 (6 probes)
+CELL CIFAR100/ResNet18BN/pt0.2/barlowtwins -> TinyImageNet lbl5: 8.95 +/- 1.06 (6 probes)
+CELL CIFAR100/ResNet18BN/pt0.2/barlowtwins -> Aircraft lbl1: 2.08 +/- 0.22 (6 probes)
+CELL CIFAR100/ResNet18BN/pt0.2/barlowtwins -> Aircraft lbl5: 3.58 +/- 0.50 (6 probes)
+CELL CIFAR100/ResNet18BN/pt0.2/barlowtwins -> CUB2011 lbl1: 1.50 +/- 0.23 (6 probes)
+CELL CIFAR100/ResNet18BN/pt0.2/barlowtwins -> Dogs lbl5: 3.43 +/- 0.40 (6 probes)
+CELL CIFAR100/ResNet18BN/pt0.2/barlowtwins -> Flowers lbl1: 3.08 +/- 0.46 (6 probes)
+CELL CIFAR100/ResNet18BN/pt0.2/barlowtwins -> Flowers lbl5: 7.21 +/- 1.15 (6 probes)
+PROBE CUB2011 lbl=5 seed=2: {'epoch': 10, 'lr': 0.09776754757575974, 'loss': 11.711833252157255, 'train_accuracy_percent': 12.709030100334449}
+PROBE CUB2011 lbl=5 seed=2: {'epoch': 20, 'lr': 0.09081878607071997, 'loss': 12.194099528335009, 'train_accuracy_percent': 24.414715719063544}
+PROBE CUB2011 lbl=5 seed=2: {'epoch': 30, 'lr': 0.0798344744144428, 'loss': 8.136494226678957, 'train_accuracy_percent': 30.100334448160535}
+PROBE CUB2011 lbl=5 seed=2: {'epoch': 40, 'lr': 0.06590057681196192, 'loss': 4.998245716892357, 'train_accuracy_percent': 41.80602006688963}
+PROBE CUB2011 lbl=5 seed=2: {'epoch': 50, 'lr': 0.05039466834548567, 'loss': 2.677557784179381, 'train_accuracy_percent': 50.50167224080268}
+PROBE CUB2011 lbl=5 seed=2: {'epoch': 60, 'lr': 0.03484974098465636, 'loss': 1.8998972344956668, 'train_accuracy_percent': 61.20401337792642}
+PROBE CUB2011 lbl=5 seed=2: {'epoch': 70, 'lr': 0.020802644302934683, 'loss': 1.4096802387349183, 'train_accuracy_percent': 66.22073578595318}
+PROBE CUB2011 lbl=5 seed=2: {'epoch': 80, 'lr': 0.00964214481190074, 'loss': 1.2340877406971908, 'train_accuracy_percent': 73.57859531772576}
+PROBE CUB2011 lbl=5 seed=2: {'epoch': 90, 'lr': 0.0024716255306108607, 'loss': 0.863253822693458, 'train_accuracy_percent': 79.93311036789298}
+PROBE CUB2011 lbl=5 seed=2: {'epoch': 100, 'lr': 0.0, 'loss': 0.8091290441643832, 'train_accuracy_percent': 81.60535117056857}
+RESULT CUB2011 lbl=5 seed=2: 2.3127
+CELL CIFAR100/ResNet18BN/pt0.2/barlowtwins -> CIFAR10 lbl1: 38.97 +/- 3.29 (6 probes)
+CELL CIFAR100/ResNet18BN/pt0.2/barlowtwins -> CIFAR10 lbl5: 45.75 +/- 3.85 (6 probes)
+CELL CIFAR100/ResNet18BN/pt0.2/barlowtwins -> TinyImageNet lbl1: 4.89 +/- 0.68 (6 probes)
+CELL CIFAR100/ResNet18BN/pt0.2/barlowtwins -> TinyImageNet lbl5: 8.95 +/- 1.06 (6 probes)
+CELL CIFAR100/ResNet18BN/pt0.2/barlowtwins -> Aircraft lbl1: 2.08 +/- 0.22 (6 probes)
+CELL CIFAR100/ResNet18BN/pt0.2/barlowtwins -> Aircraft lbl5: 3.58 +/- 0.50 (6 probes)
+CELL CIFAR100/ResNet18BN/pt0.2/barlowtwins -> CUB2011 lbl1: 1.50 +/- 0.23 (6 probes)
+CELL CIFAR100/ResNet18BN/pt0.2/barlowtwins -> CUB2011 lbl5: 2.39 +/- 0.32 (6 probes)
+CELL CIFAR100/ResNet18BN/pt0.2/barlowtwins -> Dogs lbl5: 3.43 +/- 0.40 (6 probes)
+CELL CIFAR100/ResNet18BN/pt0.2/barlowtwins -> Flowers lbl1: 3.08 +/- 0.46 (6 probes)
+CELL CIFAR100/ResNet18BN/pt0.2/barlowtwins -> Flowers lbl5: 7.21 +/- 1.15 (6 probes)
+COMPLETE: dp3_ours_CIFAR100_p0p2_barlowtwins_s1_CUB2011_l5

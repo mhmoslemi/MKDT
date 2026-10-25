@@ -182,3 +182,80 @@ PROBE Dogs lbl=1 seed=2: {'epoch': 70, 'lr': 0.0209971545214401, 'loss': 3.75833
 PROBE Dogs lbl=1 seed=2: {'epoch': 80, 'lr': 0.009736487123447069, 'loss': 3.7364964485168457, 'train_accuracy_percent': 55.0}
 PROBE Dogs lbl=1 seed=2: {'epoch': 90, 'lr': 0.002496444112952734, 'loss': 3.7113404273986816, 'train_accuracy_percent': 63.333333333333336}
 PROBE Dogs lbl=1 seed=2: {'epoch': 100, 'lr': 0.0, 'loss': 3.640124559402466, 'train_accuracy_percent': 63.333333333333336}
+RESULT Dogs lbl=1 seed=2: 1.6200
+CELL TinyImageNet/ResNet18BN/pt0.2/simclr -> CIFAR10 lbl1: 47.12 +/- 0.77 (6 probes)
+CELL TinyImageNet/ResNet18BN/pt0.2/simclr -> CIFAR10 lbl5: 55.02 +/- 0.33 (6 probes)
+CELL TinyImageNet/ResNet18BN/pt0.2/simclr -> CIFAR100 lbl1: 12.19 +/- 0.66 (6 probes)
+CELL TinyImageNet/ResNet18BN/pt0.2/simclr -> Aircraft lbl5: 3.11 +/- 0.42 (6 probes)
+CELL TinyImageNet/ResNet18BN/pt0.2/simclr -> CUB2011 lbl1: 1.65 +/- 0.07 (6 probes)
+CELL TinyImageNet/ResNet18BN/pt0.2/simclr -> CUB2011 lbl5: 1.75 +/- 0.19 (6 probes)
+CELL TinyImageNet/ResNet18BN/pt0.2/simclr -> Dogs lbl1: 1.94 +/- 0.23 (6 probes)
+CELL TinyImageNet/ResNet18BN/pt0.2/simclr -> Flowers lbl5: 6.74 +/- 0.36 (6 probes)
+COMPLETE: dp3_ours_TinyImageNet_p0p2_simclr_s1_Dogs_l1
+DOWNSTREAM ONLY: {'kind': 'ours', 'source': 'TinyImageNet', 'subset': 0.2, 'ssl': 'simclr', 'seed': 1, 'epochs': 2000, 'checkpoint_dir': 'ours_eval_results_simclr2k_barlow10k_2ssl3probes_main/TinyImageNet/ResNet18BN/pt0.2/simclr/ssl_seed_001', 'output_dir': 'ours_eval_results_simclr2k_barlow10k_2ssl3probes_downstream/TinyImageNet/ResNet18BN/pt0.2/simclr/ssl_seed_001'} probes: [{'target': 'Dogs', 'labels': 5, 'seed': 0}, {'target': 'Dogs', 'labels': 5, 'seed': 1}, {'target': 'Dogs', 'labels': 5, 'seed': 2}]
+PROBE Dogs lbl=5 seed=0: {'epoch': 10, 'lr': 0.0976968053825168, 'loss': 4.652643432617188, 'train_accuracy_percent': 4.166666666666667}
+PROBE Dogs lbl=5 seed=0: {'epoch': 20, 'lr': 0.09069645216766208, 'loss': 4.480948104858398, 'train_accuracy_percent': 11.666666666666666}
+PROBE Dogs lbl=5 seed=0: {'epoch': 30, 'lr': 0.07968597695835844, 'loss': 4.3357869847615556, 'train_accuracy_percent': 13.333333333333334}
+PROBE Dogs lbl=5 seed=0: {'epoch': 40, 'lr': 0.0657503231944974, 'loss': 4.229172795613607, 'train_accuracy_percent': 17.5}
+PROBE Dogs lbl=5 seed=0: {'epoch': 50, 'lr': 0.05026267376276531, 'loss': 4.157762190500895, 'train_accuracy_percent': 17.833333333333332}
+PROBE Dogs lbl=5 seed=0: {'epoch': 60, 'lr': 0.03474914114521912, 'loss': 4.096754646301269, 'train_accuracy_percent': 19.333333333333332}
+PROBE Dogs lbl=5 seed=0: {'epoch': 70, 'lr': 0.020738388285373534, 'loss': 4.0532011222839355, 'train_accuracy_percent': 21.333333333333332}
+PROBE Dogs lbl=5 seed=0: {'epoch': 80, 'lr': 0.009610998138484261, 'loss': 4.041588153839111, 'train_accuracy_percent': 21.333333333333332}
+PROBE Dogs lbl=5 seed=0: {'epoch': 90, 'lr': 0.002463434636714723, 'loss': 4.047235075632731, 'train_accuracy_percent': 20.0}
+PROBE Dogs lbl=5 seed=0: {'epoch': 100, 'lr': 0.0, 'loss': 4.042032260894775, 'train_accuracy_percent': 18.666666666666668}
+RESULT Dogs lbl=5 seed=0: 3.1702
+CELL TinyImageNet/ResNet18BN/pt0.2/simclr -> CIFAR10 lbl1: 47.12 +/- 0.77 (6 probes)
+CELL TinyImageNet/ResNet18BN/pt0.2/simclr -> CIFAR10 lbl5: 55.02 +/- 0.33 (6 probes)
+CELL TinyImageNet/ResNet18BN/pt0.2/simclr -> CIFAR100 lbl1: 12.19 +/- 0.66 (6 probes)
+CELL TinyImageNet/ResNet18BN/pt0.2/simclr -> CIFAR100 lbl5: 20.36 +/- 0.26 (6 probes)
+CELL TinyImageNet/ResNet18BN/pt0.2/simclr -> Aircraft lbl5: 3.11 +/- 0.42 (6 probes)
+CELL TinyImageNet/ResNet18BN/pt0.2/simclr -> CUB2011 lbl1: 1.65 +/- 0.07 (6 probes)
+CELL TinyImageNet/ResNet18BN/pt0.2/simclr -> CUB2011 lbl5: 1.75 +/- 0.19 (6 probes)
+CELL TinyImageNet/ResNet18BN/pt0.2/simclr -> Dogs lbl1: 1.94 +/- 0.23 (6 probes)
+CELL TinyImageNet/ResNet18BN/pt0.2/simclr -> Flowers lbl5: 6.74 +/- 0.36 (6 probes)
+PROBE Dogs lbl=5 seed=1: {'epoch': 10, 'lr': 0.0976968053825168, 'loss': 4.646119785308838, 'train_accuracy_percent': 5.333333333333333}
+PROBE Dogs lbl=5 seed=1: {'epoch': 20, 'lr': 0.09069645216766208, 'loss': 4.454189325968424, 'train_accuracy_percent': 12.166666666666666}
+PROBE Dogs lbl=5 seed=1: {'epoch': 30, 'lr': 0.07968597695835844, 'loss': 4.315750891367594, 'train_accuracy_percent': 12.833333333333334}
+PROBE Dogs lbl=5 seed=1: {'epoch': 40, 'lr': 0.0657503231944974, 'loss': 4.194373035430909, 'train_accuracy_percent': 16.333333333333332}
+PROBE Dogs lbl=5 seed=1: {'epoch': 50, 'lr': 0.05026267376276531, 'loss': 4.141920496622721, 'train_accuracy_percent': 16.833333333333332}
+PROBE Dogs lbl=5 seed=1: {'epoch': 60, 'lr': 0.03474914114521912, 'loss': 4.1001254781087235, 'train_accuracy_percent': 19.833333333333332}
+PROBE Dogs lbl=5 seed=1: {'epoch': 70, 'lr': 0.020738388285373534, 'loss': 4.071002311706543, 'train_accuracy_percent': 19.5}
+PROBE Dogs lbl=5 seed=1: {'epoch': 80, 'lr': 0.009610998138484261, 'loss': 4.064573669433594, 'train_accuracy_percent': 18.166666666666668}
+PROBE Dogs lbl=5 seed=1: {'epoch': 90, 'lr': 0.002463434636714723, 'loss': 4.040876871744792, 'train_accuracy_percent': 18.333333333333332}
+PROBE Dogs lbl=5 seed=1: {'epoch': 100, 'lr': 0.0, 'loss': 4.048786354064942, 'train_accuracy_percent': 21.666666666666668}
+RESULT Dogs lbl=5 seed=1: 3.3916
+CELL TinyImageNet/ResNet18BN/pt0.2/simclr -> CIFAR10 lbl1: 47.12 +/- 0.77 (6 probes)
+CELL TinyImageNet/ResNet18BN/pt0.2/simclr -> CIFAR10 lbl5: 55.02 +/- 0.33 (6 probes)
+CELL TinyImageNet/ResNet18BN/pt0.2/simclr -> CIFAR100 lbl1: 12.19 +/- 0.66 (6 probes)
+CELL TinyImageNet/ResNet18BN/pt0.2/simclr -> CIFAR100 lbl5: 20.36 +/- 0.26 (6 probes)
+CELL TinyImageNet/ResNet18BN/pt0.2/simclr -> Aircraft lbl1: 2.35 +/- 0.21 (6 probes)
+CELL TinyImageNet/ResNet18BN/pt0.2/simclr -> Aircraft lbl5: 3.11 +/- 0.42 (6 probes)
+CELL TinyImageNet/ResNet18BN/pt0.2/simclr -> CUB2011 lbl1: 1.65 +/- 0.07 (6 probes)
+CELL TinyImageNet/ResNet18BN/pt0.2/simclr -> CUB2011 lbl5: 1.75 +/- 0.19 (6 probes)
+CELL TinyImageNet/ResNet18BN/pt0.2/simclr -> Dogs lbl1: 1.94 +/- 0.23 (6 probes)
+CELL TinyImageNet/ResNet18BN/pt0.2/simclr -> Flowers lbl1: 3.02 +/- 0.21 (6 probes)
+CELL TinyImageNet/ResNet18BN/pt0.2/simclr -> Flowers lbl5: 6.74 +/- 0.36 (6 probes)
+PROBE Dogs lbl=5 seed=2: {'epoch': 10, 'lr': 0.0976968053825168, 'loss': 4.648574657440186, 'train_accuracy_percent': 3.8333333333333335}
+PROBE Dogs lbl=5 seed=2: {'epoch': 20, 'lr': 0.09069645216766208, 'loss': 4.462498035430908, 'train_accuracy_percent': 11.833333333333334}
+PROBE Dogs lbl=5 seed=2: {'epoch': 30, 'lr': 0.07968597695835844, 'loss': 4.304597085316976, 'train_accuracy_percent': 16.0}
+PROBE Dogs lbl=5 seed=2: {'epoch': 40, 'lr': 0.0657503231944974, 'loss': 4.197739575703939, 'train_accuracy_percent': 18.5}
+PROBE Dogs lbl=5 seed=2: {'epoch': 50, 'lr': 0.05026267376276531, 'loss': 4.123878103892008, 'train_accuracy_percent': 19.0}
+PROBE Dogs lbl=5 seed=2: {'epoch': 60, 'lr': 0.03474914114521912, 'loss': 4.090747000376384, 'train_accuracy_percent': 19.0}
+PROBE Dogs lbl=5 seed=2: {'epoch': 70, 'lr': 0.020738388285373534, 'loss': 4.05470370610555, 'train_accuracy_percent': 18.166666666666668}
+PROBE Dogs lbl=5 seed=2: {'epoch': 80, 'lr': 0.009610998138484261, 'loss': 4.041613089243571, 'train_accuracy_percent': 21.0}
+PROBE Dogs lbl=5 seed=2: {'epoch': 90, 'lr': 0.002463434636714723, 'loss': 3.9910862414042154, 'train_accuracy_percent': 22.166666666666668}
+PROBE Dogs lbl=5 seed=2: {'epoch': 100, 'lr': 0.0, 'loss': 4.028437226613363, 'train_accuracy_percent': 21.333333333333332}
+RESULT Dogs lbl=5 seed=2: 3.6364
+CELL TinyImageNet/ResNet18BN/pt0.2/simclr -> CIFAR10 lbl1: 47.12 +/- 0.77 (6 probes)
+CELL TinyImageNet/ResNet18BN/pt0.2/simclr -> CIFAR10 lbl5: 55.02 +/- 0.33 (6 probes)
+CELL TinyImageNet/ResNet18BN/pt0.2/simclr -> CIFAR100 lbl1: 12.19 +/- 0.66 (6 probes)
+CELL TinyImageNet/ResNet18BN/pt0.2/simclr -> CIFAR100 lbl5: 20.36 +/- 0.26 (6 probes)
+CELL TinyImageNet/ResNet18BN/pt0.2/simclr -> Aircraft lbl1: 2.35 +/- 0.21 (6 probes)
+CELL TinyImageNet/ResNet18BN/pt0.2/simclr -> Aircraft lbl5: 3.11 +/- 0.42 (6 probes)
+CELL TinyImageNet/ResNet18BN/pt0.2/simclr -> CUB2011 lbl1: 1.65 +/- 0.07 (6 probes)
+CELL TinyImageNet/ResNet18BN/pt0.2/simclr -> CUB2011 lbl5: 1.75 +/- 0.19 (6 probes)
+CELL TinyImageNet/ResNet18BN/pt0.2/simclr -> Dogs lbl1: 1.94 +/- 0.23 (6 probes)
+CELL TinyImageNet/ResNet18BN/pt0.2/simclr -> Dogs lbl5: 3.44 +/- 0.26 (6 probes)
+CELL TinyImageNet/ResNet18BN/pt0.2/simclr -> Flowers lbl1: 3.02 +/- 0.21 (6 probes)
+CELL TinyImageNet/ResNet18BN/pt0.2/simclr -> Flowers lbl5: 6.74 +/- 0.36 (6 probes)
+COMPLETE: dp3_ours_TinyImageNet_p0p2_simclr_s1_Dogs_l5

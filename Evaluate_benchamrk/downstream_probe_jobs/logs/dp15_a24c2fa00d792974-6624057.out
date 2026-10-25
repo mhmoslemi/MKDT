@@ -113,3 +113,140 @@ PROBE TinyImageNet lbl=5 seed=2: {'epoch': 60, 'lr': 0.03457904660049288, 'loss'
 PROBE TinyImageNet lbl=5 seed=2: {'epoch': 70, 'lr': 0.020629812200735793, 'loss': 3.9604109260559084, 'train_accuracy_percent': 16.62}
 PROBE TinyImageNet lbl=5 seed=2: {'epoch': 80, 'lr': 0.009558389807184015, 'loss': 3.9324807708740233, 'train_accuracy_percent': 17.88}
 PROBE TinyImageNet lbl=5 seed=2: {'epoch': 90, 'lr': 0.00244960300039126, 'loss': 3.957952944946289, 'train_accuracy_percent': 17.1}
+PROBE TinyImageNet lbl=5 seed=2: {'epoch': 100, 'lr': 0.0, 'loss': 3.927617248535156, 'train_accuracy_percent': 17.2}
+RESULT TinyImageNet lbl=5 seed=2: 10.5800
+CELL CIFAR100/ResNet18BN/pt2/simclr -> CIFAR10 lbl1: 45.68 +/- 0.60 (6 probes)
+CELL CIFAR100/ResNet18BN/pt2/simclr -> TinyImageNet lbl1: 5.52 +/- 0.19 (6 probes)
+CELL CIFAR100/ResNet18BN/pt2/simclr -> TinyImageNet lbl5: 10.56 +/- 0.14 (6 probes)
+CELL CIFAR100/ResNet18BN/pt2/simclr -> Aircraft lbl5: 3.39 +/- 0.16 (6 probes)
+CELL CIFAR100/ResNet18BN/pt2/simclr -> Dogs lbl1: 2.17 +/- 0.09 (6 probes)
+CELL CIFAR100/ResNet18BN/pt2/simclr -> Dogs lbl5: 3.54 +/- 0.36 (6 probes)
+COMPLETE: dp3_ours_CIFAR100_p2_simclr_s1_TinyImageNet_l5
+DOWNSTREAM ONLY: {'kind': 'ours', 'source': 'CIFAR100', 'subset': 2, 'ssl': 'simclr', 'seed': 1, 'epochs': 1000, 'checkpoint_dir': 'ours_eval_results_simclr1k_2ssl3probes_main/CIFAR100/ResNet18BN/pt2/simclr/ssl_seed_001', 'output_dir': 'ours_eval_results_simclr1k_2ssl3probes_downstream/CIFAR100/ResNet18BN/pt2/simclr/ssl_seed_001'} probes: [{'target': 'Aircraft', 'labels': 1, 'seed': 0}, {'target': 'Aircraft', 'labels': 1, 'seed': 1}, {'target': 'Aircraft', 'labels': 1, 'seed': 2}]
+PROBE Aircraft lbl=1 seed=0: {'epoch': 10, 'lr': 0.09797464868072488, 'loss': 4.033128261566162, 'train_accuracy_percent': 21.21212121212121}
+PROBE Aircraft lbl=1 seed=0: {'epoch': 20, 'lr': 0.09118382907149164, 'loss': 3.3863461017608643, 'train_accuracy_percent': 42.42424242424242}
+PROBE Aircraft lbl=1 seed=0: {'epoch': 30, 'lr': 0.08028048435688334, 'loss': 2.8344976902008057, 'train_accuracy_percent': 65.15151515151516}
+PROBE Aircraft lbl=1 seed=0: {'epoch': 40, 'lr': 0.06635339816587109, 'loss': 2.566689968109131, 'train_accuracy_percent': 69.6969696969697}
+PROBE Aircraft lbl=1 seed=0: {'epoch': 50, 'lr': 0.0507932981917404, 'loss': 2.269535779953003, 'train_accuracy_percent': 80.3030303030303}
+PROBE Aircraft lbl=1 seed=0: {'epoch': 60, 'lr': 0.035153981233586276, 'loss': 2.0670430660247803, 'train_accuracy_percent': 80.3030303030303}
+PROBE Aircraft lbl=1 seed=0: {'epoch': 70, 'lr': 0.0209971545214401, 'loss': 2.103863000869751, 'train_accuracy_percent': 77.27272727272727}
+PROBE Aircraft lbl=1 seed=0: {'epoch': 80, 'lr': 0.009736487123447069, 'loss': 2.069530963897705, 'train_accuracy_percent': 81.81818181818181}
+PROBE Aircraft lbl=1 seed=0: {'epoch': 90, 'lr': 0.002496444112952734, 'loss': 2.087218999862671, 'train_accuracy_percent': 77.27272727272727}
+PROBE Aircraft lbl=1 seed=0: {'epoch': 100, 'lr': 0.0, 'loss': 1.9883002042770386, 'train_accuracy_percent': 81.81818181818181}
+RESULT Aircraft lbl=1 seed=0: 2.2502
+CELL CIFAR100/ResNet18BN/pt2/simclr -> CIFAR10 lbl1: 45.68 +/- 0.60 (6 probes)
+CELL CIFAR100/ResNet18BN/pt2/simclr -> CIFAR10 lbl5: 52.92 +/- 0.33 (6 probes)
+CELL CIFAR100/ResNet18BN/pt2/simclr -> TinyImageNet lbl1: 5.52 +/- 0.19 (6 probes)
+CELL CIFAR100/ResNet18BN/pt2/simclr -> TinyImageNet lbl5: 10.56 +/- 0.14 (6 probes)
+CELL CIFAR100/ResNet18BN/pt2/simclr -> Aircraft lbl5: 3.39 +/- 0.16 (6 probes)
+CELL CIFAR100/ResNet18BN/pt2/simclr -> Dogs lbl1: 2.17 +/- 0.09 (6 probes)
+CELL CIFAR100/ResNet18BN/pt2/simclr -> Dogs lbl5: 3.54 +/- 0.36 (6 probes)
+CELL CIFAR100/ResNet18BN/pt2/simclr -> Flowers lbl1: 2.92 +/- 0.28 (6 probes)
+PROBE Aircraft lbl=1 seed=1: {'epoch': 10, 'lr': 0.09797464868072488, 'loss': 4.052432060241699, 'train_accuracy_percent': 15.151515151515152}
+PROBE Aircraft lbl=1 seed=1: {'epoch': 20, 'lr': 0.09118382907149164, 'loss': 3.403716564178467, 'train_accuracy_percent': 45.45454545454545}
+PROBE Aircraft lbl=1 seed=1: {'epoch': 30, 'lr': 0.08028048435688334, 'loss': 2.879819869995117, 'train_accuracy_percent': 72.72727272727273}
+PROBE Aircraft lbl=1 seed=1: {'epoch': 40, 'lr': 0.06635339816587109, 'loss': 2.5316264629364014, 'train_accuracy_percent': 71.21212121212122}
+PROBE Aircraft lbl=1 seed=1: {'epoch': 50, 'lr': 0.0507932981917404, 'loss': 2.4346280097961426, 'train_accuracy_percent': 69.6969696969697}
+PROBE Aircraft lbl=1 seed=1: {'epoch': 60, 'lr': 0.035153981233586276, 'loss': 2.3141119480133057, 'train_accuracy_percent': 72.72727272727273}
+PROBE Aircraft lbl=1 seed=1: {'epoch': 70, 'lr': 0.0209971545214401, 'loss': 2.2048375606536865, 'train_accuracy_percent': 80.3030303030303}
+PROBE Aircraft lbl=1 seed=1: {'epoch': 80, 'lr': 0.009736487123447069, 'loss': 2.093691110610962, 'train_accuracy_percent': 86.36363636363636}
+PROBE Aircraft lbl=1 seed=1: {'epoch': 90, 'lr': 0.002496444112952734, 'loss': 2.208544969558716, 'train_accuracy_percent': 78.78787878787878}
+PROBE Aircraft lbl=1 seed=1: {'epoch': 100, 'lr': 0.0, 'loss': 2.1410839557647705, 'train_accuracy_percent': 77.27272727272727}
+RESULT Aircraft lbl=1 seed=1: 2.2802
+CELL CIFAR100/ResNet18BN/pt2/simclr -> CIFAR10 lbl1: 45.68 +/- 0.60 (6 probes)
+CELL CIFAR100/ResNet18BN/pt2/simclr -> CIFAR10 lbl5: 52.92 +/- 0.33 (6 probes)
+CELL CIFAR100/ResNet18BN/pt2/simclr -> TinyImageNet lbl1: 5.52 +/- 0.19 (6 probes)
+CELL CIFAR100/ResNet18BN/pt2/simclr -> TinyImageNet lbl5: 10.56 +/- 0.14 (6 probes)
+CELL CIFAR100/ResNet18BN/pt2/simclr -> Aircraft lbl5: 3.39 +/- 0.16 (6 probes)
+CELL CIFAR100/ResNet18BN/pt2/simclr -> Dogs lbl1: 2.17 +/- 0.09 (6 probes)
+CELL CIFAR100/ResNet18BN/pt2/simclr -> Dogs lbl5: 3.54 +/- 0.36 (6 probes)
+CELL CIFAR100/ResNet18BN/pt2/simclr -> Flowers lbl1: 2.92 +/- 0.28 (6 probes)
+CELL CIFAR100/ResNet18BN/pt2/simclr -> Flowers lbl5: 6.36 +/- 0.23 (6 probes)
+PROBE Aircraft lbl=1 seed=2: {'epoch': 10, 'lr': 0.09797464868072488, 'loss': 3.9729535579681396, 'train_accuracy_percent': 13.636363636363637}
+PROBE Aircraft lbl=1 seed=2: {'epoch': 20, 'lr': 0.09118382907149164, 'loss': 3.2951674461364746, 'train_accuracy_percent': 48.484848484848484}
+PROBE Aircraft lbl=1 seed=2: {'epoch': 30, 'lr': 0.08028048435688334, 'loss': 2.8223659992218018, 'train_accuracy_percent': 68.18181818181819}
+PROBE Aircraft lbl=1 seed=2: {'epoch': 40, 'lr': 0.06635339816587109, 'loss': 2.286022186279297, 'train_accuracy_percent': 83.33333333333333}
+PROBE Aircraft lbl=1 seed=2: {'epoch': 50, 'lr': 0.0507932981917404, 'loss': 2.2015209197998047, 'train_accuracy_percent': 83.33333333333333}
+PROBE Aircraft lbl=1 seed=2: {'epoch': 60, 'lr': 0.035153981233586276, 'loss': 2.084807872772217, 'train_accuracy_percent': 72.72727272727273}
+PROBE Aircraft lbl=1 seed=2: {'epoch': 70, 'lr': 0.0209971545214401, 'loss': 2.2645788192749023, 'train_accuracy_percent': 72.72727272727273}
+PROBE Aircraft lbl=1 seed=2: {'epoch': 80, 'lr': 0.009736487123447069, 'loss': 2.04183030128479, 'train_accuracy_percent': 74.24242424242425}
+PROBE Aircraft lbl=1 seed=2: {'epoch': 90, 'lr': 0.002496444112952734, 'loss': 2.2656514644622803, 'train_accuracy_percent': 63.63636363636363}
+PROBE Aircraft lbl=1 seed=2: {'epoch': 100, 'lr': 0.0, 'loss': 1.8333913087844849, 'train_accuracy_percent': 80.3030303030303}
+RESULT Aircraft lbl=1 seed=2: 2.8203
+CELL CIFAR100/ResNet18BN/pt2/simclr -> CIFAR10 lbl1: 45.68 +/- 0.60 (6 probes)
+CELL CIFAR100/ResNet18BN/pt2/simclr -> CIFAR10 lbl5: 52.92 +/- 0.33 (6 probes)
+CELL CIFAR100/ResNet18BN/pt2/simclr -> TinyImageNet lbl1: 5.52 +/- 0.19 (6 probes)
+CELL CIFAR100/ResNet18BN/pt2/simclr -> TinyImageNet lbl5: 10.56 +/- 0.14 (6 probes)
+CELL CIFAR100/ResNet18BN/pt2/simclr -> Aircraft lbl1: 2.45 +/- 0.31 (6 probes)
+CELL CIFAR100/ResNet18BN/pt2/simclr -> Aircraft lbl5: 3.39 +/- 0.16 (6 probes)
+CELL CIFAR100/ResNet18BN/pt2/simclr -> Dogs lbl1: 2.17 +/- 0.09 (6 probes)
+CELL CIFAR100/ResNet18BN/pt2/simclr -> Dogs lbl5: 3.54 +/- 0.36 (6 probes)
+CELL CIFAR100/ResNet18BN/pt2/simclr -> Flowers lbl1: 2.92 +/- 0.28 (6 probes)
+CELL CIFAR100/ResNet18BN/pt2/simclr -> Flowers lbl5: 6.36 +/- 0.23 (6 probes)
+COMPLETE: dp3_ours_CIFAR100_p2_simclr_s1_Aircraft_l1
+DOWNSTREAM ONLY: {'kind': 'ours', 'source': 'CIFAR100', 'subset': 2, 'ssl': 'simclr', 'seed': 1, 'epochs': 1000, 'checkpoint_dir': 'ours_eval_results_simclr1k_2ssl3probes_main/CIFAR100/ResNet18BN/pt2/simclr/ssl_seed_001', 'output_dir': 'ours_eval_results_simclr1k_2ssl3probes_downstream/CIFAR100/ResNet18BN/pt2/simclr/ssl_seed_001'} probes: [{'target': 'CUB2011', 'labels': 1, 'seed': 0}, {'target': 'CUB2011', 'labels': 1, 'seed': 1}, {'target': 'CUB2011', 'labels': 1, 'seed': 2}]
+PROBE CUB2011 lbl=1 seed=0: {'epoch': 10, 'lr': 0.09797464868072488, 'loss': 4.331780910491943, 'train_accuracy_percent': 23.728813559322035}
+PROBE CUB2011 lbl=1 seed=0: {'epoch': 20, 'lr': 0.09118382907149164, 'loss': 3.191206693649292, 'train_accuracy_percent': 44.067796610169495}
+PROBE CUB2011 lbl=1 seed=0: {'epoch': 30, 'lr': 0.08028048435688334, 'loss': 2.5194287300109863, 'train_accuracy_percent': 71.1864406779661}
+PROBE CUB2011 lbl=1 seed=0: {'epoch': 40, 'lr': 0.06635339816587109, 'loss': 1.9457427263259888, 'train_accuracy_percent': 88.13559322033899}
+PROBE CUB2011 lbl=1 seed=0: {'epoch': 50, 'lr': 0.0507932981917404, 'loss': 1.7529313564300537, 'train_accuracy_percent': 88.13559322033899}
+PROBE CUB2011 lbl=1 seed=0: {'epoch': 60, 'lr': 0.035153981233586276, 'loss': 1.5344711542129517, 'train_accuracy_percent': 93.22033898305085}
+PROBE CUB2011 lbl=1 seed=0: {'epoch': 70, 'lr': 0.0209971545214401, 'loss': 1.498050570487976, 'train_accuracy_percent': 94.91525423728814}
+PROBE CUB2011 lbl=1 seed=0: {'epoch': 80, 'lr': 0.009736487123447069, 'loss': 1.4928195476531982, 'train_accuracy_percent': 91.52542372881356}
+PROBE CUB2011 lbl=1 seed=0: {'epoch': 90, 'lr': 0.002496444112952734, 'loss': 1.418212652206421, 'train_accuracy_percent': 93.22033898305085}
+PROBE CUB2011 lbl=1 seed=0: {'epoch': 100, 'lr': 0.0, 'loss': 1.5163183212280273, 'train_accuracy_percent': 94.91525423728814}
+RESULT CUB2011 lbl=1 seed=0: 1.7432
+CELL CIFAR100/ResNet18BN/pt2/simclr -> CIFAR10 lbl1: 45.68 +/- 0.60 (6 probes)
+CELL CIFAR100/ResNet18BN/pt2/simclr -> CIFAR10 lbl5: 52.92 +/- 0.33 (6 probes)
+CELL CIFAR100/ResNet18BN/pt2/simclr -> TinyImageNet lbl1: 5.52 +/- 0.19 (6 probes)
+CELL CIFAR100/ResNet18BN/pt2/simclr -> TinyImageNet lbl5: 10.56 +/- 0.14 (6 probes)
+CELL CIFAR100/ResNet18BN/pt2/simclr -> Aircraft lbl1: 2.45 +/- 0.31 (6 probes)
+CELL CIFAR100/ResNet18BN/pt2/simclr -> Aircraft lbl5: 3.39 +/- 0.16 (6 probes)
+CELL CIFAR100/ResNet18BN/pt2/simclr -> Dogs lbl1: 2.17 +/- 0.09 (6 probes)
+CELL CIFAR100/ResNet18BN/pt2/simclr -> Dogs lbl5: 3.54 +/- 0.36 (6 probes)
+CELL CIFAR100/ResNet18BN/pt2/simclr -> Flowers lbl1: 2.92 +/- 0.28 (6 probes)
+CELL CIFAR100/ResNet18BN/pt2/simclr -> Flowers lbl5: 6.36 +/- 0.23 (6 probes)
+PROBE CUB2011 lbl=1 seed=1: {'epoch': 10, 'lr': 0.09797464868072488, 'loss': 4.430305480957031, 'train_accuracy_percent': 30.508474576271187}
+PROBE CUB2011 lbl=1 seed=1: {'epoch': 20, 'lr': 0.09118382907149164, 'loss': 3.318578004837036, 'train_accuracy_percent': 44.067796610169495}
+PROBE CUB2011 lbl=1 seed=1: {'epoch': 30, 'lr': 0.08028048435688334, 'loss': 2.556114912033081, 'train_accuracy_percent': 72.88135593220339}
+PROBE CUB2011 lbl=1 seed=1: {'epoch': 40, 'lr': 0.06635339816587109, 'loss': 2.186033010482788, 'train_accuracy_percent': 89.83050847457628}
+PROBE CUB2011 lbl=1 seed=1: {'epoch': 50, 'lr': 0.0507932981917404, 'loss': 1.9497721195220947, 'train_accuracy_percent': 79.66101694915254}
+PROBE CUB2011 lbl=1 seed=1: {'epoch': 60, 'lr': 0.035153981233586276, 'loss': 1.6852564811706543, 'train_accuracy_percent': 83.05084745762711}
+PROBE CUB2011 lbl=1 seed=1: {'epoch': 70, 'lr': 0.0209971545214401, 'loss': 1.6787924766540527, 'train_accuracy_percent': 84.7457627118644}
+PROBE CUB2011 lbl=1 seed=1: {'epoch': 80, 'lr': 0.009736487123447069, 'loss': 1.5198382139205933, 'train_accuracy_percent': 93.22033898305085}
+PROBE CUB2011 lbl=1 seed=1: {'epoch': 90, 'lr': 0.002496444112952734, 'loss': 1.5117074251174927, 'train_accuracy_percent': 91.52542372881356}
+PROBE CUB2011 lbl=1 seed=1: {'epoch': 100, 'lr': 0.0, 'loss': 1.5420583486557007, 'train_accuracy_percent': 91.52542372881356}
+RESULT CUB2011 lbl=1 seed=1: 1.4498
+CELL CIFAR100/ResNet18BN/pt2/simclr -> CIFAR10 lbl1: 45.68 +/- 0.60 (6 probes)
+CELL CIFAR100/ResNet18BN/pt2/simclr -> CIFAR10 lbl5: 52.92 +/- 0.33 (6 probes)
+CELL CIFAR100/ResNet18BN/pt2/simclr -> TinyImageNet lbl1: 5.52 +/- 0.19 (6 probes)
+CELL CIFAR100/ResNet18BN/pt2/simclr -> TinyImageNet lbl5: 10.56 +/- 0.14 (6 probes)
+CELL CIFAR100/ResNet18BN/pt2/simclr -> Aircraft lbl1: 2.45 +/- 0.31 (6 probes)
+CELL CIFAR100/ResNet18BN/pt2/simclr -> Aircraft lbl5: 3.39 +/- 0.16 (6 probes)
+CELL CIFAR100/ResNet18BN/pt2/simclr -> Dogs lbl1: 2.17 +/- 0.09 (6 probes)
+CELL CIFAR100/ResNet18BN/pt2/simclr -> Dogs lbl5: 3.54 +/- 0.36 (6 probes)
+CELL CIFAR100/ResNet18BN/pt2/simclr -> Flowers lbl1: 2.92 +/- 0.28 (6 probes)
+CELL CIFAR100/ResNet18BN/pt2/simclr -> Flowers lbl5: 6.36 +/- 0.23 (6 probes)
+PROBE CUB2011 lbl=1 seed=2: {'epoch': 10, 'lr': 0.09797464868072488, 'loss': 4.496042251586914, 'train_accuracy_percent': 33.898305084745765}
+PROBE CUB2011 lbl=1 seed=2: {'epoch': 20, 'lr': 0.09118382907149164, 'loss': 3.3931713104248047, 'train_accuracy_percent': 45.76271186440678}
+PROBE CUB2011 lbl=1 seed=2: {'epoch': 30, 'lr': 0.08028048435688334, 'loss': 2.6885173320770264, 'train_accuracy_percent': 67.79661016949153}
+PROBE CUB2011 lbl=1 seed=2: {'epoch': 40, 'lr': 0.06635339816587109, 'loss': 2.0715320110321045, 'train_accuracy_percent': 84.7457627118644}
+PROBE CUB2011 lbl=1 seed=2: {'epoch': 50, 'lr': 0.0507932981917404, 'loss': 1.8585861921310425, 'train_accuracy_percent': 81.35593220338983}
+PROBE CUB2011 lbl=1 seed=2: {'epoch': 60, 'lr': 0.035153981233586276, 'loss': 1.8033666610717773, 'train_accuracy_percent': 88.13559322033899}
+PROBE CUB2011 lbl=1 seed=2: {'epoch': 70, 'lr': 0.0209971545214401, 'loss': 1.8121901750564575, 'train_accuracy_percent': 74.57627118644068}
+PROBE CUB2011 lbl=1 seed=2: {'epoch': 80, 'lr': 0.009736487123447069, 'loss': 1.7121400833129883, 'train_accuracy_percent': 83.05084745762711}
+PROBE CUB2011 lbl=1 seed=2: {'epoch': 90, 'lr': 0.002496444112952734, 'loss': 1.5977462530136108, 'train_accuracy_percent': 88.13559322033899}
+PROBE CUB2011 lbl=1 seed=2: {'epoch': 100, 'lr': 0.0, 'loss': 1.4051024913787842, 'train_accuracy_percent': 91.52542372881356}
+RESULT CUB2011 lbl=1 seed=2: 1.5706
+CELL CIFAR100/ResNet18BN/pt2/simclr -> CIFAR10 lbl1: 45.68 +/- 0.60 (6 probes)
+CELL CIFAR100/ResNet18BN/pt2/simclr -> CIFAR10 lbl5: 52.92 +/- 0.33 (6 probes)
+CELL CIFAR100/ResNet18BN/pt2/simclr -> TinyImageNet lbl1: 5.52 +/- 0.19 (6 probes)
+CELL CIFAR100/ResNet18BN/pt2/simclr -> TinyImageNet lbl5: 10.56 +/- 0.14 (6 probes)
+CELL CIFAR100/ResNet18BN/pt2/simclr -> Aircraft lbl1: 2.45 +/- 0.31 (6 probes)
+CELL CIFAR100/ResNet18BN/pt2/simclr -> Aircraft lbl5: 3.39 +/- 0.16 (6 probes)
+CELL CIFAR100/ResNet18BN/pt2/simclr -> CUB2011 lbl1: 1.54 +/- 0.16 (6 probes)
+CELL CIFAR100/ResNet18BN/pt2/simclr -> Dogs lbl1: 2.17 +/- 0.09 (6 probes)
+CELL CIFAR100/ResNet18BN/pt2/simclr -> Dogs lbl5: 3.54 +/- 0.36 (6 probes)
+CELL CIFAR100/ResNet18BN/pt2/simclr -> Flowers lbl1: 2.92 +/- 0.28 (6 probes)
+CELL CIFAR100/ResNet18BN/pt2/simclr -> Flowers lbl5: 6.36 +/- 0.23 (6 probes)
+COMPLETE: dp3_ours_CIFAR100_p2_simclr_s1_CUB2011_l1
