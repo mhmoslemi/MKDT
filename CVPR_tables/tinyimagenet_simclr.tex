@@ -30,8 +30,7 @@
 & \dsacc{47.91}{1.25} & \dsacc{12.25}{1.06} & \dsacc{2.53}{0.80} & \dsacc{1.82}{0.22} & \dsacc{2.04}{0.35} & \dsacc{3.48}{0.62} \\
  &  & MKDT
 &  &  &  &  &  &  \\
- &  & Ours
-&  &  &  &  &  &  \\
+ &  & Ours &  \dsacc{47.12}{0.77} &  \dsacc{12.19}{0.66} &  \dsacc{2.35}{0.21} &  \dsacc{1.65}{0.07} &  \dsacc{1.94}{0.23} &  \dsacc{3.02}{0.21} \\
 \cmidrule(lr){2-9}
 
  & \multirow{4}{*}{1\%} & Random Subset
@@ -44,8 +43,7 @@
 &  &  &  &  &  &  \\
 \cmidrule(lr){2-9}
 
- & \multirow{4}{*}{2\%} & Random Subset
-&  &  &  &  &  &  \\
+ & \multirow{4}{*}{2\%} & Random Subset &  \dsacc{57.41}{0.97} &  \dsacc{19.87}{0.79} &  &  \dsacc{2.11}{0.21} &  \dsacc{3.37}{0.38} &  \dsacc{3.90}{0.71} \\
  &  & K-means Subset
 & \dsacc{57.96}{0.82} & \dsacc{19.64}{0.42} & \dsacc{3.54}{0.45} & \dsacc{2.16}{0.20} & \dsacc{3.45}{0.47} & \dsacc{3.95}{0.24} \\
  &  & MKDT
@@ -81,8 +79,7 @@
 & \dsacc{55.12}{0.94} & \dsacc{22.60}{0.77} & \dsacc{3.65}{0.65} & \dsacc{2.37}{0.31} & \dsacc{3.99}{0.37} & \dsacc{6.88}{0.80} \\
  &  & MKDT
 &  &  &  &  &  &  \\
- &  & Ours
-&  &  &  &  &  &  \\
+ &  & Ours &  \dsacc{55.02}{0.33} &  \dsacc{20.36}{0.26} &  \dsacc{3.11}{0.42} &  \dsacc{1.75}{0.19} &  \dsacc{3.44}{0.26} &  \dsacc{6.74}{0.36} \\
 \cmidrule(lr){2-9}
 
  & \multirow{4}{*}{1\%} & Random Subset
@@ -95,8 +92,7 @@
 &  &  &  &  &  &  \\
 \cmidrule(lr){2-9}
 
- & \multirow{4}{*}{2\%} & Random Subset
-&  &  &  &  &  &  \\
+ & \multirow{4}{*}{2\%} & Random Subset &  \dsacc{64.88}{0.76} &  \dsacc{32.05}{0.63} &  \dsacc{6.83}{0.57} &  \dsacc{3.59}{0.40} &  \dsacc{6.69}{0.54} &  \dsacc{10.21}{1.19} \\
  &  & K-means Subset
 & \dsacc{65.07}{0.43} & \dsacc{32.09}{0.40} & \dsacc{6.43}{0.51} & \dsacc{3.69}{0.31} & \dsacc{6.71}{0.35} & \dsacc{10.45}{0.95} \\
  &  & MKDT
@@ -133,3 +129,6 @@
 
 % Random downstream finish: 10 seeds; 100-epoch frozen probes; mean +/- sample SD.
 % Source: Evaluate_benchamrk/random_downstream_jobs/summaries/TinyImageNet/ (saved SSL epochs recorded per seed).
+% Ours 0.2% SimCLR: 2k SSL epochs; six complete probes per cell (2 SSL seeds x 3 probes); 100-epoch frozen heads; mean +/- sample SD.
+% Ours source: Evaluate_benchamrk/ours_eval_results_simclr2k_barlow10k_2ssl3probes_downstream/; synchronized with full/tinyimagenet_downstream.tex.
+% Random 2% SimCLR additions require all ten seeds at 4k SSL epochs; partial cells are left unchanged.

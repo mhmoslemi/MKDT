@@ -70,10 +70,8 @@
 & \dsacc{52.91}{0.96} & \dsacc{50.50}{0.90}
 & \dsacc{49.31}{1.13} & \dsacc{42.48}{1.63}
 & \dsacc{52.98}{0.57} & \dsacc{56.98}{1.13} \\
-& & MKDT
-&  & \dsacc{50.43}{0.97} &  &  & \dsacc{40.56}{0.92} & \dsacc{48.58}{1.35} \\
-& & Ours
-&  &  &  & -- & \dsacc{55.80}{0.67} & \dsacc{53.42}{0.84} \\
+& & MKDT &  \dsacc{52.06}{0.84} & \dsacc{50.43}{0.97} &  &  & \dsacc{40.56}{0.92} & \dsacc{48.58}{1.35} \\
+& & Ours &  &  &  & -- & \dsacc{55.80}{0.67} & \dsacc{53.42}{0.84} \\
 % BEGIN DISABLED: 5% pretraining subset
 % \cmidrule(lr){2-9}
 %
@@ -137,9 +135,8 @@
 & \dsacc{61.38}{0.41} & \dsacc{56.64}{0.81}
 & \dsacc{52.09}{0.93} & \dsacc{47.24}{1.46}
 & \dsacc{57.77}{0.37} & \dsacc{63.18}{0.55} \\
-& & MKDT &  & \dsacc{57.89}{0.47} &  &  & \dsacc{46.55}{0.86} & \dsacc{56.92}{0.42} \\
-& & Ours
-&  &  &  & -- & \dsacc{58.72}{0.58} & \dsacc{60.75}{0.46} \\
+& & MKDT &  \dsacc{61.24}{0.44} & \dsacc{57.89}{0.47} &  &  & \dsacc{46.55}{0.86} & \dsacc{56.92}{0.42} \\
+& & Ours &  &  &  & -- & \dsacc{58.72}{0.58} & \dsacc{60.75}{0.46} \\
 % BEGIN DISABLED: 5% pretraining subset
 % \cmidrule(lr){2-9}
 %
@@ -168,12 +165,12 @@
 %          Evaluate_benchamrk/mkdt_eval_results_interactive_6seeds/, and Evaluate_benchamrk/full_eval_results_interactive_3seeds_CIFAR10/.
 % Ours: complete 2 SSL seeds (0,1) x 3 probe seeds (0,1,2); SimCLR 2000 / Barlow Twins 10000 SSL epochs.
 % Ours source: Evaluate_benchamrk/ours_eval_results_simclr2k_barlow10k_2ssl3probes_main/.
-% MKDT SimCLR main replacements: 1% subsets use 2,000 SSL epochs; the filled ResNet18/2% cells use 3,000.
+% MKDT SimCLR main replacements: 1% subsets use 2,000 SSL epochs; filled ConvNet/ResNet18 2% cells use 3,000.
 % Each replacement uses 2 SSL seeds (0,1) x 3 probe seeds (0,1,2), six complete probes per cell.
 % 2k source: Evaluate_benchamrk/mkdt_eval_results_simclr2k_2ssl3probes/.
 % 3k source: Evaluate_benchamrk/cifar10_main_results_simclr2k3k_barlow10k_2ssl3probes/.
 % MKDT VGG11/1%/Barlow Twins: replaced by 10,000-epoch results, 2 SSL seeds x 3 probes, from the same new CIFAR10 root.
 % Other populated MKDT Barlow cells retain the earlier six-encoder 8k (1% subset) / 6k (2% subset) results until their 10k replacements finish.
-% Ours ResNet18/2%/SimCLR: retained 2k SSL results selected for both label budgets (2 SSL seeds x 3 probes).
+% Ours ResNet18/2%/SimCLR: 2k SSL results restored at both label budgets by user request (2 SSL seeds x 3 probes); not the 1k reruns.
 % ResNet18 MKDT Barlow: 1% and 2% subsets, both label budgets, now use complete 10k, 2-SSL x 3-probe replacements.
-% ResNet18 main results synchronized with CVPR_tables/table.tex; Ours SimCLR uses the retained 2k results.
+% ResNet18 main results synchronized with CVPR_tables/table.tex; Ours SimCLR uses the selected 2k results at every subset size.

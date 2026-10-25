@@ -1,0 +1,1134 @@
+OUR CURRENT METHOD: SYNTHETIC PROTOTYPES THROUGH CROSS-VIEW ASSIGNMENT INFORMATION
+=============================================================================
+
+Scope of this explanation
+-------------------------
+
+This document describes the Ours synthetic-image generation implemented in
+OT-SSL-DD/method1.py and used by run_ours_cifar10.sh, run_ours_cifar100.sh, and
+run_ours_tinyimagenet.sh. It follows the actual launcher settings and generation
+logs, rather than treating every option or historical comment as part of the
+method. Evaluation is explained separately at the end.
+
+In these generation runs, disp_weight = 0 and pair_weight = 0. Therefore the
+active distillation objective is ONLY negative mutual information between
+cross-view assignments to synthetic prototypes. Displacement matching and
+view-pair similarity matching are NOT components of this experimental method.
+Their nonzero printed diagnostic values do not change that fact.
+
+This is the direct-pixel method, not the older Gen-dd.py VAE method. There is no
+VAE, generator, latent-vector optimization, trainable student, or unrolled inner
+training loop in this generation procedure.
+
+
+The whole idea in plain language
+-------------------------------
+
+We want a small collection of images that captures useful structure from a much
+larger unlabeled image dataset. We already have a feature extractor trained on
+the full dataset with SimCLR. Its weights are fixed throughout distillation.
+
+The small images act as a learnable dictionary of visual prototypes. Given two
+augmented versions of a real image, we ask which synthetic prototypes each
+version resembles in the frozen teacher's feature space. Each answer is a soft
+distribution over all synthetic images, not a hard class label.
+
+We optimize the synthetic pixels so that these two assignment distributions
+carry information about one another across the real-image population. A useful
+dictionary should distinguish different real-image content while producing
+predictable cross-view relationships. A dictionary that gives one identical
+assignment distribution for every real image in both views carries no assignment
+information. A view-dependent exception is explained later.
+
+The workflow is:
+
+  Unlabeled training images
+       -> random-feature K-means and nearest real-image representatives
+       -> initial synthetic pixels
+       -> shared differentiable augmentations of real and synthetic images
+       -> features from the fixed pretrained teacher
+       -> real-to-synthetic soft assignments in each view
+       -> cross-view joint assignment matrix
+       -> negative mutual information
+       -> gradients update only the synthetic pixels.
+
+After generation, a separate evaluation trains NEW SSL encoders on the saved
+synthetic images and measures their representations using frozen linear probes.
+The generation teacher itself is not the encoder whose synthetic-data evaluation
+accuracy we report.
+
+
+Data, notation, and image budgets
+--------------------------------
+
+Let R = {x_1, ..., x_N} be the real training images. Their labels are not used
+to initialize or optimize the synthetic set. Test images are not used in
+distillation.
+
+Let S = {s_1, ..., s_M} be the learnable synthetic images, with
+
+  M = floor(N * p / 100),
+
+where p is the requested percentage. Each s_k is an entire RGB image, not a
+feature vector. Its pixels are the optimization variables.
+
+The generation budgets are:
+
+  Dataset        Training images   Resolution   0.2% images   1% images   2% images
+  CIFAR10                50,000       32 x 32           100         500       1,000
+  CIFAR100               50,000       32 x 32           100         500       1,000
+  TinyImageNet          100,000       64 x 64           200       1,000       2,000
+
+Let f_theta be the fixed pretrained teacher backbone. Let B = 1024 be the
+number of real images in a generation minibatch. Let d be the teacher feature
+dimension. The two augmentation views are called u and v. Prototype indices
+k and l range from 1 to M; they do not denote dataset classes.
+
+The original generation grid has three datasets, three network families, and
+three percentages: 27 synthetic-set configurations. The network families are
+ResNet18BN, VGG11BN, and ConvNetBN. Each configuration generates one synthetic
+set with generation seed 0. The current reporting focus on ResNet18BN does not
+change the algorithm used to generate those sets.
+
+
+Where the teacher comes from, and what is frozen
+-----------------------------------------------
+
+The selected teacher is a backbone trained with SimCLR on the FULL real source
+training dataset. It is loaded from the existing full-data SSL checkpoint
+collection, not initialized afresh at each distillation iteration.
+
+The checkpoint path pattern is:
+
+  Evaluate_benchamrk/full_ssl_checkpoints_1000ep_3seeds/
+    <dataset>/<canonical_model>/full/pt100/simclr/seed_<NNN>/encoder.pt
+
+The checkpoint folders use canonical names such as ResNet18, whereas the
+generation launcher uses the explicit BN name ResNet18BN. The loaded benchmark
+ResNet18 is the ordinary BatchNorm, non-AP implementation. The teacher loader
+checks the model and input resolution. It uses the backbone representation,
+not the SimCLR projection-head output or classification logits.
+
+The full-data training recipe requests 1000 SSL epochs. For example, the saved
+completion metadata for CIFAR10/ResNet18/SimCLR seed 0 and TinyImageNet/ResNet18/
+SimCLR seed 1 both record 1000 completed epochs. This teacher-pretraining budget
+is separate from distillation iterations and later synthetic-data SSL epochs.
+
+The generation launchers use teacher seed 0, except TinyImageNet/ResNet18BN,
+which uses the saved teacher seed 1. The synthetic-generation seed remains 0
+in that exception. Teacher seed and generation seed are different choices.
+
+There is one teacher per selected generation run. We are not averaging the
+features of three teachers in these runs. The code can accept several teacher
+seeds, in which case it sums their losses, but that is not the setting used by
+these launchers.
+
+The teacher is kept in evaluation mode. Its parameters have gradients disabled,
+and its BatchNorm running statistics are not adapted to real or synthetic
+minibatches. Its weights and feature coordinate system remain fixed.
+
+Frozen weights do NOT prevent derivatives with respect to the input image.
+Synthetic-image features retain the gradient path through the teacher to their
+input pixels. Real-image features are computed without a gradient graph.
+
+
+Initialization: what the synthetic images actually start from
+------------------------------------------------------------
+
+The synthetic images start from selected REAL training images. They do not start
+from pure noise or VAE-generated samples in this method.
+
+Selection is performed once, before pixel optimization. A separate, randomly
+initialized feature network is built using the requested BN model family and
+generation seed. This is an initialization helper, not the pretrained teacher
+that later supplies the distillation signal.
+
+All real training images are passed through this random network without
+augmentation. The extracted features are stored, and Euclidean K-means is run
+in that random feature space with M centers. These initialization features are
+not L2-normalized before clustering.
+
+More explicitly, write r_i = g_random(x_i). Initially, M centers are chosen from
+features of randomly permuted real images. Each Lloyd update alternates:
+
+  a_i = argmin_k ||r_i - c_k||_2,
+
+  c_k = mean of r_i assigned to center k.
+
+The implementation performs at most five Lloyd updates and can stop earlier
+when the centers are numerically unchanged. An empty cluster retains its
+previous center.
+
+The center vectors are not converted directly into pixels. Instead, for each
+final center, the closest actual real-image feature is selected:
+
+  j_k = argmin_i ||r_i - c_k||_2,
+  s_k at initialization = x_(j_k).
+
+The corresponding real RGB image is copied into the synthetic tensor. There is
+no explicit uniqueness constraint in this last nearest-image lookup, so the
+implementation does not mathematically guarantee M distinct initial exemplars.
+There is also no class-balanced or label-informed selection.
+
+Although the helper and printed message contain the name "DeepCluster", the
+initializer does not train a DeepCluster network. It is random-feature K-means
+followed by nearest real-image selection. It is also not the separate benchmark
+K-means baseline, whose selection recipe has different implementation details.
+
+After initialization the random feature network is discarded. The selected
+images become freely optimizable pixel tensors; they are not restricted to
+remaining members of the real dataset.
+
+
+Image coordinates and normalization
+----------------------------------
+
+Optimization stores images in dataset-normalized coordinates. If y is an RGB
+pixel in [0,1], the stored value in channel c is
+
+  x_c = (y_c - mean_c) / std_c.
+
+The generation normalization constants are:
+
+  CIFAR10:
+    mean = (0.4914, 0.4822, 0.4465)
+    std  = (0.2023, 0.1994, 0.2010)
+
+  CIFAR100:
+    mean = (0.5071, 0.4866, 0.4409)
+    std  = (0.2673, 0.2564, 0.2762)
+
+  TinyImageNet:
+    mean = (0.485, 0.456, 0.406)
+    std  = (0.229, 0.224, 0.225)
+
+The teacher can expect different normalization statistics. Its wrapper converts
+generation-normalized inputs into the teacher's expected coordinates:
+
+  teacher_input = (x * std_generation + mean_generation - mean_teacher)
+                  / std_teacher.
+
+For example, the benchmark CIFAR10 teacher uses standard deviations
+(0.2470, 0.2435, 0.2616), rather than the generation standard deviations above.
+The wrapper handles this conversion explicitly. Stored normalized tensors must
+not be interpreted directly as [0,1] images or multiplied by 255 without first
+undoing their normalization.
+
+
+The exact augmentation used during distillation
+----------------------------------------------
+
+DSA is enabled in the selected runs. The strategy string is
+
+  color_crop_cutout_flip_scale_rotate.
+
+Here this is a menu of six augmentation GROUPS, not a composition of all six on
+every view. The DSA wrapper forces single-group mode, S, even though the launcher
+also passes distill_aug_mode = M. With DSA enabled, that M setting does not
+make all groups run together.
+
+For each iteration, independent seeds are drawn for views u and v. The u seed
+is shared by the real and synthetic batches. Likewise, the v seed is shared
+by the real and synthetic batches. In symbols,
+
+  real u view:       t_u(x_b),     synthetic u view: t_u(s_k),
+  real v view:       t_v(x_b),     synthetic v view: t_v(s_k).
+
+The u and v views are not forced to use different groups: their independent
+draws can select the same group. Their random parameters are independently
+sampled through their seeds.
+
+The seeded DiffAugment implementation is Siamese. For a view, the sampled
+parameters are shared across images within a batch and replayed for the other
+batch. Thus t_u means the same selected operation and transformation parameters
+for real and synthetic images, despite their different batch sizes. This is
+not independent per-image augmentation within each view.
+
+The default group parameters are:
+
+  color:   brightness addition in [-0.5, 0.5), saturation multiplier in [0,2),
+           and contrast multiplier in [0.5,1.5), applied in that order;
+  crop:    random translation with maximum rounded shift 0.125 of each side;
+  cutout:  a nominal half-height by half-width masked region;
+  flip:    horizontal flip with probability 0.5;
+  scale:   independent horizontal/vertical factors in [1/1.2, 1.2);
+  rotate:  angle in [-15, 15) degrees.
+
+Scale and rotation use differentiable sampling. Cutout and the translation
+implementation can introduce zero-valued regions. These operations are applied
+in the generation-normalized coordinate space. A zero in that space corresponds
+to the dataset channel mean after denormalization, not necessarily black RGB.
+Augmented tensors are not clipped to the valid RGB box before teacher feature
+extraction; the optimized base images are clipped after their update.
+
+This is the shared-seed DiffAugment convention reused from main_DM_realreal.py.
+Reusing that augmentation does not mean reusing DM's feature-mean matching
+objective: our active loss is the assignment-information objective below.
+
+Distillation DSA is also NOT identical to the two-view PIL/torchvision SimCLR
+augmentation used later during fresh SSL evaluation. Those stages use different
+augmentation implementations and should not be described as literally the same
+pipeline in a paper.
+
+
+Feature extraction and real-to-synthetic assignments
+--------------------------------------------------
+
+For a real minibatch X = {x_b}_{b=1}^B and current synthetic set S, obtain four
+sets of teacher features and normalize every feature vector to unit length:
+
+  h_b^u = normalize(f_theta(t_u(x_b))),
+  h_b^v = normalize(f_theta(t_v(x_b))),
+  z_k^u = normalize(f_theta(t_u(s_k))),
+  z_k^v = normalize(f_theta(t_v(s_k))).
+
+The real feature matrices have shape B x d. The synthetic feature matrices have
+shape M x d. There is no average across samples before this step and no teacher
+ensemble in the selected runs.
+
+Because the rows are L2-normalized, their dot products are cosine similarities.
+For each real image and each view we compute a distribution over synthetic
+prototype indices:
+
+  q_b^u(k) = exp((h_b^u . z_k^u) / tau)
+             / sum_(l=1)^M exp((h_b^u . z_l^u) / tau),
+
+  q_b^v(k) = exp((h_b^v . z_k^v) / tau)
+             / sum_(l=1)^M exp((h_b^v . z_l^v) / tau).
+
+The assignment temperature is tau = 0.2. Smaller temperatures sharpen the
+preference for high-similarity prototypes; larger temperatures soften it. This
+temperature belongs to real-to-prototype assignment. The SimCLR evaluation
+temperature is a different hyperparameter, even when its numerical value is
+also 0.2.
+
+Every q row sums to one. There are M columns, regardless of whether the dataset
+has 10, 100, or 200 semantic classes. Prototype 7 means synthetic image 7, not
+class 7. The same persistent prototype index is used in both views.
+
+The denominator couples all synthetic images: improving one prototype's score
+changes its responsibility relative to all other prototypes. No real image is
+permanently paired with a particular synthetic image. The assignments are soft
+and recomputed after the pixels and augmentations change.
+
+Both real-to-synthetic similarity matrices have shape B x M. Synthetic images
+are used in full on every iteration; we do not draw a smaller synthetic
+minibatch for this objective.
+
+For a concrete example, consider the 100-image CIFAR10 synthetic set. A real
+image might assign most of its u-view probability to prototypes 7 and 19, and
+its v-view probability to prototypes 7 and 23. Another real image might instead
+favor prototypes 40 and 58. The loss uses how these soft responses co-occur
+across 1024 paired real images. It does not require knowing either real image's
+class, declaring prototype 7 to be a dog, or matching a real image to synthetic
+image number 7 in advance.
+
+
+How the cross-view joint matrix is formed
+----------------------------------------
+
+For each real image b, we have two distributions: q_b^u and q_b^v. We take their
+outer product and average across the SAME paired real images:
+
+  J_kl = (1/B) * sum_(b=1)^B q_b^u(k) * q_b^v(l).
+
+In matrix notation, J = (Q_u transpose * Q_v) / B. The result is M x M, not
+B x B and not a matrix indexed by semantic classes.
+
+One useful interpretation is to select a real image uniformly from the batch,
+then draw prototype indices C_u and C_v from its two assignment distributions.
+J records the resulting joint distribution of those indices. It measures how
+assignments across views co-occur over the real-image population.
+
+The real-image pairing is essential. We do not independently shuffle the u and
+v rows before forming J, because that would remove the correspondence between
+two views of the same real image.
+
+The implementation makes the joint symmetric:
+
+  P = (J + J transpose) / 2.
+
+Before numerical flooring, P is nonnegative and sums to one. Its marginals are
+
+  p_k^u = sum_l P_kl,
+  p_l^v = sum_k P_kl.
+
+Symmetrization means that the ordering of the two views is not privileged.
+For a symmetric joint the row and column marginals agree, although the formula
+can still be written with both marginals for clarity.
+
+
+The only active loss: maximize assignment mutual information
+-----------------------------------------------------------
+
+The ideal probability-form objective is
+
+  I(C_u; C_v) = sum_(k,l) P_kl * log(P_kl / (p_k^u * p_l^v)),
+
+  L_distill(S; X, t_u, t_v) = -I(C_u; C_v).
+
+The logarithm is natural, so the information units are nats. The effective
+optimization problem is a minibatch-and-augmentation expectation:
+
+  minimize over S:
+    E_[X,t_u,t_v] [ -I(P(S; X,t_u,t_v)) ].
+
+The code forms a joint within each minibatch and evaluates its information
+score. It does not first accumulate a single full-dataset joint and optimize
+its exact population mutual information. Nor is it an average of separately
+computed per-image mutual informations.
+
+For numerical stability, the actual implementation replaces each P_kl by
+max(P_kl, 1e-8), computes the marginals from that floored matrix, and evaluates
+the expression above. It does not renormalize P after this floor. Therefore
+the implemented scalar is precisely the floored MI-style expression, whereas
+the probability identities and bounds below apply exactly to the normalized
+joint before flooring. Flooring can matter more for a large M; its effect
+should not be silently described as an additional normalized probability step.
+
+There are no active auxiliary coefficients to append to this loss for the
+selected runs. The coefficient of the negative-information term is one.
+
+
+Why this is a useful distillation signal
+---------------------------------------
+
+For a normalized joint, mutual information can be written as
+
+  I(C_u; C_v) = H(C_u) - H(C_u | C_v)
+             = H(C_u) + H(C_v) - H(C_u, C_v).
+
+These are two interpretations of ONE loss, not extra separately weighted
+objectives.
+
+The marginal-entropy aspect favors assignments that convey different answers
+for different real images, rather than sending every image to the same
+prototype. The conditional-entropy aspect favors cross-view relationships that
+are predictable, rather than assignments whose relationship is random.
+
+For example, if every real image has exactly the same assignment distributions
+q^u and q^v, the unsymmetrized joint factorizes. When the two distributions are
+also identical, symmetrization leaves that factorization unchanged and the
+normalized-joint mutual information is zero. This includes assigning everything
+to a single prototype and giving every image an identical uniform assignment.
+Neither produces information about which real image was observed.
+
+By contrast, if real images are divided among several reproducible prototype
+assignments, observing an assignment in one view can tell us something about
+the assignment in the other. That structure can yield positive information.
+
+An ideal uniform, perfectly corresponding M-way assignment has information
+log(M). This is a reference point, not a claim that the real implementation
+reaches it or that every minibatch can realize it.
+
+The teacher gives the similarity comparisons their learned visual geometry.
+The real images provide the population over which we measure these cross-view
+relationships. The synthetic pixels move so that their teacher features form
+a useful set of reference points for those relationships.
+
+There are important limits to this interpretation. Mutual information alone
+does not explicitly force the joint to be diagonal: a reproducible permutation
+of prototype assignments can also convey information. For two prototypes, a
+joint with probability 1/2 on each diagonal entry and a joint with probability
+1/2 on each off-diagonal entry both have information log(2). Thus the objective
+encourages informative cross-view dependence, not a guaranteed same-index match.
+
+There is also a subtle consequence of the implemented symmetrization. If every
+real image has constant q^u = a and constant q^v = b but a differs from b, then
+P = (a b transpose + b a transpose)/2 need not factorize. It can have positive
+information even though the assignments distinguish views rather than real
+images. Therefore it would be too strong to claim that this objective rules
+out every view-dependent shortcut or every form of collapse.
+
+Likewise, there is no proof here that each prototype becomes a semantic class,
+that all M prototypes are used uniformly, or that low distillation loss implies
+better fresh-encoder accuracy. Those are empirical properties to measure, not
+consequences guaranteed by the equation.
+
+
+THEORY BEHIND THE IDEA: WHAT WE ARE TRYING TO PRESERVE
+---------------------------------------------------
+
+The motivation is to compress a useful ORGANIZATION of the data, rather than
+reconstruct every image or preserve only the average teacher feature. A good
+SSL representation distinguishes different visual content while relating
+different views of the same content. Our synthetic set is intended to provide
+a small, image-valued dictionary through which these relationships remain
+informative.
+
+There are two different questions. The first is why the information objective
+can encourage useful prototypes inside a fixed teacher's representation. The
+second is why training a new encoder on those prototypes might recover useful
+representations. The first has direct mathematical interpretations. The second
+is the dataset-distillation hypothesis and needs the fresh-encoder experiments.
+They must not be conflated.
+
+The derivations below interpret the selected negative-information objective;
+they do not add any loss or coefficient. Probability identities refer to the
+normalized joint before the numerical flooring already described above.
+
+
+Synthetic images as an image-valued dictionary
+---------------------------------------------
+
+For a particular view t, the synthetic images induce dictionary elements
+
+  z_k(t) = normalize(f_theta(t(s_k))),  k = 1, ..., M.
+
+A real-image feature h(t,x) is represented relative to that dictionary by the
+M-dimensional assignment vector q_t(x). This is a soft categorical code for
+the image: it expresses relative similarity to M learned reference images.
+
+The dictionary is not a conventional fixed K-means result. Its elements move
+because their underlying pixels move. Its feature vectors also respond to
+augmentation because they are extracted from actual images, rather than being
+free vectors that exist only in the teacher's feature space.
+
+For any normalized real and synthetic features h and z,
+
+  ||h - z||_2^2 = 2 - 2 * (h . z).
+
+Therefore our cosine-softmax assignment can equivalently be written as
+
+  q_t(k | x,S) = exp(-||h(t,x) - z_k(t)||_2^2 / (2*tau))
+                / sum_l exp(-||h(t,x) - z_l(t)||_2^2 / (2*tau)).
+
+The shared factor exp(1/tau) cancels from numerator and denominator. This
+establishes an exact connection to soft nearest-prototype assignment on the
+unit sphere; it is not an approximation based on how the images look.
+
+There is also a variational interpretation. Let E_k = ||h-z_k||_2^2 / 2 and
+let Delta_M denote the probability simplex. The same q solves
+
+  q = argmin_(a in Delta_M)
+        [sum_k a_k * E_k + tau * sum_k a_k * log(a_k)].
+
+The first part prefers nearby prototypes. The second favors softer assignments
+when distances alone do not justify a confident choice. This is a derivation
+of the softmax ALREADY USED to compute q, not another optimized penalty in our
+image objective. We do not separately train q parameters or add an entropy
+regularizer to the pixel optimizer.
+
+Why store images rather than only these feature vectors? A feature dictionary
+alone cannot be passed through a new randomly initialized CNN as a training
+dataset. Image-valued prototypes can: they can be augmented and used as the
+inputs of the later SSL training. Pixel parameterization also forces each
+teacher prototype to be realized by an input image. It does not, however,
+force that image to remain natural-looking; no generative prior is active.
+
+
+Why dependence across views, instead of assignment agreement alone?
+------------------------------------------------------------------
+
+Imagine minimizing only a discrepancy between q_u(x) and q_v(x). Giving every
+real image the same constant assignment would make the two views agree
+perfectly. That solution says nothing about differences among images. Simple
+agreement alone therefore has a trivial collapse solution.
+
+Maximizing only marginal assignment entropy would not solve the whole problem
+either. Giving every image the same uniform soft assignment has maximum
+marginal entropy, yet still distinguishes no images and creates independent
+categorical assignments across the two views.
+
+Mutual information combines both requirements in one expression:
+
+  -I(C_u;C_v) = H(C_u | C_v) - H(C_u).
+
+Minimization favors predictable cross-view assignments through the conditional
+entropy, while the negative marginal entropy favors an informative range of
+assignment outcomes. These effects come from the SAME scalar; there is no
+separate diversity coefficient in the active method.
+
+For a normalized joint,
+
+  I(C_u;C_v) = KL(P || p^u * p^v),
+
+where p^u * p^v is the product of the marginals. The objective measures how much
+the paired assignment statistics differ from what would be expected if the
+two assignment indices were independent. This is why the paired real-image
+rows matter: they contain the evidence for cross-view dependence.
+
+For intuition, consider K equally populated groups with deterministic,
+corresponding assignments in the two views. Then
+
+  P_kk = 1/K for the K used indices, with all other entries zero,
+  H(C_u | C_v) = 0,
+  I(C_u;C_v) = log(K).
+
+Using more distinguishable, predictable groups can carry more information
+than assigning everything to a single group, whose information is zero.
+For arbitrary normalized assignments the bound is
+
+  0 <= I(C_u;C_v) <= min(H(C_u), H(C_v)) <= log(M).
+
+This explains the capacity role of M. It does not prove that increasing M will
+improve downstream accuracy or that optimization finds the best dictionary.
+
+The symmetrized, view-dependent shortcut discussed earlier still applies.
+These entropy arguments explain the intended pressure, not a guarantee that
+the current implementation can never exploit augmentation identity.
+
+
+Why useful information can be related to real-image content
+----------------------------------------------------------
+
+There is a precise statement for the UNSYMMETRIZED joint J. Fix the minibatch,
+teacher, dictionary, and two augmentation transformations. Let X be a uniformly
+selected real image from that batch. Independently draw C_u from q_u(X) and
+C_v from q_v(X). By construction,
+
+  C_u -> X -> C_v
+
+is a Markov chain: given X, the two categorical draws are independent. The
+data-processing inequality therefore gives
+
+  I_J(C_u;C_v) <= min(I(X;C_u), I(X;C_v)).
+
+Thus cross-view information in J cannot exceed the information each assignment
+retains about real-image identity. An assignment that contains no information
+about X cannot produce positive cross-view information under this construction.
+This is a reason to use paired assignment statistics rather than independent
+real and synthetic feature averages.
+
+Our implemented objective uses the SYMMETRIZED P, not J. To interpret P, one
+can additionally draw a fair orientation variable O, using the assignments in
+their original order or swapping them. Then the corresponding conditional
+independence is through (X,O), so the analogous bound concerns information
+about (X,O), not X alone. Information about orientation is a possible shortcut.
+We therefore cannot claim the stronger real-image-only bound for the actual
+symmetrized score without extra assumptions. Numerical flooring is another
+reason not to present the ideal probability identities as exact statements
+about every reported floating-point loss.
+
+Finally, information about image identity is not automatically information
+about semantic classes. Background, texture, and other repeatable attributes
+can also distinguish images. The semantic motivation relies on the teacher's
+learned geometry and on the chosen augmentations retaining useful content.
+Neither assumption is an unconditional theorem about the generated images.
+
+
+What DSA contributes to this theory
+----------------------------------
+
+A single unaugmented dictionary could exploit feature coincidences visible
+only for one fixed rendering of its images. Repeatedly changing the views
+makes the assignment-information criterion depend on how the images and their
+features behave under transformations, rather than only on their original
+features.
+
+Sharing a transformation between real and synthetic images puts both sides
+under the same sampled viewing condition. The second independently drawn
+transformation gives another condition. Their paired assignments then ask
+whether the dictionary supports informative relationships across those two
+conditions.
+
+This is a stochastic objective over transformation pairs, not an exact
+enumeration of every crop, color, or geometric transformation. Specifically,
+the code approximates E_[t_u,t_v,X] I(P_[t_u,t_v,X]). Because mutual information
+is nonlinear, this is generally not equal to I(E_[t_u,t_v,X] P_[t_u,t_v,X]).
+The distinction matters: optimizing minibatch information for sampled view
+pairs is not the same as proving global invariance after pooling all views.
+
+With shared-seed DSA, a transformation is also common to the batch. We cannot
+describe the method as integrating independent per-image augmentations or
+claiming exact invariance to the full SimCLR augmentation distribution. It
+optimizes robustness of its assignment relationships under the particular
+DiffAugment sampling procedure used in the generation code.
+
+
+Why optimizing pixels changes the dictionary rather than the teacher
+-------------------------------------------------------------------
+
+Let a_l = h . z_l denote a real-to-prototype cosine score. The assignment
+softmax satisfies
+
+  d q_k / d a_l = (q_k / tau) * (1[k=l] - q_l).
+
+Consequently, the gradient of an informative assignment is coupled to competing
+prototypes. A synthetic image affects its own similarity column and, through
+the softmax denominator, the relative assignments to the other images.
+
+The joint then couples these assignments over paired real views. Pixel updates
+are driven by this population relationship, not by reconstructing the nearest
+real image or pushing every synthetic feature toward the global real mean.
+
+The teacher fixes what counts as similarity. Freezing it prevents the feature
+extractor from changing the coordinate system to improve the score while the
+synthetic images remain unhelpful. Nevertheless, frozen neural networks can
+still be exploited through their inputs. Starting from real representatives
+and enforcing a valid pixel box do not provide a proof against adversarial
+textures or unnatural optimized images.
+
+The random-feature initialization is a geometric starting heuristic. Selecting
+representatives of different random-feature regions can avoid starting with
+identical images, but it is not a theorem of semantic coverage. The learned
+teacher, not that untrained initializer, supplies the subsequent optimization
+geometry.
+
+
+The bridge to dataset distillation: what remains a hypothesis
+-----------------------------------------------------------
+
+The eventual aim is that a small S supports useful SSL training from scratch.
+Abstractly, that goal concerns an encoder trained on S:
+
+  phi_S = SSLTrain(S),
+
+and its eventual real-data representation quality. Our implemented image
+objective does NOT differentiate through SSLTrain. It replaces that expensive
+training-dependent goal with a fixed-teacher assignment-information surrogate.
+
+The motivating hypothesis is: if S forms useful, cross-view-informative image
+prototypes under a strong full-data teacher, then augmentation-based training
+on S may expose a fresh encoder to useful visual structure and transformations.
+Image-valued prototypes make that later training possible; the teacher-based
+criterion guides which pixels to retain or change.
+
+There is no derived equality between teacher assignment information and the
+SimCLR or Barlow Twins training gradient of a fresh model. There is also no
+bound here proving that increasing this score improves linear-probe accuracy,
+matches the full-data teacher, or transfers to another architecture. The two
+stages can disagree because the new encoder starts randomly, uses a different
+loss and augmentation pipeline, and sees synthetic rather than full real data.
+
+This is why the reported experiment must train fresh encoders and probe their
+representations. It is not enough to show that the synthetic images receive a
+high information score from the same teacher used to optimize them.
+
+
+Relation to established ideas, without claiming the same method
+--------------------------------------------------------------
+
+The information-theoretic motivation is related to Invariant Information
+Clustering, which learns a network by maximizing mutual information between
+assignments of paired images [T1]. Our distinction is what is optimized: the
+teacher is fixed, and image-valued prototypes parameterize the assignments
+through real-to-synthetic similarities. We update the dictionary's pixels
+instead of learning a clustering network with that objective.
+
+The use of cross-view prototype assignments is also related conceptually to
+SwAV, which learns representations through prediction of assignments across
+views [T2]. We are not implementing its swapped-prediction training objective
+or its assignment-balancing procedure as our distillation loss.
+
+Distribution Matching dataset condensation motivates synthesizing a small
+training set using feature-space comparisons rather than a full differentiable
+training trajectory [T3]. Our selected comparison is different: we maximize
+paired assignment information; we do not minimize its real/synthetic feature
+distribution-matching loss.
+
+These are connections that motivate the design, not claims that those papers
+prove the effectiveness or novelty of this exact pixel-optimization objective.
+The soft-assignment derivation, information interpretation, and qualifications
+above are explanations of our current implementation.
+
+
+A theory-centered statement of the idea
+--------------------------------------
+
+We treat a synthetic dataset as a compact image-valued dictionary in the feature
+geometry of a fixed self-supervised teacher. Soft real-to-prototype assignments
+provide a categorical representation of each augmented real image. Maximizing
+information between paired assignments seeks a dictionary that supports both
+distinguishable and cross-view-predictable responses. Differentiable image
+parameterization realizes that dictionary as trainable pixels, allowing the
+resulting prototypes to serve as inputs for subsequent SSL training. This is
+an information-guided surrogate for dataset distillation, whose representation-
+learning value is assessed by training and probing fresh encoders.
+
+
+What one optimization iteration actually does
+--------------------------------------------
+
+First, draw the next batch of 1024 real training images from a shuffled ordering.
+An ordering is reshuffled after its full batches are exhausted; an incomplete
+last batch is dropped. The same real batch is used for both views.
+
+Second, sample one u augmentation seed and one v augmentation seed. Apply each
+transformation to the real batch and replay it on the full synthetic set.
+
+Third, pass the two real views through the frozen teacher without recording
+gradients. Pass both synthetic views through the same frozen teacher while
+retaining derivatives with respect to synthetic input pixels.
+
+Fourth, L2-normalize the features, calculate both B x M similarity matrices,
+apply the temperature-scaled softmaxes, form the M x M joint, symmetrize it,
+and calculate the negative-information scalar.
+
+Fifth, backpropagate that scalar. The gradient path is
+
+  loss -> joint matrix -> assignment probabilities -> synthetic teacher
+  features -> frozen teacher's input derivatives -> differentiable
+  augmentation -> synthetic pixels.
+
+The teacher weights do not change. The real images do not change. The random
+initializer network is no longer involved. There is no student update hidden
+inside this step.
+
+Sixth, take one Adam update of the entire synthetic pixel tensor, then project
+the unaugmented images back into their valid per-channel pixel box.
+
+Seventh, record diagnostics and save the rolling checkpoint when its interval
+is reached. Repeat with a new real batch and new augmentation draws.
+
+The historical flag num_random_networks is 1 in these runs. With a fixed
+pretrained teacher it controls augmentation repetitions, not the number of
+new random teachers per iteration. Multiple repetitions would average their
+losses; the selected value performs just one paired draw. Multiple saved
+teachers, if requested, would be summed, but that is not our selected setup.
+
+
+Optimization settings and constraints
+------------------------------------
+
+Only the normalized synthetic pixel tensor is passed to Adam. The initial
+learning rate is 0.001. Adam uses its default beta values (0.9, 0.999), epsilon
+1e-8, and zero weight decay.
+
+Although the code constructs CosineAnnealingLR, it sets eta_min equal to the
+initial learning rate. Consequently the actual image learning rate remains
+0.001 throughout these runs. It must not be reported as cosine-decaying to
+zero merely because the scheduler has that name.
+
+After each update, channel c is clipped to
+
+  -mean_c / std_c <= s_c <= (1 - mean_c) / std_c.
+
+This is equivalent to requiring the base RGB pixels to lie in [0,1]. It is a
+valid-pixel constraint, not a fidelity-to-initialization or smoothness penalty.
+
+The generation settings are:
+
+  Real minibatch size                      1024
+  Synthetic minibatch size                 all M images
+  Assignment temperature                   0.2
+  Image optimizer                          Adam
+  Image learning rate                      0.001, constant
+  Augmentation repetitions per iteration   1
+  Teacher                                  one fixed full-data SimCLR backbone
+  Generation seed                          0
+  DSA                                      enabled, shared-seed single-group mode
+  Feature extraction chunk size            128
+  Checkpoint interval                      100 iterations, replacing the same PT
+  Image visualizations                     iteration 1 and final iteration only
+
+The total image-update budgets, for all three datasets, are:
+
+  Synthetic percentage     Distillation iterations
+          0.2%                     10,000
+          1%                        8,000
+          2%                        6,000
+
+An iteration means ONE update of synthetic pixels. It is not an SSL epoch and
+not a traversal of the entire real dataset.
+
+Feature extraction is chunked to limit memory. Synthetic teacher activations
+are recomputed during backward using activation checkpointing. That changes
+memory use and computation time, not the mathematical objective. It does not
+train the teacher or create another trainable network.
+
+Larger synthetic budgets increase the number of prototype comparisons and the
+M x M joint size. The same iteration count is therefore not the same amount of
+computation at different M.
+
+
+Zero-weight diagnostics are not theoretical method components
+------------------------------------------------------------
+
+The selected launchers explicitly set both disp_weight and pair_weight to zero.
+The implementation still calculates and prints displacement and pair_similarity,
+and retains a historical shift_loss_history. They are diagnostics, not active
+optimization signals. A printed number such as displacement = 0.0003 does not
+mean it contributes to the update when its coefficient is zero.
+
+The reported pixel drift is also only a measurement of movement from the
+initial images. There is no active penalty that forces pixels to remain near
+their initial representatives.
+
+The current method should consequently not be described as using displacement
+alignment, pair-similarity matching, TV regularization, pixel-MSE regularization,
+coverage matching, MMD, optimal transport, gradient matching, a VAE prior, or
+student meta-learning. Those describe other options or earlier experiments,
+not this selected active objective.
+
+When all computed values are finite, total_loss in the selected single-teacher,
+single-draw runs equals neg_MI. A more negative value means a larger computed
+information score. Batch and augmentation resampling make the trace stochastic;
+monotonic improvement of every printed loss is not expected.
+
+
+What is saved and what resume means
+----------------------------------
+
+The generation output root is intentionally spelled
+
+  OT-SSL-DD/ours_syntehtic/
+
+Each configuration has its own subdirectory:
+
+  <dataset>/<BN_model>/pt<percentage>/
+
+For example:
+
+  ours_syntehtic/CIFAR10/ResNet18BN/pt0.2/
+    res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt
+    vis_IIC_CIFAR10_ResNet18BN_0.2percent_iter1.png
+    vis_IIC_CIFAR10_ResNet18BN_0.2percent_iter10000.png
+
+The PT is the data artifact used for evaluation. It contains the normalized
+synthetic image tensor, its normalization, dataset/model/percentage metadata,
+the current iteration, and a completion flag. It also stores initialization,
+optimizer, scheduler, sampling, random-number-generator, and loss-history state.
+
+It is one rolling checkpoint, atomically replaced rather than keeping a new PT
+at every interval. A checkpoint is first written at iteration 0, then at
+iteration 1, every 100 iterations, and the final iteration. Its filename always
+contains "final", including while training is incomplete. Completion must be
+checked from its metadata, not inferred from that filename.
+
+The first PNG is saved AFTER the first optimization update, not before any
+optimization. The final PNG shows the final image tensor after denormalization
+and clipping to [0,1]. PNGs are visualizations, not evaluation inputs.
+
+Resume restores saved pixels, Adam moments, scheduler state, real-data ordering
+and cursor, and the saved RNG states. It continues from the next iteration
+instead of running K-means again. The saved configuration must match the
+requested run. A timeout can lose work since the most recent saved checkpoint;
+it does not preserve iterations that were only printed after that save.
+
+The launcher skips a completed configuration when its completion metadata and
+first/final PNGs are valid. Missing teacher files are reported and that model's
+generation is skipped; the generator does not silently train a replacement
+teacher.
+
+
+Separate evaluation: what we measure after saving the synthetic set
+-----------------------------------------------------------------
+
+Generation quality is assessed by training fresh SSL encoders on the synthetic
+set, then testing their frozen representations with linear classifiers on real
+data. This is a separate experiment from minimizing the information objective.
+The current generation launchers set num_eval = 0 and do not train these
+evaluation encoders inside the image-optimization loop.
+
+The Ours evaluation loader requires a completed synthetic checkpoint with the
+expected dataset, architecture, percentage, image shape, and iteration budget.
+It reads the saved normalization, converts the tensor back to RGB, and clamps
+to [0,1]. Images then pass through PIL uint8 conversion for the reference SSL
+augmentations. Evaluation does not train on the PNG grid and does not treat the
+normalized tensor as raw RGB.
+
+This introduces the recorded float-to-PIL quantization boundary: image changes
+smaller than an 8-bit pixel increment can be present in the saved floating
+tensor without surviving in the same way through evaluation preprocessing.
+
+For each completed synthetic set, SimCLR and Barlow Twins are evaluated
+separately. For EACH SSL method we train two encoders, seeds 0 and 1, from
+random initialization. These encoders do not start from the generation teacher.
+Their architecture matches the selected generation model family; the current
+ResNet18BN-only reporting uses the corresponding benchmark ResNet18 BN backbone.
+
+For the latest selected Ours schedule:
+
+  Synthetic percentage    SimCLR SSL epochs    Barlow Twins SSL epochs
+          0.2%                   2,000                  10,000
+          1%                     2,000                  10,000
+          2%                     1,000                  10,000 where retained
+
+Some unstarted 2% Barlow Twins cells were explicitly omitted and marked --;
+the budget above is the recipe for retained runs, not an instruction to run
+those omitted cells. Earlier 2% SimCLR experiments used 2000 or 3000 epochs.
+They are different evaluation horizons, not changes to the already generated
+synthetic tensor. Older interactive launchers can still encode those historical
+schedules, so the actual run configuration must identify which result is used.
+
+These are EPOCHS of SSL training on the synthetic images. They are distinct from
+the 10,000/8,000/6,000 pixel-optimization ITERATIONS used during generation.
+
+The local reference SSL training recipe uses float32, LARS, momentum 0.9,
+weight decay 1e-4, trust coefficient 0.02, epsilon 1e-8, clipped layer adaptation,
+and exclusion of bias/normalization parameters from decay and layer adaptation.
+Batch size is min(256, M), without replacement, with incomplete final batches
+dropped. Learning rates are scaled by effective_batch/256. There are ten warmup
+epochs starting at 3e-5, followed by a per-step cosine schedule toward zero.
+Unlike the generation optimizer, this SSL learning-rate schedule actually varies.
+
+SimCLR uses base learning rate 0.4, a projection MLP with hidden width 2048 and
+output dimension 256, hidden ReLU, biases, and no projector BatchNorm. It
+L2-normalizes projected representations and minimizes NT-Xent with temperature
+0.2. For each augmented anchor, its other view is the positive and the other
+images' views supply negatives; the anchor itself is excluded from the
+denominator. This contrastive loss is used to train the evaluation encoder,
+not to optimize synthetic pixels during generation.
+
+Barlow Twins uses base learning rate 0.3 and a three-layer projector with
+dimensions d -> 2048 -> 2048 -> 2048, hidden BatchNorm/ReLU, and biases. It
+standardizes projector outputs across the batch with correlation epsilon 1e-5,
+then minimizes
+
+  L_BT = 0.1 * [sum_i (C_ii - 1)^2 + 0.0051 * sum_(i != j) C_ij^2],
+
+where C is the cross-correlation between the two standardized projected views.
+The 0.0051 coefficient is active in Barlow Twins evaluation; it is unrelated to
+the zero-weight generation diagnostics discussed earlier.
+
+The reference SSL augmentations operate on RGB/PIL images. Each view uses a
+bicubic random resized crop at native source resolution, scale [0.08,1] and
+aspect ratio [0.75,4/3], then method-specific color jitter with probability
+0.8, grayscale with probability 0.2, method-specific Gaussian blur/solarization,
+horizontal flip with probability 0.5, tensor conversion, and source-dataset
+normalization.
+
+SimCLR color jitter is (0.8,0.8,0.8,0.2), blur probability is 0.5 in both views,
+and solarization is disabled. Barlow Twins color jitter is (0.4,0.4,0.2,0.1),
+blur is disabled, and the second view uses solarization probability 0.2 with
+threshold 128. Blur, when used, samples sigma in [0.1,2].
+
+This is the repository's adapted benchmark reference recipe; the presence of
+official-method names does not make it bit-for-bit identical to either
+method's original ImageNet implementation.
+
+
+Linear probing, label budgets, and what one reported cell averages
+----------------------------------------------------------------
+
+After an evaluation SSL encoder has trained, its backbone is frozen and put
+in evaluation mode. A new linear classifier is trained on labeled REAL training
+images. The backbone weights and BatchNorm statistics remain unchanged.
+
+The 1% and 5% label budgets are fractions of the real training set, not fractions
+of the small synthetic set. For main-table CIFAR10 and CIFAR100, these budgets
+are 500 and 2500 real labeled images; for TinyImageNet they are 1000 and 5000.
+The selector uses an exact global budget with stratified/class-balanced
+selection rather than inflating a small budget to force one label per class.
+
+Each SSL encoder is evaluated using three probe seeds, 0, 1, and 2. Probe seed
+controls label-subset selection, head initialization, and training randomness.
+For a given probe seed the selection does not depend on which SSL seed is used.
+
+Each head trains for 100 epochs using SGD, learning rate 0.1, momentum 0.9,
+weight decay 0, batch size capped at 256, no warmup, and per-step cosine decay.
+Head weights start with normal standard deviation 0.01 and biases at zero.
+Only the linear head is trained: there is no backbone fine-tuning.
+
+Probe training uses random resized crop and horizontal flip. Testing preserves
+native-size CIFAR/Tiny images; larger transfer images use resize and center
+crop. Input normalization is determined by the source encoder's dataset.
+Accuracy is measured at the final prescribed head epoch, not selected by taking
+the best test-set epoch.
+
+For ONE dataset/model/percentage/SSL-method/label-budget cell, the scores are
+
+  a_(r,q), with SSL seed r in {0,1} and probe seed q in {0,1,2}.
+
+The reported mean and sample standard deviation are
+
+  mean = (1/6) * sum_(r,q) a_(r,q),
+  std  = sqrt( (1/5) * sum_(r,q) (a_(r,q) - mean)^2 ).
+
+These are six probe outcomes from TWO independently trained encoders, not six
+independently trained encoders or six independent synthetic datasets. The three
+heads that share an encoder are correlated measurements. The reported accuracy
+is overall top-1 accuracy, in percent.
+
+SimCLR and Barlow Twins have separate cells and are never averaged together.
+The 1% and 5% label budgets also have separate cells. Both label budgets reuse
+the same two SSL encoders; they do not require separate SSL pretraining.
+
+For main-table evaluation, the real probe dataset is the source dataset. For
+downstream evaluation, the same trained source encoder is reused on another
+real target dataset with a new labeled linear head. The source encoder is not
+SSL-trained again on the target data. Downstream transfer is restricted to
+ResNet18 in the current pipeline.
+
+Completed compatible probe results are reused rather than averaged twice.
+SSL resume restores its training state from saved checkpoints; an interrupted
+linear head restarts unless its completed result already exists. Dataset,
+synthetic-image, encoder, code, and protocol identities are recorded to keep
+different experiments from being silently combined.
+
+
+A concise method description that matches the active experiment
+--------------------------------------------------------------
+
+We distill an unlabeled image dataset into a compact set of learnable image
+prototypes using a frozen full-data self-supervised encoder. We initialize the
+prototypes with nearest real-image representatives of random-feature K-means
+centers. During distillation, two independently sampled differentiable
+transformations are each shared between a real minibatch and the synthetic set.
+Normalized teacher features define temperature-scaled real-to-prototype
+assignment distributions in the two views. We aggregate paired assignments
+into a symmetrized cross-view joint and optimize synthetic pixels to maximize
+its assignment-information score. Only the images are updated; the teacher
+remains fixed. The resulting unlabeled synthetic images are evaluated by
+training fresh SSL encoders and fitting frozen-backbone linear probes on real
+labeled data.
+
+No auxiliary matching term belongs in that description for the selected runs.
+Any claim that the optimized images improve representation learning must come
+from the separate fresh-encoder evaluations, not from the distillation loss
+value alone.
+
+
+Theory references
+-----------------
+
+[T1] Xu Ji, Joao F. Henriques, Andrea Vedaldi.
+     Invariant Information Clustering for Unsupervised Image Classification
+     and Segmentation. ICCV 2019.
+     https://arxiv.org/abs/1807.06653
+
+[T2] Mathilde Caron, Ishan Misra, Julien Mairal, Priya Goyal,
+     Piotr Bojanowski, Armand Joulin.
+     Unsupervised Learning of Visual Features by Contrasting Cluster
+     Assignments. NeurIPS 2020.
+     https://arxiv.org/abs/2006.09882
+
+[T3] Bo Zhao, Hakan Bilen.
+     Dataset Condensation with Distribution Matching. WACV 2023.
+     https://arxiv.org/abs/2110.04181
+
+
+Implementation sources used for this explanation
+-----------------------------------------------
+
+  OT-SSL-DD/method1.py
+    initialization, active objective, pixel optimization, normalization,
+    checkpointing, and resume state
+
+  OT-SSL-DD/run_ours_cifar10.sh
+  OT-SSL-DD/run_ours_cifar100.sh
+  OT-SSL-DD/run_ours_tinyimagenet.sh
+  OT-SSL-DD/ours_syntehtic/logs/
+    actual generation budgets, coefficients, model choices, and teacher seeds
+
+  OT-SSL-DD/dd_teachers.py
+    saved teacher loading and input-normalization conversion
+
+  OT-SSL-DD/dm_dsa.py
+  OT-SSL-DD/utils.py
+  OT-SSL-DD/CODE_refrecne/main_DM_realreal.py
+    effective shared-seed, single-group differentiable augmentation
+
+  OT-SSL-DD/eval.py
+    generation normalization constants and legacy/manual evaluation helpers;
+    its defaults alone do not define every later evaluation experiment
+
+  Evaluate_benchamrk/common.py
+  Evaluate_benchamrk/data.py
+  Evaluate_benchamrk/train_ssl.py
+  Evaluate_benchamrk/evaluate.py
+  Evaluate_benchamrk/protocol.json
+    benchmark network construction, RGB conversion, SSL training, transforms,
+    and frozen linear probes
+
+  Evaluate_benchamrk/eval_jobs/interactive_ours.py
+  Evaluate_benchamrk/eval_jobs/interactive_ours_2k10k.py
+  Evaluate_benchamrk/cifar_finish_jobs/worker.py
+  Evaluate_benchamrk/submit_ours_2pct_simclr1k_wang_killarney.sh
+  Evaluate_benchamrk/downstream_probe_jobs/worker.py
+    synthetic-set validation, two-encoder/three-probe aggregation, historical
+    evaluation horizons, and the latest selected 2% SimCLR horizon
+
+This document records the inspected implementation and selected settings. It
+does not change any code, checkpoint, result, or submitted/running job.

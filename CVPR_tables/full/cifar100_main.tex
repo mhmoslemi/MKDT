@@ -39,7 +39,7 @@
 
 & \multirow{4}{*}{0.2\%} & Random Subset
 & \dsacc{14.70}{0.57} & \dsacc{11.42}{0.81}
-&  &
+& \dsacc{8.21}{1.08} & \dsacc{2.73}{1.55}
 & \dsacc{9.79}{1.16} & \dsacc{10.03}{1.73} \\
 & & K-means Subset
 & \dsacc{14.79}{0.78} & \dsacc{11.63}{0.67}
@@ -62,16 +62,14 @@
 & & Ours &  &  &  &  & \dsacc{13.70}{0.62} & \dsacc{15.49}{0.88} \\
 \cmidrule(lr){2-9}
 
-& \multirow{4}{*}{2\%} & Random Subset
-& \dsacc{17.08}{0.51} & \dsacc{14.56}{0.60} &  &  & \dsacc{16.96}{0.61} & \dsacc{18.99}{0.76} \\
+& \multirow{4}{*}{2\%} & Random Subset & \dsacc{17.08}{0.51} & \dsacc{14.56}{0.60} &  \dsacc{12.78}{0.52} &  & \dsacc{16.96}{0.61} & \dsacc{18.99}{0.76} \\
 & & K-means Subset
 & \dsacc{17.10}{0.40} & \dsacc{14.21}{0.70}
 & \dsacc{12.29}{0.73} & \dsacc{7.52}{2.33}
 & \dsacc{17.01}{0.72} & \dsacc{18.90}{0.95} \\
 & & MKDT
 &  & -- &  & \dsacc{6.49}{2.81} & \dsacc{7.53}{0.39} &  \\
-& & Ours
-&  & -- &  & -- & \dsacc{16.35}{1.12} & -- \\
+& & Ours &  & -- &  & -- & \dsacc{16.35}{1.12} & -- \\
 % BEGIN DISABLED: 5% pretraining subset
 % \cmidrule(lr){2-9}
 %
@@ -104,7 +102,7 @@
 
 & \multirow{4}{*}{0.2\%} & Random Subset
 & \dsacc{25.42}{0.46} & \dsacc{20.66}{1.02}
-&  &
+& \dsacc{13.34}{0.81} & \dsacc{4.16}{2.34}
 & \dsacc{15.98}{0.98} & \dsacc{17.26}{2.61} \\
 & & K-means Subset
 & \dsacc{25.37}{0.32} & \dsacc{20.54}{0.58}
@@ -127,16 +125,14 @@
 & & Ours &  &  &  &  & \dsacc{21.38}{0.23} & \dsacc{25.31}{0.14} \\
 \cmidrule(lr){2-9}
 
-& \multirow{4}{*}{2\%} & Random Subset
-& \dsacc{28.40}{0.23} & \dsacc{24.50}{0.52} &  &  & \dsacc{25.16}{0.61} & \dsacc{30.42}{0.82} \\
+& \multirow{4}{*}{2\%} & Random Subset & \dsacc{28.40}{0.23} & \dsacc{24.50}{0.52} &  \dsacc{17.57}{0.68} &  & \dsacc{25.16}{0.61} & \dsacc{30.42}{0.82} \\
 & & K-means Subset
 & \dsacc{28.66}{0.52} & \dsacc{24.53}{0.31}
 & \dsacc{17.49}{0.49} & \dsacc{11.08}{3.93}
 & \dsacc{25.14}{0.64} & \dsacc{30.72}{0.76} \\
 & & MKDT
 &  & -- &  & \dsacc{10.29}{4.46} & \dsacc{14.14}{0.57} &  \\
-& & Ours
-&  & -- &  & -- & \dsacc{24.07}{0.26} & -- \\
+& & Ours &  & -- &  & -- & \dsacc{24.07}{0.26} & -- \\
 % BEGIN DISABLED: 5% pretraining subset
 % \cmidrule(lr){2-9}
 %
@@ -169,6 +165,8 @@
 % Replacement results: Evaluate_benchamrk/mkdt_eval_results_simclr2k_2ssl3probes.
 % ResNet18 main update: ten complete current-result cells synchronized with CVPR_tables/table.tex.
 % Random 2%: all ten encoder seeds at 6k SSL epochs; 100-epoch frozen main probes.
-% Ours ResNet18 SimCLR: retained 2k SSL results at every subset size; MKDT 2% SimCLR: 3k; both use 2 SSL seeds x 3 probes.
+% Ours ResNet18 SimCLR: selected 2k results at every subset size; MKDT 2% SimCLR: 3k; both use 2 SSL seeds x 3 probes.
+% Ours ResNet18/2%/SimCLR: 2k main results restored by user request, not the 1k reruns.
 % MKDT 1% Barlow replacements: 10k SSL epochs, 2 SSL seeds x 3 probes.
 % Current CIFAR100 replacement source: Evaluate_benchamrk/cifar100_main_results_simclr2k3k_barlow10k_2ssl3probes/.
+% Newly completed VGG11 Random cells use all ten encoder seeds; 100-epoch frozen main probes.

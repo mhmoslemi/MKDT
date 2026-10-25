@@ -42,7 +42,8 @@
 & \dsacc{48.84}{1.44} & \dsacc{43.09}{8.13} & \dsacc{13.43}{0.97} & \dsacc{11.98}{3.43} & \dsacc{2.97}{0.53} & \dsacc{2.52}{0.45} & \dsacc{1.87}{0.20} & \dsacc{1.71}{0.31} & \dsacc{2.09}{0.39} & \dsacc{2.15}{0.38} & \dsacc{3.46}{0.49} & \dsacc{3.36}{0.77} \\
 & & K-means Subset & \dsacc{47.91}{1.25} & \dsacc{45.19}{1.96} & \dsacc{12.25}{1.06} & \dsacc{12.13}{1.27} & \dsacc{2.53}{0.80} & \dsacc{2.41}{0.38} & \dsacc{1.82}{0.22} & \dsacc{1.83}{0.21} & \dsacc{2.04}{0.35} & \dsacc{2.42}{0.29} & \dsacc{3.48}{0.62} & \dsacc{3.56}{0.83} \\
 & & MKDT & \multicolumn{12}{c}{} \\
-& & Ours & \multicolumn{12}{c}{} \\
+& & Ours
+& \dsacc{47.12}{0.77} &  & \dsacc{12.19}{0.66} &  & \dsacc{2.35}{0.21} &  & \dsacc{1.65}{0.07} &  & \dsacc{1.94}{0.23} &  & \dsacc{3.02}{0.21} &  \\
 \cmidrule(lr){2-15}
 
 & \multirow{4}{*}{1\%} & Random Subset
@@ -53,8 +54,7 @@
 & & Ours & \multicolumn{12}{c}{} \\
 \cmidrule(lr){2-15}
 
-& \multirow{4}{*}{2\%} & Random Subset
-&  & -- &  & -- &  & -- &  & -- &  & -- &  & -- \\
+& \multirow{4}{*}{2\%} & Random Subset &  \dsacc{57.41}{0.97} & -- &  \dsacc{19.87}{0.79} & -- &  & -- &  \dsacc{2.11}{0.21} & -- &  \dsacc{3.37}{0.38} & -- &  \dsacc{3.90}{0.71} & -- \\
 & & K-means Subset
 & \dsacc{57.96}{0.82} & \dsacc{57.14}{0.90} & \dsacc{19.64}{0.42} & \dsacc{19.75}{0.50} & \dsacc{3.54}{0.45} & \dsacc{3.61}{0.32} & \dsacc{2.16}{0.20} & \dsacc{2.48}{0.28} & \dsacc{3.45}{0.47} & \dsacc{3.95}{0.50} & \dsacc{3.95}{0.24} & \dsacc{4.77}{0.55} \\
 & & MKDT &  & -- &  & -- &  & -- &  & -- &  & -- &  & -- \\
@@ -90,7 +90,8 @@
 & \dsacc{55.87}{1.18} & \dsacc{51.80}{9.83} & \dsacc{22.90}{0.90} & \dsacc{21.76}{5.93} & \dsacc{4.11}{0.52} & \dsacc{3.92}{1.01} & \dsacc{2.50}{0.32} & \dsacc{2.57}{0.67} & \dsacc{4.14}{0.28} & \dsacc{4.00}{0.98} & \dsacc{7.32}{1.03} & \dsacc{8.07}{2.84} \\
 & & K-means Subset & \dsacc{55.12}{0.94} & \dsacc{53.72}{3.13} & \dsacc{22.60}{0.77} & \dsacc{22.50}{1.87} & \dsacc{3.65}{0.65} & \dsacc{4.20}{0.30} & \dsacc{2.37}{0.31} & \dsacc{2.87}{0.38} & \dsacc{3.99}{0.37} & \dsacc{4.37}{0.47} & \dsacc{6.88}{0.80} & \dsacc{9.46}{1.99} \\
 & & MKDT & \multicolumn{12}{c}{} \\
-& & Ours & \multicolumn{12}{c}{} \\
+& & Ours
+& \dsacc{55.02}{0.33} &  & \dsacc{20.36}{0.26} &  & \dsacc{3.11}{0.42} &  & \dsacc{1.75}{0.19} &  & \dsacc{3.44}{0.26} &  & \dsacc{6.74}{0.36} &  \\
 \cmidrule(lr){2-15}
 
 & \multirow{4}{*}{1\%} & Random Subset
@@ -101,8 +102,7 @@
 & & Ours & \multicolumn{12}{c}{} \\
 \cmidrule(lr){2-15}
 
-& \multirow{4}{*}{2\%} & Random Subset
-&  & -- &  & -- &  & -- &  & -- &  & -- &  & -- \\
+& \multirow{4}{*}{2\%} & Random Subset &  \dsacc{64.88}{0.76} & -- &  \dsacc{32.05}{0.63} & -- &  \dsacc{6.83}{0.57} & -- &  \dsacc{3.59}{0.40} & -- &  \dsacc{6.69}{0.54} & -- &  \dsacc{10.21}{1.19} & -- \\
 & & K-means Subset
 & \dsacc{65.07}{0.43} & \dsacc{64.97}{0.56} & \dsacc{32.09}{0.40} & \dsacc{33.48}{0.51} & \dsacc{6.43}{0.51} & \dsacc{6.31}{0.31} & \dsacc{3.69}{0.31} & \dsacc{3.84}{0.31} & \dsacc{6.71}{0.35} & \dsacc{7.87}{0.21} & \dsacc{10.45}{0.95} & \dsacc{15.05}{2.12} \\
 & & MKDT &  & -- &  & -- &  & -- &  & -- &  & -- &  & -- \\
@@ -136,3 +136,6 @@
 % Random downstream finish: 10 seeds; 100-epoch frozen probes; mean +/- sample SD.
 % Source: Evaluate_benchamrk/random_downstream_jobs/summaries/TinyImageNet/ (saved SSL epochs recorded per seed).
 % Random 1% subset / Barlow Twins: all 12 downstream cells complete; 10 encoder seeds at 5k SSL epochs.
+% Ours 0.2% SimCLR: 2k SSL epochs; six complete probes per cell (2 SSL seeds x 3 probes); 100-epoch frozen heads; mean +/- sample SD.
+% Ours source: Evaluate_benchamrk/ours_eval_results_simclr2k_barlow10k_2ssl3probes_downstream/; synchronized with ../tinyimagenet_simclr.tex.
+% Random 2% SimCLR additions require all ten seeds at 4k SSL epochs; partial cells are left unchanged.

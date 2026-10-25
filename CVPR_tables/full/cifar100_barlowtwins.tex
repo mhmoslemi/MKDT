@@ -30,8 +30,7 @@
 & \dsacc{4.51}{0.31} & \dsacc{38.69}{2.33} & \dsacc{2.05}{0.30} & \dsacc{1.73}{0.28} & \dsacc{2.07}{0.23} & \dsacc{3.45}{0.42} \\
  &  & MKDT
 &  &  &  &  &  &  \\
- &  & Ours
-&  &  &  &  &  &  \\
+ &  & Ours &  \dsacc{4.89}{0.68} &  \dsacc{38.97}{3.29} &  \dsacc{2.08}{0.22} &  \dsacc{1.50}{0.23} &  \dsacc{2.02}{0.12} &  \dsacc{3.08}{0.46} \\
 \cmidrule(lr){2-9}
 
  & \multirow{4}{*}{1\%} & Random Subset
@@ -40,8 +39,7 @@
 & \dsacc{6.82}{0.34} & \dsacc{45.28}{1.65} & \dsacc{2.38}{0.24} & \dsacc{1.95}{0.33} & \dsacc{2.55}{0.24} & \dsacc{3.61}{0.87} \\
  &  & MKDT
 & \dsacc{6.01}{0.22} & \dsacc{42.41}{1.80} & \dsacc{2.50}{0.17} & \dsacc{1.60}{0.28} & \dsacc{2.21}{0.23} & \dsacc{3.22}{0.43} \\
- &  & Ours
-&  &  &  &  &  &  \\
+ &  & Ours &  \dsacc{6.97}{0.24} &  \dsacc{46.38}{1.43} &  \dsacc{2.54}{0.23} &  \dsacc{1.74}{0.21} &  \dsacc{2.52}{0.16} &  \dsacc{3.52}{0.69} \\
 \cmidrule(lr){2-9}
 
  & \multirow{4}{*}{2\%} & Random Subset
@@ -81,8 +79,7 @@
 & \dsacc{8.65}{0.70} & \dsacc{45.10}{1.93} & \dsacc{3.57}{0.48} & \dsacc{2.57}{0.29} & \dsacc{3.44}{0.22} & \dsacc{8.11}{1.46} \\
  &  & MKDT
 &  &  &  &  &  &  \\
- &  & Ours
-&  &  &  &  &  &  \\
+ &  & Ours &  \dsacc{8.95}{1.06} &  \dsacc{45.75}{3.85} &  \dsacc{3.58}{0.50} &  \dsacc{2.39}{0.32} &  \dsacc{3.43}{0.40} &  \dsacc{7.21}{1.15} \\
 \cmidrule(lr){2-9}
 
  & \multirow{4}{*}{1\%} & Random Subset
@@ -91,8 +88,7 @@
 & \dsacc{12.45}{0.73} & \dsacc{52.51}{2.41} & \dsacc{4.58}{0.35} & \dsacc{3.31}{0.39} & \dsacc{4.56}{0.26} & \dsacc{9.76}{1.95} \\
  &  & MKDT
 & \dsacc{10.91}{0.36} & \dsacc{50.75}{1.34} & \dsacc{4.39}{0.47} & \dsacc{2.72}{0.28} & \dsacc{3.99}{0.30} & \dsacc{8.27}{0.83} \\
- &  & Ours
-&  &  &  &  &  &  \\
+ &  & Ours &  \dsacc{12.99}{0.49} &  \dsacc{55.02}{0.58} &  \dsacc{4.90}{0.41} &  \dsacc{3.05}{0.34} &  \dsacc{4.44}{0.18} &  \dsacc{10.45}{1.83} \\
 \cmidrule(lr){2-9}
 
  & \multirow{4}{*}{2\%} & Random Subset
@@ -130,6 +126,8 @@
 % Random Dogs/Flowers use the complete Killarney evaluations; cross-server image equivalence remains unverified.
 % MKDT SimCLR: superseded values cleared; replacement uses 2,000 SSL epochs, 2 SSL seeds x 3 probe seeds.
 % Replacement results: Evaluate_benchamrk/mkdt_eval_results_simclr2k_2ssl3probes.
+% Ours: 10k SSL epochs; six complete probes per cell (2 SSL seeds x 3 probe seeds); 100-epoch frozen heads; mean +/- sample SD.
+% Ours source: Evaluate_benchamrk/ours_eval_results_simclr2k_barlow10k_2ssl3probes_downstream/; synchronized with cifar100_downstream.tex.
 
 % Random downstream finish: 10 seeds; 100-epoch frozen probes; mean +/- sample SD.
 % Source: Evaluate_benchamrk/random_downstream_jobs/summaries/CIFAR100/ (saved SSL epochs recorded per seed).

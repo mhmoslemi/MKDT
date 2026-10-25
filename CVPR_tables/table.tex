@@ -74,8 +74,7 @@
 & \dsacc{10.70}{0.41} & \dsacc{12.49}{0.50} \\
 & & MKDT
 & \dsacc{40.56}{0.92} & \dsacc{48.58}{1.35} & \dsacc{7.53}{0.39} &  &  & -- \\
-& & Ours
-& \dsacc{55.80}{0.67} & \dsacc{53.42}{0.84} & \dsacc{16.35}{1.12} & -- &  & -- \\
+& & Ours & \dsacc{55.80}{0.67} & \dsacc{53.42}{0.84} & \dsacc{16.35}{1.12} & -- &  & -- \\
 % BEGIN DISABLED: 5% pretraining subset
 % \cmidrule(lr){2-9}
 %
@@ -145,8 +144,7 @@
 & \dsacc{17.94}{0.31} & \dsacc{22.23}{0.28} \\
 & & MKDT
 & \dsacc{46.55}{0.86} & \dsacc{56.92}{0.42} & \dsacc{14.14}{0.57} &  &  & -- \\
-& & Ours
-& \dsacc{58.72}{0.58} & \dsacc{60.75}{0.46} & \dsacc{24.07}{0.26} & -- &  & -- \\
+& & Ours & \dsacc{58.72}{0.58} & \dsacc{60.75}{0.46} & \dsacc{24.07}{0.26} & -- &  & -- \\
 % BEGIN DISABLED: 5% pretraining subset
 % \cmidrule(lr){2-9}
 %
@@ -169,7 +167,8 @@
 
 % ResNet18BN main results synchronized with full/cifar10_main.tex, full/cifar100_main.tex, and full/tinyimagenet_main.tex.
 % New Ours/MKDT replacements require all 2 SSL seeds x 3 probe seeds (six probes per cell).
-% Ours: SimCLR 2k SSL epochs at every subset size; Barlow Twins 10k; 2 SSL seeds x 3 probes.
+% Ours: SimCLR 2k at every subset size; Barlow Twins 10k; 2 SSL seeds x 3 probes.
+% Ours main source: Evaluate_benchamrk/ours_eval_results_simclr2k_barlow10k_2ssl3probes_main/; 2k results restored by user request, not the 1k reruns.
 % CIFAR10/CIFAR100 MKDT: SimCLR 2k epochs at 1%, 3k at 2%; completed new Barlow replacements use 10k.
 % CIFAR100 Random/ResNet18/2%: ten complete encoder seeds, 6k SSL epochs; 100-epoch frozen main probes.
 % Incomplete replacements retain earlier completed values only where documented in the source tables; no downstream scores are used.
