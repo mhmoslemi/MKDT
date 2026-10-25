@@ -35,7 +35,7 @@
 \cmidrule(lr){2-9}
 
  & \multirow{4}{*}{1\%} & Random Subset
-& \dsacc{54.26}{1.17} &  &  &  &  &  \\
+& \dsacc{54.26}{1.17} & \dsacc{18.18}{0.71} & \dsacc{3.39}{0.47} & \dsacc{2.26}{0.25} & \dsacc{3.31}{0.29} & \dsacc{4.30}{0.63} \\
  &  & K-means Subset
 & \dsacc{54.06}{1.72} & \dsacc{17.83}{0.94} & \dsacc{3.30}{0.46} & \dsacc{2.30}{0.22} & \dsacc{3.33}{0.34} & \dsacc{4.33}{0.47} \\
  &  & MKDT
@@ -45,13 +45,13 @@
 \cmidrule(lr){2-9}
 
  & \multirow{4}{*}{2\%} & Random Subset
-&  &  &  &  &  &  \\
+& -- & -- & -- & -- & -- & -- \\
  &  & K-means Subset
 & \dsacc{57.14}{0.90} & \dsacc{19.75}{0.50} & \dsacc{3.61}{0.32} & \dsacc{2.48}{0.28} & \dsacc{3.95}{0.50} & \dsacc{4.77}{0.55} \\
  &  & MKDT
-&  &  &  &  &  &  \\
+& -- & -- & -- & -- & -- & -- \\
  &  & Ours
-&  &  &  &  &  &  \\
+& -- & -- & -- & -- & -- & -- \\
 % BEGIN DISABLED: 5% pretraining subset
 % \cmidrule(lr){2-9}
 %
@@ -86,7 +86,7 @@
 \cmidrule(lr){2-9}
 
  & \multirow{4}{*}{1\%} & Random Subset
-&  &  &  &  &  &  \\
+& \dsacc{62.83}{0.82} & \dsacc{30.54}{0.76} & \dsacc{5.40}{0.69} & \dsacc{3.57}{0.39} & \dsacc{6.85}{0.44} & \dsacc{12.89}{1.64} \\
  &  & K-means Subset
 & \dsacc{62.12}{0.98} & \dsacc{30.41}{0.67} & \dsacc{5.46}{0.56} & \dsacc{3.44}{0.36} & \dsacc{6.74}{0.36} & \dsacc{12.51}{2.23} \\
  &  & MKDT
@@ -96,13 +96,13 @@
 \cmidrule(lr){2-9}
 
  & \multirow{4}{*}{2\%} & Random Subset
-&  &  &  &  &  &  \\
+& -- & -- & -- & -- & -- & -- \\
  &  & K-means Subset
 & \dsacc{64.97}{0.56} & \dsacc{33.48}{0.51} & \dsacc{6.31}{0.31} & \dsacc{3.84}{0.31} & \dsacc{7.87}{0.21} & \dsacc{15.05}{2.12} \\
  &  & MKDT
-&  &  &  &  &  &  \\
+& -- & -- & -- & -- & -- & -- \\
  &  & Ours
-&  &  &  &  &  &  \\
+& -- & -- & -- & -- & -- & -- \\
 % BEGIN DISABLED: 5% pretraining subset
 % \cmidrule(lr){2-9}
 %
@@ -133,3 +133,4 @@
 
 % Random downstream finish: 10 seeds; 100-epoch frozen probes; mean +/- sample SD.
 % Source: Evaluate_benchamrk/random_downstream_jobs/summaries/TinyImageNet/ (saved SSL epochs recorded per seed).
+% Random 1% subset / Barlow Twins: all 12 downstream cells complete; 10 encoder seeds at 5k SSL epochs.
