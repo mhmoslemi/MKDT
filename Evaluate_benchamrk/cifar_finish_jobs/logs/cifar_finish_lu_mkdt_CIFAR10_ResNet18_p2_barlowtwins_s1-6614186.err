@@ -1,0 +1,30 @@
+Traceback (most recent call last):
+  File "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/cifar_finish_jobs/worker.py", line 363, in <module>
+    main()
+  File "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/cifar_finish_jobs/worker.py", line 353, in main
+    run_synthetic(task, args, datasets)
+  File "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/cifar_finish_jobs/worker.py", line 233, in run_synthetic
+    checkpoint, saved = train(synthetic, protocol, task['source'], task['model'], task['ssl'],
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/train_ssl.py", line 134, in train
+    model = SSLModel(model_name, size, recipe).to(device)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mmoslem3/ENV/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1371, in to
+    return self._apply(convert)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/home/mmoslem3/ENV/lib/python3.11/site-packages/torch/nn/modules/module.py", line 930, in _apply
+    module._apply(fn)
+  File "/home/mmoslem3/ENV/lib/python3.11/site-packages/torch/nn/modules/module.py", line 930, in _apply
+    module._apply(fn)
+  File "/home/mmoslem3/ENV/lib/python3.11/site-packages/torch/nn/modules/module.py", line 957, in _apply
+    param_applied = fn(param)
+                    ^^^^^^^^^
+  File "/home/mmoslem3/ENV/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1357, in convert
+    return t.to(
+           ^^^^^
+torch.AcceleratorError: CUDA error: uncorrectable ECC error encountered
+Search for `cudaErrorECCUncorrectable' in https://docs.nvidia.com/cuda/cuda-runtime-api/group__CUDART__TYPES.html for more information.
+CUDA kernel errors might be asynchronously reported at some other API call, so the stacktrace below might be incorrect.
+For debugging consider passing CUDA_LAUNCH_BLOCKING=1
+Compile with `TORCH_USE_CUDA_DSA` to enable device-side assertions.
+

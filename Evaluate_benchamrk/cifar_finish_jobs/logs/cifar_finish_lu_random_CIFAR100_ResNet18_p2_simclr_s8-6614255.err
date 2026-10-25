@@ -1,0 +1,33 @@
+Traceback (most recent call last):
+  File "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/cifar_finish_jobs/worker.py", line 363, in <module>
+    main()
+  File "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/cifar_finish_jobs/worker.py", line 351, in main
+    run_random(task, args, datasets)
+  File "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/cifar_finish_jobs/worker.py", line 293, in run_random
+    random_eval.evaluate_pending_seed(unit, pending, plan, root, datasets, hashes, drivers, worker_hash)
+  File "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/eval_jobs/interactive_random_source.py", line 89, in evaluate_pending_seed
+    result = linear_probe(source / 'encoder.pt', identity, protocol, unit['source'], target,
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/evaluate.py", line 32, in linear_probe
+    encoder, dimension, saved = load_encoder(checkpoint, identity, device)
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/common.py", line 144, in load_encoder
+    return model.to(device).eval().requires_grad_(False), dimension, saved
+           ^^^^^^^^^^^^^^^^
+  File "/home/mmoslem3/ENV/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1371, in to
+    return self._apply(convert)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/home/mmoslem3/ENV/lib/python3.11/site-packages/torch/nn/modules/module.py", line 930, in _apply
+    module._apply(fn)
+  File "/home/mmoslem3/ENV/lib/python3.11/site-packages/torch/nn/modules/module.py", line 957, in _apply
+    param_applied = fn(param)
+                    ^^^^^^^^^
+  File "/home/mmoslem3/ENV/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1357, in convert
+    return t.to(
+           ^^^^^
+torch.AcceleratorError: CUDA error: uncorrectable ECC error encountered
+Search for `cudaErrorECCUncorrectable' in https://docs.nvidia.com/cuda/cuda-runtime-api/group__CUDART__TYPES.html for more information.
+CUDA kernel errors might be asynchronously reported at some other API call, so the stacktrace below might be incorrect.
+For debugging consider passing CUDA_LAUNCH_BLOCKING=1
+Compile with `TORCH_USE_CUDA_DSA` to enable device-side assertions.
+
