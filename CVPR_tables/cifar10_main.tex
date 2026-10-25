@@ -46,7 +46,7 @@
 & \dsacc{37.77}{0.93} & \dsacc{16.95}{2.65}
 & \dsacc{39.46}{0.79} & \dsacc{38.75}{1.98} \\
 & & MKDT & \multicolumn{6}{c}{} \\
-& & Ours &  &  &  &  & \dsacc{44.28}{0.86} & \dsacc{40.07}{0.78} \\
+& & Ours &  & \dsacc{38.27}{1.38} &  &  & \dsacc{44.28}{0.86} & \dsacc{40.07}{0.78} \\
 \cmidrule(lr){2-9}
 
 & \multirow{4}{*}{1\%} & Random Subset
@@ -57,8 +57,8 @@
 & \dsacc{52.17}{0.76} & \dsacc{46.49}{0.77}
 & \dsacc{43.63}{3.64} & \dsacc{27.97}{6.29}
 & \dsacc{46.86}{0.91} & \dsacc{48.98}{2.37} \\
-& & MKDT &  & \dsacc{46.72}{1.20} &  & \dsacc{25.07}{5.92} & \dsacc{40.29}{0.99} & \dsacc{43.66}{0.62} \\
-& & Ours &  &  &  &  & \dsacc{50.04}{0.61} & \dsacc{50.54}{1.17} \\
+& & MKDT & \dsacc{44.16}{0.55} & \dsacc{46.72}{1.20} & \dsacc{28.77}{1.26} & \dsacc{31.39}{2.24} & \dsacc{40.29}{0.99} & \dsacc{43.66}{0.62} \\
+& & Ours &  &  & \dsacc{36.59}{2.03} &  & \dsacc{50.04}{0.61} & \dsacc{50.54}{1.17} \\
 \cmidrule(lr){2-9}
 
 & \multirow{4}{*}{2\%} & Random Subset
@@ -69,7 +69,7 @@
 & \dsacc{52.91}{0.96} & \dsacc{50.50}{0.90}
 & \dsacc{49.31}{1.13} & \dsacc{42.48}{1.63}
 & \dsacc{52.98}{0.57} & \dsacc{56.98}{1.13} \\
-& & MKDT &  & \dsacc{50.43}{0.97} &  &  &  & \dsacc{49.24}{0.76} \\
+& & MKDT &  & \dsacc{50.43}{0.97} &  &  & \dsacc{40.56}{0.92} & \dsacc{49.24}{0.76} \\
 & & Ours &  &  &  &  & \dsacc{55.80}{0.67}  &  \\
 % BEGIN DISABLED: 5% pretraining subset
 % \cmidrule(lr){2-9}
@@ -110,7 +110,7 @@
 & \dsacc{42.93}{0.98} & \dsacc{17.90}{2.35}
 & \dsacc{45.44}{0.72} & \dsacc{45.80}{1.52} \\
 & & MKDT & \multicolumn{6}{c}{} \\
-& & Ours &  &  &  &  & \dsacc{50.09}{0.30} & \dsacc{47.66}{0.84} \\
+& & Ours &  & \dsacc{45.89}{1.19} &  &  & \dsacc{50.09}{0.30} & \dsacc{47.66}{0.84} \\
 \cmidrule(lr){2-9}
 
 & \multirow{4}{*}{1\%} & Random Subset
@@ -121,8 +121,8 @@
 & \dsacc{60.70}{0.62} & \dsacc{53.38}{0.96}
 & \dsacc{48.03}{3.95} & \dsacc{28.80}{5.85}
 & \dsacc{51.80}{0.93} & \dsacc{56.25}{2.23} \\
-& & MKDT &  & \dsacc{53.28}{0.69} &  & \dsacc{25.27}{5.84} & \dsacc{46.66}{0.67} & \dsacc{51.19}{1.66} \\
-& & Ours &  &  &  &  & \dsacc{55.62}{0.44} & \dsacc{57.80}{1.14} \\
+& & MKDT & \dsacc{53.49}{0.21} & \dsacc{53.28}{0.69} & \dsacc{33.05}{1.06} & \dsacc{31.66}{2.79} & \dsacc{46.66}{0.67} & \dsacc{51.19}{1.66} \\
+& & Ours &  &  & \dsacc{39.06}{2.15} &  & \dsacc{55.62}{0.44} & \dsacc{57.80}{1.14} \\
 \cmidrule(lr){2-9}
 
 & \multirow{4}{*}{2\%} & Random Subset
@@ -133,7 +133,7 @@
 & \dsacc{61.38}{0.41} & \dsacc{56.64}{0.81}
 & \dsacc{52.09}{0.93} & \dsacc{47.24}{1.46}
 & \dsacc{57.77}{0.37} & \dsacc{63.18}{0.55} \\
-& & MKDT &  & \dsacc{57.89}{0.47} &  &  &  & \dsacc{57.13}{0.42} \\
+& & MKDT &  & \dsacc{57.89}{0.47} &  &  & \dsacc{46.55}{0.86} & \dsacc{57.13}{0.42} \\
 & & Ours &  &  &  &  & \dsacc{58.72}{0.58}  &  \\
 % BEGIN DISABLED: 5% pretraining subset
 % \cmidrule(lr){2-9}
@@ -163,5 +163,11 @@
 %          Evaluate_benchamrk/mkdt_eval_results_interactive_6seeds/, and Evaluate_benchamrk/full_eval_results_interactive_3seeds_CIFAR10/.
 % Ours: complete 2 SSL seeds (0,1) x 3 probe seeds (0,1,2); SimCLR 2000 / Barlow Twins 10000 SSL epochs.
 % Ours source: Evaluate_benchamrk/ours_eval_results_simclr2k_barlow10k_2ssl3probes_main/.
-% MKDT SimCLR: main-only replacement, 2,000 SSL epochs; 2 SSL seeds x 3 probe seeds, six complete probes per cell.
-% Replacement results: Evaluate_benchamrk/mkdt_eval_results_simclr2k_2ssl3probes.
+% MKDT SimCLR main replacements: 1% subsets use 2,000 SSL epochs; the filled ResNet18/2% cells use 3,000.
+% Each replacement uses 2 SSL seeds (0,1) x 3 probe seeds (0,1,2), six complete probes per cell.
+% 2k source: Evaluate_benchamrk/mkdt_eval_results_simclr2k_2ssl3probes/.
+% 3k source: Evaluate_benchamrk/cifar10_main_results_simclr2k3k_barlow10k_2ssl3probes/.
+% MKDT VGG11/1%/Barlow Twins: replaced by 10,000-epoch results, 2 SSL seeds x 3 probes, from the same new CIFAR10 root.
+% Other populated MKDT Barlow cells retain the earlier six-encoder 8k (1% subset) / 6k (2% subset) results until their 10k replacements finish.
+% Ours ResNet18/2%/SimCLR retains the earlier 2k results until both 3k SSL seeds have all three probes complete.
+% Latest complete-cell update: 4 Ours cells and 8 MKDT cells, verified against per-probe JSONs.

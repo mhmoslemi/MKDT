@@ -34,6 +34,8 @@ manifest=${CIFAR_FINISH_MANIFEST:-$bench_dir/cifar_finish_jobs/tasks.tsv}
 worker_script=${CIFAR_FINISH_WORKER:-$bench_dir/cifar_finish_jobs/worker.py}
 max_seconds=${CIFAR_FINISH_MAX_SECONDS:-0}
 [[ $max_seconds =~ ^(0|[1-9][0-9]*)$ ]] || { echo 'Invalid job time limit.' >&2; exit 2; }
+model_filter=${CIFAR_FINISH_MODEL:-}
+[[ -z $model_filter || $model_filter == ResNet18 ]] || { echo 'Unsupported model filter.' >&2; exit 2; }
 venv=${BENCH_VENV:-$HOME/ENV}
 data_root=${BENCH_DATA_ROOT:-$bench_dir/../../data}
 synthetic_root=${MKDT_GENERATED_ROOT:-$bench_dir/../benchmarks/mkdt_multidataset/results/batch_20261010T160046Z_Y6dqZS/synthetic/generated}
@@ -115,6 +117,7 @@ while IFS=$'\t' read -r task kind source_name model subset ssl seed epochs check
     parent_dir output_dir evaluations probe_paths rate probe1 probe5 scope; do
     [[ $task != task ]] || continue
     [[ $scope == main && $task =~ ^[a-zA-Z0-9_]+$ ]] || { echo 'Invalid manifest row.' >&2; exit 2; }
+    [[ -z $model_filter || $model == $model_filter ]] || continue
     [[ $output_dir != - ]] || output_dir=$checkpoint_dir
     name="cifar_finish_lu_$task"
     if awk -v name="$name" '$0==name {found=1} END {exit !found}' <<< "$queue"; then
@@ -185,6 +188,7 @@ while IFS=$'\t' read -r task kind source_name model subset ssl seed epochs check
     if (( ! dry_run )); then
         job=$(sbatch --parsable --job-name="$name" --account="$account" \
             --nodes=1 --ntasks=1 --cpus-per-task=1 --mem=6G --gres=gpu:l40s:1 \
+            --exclude=kn101 \
             --time="$walltime" --chdir="$bench_dir" \
             --output="$run_dir/logs/%x-%j.out" --error="$run_dir/logs/%x-%j.err" \
             "$launcher" --worker "$bench_dir" "$manifest" "$task" "$venv" "$data_root" "$synthetic_root" "$worker_script")
