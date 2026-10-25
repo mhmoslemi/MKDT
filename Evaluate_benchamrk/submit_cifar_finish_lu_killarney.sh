@@ -4,8 +4,9 @@ set -euo pipefail
 
 if [[ ${1:-} == --worker ]]; then
     shift
-    [[ $# == 6 ]] || { echo 'Invalid worker arguments.' >&2; exit 2; }
+    [[ $# == 6 || $# == 7 ]] || { echo 'Invalid worker arguments.' >&2; exit 2; }
     bench_dir=$1 manifest=$2 task=$3 venv=$4 data_root=$5 synthetic_root=$6
+    worker_script=${7:-$bench_dir/cifar_finish_jobs/worker.py}
     : "${SLURM_JOB_ID:?Run the worker through the submit script}"
     module --force purge
     module load StdEnv/2023 python/3.11.5
@@ -17,7 +18,7 @@ if [[ ${1:-} == --worker ]]; then
     export TORCH_HOME="$bench_dir/cifar_finish_jobs/cache/torch"
     export TMPDIR="${SLURM_TMPDIR:?}"
     cd "$bench_dir"
-    exec python "$bench_dir/cifar_finish_jobs/worker.py" "$task" --manifest "$manifest" \
+    exec python "$worker_script" "$task" --manifest "$manifest" \
         --venv "$venv" --data-root "$data_root" --synthetic-root "$synthetic_root"
 fi
 
@@ -29,12 +30,15 @@ if [[ ${1:-} == --dry-run ]]; then dry_run=1; shift; fi
 }
 bench_dir=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)
 launcher="$bench_dir/submit_cifar_finish_lu_killarney.sh"
-manifest="$bench_dir/cifar_finish_jobs/tasks.tsv"
+manifest=${CIFAR_FINISH_MANIFEST:-$bench_dir/cifar_finish_jobs/tasks.tsv}
+worker_script=${CIFAR_FINISH_WORKER:-$bench_dir/cifar_finish_jobs/worker.py}
+max_seconds=${CIFAR_FINISH_MAX_SECONDS:-0}
+[[ $max_seconds =~ ^(0|[1-9][0-9]*)$ ]] || { echo 'Invalid job time limit.' >&2; exit 2; }
 venv=${BENCH_VENV:-$HOME/ENV}
 data_root=${BENCH_DATA_ROOT:-$bench_dir/../../data}
 synthetic_root=${MKDT_GENERATED_ROOT:-$bench_dir/../benchmarks/mkdt_multidataset/results/batch_20261010T160046Z_Y6dqZS/synthetic/generated}
 account=aip-yiweilu
-[[ -r $manifest && -r $venv/bin/activate && -d $data_root && -d $synthetic_root ]] || {
+[[ -r $manifest && -r $worker_script && -r $venv/bin/activate && -d $data_root && -d $synthetic_root ]] || {
     echo 'Missing manifest, Python environment, source data, or MKDT synthetic root.' >&2; exit 2;
 }
 venv=$(cd -- "$venv" && pwd -P)
@@ -132,7 +136,7 @@ while IFS=$'\t' read -r task kind source_name model subset ssl seed epochs check
     if (( missing == 0 )); then echo "SKIP complete: $task"; skipped=$((skipped + 1)); continue; fi
 
     folder="$bench_dir/$checkpoint_dir"
-    resume=0
+    resume=0 missing_state=
     if [[ -s $folder/encoder.pt ]]; then
         resume=$epochs
     elif [[ -s $folder/training.pt ]]; then
@@ -146,8 +150,9 @@ while IFS=$'\t' read -r task kind source_name model subset ssl seed epochs check
             horizon=$(jq -er '.signature.protocol.ssl.subset_epochs' "$parent/config.json")
             resume=$(saved_epoch "$parent" "$horizon")
         elif [[ -s $parent/encoder.pt || -s $parent/ssl_complete.json ]]; then
-            echo "BLOCKED $task: sync full continuation state $parent/training.pt" >&2
-            blocked=$((blocked + 1)); continue
+            missing_state="$parent/training.pt"
+            horizon=$(jq -er '.signature.protocol.ssl.subset_epochs' "$parent/config.json")
+            resume=$(saved_epoch "$parent" "$horizon")
         fi
     fi
     if [[ $kind != random ]]; then
@@ -166,6 +171,14 @@ while IFS=$'\t' read -r task kind source_name model subset ssl seed epochs check
     seconds=$(awk -v e="$epochs" -v r="$resume" -v s="$rate" -v p="$probe_seconds" \
         'BEGIN {x=(e-r)*s+p+900; print int(x)+(x>int(x))}')
     printf -v walltime '%02d:%02d:%02d' "$((seconds / 3600))" "$((seconds / 60 % 60))" "$((seconds % 60))"
+    if (( max_seconds && seconds > max_seconds )); then
+        echo "SKIP long: $task needs ~$walltime including 15-minute margin."
+        skipped=$((skipped + 1)); continue
+    fi
+    if [[ -n $missing_state ]]; then
+        echo "BLOCKED $task: sync full continuation state $missing_state" >&2
+        blocked=$((blocked + 1)); continue
+    fi
     printf '%s: resume ~%s/%s, %s probes, time=%s, %s, L40S/1 CPU/6G\n' \
         "$task" "$resume" "$epochs" "$missing" "$walltime" "$account"
     job=DRY_RUN
@@ -174,7 +187,7 @@ while IFS=$'\t' read -r task kind source_name model subset ssl seed epochs check
             --nodes=1 --ntasks=1 --cpus-per-task=1 --mem=6G --gres=gpu:l40s:1 \
             --time="$walltime" --chdir="$bench_dir" \
             --output="$run_dir/logs/%x-%j.out" --error="$run_dir/logs/%x-%j.err" \
-            "$launcher" --worker "$bench_dir" "$manifest" "$task" "$venv" "$data_root" "$synthetic_root")
+            "$launcher" --worker "$bench_dir" "$manifest" "$task" "$venv" "$data_root" "$synthetic_root" "$worker_script")
         job=${job%%;*}
         [[ $job =~ ^[0-9]+$ ]] || { echo "Unexpected sbatch response: $job" >&2; exit 2; }
     fi
