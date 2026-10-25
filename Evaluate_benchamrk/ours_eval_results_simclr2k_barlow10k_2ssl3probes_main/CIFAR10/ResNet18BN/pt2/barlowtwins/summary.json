@@ -1,12 +1,13 @@
 {
   "cells": [
     {
-      "complete": false,
-      "completed_probes": 3,
+      "complete": true,
+      "completed_probes": 6,
       "expected_probes": 6,
       "labels": 1,
-      "mean_percent": null,
-      "model": "ResNet18BN",
+      "mean_percent": 53.425,
+      "method": "ours",
+      "model": "ResNet18",
       "samples": [
         {
           "accuracy_percent": 54.14,
@@ -22,11 +23,26 @@
           "accuracy_percent": 53.06,
           "probe_seed": 2,
           "ssl_seed": 0
+        },
+        {
+          "accuracy_percent": 54.26,
+          "probe_seed": 0,
+          "ssl_seed": 1
+        },
+        {
+          "accuracy_percent": 52.76,
+          "probe_seed": 1,
+          "ssl_seed": 1
+        },
+        {
+          "accuracy_percent": 54.07,
+          "probe_seed": 2,
+          "ssl_seed": 1
         }
       ],
       "source": "CIFAR10",
       "ssl": "barlowtwins",
-      "std_percent": null,
+      "std_percent": 0.8434630993706842,
       "subset": 2,
       "target": "CIFAR10"
     },
@@ -36,7 +52,8 @@
       "expected_probes": 6,
       "labels": 5,
       "mean_percent": null,
-      "model": "ResNet18BN",
+      "method": "ours",
+      "model": "ResNet18",
       "samples": [
         {
           "accuracy_percent": 60.37,
