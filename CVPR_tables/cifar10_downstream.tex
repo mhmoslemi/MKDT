@@ -1,6 +1,13 @@
+% \usepackage{multirow}
+% \usepackage{booktabs} % For \toprule, \midrule, \bottomrule, \cmidrule
+% \usepackage{graphicx} % For \resizebox
+% \usepackage{xcolor}   % For \textcolor
 
 
-% ============================================================
+% % Define the 'D' column type for centered columns with a specific width
+\newcolumntype{D}[1]{>{\centering\arraybackslash}p{#1}}
+
+% % ============================================================
 % TABLE 3: RESNET18
 % ============================================================
 
@@ -84,9 +91,9 @@ SimCLR & BT & SimCLR & BT & SimCLR & BT \\
 & \dsacc{2.69}{0.42} & \dsacc{3.58}{1.07}
 & \dsacc{3.61}{0.34} & \dsacc{7.04}{0.63} \\
 
-& & MKDT &  & \dsacc{11.60}{0.38} &  & \dsacc{2.31}{0.20} &  \dsacc{1.37}{0.05} & \dsacc{1.73}{0.09} &  \dsacc{1.89}{0.14} & \dsacc{2.45}{0.18} &  \dsacc{3.22}{0.49} & \dsacc{3.55}{0.58} &  & \dsacc{5.86}{0.43} \\
+& & MKDT & & \dsacc{11.60}{0.38} & & \dsacc{2.31}{0.20} & \dsacc{1.37}{0.05} & \dsacc{1.73}{0.09} & \dsacc{1.89}{0.14} & \dsacc{2.45}{0.18} & \dsacc{3.22}{0.49} & \dsacc{3.55}{0.58} & & \dsacc{5.86}{0.43} \\
 & & Ours
-&  & \dsacc{14.23}{0.93} &  & \dsacc{2.70}{0.19} & \dsacc{1.50}{0.15} & \dsacc{1.73}{0.13} & \dsacc{2.27}{0.22} & \dsacc{2.65}{0.18} & \dsacc{2.64}{0.30} & \dsacc{3.25}{0.44} &  & \dsacc{6.81}{0.44} \\
+& & \dsacc{14.23}{0.93} & & \dsacc{2.70}{0.19} & \dsacc{1.50}{0.15} & \dsacc{1.73}{0.13} & \dsacc{2.27}{0.22} & \dsacc{2.65}{0.18} & \dsacc{2.64}{0.30} & \dsacc{3.25}{0.44} & & \dsacc{6.81}{0.44} \\
 \cmidrule(lr){2-15}
 
 & \multirow{4}{*}{2\%} & Random Subset
@@ -103,28 +110,8 @@ SimCLR & BT & SimCLR & BT & SimCLR & BT \\
 & \dsacc{2.31}{0.30} & \dsacc{2.95}{0.28}
 & \dsacc{2.97}{0.45} & \dsacc{4.16}{0.90}
 & \dsacc{4.70}{0.12} & \dsacc{8.60}{0.30} \\
-& & MKDT &  \dsacc{7.29}{0.36} & \dsacc{13.85}{0.55} &  \dsacc{1.75}{0.29} & \dsacc{2.98}{0.25} &  \dsacc{1.10}{0.19} & \dsacc{1.77}{0.10} &  \dsacc{1.92}{0.57} & \dsacc{2.68}{0.32} &  & \dsacc{3.72}{0.70} &  & \dsacc{7.62}{0.42} \\
-& & Ours &  \dsacc{12.30}{0.34} & -- &  \dsacc{2.51}{0.29} & -- &  \dsacc{1.38}{0.12} & -- &  \dsacc{2.52}{0.16} & -- &  \dsacc{2.85}{0.23} & -- &  \dsacc{5.53}{0.08} & -- \\
-% BEGIN DISABLED: 5% pretraining subset
-% \cmidrule(lr){2-15}
-%
-% & \multirow{4}{*}{5\%} & Random Subset
-% &  &
-% &  &
-% &  &
-% &  &
-% &  &
-% &  &  \\
-% & & K-means Subset
-% &  &
-% &  &
-% &  &
-% &  &
-% &  &
-% &  &  \\
-% & & MKDT &  &  &  &  &  &  &  &  &  &  &  &  \\
-% & & Ours & \multicolumn{12}{c}{} \\
-% END DISABLED: 5% pretraining subset
+& & MKDT & \dsacc{7.29}{0.36} & \dsacc{13.85}{0.55} & \dsacc{1.75}{0.29} & \dsacc{2.98}{0.25} & \dsacc{1.10}{0.19} & \dsacc{1.77}{0.10} & \dsacc{1.92}{0.57} & \dsacc{2.68}{0.32} & & \dsacc{3.72}{0.70} & & \dsacc{7.62}{0.42} \\
+& & Ours & \dsacc{12.30}{0.34} & -- & \dsacc{2.51}{0.29} & -- & \dsacc{1.38}{0.12} & -- & \dsacc{2.52}{0.16} & -- & \dsacc{2.85}{0.23} & -- & \dsacc{5.53}{0.08} & -- \\
 
 \midrule
 
@@ -176,9 +163,9 @@ SimCLR & BT & SimCLR & BT & SimCLR & BT \\
 & \dsacc{4.43}{0.73} & \dsacc{9.78}{1.74}
 & \dsacc{7.25}{0.43} & \dsacc{12.64}{0.91} \\
 
-& & MKDT &  & \dsacc{20.75}{0.87} &  \dsacc{3.17}{0.15} & \dsacc{4.59}{0.30} &  & \dsacc{2.90}{0.24} &  \dsacc{3.08}{0.33} & \dsacc{4.25}{0.40} &  \dsacc{6.82}{0.49} & \dsacc{8.61}{0.95} &  & \dsacc{11.01}{0.42} \\
+& & MKDT & & \dsacc{20.75}{0.87} & \dsacc{3.17}{0.15} & \dsacc{4.59}{0.30} & & \dsacc{2.90}{0.24} & \dsacc{3.08}{0.33} & \dsacc{4.25}{0.40} & \dsacc{6.82}{0.49} & \dsacc{8.61}{0.95} & & \dsacc{11.01}{0.42} \\
 & & Ours
-&  & \dsacc{23.93}{0.63} & \dsacc{3.68}{0.12} & \dsacc{5.07}{0.40} & \dsacc{1.94}{0.15} & \dsacc{2.82}{0.29} & \dsacc{3.46}{0.16} & \dsacc{4.67}{0.37} & \dsacc{5.69}{0.15} & \dsacc{9.72}{1.17} &  & \dsacc{12.94}{0.90} \\
+& & \dsacc{23.93}{0.63} & \dsacc{3.68}{0.12} & \dsacc{5.07}{0.40} & \dsacc{1.94}{0.15} & \dsacc{2.82}{0.29} & \dsacc{3.46}{0.16} & \dsacc{4.67}{0.37} & \dsacc{5.69}{0.15} & \dsacc{9.72}{1.17} & & \dsacc{12.94}{0.90} \\
 \cmidrule(lr){2-15}
 
 & \multirow{4}{*}{2\%} & Random Subset
@@ -195,44 +182,10 @@ SimCLR & BT & SimCLR & BT & SimCLR & BT \\
 & \dsacc{3.84}{0.24} & \dsacc{5.96}{0.38}
 & \dsacc{6.04}{1.09} & \dsacc{11.51}{1.70}
 & \dsacc{9.24}{0.27} & \dsacc{15.93}{0.45} \\
-& & MKDT &  \dsacc{14.67}{0.49} & \dsacc{24.08}{0.53} &  \dsacc{2.34}{0.40} & \dsacc{5.15}{0.34} &  \dsacc{1.36}{0.23} & \dsacc{2.80}{0.27} &  \dsacc{3.60}{0.50} & \dsacc{5.13}{0.39} &  \dsacc{4.67}{0.51} & \dsacc{9.44}{0.68} &  \dsacc{6.95}{0.23} & \dsacc{13.79}{0.37} \\
-& & Ours &  \dsacc{20.17}{0.43} & -- &  \dsacc{3.88}{0.43} & -- &  \dsacc{2.04}{0.15} & -- &  \dsacc{3.86}{0.21} & -- &  \dsacc{6.19}{0.53} & -- &  \dsacc{10.46}{0.18} & -- \\
-% BEGIN DISABLED: 5% pretraining subset
-% \cmidrule(lr){2-15}
-%
-% & \multirow{4}{*}{5\%} & Random Subset
-% &  &
-% &  &
-% &  &
-% &  &
-% &  &
-% &  &  \\
-% & & K-means Subset
-% &  &
-% &  &
-% &  &
-% &  &
-% &  &
-% &  &  \\
-% & & MKDT &  &  &  &  &  &  &  &  &  &  &  &  \\
-% & & Ours & \multicolumn{12}{c}{} \\
-% END DISABLED: 5% pretraining subset
+& & MKDT & \dsacc{14.67}{0.49} & \dsacc{24.08}{0.53} & \dsacc{2.34}{0.40} & \dsacc{5.15}{0.34} & \dsacc{1.36}{0.23} & \dsacc{2.80}{0.27} & \dsacc{3.60}{0.50} & \dsacc{5.13}{0.39} & \dsacc{4.67}{0.51} & \dsacc{9.44}{0.68} & \dsacc{6.95}{0.23} & \dsacc{13.79}{0.37} \\
+& & Ours & \dsacc{20.17}{0.43} & -- & \dsacc{3.88}{0.43} & -- & \dsacc{2.04}{0.15} & -- & \dsacc{3.86}{0.21} & -- & \dsacc{6.19}{0.53} & -- & \dsacc{10.46}{0.18} & -- \\
 
 \bottomrule
 \end{tabular}%
 }
 \end{table*}
-
-% Interactive evaluation snapshot: 2026-10-22T21:31:18Z.
-% Random: seeds 0--9, except CIFAR-10 ResNet18 1% uses available seeds 0--8; k-means/MKDT: seeds 0--5; full data: seeds 0--2.
-% New entries: mean +/- sample SD (ddof=1), 100-epoch frozen linear probes.
-% Sources: Evaluate_benchamrk/random_eval_results_interactive_10seeds/,
-%          Evaluate_benchamrk/kmeans_eval_results_interactive_6seeds/ (not the 250ep run),
-%          Evaluate_benchamrk/mkdt_eval_results_interactive_6seeds/, and Evaluate_benchamrk/full_eval_results_interactive_3seeds_CIFAR10/.
-% Random Dogs/Flowers use the complete Killarney evaluations; cross-server image equivalence remains unverified.
-% MKDT SimCLR: superseded values cleared; replacement uses 2,000 SSL epochs, 2 SSL seeds x 3 probe seeds.
-% Replacement results: Evaluate_benchamrk/mkdt_eval_results_simclr2k_2ssl3probes.
-% Ours: only complete 2 SSL seeds x 3 probe seeds per cell; 100-epoch frozen probes; mean +/- sample SD.
-% Ours SSL: SimCLR 2k at 0.2%/1%, 1k at 2%; retained Barlow Twins 10k. Partial cells and -- are unchanged.
-% Ours sources: Evaluate_benchamrk/ours_eval_results_simclr2k_barlow10k_2ssl3probes_downstream/ and ours_eval_results_simclr1k_2ssl3probes_downstream/.
-% Synced completion update 2026-10-25: 16 new MKDT SimCLR cells at 2k SSL epochs; all six probes validated per cell.
