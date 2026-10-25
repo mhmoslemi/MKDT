@@ -298,11 +298,12 @@ def get_indices_per_class(dataset, epc):
     return sampled_indices
 
 
-def build_trainset(dataset, dst_train, train_labels_path, channel, batch_train, distill_idx=None, shuffle=False):
+def build_trainset(dataset, dst_train, train_labels_path, channel, batch_train, distill_idx=None, shuffle=False,
+                   preload=True, num_workers=4):
     # Organize real datasets (images and the target representation)
     images_all = None
     print("BUILDING TRAINSET")
-    if dataset != "ImageNet":
+    if dataset != "ImageNet" and preload:
         images_all = []
         for i in tqdm.tqdm(range(len(dst_train))):
             sample = dst_train[i]
@@ -316,7 +317,7 @@ def build_trainset(dataset, dst_train, train_labels_path, channel, batch_train, 
         for ch in range(channel):
             print('real images channel %d, mean = %.4f, std = %.4f' % (ch, torch.mean(images_all[:, ch]), torch.std(images_all[:, ch])))
 
-    if dataset != "ImageNet":
+    if images_all is not None:
         dst_train = TensorDataset(copy.deepcopy(images_all.detach()), copy.deepcopy(labels_all.detach()))
     else:
         dst_train = TensorDatasetWrapper(dst_train, copy.deepcopy(labels_all.detach()))
@@ -327,7 +328,7 @@ def build_trainset(dataset, dst_train, train_labels_path, channel, batch_train, 
             distill_idx = pickle.load(f)
         dst_train = Subset(dst_train, indices=distill_idx)
 
-    trainloader = torch.utils.data.DataLoader(dst_train, batch_size=batch_train, shuffle=shuffle, num_workers=4, pin_memory=True)
+    trainloader = torch.utils.data.DataLoader(dst_train, batch_size=batch_train, shuffle=shuffle, num_workers=num_workers, pin_memory=True)
     print("Dataset creation complete")
     return trainloader, labels_all
 

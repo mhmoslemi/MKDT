@@ -12,10 +12,17 @@ import random
 from reparam_module import ReparamModule
 from datetime import datetime
 
+def atomic_save(value, path):
+    temporary = os.path.join(os.path.dirname(path), f'.{os.path.basename(path)}.{os.getpid()}.tmp.pt')
+    torch.save(value, temporary)
+    os.replace(temporary, path)
+
 def main(args):
     args.device = 'cuda' if torch.cuda.is_available() else 'cpu'
-
-    eval_it_pool = np.arange(0, args.iters + 1, args.eval_it).tolist()
+    if args.seed is not None:
+        random.seed(args.seed)
+        np.random.seed(args.seed)
+        torch.manual_seed(args.seed)
 
     # Load the dataset
     channel, im_size, _, dst_train, _ = get_dataset(dataset=args.dataset, data_path=args.data_path)
@@ -29,27 +36,14 @@ def main(args):
     # Organize the Real Dataset
     ''' organize the real dataset '''
     
-    images_all = []
-    
-    print("BUILDING TRAINSET")
-    for i in tqdm(range(len(dst_train))):
-        sample = dst_train[i]
-        images_all.append(torch.unsqueeze(sample[0], dim=0))
-
-    images_all = torch.cat(images_all, dim=0).to("cpu").detach()
-    labels_all = torch.load(args.train_labels_path, map_location="cpu").detach()
-    
-    for ch in range(channel):
-        print('real images channel %d, mean = %.4f, std = %.4f'%(ch, torch.mean(images_all[:, ch]), torch.std(images_all[:, ch])))
-
-    def get_images(idx):  # get random n images from class c
-        return images_all[idx]
+    labels_all = torch.load(args.train_labels_path, map_location="cpu", weights_only=True).detach()
 
     ''' initialize the synthetic data '''
     syn_lr = torch.tensor(args.lr_teacher).to(args.device)
     with open(args.image_init_idx_path, "rb") as f:
         img_init_idx = pickle.load(f)
-    image_syn = get_images(img_init_idx)
+    # Only the selected initialization pixels are needed during trajectory matching.
+    image_syn = torch.stack([dst_train[int(i)][0] for i in img_init_idx])
     print("Shape of the synthetic images: ", image_syn.shape)
     label_syn = copy.deepcopy(labels_all[img_init_idx])
     print("Shape of the synthetic image labels: ", label_syn.shape)
@@ -84,11 +78,10 @@ def main(args):
         n += 1
     if n == 0:
         raise AssertionError("No buffers detected at {}".format(expert_dir))
-    file_idx = 0
-    expert_idx = 0
+    file_idx, expert_idx = 0, 0
+    expert_order = []
+    loaded_file = None
     random.shuffle(expert_files)
-    buffer = torch.load(expert_files[file_idx], map_location="cpu")
-    random.shuffle(buffer) # Only necessary when max_experts (as in MTT is used). We do not use max_experts here. 
 
     # A deterministic save_dir lets callers detect a completed/partial run and
     # decide whether to skip or resume; without it, fall back to a timestamped dir.
@@ -102,26 +95,60 @@ def main(args):
     with open(os.path.join(save_dir, "hparams.txt"), "w") as f:
         f.write(pprint.pformat(vars(args), indent=4))
         
+    checkpoint_path = os.path.join(save_dir, 'training.pt')
+    config = {k: v for k, v in vars(args).items()
+              if k not in ('resume', 'stop_at', 'device', 'distributed', 'im_size')}
+    start_it = 0
+    if args.resume:
+        if not os.path.isfile(checkpoint_path):
+            raise FileNotFoundError(f'Cannot resume without full state: {checkpoint_path}')
+        saved = torch.load(checkpoint_path, map_location='cpu', weights_only=False)
+        if saved['config'] != config or set(saved['expert_files']) != set(expert_files):
+            raise ValueError('Distillation recipe or expert file set changed')
+        with torch.no_grad():
+            image_syn.copy_(saved['images'])
+            label_syn.copy_(saved['labels'])
+            syn_lr.copy_(saved['synlr'])
+        for optimizer, state in zip((optimizer_img, optimizer_labels, optimizer_lr), saved['optimizers']):
+            optimizer.load_state_dict(state)
+        start_it = saved['iteration']
+        expert_files = saved['expert_files']
+        file_idx, expert_idx, expert_order = saved['file_idx'], saved['expert_idx'], saved['expert_order']
+        random.setstate(saved['python_rng'])
+        np.random.set_state(saved['numpy_rng'])
+        torch.set_rng_state(saved['torch_rng'])
+        if args.device == 'cuda':
+            torch.cuda.set_rng_state_all(saved['cuda_rng'])
+        print(f'Resuming complete state after iteration {start_it}', flush=True)
+    elif args.checkpoint_every and os.path.exists(checkpoint_path):
+        raise FileExistsError(f'Use --resume to continue {checkpoint_path}')
+
+    def save_state(iteration, export=False):
+        if export:
+            for name, value in (('images', image_syn), ('labels', label_syn), ('synlr', syn_lr)):
+                atomic_save(value.detach().cpu(), os.path.join(save_dir, f'{name}_{iteration}.pt'))
+        if args.checkpoint_every:
+            atomic_save({'config': config, 'iteration': iteration,
+                'images': image_syn.detach().cpu(), 'labels': label_syn.detach().cpu(),
+                'synlr': syn_lr.detach().cpu(),
+                'optimizers': [o.state_dict() for o in (optimizer_img, optimizer_labels, optimizer_lr)],
+                'expert_files': expert_files, 'file_idx': file_idx, 'expert_idx': expert_idx,
+                'expert_order': expert_order, 'python_rng': random.getstate(),
+                'numpy_rng': np.random.get_state(), 'torch_rng': torch.get_rng_state(),
+                'cuda_rng': torch.cuda.get_rng_state_all() if args.device == 'cuda' else []}, checkpoint_path)
+
+    stop_at = min(args.iters, args.stop_at or args.iters)
+    if start_it > stop_at:
+        raise ValueError('Saved iteration is beyond the requested stop point')
+    if start_it == 0:
+        save_state(0, export=True)
     print('%s training begins'%get_time())
-    pbar = tqdm(range(0, args.iters), desc="Distilling")
+    pbar = tqdm(range(start_it, stop_at), desc="Distilling")
     for it in pbar:
         log_it = it + 1
-        if (it == 0) or (log_it in eval_it_pool):
-            with torch.no_grad():
-                for name, value in (("images", image_syn), ("labels", label_syn),
-                                    ("synthetic learning rate", syn_lr)):
-                    if not torch.isfinite(value).all().item():
-                        raise FloatingPointError(
-                            f"Non-finite {name} before checkpoint {log_it}")
-                image_save = image_syn.cuda()
-                torch.save(image_save.cpu(), os.path.join(save_dir, "images_{}.pt".format(log_it)))
-                # visualize
-                # grid = make_grid(image_save.clone(), nrow=100)
-                torch.save(label_syn.cpu(), os.path.join(save_dir, "labels_{}.pt".format(log_it)))
-                torch.save(syn_lr.cpu(), os.path.join(save_dir, "synlr_{}.pt".format(log_it)))
-                print("Synthetic LR", syn_lr.item())
         
-        student_net = get_network(args.model, channel, label_syn.shape[1], im_size, dist=False).to(args.device)  # get a random model
+        student_net = get_network(args.model, channel, label_syn.shape[1], im_size, dist=False,
+                                  fix_net=args.seed is not None).to(args.device)
         student_net = ReparamModule(student_net)
 
         if args.distributed:
@@ -130,7 +157,13 @@ def main(args):
         student_net.train()
 
         num_params = sum([np.prod(p.size()) for p in (student_net.parameters())])
-        expert_trajectory = buffer[expert_idx]
+        if loaded_file != expert_files[file_idx]:
+            buffer = torch.load(expert_files[file_idx], map_location="cpu", weights_only=True)
+            loaded_file = expert_files[file_idx]
+        if not expert_order:
+            expert_order = list(range(len(buffer)))
+            random.shuffle(expert_order)
+        expert_trajectory = buffer[expert_order[expert_idx]]
         expert_idx += 1
         if expert_idx == len(buffer):
             expert_idx = 0
@@ -138,8 +171,7 @@ def main(args):
             if file_idx == len(expert_files):
                 file_idx = 0
                 random.shuffle(expert_files)
-            # print("loading file {}".format(expert_files[file_idx]))
-            random.shuffle(buffer)
+            expert_order = []
 
         start_epoch = np.random.randint(args.min_start_epoch, args.max_start_epoch)
         starting_params = expert_trajectory[start_epoch]
@@ -225,6 +257,10 @@ def main(args):
                    "Avg Grad": avg_grad})
         for _ in student_params:
             del _
+
+        export = log_it % args.eval_it == 0 or log_it == args.iters
+        if export or log_it == stop_at or (args.checkpoint_every and log_it % args.checkpoint_every == 0):
+            save_state(log_it, export=export)
     
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Parameter Processing')
@@ -255,6 +291,10 @@ if __name__ == '__main__':
     parser.add_argument('--train_labels_path', type=str, required=True, help='path to the target representation')
     parser.add_argument('--run_id', type=str, default=None, help='id for run')
     parser.add_argument('--save_dir', type=str, default=None, help='deterministic output dir (enables detecting a completed/partial run to resume); default is a timestamped dir under ./logged_files/{dataset}')
+    parser.add_argument('--resume', action='store_true', help='restore images, labels, learned LR, optimizers, expert cursor and RNG')
+    parser.add_argument('--checkpoint_every', type=int, default=0, help='replace training.pt every N completed updates; 0 disables full-state saves')
+    parser.add_argument('--stop_at', type=int, default=None, help='stop this job at this update without changing the total recipe')
+    parser.add_argument('--seed', type=int, default=None)
     parser.add_argument('--expert_dir', type=str, help='dir for expert trajectories')
     parser.add_argument('--criterion', type=str, default="mse") # Should always use MSE
 

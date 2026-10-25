@@ -20,7 +20,9 @@ def main(args):
                                  train_labels_path=train_labels_path,
                                  channel=channel,
                                  batch_train=args.batch_train,
-                                 shuffle=False
+                                 shuffle=False,
+                                 preload=not args.stream_data,
+                                 num_workers=args.workers
                                 )
     epoch_losses = {}
 
@@ -29,7 +31,7 @@ def main(args):
 
     # Clamp to the number of trajectories actually on disk.
     available = 0
-    while os.path.exists(os.path.join(buffer_dir, f'replay_buffer_{available}.pt')):
+    while os.path.exists(os.path.join(buffer_dir, f'replay_buffer_{args.buffer_start + available}.pt')):
         available += 1
     if available == 0:
         raise FileNotFoundError(f"No expert trajectories found in {buffer_dir}")
@@ -42,8 +44,8 @@ def main(args):
     epoch_losses = np.zeros(num_examples)
 
     for num_buffer in range(1, args.num_buffers + 1):
-        checkpoint_path = os.path.join(buffer_dir, f'replay_buffer_{num_buffer-1}.pt')
-        param_all = torch.load(checkpoint_path)
+        checkpoint_path = os.path.join(buffer_dir, f'replay_buffer_{args.buffer_start + num_buffer-1}.pt')
+        param_all = torch.load(checkpoint_path, map_location='cpu', weights_only=True)
         first_epoch_checkpoint = param_all[0][1] # Load the checkpoint from the first epoch
         first_epoch_checkpoint = torch.cat([p.data.to(args.device).reshape(-1) for p in first_epoch_checkpoint], 0)
 
@@ -59,6 +61,12 @@ def main(args):
                 epoch_losses[i * args.batch_train:(i + 1) * args.batch_train] += individual_losses
 
     epoch_losses /= args.num_buffers
+
+    if args.loss_output:
+        temporary = args.loss_output + f'.{os.getpid()}.tmp.pt'
+        torch.save(torch.from_numpy(epoch_losses), temporary)
+        os.replace(temporary, args.loss_output)
+        return
 
     sorted_indices = np.argsort(epoch_losses)[::-1]
 
@@ -96,6 +104,10 @@ if __name__ == '__main__':
     parser.add_argument('--dataset', type=str, default='CIFAR100', help='dataset')
     parser.add_argument('--model', type=str, default='ConvNet', help='model')
     parser.add_argument('--num_buffers', type=int, default=100, help='number of buffers')
+    parser.add_argument('--buffer_start', type=int, default=0)
+    parser.add_argument('--loss_output', default=None, help='save per-image mean losses for this shard instead of exporting indices')
+    parser.add_argument('--stream_data', action='store_true')
+    parser.add_argument('--workers', type=int, default=4)
     parser.add_argument('--ssl_algo', type=str, default="barlow_twins", choices=['barlow_twins', 'simclr'], help='Algorithm to train the SSL')
     parser.add_argument('--batch_train', type=int, default=256, help='batch size for training networks')
     parser.add_argument('--data_path', type=str, default='/home/data', help='dataset path')

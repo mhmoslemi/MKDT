@@ -1,5 +1,7 @@
 import os
 import argparse
+import random
+import numpy as np
 import torch
 import torch.nn as nn
 from utils import get_dataset, get_network, epoch, build_trainset
@@ -33,7 +35,9 @@ def main(args):
                                  train_labels_path=args.train_labels_path, 
                                  channel=channel, 
                                  batch_train=args.batch_train,
-                                 shuffle=True
+                                 shuffle=True,
+                                 preload=not args.stream_data,
+                                 num_workers=args.workers
                                 )
     
     # Loss function
@@ -60,7 +64,13 @@ def main(args):
                 continue
 
         # Sample model 
-        teacher_net = get_network(args.model, channel, labels_all.shape[1], im_size).to(args.device) # get a random model
+        if args.seed is not None:
+            seed = args.seed + (args.start_index or 0) + it
+            random.seed(seed)
+            np.random.seed(seed)
+            torch.manual_seed(seed)
+        teacher_net = get_network(args.model, channel, labels_all.shape[1], im_size,
+                                  fix_net=args.seed is not None).to(args.device)
 
         if it == 0:
             print(teacher_net)
@@ -98,7 +108,10 @@ def main(args):
         else:
             n = args.start_index + it
         print("Saving {}".format(os.path.join(save_dir, "replay_buffer_{}.pt".format(n))))
-        torch.save(trajectories, os.path.join(save_dir, "replay_buffer_{}.pt".format(n)))
+        destination = os.path.join(save_dir, "replay_buffer_{}.pt".format(n))
+        temporary = os.path.join(save_dir, f'.replay_buffer_{n}.{os.getpid()}.tmp.pt')
+        torch.save(trajectories, temporary)
+        os.replace(temporary, destination)
         trajectories = []
 
 
@@ -118,6 +131,9 @@ if __name__ == '__main__':
     parser.add_argument('--criterion', type=str, default="mse")
     parser.add_argument('--device', type=int, default=0, help='gpu number')
     parser.add_argument('--start_index', type=int, default=None, help='first explicit replay-buffer index for collision-free parallel shards')
+    parser.add_argument('--seed', type=int, default=None, help='base seed plus expert index')
+    parser.add_argument('--stream_data', action='store_true', help='normalize images batchwise instead of preloading all float pixels')
+    parser.add_argument('--workers', type=int, default=4)
     parser.add_argument('--progress_percent_step', type=int, default=0,
                         help='print aggregate progress at this percentage interval; 0 disables it')
     
