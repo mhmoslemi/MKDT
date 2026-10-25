@@ -1,0 +1,38 @@
+{
+  "name": "dfprobe_12ca082c8df162ce",
+  "stage": "probe",
+  "bundles": [
+    {
+      "unit": {
+        "source": "CIFAR10",
+        "kind": "mkdt",
+        "subset": 1,
+        "ssl": "simclr",
+        "seed": 0,
+        "epochs": 2000,
+        "model": "ResNet18",
+        "id": "mkdt_CIFAR10_p1_simclr_s0",
+        "checkpoint_dir": "mkdt_eval_results_simclr2k_2ssl3probes/CIFAR10/ResNet18/mkdt/pt1/simclr/ssl_seed_000",
+        "output_dir": "mkdt_eval_results_simclr2k_2ssl3probes/CIFAR10/ResNet18/mkdt/pt1/simclr/ssl_seed_000"
+      },
+      "cell": {
+        "source": "CIFAR10",
+        "kind": "mkdt",
+        "subset": 1,
+        "ssl": "simclr",
+        "target": "Aircraft",
+        "labels": 5,
+        "status": "blank"
+      },
+      "probes": [
+        0,
+        1,
+        2
+      ],
+      "seconds": 1123.1482878054958,
+      "dependencies": []
+    }
+  ],
+  "dependencies": [],
+  "seconds": 1274
+}

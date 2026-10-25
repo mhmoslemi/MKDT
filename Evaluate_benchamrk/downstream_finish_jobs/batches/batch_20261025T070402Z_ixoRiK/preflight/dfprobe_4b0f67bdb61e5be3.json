@@ -1,0 +1,171 @@
+{
+  "name": "dfprobe_4b0f67bdb61e5be3",
+  "stage": "probe",
+  "bundles": [
+    {
+      "unit": {
+        "source": "CIFAR10",
+        "kind": "mkdt",
+        "subset": 0.2,
+        "ssl": "simclr",
+        "seed": 0,
+        "epochs": 2000,
+        "model": "ResNet18",
+        "id": "mkdt_CIFAR10_p0p2_simclr_s0",
+        "checkpoint_dir": "mkdt_eval_results_simclr2k_2ssl3probes/CIFAR10/ResNet18/mkdt/pt0.2/simclr/ssl_seed_000",
+        "output_dir": "mkdt_eval_results_simclr2k_2ssl3probes/CIFAR10/ResNet18/mkdt/pt0.2/simclr/ssl_seed_000"
+      },
+      "cell": {
+        "source": "CIFAR10",
+        "kind": "mkdt",
+        "subset": 0.2,
+        "ssl": "simclr",
+        "target": "TinyImageNet",
+        "labels": 1,
+        "status": "blank"
+      },
+      "probes": [
+        0,
+        1,
+        2
+      ],
+      "seconds": 158.71355584496632,
+      "dependencies": [
+        "dfssl_mkdt_CIFAR10_p0p2_simclr_s0"
+      ]
+    },
+    {
+      "unit": {
+        "source": "CIFAR10",
+        "kind": "mkdt",
+        "subset": 0.2,
+        "ssl": "simclr",
+        "seed": 1,
+        "epochs": 2000,
+        "model": "ResNet18",
+        "id": "mkdt_CIFAR10_p0p2_simclr_s1",
+        "checkpoint_dir": "mkdt_eval_results_simclr2k_2ssl3probes/CIFAR10/ResNet18/mkdt/pt0.2/simclr/ssl_seed_001",
+        "output_dir": "mkdt_eval_results_simclr2k_2ssl3probes/CIFAR10/ResNet18/mkdt/pt0.2/simclr/ssl_seed_001"
+      },
+      "cell": {
+        "source": "CIFAR10",
+        "kind": "mkdt",
+        "subset": 0.2,
+        "ssl": "simclr",
+        "target": "TinyImageNet",
+        "labels": 1,
+        "status": "blank"
+      },
+      "probes": [
+        0,
+        1,
+        2
+      ],
+      "seconds": 158.71355584496632,
+      "dependencies": [
+        "dfssl_mkdt_CIFAR10_p0p2_simclr_s1"
+      ]
+    },
+    {
+      "unit": {
+        "source": "CIFAR10",
+        "kind": "mkdt",
+        "subset": 0.2,
+        "ssl": "barlowtwins",
+        "seed": 0,
+        "epochs": 10000,
+        "model": "ResNet18",
+        "id": "mkdt_CIFAR10_p0p2_barlowtwins_s0",
+        "checkpoint_dir": "mkdt_eval_results_simclr2k_2ssl3probes/CIFAR10/ResNet18/mkdt/pt0.2/barlowtwins/ssl_seed_000",
+        "output_dir": "mkdt_eval_results_simclr2k_2ssl3probes/CIFAR10/ResNet18/mkdt/pt0.2/barlowtwins/ssl_seed_000"
+      },
+      "cell": {
+        "source": "CIFAR10",
+        "kind": "mkdt",
+        "subset": 0.2,
+        "ssl": "barlowtwins",
+        "target": "TinyImageNet",
+        "labels": 1,
+        "status": "blank"
+      },
+      "probes": [
+        0,
+        1,
+        2
+      ],
+      "seconds": 158.71355584496632,
+      "dependencies": [
+        "dfssl_mkdt_CIFAR10_p0p2_barlowtwins_s0"
+      ]
+    },
+    {
+      "unit": {
+        "source": "CIFAR10",
+        "kind": "mkdt",
+        "subset": 0.2,
+        "ssl": "barlowtwins",
+        "seed": 1,
+        "epochs": 10000,
+        "model": "ResNet18",
+        "id": "mkdt_CIFAR10_p0p2_barlowtwins_s1",
+        "checkpoint_dir": "mkdt_eval_results_simclr2k_2ssl3probes/CIFAR10/ResNet18/mkdt/pt0.2/barlowtwins/ssl_seed_001",
+        "output_dir": "mkdt_eval_results_simclr2k_2ssl3probes/CIFAR10/ResNet18/mkdt/pt0.2/barlowtwins/ssl_seed_001"
+      },
+      "cell": {
+        "source": "CIFAR10",
+        "kind": "mkdt",
+        "subset": 0.2,
+        "ssl": "barlowtwins",
+        "target": "TinyImageNet",
+        "labels": 1,
+        "status": "blank"
+      },
+      "probes": [
+        0,
+        1,
+        2
+      ],
+      "seconds": 158.71355584496632,
+      "dependencies": [
+        "dfssl_mkdt_CIFAR10_p0p2_barlowtwins_s1"
+      ]
+    },
+    {
+      "unit": {
+        "source": "CIFAR10",
+        "kind": "mkdt",
+        "subset": 1,
+        "ssl": "simclr",
+        "seed": 0,
+        "epochs": 2000,
+        "model": "ResNet18",
+        "id": "mkdt_CIFAR10_p1_simclr_s0",
+        "checkpoint_dir": "mkdt_eval_results_simclr2k_2ssl3probes/CIFAR10/ResNet18/mkdt/pt1/simclr/ssl_seed_000",
+        "output_dir": "mkdt_eval_results_simclr2k_2ssl3probes/CIFAR10/ResNet18/mkdt/pt1/simclr/ssl_seed_000"
+      },
+      "cell": {
+        "source": "CIFAR10",
+        "kind": "mkdt",
+        "subset": 1,
+        "ssl": "simclr",
+        "target": "Aircraft",
+        "labels": 1,
+        "status": "blank"
+      },
+      "probes": [
+        0,
+        1,
+        2
+      ],
+      "seconds": 358.2512924554758,
+      "dependencies": []
+    }
+  ],
+  "dependencies": [
+    "dfssl_mkdt_CIFAR10_p0p2_simclr_s0",
+    "dfssl_mkdt_CIFAR10_p0p2_simclr_s1",
+    "dfssl_mkdt_CIFAR10_p0p2_barlowtwins_s0",
+    "dfssl_mkdt_CIFAR10_p0p2_barlowtwins_s1"
+  ],
+  "seconds": 1144
+}

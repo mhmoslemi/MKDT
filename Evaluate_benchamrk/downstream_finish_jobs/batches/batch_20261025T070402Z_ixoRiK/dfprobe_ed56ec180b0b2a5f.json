@@ -1,0 +1,42 @@
+{
+  "name": "dfprobe_ed56ec180b0b2a5f",
+  "stage": "probe",
+  "bundles": [
+    {
+      "unit": {
+        "source": "TinyImageNet",
+        "kind": "ours",
+        "subset": 1,
+        "ssl": "simclr",
+        "seed": 0,
+        "epochs": 2000,
+        "model": "ResNet18",
+        "id": "ours_TinyImageNet_p1_simclr_s0",
+        "checkpoint_dir": "ours_eval_results_simclr2k_barlow10k_2ssl3probes_main/TinyImageNet/ResNet18BN/pt1/simclr/ssl_seed_000",
+        "output_dir": "ours_eval_results_simclr2k_barlow10k_2ssl3probes_downstream/TinyImageNet/ResNet18BN/pt1/simclr/ssl_seed_000"
+      },
+      "cell": {
+        "source": "TinyImageNet",
+        "kind": "ours",
+        "subset": 1,
+        "ssl": "simclr",
+        "target": "Aircraft",
+        "labels": 5,
+        "status": "blank"
+      },
+      "probes": [
+        0,
+        1,
+        2
+      ],
+      "seconds": 1209.2269609321374,
+      "dependencies": [
+        "dfssl_ours_TinyImageNet_p1_simclr_s0"
+      ]
+    }
+  ],
+  "dependencies": [
+    "dfssl_ours_TinyImageNet_p1_simclr_s0"
+  ],
+  "seconds": 1360
+}

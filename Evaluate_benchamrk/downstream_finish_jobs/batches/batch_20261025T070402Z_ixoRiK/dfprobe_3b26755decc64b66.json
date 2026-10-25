@@ -1,0 +1,42 @@
+{
+  "name": "dfprobe_3b26755decc64b66",
+  "stage": "probe",
+  "bundles": [
+    {
+      "unit": {
+        "source": "CIFAR10",
+        "kind": "mkdt",
+        "subset": 0.2,
+        "ssl": "barlowtwins",
+        "seed": 0,
+        "epochs": 10000,
+        "model": "ResNet18",
+        "id": "mkdt_CIFAR10_p0p2_barlowtwins_s0",
+        "checkpoint_dir": "mkdt_eval_results_simclr2k_2ssl3probes/CIFAR10/ResNet18/mkdt/pt0.2/barlowtwins/ssl_seed_000",
+        "output_dir": "mkdt_eval_results_simclr2k_2ssl3probes/CIFAR10/ResNet18/mkdt/pt0.2/barlowtwins/ssl_seed_000"
+      },
+      "cell": {
+        "source": "CIFAR10",
+        "kind": "mkdt",
+        "subset": 0.2,
+        "ssl": "barlowtwins",
+        "target": "Aircraft",
+        "labels": 5,
+        "status": "blank"
+      },
+      "probes": [
+        0,
+        1,
+        2
+      ],
+      "seconds": 1123.1482878054958,
+      "dependencies": [
+        "dfssl_mkdt_CIFAR10_p0p2_barlowtwins_s0"
+      ]
+    }
+  ],
+  "dependencies": [
+    "dfssl_mkdt_CIFAR10_p0p2_barlowtwins_s0"
+  ],
+  "seconds": 1274
+}

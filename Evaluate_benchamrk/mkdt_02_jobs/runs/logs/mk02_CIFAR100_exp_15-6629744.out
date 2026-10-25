@@ -1,0 +1,112 @@
+Hyper-parameters: 
+ {'dataset': 'CIFAR100', 'model': 'ConvNet', 'num_experts': 5, 'lr_teacher': 0.1, 'batch_train': 256, 'data_path': '/scratch/mmoslem3/data', 'buffer_path': '/scratch/mmoslem3/MKDT/Evaluate_benchamrk/mkdt_02_jobs/runs/CIFAR100/buffers', 'train_epochs': 20, 'mom': 0.9, 'l2': 0.0001, 'train_labels_path': '/scratch/mmoslem3/MKDT/benchmarks/mkdt_multidataset/results/batch_20261010T160046Z_Y6dqZS/synthetic/work/target_rep/barlow_twins/CIFAR100_target_rep_train.pt', 'criterion': 'mse', 'device': 'cuda:0', 'start_index': 15, 'seed': 0, 'stream_data': True, 'workers': 0, 'progress_percent_step': 0}
+BUILDING TRAINSET
+train label shape torch.Size([50000, 512])
+Dataset creation complete
+ConvNet(
+  (features): Sequential(
+    (0): Conv2d(3, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (1): GroupNorm(128, 128, eps=1e-05, affine=True)
+    (2): ReLU(inplace=True)
+    (3): AvgPool2d(kernel_size=2, stride=2, padding=0)
+    (4): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (5): GroupNorm(128, 128, eps=1e-05, affine=True)
+    (6): ReLU(inplace=True)
+    (7): AvgPool2d(kernel_size=2, stride=2, padding=0)
+    (8): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (9): GroupNorm(128, 128, eps=1e-05, affine=True)
+    (10): ReLU(inplace=True)
+    (11): AvgPool2d(kernel_size=2, stride=2, padding=0)
+  )
+  (classifier): Linear(in_features=2048, out_features=512, bias=True)
+)
+Itr: 0 	Epoch: 0 	Train Loss: 0.6784520062065125
+Itr: 0 	Epoch: 1 	Train Loss: 0.6116217880821228
+Itr: 0 	Epoch: 2 	Train Loss: 0.5781758948326111
+Itr: 0 	Epoch: 3 	Train Loss: 0.5538076747131347
+Itr: 0 	Epoch: 4 	Train Loss: 0.5356173909187317
+Itr: 0 	Epoch: 5 	Train Loss: 0.5212775935935974
+Itr: 0 	Epoch: 6 	Train Loss: 0.5086817464542389
+Itr: 0 	Epoch: 7 	Train Loss: 0.4970142265510559
+Itr: 0 	Epoch: 8 	Train Loss: 0.4876348682975769
+Itr: 0 	Epoch: 9 	Train Loss: 0.47843604319572447
+Itr: 0 	Epoch: 10 	Train Loss: 0.47083340461730955
+Itr: 0 	Epoch: 11 	Train Loss: 0.4634796005153656
+Itr: 0 	Epoch: 12 	Train Loss: 0.45725481475830076
+Itr: 0 	Epoch: 13 	Train Loss: 0.45175998125076294
+Itr: 0 	Epoch: 14 	Train Loss: 0.44671506616592405
+Itr: 0 	Epoch: 15 	Train Loss: 0.4456950785827637
+Itr: 0 	Epoch: 16 	Train Loss: 0.4386570490932465
+Itr: 0 	Epoch: 17 	Train Loss: 0.43364336579322815
+Itr: 0 	Epoch: 18 	Train Loss: 0.42915538153648375
+Itr: 0 	Epoch: 19 	Train Loss: 0.42599339480400084
+Saving trajectory checkpoint
+Saving /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mkdt_02_jobs/runs/CIFAR100/buffers/CIFAR100/ConvNet/replay_buffer_15.pt
+Itr: 1 	Epoch: 0 	Train Loss: 0.6776732384300231
+Itr: 1 	Epoch: 1 	Train Loss: 0.6108221131324768
+Itr: 1 	Epoch: 2 	Train Loss: 0.5779460210227967
+Itr: 1 	Epoch: 3 	Train Loss: 0.55359027841568
+Itr: 1 	Epoch: 4 	Train Loss: 0.5353273655128479
+Itr: 1 	Epoch: 5 	Train Loss: 0.5203293058109284
+Itr: 1 	Epoch: 6 	Train Loss: 0.5073154032707214
+Itr: 1 	Epoch: 7 	Train Loss: 0.4959547347831726
+Itr: 1 	Epoch: 8 	Train Loss: 0.486199893283844
+Itr: 1 	Epoch: 9 	Train Loss: 0.47752241287231445
+Itr: 1 	Epoch: 10 	Train Loss: 0.4694907021522522
+Itr: 1 	Epoch: 11 	Train Loss: 0.462325974149704
+Itr: 1 	Epoch: 12 	Train Loss: 0.4564640071868897
+Itr: 1 	Epoch: 13 	Train Loss: 0.450973347568512
+Itr: 1 	Epoch: 14 	Train Loss: 0.4452146933269501
+Itr: 1 	Epoch: 15 	Train Loss: 0.4414730885219574
+Itr: 1 	Epoch: 16 	Train Loss: 0.43626242736816406
+Itr: 1 	Epoch: 17 	Train Loss: 0.4319436030769348
+Itr: 1 	Epoch: 18 	Train Loss: 0.4285381215858459
+Itr: 1 	Epoch: 19 	Train Loss: 0.4258654182434082
+Saving trajectory checkpoint
+Saving /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mkdt_02_jobs/runs/CIFAR100/buffers/CIFAR100/ConvNet/replay_buffer_16.pt
+Itr: 2 	Epoch: 0 	Train Loss: 0.679454219417572
+Itr: 2 	Epoch: 1 	Train Loss: 0.6122758707237244
+Itr: 2 	Epoch: 2 	Train Loss: 0.5781929524612427
+Itr: 2 	Epoch: 3 	Train Loss: 0.5540655897521972
+Itr: 2 	Epoch: 4 	Train Loss: 0.535303759765625
+Itr: 2 	Epoch: 5 	Train Loss: 0.5211298955059052
+Itr: 2 	Epoch: 6 	Train Loss: 0.5079402612686157
+Itr: 2 	Epoch: 7 	Train Loss: 0.4962070915031433
+Itr: 2 	Epoch: 8 	Train Loss: 0.48701012020111084
+Itr: 2 	Epoch: 9 	Train Loss: 0.4776202996253967
+Itr: 2 	Epoch: 10 	Train Loss: 0.4695703371524811
+Itr: 2 	Epoch: 11 	Train Loss: 0.4652867450237274
+Itr: 2 	Epoch: 12 	Train Loss: 0.4563260242462158
+Itr: 2 	Epoch: 13 	Train Loss: 0.4507544758892059
+Itr: 2 	Epoch: 14 	Train Loss: 0.445320541229248
+Itr: 2 	Epoch: 15 	Train Loss: 0.4408495004272461
+Itr: 2 	Epoch: 16 	Train Loss: 0.43584786477088927
+Itr: 2 	Epoch: 17 	Train Loss: 0.4321524832057953
+Itr: 2 	Epoch: 18 	Train Loss: 0.43011648317337037
+Itr: 2 	Epoch: 19 	Train Loss: 0.4247590493965149
+Saving trajectory checkpoint
+Saving /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mkdt_02_jobs/runs/CIFAR100/buffers/CIFAR100/ConvNet/replay_buffer_17.pt
+Itr: 3 	Epoch: 0 	Train Loss: 0.6772329187583923
+Itr: 3 	Epoch: 1 	Train Loss: 0.6094047114562988
+Itr: 3 	Epoch: 2 	Train Loss: 0.576528991985321
+Itr: 3 	Epoch: 3 	Train Loss: 0.5528148082923889
+Itr: 3 	Epoch: 4 	Train Loss: 0.5341416986656189
+Itr: 3 	Epoch: 5 	Train Loss: 0.5193923004722595
+Itr: 3 	Epoch: 6 	Train Loss: 0.5075181558132171
+Itr: 3 	Epoch: 7 	Train Loss: 0.4958676937007904
+Itr: 3 	Epoch: 8 	Train Loss: 0.4861827176189423
+Itr: 3 	Epoch: 9 	Train Loss: 0.47800788835525515
+Itr: 3 	Epoch: 10 	Train Loss: 0.4696503343105316
+Itr: 3 	Epoch: 11 	Train Loss: 0.46324057488441467
+Itr: 3 	Epoch: 12 	Train Loss: 0.4567665176296234
+Itr: 3 	Epoch: 13 	Train Loss: 0.4514124197673798
+Itr: 3 	Epoch: 14 	Train Loss: 0.44629244126319884
+Itr: 3 	Epoch: 15 	Train Loss: 0.4412916908454895
+Itr: 3 	Epoch: 16 	Train Loss: 0.43698740495681765
+Itr: 3 	Epoch: 17 	Train Loss: 0.4325940661907196
+Itr: 3 	Epoch: 18 	Train Loss: 0.4295924613571167
+Itr: 3 	Epoch: 19 	Train Loss: 0.42587275170326233
+Saving trajectory checkpoint
+Saving /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mkdt_02_jobs/runs/CIFAR100/buffers/CIFAR100/ConvNet/replay_buffer_18.pt
+Itr: 4 	Epoch: 0 	Train Loss: 0.6793180653762817
+Itr: 4 	Epoch: 1 	Train Loss: 0.6115451186180115

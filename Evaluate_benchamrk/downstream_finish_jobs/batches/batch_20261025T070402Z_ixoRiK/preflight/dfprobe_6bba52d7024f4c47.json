@@ -1,0 +1,171 @@
+{
+  "name": "dfprobe_6bba52d7024f4c47",
+  "stage": "probe",
+  "bundles": [
+    {
+      "unit": {
+        "source": "TinyImageNet",
+        "kind": "mkdt",
+        "subset": 1,
+        "ssl": "simclr",
+        "seed": 1,
+        "epochs": 2000,
+        "model": "ResNet18",
+        "id": "mkdt_TinyImageNet_p1_simclr_s1",
+        "checkpoint_dir": "mkdt_eval_results_simclr2k_2ssl3probes/TinyImageNet/ResNet18/mkdt/pt1/simclr/ssl_seed_001",
+        "output_dir": "mkdt_eval_results_simclr2k_2ssl3probes/TinyImageNet/ResNet18/mkdt/pt1/simclr/ssl_seed_001"
+      },
+      "cell": {
+        "source": "TinyImageNet",
+        "kind": "mkdt",
+        "subset": 1,
+        "ssl": "simclr",
+        "target": "CUB2011",
+        "labels": 5,
+        "status": "blank"
+      },
+      "probes": [
+        0,
+        1,
+        2
+      ],
+      "seconds": 421.7982748921495,
+      "dependencies": [
+        "dfssl_mkdt_TinyImageNet_p1_simclr_s1"
+      ]
+    },
+    {
+      "unit": {
+        "source": "TinyImageNet",
+        "kind": "mkdt",
+        "subset": 1,
+        "ssl": "simclr",
+        "seed": 0,
+        "epochs": 2000,
+        "model": "ResNet18",
+        "id": "mkdt_TinyImageNet_p1_simclr_s0",
+        "checkpoint_dir": "mkdt_eval_results_simclr2k_2ssl3probes/TinyImageNet/ResNet18/mkdt/pt1/simclr/ssl_seed_000",
+        "output_dir": "mkdt_eval_results_simclr2k_2ssl3probes/TinyImageNet/ResNet18/mkdt/pt1/simclr/ssl_seed_000"
+      },
+      "cell": {
+        "source": "TinyImageNet",
+        "kind": "mkdt",
+        "subset": 1,
+        "ssl": "simclr",
+        "target": "Dogs",
+        "labels": 5,
+        "status": "blank"
+      },
+      "probes": [
+        0,
+        1,
+        2
+      ],
+      "seconds": 643.7577375329565,
+      "dependencies": [
+        "dfssl_mkdt_TinyImageNet_p1_simclr_s0"
+      ]
+    },
+    {
+      "unit": {
+        "source": "TinyImageNet",
+        "kind": "mkdt",
+        "subset": 1,
+        "ssl": "simclr",
+        "seed": 1,
+        "epochs": 2000,
+        "model": "ResNet18",
+        "id": "mkdt_TinyImageNet_p1_simclr_s1",
+        "checkpoint_dir": "mkdt_eval_results_simclr2k_2ssl3probes/TinyImageNet/ResNet18/mkdt/pt1/simclr/ssl_seed_001",
+        "output_dir": "mkdt_eval_results_simclr2k_2ssl3probes/TinyImageNet/ResNet18/mkdt/pt1/simclr/ssl_seed_001"
+      },
+      "cell": {
+        "source": "TinyImageNet",
+        "kind": "mkdt",
+        "subset": 1,
+        "ssl": "simclr",
+        "target": "Dogs",
+        "labels": 5,
+        "status": "blank"
+      },
+      "probes": [
+        0,
+        1,
+        2
+      ],
+      "seconds": 643.7577375329565,
+      "dependencies": [
+        "dfssl_mkdt_TinyImageNet_p1_simclr_s1"
+      ]
+    },
+    {
+      "unit": {
+        "source": "TinyImageNet",
+        "kind": "mkdt",
+        "subset": 1,
+        "ssl": "simclr",
+        "seed": 0,
+        "epochs": 2000,
+        "model": "ResNet18",
+        "id": "mkdt_TinyImageNet_p1_simclr_s0",
+        "checkpoint_dir": "mkdt_eval_results_simclr2k_2ssl3probes/TinyImageNet/ResNet18/mkdt/pt1/simclr/ssl_seed_000",
+        "output_dir": "mkdt_eval_results_simclr2k_2ssl3probes/TinyImageNet/ResNet18/mkdt/pt1/simclr/ssl_seed_000"
+      },
+      "cell": {
+        "source": "TinyImageNet",
+        "kind": "mkdt",
+        "subset": 1,
+        "ssl": "simclr",
+        "target": "Flowers",
+        "labels": 5,
+        "status": "blank"
+      },
+      "probes": [
+        0,
+        1,
+        2
+      ],
+      "seconds": 182.103093710728,
+      "dependencies": [
+        "dfssl_mkdt_TinyImageNet_p1_simclr_s0"
+      ]
+    },
+    {
+      "unit": {
+        "source": "TinyImageNet",
+        "kind": "mkdt",
+        "subset": 1,
+        "ssl": "simclr",
+        "seed": 1,
+        "epochs": 2000,
+        "model": "ResNet18",
+        "id": "mkdt_TinyImageNet_p1_simclr_s1",
+        "checkpoint_dir": "mkdt_eval_results_simclr2k_2ssl3probes/TinyImageNet/ResNet18/mkdt/pt1/simclr/ssl_seed_001",
+        "output_dir": "mkdt_eval_results_simclr2k_2ssl3probes/TinyImageNet/ResNet18/mkdt/pt1/simclr/ssl_seed_001"
+      },
+      "cell": {
+        "source": "TinyImageNet",
+        "kind": "mkdt",
+        "subset": 1,
+        "ssl": "simclr",
+        "target": "Flowers",
+        "labels": 5,
+        "status": "blank"
+      },
+      "probes": [
+        0,
+        1,
+        2
+      ],
+      "seconds": 182.103093710728,
+      "dependencies": [
+        "dfssl_mkdt_TinyImageNet_p1_simclr_s1"
+      ]
+    }
+  ],
+  "dependencies": [
+    "dfssl_mkdt_TinyImageNet_p1_simclr_s1",
+    "dfssl_mkdt_TinyImageNet_p1_simclr_s0"
+  ],
+  "seconds": 2224
+}

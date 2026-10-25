@@ -1,0 +1,21 @@
+{
+  "name": "dfssl_mkdt_CIFAR100_p0p2_barlowtwins_s0",
+  "stage": "ssl",
+  "unit": {
+    "source": "CIFAR100",
+    "kind": "mkdt",
+    "subset": 0.2,
+    "ssl": "barlowtwins",
+    "seed": 0,
+    "epochs": 10000,
+    "model": "ResNet18",
+    "id": "mkdt_CIFAR100_p0p2_barlowtwins_s0",
+    "checkpoint_dir": "mkdt_eval_results_simclr2k_2ssl3probes/CIFAR100/ResNet18/mkdt/pt0.2/barlowtwins/ssl_seed_000",
+    "output_dir": "mkdt_eval_results_simclr2k_2ssl3probes/CIFAR100/ResNet18/mkdt/pt0.2/barlowtwins/ssl_seed_000"
+  },
+  "dependencies": [
+    "mk02_CIFAR100_dist_5000"
+  ],
+  "seconds": 1988,
+  "resume_epoch_estimate": 0
+}

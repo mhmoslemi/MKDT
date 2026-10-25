@@ -1,0 +1,158 @@
+{
+  "name": "dfprobe_d8ffd9d0534956cd",
+  "stage": "probe",
+  "bundles": [
+    {
+      "unit": {
+        "source": "TinyImageNet",
+        "kind": "ours",
+        "subset": 2,
+        "ssl": "simclr",
+        "seed": 1,
+        "epochs": 1000,
+        "model": "ResNet18",
+        "id": "ours_TinyImageNet_p2_simclr_s1",
+        "checkpoint_dir": "ours_eval_results_simclr1k_2ssl3probes_main/TinyImageNet/ResNet18BN/pt2/simclr/ssl_seed_001",
+        "output_dir": "ours_eval_results_simclr1k_2ssl3probes_downstream/TinyImageNet/ResNet18BN/pt2/simclr/ssl_seed_001"
+      },
+      "cell": {
+        "source": "TinyImageNet",
+        "kind": "ours",
+        "subset": 2,
+        "ssl": "simclr",
+        "target": "CUB2011",
+        "labels": 5,
+        "status": "blank"
+      },
+      "probes": [
+        0,
+        1,
+        2
+      ],
+      "seconds": 421.7982748921495,
+      "dependencies": []
+    },
+    {
+      "unit": {
+        "source": "TinyImageNet",
+        "kind": "ours",
+        "subset": 2,
+        "ssl": "simclr",
+        "seed": 0,
+        "epochs": 1000,
+        "model": "ResNet18",
+        "id": "ours_TinyImageNet_p2_simclr_s0",
+        "checkpoint_dir": "ours_eval_results_simclr1k_2ssl3probes_main/TinyImageNet/ResNet18BN/pt2/simclr/ssl_seed_000",
+        "output_dir": "ours_eval_results_simclr1k_2ssl3probes_downstream/TinyImageNet/ResNet18BN/pt2/simclr/ssl_seed_000"
+      },
+      "cell": {
+        "source": "TinyImageNet",
+        "kind": "ours",
+        "subset": 2,
+        "ssl": "simclr",
+        "target": "Dogs",
+        "labels": 5,
+        "status": "blank"
+      },
+      "probes": [
+        0,
+        1,
+        2
+      ],
+      "seconds": 643.7577375329565,
+      "dependencies": []
+    },
+    {
+      "unit": {
+        "source": "TinyImageNet",
+        "kind": "ours",
+        "subset": 2,
+        "ssl": "simclr",
+        "seed": 1,
+        "epochs": 1000,
+        "model": "ResNet18",
+        "id": "ours_TinyImageNet_p2_simclr_s1",
+        "checkpoint_dir": "ours_eval_results_simclr1k_2ssl3probes_main/TinyImageNet/ResNet18BN/pt2/simclr/ssl_seed_001",
+        "output_dir": "ours_eval_results_simclr1k_2ssl3probes_downstream/TinyImageNet/ResNet18BN/pt2/simclr/ssl_seed_001"
+      },
+      "cell": {
+        "source": "TinyImageNet",
+        "kind": "ours",
+        "subset": 2,
+        "ssl": "simclr",
+        "target": "Dogs",
+        "labels": 5,
+        "status": "blank"
+      },
+      "probes": [
+        0,
+        1,
+        2
+      ],
+      "seconds": 643.7577375329565,
+      "dependencies": []
+    },
+    {
+      "unit": {
+        "source": "TinyImageNet",
+        "kind": "ours",
+        "subset": 2,
+        "ssl": "simclr",
+        "seed": 0,
+        "epochs": 1000,
+        "model": "ResNet18",
+        "id": "ours_TinyImageNet_p2_simclr_s0",
+        "checkpoint_dir": "ours_eval_results_simclr1k_2ssl3probes_main/TinyImageNet/ResNet18BN/pt2/simclr/ssl_seed_000",
+        "output_dir": "ours_eval_results_simclr1k_2ssl3probes_downstream/TinyImageNet/ResNet18BN/pt2/simclr/ssl_seed_000"
+      },
+      "cell": {
+        "source": "TinyImageNet",
+        "kind": "ours",
+        "subset": 2,
+        "ssl": "simclr",
+        "target": "Flowers",
+        "labels": 5,
+        "status": "blank"
+      },
+      "probes": [
+        0,
+        1,
+        2
+      ],
+      "seconds": 182.103093710728,
+      "dependencies": []
+    },
+    {
+      "unit": {
+        "source": "TinyImageNet",
+        "kind": "ours",
+        "subset": 2,
+        "ssl": "simclr",
+        "seed": 1,
+        "epochs": 1000,
+        "model": "ResNet18",
+        "id": "ours_TinyImageNet_p2_simclr_s1",
+        "checkpoint_dir": "ours_eval_results_simclr1k_2ssl3probes_main/TinyImageNet/ResNet18BN/pt2/simclr/ssl_seed_001",
+        "output_dir": "ours_eval_results_simclr1k_2ssl3probes_downstream/TinyImageNet/ResNet18BN/pt2/simclr/ssl_seed_001"
+      },
+      "cell": {
+        "source": "TinyImageNet",
+        "kind": "ours",
+        "subset": 2,
+        "ssl": "simclr",
+        "target": "Flowers",
+        "labels": 5,
+        "status": "blank"
+      },
+      "probes": [
+        0,
+        1,
+        2
+      ],
+      "seconds": 182.103093710728,
+      "dependencies": []
+    }
+  ],
+  "dependencies": [],
+  "seconds": 2224
+}
