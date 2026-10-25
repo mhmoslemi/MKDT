@@ -25,7 +25,7 @@
 \cmidrule(lr){2-9}
 
  & \multirow{4}{*}{0.2\%} & Random Subset
-&  &  &  &  &  &  \\
+& \dsacc{43.09}{8.13} & \dsacc{11.98}{3.43} & \dsacc{2.52}{0.45} & \dsacc{1.71}{0.31} & \dsacc{2.15}{0.38} & \dsacc{3.36}{0.77} \\
  &  & K-means Subset
 & \dsacc{45.19}{1.96} & \dsacc{12.13}{1.27} & \dsacc{2.41}{0.38} & \dsacc{1.83}{0.21} & \dsacc{2.42}{0.29} & \dsacc{3.56}{0.83} \\
  &  & MKDT
@@ -35,7 +35,7 @@
 \cmidrule(lr){2-9}
 
  & \multirow{4}{*}{1\%} & Random Subset
-&  &  &  &  &  &  \\
+& \dsacc{54.26}{1.17} &  &  &  &  &  \\
  &  & K-means Subset
 & \dsacc{54.06}{1.72} & \dsacc{17.83}{0.94} & \dsacc{3.30}{0.46} & \dsacc{2.30}{0.22} & \dsacc{3.33}{0.34} & \dsacc{4.33}{0.47} \\
  &  & MKDT
@@ -76,7 +76,7 @@
 \cmidrule(lr){2-9}
 
  & \multirow{4}{*}{0.2\%} & Random Subset
-&  &  &  &  &  &  \\
+& \dsacc{51.80}{9.83} & \dsacc{21.76}{5.93} & \dsacc{3.92}{1.01} & \dsacc{2.57}{0.67} & \dsacc{4.00}{0.98} & \dsacc{8.07}{2.84} \\
  &  & K-means Subset
 & \dsacc{53.72}{3.13} & \dsacc{22.50}{1.87} & \dsacc{4.20}{0.30} & \dsacc{2.87}{0.38} & \dsacc{4.37}{0.47} & \dsacc{9.46}{1.99} \\
  &  & MKDT
@@ -130,3 +130,6 @@
 %          Evaluate_benchamrk/mkdt_eval_results_interactive_6seeds/, and
 %          Evaluate_benchamrk/full_eval_results_interactive_3seeds_TinyImageNet/.
 % Full data includes explicitly accepted epoch-950 timeout snapshots; requested SSL budget was 1000 epochs.
+
+% Random downstream finish: 10 seeds; 100-epoch frozen probes; mean +/- sample SD.
+% Source: Evaluate_benchamrk/random_downstream_jobs/summaries/TinyImageNet/ (saved SSL epochs recorded per seed).
