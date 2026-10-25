@@ -10,7 +10,8 @@ const read = file => JSON.parse(fs.readFileSync(file, 'utf8'));
 const omitted = new Set(read(path.join(__dirname, 'omitted_cells.json')));
 const cellKey = (unit, probe) => [unit.source, 'ResNet18', unit.kind, unit.subset,
     unit.ssl, probe.target, probe.labels].join('|');
-const queued = new Set((process.argv[3] || '').split('\n').map(x => x.trim()).filter(x => /^dp(?:3|15)_/.test(x)));
+const activeNames = new Set((process.argv[3] || '').split('\n').map(x => x.trim()).filter(Boolean));
+const queued = new Set([...activeNames].filter(x => /^dp(?:3|15)_/.test(x)));
 const queuedBundles = new Set();
 for (const name of queued) {
     let found = false;
@@ -95,6 +96,10 @@ function bundle(unit, probes, suffix) {
     const requested = probes.filter(p => !omitted.has(cellKey(unit, p)));
     if (!requested.length) { counts.omitted_bundles++; return; }
     if (queuedBundles.has(name)) { counts.queued_bundles++; return; }
+    if (unit.kind === 'random' && requested.some(p => activeNames.has(
+        `rnd_down_${unit.source}_p${String(unit.subset).replace('.', 'p')}_${unit.ssl}_s${unit.seed}_${p.target}_l${p.labels}`))) {
+        counts.queued_bundles++; return;
+    }
     const pending = requested.filter(p => !done(unit, p));
     if (!pending.length) { counts.completed_bundles++; return; }
     const seconds = Math.ceil(150 + pending.reduce((sum, p) => {

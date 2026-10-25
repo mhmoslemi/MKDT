@@ -135,10 +135,10 @@ def main():
     parser.add_argument('manifest', type=Path)
     parser.add_argument('data_root', type=Path)
     args = parser.parse_args()
-    if (os.environ.get('SLURM_CLUSTER_NAME', os.environ.get('CC_CLUSTER')) != 'vulcan'
+    if (os.environ.get('SLURM_CLUSTER_NAME', os.environ.get('CC_CLUSTER')) != 'killarney'
             or os.environ.get('SLURM_JOB_ACCOUNT') != 'aip-boyuwang'
             or not os.environ.get('SLURM_JOB_ID') or not ours.torch.cuda.is_available()):
-        parser.error('Use a Wang-account GPU job on Vulcan')
+        parser.error('Use a Wang-account GPU job on Killarney')
     if not args.manifest.resolve().is_relative_to(HERE / 'batches'):
         parser.error('Unexpected job manifest')
     ours.torch.set_num_threads(1)

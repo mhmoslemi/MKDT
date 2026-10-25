@@ -21,7 +21,7 @@ fi
 
 dry_run=0
 if [[ ${1:-} == --dry-run ]]; then dry_run=1; shift; fi
-[[ $# == 0 && -z ${SLURM_JOB_ID:-} ]] || { echo 'Run on the Vulcan login node.' >&2; exit 2; }
+[[ $# == 0 && -z ${SLURM_JOB_ID:-} ]] || { echo 'Run on the Killarney login node.' >&2; exit 2; }
 bench_dir=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)
 run_dir="$bench_dir/downstream_probe_jobs"
 venv=${BENCH_VENV:-$HOME/ENV}
@@ -30,13 +30,16 @@ data_root=${BENCH_DATA_ROOT:-$bench_dir/../../data}
 venv=$(cd -- "$venv" && pwd -P)
 data_root=$(cd -- "$data_root" && pwd -P)
 cluster=$(scontrol show config | awk '$1=="ClusterName" {print $3}')
-[[ $cluster == vulcan ]] || { echo 'Submit on Vulcan only.' >&2; exit 2; }
+[[ $cluster == killarney ]] || { echo 'Submit on Killarney only.' >&2; exit 2; }
 inventory=$(sinfo -h -o '%G' --Node)
 [[ $inventory == *gpu:l40s:* ]] || { echo 'L40S GPU type not found.' >&2; exit 2; }
 accounts=$(sacctmgr -nP show assoc "user=$(id -un)" format=Account)
 awk -F '|' '$1=="aip-boyuwang" {found=1} END {exit !found}' <<< "$accounts" || { echo 'Wang account unavailable.' >&2; exit 2; }
 module spider python/3.11.5 >/dev/null 2>&1
-command -v node >/dev/null
+if ! command -v node >/dev/null; then
+    module spider nodejs/20.16.0 >/dev/null 2>&1
+    module load StdEnv/2023 nodejs/20.16.0
+fi
 for marker in cifar-10-batches-py/data_batch_1 cifar-10-batches-py/test_batch \
     cifar-100-python/train cifar-100-python/test tinyimagenet.pt \
     fgvc-aircraft-2013b/data/variants.txt CUB_200_2011/images.txt \
@@ -62,9 +65,9 @@ while IFS=$'\t' read -r name seconds missing manifest; do
     if (( ! dry_run )); then
         job=$(sbatch --parsable --job-name="$name" --account=aip-boyuwang \
             --nodes=1 --ntasks=1 --cpus-per-task=1 --mem=6G --gres=gpu:l40s:1 \
-            --time="$walltime" --chdir="$bench_dir" \
+            --exclude=kn101 --time="$walltime" --chdir="$bench_dir" \
             --output="$run_dir/logs/%x-%j.out" --error="$run_dir/logs/%x-%j.err" \
-            "$bench_dir/submit_downstream_3probes_lu_vulcan.sh" \
+            "$bench_dir/submit_downstream_3probes_wang_killarney.sh" \
             --worker "$bench_dir" "$manifest" "$venv" "$data_root")
         job=${job%%;*}
         [[ $job =~ ^[0-9]+$ ]] || { echo "Unexpected sbatch response: $job" >&2; exit 2; }
