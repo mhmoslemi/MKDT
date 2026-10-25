@@ -1,0 +1,20 @@
+Traceback (most recent call last):
+  File "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/common.py", line 62, in exclusive_run
+    fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+BlockingIOError: [Errno 11] Resource temporarily unavailable
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/downstream_probe_jobs/worker.py", line 157, in <module>
+    main()
+  File "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/downstream_probe_jobs/worker.py", line 153, in main
+    run(bundle, args)
+  File "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/downstream_probe_jobs/worker.py", line 93, in run
+    with ours.exclusive_run(output / '.metadata'):
+  File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Compiler/gcccore/python/3.11.5/lib/python3.11/contextlib.py", line 137, in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+  File "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/common.py", line 64, in exclusive_run
+    raise RuntimeError(f'Another process is working in {folder}') from error
+RuntimeError: Another process is working in /scratch/mmoslem3/MKDT/Evaluate_benchamrk/ours_eval_results_simclr2k_barlow10k_2ssl3probes_downstream/CIFAR10/ResNet18BN/pt1/simclr/ssl_seed_001/.metadata
