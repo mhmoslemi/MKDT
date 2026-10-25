@@ -29,7 +29,7 @@
  &  & K-means Subset
 & \dsacc{47.91}{1.25} & \dsacc{12.25}{1.06} & \dsacc{2.53}{0.80} & \dsacc{1.82}{0.22} & \dsacc{2.04}{0.35} & \dsacc{3.48}{0.62} \\
  &  & MKDT
-&  &  &  &  &  &  \\
+&  \dsacc{44.17}{0.61} &  \dsacc{11.60}{0.55} &  \dsacc{2.40}{0.33} &  \dsacc{1.73}{0.06} &  \dsacc{1.93}{0.21} &  \\
  &  & Ours &  \dsacc{47.12}{0.77} &  \dsacc{12.19}{0.66} &  \dsacc{2.35}{0.21} &  \dsacc{1.65}{0.07} &  \dsacc{1.94}{0.23} &  \dsacc{3.02}{0.21} \\
 \cmidrule(lr){2-9}
 
@@ -49,7 +49,7 @@
  &  & MKDT
 &  &  &  &  &  &  \\
  &  & Ours
-&  &  &  &  &  &  \\
+&  &  \dsacc{13.37}{0.41} &  \dsacc{2.49}{0.23} &  \dsacc{1.42}{0.18} &  \dsacc{2.18}{0.29} &  \dsacc{3.59}{0.48} \\
 % BEGIN DISABLED: 5% pretraining subset
 % \cmidrule(lr){2-9}
 %
@@ -78,7 +78,7 @@
  &  & K-means Subset
 & \dsacc{55.12}{0.94} & \dsacc{22.60}{0.77} & \dsacc{3.65}{0.65} & \dsacc{2.37}{0.31} & \dsacc{3.99}{0.37} & \dsacc{6.88}{0.80} \\
  &  & MKDT
-&  &  &  &  &  &  \\
+&  \dsacc{53.47}{0.76} &  \dsacc{19.29}{0.14} &  \dsacc{3.57}{0.41} &  \dsacc{2.08}{0.09} &  \dsacc{3.35}{0.25} &  \dsacc{7.28}{0.67} \\
  &  & Ours &  \dsacc{55.02}{0.33} &  \dsacc{20.36}{0.26} &  \dsacc{3.11}{0.42} &  \dsacc{1.75}{0.19} &  \dsacc{3.44}{0.26} &  \dsacc{6.74}{0.36} \\
 \cmidrule(lr){2-9}
 
@@ -98,7 +98,7 @@
  &  & MKDT
 &  &  &  &  &  &  \\
  &  & Ours
-&  &  &  &  &  &  \\
+&  \dsacc{61.03}{0.18} &  \dsacc{25.07}{0.39} &  \dsacc{3.40}{0.25} &  \dsacc{1.69}{0.17} &  \dsacc{4.09}{0.12} &  \dsacc{8.35}{0.45} \\
 % BEGIN DISABLED: 5% pretraining subset
 % \cmidrule(lr){2-9}
 %
@@ -132,3 +132,5 @@
 % Ours 0.2% SimCLR: 2k SSL epochs; six complete probes per cell (2 SSL seeds x 3 probes); 100-epoch frozen heads; mean +/- sample SD.
 % Ours source: Evaluate_benchamrk/ours_eval_results_simclr2k_barlow10k_2ssl3probes_downstream/; synchronized with full/tinyimagenet_downstream.tex.
 % Random 2% SimCLR additions require all ten seeds at 4k SSL epochs; partial cells are left unchanged.
+% Synced completion update 2026-10-25: 11 MKDT 0.2% cells (2k SSL) and 11 Ours 2% cells (1k SSL); six validated probes each.
+% New sources: mkdt_eval_results_simclr2k_2ssl3probes/ and ours_eval_results_simclr1k_2ssl3probes_downstream/ under Evaluate_benchamrk/.

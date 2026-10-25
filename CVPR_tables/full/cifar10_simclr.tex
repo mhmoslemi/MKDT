@@ -46,7 +46,7 @@
 & \dsacc{8.57}{0.53} & \dsacc{2.03}{0.23} & \dsacc{1.16}{0.22} & \dsacc{1.87}{0.38} & \dsacc{2.69}{0.42} & \dsacc{3.61}{0.34} \\
 
  &  & MKDT
-&  &  &  &  &  &  \\
+&  &  &  \dsacc{1.37}{0.05} &  \dsacc{1.89}{0.14} &  \dsacc{3.22}{0.49} &  \\
  &  & Ours &  &  &  \dsacc{1.50}{0.15} &  \dsacc{2.27}{0.22} &  \dsacc{2.64}{0.30} &  \\
 \cmidrule(lr){2-9}
 
@@ -55,7 +55,7 @@
  &  & K-means Subset
 & \dsacc{10.65}{1.12} & \dsacc{2.81}{0.46} & \dsacc{1.53}{0.16} & \dsacc{2.31}{0.30} & \dsacc{2.97}{0.45} & \dsacc{4.70}{0.12} \\
  &  & MKDT
-&  &  &  &  &  &  \\
+&  \dsacc{7.29}{0.36} &  \dsacc{1.75}{0.29} &  \dsacc{1.10}{0.19} &  \dsacc{1.92}{0.57} &  &  \\
  &  & Ours &  \dsacc{12.30}{0.34} &  \dsacc{2.51}{0.29} &  \dsacc{1.38}{0.12} &  \dsacc{2.52}{0.16} &  \dsacc{2.85}{0.23} &  \dsacc{5.53}{0.08} \\
 % BEGIN DISABLED: 5% pretraining subset
 % \cmidrule(lr){2-9}
@@ -96,7 +96,7 @@
 & \dsacc{15.37}{0.75} & \dsacc{2.96}{0.52} & \dsacc{1.66}{0.27} & \dsacc{3.18}{0.31} & \dsacc{4.43}{0.73} & \dsacc{7.25}{0.43} \\
 
  &  & MKDT
-&  &  &  &  &  &  \\
+&  &  \dsacc{3.17}{0.15} &  &  \dsacc{3.08}{0.33} &  \dsacc{6.82}{0.49} &  \\
  &  & Ours &  &  \dsacc{3.68}{0.12} &  \dsacc{1.94}{0.15} &  \dsacc{3.46}{0.16} &  \dsacc{5.69}{0.15} &  \\
 \cmidrule(lr){2-9}
 
@@ -105,7 +105,7 @@
  &  & K-means Subset
 & \dsacc{19.16}{0.52} & \dsacc{4.32}{0.40} & \dsacc{1.96}{0.22} & \dsacc{3.84}{0.24} & \dsacc{6.04}{1.09} & \dsacc{9.24}{0.27} \\
  &  & MKDT
-&  &  &  &  &  &  \\
+&  \dsacc{14.67}{0.49} &  \dsacc{2.34}{0.40} &  \dsacc{1.36}{0.23} &  \dsacc{3.60}{0.50} &  \dsacc{4.67}{0.51} &  \dsacc{6.95}{0.23} \\
  &  & Ours &  \dsacc{20.17}{0.43} &  \dsacc{3.88}{0.43} &  \dsacc{2.04}{0.15} &  \dsacc{3.86}{0.21} &  \dsacc{6.19}{0.53} &  \dsacc{10.46}{0.18} \\
 % BEGIN DISABLED: 5% pretraining subset
 % \cmidrule(lr){2-9}
@@ -137,3 +137,4 @@
 % Ours: six complete probes per cell (2 SSL seeds x 3 probe seeds), 100-epoch frozen heads; mean +/- sample SD.
 % Ours SimCLR: 2k SSL epochs at 0.2%/1%, 1k at 2%; synchronized with cifar10_downstream.tex.
 % Ours sources: Evaluate_benchamrk/ours_eval_results_simclr2k_barlow10k_2ssl3probes_downstream/ and ours_eval_results_simclr1k_2ssl3probes_downstream/.
+% Synced completion update 2026-10-25: 16 new MKDT SimCLR cells at 2k SSL epochs; all six probes validated per cell.
