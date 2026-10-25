@@ -14,4 +14,11 @@ for(const kind of ['ours','mkdt','random']) for(const subset of [0.2,1,2]) for(c
 }
 const mkdt02=cells.filter(c=>c.kind==='mkdt'&&c.subset===0.2&&eligible(c));
 assert.ok(mkdt02.every(c=>c.source==='TinyImageNet'));
-console.log('OK: table parsing, exclusions, architecture, and SSL schedules.');
+const launcher=fs.readFileSync(path.join(__dirname,'../submit_main_table_lu_killarney.sh'),'utf8');
+const start=launcher.indexOf('    account=aip-yiweilu\n');
+assert.ok(start>=0);
+const routing=launcher.slice(start,launcher.indexOf('    printf -v walltime',start));
+const accounts=require('child_process').execFileSync('bash',['-c',
+    `for seconds in 60 3599 3600 27425; do\n${routing}\nprintf '%s\\n' "$account"\ndone`],{encoding:'utf8'});
+assert.equal(accounts,'aip-boyuwang\naip-boyuwang\naip-yiweilu\naip-yiweilu\n');
+console.log('OK: table parsing, exclusions, architecture, SSL schedules, and account routing at 1h.');

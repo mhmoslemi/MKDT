@@ -123,11 +123,14 @@ def main():
     args = parser.parse_args()
     if (not os.environ.get('SLURM_JOB_ID')
             or os.environ.get('SLURM_CLUSTER_NAME', os.environ.get('CC_CLUSTER')) != 'killarney'
-            or os.environ.get('SLURM_JOB_ACCOUNT') != 'aip-yiweilu' or not base.torch.cuda.is_available()):
-        parser.error('Use this launcher in a Lu-account Killarney GPU job')
+            or not base.torch.cuda.is_available()):
+        parser.error('Use this launcher in a Killarney GPU job')
     if not args.manifest.resolve().is_relative_to(HERE / 'batches'):
         parser.error('Unexpected main-table job manifest')
     job = base.read(args.manifest)
+    account = 'aip-boyuwang' if job['seconds'] < 3600 else 'aip-yiweilu'
+    if os.environ.get('SLURM_JOB_ACCOUNT') != account:
+        parser.error(f'This job must use account {account}')
     task = job['unit']
     expected = {0.2: 6000, 1: 5000, 2: 4000}[task['subset']] if task['kind'] == 'random' else (
         2000 if task['ssl'] == 'simclr' else 10000)
