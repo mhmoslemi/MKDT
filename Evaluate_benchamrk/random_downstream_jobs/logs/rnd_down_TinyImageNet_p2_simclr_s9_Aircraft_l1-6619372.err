@@ -1,0 +1,13 @@
+Traceback (most recent call last):
+  File "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/random_downstream_jobs/worker.py", line 225, in <module>
+    main()
+  File "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/random_downstream_jobs/worker.py", line 209, in main
+    if path.exists() and read(path) != config:
+                         ^^^^^^^^^^
+  File "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/random_downstream_jobs/worker.py", line 31, in read
+    return json.loads(Path(path).read_text())
+                      ^^^^^^^^^^^^^^^^^^^^^^
+  File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Compiler/gcccore/python/3.11.5/lib/python3.11/pathlib.py", line 1059, in read_text
+    return f.read()
+           ^^^^^^^^
+OSError: [Errno 116] Stale file handle
