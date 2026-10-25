@@ -1,0 +1,49 @@
+{
+  "name": "mainlu_mkdt_TinyImageNet_p0p2_barlowtwins_s1",
+  "unit": {
+    "source": "TinyImageNet",
+    "kind": "mkdt",
+    "subset": 0.2,
+    "ssl": "barlowtwins",
+    "seed": 1,
+    "epochs": 10000,
+    "model": "ResNet18",
+    "scope": "main",
+    "parent_dir": null,
+    "checkpoint_dir": "mkdt_eval_results_simclr2k_2ssl3probes/TinyImageNet/ResNet18/mkdt/pt0.2/barlowtwins/ssl_seed_001",
+    "output_dir": "mkdt_eval_results_simclr2k_2ssl3probes/TinyImageNet/ResNet18/mkdt/pt0.2/barlowtwins/ssl_seed_001",
+    "labels": [
+      1,
+      5
+    ]
+  },
+  "probes": [
+    {
+      "labels": 1,
+      "probe": 0
+    },
+    {
+      "labels": 1,
+      "probe": 1
+    },
+    {
+      "labels": 1,
+      "probe": 2
+    },
+    {
+      "labels": 5,
+      "probe": 0
+    },
+    {
+      "labels": 5,
+      "probe": 1
+    },
+    {
+      "labels": 5,
+      "probe": 2
+    }
+  ],
+  "resume_epoch_estimate": 0,
+  "seconds": 8199,
+  "buffer_seconds": 60
+}

@@ -1,0 +1,33 @@
+{
+  "name": "mainlu_random_TinyImageNet_p1_barlowtwins_s2",
+  "unit": {
+    "source": "TinyImageNet",
+    "kind": "random",
+    "subset": 1,
+    "ssl": "barlowtwins",
+    "seed": 2,
+    "epochs": 5000,
+    "model": "ResNet18",
+    "scope": "main",
+    "parent_dir": null,
+    "checkpoint_dir": "random_ssl_checkpoints_cifar10k8k6k_tiny6k5k4k/TinyImageNet/ResNet18/random/pt1/barlowtwins/seed_002",
+    "output_dir": "random_eval_results_interactive_10seeds/TinyImageNet/ResNet18/random/pt1/barlowtwins/seed_002",
+    "labels": [
+      1,
+      5
+    ]
+  },
+  "probes": [
+    {
+      "labels": 1,
+      "probe": 2
+    },
+    {
+      "labels": 5,
+      "probe": 2
+    }
+  ],
+  "resume_epoch_estimate": 5000,
+  "seconds": 474,
+  "buffer_seconds": 60
+}
