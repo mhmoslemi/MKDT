@@ -15,7 +15,7 @@ from torchvision.transforms.functional import to_pil_image
 
 SSL_EPOCHS = {
     # "CIFAR10": {0.2: 2000, 1: 8000, 2: 6000},
-    "CIFAR10": {0.2: 2000, 1: 2000, 2: 4000},
+    "CIFAR10": {0.2: 2000, 1: 2000, 2: 1200},
     "CIFAR100": {0.2: 3000, 1: 8000, 2: 6000},
     "TinyImageNet": {0.2: 6000, 1: 5000, 2: 4000},
 }
