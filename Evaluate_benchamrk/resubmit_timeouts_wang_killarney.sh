@@ -3,7 +3,7 @@
 set -euo pipefail
 dry_run=0
 if [[ ${1:-} == --dry-run ]]; then dry_run=1; shift; fi
-[[ $# == 0 && -z ${SLURM_JOB_ID:-} ]] || { echo 'Run with bash on the Killarney login node.' >&2; exit 2; }
+[[ $# == 0 && -z ${SLURM_JOB_ID:-} ]] || { echo 'Run with bash on the destination login node.' >&2; exit 2; }
 bench=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)
 repo=$(cd -- "$bench/.." && pwd -P)
 work="$bench/mkdt_02_jobs/runs"
@@ -17,7 +17,10 @@ venv=$(cd -- "$venv" && pwd -P)
 data=$(cd -- "$data" && pwd -P)
 synthetic=$(cd -- "$synthetic" && pwd -P)
 cluster=$(scontrol show config | awk '$1=="ClusterName" {print $3}')
-[[ $cluster == killarney ]] || { echo 'Submit on Killarney only.' >&2; exit 2; }
+expected_cluster=${TIMEOUT_RETRY_CLUSTER:-killarney}
+[[ $expected_cluster == killarney || $expected_cluster == vulcan ]] || exit 2
+[[ $cluster == "$expected_cluster" ]] || { echo "Submit on $expected_cluster only." >&2; exit 2; }
+[[ $cluster != vulcan ]] || run="$run/vulcan"
 inventory=$(sinfo -h -o '%G' --Node)
 [[ $inventory == *gpu:l40s:* ]] || { echo 'L40S GPU type not found.' >&2; exit 2; }
 accounts=$(sacctmgr -nP show assoc "user=$(id -un)" format=Account)
@@ -115,10 +118,12 @@ submit() {
     echo "$name: $walltime, Wang/L40S/1 CPU/6G"
     job=DRY_RUN
     if (( ! dry_run )); then
-        job=$(sbatch --parsable --job-name="$name" --account=aip-boyuwang \
-            --nodes=1 --ntasks=1 --cpus-per-task=1 --mem=6G --gres=gpu:l40s:1 \
-            --exclude=kn101 --time="$walltime" --chdir="$repo" \
-            --output="$logs/%x-%j.out" --error="$logs/%x-%j.err" "$@")
+        local command=(sbatch --parsable --job-name="$name" --account=aip-boyuwang
+            --nodes=1 --ntasks=1 --cpus-per-task=1 --mem=6G --gres=gpu:l40s:1
+            --time="$walltime" --chdir="$repo"
+            --output="$logs/%x-%j.out" --error="$logs/%x-%j.err")
+        [[ $cluster != killarney ]] || command+=(--exclude=kn101)
+        job=$("${command[@]}" "$@")
         job=${job%%;*}
         [[ $job =~ ^[0-9]+$ ]] || { echo "Unexpected sbatch response: $job" >&2; exit 2; }
     fi
@@ -128,13 +133,24 @@ submit() {
 mkdir -p "$work/logs" "$downstream/logs"
 for i in "${!expert_datasets[@]}"; do
     dataset=${expert_datasets[$i]} start=${expert_starts[$i]}
-    submit "mk02_${dataset}_exp_${start}" 7 "$work/logs" "$batch/generation.sh" \
-        --worker "$batch/code" experts "$dataset" "$start" "$work" "$synthetic" "$data" "$venv"
+    if [[ $cluster == vulcan ]]; then
+        submit "mk02_${dataset}_exp_${start}" 7 "$work/logs" "$bench/resubmit_timeouts_wang_vulcan.sh" \
+            --worker experts "$bench" "$batch/code" "$dataset" "$start" "$work" "$synthetic" "$data" "$venv"
+    else
+        submit "mk02_${dataset}_exp_${start}" 7 "$work/logs" "$batch/generation.sh" \
+            --worker "$batch/code" experts "$dataset" "$start" "$work" "$synthetic" "$data" "$venv"
+    fi
 done
 for i in "${!ssl_names[@]}"; do
-    submit "${ssl_names[$i]}" "${ssl_minutes[$i]}" "$downstream/logs" \
-        "$bench/submit_remaining_downstream_wang_killarney.sh" \
-        --worker "$bench" "${ssl_manifests[$i]}" "$venv" "$data" "$synthetic"
+    if [[ $cluster == vulcan ]]; then
+        submit "${ssl_names[$i]}" "${ssl_minutes[$i]}" "$downstream/logs" \
+            "$bench/resubmit_timeouts_wang_vulcan.sh" \
+            --worker ssl "$bench" "${ssl_manifests[$i]}" "$venv" "$data" "$synthetic"
+    else
+        submit "${ssl_names[$i]}" "${ssl_minutes[$i]}" "$downstream/logs" \
+            "$bench/submit_remaining_downstream_wang_killarney.sh" \
+            --worker "$bench" "${ssl_manifests[$i]}" "$venv" "$data" "$synthetic"
+    fi
 done
 printf 'DONE: %s retries %s; %s complete/queued skipped. Receipt: %s\n' \
     "$submitted" "$([[ $dry_run == 1 ]] && echo planned || echo submitted)" "$skipped" "$receipt"

@@ -29,7 +29,7 @@
  &  & K-means Subset
 & \dsacc{3.51}{0.18} & \dsacc{37.11}{0.84} & \dsacc{2.01}{0.33} & \dsacc{1.40}{0.04} & \dsacc{1.55}{0.10} & \dsacc{2.71}{0.66} \\
  &  & MKDT
-&  &  &  &  &  &  \\
+&  \dsacc{4.14}{0.11} &  \dsacc{39.52}{0.64} &  \dsacc{2.37}{0.25} &  \dsacc{1.47}{0.18} &  \dsacc{1.86}{0.15} &  \dsacc{3.17}{0.83} \\
  &  & Ours &  \dsacc{4.59}{0.08} &  \dsacc{39.28}{0.42} &  \dsacc{2.18}{0.32} &  \dsacc{1.43}{0.10} &  \dsacc{1.79}{0.12} &  \dsacc{2.69}{0.38} \\
 \cmidrule(lr){2-9}
 
@@ -38,7 +38,7 @@
  &  & K-means Subset
 & \dsacc{4.21}{0.66} & \dsacc{41.16}{1.57} & \dsacc{2.17}{0.60} & \dsacc{1.35}{0.26} & \dsacc{1.71}{0.16} & \dsacc{3.01}{0.30} \\
  &  & MKDT
-&  &  &  &  \dsacc{1.48}{0.09} &  \dsacc{1.97}{0.18} &  \dsacc{3.19}{0.45} \\
+&  \dsacc{4.75}{0.15} &  \dsacc{40.29}{1.23} &  \dsacc{2.39}{0.19} &  \dsacc{1.48}{0.09} &  \dsacc{1.97}{0.18} &  \dsacc{3.19}{0.45} \\
  &  & Ours &  \dsacc{5.24}{0.17} &  \dsacc{42.84}{0.59} &  \dsacc{2.53}{0.29} &  \dsacc{1.39}{0.21} &  \dsacc{1.95}{0.15} &  \dsacc{2.93}{0.36} \\
 \cmidrule(lr){2-9}
 
@@ -47,7 +47,7 @@
  &  & K-means Subset
 & \dsacc{5.88}{0.56} & \dsacc{45.65}{1.01} & \dsacc{2.83}{0.59} & \dsacc{1.72}{0.24} & \dsacc{2.18}{0.27} & \dsacc{3.60}{0.49} \\
  &  & MKDT
-&  \dsacc{2.96}{0.07} &  \dsacc{35.32}{0.99} &  \dsacc{1.94}{0.16} &  \dsacc{1.17}{0.16} &  &  \\
+&  \dsacc{2.96}{0.07} &  \dsacc{35.32}{0.99} &  \dsacc{1.94}{0.16} &  \dsacc{1.17}{0.16} &  \dsacc{1.75}{0.10} &  \dsacc{2.21}{0.39} \\
  &  & Ours &  \dsacc{5.52}{0.19} &  \dsacc{45.68}{0.60} &  \dsacc{2.45}{0.31} &  \dsacc{1.54}{0.16} &  \dsacc{2.17}{0.09} &  \dsacc{2.92}{0.28} \\
 % BEGIN DISABLED: 5% pretraining subset
 % \cmidrule(lr){2-9}
@@ -77,7 +77,7 @@
  &  & K-means Subset
 & \dsacc{6.90}{0.29} & \dsacc{44.69}{0.74} & \dsacc{3.05}{0.18} & \dsacc{1.75}{0.13} & \dsacc{2.62}{0.41} & \dsacc{4.44}{1.09} \\
  &  & MKDT
-&  &  &  &  &  &  \\
+&  \dsacc{7.97}{0.30} &  \dsacc{46.56}{0.46} &  \dsacc{3.03}{0.52} &  \dsacc{1.91}{0.17} &  \dsacc{2.76}{0.14} &  \dsacc{7.16}{0.73} \\
  &  & Ours &  \dsacc{8.39}{0.11} &  \dsacc{46.50}{0.62} &  \dsacc{2.88}{0.23} &  \dsacc{1.75}{0.08} &  \dsacc{2.82}{0.16} &  \dsacc{5.86}{1.09} \\
 \cmidrule(lr){2-9}
 
@@ -86,7 +86,7 @@
  &  & K-means Subset
 & \dsacc{8.61}{0.80} & \dsacc{47.81}{1.46} & \dsacc{2.86}{0.72} & \dsacc{1.69}{0.28} & \dsacc{3.16}{0.27} & \dsacc{5.62}{1.23} \\
  &  & MKDT
-&  &  &  \dsacc{3.25}{0.37} &  &  \dsacc{3.07}{0.23} &  \dsacc{6.85}{0.58} \\
+&  \dsacc{8.97}{0.23} &  \dsacc{47.25}{1.14} &  \dsacc{3.25}{0.37} &  \dsacc{2.10}{0.07} &  \dsacc{3.07}{0.23} &  \dsacc{6.85}{0.58} \\
  &  & Ours &  \dsacc{9.88}{0.07} &  \dsacc{50.63}{0.30} &  \dsacc{3.47}{0.27} &  \dsacc{1.95}{0.20} &  \dsacc{3.20}{0.15} &  \dsacc{6.32}{0.29} \\
 \cmidrule(lr){2-9}
 
@@ -131,3 +131,23 @@
 % Random downstream finish: 10 seeds; 100-epoch frozen probes; mean +/- sample SD.
 % Source: Evaluate_benchamrk/random_downstream_jobs/summaries/CIFAR100/ (saved SSL epochs recorded per seed).
 % Synced completion update 2026-10-25: 16 new MKDT SimCLR cells at 2k SSL epochs; all six probes validated per cell.
+% Probe completion: CIFAR100|ResNet18|mkdt|1|simclr|CIFAR10|1; SSL epochs=2000; encoder seeds=0,1; six (SSL seed:probe seed) pairs=0:0,0:1,0:2,1:0,1:1,1:2.
+% Probe completion: CIFAR100|ResNet18|mkdt|1|simclr|TinyImageNet|1; SSL epochs=2000; encoder seeds=0,1; six (SSL seed:probe seed) pairs=0:0,0:1,0:2,1:0,1:1,1:2.
+% Probe completion: CIFAR100|ResNet18|mkdt|1|simclr|CIFAR10|5; SSL epochs=2000; encoder seeds=0,1; six (SSL seed:probe seed) pairs=0:0,0:1,0:2,1:0,1:1,1:2.
+% Probe completion: CIFAR100|ResNet18|mkdt|1|simclr|Aircraft|1; SSL epochs=2000; encoder seeds=0,1; six (SSL seed:probe seed) pairs=0:0,0:1,0:2,1:0,1:1,1:2.
+% Probe completion: CIFAR100|ResNet18|mkdt|1|simclr|CUB2011|5; SSL epochs=2000; encoder seeds=0,1; six (SSL seed:probe seed) pairs=0:0,0:1,0:2,1:0,1:1,1:2.
+% Probe completion: CIFAR100|ResNet18|mkdt|1|simclr|TinyImageNet|5; SSL epochs=2000; encoder seeds=0,1; six (SSL seed:probe seed) pairs=0:0,0:1,0:2,1:0,1:1,1:2.
+% Probe completion: CIFAR100|ResNet18|mkdt|2|simclr|Flowers|1; SSL epochs=2000; encoder seeds=0,1; six (SSL seed:probe seed) pairs=0:0,0:1,0:2,1:0,1:1,1:2.
+% Probe completion: CIFAR100|ResNet18|mkdt|2|simclr|Dogs|1; SSL epochs=2000; encoder seeds=0,1; six (SSL seed:probe seed) pairs=0:0,0:1,0:2,1:0,1:1,1:2.
+% Probe completion: CIFAR100|ResNet18|mkdt|0.2|simclr|CIFAR10|1; SSL epochs=2000; encoder seeds=0,1; 6 (SSL seed:probe seed) pairs=0:0,0:1,0:2,1:0,1:1,1:2.
+% Probe completion: CIFAR100|ResNet18|mkdt|0.2|simclr|TinyImageNet|1; SSL epochs=2000; encoder seeds=0,1; 6 (SSL seed:probe seed) pairs=0:0,0:1,0:2,1:0,1:1,1:2.
+% Probe completion: CIFAR100|ResNet18|mkdt|0.2|simclr|Flowers|1; SSL epochs=2000; encoder seeds=0,1; 6 (SSL seed:probe seed) pairs=0:0,0:1,0:2,1:0,1:1,1:2.
+% Probe completion: CIFAR100|ResNet18|mkdt|0.2|simclr|CUB2011|1; SSL epochs=2000; encoder seeds=0,1; 6 (SSL seed:probe seed) pairs=0:0,0:1,0:2,1:0,1:1,1:2.
+% Probe completion: CIFAR100|ResNet18|mkdt|0.2|simclr|Dogs|1; SSL epochs=2000; encoder seeds=0,1; 6 (SSL seed:probe seed) pairs=0:0,0:1,0:2,1:0,1:1,1:2.
+% Probe completion: CIFAR100|ResNet18|mkdt|0.2|simclr|Flowers|5; SSL epochs=2000; encoder seeds=0,1; 6 (SSL seed:probe seed) pairs=0:0,0:1,0:2,1:0,1:1,1:2.
+% Probe completion: CIFAR100|ResNet18|mkdt|0.2|simclr|CIFAR10|5; SSL epochs=2000; encoder seeds=0,1; 6 (SSL seed:probe seed) pairs=0:0,0:1,0:2,1:0,1:1,1:2.
+% Probe completion: CIFAR100|ResNet18|mkdt|0.2|simclr|Aircraft|1; SSL epochs=2000; encoder seeds=0,1; 6 (SSL seed:probe seed) pairs=0:0,0:1,0:2,1:0,1:1,1:2.
+% Probe completion: CIFAR100|ResNet18|mkdt|0.2|simclr|CUB2011|5; SSL epochs=2000; encoder seeds=0,1; 6 (SSL seed:probe seed) pairs=0:0,0:1,0:2,1:0,1:1,1:2.
+% Probe completion: CIFAR100|ResNet18|mkdt|0.2|simclr|Dogs|5; SSL epochs=2000; encoder seeds=0,1; 6 (SSL seed:probe seed) pairs=0:0,0:1,0:2,1:0,1:1,1:2.
+% Probe completion: CIFAR100|ResNet18|mkdt|0.2|simclr|TinyImageNet|5; SSL epochs=2000; encoder seeds=0,1; 6 (SSL seed:probe seed) pairs=0:0,0:1,0:2,1:0,1:1,1:2.
+% Probe completion: CIFAR100|ResNet18|mkdt|0.2|simclr|Aircraft|5; SSL epochs=2000; encoder seeds=0,1; 6 (SSL seed:probe seed) pairs=0:0,0:1,0:2,1:0,1:1,1:2.

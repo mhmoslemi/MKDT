@@ -2,7 +2,7 @@
 \centering
 \def\dsacc#1#2{$#1${\footnotesize$\pm #2$}}
 \def\oldacc#1#2{\textcolor{red}{\dsacc{#1}{#2}}}
-\caption{Downstream results from Tiny ImageNet using ResNet18BN pretrained with Barlow Twins.}
+\caption{Downstream results from Tiny ImageNet using ResNet18BN pretrained with Barlow Twins. Entries marked \textsuperscript{*} average six linear probes over the available frozen encoders, not six independent SSL trainings.}
 \label{tab:tinyimagenet-downstream-barlowtwins}
 
 \setlength{\tabcolsep}{2pt}
@@ -29,9 +29,9 @@
  &  & K-means Subset
 & \dsacc{45.19}{1.96} & \dsacc{12.13}{1.27} & \dsacc{2.41}{0.38} & \dsacc{1.83}{0.21} & \dsacc{2.42}{0.29} & \dsacc{3.56}{0.83} \\
  &  & MKDT
-&  &  &  &  &  &  \\
+&  \dsacc{45.49}{0.48} &  \dsacc{12.38}{1.12} &  \dsacc{2.15}{0.31} &  \dsacc{1.73}{0.29} &  \dsacc{2.23}{0.18} &  \dsacc{3.50}{0.63} \\
  &  & Ours
-&  &  &  &  &  &  \\
+&  \dsacc{44.84}{0.87}\textsuperscript{*} &  \dsacc{13.26}{0.56}\textsuperscript{*} &  \dsacc{2.60}{0.32}\textsuperscript{*} &  \dsacc{1.74}{0.11}\textsuperscript{*} &  \dsacc{2.26}{0.19}\textsuperscript{*} &  \dsacc{3.37}{0.76}\textsuperscript{*} \\
 \cmidrule(lr){2-9}
 
  & \multirow{4}{*}{1\%} & Random Subset
@@ -41,7 +41,7 @@
  &  & MKDT
 & \dsacc{40.95}{0.53} & \dsacc{10.53}{0.85} & \dsacc{2.03}{0.34} & \dsacc{1.46}{0.17} & \dsacc{1.99}{0.22} & \dsacc{3.16}{0.70} \\
  &  & Ours
-&  &  &  &  &  &  \\
+&  \dsacc{53.07}{1.03} &  \dsacc{17.42}{0.45} &  \dsacc{3.38}{0.41} &  \dsacc{2.11}{0.36} &  \dsacc{3.49}{0.43} &  \dsacc{4.07}{0.39} \\
 \cmidrule(lr){2-9}
 
  & \multirow{4}{*}{2\%} & Random Subset
@@ -80,9 +80,9 @@
  &  & K-means Subset
 & \dsacc{53.72}{3.13} & \dsacc{22.50}{1.87} & \dsacc{4.20}{0.30} & \dsacc{2.87}{0.38} & \dsacc{4.37}{0.47} & \dsacc{9.46}{1.99} \\
  &  & MKDT
-&  &  &  &  &  &  \\
+&  \dsacc{55.30}{0.61} &  \dsacc{23.52}{0.90} &  \dsacc{4.25}{0.35} &  \dsacc{2.60}{0.27} &  \dsacc{4.16}{0.22} &  \dsacc{8.31}{0.99} \\
  &  & Ours
-&  &  &  &  &  &  \\
+&  \dsacc{54.20}{0.31}\textsuperscript{*} &  \dsacc{24.21}{0.18}\textsuperscript{*} &  \dsacc{4.07}{0.21}\textsuperscript{*} &  \dsacc{2.78}{0.27}\textsuperscript{*} &  \dsacc{4.07}{0.13}\textsuperscript{*} &  \dsacc{8.59}{0.66}\textsuperscript{*} \\
 \cmidrule(lr){2-9}
 
  & \multirow{4}{*}{1\%} & Random Subset
@@ -92,7 +92,7 @@
  &  & MKDT
 & \dsacc{49.66}{1.10} & \dsacc{20.14}{0.91} & \dsacc{3.48}{0.28} & \dsacc{2.42}{0.32} & \dsacc{4.11}{0.36} & \dsacc{7.83}{1.17} \\
  &  & Ours
-&  &  &  &  &  &  \\
+&  \dsacc{60.82}{0.42} &  \dsacc{29.33}{0.40} &  \dsacc{5.64}{0.22} &  \dsacc{2.95}{0.25} &  \dsacc{6.58}{0.38} &  \dsacc{13.20}{0.88} \\
 \cmidrule(lr){2-9}
 
  & \multirow{4}{*}{2\%} & Random Subset
@@ -134,3 +134,39 @@
 % Random downstream finish: 10 seeds; 100-epoch frozen probes; mean +/- sample SD.
 % Source: Evaluate_benchamrk/random_downstream_jobs/summaries/TinyImageNet/ (saved SSL epochs recorded per seed).
 % Random 1% subset / Barlow Twins: all 12 downstream cells complete; 10 encoder seeds at 5k SSL epochs.
+% Probe completion: TinyImageNet|ResNet18|mkdt|0.2|barlowtwins|CIFAR100|1; SSL epochs=10000; encoder seeds=0,1; 6 (SSL seed:probe seed) pairs=0:0,0:1,0:2,1:0,1:1,1:2.
+% Probe completion: TinyImageNet|ResNet18|mkdt|0.2|barlowtwins|CIFAR10|1; SSL epochs=10000; encoder seeds=0,1; 6 (SSL seed:probe seed) pairs=0:0,0:1,0:2,1:0,1:1,1:2.
+% Probe completion: TinyImageNet|ResNet18|mkdt|0.2|barlowtwins|Flowers|1; SSL epochs=10000; encoder seeds=0,1; 6 (SSL seed:probe seed) pairs=0:0,0:1,0:2,1:0,1:1,1:2.
+% Probe completion: TinyImageNet|ResNet18|ours|0.2|barlowtwins|CIFAR100|1; SSL epochs=10000; encoder seeds=0; 6 (SSL seed:probe seed) pairs=0:0,0:1,0:2,0:3,0:4,0:5.
+% Probe completion: TinyImageNet|ResNet18|ours|0.2|barlowtwins|CIFAR10|1; SSL epochs=10000; encoder seeds=0; 6 (SSL seed:probe seed) pairs=0:0,0:1,0:2,0:3,0:4,0:5.
+% Probe completion: TinyImageNet|ResNet18|mkdt|0.2|barlowtwins|CUB2011|1; SSL epochs=10000; encoder seeds=0,1; 6 (SSL seed:probe seed) pairs=0:0,0:1,0:2,1:0,1:1,1:2.
+% Probe completion: TinyImageNet|ResNet18|ours|0.2|barlowtwins|Flowers|1; SSL epochs=10000; encoder seeds=0; 6 (SSL seed:probe seed) pairs=0:0,0:1,0:2,0:3,0:4,0:5.
+% Probe completion: TinyImageNet|ResNet18|ours|1|barlowtwins|CIFAR10|1; SSL epochs=10000; encoder seeds=0,1; 6 (SSL seed:probe seed) pairs=0:0,0:1,0:2,1:0,1:1,1:2.
+% Probe completion: TinyImageNet|ResNet18|ours|0.2|barlowtwins|CUB2011|1; SSL epochs=10000; encoder seeds=0; 6 (SSL seed:probe seed) pairs=0:0,0:1,0:2,0:3,0:4,0:5.
+% Probe completion: TinyImageNet|ResNet18|ours|1|barlowtwins|CIFAR100|1; SSL epochs=10000; encoder seeds=0,1; 6 (SSL seed:probe seed) pairs=0:0,0:1,0:2,1:0,1:1,1:2.
+% Probe completion: TinyImageNet|ResNet18|mkdt|0.2|barlowtwins|Dogs|1; SSL epochs=10000; encoder seeds=0,1; 6 (SSL seed:probe seed) pairs=0:0,0:1,0:2,1:0,1:1,1:2.
+% Probe completion: TinyImageNet|ResNet18|ours|1|barlowtwins|Flowers|1; SSL epochs=10000; encoder seeds=0,1; 6 (SSL seed:probe seed) pairs=0:0,0:1,0:2,1:0,1:1,1:2.
+% Probe completion: TinyImageNet|ResNet18|ours|0.2|barlowtwins|Dogs|1; SSL epochs=10000; encoder seeds=0; 6 (SSL seed:probe seed) pairs=0:0,0:1,0:2,0:3,0:4,0:5.
+% Probe completion: TinyImageNet|ResNet18|ours|1|barlowtwins|CUB2011|1; SSL epochs=10000; encoder seeds=0,1; 6 (SSL seed:probe seed) pairs=0:0,0:1,0:2,1:0,1:1,1:2.
+% Probe completion: TinyImageNet|ResNet18|mkdt|0.2|barlowtwins|Flowers|5; SSL epochs=10000; encoder seeds=0,1; 6 (SSL seed:probe seed) pairs=0:0,0:1,0:2,1:0,1:1,1:2.
+% Probe completion: TinyImageNet|ResNet18|ours|0.2|barlowtwins|Flowers|5; SSL epochs=10000; encoder seeds=0; 6 (SSL seed:probe seed) pairs=0:0,0:1,0:2,0:3,0:4,0:5.
+% Probe completion: TinyImageNet|ResNet18|ours|1|barlowtwins|Dogs|1; SSL epochs=10000; encoder seeds=0,1; 6 (SSL seed:probe seed) pairs=0:0,0:1,0:2,1:0,1:1,1:2.
+% Probe completion: TinyImageNet|ResNet18|ours|1|barlowtwins|Flowers|5; SSL epochs=10000; encoder seeds=0,1; 6 (SSL seed:probe seed) pairs=0:0,0:1,0:2,1:0,1:1,1:2.
+% Probe completion: TinyImageNet|ResNet18|mkdt|0.2|barlowtwins|Aircraft|1; SSL epochs=10000; encoder seeds=0,1; 6 (SSL seed:probe seed) pairs=0:0,0:1,0:2,1:0,1:1,1:2.
+% Probe completion: TinyImageNet|ResNet18|ours|0.2|barlowtwins|Aircraft|1; SSL epochs=10000; encoder seeds=0; 6 (SSL seed:probe seed) pairs=0:0,0:1,0:2,0:3,0:4,0:5.
+% Probe completion: TinyImageNet|ResNet18|ours|1|barlowtwins|Aircraft|1; SSL epochs=10000; encoder seeds=0,1; 6 (SSL seed:probe seed) pairs=0:0,0:1,0:2,1:0,1:1,1:2.
+% Probe completion: TinyImageNet|ResNet18|mkdt|0.2|barlowtwins|CIFAR10|5; SSL epochs=10000; encoder seeds=0,1; 6 (SSL seed:probe seed) pairs=0:0,0:1,0:2,1:0,1:1,1:2.
+% Probe completion: TinyImageNet|ResNet18|mkdt|0.2|barlowtwins|CIFAR100|5; SSL epochs=10000; encoder seeds=0,1; 6 (SSL seed:probe seed) pairs=0:0,0:1,0:2,1:0,1:1,1:2.
+% Probe completion: TinyImageNet|ResNet18|ours|0.2|barlowtwins|CIFAR10|5; SSL epochs=10000; encoder seeds=0; 6 (SSL seed:probe seed) pairs=0:0,0:1,0:2,0:3,0:4,0:5.
+% Probe completion: TinyImageNet|ResNet18|mkdt|0.2|barlowtwins|CUB2011|5; SSL epochs=10000; encoder seeds=0,1; 6 (SSL seed:probe seed) pairs=0:0,0:1,0:2,1:0,1:1,1:2.
+% Probe completion: TinyImageNet|ResNet18|ours|0.2|barlowtwins|CIFAR100|5; SSL epochs=10000; encoder seeds=0; 6 (SSL seed:probe seed) pairs=0:0,0:1,0:2,0:3,0:4,0:5.
+% Probe completion: TinyImageNet|ResNet18|ours|0.2|barlowtwins|CUB2011|5; SSL epochs=10000; encoder seeds=0; 6 (SSL seed:probe seed) pairs=0:0,0:1,0:2,0:3,0:4,0:5.
+% Probe completion: TinyImageNet|ResNet18|ours|1|barlowtwins|CIFAR10|5; SSL epochs=10000; encoder seeds=0,1; 6 (SSL seed:probe seed) pairs=0:0,0:1,0:2,1:0,1:1,1:2.
+% Probe completion: TinyImageNet|ResNet18|ours|1|barlowtwins|CIFAR100|5; SSL epochs=10000; encoder seeds=0,1; 6 (SSL seed:probe seed) pairs=0:0,0:1,0:2,1:0,1:1,1:2.
+% Probe completion: TinyImageNet|ResNet18|ours|1|barlowtwins|CUB2011|5; SSL epochs=10000; encoder seeds=0,1; 6 (SSL seed:probe seed) pairs=0:0,0:1,0:2,1:0,1:1,1:2.
+% Probe completion: TinyImageNet|ResNet18|mkdt|0.2|barlowtwins|Dogs|5; SSL epochs=10000; encoder seeds=0,1; 6 (SSL seed:probe seed) pairs=0:0,0:1,0:2,1:0,1:1,1:2.
+% Probe completion: TinyImageNet|ResNet18|ours|0.2|barlowtwins|Dogs|5; SSL epochs=10000; encoder seeds=0; 6 (SSL seed:probe seed) pairs=0:0,0:1,0:2,0:3,0:4,0:5.
+% Probe completion: TinyImageNet|ResNet18|ours|1|barlowtwins|Dogs|5; SSL epochs=10000; encoder seeds=0,1; 6 (SSL seed:probe seed) pairs=0:0,0:1,0:2,1:0,1:1,1:2.
+% Probe completion: TinyImageNet|ResNet18|ours|1|barlowtwins|Aircraft|5; SSL epochs=10000; encoder seeds=0,1; 6 (SSL seed:probe seed) pairs=0:0,0:1,0:2,1:0,1:1,1:2.
+% Probe completion: TinyImageNet|ResNet18|mkdt|0.2|barlowtwins|Aircraft|5; SSL epochs=10000; encoder seeds=0,1; 6 (SSL seed:probe seed) pairs=0:0,0:1,0:2,1:0,1:1,1:2.
+% Probe completion: TinyImageNet|ResNet18|ours|0.2|barlowtwins|Aircraft|5; SSL epochs=10000; encoder seeds=0; 6 (SSL seed:probe seed) pairs=0:0,0:1,0:2,0:3,0:4,0:5.

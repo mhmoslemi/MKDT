@@ -1,0 +1,18 @@
+Traceback (most recent call last):
+  File "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/common.py", line 62, in exclusive_run
+    fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+BlockingIOError: [Errno 11] Resource temporarily unavailable
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/partial_probe_jobs/worker.py", line 192, in <module>
+    main()
+  File "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/partial_probe_jobs/worker.py", line 160, in main
+    with exclusive_run(output / '.probe_locks' / destination.stem):
+  File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/python/3.11.5/lib/python3.11/contextlib.py", line 137, in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+  File "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/common.py", line 64, in exclusive_run
+    raise RuntimeError(f'Another process is working in {folder}') from error
+RuntimeError: Another process is working in /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mkdt_eval_results_interactive_6seeds/CIFAR100/ResNet18/mkdt/pt2/barlowtwins/seed_000/.probe_locks/ssl_seed_0_probe_3

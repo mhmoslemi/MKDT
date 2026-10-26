@@ -1,0 +1,88 @@
+{
+  "name": "pp_ours_TinyImageNet_p1_simclr_down_CIFAR10_l5",
+  "stage": "probe",
+  "group_id": "ours_TinyImageNet_p1_simclr_down",
+  "cell": {
+    "source": "TinyImageNet",
+    "model": "ResNet18",
+    "target": "CIFAR10",
+    "ssl": "simclr",
+    "kind": "ours",
+    "subset": 1,
+    "labels": 5,
+    "value": ""
+  },
+  "cell_key": "TinyImageNet|ResNet18|ours|1|simclr|CIFAR10|5",
+  "remaining": true,
+  "ssl_epochs": 2000,
+  "scheme": "two_ssl",
+  "repeated_encoders": false,
+  "samples": [
+    {
+      "ssl_seed": 0,
+      "probe_seed": 0,
+      "checkpoint_dir": "ours_eval_results_simclr2k_barlow10k_2ssl3probes_main/TinyImageNet/ResNet18BN/pt1/simclr/ssl_seed_000",
+      "config_sha256": "18f0cb009faf389cfcb1dbce0bb2b9af71cebe46b257908790f886ac0c01a9ec",
+      "encoder_sha256": "006fc7f6153b707d5e5863243c38e99d8fd1d3b7d561f6f348d19789a175efea",
+      "result_file": "ours_eval_results_simclr2k_barlow10k_2ssl3probes_downstream/TinyImageNet/ResNet18BN/pt1/simclr/ssl_seed_000/evaluations/CIFAR10_lbl5_probe0.json"
+    },
+    {
+      "ssl_seed": 0,
+      "probe_seed": 1,
+      "checkpoint_dir": "ours_eval_results_simclr2k_barlow10k_2ssl3probes_main/TinyImageNet/ResNet18BN/pt1/simclr/ssl_seed_000",
+      "config_sha256": "18f0cb009faf389cfcb1dbce0bb2b9af71cebe46b257908790f886ac0c01a9ec",
+      "encoder_sha256": "006fc7f6153b707d5e5863243c38e99d8fd1d3b7d561f6f348d19789a175efea",
+      "result_file": "ours_eval_results_simclr2k_barlow10k_2ssl3probes_downstream/TinyImageNet/ResNet18BN/pt1/simclr/ssl_seed_000/evaluations/CIFAR10_lbl5_probe1.json"
+    },
+    {
+      "ssl_seed": 0,
+      "probe_seed": 2,
+      "checkpoint_dir": "ours_eval_results_simclr2k_barlow10k_2ssl3probes_main/TinyImageNet/ResNet18BN/pt1/simclr/ssl_seed_000",
+      "config_sha256": "18f0cb009faf389cfcb1dbce0bb2b9af71cebe46b257908790f886ac0c01a9ec",
+      "encoder_sha256": "006fc7f6153b707d5e5863243c38e99d8fd1d3b7d561f6f348d19789a175efea",
+      "result_file": "ours_eval_results_simclr2k_barlow10k_2ssl3probes_downstream/TinyImageNet/ResNet18BN/pt1/simclr/ssl_seed_000/evaluations/CIFAR10_lbl5_probe2.json"
+    },
+    {
+      "ssl_seed": 1,
+      "probe_seed": 0,
+      "checkpoint_dir": "ours_eval_results_simclr2k_barlow10k_2ssl3probes_main/TinyImageNet/ResNet18BN/pt1/simclr/ssl_seed_001",
+      "config_sha256": "b7437f9ae13f377107e6b2204a0c32d79c18d67ddb23632723f3761bd52c90c9",
+      "encoder_sha256": "30e2251aed033c9b4668943737fbd1654c52997a0716fd5680eb42c39e6fa66d",
+      "result_file": "ours_eval_results_simclr2k_barlow10k_2ssl3probes_downstream/TinyImageNet/ResNet18BN/pt1/simclr/ssl_seed_001/evaluations/CIFAR10_lbl5_probe0.json"
+    },
+    {
+      "ssl_seed": 1,
+      "probe_seed": 1,
+      "checkpoint_dir": "ours_eval_results_simclr2k_barlow10k_2ssl3probes_main/TinyImageNet/ResNet18BN/pt1/simclr/ssl_seed_001",
+      "config_sha256": "b7437f9ae13f377107e6b2204a0c32d79c18d67ddb23632723f3761bd52c90c9",
+      "encoder_sha256": "30e2251aed033c9b4668943737fbd1654c52997a0716fd5680eb42c39e6fa66d",
+      "result_file": "ours_eval_results_simclr2k_barlow10k_2ssl3probes_downstream/TinyImageNet/ResNet18BN/pt1/simclr/ssl_seed_001/evaluations/CIFAR10_lbl5_probe1.json"
+    },
+    {
+      "ssl_seed": 1,
+      "probe_seed": 2,
+      "checkpoint_dir": "ours_eval_results_simclr2k_barlow10k_2ssl3probes_main/TinyImageNet/ResNet18BN/pt1/simclr/ssl_seed_001",
+      "config_sha256": "b7437f9ae13f377107e6b2204a0c32d79c18d67ddb23632723f3761bd52c90c9",
+      "encoder_sha256": "30e2251aed033c9b4668943737fbd1654c52997a0716fd5680eb42c39e6fa66d",
+      "result_file": "ours_eval_results_simclr2k_barlow10k_2ssl3probes_downstream/TinyImageNet/ResNet18BN/pt1/simclr/ssl_seed_001/evaluations/CIFAR10_lbl5_probe2.json"
+    }
+  ],
+  "summary_file": "partial_probe_results/ours_TinyImageNet_p1_simclr_down/CIFAR10_lbl5/summary.json",
+  "code_hashes": {
+    "Evaluate_benchamrk/common.py": "67fcd33f581a34a7f764431b6761ac120cb080d4b2ea0d69b95074565a224f8b",
+    "Evaluate_benchamrk/data.py": "befcf535679e449b3544ae9b8578325e53f7995179591042315d8937cd55f6d9",
+    "Evaluate_benchamrk/evaluate.py": "2b2162a56878f48ade39d2b80d4316511f20a72d29eaa2cf70fe023d88ad722f",
+    "Evaluate_benchamrk/plan.py": "c6d9bd33b36d1d235a2f6af291b3a0a82187b1eea3a10b90a7f57317d8eee83e",
+    "Evaluate_benchamrk/run.py": "1c2b8d29ab47966f1178c9f04b3e1b7c72bd2f55fb65a32c32c77c3730faf45b",
+    "Evaluate_benchamrk/test_protocol.py": "f018562437924ced1d890343a4e898f10e48c50a63920d337031194671c4e43d",
+    "Evaluate_benchamrk/train_ssl.py": "3670781eb0f0f838ced6cc7ca9775791d4d52683fe25e489239f012937dc1a79",
+    "networks.py": "0c15ff3ef11f21df752e2a9a17851ab8c8a52ddc3969380682ea8bfcec1968fc",
+    "benchmarks/downstream_data.py": "081fe26e5dc81c96ce8e8ffe5a412302663de4a9d095684c5b37e7c615b4a6fd"
+  },
+  "seconds": 939,
+  "buffer_seconds": 60,
+  "dependencies": [],
+  "missing_probes": 6,
+  "reprobe_legacy_target": false,
+  "account": "aip-yiweilu"
+}

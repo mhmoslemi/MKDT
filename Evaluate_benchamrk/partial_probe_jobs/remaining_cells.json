@@ -1,0 +1,123 @@
+[
+  {
+    "id": "ours_TinyImageNet_p1_barlowtwins", "source": "TinyImageNet", "kind": "ours", "subset": 1,
+    "ssl": "barlowtwins", "epochs": 10000, "scheme": "two_ssl",
+    "output_group": "ours_eval_results_simclr2k_barlow10k_2ssl3probes_main/TinyImageNet/ResNet18BN/pt1/barlowtwins",
+    "checkpoint_group": "ours_eval_results_simclr2k_barlow10k_2ssl3probes_main/TinyImageNet/ResNet18BN/pt1/barlowtwins",
+    "cells": [["TinyImageNet", 1], ["TinyImageNet", 5]]
+  },
+  {
+    "id": "ours_TinyImageNet_p2_simclr", "source": "TinyImageNet", "kind": "ours", "subset": 2,
+    "ssl": "simclr", "epochs": 2000, "scheme": "two_ssl",
+    "generation_job_name": "oursgen_TinyImageNet_ResNet18BN_p2",
+    "output_group": "ours_eval_results_simclr2k_barlow10k_2ssl3probes_main/TinyImageNet/ResNet18BN/pt2/simclr",
+    "checkpoint_group": "ours_eval_results_simclr2k_barlow10k_2ssl3probes_main/TinyImageNet/ResNet18BN/pt2/simclr",
+    "cells": [["TinyImageNet", 1], ["TinyImageNet", 5]]
+  },
+  {
+    "id": "mkdt_TinyImageNet_p0p2_barlowtwins", "source": "TinyImageNet", "kind": "mkdt", "subset": 0.2,
+    "ssl": "barlowtwins", "epochs": 10000, "scheme": "two_ssl",
+    "output_group": "mkdt_eval_results_simclr2k_2ssl3probes/TinyImageNet/ResNet18/mkdt/pt0.2/barlowtwins",
+    "checkpoint_group": "mkdt_eval_results_simclr2k_2ssl3probes/TinyImageNet/ResNet18/mkdt/pt0.2/barlowtwins",
+    "cells": [["TinyImageNet", 1], ["TinyImageNet", 5], ["CIFAR10", 1], ["CIFAR10", 5], ["CIFAR100", 1], ["CIFAR100", 5], ["Aircraft", 1], ["Aircraft", 5], ["CUB2011", 1], ["CUB2011", 5], ["Dogs", 1], ["Dogs", 5], ["Flowers", 1], ["Flowers", 5]]
+  },
+  {
+    "id": "mkdt_TinyImageNet_p2_simclr", "source": "TinyImageNet", "kind": "mkdt", "subset": 2,
+    "ssl": "simclr", "epochs": 2000, "scheme": "two_ssl",
+    "output_group": "mkdt_eval_results_simclr2k_2ssl3probes/TinyImageNet/ResNet18/mkdt/pt2/simclr",
+    "checkpoint_group": "mkdt_eval_results_simclr2k_2ssl3probes/TinyImageNet/ResNet18/mkdt/pt2/simclr",
+    "cells": [["TinyImageNet", 1], ["TinyImageNet", 5], ["CIFAR10", 1], ["CIFAR10", 5], ["CIFAR100", 1], ["CIFAR100", 5], ["Aircraft", 1], ["Aircraft", 5], ["CUB2011", 1], ["CUB2011", 5], ["Dogs", 1], ["Dogs", 5], ["Flowers", 1], ["Flowers", 5]]
+  },
+  {
+    "id": "mkdt_CIFAR10_p2_simclr", "source": "CIFAR10", "kind": "mkdt", "subset": 2,
+    "ssl": "simclr", "epochs": 2000, "scheme": "two_ssl",
+    "output_group": "mkdt_eval_results_simclr2k_2ssl3probes/CIFAR10/ResNet18/mkdt/pt2/simclr",
+    "checkpoint_group": "mkdt_eval_results_simclr2k_2ssl3probes/CIFAR10/ResNet18/mkdt/pt2/simclr",
+    "cells": [["Flowers", 1], ["TinyImageNet", 1]]
+  },
+  {
+    "id": "mkdt_CIFAR100_p2_simclr", "source": "CIFAR100", "kind": "mkdt", "subset": 2,
+    "ssl": "simclr", "epochs": 2000, "scheme": "two_ssl",
+    "output_group": "mkdt_eval_results_simclr2k_2ssl3probes/CIFAR100/ResNet18/mkdt/pt2/simclr",
+    "checkpoint_group": "mkdt_eval_results_simclr2k_2ssl3probes/CIFAR100/ResNet18/mkdt/pt2/simclr",
+    "cells": [["Dogs", 1], ["Flowers", 1]]
+  },
+  {
+    "id": "mkdt_CIFAR10_p0p2_simclr", "source": "CIFAR10", "kind": "mkdt", "subset": 0.2,
+    "ssl": "simclr", "epochs": 2000, "scheme": "two_ssl",
+    "output_group": "mkdt_eval_results_simclr2k_2ssl3probes/CIFAR10/ResNet18/mkdt/pt0.2/simclr",
+    "checkpoint_group": "mkdt_eval_results_simclr2k_2ssl3probes/CIFAR10/ResNet18/mkdt/pt0.2/simclr",
+    "cells": [["CIFAR10", 1], ["CIFAR10", 5], ["CIFAR100", 1], ["CIFAR100", 5], ["Aircraft", 1], ["Aircraft", 5], ["CUB2011", 1], ["CUB2011", 5], ["Dogs", 1], ["Dogs", 5], ["Flowers", 1], ["Flowers", 5], ["TinyImageNet", 1], ["TinyImageNet", 5]]
+  },
+  {
+    "id": "mkdt_CIFAR10_p0p2_barlowtwins", "source": "CIFAR10", "kind": "mkdt", "subset": 0.2,
+    "ssl": "barlowtwins", "epochs": 10000, "scheme": "two_ssl",
+    "output_group": "mkdt_eval_results_simclr2k_2ssl3probes/CIFAR10/ResNet18/mkdt/pt0.2/barlowtwins",
+    "checkpoint_group": "mkdt_eval_results_simclr2k_2ssl3probes/CIFAR10/ResNet18/mkdt/pt0.2/barlowtwins",
+    "cells": [["CIFAR10", 1], ["CIFAR10", 5], ["CIFAR100", 1], ["CIFAR100", 5], ["Aircraft", 1], ["Aircraft", 5], ["CUB2011", 1], ["CUB2011", 5], ["Dogs", 1], ["Dogs", 5], ["Flowers", 1], ["Flowers", 5], ["TinyImageNet", 1], ["TinyImageNet", 5]]
+  },
+  {
+    "id": "mkdt_CIFAR100_p0p2_simclr", "source": "CIFAR100", "kind": "mkdt", "subset": 0.2,
+    "ssl": "simclr", "epochs": 2000, "scheme": "two_ssl",
+    "output_group": "mkdt_eval_results_simclr2k_2ssl3probes/CIFAR100/ResNet18/mkdt/pt0.2/simclr",
+    "checkpoint_group": "mkdt_eval_results_simclr2k_2ssl3probes/CIFAR100/ResNet18/mkdt/pt0.2/simclr",
+    "cells": [["CIFAR100", 1], ["CIFAR100", 5], ["CIFAR10", 1], ["CIFAR10", 5], ["Aircraft", 1], ["Aircraft", 5], ["CUB2011", 1], ["CUB2011", 5], ["Dogs", 1], ["Dogs", 5], ["Flowers", 1], ["Flowers", 5], ["TinyImageNet", 1], ["TinyImageNet", 5]]
+  },
+  {
+    "id": "mkdt_CIFAR100_p0p2_barlowtwins", "source": "CIFAR100", "kind": "mkdt", "subset": 0.2,
+    "ssl": "barlowtwins", "epochs": 10000, "scheme": "two_ssl",
+    "output_group": "mkdt_eval_results_simclr2k_2ssl3probes/CIFAR100/ResNet18/mkdt/pt0.2/barlowtwins",
+    "checkpoint_group": "mkdt_eval_results_simclr2k_2ssl3probes/CIFAR100/ResNet18/mkdt/pt0.2/barlowtwins",
+    "cells": [["CIFAR100", 1], ["CIFAR100", 5], ["CIFAR10", 1], ["CIFAR10", 5], ["Aircraft", 1], ["Aircraft", 5], ["CUB2011", 1], ["CUB2011", 5], ["Dogs", 1], ["Dogs", 5], ["Flowers", 1], ["Flowers", 5], ["TinyImageNet", 1], ["TinyImageNet", 5]]
+  },
+  {
+    "id": "mkdt_TinyImageNet_p0p2_simclr_down", "source": "TinyImageNet", "kind": "mkdt", "subset": 0.2,
+    "ssl": "simclr", "epochs": 2000, "scheme": "two_ssl",
+    "output_group": "mkdt_eval_results_simclr2k_2ssl3probes/TinyImageNet/ResNet18/mkdt/pt0.2/simclr",
+    "checkpoint_group": "mkdt_eval_results_simclr2k_2ssl3probes/TinyImageNet/ResNet18/mkdt/pt0.2/simclr",
+    "cells": [["Flowers", 1]]
+  },
+  {
+    "id": "mkdt_TinyImageNet_p1_simclr_down", "source": "TinyImageNet", "kind": "mkdt", "subset": 1,
+    "ssl": "simclr", "epochs": 2000, "scheme": "two_ssl",
+    "output_group": "mkdt_eval_results_simclr2k_2ssl3probes/TinyImageNet/ResNet18/mkdt/pt1/simclr",
+    "checkpoint_group": "mkdt_eval_results_simclr2k_2ssl3probes/TinyImageNet/ResNet18/mkdt/pt1/simclr",
+    "cells": [["CIFAR10", 1], ["CIFAR10", 5], ["CIFAR100", 1], ["CIFAR100", 5], ["Aircraft", 1], ["Aircraft", 5], ["CUB2011", 1], ["CUB2011", 5], ["Dogs", 1], ["Dogs", 5], ["Flowers", 1], ["Flowers", 5]]
+  },
+  {
+    "id": "ours_TinyImageNet_p1_simclr_down", "source": "TinyImageNet", "kind": "ours", "subset": 1,
+    "ssl": "simclr", "epochs": 2000, "scheme": "two_ssl",
+    "output_group": "ours_eval_results_simclr2k_barlow10k_2ssl3probes_downstream/TinyImageNet/ResNet18BN/pt1/simclr",
+    "checkpoint_group": "ours_eval_results_simclr2k_barlow10k_2ssl3probes_main/TinyImageNet/ResNet18BN/pt1/simclr",
+    "cells": [["CIFAR10", 1], ["CIFAR10", 5], ["CIFAR100", 1], ["CIFAR100", 5], ["Aircraft", 1], ["Aircraft", 5], ["CUB2011", 1], ["CUB2011", 5], ["Dogs", 1], ["Dogs", 5], ["Flowers", 1], ["Flowers", 5]]
+  },
+  {
+    "id": "ours_TinyImageNet_p0p2_barlowtwins_down", "source": "TinyImageNet", "kind": "ours", "subset": 0.2,
+    "ssl": "barlowtwins", "epochs": 10000, "scheme": "one_ssl",
+    "output_group": "ours_eval_results_simclr2k_barlow10k_2ssl3probes_downstream/TinyImageNet/ResNet18BN/pt0.2/barlowtwins",
+    "checkpoint_group": "ours_eval_results_simclr2k_barlow10k_2ssl3probes_main/TinyImageNet/ResNet18BN/pt0.2/barlowtwins",
+    "cells": [["CIFAR10", 1], ["CIFAR10", 5], ["CIFAR100", 1], ["CIFAR100", 5], ["Aircraft", 1], ["Aircraft", 5], ["CUB2011", 1], ["CUB2011", 5], ["Dogs", 1], ["Dogs", 5], ["Flowers", 1], ["Flowers", 5]]
+  },
+  {
+    "id": "ours_TinyImageNet_p1_barlowtwins_down", "training_group_id": "ours_TinyImageNet_p1_barlowtwins",
+    "source": "TinyImageNet", "kind": "ours", "subset": 1,
+    "ssl": "barlowtwins", "epochs": 10000, "scheme": "two_ssl",
+    "output_group": "ours_eval_results_simclr2k_barlow10k_2ssl3probes_downstream/TinyImageNet/ResNet18BN/pt1/barlowtwins",
+    "checkpoint_group": "ours_eval_results_simclr2k_barlow10k_2ssl3probes_main/TinyImageNet/ResNet18BN/pt1/barlowtwins",
+    "cells": [["CIFAR10", 1], ["CIFAR10", 5], ["CIFAR100", 1], ["CIFAR100", 5], ["Aircraft", 1], ["Aircraft", 5], ["CUB2011", 1], ["CUB2011", 5], ["Dogs", 1], ["Dogs", 5], ["Flowers", 1], ["Flowers", 5]]
+  },
+  {
+    "id": "ours_TinyImageNet_p2_simclr_down", "source": "TinyImageNet", "kind": "ours", "subset": 2,
+    "ssl": "simclr", "epochs": 1000, "scheme": "two_ssl",
+    "output_group": "ours_eval_results_simclr1k_2ssl3probes_downstream/TinyImageNet/ResNet18BN/pt2/simclr",
+    "checkpoint_group": "ours_eval_results_simclr1k_2ssl3probes_main/TinyImageNet/ResNet18BN/pt2/simclr",
+    "cells": [["CIFAR10", 1]]
+  },
+  {
+    "id": "random_TinyImageNet_p2_simclr_down", "source": "TinyImageNet", "kind": "random", "subset": 2,
+    "ssl": "simclr", "epochs": 4000, "scheme": "ten_ssl",
+    "output_group": "random_eval_results_interactive_10seeds/TinyImageNet/ResNet18/random/pt2/simclr",
+    "checkpoint_group": "random_ssl_checkpoints_cifar10k8k6k_tiny6k5k4k/TinyImageNet/ResNet18/random/pt2/simclr",
+    "cells": [["Aircraft", 1]]
+  }
+]
