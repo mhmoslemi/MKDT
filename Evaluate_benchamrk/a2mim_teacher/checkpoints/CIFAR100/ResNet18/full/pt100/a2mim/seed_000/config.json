@@ -1,0 +1,85 @@
+{
+  "identity": {
+    "seed": 0,
+    "selection": {
+      "scope": "full"
+    },
+    "selection_method": "full",
+    "signature": "75d3655cbdc33173fc759c5545665a15482c81d7ad6369901d40f98bebce2109"
+  },
+  "signature": {
+    "augmentation": "random_resized_crop_0.8_1.0_bilinear_and_flip",
+    "batch_size": 256,
+    "betas": [
+      0.9,
+      0.999
+    ],
+    "checkpoint_every_epochs": 10,
+    "code_hashes": {
+      "Evaluate_benchamrk/a2mim_teacher/model.py": "584adbe1af8325eee8bfaf4c277f70ac30a3d657b0be2fd0d4c9f1684794d524",
+      "Evaluate_benchamrk/a2mim_teacher/train.py": "cc11ba04550350f0796345fd593392d9be6b88e4da32aa85141036b21d9ba810",
+      "Evaluate_benchamrk/common.py": "67fcd33f581a34a7f764431b6761ac120cb080d4b2ea0d69b95074565a224f8b",
+      "Evaluate_benchamrk/data.py": "befcf535679e449b3544ae9b8578325e53f7995179591042315d8937cd55f6d9",
+      "benchmarks/downstream_data.py": "081fe26e5dc81c96ce8e8ffe5a412302663de4a9d095684c5b37e7c615b4a6fd",
+      "networks.py": "0c15ff3ef11f21df752e2a9a17851ab8c8a52ddc3969380682ea8bfcec1968fc"
+    },
+    "count": 50000,
+    "encoder_stride": 8,
+    "epochs": 300,
+    "eps": 1e-08,
+    "feature_mask_channels": 256,
+    "feature_mask_stage": "before_layer4",
+    "fft_unmask_replace": "mixed",
+    "fft_unmask_weight": 0.001,
+    "frequency_loss": "official_FocalFrequencyLoss_ave_spectrum_log_matrix_batch_matrix",
+    "frequency_weight": 0.5,
+    "input_size": 32,
+    "mask_gamma_init": 1e-06,
+    "mask_patch_size": 8,
+    "mask_ratio": 0.6,
+    "mask_token_init_std": 0.02,
+    "mask_token_lr_mult": 0.1,
+    "method": "a2mim",
+    "minimum_lr": 1e-05,
+    "model": "ResNet18",
+    "normalization": [
+      [
+        0.5071,
+        0.4865,
+        0.4409
+      ],
+      [
+        0.2673,
+        0.2564,
+        0.2762
+      ]
+    ],
+    "optimizer": "adamw",
+    "peak_lr": 0.00015,
+    "pixel_loss": "official_focal_l1_alpha0.2_gamma1_sigmoid",
+    "precision": "float32",
+    "pretrained": false,
+    "reference": {
+      "a2mim_commit": "ccca6dc21995b8e39e5571bd189c1ebce93bf49d",
+      "a2mim_repository": "https://github.com/Westlake-AI/A2MIM",
+      "implementation_commit": "37e1372446ab35c03fcf77302539bd4a5bee47eb",
+      "implementation_repository": "https://github.com/Westlake-AI/openmixup",
+      "license": "Apache-2.0",
+      "sha256": {
+        "LICENSE": "a982f2556c69a656f966117814c7b91a962681ab086e55a22d73655297229425",
+        "focal_loss.py.txt": "6f86d8f9ea1d4b538400a82f5908c54380f78325f8d091c06a4c47981a6446d3",
+        "mim_head.py.txt": "55cbd75123853b120968c208f8317dc87d1a97acbe024733674469ce4c30ec0a",
+        "mim_resnet.py.txt": "275bdfd81971b9f369bc3306c07ff73b38e57f1ace5a959420de15584323670b",
+        "model_config.py.txt": "f9ea5d9af0ae049a2f56c681d7cfbab0285ee8b8725d03c8676da6d881c5024e",
+        "regression_loss.py.txt": "0ab1d3c3ac4dc139bf1419db509c703d506d33ca45456249be59221b8b66d673",
+        "train_config.py.txt": "fffe425714d161772512c3517e2789ec1fe9109135830c5e5d1ce0f12daf578a"
+      }
+    },
+    "schedule": "official_StepFixCosineAnnealing",
+    "seed": 0,
+    "source": "CIFAR100",
+    "training_split_fingerprint": "091c775676ae5172a0a29eaf9c37f6a6b601efefc7376b95ef622082ae2a9c14",
+    "warmup_epochs": 10,
+    "weight_decay": 0.05
+  }
+}

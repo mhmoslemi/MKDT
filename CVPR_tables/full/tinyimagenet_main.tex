@@ -66,7 +66,7 @@
 & \dsacc{8.76}{0.32} & \dsacc{10.16}{0.41}
 & \dsacc{10.70}{0.41} & \dsacc{12.49}{0.50} \\
 & & MKDT &  &  &  & -- &  & -- \\
-& & Ours & & -- & & -- & & -- \\
+& & Ours & & -- & & -- & \dsacc{7.85}{0.30} & -- \\
 % BEGIN DISABLED: 5% pretraining subset
 % \cmidrule(lr){2-9}
 %
@@ -124,7 +124,7 @@
 & \dsacc{13.73}{0.32} & \dsacc{15.93}{0.29}
 & \dsacc{17.94}{0.31} & \dsacc{22.23}{0.28} \\
 & & MKDT &  &  &  & -- &  & -- \\
-& & Ours & & -- & & -- & & -- \\
+& & Ours & & -- & & -- & \dsacc{14.55}{0.46} & -- \\
 % BEGIN DISABLED: 5% pretraining subset
 % \cmidrule(lr){2-9}
 %
@@ -159,3 +159,5 @@
 % MKDT SimCLR: superseded values cleared; replacement uses 2,000 SSL epochs, 2 SSL seeds x 3 probe seeds.
 % Replacement results: Evaluate_benchamrk/mkdt_eval_results_simclr2k_2ssl3probes.
 % MKDT ConvNet/1%/Barlow Twins: six SSL seeds; accepted seed 0 uses epoch 4500/5000, seeds 1--5 use epoch 5000.
+% Probe completion: TinyImageNet|ResNet18|ours|2|simclr|TinyImageNet|1; SSL epochs=2000; encoder seeds=0,1; 6 (SSL seed:probe seed) pairs=0:0,0:1,0:2,1:0,1:1,1:2.
+% Probe completion: TinyImageNet|ResNet18|ours|2|simclr|TinyImageNet|5; SSL epochs=2000; encoder seeds=0,1; 6 (SSL seed:probe seed) pairs=0:0,0:1,0:2,1:0,1:1,1:2.
