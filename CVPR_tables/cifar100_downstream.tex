@@ -2,7 +2,7 @@
 \centering
 \def\dsacc#1#2{$#1${\footnotesize$\pm #2$}}
 \def\oldacc#1#2{\textcolor{red}{\dsacc{#1}{#2}}}
-\caption{cifar100 downstream. ResNet18 Entries marked \textsuperscript{*} average six linear probes over the available frozen encoders, not six independent SSL trainings.}
+\caption{cifar100 downstream. ResNet18}
 \label{tab:cifar100-downstream-resnet18}
 
 \setlength{\tabcolsep}{2pt}
@@ -81,7 +81,7 @@
 & \dsacc{5.69}{0.29} & \dsacc{8.78}{0.32} & \dsacc{46.18}{0.89} & \dsacc{52.39}{1.33} & \dsacc{2.72}{0.30} & \dsacc{3.24}{0.49} & \dsacc{1.72}{0.20} & \dsacc{2.07}{0.18} & \dsacc{2.05}{0.21} & \dsacc{2.84}{0.24} & \dsacc{3.51}{0.62} & \dsacc{4.30}{0.53} \\
 & & K-means Subset
 & \dsacc{5.88}{0.56} & \dsacc{8.72}{0.22} & \dsacc{45.65}{1.01} & \dsacc{52.59}{0.95} & \dsacc{2.83}{0.59} & \dsacc{2.99}{0.48} & \dsacc{1.72}{0.24} & \dsacc{2.19}{0.18} & \dsacc{2.18}{0.27} & \dsacc{2.86}{0.33} & \dsacc{3.60}{0.49} & \dsacc{4.33}{0.61} \\
-& & MKDT &  \dsacc{2.96}{0.07} &  \dsacc{4.61}{0.27}\textsuperscript{*} &  \dsacc{35.32}{0.99} &  \dsacc{34.39}{0.52}\textsuperscript{*} &  \dsacc{1.94}{0.16} &  \dsacc{2.19}{0.44}\textsuperscript{*} &  \dsacc{1.17}{0.16} &  \dsacc{1.44}{0.14}\textsuperscript{*} &  \dsacc{1.75}{0.10} &  \dsacc{2.16}{0.11}\textsuperscript{*} &  \dsacc{2.21}{0.39} &  \dsacc{2.96}{0.42}\textsuperscript{*} \\
+& & MKDT &  \dsacc{2.96}{0.07} &  \dsacc{4.61}{0.27} &  \dsacc{35.32}{0.99} &  \dsacc{34.39}{0.52} &  \dsacc{1.94}{0.16} &  \dsacc{2.19}{0.44} &  \dsacc{1.17}{0.16} &  \dsacc{1.44}{0.14} &  \dsacc{1.75}{0.10} &  \dsacc{2.16}{0.11} &  \dsacc{2.21}{0.39} &  \dsacc{2.96}{0.42} \\
 & & Ours &  \dsacc{5.52}{0.19} & -- &  \dsacc{45.68}{0.60} & -- &  \dsacc{2.45}{0.31} & -- &  \dsacc{1.54}{0.16} & -- &  \dsacc{2.17}{0.09} & -- &  \dsacc{2.92}{0.28} & -- \\
 % BEGIN DISABLED: 5% pretraining subset
 % \cmidrule(lr){2-15}
@@ -153,7 +153,7 @@
 & \dsacc{10.62}{0.36} & \dsacc{16.05}{0.41} & \dsacc{52.19}{0.63} & \dsacc{59.73}{0.73} & \dsacc{4.09}{0.27} & \dsacc{5.70}{0.43} & \dsacc{2.36}{0.35} & \dsacc{3.48}{0.35} & \dsacc{3.92}{0.41} & \dsacc{5.49}{0.43} & \dsacc{7.01}{1.14} & \dsacc{11.66}{1.49} \\
 & & K-means Subset
 & \dsacc{11.06}{0.64} & \dsacc{16.17}{0.20} & \dsacc{52.45}{1.15} & \dsacc{60.07}{0.53} & \dsacc{4.06}{0.70} & \dsacc{5.41}{0.51} & \dsacc{2.48}{0.39} & \dsacc{3.51}{0.48} & \dsacc{4.14}{0.26} & \dsacc{5.53}{0.41} & \dsacc{7.71}{0.93} & \dsacc{12.00}{1.44} \\
-& & MKDT &  \dsacc{6.32}{0.11} &  \dsacc{7.90}{0.18}\textsuperscript{*} &  \dsacc{42.33}{0.81} &  \dsacc{42.56}{0.17}\textsuperscript{*} &  \dsacc{2.37}{0.19} &  \dsacc{4.21}{0.42}\textsuperscript{*} &  \dsacc{1.56}{0.11} &  \dsacc{2.36}{0.42}\textsuperscript{*} &  \dsacc{2.67}{0.21} &  \dsacc{3.61}{0.14}\textsuperscript{*} &  \dsacc{5.13}{0.56} &  \dsacc{7.41}{0.82}\textsuperscript{*} \\
+& & MKDT &  \dsacc{6.32}{0.11} &  \dsacc{7.90}{0.18} &  \dsacc{42.33}{0.81} &  \dsacc{42.56}{0.17} &  \dsacc{2.37}{0.19} &  \dsacc{4.21}{0.42} &  \dsacc{1.56}{0.11} &  \dsacc{2.36}{0.42} &  \dsacc{2.67}{0.21} &  \dsacc{3.61}{0.14} &  \dsacc{5.13}{0.56} &  \dsacc{7.41}{0.82} \\
 & & Ours &  \dsacc{10.56}{0.14} & -- &  \dsacc{52.92}{0.33} & -- &  \dsacc{3.39}{0.16} & -- &  \dsacc{1.99}{0.28} & -- &  \dsacc{3.54}{0.36} & -- &  \dsacc{6.36}{0.23} & -- \\
 % BEGIN DISABLED: 5% pretraining subset
 % \cmidrule(lr){2-15}

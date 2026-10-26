@@ -1,0 +1,33 @@
+\begin{table*}[t]
+\centering
+\def\dsacc#1#2{$#1${\footnotesize$\pm #2$}}
+\caption{Cross-architecture evaluation with SimCLR pretrained on CIFAR-10. Ours reuses synthetic data generated with ResNet18BN; SSL and frozen linear evaluation use ResNet34BN or ResNet50BN. Full Data uses 1,000 SSL epochs and five probes; Random Subset and Ours use 2,000 SSL epochs, two encoders and two probes per encoder. All probes run for 100 epochs. Entries report mean and sample standard deviation.}
+\label{tab:cross-arch-cifar10}
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.1}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{@{}cclcccccc@{}}
+\toprule
+\multirow{2}{*}{Labels} & \multirow{2}{*}{Subset} & \multirow{2}{*}{Method} & \multicolumn{3}{c}{ResNet34BN} & \multicolumn{3}{c}{ResNet50BN} \\
+\cmidrule(lr){4-6}\cmidrule(lr){7-9}
+& & & CIFAR-10 & CIFAR-100 & Tiny ImageNet & CIFAR-10 & CIFAR-100 & Tiny ImageNet \\
+\midrule
+\multirow{5}{*}{1\%} & 100\% & Full Data &  &  &  &  &  &  \\ % crossarch kind=full pt=100 lbl=1
+\cmidrule(lr){2-9}
+& \multirow{2}{*}{0.2\%} & Random Subset & \dsacc{39.39}{1.77} & \dsacc{9.27}{0.57} & \dsacc{3.99}{0.29} & \dsacc{37.48}{1.11} & \dsacc{8.43}{0.55} & \dsacc{3.95}{0.18} \\ % crossarch kind=random pt=0.2 lbl=1
+& & Ours & \dsacc{43.54}{0.73} & \dsacc{9.46}{0.86} & \dsacc{4.27}{0.13} & \dsacc{42.32}{0.71} & \dsacc{9.67}{0.97} & \dsacc{4.47}{0.20} \\ % crossarch kind=ours pt=0.2 lbl=1
+\cmidrule(lr){2-9}
+& \multirow{2}{*}{1\%} & Random Subset & \dsacc{47.20}{0.25} & \dsacc{11.39}{0.29} & \dsacc{4.71}{0.13} & \dsacc{46.09}{0.56} & \dsacc{11.78}{0.29} & \dsacc{5.13}{0.19} \\ % crossarch kind=random pt=1 lbl=1
+& & Ours & \dsacc{50.41}{0.51} & \dsacc{10.59}{0.13} & \dsacc{4.75}{0.21} & \dsacc{47.72}{0.44} & \dsacc{11.47}{0.85} & \dsacc{5.26}{0.09} \\ % crossarch kind=ours pt=1 lbl=1
+\midrule
+\multirow{5}{*}{5\%} & 100\% & Full Data &  &  &  &  &  &  \\ % crossarch kind=full pt=100 lbl=5
+\cmidrule(lr){2-9}
+& \multirow{2}{*}{0.2\%} & Random Subset & \dsacc{46.49}{1.38} & \dsacc{16.02}{0.44} & \dsacc{7.71}{0.23} & \dsacc{44.20}{1.24} & \dsacc{15.33}{0.12} & \dsacc{8.07}{0.11} \\ % crossarch kind=random pt=0.2 lbl=5
+& & Ours & \dsacc{49.85}{0.11} & \dsacc{16.28}{0.33} & \dsacc{7.89}{0.18} & \dsacc{48.71}{0.42} & \dsacc{16.99}{0.31} & \dsacc{8.67}{0.19} \\ % crossarch kind=ours pt=0.2 lbl=5
+\cmidrule(lr){2-9}
+& \multirow{2}{*}{1\%} & Random Subset & \dsacc{53.54}{0.17} & \dsacc{18.59}{0.39} & \dsacc{9.15}{0.26} & \dsacc{54.00}{0.43} & \dsacc{19.96}{0.34} & \dsacc{10.26}{0.21} \\ % crossarch kind=random pt=1 lbl=5
+& & Ours & \dsacc{55.87}{0.24} & \dsacc{18.18}{0.34} & \dsacc{8.78}{0.23} & \dsacc{55.14}{0.16} & \dsacc{19.98}{0.28} & \dsacc{10.14}{0.17} \\ % crossarch kind=ours pt=1 lbl=5
+\bottomrule
+\end{tabular}%
+}
+\end{table*}

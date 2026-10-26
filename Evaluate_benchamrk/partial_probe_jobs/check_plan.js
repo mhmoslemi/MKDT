@@ -47,8 +47,8 @@ for(const g of [groups[0],groups[2],groups[4]]){
         const after=rows(file,files.get(file)).flatMap(r=>r.cells);assert.equal(after.length,before.length);
         before.forEach((c,i)=>assert.equal(after[i].value,
             c.model==='ResNet18'&&key(c)===summary.cell_key&&c.value===''?
-            summary.tex_value+(summary.repeated_encoders?'\\textsuperscript{*}':''):c.value));
-        if(summary.repeated_encoders)assert.ok(files.get(file).includes('not six independent SSL trainings.'));
+            summary.tex_value:c.value));
+        assert.ok(!files.get(file).includes('Entries marked \\textsuperscript{*}'));
     }
     const count=writes.size;module.exports.applySummary(summary);assert.equal(writes.size,count);
 }

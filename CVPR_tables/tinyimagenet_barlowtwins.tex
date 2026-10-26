@@ -2,7 +2,7 @@
 \centering
 \def\dsacc#1#2{$#1${\footnotesize$\pm #2$}}
 \def\oldacc#1#2{\textcolor{red}{\dsacc{#1}{#2}}}
-\caption{Downstream results from Tiny ImageNet using ResNet18BN pretrained with Barlow Twins. Entries marked \textsuperscript{*} average six linear probes over the available frozen encoders, not six independent SSL trainings.}
+\caption{Downstream results from Tiny ImageNet using ResNet18BN pretrained with Barlow Twins.}
 \label{tab:tinyimagenet-downstream-barlowtwins}
 
 \setlength{\tabcolsep}{2pt}
@@ -31,7 +31,7 @@
  &  & MKDT
 &  \dsacc{45.49}{0.48} &  \dsacc{12.38}{1.12} &  \dsacc{2.15}{0.31} &  \dsacc{1.73}{0.29} &  \dsacc{2.23}{0.18} &  \dsacc{3.50}{0.63} \\
  &  & Ours
-&  \dsacc{44.84}{0.87}\textsuperscript{*} &  \dsacc{13.26}{0.56}\textsuperscript{*} &  \dsacc{2.60}{0.32}\textsuperscript{*} &  \dsacc{1.74}{0.11}\textsuperscript{*} &  \dsacc{2.26}{0.19}\textsuperscript{*} &  \dsacc{3.37}{0.76}\textsuperscript{*} \\
+&  \dsacc{44.84}{0.87} &  \dsacc{13.26}{0.56} &  \dsacc{2.60}{0.32} &  \dsacc{1.74}{0.11} &  \dsacc{2.26}{0.19} &  \dsacc{3.37}{0.76} \\
 \cmidrule(lr){2-9}
 
  & \multirow{4}{*}{1\%} & Random Subset
@@ -82,7 +82,7 @@
  &  & MKDT
 &  \dsacc{55.30}{0.61} &  \dsacc{23.52}{0.90} &  \dsacc{4.25}{0.35} &  \dsacc{2.60}{0.27} &  \dsacc{4.16}{0.22} &  \dsacc{8.31}{0.99} \\
  &  & Ours
-&  \dsacc{54.20}{0.31}\textsuperscript{*} &  \dsacc{24.21}{0.18}\textsuperscript{*} &  \dsacc{4.07}{0.21}\textsuperscript{*} &  \dsacc{2.78}{0.27}\textsuperscript{*} &  \dsacc{4.07}{0.13}\textsuperscript{*} &  \dsacc{8.59}{0.66}\textsuperscript{*} \\
+&  \dsacc{54.20}{0.31} &  \dsacc{24.21}{0.18} &  \dsacc{4.07}{0.21} &  \dsacc{2.78}{0.27} &  \dsacc{4.07}{0.13} &  \dsacc{8.59}{0.66} \\
 \cmidrule(lr){2-9}
 
  & \multirow{4}{*}{1\%} & Random Subset

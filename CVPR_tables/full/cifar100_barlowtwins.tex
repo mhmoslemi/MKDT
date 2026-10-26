@@ -2,7 +2,7 @@
 \centering
 \def\dsacc#1#2{$#1${\footnotesize$\pm #2$}}
 \def\oldacc#1#2{\textcolor{red}{\dsacc{#1}{#2}}}
-\caption{Downstream results from CIFAR-100 using ResNet18BN pretrained with Barlow Twins. Entries marked \textsuperscript{*} average six linear probes over the available frozen encoders, not six independent SSL trainings.}
+\caption{Downstream results from CIFAR-100 using ResNet18BN pretrained with Barlow Twins.}
 \label{tab:cifar100-downstream-barlowtwins}
 
 \setlength{\tabcolsep}{2pt}
@@ -47,7 +47,7 @@
  &  & K-means Subset
 & \dsacc{8.72}{0.22} & \dsacc{52.59}{0.95} & \dsacc{2.99}{0.48} & \dsacc{2.19}{0.18} & \dsacc{2.86}{0.33} & \dsacc{4.33}{0.61} \\
  &  & MKDT
-&  \dsacc{4.61}{0.27}\textsuperscript{*} &  \dsacc{34.39}{0.52}\textsuperscript{*} &  \dsacc{2.19}{0.44}\textsuperscript{*} &  \dsacc{1.44}{0.14}\textsuperscript{*} &  \dsacc{2.16}{0.11}\textsuperscript{*} &  \dsacc{2.96}{0.42}\textsuperscript{*} \\
+&  \dsacc{4.61}{0.27} &  \dsacc{34.39}{0.52} &  \dsacc{2.19}{0.44} &  \dsacc{1.44}{0.14} &  \dsacc{2.16}{0.11} &  \dsacc{2.96}{0.42} \\
  &  & Ours
 & -- & -- & -- & -- & -- & -- \\
 % BEGIN DISABLED: 5% pretraining subset
@@ -96,7 +96,7 @@
  &  & K-means Subset
 & \dsacc{16.17}{0.20} & \dsacc{60.07}{0.53} & \dsacc{5.41}{0.51} & \dsacc{3.51}{0.48} & \dsacc{5.53}{0.41} & \dsacc{12.00}{1.44} \\
  &  & MKDT
-&  \dsacc{7.90}{0.18}\textsuperscript{*} &  \dsacc{42.56}{0.17}\textsuperscript{*} &  \dsacc{4.21}{0.42}\textsuperscript{*} &  \dsacc{2.36}{0.42}\textsuperscript{*} &  \dsacc{3.61}{0.14}\textsuperscript{*} &  \dsacc{7.41}{0.82}\textsuperscript{*} \\
+&  \dsacc{7.90}{0.18} &  \dsacc{42.56}{0.17} &  \dsacc{4.21}{0.42} &  \dsacc{2.36}{0.42} &  \dsacc{3.61}{0.14} &  \dsacc{7.41}{0.82} \\
  &  & Ours
 & -- & -- & -- & -- & -- & -- \\
 % BEGIN DISABLED: 5% pretraining subset

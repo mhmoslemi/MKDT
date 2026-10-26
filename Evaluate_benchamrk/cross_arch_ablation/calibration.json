@@ -1,0 +1,68 @@
+{
+  "code_hashes": {
+    "Evaluate_benchamrk/common.py": "67fcd33f581a34a7f764431b6761ac120cb080d4b2ea0d69b95074565a224f8b",
+    "Evaluate_benchamrk/cross_arch_ablation/calibrate.py": "b8a5bb18a3b1ce1efdc05568bd83e7a4f94f47f13bccde172f2ca7236b7e5c0d",
+    "Evaluate_benchamrk/cross_arch_ablation/models.py": "6b8463d3a52a9efa7e77b4f62db183bc859d8cd26b91afef8e9f0a18c933fc89",
+    "Evaluate_benchamrk/data.py": "befcf535679e449b3544ae9b8578325e53f7995179591042315d8937cd55f6d9",
+    "Evaluate_benchamrk/evaluate.py": "2b2162a56878f48ade39d2b80d4316511f20a72d29eaa2cf70fe023d88ad722f",
+    "Evaluate_benchamrk/plan.py": "c6d9bd33b36d1d235a2f6af291b3a0a82187b1eea3a10b90a7f57317d8eee83e",
+    "Evaluate_benchamrk/protocol.json": "088b30569317c167f7f2a77a1f889d593b620ea31bdc93c5120b183c71e4a570",
+    "Evaluate_benchamrk/run.py": "1c2b8d29ab47966f1178c9f04b3e1b7c72bd2f55fb65a32c32c77c3730faf45b",
+    "Evaluate_benchamrk/test_protocol.py": "f018562437924ced1d890343a4e898f10e48c50a63920d337031194671c4e43d",
+    "Evaluate_benchamrk/train_ssl.py": "3670781eb0f0f838ced6cc7ca9775791d4d52683fe25e489239f012937dc1a79",
+    "benchmarks/downstream_data.py": "081fe26e5dc81c96ce8e8ffe5a412302663de4a9d095684c5b37e7c615b4a6fd",
+    "networks.py": "0c15ff3ef11f21df752e2a9a17851ab8c8a52ddc3969380682ea8bfcec1968fc"
+  },
+  "complete": true,
+  "fingerprints": {
+    "CIFAR100_test": "9c139c51dd4c61a359c8f59767b68e175bdac9dafc314b9fe10ca3c2bbd9495d",
+    "CIFAR100_train": "091c775676ae5172a0a29eaf9c37f6a6b601efefc7376b95ef622082ae2a9c14",
+    "CIFAR10_test": "39e02c167a2113a1ccabdd4e042ca61ed4592118aada393ba5ef258228b11d4c",
+    "CIFAR10_train": "47c1a4816becad3cadf1c29ae31c86712d7a51b264ec33e791d79661adfffef5",
+    "TinyImageNet_test": "ac2f781530126bd215ef110f43e52f0faa4d04dde794c2d98b7cd4a049e3d134",
+    "TinyImageNet_train": "d453fd72512babeda053741d8722e13920c20383ed5a205b93e3830c6b68fed5"
+  },
+  "gpu": "NVIDIA L40S",
+  "job": "1947366",
+  "models": {
+    "ResNet18": {
+      "bn_only": true,
+      "feature_dimension": 512,
+      "frozen_bn": true,
+      "probe_batch_seconds": 0.009837261401116848,
+      "ssl_batch_seconds": {
+        "100": 0.038405842147767544,
+        "256": 0.0850337129086256
+      },
+      "strict_reload": true
+    },
+    "ResNet34": {
+      "bn_only": true,
+      "feature_dimension": 512,
+      "frozen_bn": true,
+      "probe_batch_seconds": 0.019484556280076504,
+      "ssl_batch_seconds": {
+        "100": 0.06754795834422112,
+        "256": 0.15324614383280277
+      },
+      "strict_reload": true
+    },
+    "ResNet50": {
+      "bn_only": true,
+      "feature_dimension": 2048,
+      "frozen_bn": true,
+      "probe_batch_seconds": 0.0453490037471056,
+      "ssl_batch_seconds": {
+        "100": 0.13126943074166775,
+        "256": 0.3418285632506013
+      },
+      "strict_reload": true
+    }
+  },
+  "synthetics": {
+    "OT-SSL-DD/ours_syntehtic/CIFAR10/ResNet18BN/pt0.2/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt": "8f39793263a9357f4d716ff1e058bfe8a32452c062044a766f93aeaa25fc3a93",
+    "OT-SSL-DD/ours_syntehtic/CIFAR10/ResNet18BN/pt1/res_IIC_CIFAR10_ResNet18BN_1percent_final.pt": "1d71148d90502444fd9c657e5654a94e1992852fcdcb1c7f9154303806a00a71",
+    "OT-SSL-DD/ours_syntehtic/CIFAR100/ResNet18BN/pt0.2/res_IIC_CIFAR100_ResNet18BN_0.2percent_final.pt": "6afaece11f32ef9e4cb1da9a7b702fb927ee5121ce62ec141365ba58234e0c3e",
+    "OT-SSL-DD/ours_syntehtic/CIFAR100/ResNet18BN/pt1/res_IIC_CIFAR100_ResNet18BN_1percent_final.pt": "49aa5b4db9ca97ffdbd9a7b37f08f4aa4eaa6529551ac6156d7edb9ba2d9b18d"
+  }
+}

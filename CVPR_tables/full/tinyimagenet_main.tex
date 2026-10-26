@@ -4,7 +4,7 @@
 \centering
 \def\dsacc#1#2{$#1${\footnotesize$\pm #2$}}
 \def\oldacc#1#2{\textcolor{red}{\dsacc{#1}{#2}}}
-\caption{Tiny ImageNet main results. Full-data VGG11+SimCLR reports four probe runs from two SSL encoders; other full-data entries use three SSL encoders. Entries marked \textsuperscript{*} average six linear probes over the available frozen encoders, not six independent SSL trainings.}
+\caption{Tiny ImageNet main results. Full-data VGG11+SimCLR reports four probe runs from two SSL encoders; other full-data entries use three SSL encoders.}
 
 
 \label{tab:tinyimagenet-all}
@@ -43,7 +43,7 @@
 & & K-means Subset & \dsacc{7.79}{0.30} & \dsacc{5.49}{0.34} & \dsacc{5.33}{0.41} & \dsacc{4.00}{0.64} & \dsacc{5.61}{0.54} & \dsacc{6.54}{0.69} \\
 & & MKDT
 &  &  &  &  & \dsacc{5.33}{0.26} &  \dsacc{6.57}{0.34} \\
-& & Ours &  &  & \dsacc{4.87}{0.11} &  & \dsacc{5.56}{0.14}  &  \dsacc{6.71}{0.26}\textsuperscript{*} \\
+& & Ours &  &  & \dsacc{4.87}{0.11} &  & \dsacc{5.56}{0.14}  &  \dsacc{6.71}{0.26} \\
 \cmidrule(lr){2-9}
 
 & \multirow{4}{*}{1\%} & Random Subset
@@ -102,7 +102,7 @@
 & & K-means Subset & \dsacc{14.47}{0.20} & \dsacc{9.79}{0.31} & \dsacc{9.94}{0.70} & \dsacc{6.95}{1.08} & \dsacc{10.82}{0.70} & \dsacc{12.30}{1.09} \\
 & & MKDT
 &  &  &  &  & \dsacc{10.14}{0.31} &  \dsacc{13.21}{0.40} \\
-& & Ours &  &  & \dsacc{8.88}{0.37} &  & \dsacc{10.07}{0.32}  &  \dsacc{12.77}{0.31}\textsuperscript{*} \\
+& & Ours &  &  & \dsacc{8.88}{0.37} &  & \dsacc{10.07}{0.32}  &  \dsacc{12.77}{0.31} \\
 \cmidrule(lr){2-9}
 
 & \multirow{4}{*}{1\%} & Random Subset

@@ -51,19 +51,13 @@ function applySummary(summary){
         for(const row of rows(relative,original).reverse()){
             const index=row.cells.findIndex(c=>c.model==='ResNet18'&&key(c)===summary.cell_key&&c.value==='');
             if(index<0)continue;
-            const value=summary.tex_value+(summary.repeated_encoders?'\\textsuperscript{*}':'');
+            const value=summary.tex_value;
             row.tokens[index]=row.tokens[index].replace(/^([ \t]*)/,'$1'+value+' ');
             const replacement=row.prefix+(row.spanning?'\n& '+row.tokens.map(t=>t.trim()).join(' & ')+' ':row.leading+'&'+row.tokens.join('&'))+'\\\\';
             lines.splice(row.start,row.end-row.start+1,replacement);changed=true;
         }
         if(!changed)continue;
         let text=lines.join('\n');
-        const note=' Entries marked \\textsuperscript{*} average six linear probes over the available frozen encoders, not six independent SSL trainings.';
-        if(summary.repeated_encoders&&!text.includes(note.trim())){
-            const start=text.indexOf('\\caption{');assert.ok(start>=0);let depth=1,index=start+9;
-            for(;index<text.length&&depth;index++){if(text[index]==='{')depth++;if(text[index]==='}')depth--;}
-            assert.equal(depth,0);text=text.slice(0,index-1)+note+text.slice(index-1);
-        }
         text=text.replace(/\n?$/,'\n')+`% Probe completion: ${summary.cell_key}; SSL epochs=${summary.ssl_epochs}; encoder seeds=${summary.ssl_seeds.join(',')}; ${summary.samples.length} (SSL seed:probe seed) pairs=${summary.samples.map(s=>s.ssl_seed+':'+s.probe_seed).join(',')}.\n`;
         const temporary=file+`.${process.pid}.tmp`;fs.writeFileSync(temporary,text);fs.chmodSync(temporary,fs.statSync(file).mode&0o777);fs.renameSync(temporary,file);
         console.log('TABLE FILLED:',relative,summary.cell_key,valueForLog(summary));

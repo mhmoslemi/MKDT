@@ -1,0 +1,33 @@
+{
+  "name": "xa_CIFAR10_ResNet34_random_p1_s1_probe",
+  "stage": "probe",
+  "source": "CIFAR10",
+  "model": "ResNet34",
+  "kind": "random",
+  "size": 1,
+  "seed": 1,
+  "seconds": 1204,
+  "dependencies": [
+    "xa_CIFAR10_ResNet34_random_p1_s1_e2000"
+  ],
+  "code_hashes": {
+    "Evaluate_benchamrk/common.py": "67fcd33f581a34a7f764431b6761ac120cb080d4b2ea0d69b95074565a224f8b",
+    "Evaluate_benchamrk/data.py": "befcf535679e449b3544ae9b8578325e53f7995179591042315d8937cd55f6d9",
+    "Evaluate_benchamrk/evaluate.py": "2b2162a56878f48ade39d2b80d4316511f20a72d29eaa2cf70fe023d88ad722f",
+    "Evaluate_benchamrk/plan.py": "c6d9bd33b36d1d235a2f6af291b3a0a82187b1eea3a10b90a7f57317d8eee83e",
+    "Evaluate_benchamrk/run.py": "1c2b8d29ab47966f1178c9f04b3e1b7c72bd2f55fb65a32c32c77c3730faf45b",
+    "Evaluate_benchamrk/test_protocol.py": "f018562437924ced1d890343a4e898f10e48c50a63920d337031194671c4e43d",
+    "Evaluate_benchamrk/train_ssl.py": "3670781eb0f0f838ced6cc7ca9775791d4d52683fe25e489239f012937dc1a79",
+    "networks.py": "0c15ff3ef11f21df752e2a9a17851ab8c8a52ddc3969380682ea8bfcec1968fc",
+    "benchmarks/downstream_data.py": "081fe26e5dc81c96ce8e8ffe5a412302663de4a9d095684c5b37e7c615b4a6fd",
+    "Evaluate_benchamrk/protocol.json": "088b30569317c167f7f2a77a1f889d593b620ea31bdc93c5120b183c71e4a570",
+    "Evaluate_benchamrk/eval_jobs/interactive_ours.py": "74f43f8a15f4529a8de46c1406069f7ce687858b1cb68d1ebd016b0a5b3bd9b1",
+    "Evaluate_benchamrk/cross_arch_ablation/models.py": "6b8463d3a52a9efa7e77b4f62db183bc859d8cd26b91afef8e9f0a18c933fc89",
+    "Evaluate_benchamrk/cross_arch_ablation/worker.py": "018e615beb7135c704831f3ea7d54840b0d798e3f5c377281bd9f37d885c2f3f",
+    "Evaluate_benchamrk/cross_arch_ablation/plan.js": "f4a71a63efb60208678f636ce3b5c79ba7ef85de0f9d16770748ef4d181ec0e4",
+    "Evaluate_benchamrk/cross_arch_ablation/calibrate.py": "b8a5bb18a3b1ce1efdc05568bd83e7a4f94f47f13bccde172f2ca7236b7e5c0d",
+    "Evaluate_benchamrk/submit_cross_arch_ablation_wang_vulcan.sh": "49969daa61c2d2664fc2a2a5d58011e7fafbca79753eec778baaf5485ff8408e"
+  },
+  "missing_probes": 12,
+  "buffer_seconds": 60
+}
