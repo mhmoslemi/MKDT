@@ -2,8 +2,7 @@
 % Measurement sources and exclusions: generation_cost_sources.json.
 \begin{table}[t]
 \centering
-\caption{Historical dataset-construction costs. Teacher training is a one-time
-cost, amortized across subset sizes. Distillation times measure optimization
+\caption{Historical dataset-construction costs. Distillation times measure optimization
 only, not end-to-end generation. Auxiliary storage is the retained teacher
 checkpoint for Ours, or feature targets and 100 expert trajectories for MKDT;
 it is not RAM or GPU memory.}
@@ -12,41 +11,37 @@ it is not RAM or GPU memory.}
 \setlength{\tabcolsep}{3pt}
 \renewcommand{\arraystretch}{1.06}
 \resizebox{\columnwidth}{!}{%
-\begin{tabular}{@{}llrrr@{}}
+\begin{tabular}{@{}llrr@{}}
 \toprule
-Dataset & Stage / budget & Random & MKDT & Ours \\
+Dataset & Stage / budget & MKDT & Ours \\
 \midrule
-CIFAR-10 & Teacher (h)       & -- & NR    & 16.21 \\
-         & Expert bank (h)   & -- & NR    & --    \\
-         & 0.2\% (min)       & NR & 47.8  & 29.9  \\
-         & 1\% (min)         & NR & 112.9 & 33.1  \\
-         & 2\% (min)         & NR & 112.8 & 33.8  \\
-         & Aux. storage (GiB)& 0  & 10.65 & 0.042 \\
+CIFAR-10 & Experts (GPU-h)   & 1.01  & --    \\
+         & 0.2\% (min)       & 47.8  & 29.9  \\
+         & 1\% (min)         & 112.9 & 33.1  \\
+         & 2\% (min)         & 112.8 & 33.8  \\
+         & Aux. storage (GiB)& 10.65 & 0.042 \\
 \midrule
-CIFAR-100 & Teacher (h)       & -- & NR    & 16.23 \\
-          & Expert bank (h)   & -- & NR    & --    \\
-          & 0.2\% (min)       & NR & 48.0  & 27.8  \\
-          & 1\% (min)         & NR & 113.0 & 30.5  \\
-          & 2\% (min)         & NR & 114.4 & 31.3  \\
-          & Aux. storage (GiB)& 0  & 10.65 & 0.042 \\
+CIFAR-100 & Experts (GPU-h)   & 0.98  & --    \\
+          & 0.2\% (min)       & 48.0  & 27.8  \\
+          & 1\% (min)         & 113.0 & 30.5  \\
+          & 2\% (min)         & 114.4 & 31.3  \\
+          & Aux. storage (GiB)& 10.65 & 0.042 \\
 \midrule
-Tiny ImageNet & Teacher (h)       & -- & NR    & 74.77 \\
-              & Expert bank (h)   & -- & NR    & --    \\
-              & 0.2\% (min)       & NR & 200.6 & 111.1 \\
-              & 1\% (min)         & NR & 232.4 & 183.4 \\
-              & 2\% (min)         & NR & 230.6 & 235.2 \\
-              & Aux. storage (GiB)& 0  & 11.91 & 0.042 \\
+Tiny ImageNet & Experts (GPU-h)   & 7.13  & --    \\
+              & 0.2\% (min)       & 200.6 & 111.1 \\
+              & 1\% (min)         & 23s2.4 & 183.4 \\
+              & 2\% (min)         & 230.6 & 235.2 \\
+              & Aux. storage (GiB)& 11.91 & 0.042 \\
 \bottomrule
 \end{tabular}%
 }
 \par\vspace{2pt}
 \parbox{\columnwidth}{\scriptsize
-NR: not recorded; --: not applicable. Random selection has no optimization,
-but its selection latency was not logged. Ours uses one SimCLR ResNet18BN
-teacher; MKDT uses Barlow-Twins feature targets and regression experts, so
-their teacher preparation is not interchangeable.
+--: not applicable. Expert training sums five successful single-GPU jobs
+covering all 100 experts; failed attempts,
+retries, queue time, and subsequent ranking are excluded.
 Ours runs 10k/8k/6k updates at 0.2/1/2\%; MKDT runs 5k updates on CIFAR
-and 10k on Tiny ImageNet. Timings exclude initialization, preparation,
+and 10k on Tiny ImageNet. Distillation timings exclude initialization, preparation,
 queue gaps, downstream SSL, and probing. Runs span Vulcan and Killarney
 and are not a controlled hardware-matched benchmark.}
 \end{table}
