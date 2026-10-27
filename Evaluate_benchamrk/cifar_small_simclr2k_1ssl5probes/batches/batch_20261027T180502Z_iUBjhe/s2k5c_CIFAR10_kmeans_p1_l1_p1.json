@@ -1,0 +1,32 @@
+{
+  "source": "CIFAR10",
+  "subset": 1,
+  "kind": "kmeans",
+  "selection_config": "kmeans_ssl_checkpoints_cifar10k8k6k_tiny6k5k4k_6seeds/CIFAR10/ResNet18/kmeans/pt1/simclr/seed_000/config.json",
+  "selection_config_sha256": "3108c1d2f2732e7819bd9c0d7fb4b86b7264b204838454689f07b27894cf60e8",
+  "code_hashes": {
+    "Evaluate_benchamrk/common.py": "67fcd33f581a34a7f764431b6761ac120cb080d4b2ea0d69b95074565a224f8b",
+    "Evaluate_benchamrk/data.py": "befcf535679e449b3544ae9b8578325e53f7995179591042315d8937cd55f6d9",
+    "Evaluate_benchamrk/evaluate.py": "2b2162a56878f48ade39d2b80d4316511f20a72d29eaa2cf70fe023d88ad722f",
+    "Evaluate_benchamrk/plan.py": "c6d9bd33b36d1d235a2f6af291b3a0a82187b1eea3a10b90a7f57317d8eee83e",
+    "Evaluate_benchamrk/run.py": "1c2b8d29ab47966f1178c9f04b3e1b7c72bd2f55fb65a32c32c77c3730faf45b",
+    "Evaluate_benchamrk/test_protocol.py": "f018562437924ced1d890343a4e898f10e48c50a63920d337031194671c4e43d",
+    "Evaluate_benchamrk/train_ssl.py": "3670781eb0f0f838ced6cc7ca9775791d4d52683fe25e489239f012937dc1a79",
+    "networks.py": "0c15ff3ef11f21df752e2a9a17851ab8c8a52ddc3969380682ea8bfcec1968fc",
+    "benchmarks/downstream_data.py": "081fe26e5dc81c96ce8e8ffe5a412302663de4a9d095684c5b37e7c615b4a6fd",
+    "Evaluate_benchamrk/protocol.json": "088b30569317c167f7f2a77a1f889d593b620ea31bdc93c5120b183c71e4a570",
+    "Evaluate_benchamrk/cifar_small_simclr2k_1ssl5probes/worker.py": "2cca340b88187bbf0e6d3b0a3223a0ddd7fb7670c52a8a8d281e9f5991342854",
+    "Evaluate_benchamrk/cifar_small_simclr2k_1ssl5probes/tables.js": "b940d7682f372aab16e25b5f252ee85aae55e4908b27ec6b7f90e68507a3ba6c",
+    "Evaluate_benchamrk/cifar_small_simclr2k_1ssl5probes/plan.js": "9e0120c3905148eaa6b68b252e8fe7bc654b7eb9921e1bc65de2bdbc73b9dd69",
+    "Evaluate_benchamrk/submit_cifar_small_simclr2k_1ssl5probes_wang_vulcan.sh": "b9236d7cb66f4398171165a3f142b137ddc8975062c06994e91ae97fa9e4b8a5"
+  },
+  "buffer_seconds": 30,
+  "name": "s2k5c_CIFAR10_kmeans_p1_l1_p1",
+  "stage": "probe",
+  "labels": 1,
+  "probe_seed": 1,
+  "seconds": 42,
+  "dependencies": [
+    "s2k5c_CIFAR10_kmeans_p1_ssl"
+  ]
+}

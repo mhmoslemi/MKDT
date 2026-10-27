@@ -1,0 +1,289 @@
+{
+  "expected_encoder_jobs": 8,
+  "expected_probe_jobs": 80,
+  "expected_table_cells": 16,
+  "jobs_to_submit": 88,
+  "ssl_jobs": 8,
+  "probe_jobs": 80,
+  "account": "aip-boyuwang",
+  "ssl_epochs": 2000,
+  "probe_epochs": 100,
+  "buffer_seconds": 30,
+  "table_scope": "CVPR_tables/table.tex",
+  "groups": [
+    {
+      "source": "CIFAR10",
+      "subset": 0.2,
+      "kind": "random",
+      "selection_config": "random_ssl_checkpoints_cifar10k8k6k_tiny6k5k4k/CIFAR10/ResNet18/random/pt0.2/simclr/seed_000/config.json",
+      "selection_config_sha256": "2caff622a2c4552d9ee5eff97134944a6ef10f32d9ebb5a524bd5f182467f0db",
+      "selection_seed": 0,
+      "ssl_seed": 0,
+      "ssl_epochs": 2000,
+      "probe_seeds": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "label_percentages": [
+        1,
+        5
+      ],
+      "table": "CVPR_tables/table.tex"
+    },
+    {
+      "source": "CIFAR10",
+      "subset": 0.2,
+      "kind": "kmeans",
+      "selection_config": "kmeans_ssl_checkpoints_cifar10k8k6k_tiny6k5k4k_6seeds/CIFAR10/ResNet18/kmeans/pt0.2/simclr/seed_000/config.json",
+      "selection_config_sha256": "a088269e0a45b5ebf73ced66e9d27164d990325e3a5cd512f89ffbc54a49d9da",
+      "selection_seed": 0,
+      "ssl_seed": 0,
+      "ssl_epochs": 2000,
+      "probe_seeds": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "label_percentages": [
+        1,
+        5
+      ],
+      "table": "CVPR_tables/table.tex"
+    },
+    {
+      "source": "CIFAR10",
+      "subset": 1,
+      "kind": "random",
+      "selection_config": "random_ssl_checkpoints_cifar10k8k6k_tiny6k5k4k/CIFAR10/ResNet18/random/pt1/simclr/seed_000/config.json",
+      "selection_config_sha256": "1bd56261b41250325d98f9d51a22d07cb4cababb464ec1696d86f21bfef938d5",
+      "selection_seed": 0,
+      "ssl_seed": 0,
+      "ssl_epochs": 2000,
+      "probe_seeds": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "label_percentages": [
+        1,
+        5
+      ],
+      "table": "CVPR_tables/table.tex"
+    },
+    {
+      "source": "CIFAR10",
+      "subset": 1,
+      "kind": "kmeans",
+      "selection_config": "kmeans_ssl_checkpoints_cifar10k8k6k_tiny6k5k4k_6seeds/CIFAR10/ResNet18/kmeans/pt1/simclr/seed_000/config.json",
+      "selection_config_sha256": "3108c1d2f2732e7819bd9c0d7fb4b86b7264b204838454689f07b27894cf60e8",
+      "selection_seed": 0,
+      "ssl_seed": 0,
+      "ssl_epochs": 2000,
+      "probe_seeds": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "label_percentages": [
+        1,
+        5
+      ],
+      "table": "CVPR_tables/table.tex"
+    },
+    {
+      "source": "CIFAR100",
+      "subset": 0.2,
+      "kind": "random",
+      "selection_config": "random_ssl_checkpoints_cifar10k8k6k_tiny6k5k4k/CIFAR100/ResNet18/random/pt0.2/simclr/seed_000/config.json",
+      "selection_config_sha256": "0bcfa4c2b51c0dc2ec14ef45649b58b531cbd70288f3ee9df504ea05e5a185b3",
+      "selection_seed": 0,
+      "ssl_seed": 0,
+      "ssl_epochs": 2000,
+      "probe_seeds": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "label_percentages": [
+        1,
+        5
+      ],
+      "table": "CVPR_tables/table.tex"
+    },
+    {
+      "source": "CIFAR100",
+      "subset": 0.2,
+      "kind": "kmeans",
+      "selection_config": "kmeans_ssl_checkpoints_cifar10k8k6k_tiny6k5k4k_6seeds/CIFAR100/ResNet18/kmeans/pt0.2/simclr/seed_000/config.json",
+      "selection_config_sha256": "f6a005bfebd20e1475f80bdb6747507b48f604dffcb3a69625b33276c083516c",
+      "selection_seed": 0,
+      "ssl_seed": 0,
+      "ssl_epochs": 2000,
+      "probe_seeds": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "label_percentages": [
+        1,
+        5
+      ],
+      "table": "CVPR_tables/table.tex"
+    },
+    {
+      "source": "CIFAR100",
+      "subset": 1,
+      "kind": "random",
+      "selection_config": "random_ssl_checkpoints_cifar10k8k6k_tiny6k5k4k/CIFAR100/ResNet18/random/pt1/simclr/seed_000/config.json",
+      "selection_config_sha256": "45c739a687a4dae18f0d743e801353b3bffc42762f752409b02a3baccef230a1",
+      "selection_seed": 0,
+      "ssl_seed": 0,
+      "ssl_epochs": 2000,
+      "probe_seeds": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "label_percentages": [
+        1,
+        5
+      ],
+      "table": "CVPR_tables/table.tex"
+    },
+    {
+      "source": "CIFAR100",
+      "subset": 1,
+      "kind": "kmeans",
+      "selection_config": "kmeans_ssl_checkpoints_cifar10k8k6k_tiny6k5k4k_6seeds/CIFAR100/ResNet18/kmeans/pt1/simclr/seed_000/config.json",
+      "selection_config_sha256": "eb098cb7a684059a598354bd3341e61b44ec10ebf7514ad79547a5b129b9331b",
+      "selection_seed": 0,
+      "ssl_seed": 0,
+      "ssl_epochs": 2000,
+      "probe_seeds": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "label_percentages": [
+        1,
+        5
+      ],
+      "table": "CVPR_tables/table.tex"
+    }
+  ],
+  "timings": [
+    {
+      "source": "CIFAR10",
+      "subset": 0.2,
+      "kind": "random",
+      "ssl_epoch_seconds_p95": 0.1272643539123237,
+      "probe_seconds_p95": {
+        "1": 11.907805587630719,
+        "5": 54.329310244414955
+      },
+      "measurement": "Vulcan K-means / same BN architecture, data size and benchmark recipe",
+      "buffer_seconds": 30
+    },
+    {
+      "source": "CIFAR10",
+      "subset": 0.2,
+      "kind": "kmeans",
+      "ssl_epoch_seconds_p95": 0.1272643539123237,
+      "probe_seconds_p95": {
+        "1": 11.907805587630719,
+        "5": 54.329310244414955
+      },
+      "measurement": "Vulcan K-means / same BN architecture, data size and benchmark recipe",
+      "buffer_seconds": 30
+    },
+    {
+      "source": "CIFAR10",
+      "subset": 1,
+      "kind": "random",
+      "ssl_epoch_seconds_p95": 0.30338575411587954,
+      "probe_seconds_p95": {
+        "1": 11.956465010065585,
+        "5": 55.07463821116835
+      },
+      "measurement": "Vulcan K-means / same BN architecture, data size and benchmark recipe",
+      "buffer_seconds": 30
+    },
+    {
+      "source": "CIFAR10",
+      "subset": 1,
+      "kind": "kmeans",
+      "ssl_epoch_seconds_p95": 0.30338575411587954,
+      "probe_seconds_p95": {
+        "1": 11.956465010065585,
+        "5": 55.07463821116835
+      },
+      "measurement": "Vulcan K-means / same BN architecture, data size and benchmark recipe",
+      "buffer_seconds": 30
+    },
+    {
+      "source": "CIFAR100",
+      "subset": 0.2,
+      "kind": "random",
+      "ssl_epoch_seconds_p95": 0.1270178067497909,
+      "probe_seconds_p95": {
+        "1": 11.753008120227605,
+        "5": 53.838565106038004
+      },
+      "measurement": "Vulcan K-means / same BN architecture, data size and benchmark recipe",
+      "buffer_seconds": 30
+    },
+    {
+      "source": "CIFAR100",
+      "subset": 0.2,
+      "kind": "kmeans",
+      "ssl_epoch_seconds_p95": 0.1270178067497909,
+      "probe_seconds_p95": {
+        "1": 11.753008120227605,
+        "5": 53.838565106038004
+      },
+      "measurement": "Vulcan K-means / same BN architecture, data size and benchmark recipe",
+      "buffer_seconds": 30
+    },
+    {
+      "source": "CIFAR100",
+      "subset": 1,
+      "kind": "random",
+      "ssl_epoch_seconds_p95": 0.30276422994211316,
+      "probe_seconds_p95": {
+        "1": 11.572963016107678,
+        "5": 53.28223757026717
+      },
+      "measurement": "Vulcan K-means / same BN architecture, data size and benchmark recipe",
+      "buffer_seconds": 30
+    },
+    {
+      "source": "CIFAR100",
+      "subset": 1,
+      "kind": "kmeans",
+      "ssl_epoch_seconds_p95": 0.30276422994211316,
+      "probe_seconds_p95": {
+        "1": 11.572963016107678,
+        "5": 53.28223757026717
+      },
+      "measurement": "Vulcan K-means / same BN architecture, data size and benchmark recipe",
+      "buffer_seconds": 30
+    }
+  ]
+}

@@ -1,0 +1,230 @@
+% \usepackage{multirow}
+% \usepackage{booktabs} % For \toprule, \midrule, \bottomrule, \cmidrule
+% \usepackage{graphicx} % For \resizebox
+% \usepackage{xcolor}   % For \textcolor
+
+
+% % Define the 'D' column type for centered columns with a specific width
+\newcolumntype{D}[1]{>{\centering\arraybackslash}p{#1}}
+
+% % ============================================================
+% TABLE 3: RESNET18
+% ============================================================
+
+\begin{table*}[t]
+\centering
+\def\dsacc#1#2{$#1${\footnotesize$\pm #2$}}
+\def\oldacc#1#2{\textcolor{red}{\dsacc{#1}{#2}}}
+\caption{cifar10 downstream. ResNet18}
+\label{tab:downstream-resnet18}
+
+\setlength{\tabcolsep}{2pt}
+\renewcommand{\arraystretch}{1.1}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{@{}D{7mm}D{8mm}l*{12}{c}@{}}
+\toprule
+\multirow{2}{*}{\shortstack{Labeled\\(\%)}}
+& \multirow{2}{*}{\shortstack{PT\\(\%)}}
+& \multirow{2}{*}{Method}
+& \multicolumn{2}{c}{CIFAR-100}
+& \multicolumn{2}{c}{Aircraft}
+& \multicolumn{2}{c}{CUB-2011}
+& \multicolumn{2}{c}{Dogs}
+& \multicolumn{2}{c}{Flowers}
+& \multicolumn{2}{c}{Tiny ImageNet} \\
+\cmidrule(lr){4-5}
+\cmidrule(lr){6-7}
+\cmidrule(lr){8-9}
+\cmidrule(lr){10-11}
+\cmidrule(lr){12-13}
+\cmidrule(l){14-15}
+& & &
+SimCLR & BT & SimCLR & BT & SimCLR & BT &
+SimCLR & BT & SimCLR & BT & SimCLR & BT \\
+\midrule
+
+\multirow{14}{*}{1\%}
+& -- & No Pre-Training
+& \multicolumn{2}{c}{\dsacc{1.66}{0.15}}
+& \multicolumn{2}{c}{\dsacc{1.24}{0.15}}
+& \multicolumn{2}{c}{\dsacc{0.54}{0.12}}
+& \multicolumn{2}{c}{\dsacc{0.93}{0.13}}
+& \multicolumn{2}{c}{\dsacc{0.95}{0.33}}
+& \multicolumn{2}{c}{\dsacc{0.65}{0.08}} \\
+\cmidrule(lr){2-15}
+
+& 100\% & Full Data & \dsacc{24.04}{0.87} & \dsacc{26.99}{1.20} & \dsacc{4.10}{0.90} & \dsacc{4.06}{0.95} & \dsacc{2.53}{0.22} & \dsacc{2.68}{0.39} & \dsacc{4.83}{0.51} & \dsacc{5.23}{0.67} & \dsacc{4.58}{0.47} & \dsacc{4.08}{0.37} & \dsacc{11.89}{0.20} & \dsacc{12.89}{0.26} \\
+\cmidrule(lr){2-15}
+
+& \multirow{4}{*}{0.2\%} & Random Subset
+& \dsacc{8.34}{0.75} & \dsacc{10.40}{0.63}
+& \dsacc{2.13}{0.33} & \dsacc{2.37}{0.29}
+& \dsacc{1.23}{0.21} & \dsacc{1.69}{0.28}
+& \dsacc{1.54}{0.18} & \dsacc{1.96}{0.16}
+& \dsacc{2.65}{0.43} & \dsacc{3.19}{0.57}
+& \dsacc{3.53}{0.38} & \dsacc{4.93}{0.43} \\
+& & K-means Subset
+& \dsacc{7.75}{1.16} & \dsacc{9.93}{0.35}
+& \dsacc{2.03}{0.41} & \dsacc{2.29}{0.32}
+& \dsacc{1.17}{0.26} & \dsacc{1.68}{0.22}
+& \dsacc{1.55}{0.32} & \dsacc{2.04}{0.09}
+& \dsacc{2.51}{0.74} & \dsacc{2.94}{0.45}
+& \dsacc{3.12}{0.41} & \dsacc{4.54}{0.34} \\
+& & MKDT
+& \dsacc{9.03}{0.80} &  \dsacc{8.56}{1.17} &  \dsacc{2.09}{0.37} &  \dsacc{1.77}{0.20} &  \dsacc{1.53}{0.15} &  \dsacc{1.25}{0.16} &  \dsacc{1.96}{0.03} &  \dsacc{1.87}{0.18} &  \dsacc{2.92}{0.32} &  \dsacc{2.75}{0.31} &  \dsacc{4.15}{0.13} &  \dsacc{4.00}{0.44} \\
+& & Ours
+& \dsacc{10.05}{0.73} & \dsacc{10.43}{0.59} & \dsacc{2.26}{0.18} & \dsacc{2.04}{0.14} & \dsacc{1.35}{0.10} & \dsacc{1.45}{0.14} & \dsacc{1.80}{0.15} & \dsacc{2.07}{0.08} & \dsacc{2.61}{0.34} & \dsacc{2.63}{0.41} & \dsacc{4.64}{0.11} & \dsacc{4.83}{0.28} \\
+\cmidrule(lr){2-15}
+
+& \multirow{4}{*}{1\%} & Random Subset
+& \dsacc{8.63}{0.61} & \dsacc{14.20}{0.47}
+& \dsacc{2.09}{0.42} & \dsacc{2.99}{0.31}
+& \dsacc{1.26}{0.14} & \dsacc{1.99}{0.29}
+& \dsacc{1.75}{0.35} & \dsacc{2.59}{0.29}
+& \dsacc{2.96}{0.33} & \dsacc{3.64}{0.67}
+& \dsacc{3.62}{0.36} & \dsacc{7.20}{0.43} \\
+
+& & K-means Subset
+& \dsacc{8.57}{0.53} & \dsacc{13.58}{1.16}
+& \dsacc{2.03}{0.23} & \dsacc{2.68}{0.54}
+& \dsacc{1.16}{0.22} & \dsacc{1.98}{0.28}
+& \dsacc{1.87}{0.38} & \dsacc{2.54}{0.22}
+& \dsacc{2.69}{0.42} & \dsacc{3.58}{1.07}
+& \dsacc{3.61}{0.34} & \dsacc{7.04}{0.63} \\
+
+& & MKDT & \dsacc{9.34}{0.88} & \dsacc{11.60}{0.38} & \dsacc{2.21}{0.27} & \dsacc{2.31}{0.20} & \dsacc{1.37}{0.05} & \dsacc{1.73}{0.09} & \dsacc{1.89}{0.14} & \dsacc{2.45}{0.18} & \dsacc{3.22}{0.49} & \dsacc{3.55}{0.58} & \dsacc{4.32}{0.18} & \dsacc{5.86}{0.43} \\
+& & Ours
+& \dsacc{10.89}{0.80} & \dsacc{14.23}{0.93} & \dsacc{2.22}{0.16} & \dsacc{2.70}{0.19} & \dsacc{1.50}{0.15} & \dsacc{1.73}{0.13} & \dsacc{2.27}{0.22} & \dsacc{2.65}{0.18} & \dsacc{2.64}{0.30} & \dsacc{3.25}{0.44} & \dsacc{5.05}{0.15} & \dsacc{6.81}{0.44} \\
+\cmidrule(lr){2-15}
+
+& \multirow{4}{*}{2\%} & Random Subset
+& \dsacc{11.04}{0.49} & \dsacc{16.91}{0.71}
+& \dsacc{2.60}{0.36} & \dsacc{3.19}{0.51}
+& \dsacc{1.48}{0.16} & \dsacc{2.06}{0.19}
+& \dsacc{2.05}{0.29} & \dsacc{2.91}{0.22}
+& \dsacc{3.14}{0.35} & \dsacc{3.86}{0.73}
+& \dsacc{4.57}{0.30} & \dsacc{8.51}{0.42} \\
+& & K-means Subset
+& \dsacc{10.65}{1.12} & \dsacc{16.51}{0.73}
+& \dsacc{2.81}{0.46} & \dsacc{3.20}{0.41}
+& \dsacc{1.53}{0.16} & \dsacc{2.15}{0.20}
+& \dsacc{2.31}{0.30} & \dsacc{2.95}{0.28}
+& \dsacc{2.97}{0.45} & \dsacc{4.16}{0.90}
+& \dsacc{4.70}{0.12} & \dsacc{8.60}{0.30} \\
+& & MKDT & \dsacc{7.29}{0.36} & \dsacc{13.85}{0.55} & \dsacc{1.75}{0.29} & \dsacc{2.98}{0.25} & \dsacc{1.10}{0.19} & \dsacc{1.77}{0.10} & \dsacc{1.92}{0.57} & \dsacc{2.68}{0.32} & \dsacc{2.75}{0.45} & \dsacc{3.72}{0.70} & \dsacc{3.20}{0.24} & \dsacc{7.62}{0.42} \\
+& & Ours & \dsacc{12.30}{0.34} & -- & \dsacc{2.51}{0.29} & -- & \dsacc{1.38}{0.12} & -- & \dsacc{2.52}{0.16} & -- & \dsacc{2.85}{0.23} & -- & \dsacc{5.53}{0.08} & -- \\
+
+\midrule
+
+\multirow{14}{*}{5\%}
+& -- & No Pre-Training
+& \multicolumn{2}{c}{\dsacc{2.81}{0.30}}
+& \multicolumn{2}{c}{\dsacc{1.49}{0.32}}
+& \multicolumn{2}{c}{\dsacc{0.61}{0.10}}
+& \multicolumn{2}{c}{\dsacc{0.96}{0.14}}
+& \multicolumn{2}{c}{\dsacc{1.21}{0.41}}
+& \multicolumn{2}{c}{\dsacc{0.84}{0.12}} \\
+\cmidrule(lr){2-15}
+
+& 100\% & Full Data & \dsacc{38.03}{0.40} & \dsacc{41.77}{0.65} & \dsacc{7.87}{0.06} & \dsacc{8.87}{0.50} & \dsacc{3.81}{0.70} & \dsacc{5.04}{0.54} & \dsacc{8.69}{0.47} & \dsacc{10.85}{0.63} & \dsacc{12.36}{0.42} & \dsacc{13.88}{2.17} & \dsacc{20.57}{0.31} & \dsacc{22.45}{0.20} \\
+\cmidrule(lr){2-15}
+
+& \multirow{4}{*}{0.2\%} & Random Subset
+& \dsacc{14.43}{0.71} & \dsacc{18.54}{0.83}
+& \dsacc{3.04}{0.54} & \dsacc{3.96}{0.68}
+& \dsacc{1.53}{0.29} & \dsacc{2.57}{0.24}
+& \dsacc{2.67}{0.27} & \dsacc{3.64}{0.26}
+& \dsacc{4.39}{0.70} & \dsacc{7.77}{1.14}
+& \dsacc{6.65}{0.46} & \dsacc{9.19}{0.73} \\
+& & K-means Subset
+& \dsacc{13.64}{0.89} & \dsacc{17.86}{0.81}
+& \dsacc{2.91}{0.34} & \dsacc{3.86}{0.48}
+& \dsacc{1.39}{0.15} & \dsacc{2.50}{0.28}
+& \dsacc{2.46}{0.25} & \dsacc{3.42}{0.28}
+& \dsacc{4.08}{0.99} & \dsacc{7.79}{1.37}
+& \dsacc{6.33}{0.60} & \dsacc{8.48}{0.59} \\
+& & MKDT
+& \dsacc{15.63}{0.23} &  \dsacc{16.11}{1.19} &  \dsacc{2.62}{0.39} &  \dsacc{2.88}{0.58} &  \dsacc{2.02}{0.19} &  \dsacc{1.83}{0.21} &  \dsacc{2.94}{0.24} &  \dsacc{2.96}{0.40} &  \dsacc{7.06}{0.69} &  \dsacc{6.10}{0.95} &  \dsacc{7.86}{0.15} &  \dsacc{7.72}{0.49} \\
+& & Ours
+& \dsacc{17.26}{0.20} & \dsacc{18.64}{0.80} & \dsacc{3.29}{0.29} & \dsacc{3.74}{0.46} & \dsacc{1.74}{0.13} & \dsacc{2.29}{0.31} & \dsacc{2.82}{0.17} & \dsacc{3.47}{0.29} & \dsacc{6.12}{0.74} & \dsacc{7.42}{0.97} & \dsacc{8.54}{0.23} & \dsacc{9.14}{0.47} \\
+\cmidrule(lr){2-15}
+
+& \multirow{4}{*}{1\%} & Random Subset
+& \dsacc{15.58}{0.79} & \dsacc{23.90}{0.88}
+& \dsacc{3.02}{0.58} & \dsacc{5.25}{0.32}
+& \dsacc{1.55}{0.25} & \dsacc{3.33}{0.27}
+& \dsacc{3.01}{0.35} & \dsacc{5.01}{0.30}
+& \dsacc{4.27}{0.52} & \dsacc{9.30}{1.63}
+& \dsacc{7.05}{0.59} & \dsacc{13.19}{0.41} \\
+
+& & K-means Subset
+& \dsacc{15.37}{0.75} & \dsacc{23.21}{1.14}
+& \dsacc{2.96}{0.52} & \dsacc{4.93}{0.36}
+& \dsacc{1.66}{0.27} & \dsacc{3.13}{0.30}
+& \dsacc{3.18}{0.31} & \dsacc{4.81}{0.27}
+& \dsacc{4.43}{0.73} & \dsacc{9.78}{1.74}
+& \dsacc{7.25}{0.43} & \dsacc{12.64}{0.91} \\
+
+& & MKDT & \dsacc{16.55}{0.36} & \dsacc{20.75}{0.87} & \dsacc{3.17}{0.15} & \dsacc{4.59}{0.30} & \dsacc{1.77}{0.08} & \dsacc{2.90}{0.24} & \dsacc{3.08}{0.33} & \dsacc{4.25}{0.40} & \dsacc{6.82}{0.49} & \dsacc{8.61}{0.95} & \dsacc{8.32}{0.13} & \dsacc{11.01}{0.42} \\
+& & Ours
+& \dsacc{18.69}{0.29} & \dsacc{23.93}{0.63} & \dsacc{3.68}{0.12} & \dsacc{5.07}{0.40} & \dsacc{1.94}{0.15} & \dsacc{2.82}{0.29} & \dsacc{3.46}{0.16} & \dsacc{4.67}{0.37} & \dsacc{5.69}{0.15} & \dsacc{9.72}{1.17} & \dsacc{9.51}{0.10} & \dsacc{12.94}{0.90} \\
+\cmidrule(lr){2-15}
+
+& \multirow{4}{*}{2\%} & Random Subset
+& \dsacc{19.06}{0.53} & \dsacc{28.06}{0.46}
+& \dsacc{4.04}{0.55} & \dsacc{6.09}{0.45}
+& \dsacc{1.98}{0.27} & \dsacc{3.42}{0.40}
+& \dsacc{3.75}{0.51} & \dsacc{5.83}{0.28}
+& \dsacc{5.29}{0.72} & \dsacc{10.83}{1.64}
+& \dsacc{8.91}{0.31} & \dsacc{15.58}{0.34} \\
+& & K-means Subset
+& \dsacc{19.16}{0.52} & \dsacc{27.91}{0.33}
+& \dsacc{4.32}{0.40} & \dsacc{6.16}{0.35}
+& \dsacc{1.96}{0.22} & \dsacc{3.57}{0.51}
+& \dsacc{3.84}{0.24} & \dsacc{5.96}{0.38}
+& \dsacc{6.04}{1.09} & \dsacc{11.51}{1.70}
+& \dsacc{9.24}{0.27} & \dsacc{15.93}{0.45} \\
+& & MKDT & \dsacc{14.67}{0.49} & \dsacc{24.08}{0.53} & \dsacc{2.34}{0.40} & \dsacc{5.15}{0.34} & \dsacc{1.36}{0.23} & \dsacc{2.80}{0.27} & \dsacc{3.60}{0.50} & \dsacc{5.13}{0.39} & \dsacc{4.67}{0.51} & \dsacc{9.44}{0.68} & \dsacc{6.95}{0.23} & \dsacc{13.79}{0.37} \\
+& & Ours & \dsacc{20.17}{0.43} & -- & \dsacc{3.88}{0.43} & -- & \dsacc{2.04}{0.15} & -- & \dsacc{3.86}{0.21} & -- & \dsacc{6.19}{0.53} & -- & \dsacc{10.46}{0.18} & -- \\
+
+\bottomrule
+\end{tabular}%
+}
+\end{table*}
+% Probe completion: CIFAR10|ResNet18|mkdt|1|simclr|CIFAR100|1; SSL epochs=2000; encoder seeds=0,1; six (SSL seed:probe seed) pairs=0:0,0:1,0:2,1:0,1:1,1:2.
+% Probe completion: CIFAR10|ResNet18|mkdt|1|simclr|TinyImageNet|1; SSL epochs=2000; encoder seeds=0,1; six (SSL seed:probe seed) pairs=0:0,0:1,0:2,1:0,1:1,1:2.
+% Probe completion: CIFAR10|ResNet18|mkdt|1|simclr|CIFAR100|5; SSL epochs=2000; encoder seeds=0,1; six (SSL seed:probe seed) pairs=0:0,0:1,0:2,1:0,1:1,1:2.
+% Probe completion: CIFAR10|ResNet18|ours|1|simclr|CIFAR100|1; SSL epochs=2000; encoder seeds=0,1; six (SSL seed:probe seed) pairs=0:0,0:1,0:2,1:0,1:1,1:2.
+% Probe completion: CIFAR10|ResNet18|ours|1|simclr|TinyImageNet|1; SSL epochs=2000; encoder seeds=0,1; six (SSL seed:probe seed) pairs=0:0,0:1,0:2,1:0,1:1,1:2.
+% Probe completion: CIFAR10|ResNet18|mkdt|1|simclr|Aircraft|1; SSL epochs=2000; encoder seeds=0,1; six (SSL seed:probe seed) pairs=0:0,0:1,0:2,1:0,1:1,1:2.
+% Probe completion: CIFAR10|ResNet18|mkdt|1|simclr|CUB2011|5; SSL epochs=2000; encoder seeds=0,1; six (SSL seed:probe seed) pairs=0:0,0:1,0:2,1:0,1:1,1:2.
+% Probe completion: CIFAR10|ResNet18|ours|1|simclr|CIFAR100|5; SSL epochs=2000; encoder seeds=0,1; six (SSL seed:probe seed) pairs=0:0,0:1,0:2,1:0,1:1,1:2.
+% Probe completion: CIFAR10|ResNet18|ours|1|simclr|Aircraft|1; SSL epochs=2000; encoder seeds=0,1; six (SSL seed:probe seed) pairs=0:0,0:1,0:2,1:0,1:1,1:2.
+% Probe completion: CIFAR10|ResNet18|mkdt|1|simclr|TinyImageNet|5; SSL epochs=2000; encoder seeds=0,1; six (SSL seed:probe seed) pairs=0:0,0:1,0:2,1:0,1:1,1:2.
+% Probe completion: CIFAR10|ResNet18|ours|1|simclr|TinyImageNet|5; SSL epochs=2000; encoder seeds=0,1; six (SSL seed:probe seed) pairs=0:0,0:1,0:2,1:0,1:1,1:2.
+% Probe completion: CIFAR10|ResNet18|mkdt|2|simclr|Flowers|1; SSL epochs=2000; encoder seeds=0,1; six (SSL seed:probe seed) pairs=0:0,0:1,0:2,1:0,1:1,1:2.
+% Probe completion: CIFAR10|ResNet18|mkdt|2|simclr|TinyImageNet|1; SSL epochs=2000; encoder seeds=0,1; six (SSL seed:probe seed) pairs=0:0,0:1,0:2,1:0,1:1,1:2.
+% Probe completion: CIFAR10|ResNet18|mkdt|0.2|simclr|CIFAR100|1; SSL epochs=2000; encoder seeds=0,1; 6 (SSL seed:probe seed) pairs=0:0,0:1,0:2,1:0,1:1,1:2.
+% Probe completion: CIFAR10|ResNet18|mkdt|0.2|simclr|CUB2011|1; SSL epochs=2000; encoder seeds=0,1; 6 (SSL seed:probe seed) pairs=0:0,0:1,0:2,1:0,1:1,1:2.
+% Probe completion: CIFAR10|ResNet18|mkdt|0.2|simclr|Flowers|1; SSL epochs=2000; encoder seeds=0,1; 6 (SSL seed:probe seed) pairs=0:0,0:1,0:2,1:0,1:1,1:2.
+% Probe completion: CIFAR10|ResNet18|mkdt|0.2|simclr|Dogs|1; SSL epochs=2000; encoder seeds=0,1; 6 (SSL seed:probe seed) pairs=0:0,0:1,0:2,1:0,1:1,1:2.
+% Probe completion: CIFAR10|ResNet18|mkdt|0.2|simclr|TinyImageNet|1; SSL epochs=2000; encoder seeds=0,1; 6 (SSL seed:probe seed) pairs=0:0,0:1,0:2,1:0,1:1,1:2.
+% Probe completion: CIFAR10|ResNet18|mkdt|0.2|simclr|Aircraft|1; SSL epochs=2000; encoder seeds=0,1; 6 (SSL seed:probe seed) pairs=0:0,0:1,0:2,1:0,1:1,1:2.
+% Probe completion: CIFAR10|ResNet18|mkdt|0.2|simclr|CIFAR100|5; SSL epochs=2000; encoder seeds=0,1; 6 (SSL seed:probe seed) pairs=0:0,0:1,0:2,1:0,1:1,1:2.
+% Probe completion: CIFAR10|ResNet18|mkdt|0.2|simclr|Flowers|5; SSL epochs=2000; encoder seeds=0,1; 6 (SSL seed:probe seed) pairs=0:0,0:1,0:2,1:0,1:1,1:2.
+% Probe completion: CIFAR10|ResNet18|mkdt|0.2|simclr|CUB2011|5; SSL epochs=2000; encoder seeds=0,1; 6 (SSL seed:probe seed) pairs=0:0,0:1,0:2,1:0,1:1,1:2.
+% Probe completion: CIFAR10|ResNet18|mkdt|0.2|simclr|Dogs|5; SSL epochs=2000; encoder seeds=0,1; 6 (SSL seed:probe seed) pairs=0:0,0:1,0:2,1:0,1:1,1:2.
+% Probe completion: CIFAR10|ResNet18|mkdt|0.2|barlowtwins|CIFAR100|1; SSL epochs=10000; encoder seeds=0,1; 6 (SSL seed:probe seed) pairs=0:0,0:1,0:2,1:0,1:1,1:2.
+% Probe completion: CIFAR10|ResNet18|mkdt|0.2|barlowtwins|CUB2011|1; SSL epochs=10000; encoder seeds=0,1; 6 (SSL seed:probe seed) pairs=0:0,0:1,0:2,1:0,1:1,1:2.
+% Probe completion: CIFAR10|ResNet18|mkdt|0.2|barlowtwins|Dogs|1; SSL epochs=10000; encoder seeds=0,1; 6 (SSL seed:probe seed) pairs=0:0,0:1,0:2,1:0,1:1,1:2.
+% Probe completion: CIFAR10|ResNet18|mkdt|0.2|barlowtwins|Flowers|1; SSL epochs=10000; encoder seeds=0,1; 6 (SSL seed:probe seed) pairs=0:0,0:1,0:2,1:0,1:1,1:2.
+% Probe completion: CIFAR10|ResNet18|mkdt|0.2|barlowtwins|TinyImageNet|1; SSL epochs=10000; encoder seeds=0,1; 6 (SSL seed:probe seed) pairs=0:0,0:1,0:2,1:0,1:1,1:2.
+% Probe completion: CIFAR10|ResNet18|mkdt|0.2|simclr|TinyImageNet|5; SSL epochs=2000; encoder seeds=0,1; 6 (SSL seed:probe seed) pairs=0:0,0:1,0:2,1:0,1:1,1:2.
+% Probe completion: CIFAR10|ResNet18|mkdt|0.2|barlowtwins|Flowers|5; SSL epochs=10000; encoder seeds=0,1; 6 (SSL seed:probe seed) pairs=0:0,0:1,0:2,1:0,1:1,1:2.
+% Probe completion: CIFAR10|ResNet18|mkdt|0.2|barlowtwins|CIFAR100|5; SSL epochs=10000; encoder seeds=0,1; 6 (SSL seed:probe seed) pairs=0:0,0:1,0:2,1:0,1:1,1:2.
+% Probe completion: CIFAR10|ResNet18|mkdt|0.2|barlowtwins|Aircraft|1; SSL epochs=10000; encoder seeds=0,1; 6 (SSL seed:probe seed) pairs=0:0,0:1,0:2,1:0,1:1,1:2.
+% Probe completion: CIFAR10|ResNet18|mkdt|0.2|barlowtwins|CUB2011|5; SSL epochs=10000; encoder seeds=0,1; 6 (SSL seed:probe seed) pairs=0:0,0:1,0:2,1:0,1:1,1:2.
+% Probe completion: CIFAR10|ResNet18|mkdt|0.2|barlowtwins|Dogs|5; SSL epochs=10000; encoder seeds=0,1; 6 (SSL seed:probe seed) pairs=0:0,0:1,0:2,1:0,1:1,1:2.
+% Probe completion: CIFAR10|ResNet18|mkdt|0.2|barlowtwins|TinyImageNet|5; SSL epochs=10000; encoder seeds=0,1; 6 (SSL seed:probe seed) pairs=0:0,0:1,0:2,1:0,1:1,1:2.
+% Probe completion: CIFAR10|ResNet18|mkdt|0.2|simclr|Aircraft|5; SSL epochs=2000; encoder seeds=0,1; 6 (SSL seed:probe seed) pairs=0:0,0:1,0:2,1:0,1:1,1:2.
+% Probe completion: CIFAR10|ResNet18|mkdt|0.2|barlowtwins|Aircraft|5; SSL epochs=10000; encoder seeds=0,1; 6 (SSL seed:probe seed) pairs=0:0,0:1,0:2,1:0,1:1,1:2.

@@ -1,0 +1,357 @@
+{
+  "expected_encoder_jobs": 10,
+  "expected_probe_jobs": 100,
+  "expected_table_cells": 20,
+  "jobs_to_submit": 110,
+  "ssl_jobs": 10,
+  "probe_jobs": 100,
+  "account": "aip-boyuwang",
+  "ssl_epochs": 2000,
+  "probe_epochs": 100,
+  "buffer_seconds": 30,
+  "table_scope": "CVPR_tables/table.tex",
+  "groups": [
+    {
+      "source": "CIFAR10",
+      "subset": 2,
+      "kind": "random",
+      "selection_config": "random_ssl_checkpoints_cifar10k8k6k_tiny6k5k4k/CIFAR10/ResNet18/random/pt2/simclr/seed_000/config.json",
+      "selection_config_sha256": "89a9936b4e002bea3998dfca9630166fa765e837a9ffcbabc7b1e41b4a4f445e",
+      "selection_seed": 0,
+      "ssl_seed": 0,
+      "ssl_epochs": 2000,
+      "probe_seeds": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "label_percentages": [
+        1,
+        5
+      ],
+      "table": "CVPR_tables/table.tex"
+    },
+    {
+      "source": "CIFAR10",
+      "subset": 2,
+      "kind": "kmeans",
+      "selection_config": "kmeans_ssl_checkpoints_cifar10k8k6k_tiny6k5k4k_6seeds/CIFAR10/ResNet18/kmeans/pt2/simclr/seed_000/config.json",
+      "selection_config_sha256": "a9cbeac9816a8d76c09bd74a5831ffb082cffb31190aa81ef81bfa4fc3465ea2",
+      "selection_seed": 0,
+      "ssl_seed": 0,
+      "ssl_epochs": 2000,
+      "probe_seeds": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "label_percentages": [
+        1,
+        5
+      ],
+      "table": "CVPR_tables/table.tex"
+    },
+    {
+      "source": "CIFAR100",
+      "subset": 2,
+      "kind": "random",
+      "selection_config": "random_ssl_checkpoints_cifar10k8k6k_tiny6k5k4k/CIFAR100/ResNet18/random/pt2/simclr/seed_000/config.json",
+      "selection_config_sha256": "ad9d048bd48dfd2fbb95be94b9d2557a4af07b42d4181f5dfd1c54856df70337",
+      "selection_seed": 0,
+      "ssl_seed": 0,
+      "ssl_epochs": 2000,
+      "probe_seeds": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "label_percentages": [
+        1,
+        5
+      ],
+      "table": "CVPR_tables/table.tex"
+    },
+    {
+      "source": "CIFAR100",
+      "subset": 2,
+      "kind": "kmeans",
+      "selection_config": "kmeans_ssl_checkpoints_cifar10k8k6k_tiny6k5k4k_6seeds/CIFAR100/ResNet18/kmeans/pt2/simclr/seed_000/config.json",
+      "selection_config_sha256": "e6098550b743a3744da8e043107e84663154199d280b6c3e5be2d122e0889782",
+      "selection_seed": 0,
+      "ssl_seed": 0,
+      "ssl_epochs": 2000,
+      "probe_seeds": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "label_percentages": [
+        1,
+        5
+      ],
+      "table": "CVPR_tables/table.tex"
+    },
+    {
+      "source": "TinyImageNet",
+      "subset": 0.2,
+      "kind": "random",
+      "selection_config": "random_ssl_checkpoints_cifar10k8k6k_tiny6k5k4k/TinyImageNet/ResNet18/random/pt0.2/simclr/seed_000/config.json",
+      "selection_config_sha256": "2b17e2b5cf1c57e2aa513875951e86cdc927378f3b05c0b6bca9cdc6da974c30",
+      "selection_seed": 0,
+      "ssl_seed": 0,
+      "ssl_epochs": 2000,
+      "probe_seeds": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "label_percentages": [
+        1,
+        5
+      ],
+      "table": "CVPR_tables/table.tex"
+    },
+    {
+      "source": "TinyImageNet",
+      "subset": 0.2,
+      "kind": "kmeans",
+      "selection_config": "kmeans_ssl_checkpoints_cifar10k8k6k_tiny6k5k4k_6seeds/TinyImageNet/ResNet18/kmeans/pt0.2/simclr/seed_000/config.json",
+      "selection_config_sha256": "fdcc9449eda9b389ba3466dbc3e054201f6f233e7c8ee5eec16d778072a73323",
+      "selection_seed": 0,
+      "ssl_seed": 0,
+      "ssl_epochs": 2000,
+      "probe_seeds": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "label_percentages": [
+        1,
+        5
+      ],
+      "table": "CVPR_tables/table.tex"
+    },
+    {
+      "source": "TinyImageNet",
+      "subset": 1,
+      "kind": "random",
+      "selection_config": "random_ssl_checkpoints_cifar10k8k6k_tiny6k5k4k/TinyImageNet/ResNet18/random/pt1/simclr/seed_000/config.json",
+      "selection_config_sha256": "c974a2e2d89f2a2ce908dcaed18a6046c92777f4624a90ccac48ba973a08088c",
+      "selection_seed": 0,
+      "ssl_seed": 0,
+      "ssl_epochs": 2000,
+      "probe_seeds": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "label_percentages": [
+        1,
+        5
+      ],
+      "table": "CVPR_tables/table.tex"
+    },
+    {
+      "source": "TinyImageNet",
+      "subset": 1,
+      "kind": "kmeans",
+      "selection_config": "kmeans_ssl_checkpoints_cifar10k8k6k_tiny6k5k4k_6seeds/TinyImageNet/ResNet18/kmeans/pt1/simclr/seed_000/config.json",
+      "selection_config_sha256": "95c27552396334df624132cbdfc48dcd58b80dfefa760edb5aa2d90575937ed8",
+      "selection_seed": 0,
+      "ssl_seed": 0,
+      "ssl_epochs": 2000,
+      "probe_seeds": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "label_percentages": [
+        1,
+        5
+      ],
+      "table": "CVPR_tables/table.tex"
+    },
+    {
+      "source": "TinyImageNet",
+      "subset": 2,
+      "kind": "random",
+      "selection_config": "random_ssl_checkpoints_cifar10k8k6k_tiny6k5k4k/TinyImageNet/ResNet18/random/pt2/simclr/seed_000/config.json",
+      "selection_config_sha256": "47c6f27f22c423b870e1a09008fd7294088179421f8ccd315e4ac91d0b182885",
+      "selection_seed": 0,
+      "ssl_seed": 0,
+      "ssl_epochs": 2000,
+      "probe_seeds": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "label_percentages": [
+        1,
+        5
+      ],
+      "table": "CVPR_tables/table.tex"
+    },
+    {
+      "source": "TinyImageNet",
+      "subset": 2,
+      "kind": "kmeans",
+      "selection_config": "kmeans_ssl_checkpoints_cifar10k8k6k_tiny6k5k4k_6seeds/TinyImageNet/ResNet18/kmeans/pt2/simclr/seed_000/config.json",
+      "selection_config_sha256": "413fcf13f4ff9a353b775f25ddd81da888fbaf8dd2a89b1f71887256c7426cf9",
+      "selection_seed": 0,
+      "ssl_seed": 0,
+      "ssl_epochs": 2000,
+      "probe_seeds": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "label_percentages": [
+        1,
+        5
+      ],
+      "table": "CVPR_tables/table.tex"
+    }
+  ],
+  "timings": [
+    {
+      "source": "CIFAR10",
+      "subset": 2,
+      "kind": "random",
+      "ssl_epoch_seconds_p95": 1.0308944107964635,
+      "probe_seconds_p95": {
+        "1": 12.365424322895706,
+        "5": 56.01552057079971
+      },
+      "measurement": "Vulcan K-means / same BN architecture, data size and benchmark recipe",
+      "buffer_seconds": 30
+    },
+    {
+      "source": "CIFAR10",
+      "subset": 2,
+      "kind": "kmeans",
+      "ssl_epoch_seconds_p95": 1.0308944107964635,
+      "probe_seconds_p95": {
+        "1": 12.365424322895706,
+        "5": 56.01552057079971
+      },
+      "measurement": "Vulcan K-means / same BN architecture, data size and benchmark recipe",
+      "buffer_seconds": 30
+    },
+    {
+      "source": "CIFAR100",
+      "subset": 2,
+      "kind": "random",
+      "ssl_epoch_seconds_p95": 0.9959627781063318,
+      "probe_seconds_p95": {
+        "1": 11.598247231915593,
+        "5": 53.15756053524092
+      },
+      "measurement": "Vulcan K-means / same BN architecture, data size and benchmark recipe",
+      "buffer_seconds": 30
+    },
+    {
+      "source": "CIFAR100",
+      "subset": 2,
+      "kind": "kmeans",
+      "ssl_epoch_seconds_p95": 0.9959627781063318,
+      "probe_seconds_p95": {
+        "1": 11.598247231915593,
+        "5": 53.15756053524092
+      },
+      "measurement": "Vulcan K-means / same BN architecture, data size and benchmark recipe",
+      "buffer_seconds": 30
+    },
+    {
+      "source": "TinyImageNet",
+      "subset": 0.2,
+      "kind": "random",
+      "ssl_epoch_seconds_p95": 0.5415243837051094,
+      "probe_seconds_p95": {
+        "1": 50.88248208491132,
+        "5": 240.91044408688322
+      },
+      "measurement": "Vulcan K-means / same BN architecture, data size and benchmark recipe",
+      "buffer_seconds": 30
+    },
+    {
+      "source": "TinyImageNet",
+      "subset": 0.2,
+      "kind": "kmeans",
+      "ssl_epoch_seconds_p95": 0.5415243837051094,
+      "probe_seconds_p95": {
+        "1": 50.88248208491132,
+        "5": 240.91044408688322
+      },
+      "measurement": "Vulcan K-means / same BN architecture, data size and benchmark recipe",
+      "buffer_seconds": 30
+    },
+    {
+      "source": "TinyImageNet",
+      "subset": 1,
+      "kind": "random",
+      "ssl_epoch_seconds_p95": 2.0837517017498612,
+      "probe_seconds_p95": {
+        "1": 51.27338841184974,
+        "5": 242.49836271395907
+      },
+      "measurement": "Vulcan K-means / same BN architecture, data size and benchmark recipe",
+      "buffer_seconds": 30
+    },
+    {
+      "source": "TinyImageNet",
+      "subset": 1,
+      "kind": "kmeans",
+      "ssl_epoch_seconds_p95": 2.0837517017498612,
+      "probe_seconds_p95": {
+        "1": 51.27338841184974,
+        "5": 242.49836271395907
+      },
+      "measurement": "Vulcan K-means / same BN architecture, data size and benchmark recipe",
+      "buffer_seconds": 30
+    },
+    {
+      "source": "TinyImageNet",
+      "subset": 2,
+      "kind": "random",
+      "ssl_epoch_seconds_p95": 4.875749134924263,
+      "probe_seconds_p95": {
+        "1": 50.82017205003649,
+        "5": 240.66635113675147
+      },
+      "measurement": "Vulcan K-means / same BN architecture, data size and benchmark recipe",
+      "buffer_seconds": 30
+    },
+    {
+      "source": "TinyImageNet",
+      "subset": 2,
+      "kind": "kmeans",
+      "ssl_epoch_seconds_p95": 4.875749134924263,
+      "probe_seconds_p95": {
+        "1": 50.82017205003649,
+        "5": 240.66635113675147
+      },
+      "measurement": "Vulcan K-means / same BN architecture, data size and benchmark recipe",
+      "buffer_seconds": 30
+    }
+  ]
+}
