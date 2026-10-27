@@ -1,0 +1,102 @@
+{
+  "scope": "Historical costs for the synthetic sets evaluated with ResNet18 in the main tables; one set per dataset and budget, not an average over repeated generation runs.",
+  "runtime_definition": "Ours: sum of bracketed local-time distillation-start to retained-iteration timestamps. MKDT: completed tqdm optimization elapsed times, summed over sequential chunks when necessary. Neither is end-to-end generation time.",
+  "runtime_exclusions": ["Dataset loading", "Initialization and clustering", "Teacher training", "Teacher-feature extraction", "Expert-bank construction and ranking", "Queue and interruption gaps", "Repeated work discarded before a resume checkpoint", "Downstream SSL and linear probing"],
+  "hardware_limit": "Historical Vulcan/Killarney runs, not a controlled hardware-matched comparison. Accounting confirms NVIDIA L40S for the listed Vulcan MKDT jobs. Ours interactive generation logs do not record a GPU model.",
+  "random": {
+    "selection_seconds": null,
+    "reason": "Selection latency was not recorded. Do not substitute zero for unmeasured selection time.",
+    "auxiliary_reference_bytes": 0,
+    "storage_definition": "No frozen teacher, feature-target cache, or expert bank; selected indices and source images are outside this storage metric."
+  },
+  "ours": {
+    "generation_model": "ResNet18BN",
+    "teacher_method": "simclr",
+    "iterations_by_percentage": {"0.2": 10000, "1": 8000, "2": 6000},
+    "datasets": {
+      "CIFAR10": {
+        "teacher_seed": 0,
+        "teacher_marker": "Evaluate_benchamrk/full_ssl_checkpoints_1000ep_3seeds/CIFAR10/ResNet18/full/pt100/simclr/seed_000/ssl_complete.json",
+        "teacher_epochs": 1000,
+        "teacher_training_seconds": 58368.561610376,
+        "teacher_checkpoint_bytes": 44754295,
+        "generation": {
+          "0.2": {"seconds": 1793, "log": "OT-SSL-DD/ours_syntehtic/logs/CIFAR10_ResNet18BN_pt0.2.log", "segments": [[0, 10000, "2026-10-23 09:57:50", "2026-10-23 10:27:43"]]},
+          "1": {"seconds": 1984, "log": "OT-SSL-DD/ours_syntehtic/logs/CIFAR10_ResNet18BN_pt1.log", "segments": [[0, 8000, "2026-10-23 10:28:01", "2026-10-23 11:01:05"]]},
+          "2": {"seconds": 2029, "log": "OT-SSL-DD/ours_syntehtic/logs/CIFAR10_ResNet18BN_pt2.log", "segments": [[0, 6000, "2026-10-23 11:01:27", "2026-10-23 11:35:16"]]}
+        }
+      },
+      "CIFAR100": {
+        "teacher_seed": 0,
+        "teacher_marker": "Evaluate_benchamrk/full_ssl_checkpoints_1000ep_3seeds/CIFAR100/ResNet18/full/pt100/simclr/seed_000/ssl_complete.json",
+        "teacher_epochs": 1000,
+        "teacher_training_seconds": 58430.00133425463,
+        "teacher_checkpoint_bytes": 44754295,
+        "generation": {
+          "0.2": {"seconds": 1670, "log": "OT-SSL-DD/ours_syntehtic/logs/CIFAR100_ResNet18BN_pt0.2.log", "segments": [[0, 10000, "2026-10-23 09:58:12", "2026-10-23 10:26:02"]]},
+          "1": {"seconds": 1832, "log": "OT-SSL-DD/ours_syntehtic/logs/CIFAR100_ResNet18BN_pt1.log", "segments": [[0, 8000, "2026-10-23 10:26:17", "2026-10-23 10:56:49"]]},
+          "2": {"seconds": 1877, "log": "OT-SSL-DD/ours_syntehtic/logs/CIFAR100_ResNet18BN_pt2.log", "segments": [[0, 6000, "2026-10-23 10:57:07", "2026-10-23 11:28:24"]]}
+        }
+      },
+      "TinyImageNet": {
+        "teacher_seed": 1,
+        "teacher_marker": "Evaluate_benchamrk/full_ssl_checkpoints_1000ep_3seeds/TinyImageNet/ResNet18/full/pt100/simclr/seed_001/ssl_complete.json",
+        "teacher_epochs": 1000,
+        "teacher_training_seconds": 269164.37598847505,
+        "teacher_checkpoint_bytes": 44754295,
+        "generation": {
+          "0.2": {"seconds": 6664, "log": "OT-SSL-DD/ours_syntehtic/logs/TinyImageNet_ResNet18BN_pt0.2.log", "segments": [[0, 600, "2026-10-23 13:59:23", "2026-10-23 14:06:12"], [600, 10000, "2026-10-23 22:40:39", "2026-10-24 00:24:54"]]},
+          "1": {"seconds": 11004, "log": "OT-SSL-DD/ours_syntehtic/logs/TinyImageNet_ResNet18BN_pt1.log", "segments": [[0, 8000, "2026-10-24 00:26:17", "2026-10-24 03:29:41"]]},
+          "2": {"seconds": 14109, "log": "OT-SSL-DD/ours_syntehtic/logs/TinyImageNet_ResNet18BN_pt2.log", "segments": [[0, 700, "2026-10-24 03:31:49", "2026-10-24 03:58:22"], [700, 3900, "2026-10-24 09:53:35", "2026-10-24 11:57:13"], [3900, 6000, "2026-10-24 16:15:52", "2026-10-24 17:40:50"]], "note": "Uses the first fully logged 0-to-6000 sequence. A later repeat from iteration 3900 in job 1946354 is not added. Discarded updates 701-725 and 3901-3975 before earlier timeouts are excluded."}
+        }
+      }
+    }
+  },
+  "mkdt": {
+    "teacher_method": "barlow_twins",
+    "teacher_training_seconds": null,
+    "expert_bank_preparation_seconds": null,
+    "preparation_limit": "Cached teacher targets and expert banks exist. Original teacher-training duration and complete end-to-end expert-bank preparation duration were not recovered; epoch tqdm times and scheduler limits are not treated as complete preparation times.",
+    "bank_definition": "100 experts, each with initialization plus 20 epoch snapshots. CIFAR uses ConvNet; Tiny uses ConvNetD4. These generation networks differ from the downstream evaluation ResNet18BN.",
+    "storage_definition": "Actual serialized bytes of rebuilt 0.2% expert banks plus cached teacher feature targets. Excludes raw datasets, generated images, optimizer checkpoints, ranking outputs, and the original teacher checkpoint, which is not needed once feature targets are cached. No peak CPU RAM or GPU memory is claimed.",
+    "recipe_limit": "0.2% uses the rebuilt/chunked generation pipeline; historical 1%/2% timings come from the older pipeline. This table documents those runs, not an identical-code speed benchmark.",
+    "datasets": {
+      "CIFAR10": {
+        "iterations": 5000,
+        "bank": "Evaluate_benchamrk/mkdt_02_jobs/runs/CIFAR10/buffers/CIFAR10/ConvNet",
+        "bank_bytes": 11336844600,
+        "features": "benchmarks/mkdt_multidataset/results/batch_20261010T160046Z_Y6dqZS/synthetic/work/target_rep/barlow_twins/CIFAR10_target_rep_train.pt",
+        "feature_bytes": 102401760,
+        "generation": {
+          "0.2": {"seconds": 2869, "log_directory": "Evaluate_benchamrk/mkdt_02_jobs/runs/logs", "job_ids": [1943540, 1943541, 1943542, 1943543, 1943544], "chunk_seconds": [581, 572, 576, 558, 582]},
+          "1": {"seconds": 6774, "log": "benchmarks/mkdt_multidataset/results/batch_20261010T160046Z_Y6dqZS/logs/mkdt_syn_CIFAR10_ConvNet_1-1576313.out"},
+          "2": {"seconds": 6770, "log": "benchmarks/mkdt_multidataset/results/batch_20261010T160046Z_Y6dqZS/logs/mkdt_syn_CIFAR10_ConvNet_2-1576314.out"}
+        }
+      },
+      "CIFAR100": {
+        "iterations": 5000,
+        "bank": "Evaluate_benchamrk/mkdt_02_jobs/runs/CIFAR100/buffers/CIFAR100/ConvNet",
+        "bank_bytes": 11336842500,
+        "features": "benchmarks/mkdt_multidataset/results/batch_20261010T160046Z_Y6dqZS/synthetic/work/target_rep/barlow_twins/CIFAR100_target_rep_train.pt",
+        "feature_bytes": 102401767,
+        "generation": {
+          "0.2": {"seconds": 2879, "log_directory": "Evaluate_benchamrk/mkdt_02_jobs/runs/logs", "job_ids": [1943546, 1943547, 1943548, 1943549, 1943550], "chunk_seconds": [599, 571, 580, 554, 575]},
+          "1": {"seconds": 6777, "log": "benchmarks/mkdt_multidataset/results/batch_20261010T160046Z_Y6dqZS/logs/mkdt_syn_CIFAR100_ConvNet_1-1576331.out"},
+          "2": {"seconds": 6864, "log": "benchmarks/mkdt_multidataset/results/batch_20261010T160046Z_Y6dqZS/logs/mkdt_syn_CIFAR100_ConvNet_2-1576332.out"}
+        }
+      },
+      "TinyImageNet": {
+        "iterations": 10000,
+        "bank": "Evaluate_benchamrk/mkdt_02_jobs/runs/Tiny/buffers/Tiny/ConvNetD4",
+        "bank_bytes": 12581121740,
+        "features": "benchmarks/mkdt_multidataset/results/batch_20261010T160046Z_Y6dqZS/synthetic/work/target_rep/barlow_twins/Tiny_target_rep_train.pt",
+        "feature_bytes": 204801675,
+        "generation": {
+          "0.2": {"seconds": 12037, "log_directory": "Evaluate_benchamrk/mkdt_02_jobs/runs/logs", "job_ids": [6629788, 6629789, 6629790, 6629791, 6629792, 6629793, 6629794, 6629795, 6629796, 6629797], "chunk_seconds": [1266, 1246, 1205, 1188, 1188, 1189, 1189, 1189, 1189, 1188]},
+          "1": {"seconds": 13946, "log": "benchmarks/killarney_short_jobs/logs/part3/kil_p3_syn_Tiny_Conv_1-6196841.out"},
+          "2": {"seconds": 13837, "log": "benchmarks/killarney_short_jobs/logs/part3/kil_p3_syn_Tiny_Conv_2-6196842.out"}
+        }
+      }
+    }
+  }
+}

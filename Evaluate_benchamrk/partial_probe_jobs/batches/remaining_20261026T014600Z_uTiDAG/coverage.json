@@ -1,0 +1,832 @@
+{
+  "blank_cells": 135,
+  "excluded_cells": 0,
+  "eligible_cells": 135,
+  "planned_cells": 130,
+  "blocked_cells": 2,
+  "jobs": 138,
+  "ssl_jobs": 8,
+  "probe_jobs": 130,
+  "new_probes": 777,
+  "reused_probes": 3,
+  "accounts": {
+    "counts": {
+      "aip-boyuwang": 0,
+      "aip-yiweilu": 138
+    },
+    "seconds": {
+      "aip-boyuwang": 0,
+      "aip-yiweilu": 108678
+    }
+  },
+  "buffer_seconds": 60,
+  "blocked": [
+    {
+      "cell": "TinyImageNet|ResNet18|ours|2|simclr|TinyImageNet|1",
+      "reason": "user_hold_until_synced_data_confirmed",
+      "path": "/scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic/TinyImageNet/ResNet18BN/pt2/res_IIC_TinyImageNet_ResNet18BN_2percent_final.pt"
+    },
+    {
+      "cell": "TinyImageNet|ResNet18|ours|2|simclr|TinyImageNet|5",
+      "reason": "user_hold_until_synced_data_confirmed",
+      "path": "/scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic/TinyImageNet/ResNet18BN/pt2/res_IIC_TinyImageNet_ResNet18BN_2percent_final.pt"
+    }
+  ],
+  "report": [
+    {
+      "cell": "CIFAR10|ResNet18|mkdt|0.2|simclr|CIFAR10|1",
+      "status": "planned",
+      "job": "pp_mkdt_CIFAR10_p0p2_simclr_CIFAR10_l1",
+      "missing_probes": 6
+    },
+    {
+      "cell": "CIFAR10|ResNet18|mkdt|0.2|barlowtwins|CIFAR10|1",
+      "status": "planned",
+      "job": "pp_mkdt_CIFAR10_p0p2_barlowtwins_CIFAR10_l1",
+      "missing_probes": 6
+    },
+    {
+      "cell": "CIFAR100|ResNet18|mkdt|0.2|simclr|CIFAR100|1",
+      "status": "planned",
+      "job": "pp_mkdt_CIFAR100_p0p2_simclr_CIFAR100_l1",
+      "missing_probes": 6
+    },
+    {
+      "cell": "CIFAR100|ResNet18|mkdt|0.2|barlowtwins|CIFAR100|1",
+      "status": "planned",
+      "job": "pp_mkdt_CIFAR100_p0p2_barlowtwins_CIFAR100_l1",
+      "missing_probes": 6
+    },
+    {
+      "cell": "TinyImageNet|ResNet18|ours|1|barlowtwins|TinyImageNet|1",
+      "status": "queued",
+      "job": "1939848"
+    },
+    {
+      "cell": "CIFAR10|ResNet18|mkdt|0.2|simclr|CIFAR10|5",
+      "status": "planned",
+      "job": "pp_mkdt_CIFAR10_p0p2_simclr_CIFAR10_l5",
+      "missing_probes": 6
+    },
+    {
+      "cell": "CIFAR10|ResNet18|mkdt|0.2|barlowtwins|CIFAR10|5",
+      "status": "planned",
+      "job": "pp_mkdt_CIFAR10_p0p2_barlowtwins_CIFAR10_l5",
+      "missing_probes": 6
+    },
+    {
+      "cell": "CIFAR100|ResNet18|mkdt|0.2|simclr|CIFAR100|5",
+      "status": "planned",
+      "job": "pp_mkdt_CIFAR100_p0p2_simclr_CIFAR100_l5",
+      "missing_probes": 6
+    },
+    {
+      "cell": "CIFAR100|ResNet18|mkdt|0.2|barlowtwins|CIFAR100|5",
+      "status": "planned",
+      "job": "pp_mkdt_CIFAR100_p0p2_barlowtwins_CIFAR100_l5",
+      "missing_probes": 6
+    },
+    {
+      "cell": "TinyImageNet|ResNet18|ours|1|barlowtwins|TinyImageNet|5",
+      "status": "queued",
+      "job": "1939849"
+    },
+    {
+      "cell": "CIFAR10|ResNet18|mkdt|0.2|simclr|CIFAR100|1",
+      "status": "planned",
+      "job": "pp_mkdt_CIFAR10_p0p2_simclr_CIFAR100_l1",
+      "missing_probes": 6
+    },
+    {
+      "cell": "CIFAR10|ResNet18|mkdt|0.2|barlowtwins|CIFAR100|1",
+      "status": "planned",
+      "job": "pp_mkdt_CIFAR10_p0p2_barlowtwins_CIFAR100_l1",
+      "missing_probes": 6
+    },
+    {
+      "cell": "CIFAR10|ResNet18|mkdt|0.2|simclr|Aircraft|1",
+      "status": "planned",
+      "job": "pp_mkdt_CIFAR10_p0p2_simclr_Aircraft_l1",
+      "missing_probes": 6
+    },
+    {
+      "cell": "CIFAR10|ResNet18|mkdt|0.2|barlowtwins|Aircraft|1",
+      "status": "planned",
+      "job": "pp_mkdt_CIFAR10_p0p2_barlowtwins_Aircraft_l1",
+      "missing_probes": 6
+    },
+    {
+      "cell": "CIFAR10|ResNet18|mkdt|0.2|simclr|CUB2011|1",
+      "status": "planned",
+      "job": "pp_mkdt_CIFAR10_p0p2_simclr_CUB2011_l1",
+      "missing_probes": 6
+    },
+    {
+      "cell": "CIFAR10|ResNet18|mkdt|0.2|barlowtwins|CUB2011|1",
+      "status": "planned",
+      "job": "pp_mkdt_CIFAR10_p0p2_barlowtwins_CUB2011_l1",
+      "missing_probes": 6
+    },
+    {
+      "cell": "CIFAR10|ResNet18|mkdt|0.2|simclr|Dogs|1",
+      "status": "planned",
+      "job": "pp_mkdt_CIFAR10_p0p2_simclr_Dogs_l1",
+      "missing_probes": 6
+    },
+    {
+      "cell": "CIFAR10|ResNet18|mkdt|0.2|barlowtwins|Dogs|1",
+      "status": "planned",
+      "job": "pp_mkdt_CIFAR10_p0p2_barlowtwins_Dogs_l1",
+      "missing_probes": 6
+    },
+    {
+      "cell": "CIFAR10|ResNet18|mkdt|0.2|simclr|Flowers|1",
+      "status": "planned",
+      "job": "pp_mkdt_CIFAR10_p0p2_simclr_Flowers_l1",
+      "missing_probes": 6
+    },
+    {
+      "cell": "CIFAR10|ResNet18|mkdt|0.2|barlowtwins|Flowers|1",
+      "status": "planned",
+      "job": "pp_mkdt_CIFAR10_p0p2_barlowtwins_Flowers_l1",
+      "missing_probes": 6
+    },
+    {
+      "cell": "CIFAR10|ResNet18|mkdt|0.2|simclr|TinyImageNet|1",
+      "status": "planned",
+      "job": "pp_mkdt_CIFAR10_p0p2_simclr_TinyImageNet_l1",
+      "missing_probes": 6
+    },
+    {
+      "cell": "CIFAR10|ResNet18|mkdt|0.2|barlowtwins|TinyImageNet|1",
+      "status": "planned",
+      "job": "pp_mkdt_CIFAR10_p0p2_barlowtwins_TinyImageNet_l1",
+      "missing_probes": 6
+    },
+    {
+      "cell": "CIFAR10|ResNet18|mkdt|0.2|simclr|CIFAR100|5",
+      "status": "planned",
+      "job": "pp_mkdt_CIFAR10_p0p2_simclr_CIFAR100_l5",
+      "missing_probes": 6
+    },
+    {
+      "cell": "CIFAR10|ResNet18|mkdt|0.2|barlowtwins|CIFAR100|5",
+      "status": "planned",
+      "job": "pp_mkdt_CIFAR10_p0p2_barlowtwins_CIFAR100_l5",
+      "missing_probes": 6
+    },
+    {
+      "cell": "CIFAR10|ResNet18|mkdt|0.2|simclr|Aircraft|5",
+      "status": "planned",
+      "job": "pp_mkdt_CIFAR10_p0p2_simclr_Aircraft_l5",
+      "missing_probes": 6
+    },
+    {
+      "cell": "CIFAR10|ResNet18|mkdt|0.2|barlowtwins|Aircraft|5",
+      "status": "planned",
+      "job": "pp_mkdt_CIFAR10_p0p2_barlowtwins_Aircraft_l5",
+      "missing_probes": 6
+    },
+    {
+      "cell": "CIFAR10|ResNet18|mkdt|0.2|simclr|CUB2011|5",
+      "status": "planned",
+      "job": "pp_mkdt_CIFAR10_p0p2_simclr_CUB2011_l5",
+      "missing_probes": 6
+    },
+    {
+      "cell": "CIFAR10|ResNet18|mkdt|0.2|barlowtwins|CUB2011|5",
+      "status": "planned",
+      "job": "pp_mkdt_CIFAR10_p0p2_barlowtwins_CUB2011_l5",
+      "missing_probes": 6
+    },
+    {
+      "cell": "CIFAR10|ResNet18|mkdt|0.2|simclr|Dogs|5",
+      "status": "planned",
+      "job": "pp_mkdt_CIFAR10_p0p2_simclr_Dogs_l5",
+      "missing_probes": 6
+    },
+    {
+      "cell": "CIFAR10|ResNet18|mkdt|0.2|barlowtwins|Dogs|5",
+      "status": "planned",
+      "job": "pp_mkdt_CIFAR10_p0p2_barlowtwins_Dogs_l5",
+      "missing_probes": 6
+    },
+    {
+      "cell": "CIFAR10|ResNet18|mkdt|0.2|simclr|Flowers|5",
+      "status": "planned",
+      "job": "pp_mkdt_CIFAR10_p0p2_simclr_Flowers_l5",
+      "missing_probes": 6
+    },
+    {
+      "cell": "CIFAR10|ResNet18|mkdt|0.2|barlowtwins|Flowers|5",
+      "status": "planned",
+      "job": "pp_mkdt_CIFAR10_p0p2_barlowtwins_Flowers_l5",
+      "missing_probes": 6
+    },
+    {
+      "cell": "CIFAR10|ResNet18|mkdt|0.2|simclr|TinyImageNet|5",
+      "status": "planned",
+      "job": "pp_mkdt_CIFAR10_p0p2_simclr_TinyImageNet_l5",
+      "missing_probes": 6
+    },
+    {
+      "cell": "CIFAR10|ResNet18|mkdt|0.2|barlowtwins|TinyImageNet|5",
+      "status": "planned",
+      "job": "pp_mkdt_CIFAR10_p0p2_barlowtwins_TinyImageNet_l5",
+      "missing_probes": 6
+    },
+    {
+      "cell": "CIFAR100|ResNet18|mkdt|0.2|simclr|TinyImageNet|1",
+      "status": "planned",
+      "job": "pp_mkdt_CIFAR100_p0p2_simclr_TinyImageNet_l1",
+      "missing_probes": 6
+    },
+    {
+      "cell": "CIFAR100|ResNet18|mkdt|0.2|barlowtwins|TinyImageNet|1",
+      "status": "planned",
+      "job": "pp_mkdt_CIFAR100_p0p2_barlowtwins_TinyImageNet_l1",
+      "missing_probes": 6
+    },
+    {
+      "cell": "CIFAR100|ResNet18|mkdt|0.2|simclr|CIFAR10|1",
+      "status": "planned",
+      "job": "pp_mkdt_CIFAR100_p0p2_simclr_CIFAR10_l1",
+      "missing_probes": 6
+    },
+    {
+      "cell": "CIFAR100|ResNet18|mkdt|0.2|barlowtwins|CIFAR10|1",
+      "status": "planned",
+      "job": "pp_mkdt_CIFAR100_p0p2_barlowtwins_CIFAR10_l1",
+      "missing_probes": 6
+    },
+    {
+      "cell": "CIFAR100|ResNet18|mkdt|0.2|simclr|Aircraft|1",
+      "status": "planned",
+      "job": "pp_mkdt_CIFAR100_p0p2_simclr_Aircraft_l1",
+      "missing_probes": 6
+    },
+    {
+      "cell": "CIFAR100|ResNet18|mkdt|0.2|barlowtwins|Aircraft|1",
+      "status": "planned",
+      "job": "pp_mkdt_CIFAR100_p0p2_barlowtwins_Aircraft_l1",
+      "missing_probes": 6
+    },
+    {
+      "cell": "CIFAR100|ResNet18|mkdt|0.2|simclr|CUB2011|1",
+      "status": "planned",
+      "job": "pp_mkdt_CIFAR100_p0p2_simclr_CUB2011_l1",
+      "missing_probes": 6
+    },
+    {
+      "cell": "CIFAR100|ResNet18|mkdt|0.2|barlowtwins|CUB2011|1",
+      "status": "planned",
+      "job": "pp_mkdt_CIFAR100_p0p2_barlowtwins_CUB2011_l1",
+      "missing_probes": 6
+    },
+    {
+      "cell": "CIFAR100|ResNet18|mkdt|0.2|simclr|Dogs|1",
+      "status": "planned",
+      "job": "pp_mkdt_CIFAR100_p0p2_simclr_Dogs_l1",
+      "missing_probes": 6
+    },
+    {
+      "cell": "CIFAR100|ResNet18|mkdt|0.2|barlowtwins|Dogs|1",
+      "status": "planned",
+      "job": "pp_mkdt_CIFAR100_p0p2_barlowtwins_Dogs_l1",
+      "missing_probes": 6
+    },
+    {
+      "cell": "CIFAR100|ResNet18|mkdt|0.2|simclr|Flowers|1",
+      "status": "planned",
+      "job": "pp_mkdt_CIFAR100_p0p2_simclr_Flowers_l1",
+      "missing_probes": 6
+    },
+    {
+      "cell": "CIFAR100|ResNet18|mkdt|0.2|barlowtwins|Flowers|1",
+      "status": "planned",
+      "job": "pp_mkdt_CIFAR100_p0p2_barlowtwins_Flowers_l1",
+      "missing_probes": 6
+    },
+    {
+      "cell": "CIFAR100|ResNet18|mkdt|0.2|simclr|TinyImageNet|5",
+      "status": "planned",
+      "job": "pp_mkdt_CIFAR100_p0p2_simclr_TinyImageNet_l5",
+      "missing_probes": 6
+    },
+    {
+      "cell": "CIFAR100|ResNet18|mkdt|0.2|barlowtwins|TinyImageNet|5",
+      "status": "planned",
+      "job": "pp_mkdt_CIFAR100_p0p2_barlowtwins_TinyImageNet_l5",
+      "missing_probes": 6
+    },
+    {
+      "cell": "CIFAR100|ResNet18|mkdt|0.2|simclr|CIFAR10|5",
+      "status": "planned",
+      "job": "pp_mkdt_CIFAR100_p0p2_simclr_CIFAR10_l5",
+      "missing_probes": 6
+    },
+    {
+      "cell": "CIFAR100|ResNet18|mkdt|0.2|barlowtwins|CIFAR10|5",
+      "status": "planned",
+      "job": "pp_mkdt_CIFAR100_p0p2_barlowtwins_CIFAR10_l5",
+      "missing_probes": 6
+    },
+    {
+      "cell": "CIFAR100|ResNet18|mkdt|0.2|simclr|Aircraft|5",
+      "status": "planned",
+      "job": "pp_mkdt_CIFAR100_p0p2_simclr_Aircraft_l5",
+      "missing_probes": 6
+    },
+    {
+      "cell": "CIFAR100|ResNet18|mkdt|0.2|barlowtwins|Aircraft|5",
+      "status": "planned",
+      "job": "pp_mkdt_CIFAR100_p0p2_barlowtwins_Aircraft_l5",
+      "missing_probes": 6
+    },
+    {
+      "cell": "CIFAR100|ResNet18|mkdt|0.2|simclr|CUB2011|5",
+      "status": "planned",
+      "job": "pp_mkdt_CIFAR100_p0p2_simclr_CUB2011_l5",
+      "missing_probes": 6
+    },
+    {
+      "cell": "CIFAR100|ResNet18|mkdt|0.2|barlowtwins|CUB2011|5",
+      "status": "planned",
+      "job": "pp_mkdt_CIFAR100_p0p2_barlowtwins_CUB2011_l5",
+      "missing_probes": 6
+    },
+    {
+      "cell": "CIFAR100|ResNet18|mkdt|0.2|simclr|Dogs|5",
+      "status": "planned",
+      "job": "pp_mkdt_CIFAR100_p0p2_simclr_Dogs_l5",
+      "missing_probes": 6
+    },
+    {
+      "cell": "CIFAR100|ResNet18|mkdt|0.2|barlowtwins|Dogs|5",
+      "status": "planned",
+      "job": "pp_mkdt_CIFAR100_p0p2_barlowtwins_Dogs_l5",
+      "missing_probes": 6
+    },
+    {
+      "cell": "CIFAR100|ResNet18|mkdt|0.2|simclr|Flowers|5",
+      "status": "planned",
+      "job": "pp_mkdt_CIFAR100_p0p2_simclr_Flowers_l5",
+      "missing_probes": 6
+    },
+    {
+      "cell": "CIFAR100|ResNet18|mkdt|0.2|barlowtwins|Flowers|5",
+      "status": "planned",
+      "job": "pp_mkdt_CIFAR100_p0p2_barlowtwins_Flowers_l5",
+      "missing_probes": 6
+    },
+    {
+      "cell": "TinyImageNet|ResNet18|mkdt|0.2|simclr|Flowers|1",
+      "status": "planned",
+      "job": "pp_mkdt_TinyImageNet_p0p2_simclr_down_Flowers_l1",
+      "missing_probes": 6
+    },
+    {
+      "cell": "TinyImageNet|ResNet18|mkdt|1|simclr|CIFAR10|1",
+      "status": "planned",
+      "job": "pp_mkdt_TinyImageNet_p1_simclr_down_CIFAR10_l1",
+      "missing_probes": 6
+    },
+    {
+      "cell": "TinyImageNet|ResNet18|mkdt|1|simclr|CIFAR100|1",
+      "status": "planned",
+      "job": "pp_mkdt_TinyImageNet_p1_simclr_down_CIFAR100_l1",
+      "missing_probes": 6
+    },
+    {
+      "cell": "TinyImageNet|ResNet18|mkdt|1|simclr|Aircraft|1",
+      "status": "planned",
+      "job": "pp_mkdt_TinyImageNet_p1_simclr_down_Aircraft_l1",
+      "missing_probes": 6
+    },
+    {
+      "cell": "TinyImageNet|ResNet18|mkdt|1|simclr|CUB2011|1",
+      "status": "planned",
+      "job": "pp_mkdt_TinyImageNet_p1_simclr_down_CUB2011_l1",
+      "missing_probes": 6
+    },
+    {
+      "cell": "TinyImageNet|ResNet18|mkdt|1|simclr|Dogs|1",
+      "status": "planned",
+      "job": "pp_mkdt_TinyImageNet_p1_simclr_down_Dogs_l1",
+      "missing_probes": 6
+    },
+    {
+      "cell": "TinyImageNet|ResNet18|mkdt|1|simclr|Flowers|1",
+      "status": "planned",
+      "job": "pp_mkdt_TinyImageNet_p1_simclr_down_Flowers_l1",
+      "missing_probes": 6
+    },
+    {
+      "cell": "TinyImageNet|ResNet18|ours|1|simclr|CIFAR10|1",
+      "status": "planned",
+      "job": "pp_ours_TinyImageNet_p1_simclr_down_CIFAR10_l1",
+      "missing_probes": 6
+    },
+    {
+      "cell": "TinyImageNet|ResNet18|ours|1|simclr|CIFAR100|1",
+      "status": "planned",
+      "job": "pp_ours_TinyImageNet_p1_simclr_down_CIFAR100_l1",
+      "missing_probes": 6
+    },
+    {
+      "cell": "TinyImageNet|ResNet18|ours|1|simclr|Aircraft|1",
+      "status": "planned",
+      "job": "pp_ours_TinyImageNet_p1_simclr_down_Aircraft_l1",
+      "missing_probes": 6
+    },
+    {
+      "cell": "TinyImageNet|ResNet18|ours|1|simclr|CUB2011|1",
+      "status": "planned",
+      "job": "pp_ours_TinyImageNet_p1_simclr_down_CUB2011_l1",
+      "missing_probes": 6
+    },
+    {
+      "cell": "TinyImageNet|ResNet18|ours|1|simclr|Dogs|1",
+      "status": "planned",
+      "job": "pp_ours_TinyImageNet_p1_simclr_down_Dogs_l1",
+      "missing_probes": 6
+    },
+    {
+      "cell": "TinyImageNet|ResNet18|ours|1|simclr|Flowers|1",
+      "status": "planned",
+      "job": "pp_ours_TinyImageNet_p1_simclr_down_Flowers_l1",
+      "missing_probes": 6
+    },
+    {
+      "cell": "TinyImageNet|ResNet18|random|2|simclr|Aircraft|1",
+      "status": "queued",
+      "job": "1944314"
+    },
+    {
+      "cell": "TinyImageNet|ResNet18|mkdt|2|simclr|CIFAR10|1",
+      "status": "planned",
+      "job": "pp_mkdt_TinyImageNet_p2_simclr_CIFAR10_l1",
+      "missing_probes": 6
+    },
+    {
+      "cell": "TinyImageNet|ResNet18|mkdt|2|simclr|CIFAR100|1",
+      "status": "planned",
+      "job": "pp_mkdt_TinyImageNet_p2_simclr_CIFAR100_l1",
+      "missing_probes": 6
+    },
+    {
+      "cell": "TinyImageNet|ResNet18|mkdt|2|simclr|Aircraft|1",
+      "status": "planned",
+      "job": "pp_mkdt_TinyImageNet_p2_simclr_Aircraft_l1",
+      "missing_probes": 6
+    },
+    {
+      "cell": "TinyImageNet|ResNet18|mkdt|2|simclr|CUB2011|1",
+      "status": "planned",
+      "job": "pp_mkdt_TinyImageNet_p2_simclr_CUB2011_l1",
+      "missing_probes": 6
+    },
+    {
+      "cell": "TinyImageNet|ResNet18|mkdt|2|simclr|Dogs|1",
+      "status": "planned",
+      "job": "pp_mkdt_TinyImageNet_p2_simclr_Dogs_l1",
+      "missing_probes": 6
+    },
+    {
+      "cell": "TinyImageNet|ResNet18|mkdt|2|simclr|Flowers|1",
+      "status": "planned",
+      "job": "pp_mkdt_TinyImageNet_p2_simclr_Flowers_l1",
+      "missing_probes": 6
+    },
+    {
+      "cell": "TinyImageNet|ResNet18|ours|2|simclr|CIFAR10|1",
+      "status": "planned",
+      "job": "pp_ours_TinyImageNet_p2_simclr_down_CIFAR10_l1",
+      "missing_probes": 6
+    },
+    {
+      "cell": "TinyImageNet|ResNet18|mkdt|1|simclr|CIFAR10|5",
+      "status": "planned",
+      "job": "pp_mkdt_TinyImageNet_p1_simclr_down_CIFAR10_l5",
+      "missing_probes": 6
+    },
+    {
+      "cell": "TinyImageNet|ResNet18|mkdt|1|simclr|CIFAR100|5",
+      "status": "planned",
+      "job": "pp_mkdt_TinyImageNet_p1_simclr_down_CIFAR100_l5",
+      "missing_probes": 6
+    },
+    {
+      "cell": "TinyImageNet|ResNet18|mkdt|1|simclr|Aircraft|5",
+      "status": "planned",
+      "job": "pp_mkdt_TinyImageNet_p1_simclr_down_Aircraft_l5",
+      "missing_probes": 6
+    },
+    {
+      "cell": "TinyImageNet|ResNet18|mkdt|1|simclr|CUB2011|5",
+      "status": "planned",
+      "job": "pp_mkdt_TinyImageNet_p1_simclr_down_CUB2011_l5",
+      "missing_probes": 6
+    },
+    {
+      "cell": "TinyImageNet|ResNet18|mkdt|1|simclr|Dogs|5",
+      "status": "planned",
+      "job": "pp_mkdt_TinyImageNet_p1_simclr_down_Dogs_l5",
+      "missing_probes": 6
+    },
+    {
+      "cell": "TinyImageNet|ResNet18|mkdt|1|simclr|Flowers|5",
+      "status": "planned",
+      "job": "pp_mkdt_TinyImageNet_p1_simclr_down_Flowers_l5",
+      "missing_probes": 6
+    },
+    {
+      "cell": "TinyImageNet|ResNet18|ours|1|simclr|CIFAR10|5",
+      "status": "planned",
+      "job": "pp_ours_TinyImageNet_p1_simclr_down_CIFAR10_l5",
+      "missing_probes": 6
+    },
+    {
+      "cell": "TinyImageNet|ResNet18|ours|1|simclr|CIFAR100|5",
+      "status": "planned",
+      "job": "pp_ours_TinyImageNet_p1_simclr_down_CIFAR100_l5",
+      "missing_probes": 6
+    },
+    {
+      "cell": "TinyImageNet|ResNet18|ours|1|simclr|Aircraft|5",
+      "status": "planned",
+      "job": "pp_ours_TinyImageNet_p1_simclr_down_Aircraft_l5",
+      "missing_probes": 3
+    },
+    {
+      "cell": "TinyImageNet|ResNet18|ours|1|simclr|CUB2011|5",
+      "status": "planned",
+      "job": "pp_ours_TinyImageNet_p1_simclr_down_CUB2011_l5",
+      "missing_probes": 6
+    },
+    {
+      "cell": "TinyImageNet|ResNet18|ours|1|simclr|Dogs|5",
+      "status": "planned",
+      "job": "pp_ours_TinyImageNet_p1_simclr_down_Dogs_l5",
+      "missing_probes": 6
+    },
+    {
+      "cell": "TinyImageNet|ResNet18|ours|1|simclr|Flowers|5",
+      "status": "planned",
+      "job": "pp_ours_TinyImageNet_p1_simclr_down_Flowers_l5",
+      "missing_probes": 6
+    },
+    {
+      "cell": "TinyImageNet|ResNet18|mkdt|2|simclr|CIFAR10|5",
+      "status": "planned",
+      "job": "pp_mkdt_TinyImageNet_p2_simclr_CIFAR10_l5",
+      "missing_probes": 6
+    },
+    {
+      "cell": "TinyImageNet|ResNet18|mkdt|2|simclr|CIFAR100|5",
+      "status": "planned",
+      "job": "pp_mkdt_TinyImageNet_p2_simclr_CIFAR100_l5",
+      "missing_probes": 6
+    },
+    {
+      "cell": "TinyImageNet|ResNet18|mkdt|2|simclr|Aircraft|5",
+      "status": "planned",
+      "job": "pp_mkdt_TinyImageNet_p2_simclr_Aircraft_l5",
+      "missing_probes": 6
+    },
+    {
+      "cell": "TinyImageNet|ResNet18|mkdt|2|simclr|CUB2011|5",
+      "status": "planned",
+      "job": "pp_mkdt_TinyImageNet_p2_simclr_CUB2011_l5",
+      "missing_probes": 6
+    },
+    {
+      "cell": "TinyImageNet|ResNet18|mkdt|2|simclr|Dogs|5",
+      "status": "planned",
+      "job": "pp_mkdt_TinyImageNet_p2_simclr_Dogs_l5",
+      "missing_probes": 6
+    },
+    {
+      "cell": "TinyImageNet|ResNet18|mkdt|2|simclr|Flowers|5",
+      "status": "planned",
+      "job": "pp_mkdt_TinyImageNet_p2_simclr_Flowers_l5",
+      "missing_probes": 6
+    },
+    {
+      "cell": "TinyImageNet|ResNet18|mkdt|0.2|barlowtwins|CIFAR10|1",
+      "status": "planned",
+      "job": "pp_mkdt_TinyImageNet_p0p2_barlowtwins_CIFAR10_l1",
+      "missing_probes": 6
+    },
+    {
+      "cell": "TinyImageNet|ResNet18|mkdt|0.2|barlowtwins|CIFAR100|1",
+      "status": "planned",
+      "job": "pp_mkdt_TinyImageNet_p0p2_barlowtwins_CIFAR100_l1",
+      "missing_probes": 6
+    },
+    {
+      "cell": "TinyImageNet|ResNet18|mkdt|0.2|barlowtwins|Aircraft|1",
+      "status": "planned",
+      "job": "pp_mkdt_TinyImageNet_p0p2_barlowtwins_Aircraft_l1",
+      "missing_probes": 6
+    },
+    {
+      "cell": "TinyImageNet|ResNet18|mkdt|0.2|barlowtwins|CUB2011|1",
+      "status": "planned",
+      "job": "pp_mkdt_TinyImageNet_p0p2_barlowtwins_CUB2011_l1",
+      "missing_probes": 6
+    },
+    {
+      "cell": "TinyImageNet|ResNet18|mkdt|0.2|barlowtwins|Dogs|1",
+      "status": "planned",
+      "job": "pp_mkdt_TinyImageNet_p0p2_barlowtwins_Dogs_l1",
+      "missing_probes": 6
+    },
+    {
+      "cell": "TinyImageNet|ResNet18|mkdt|0.2|barlowtwins|Flowers|1",
+      "status": "planned",
+      "job": "pp_mkdt_TinyImageNet_p0p2_barlowtwins_Flowers_l1",
+      "missing_probes": 6
+    },
+    {
+      "cell": "TinyImageNet|ResNet18|ours|0.2|barlowtwins|CIFAR10|1",
+      "status": "planned",
+      "job": "pp_ours_TinyImageNet_p0p2_barlowtwins_down_CIFAR10_l1",
+      "missing_probes": 6
+    },
+    {
+      "cell": "TinyImageNet|ResNet18|ours|0.2|barlowtwins|CIFAR100|1",
+      "status": "planned",
+      "job": "pp_ours_TinyImageNet_p0p2_barlowtwins_down_CIFAR100_l1",
+      "missing_probes": 6
+    },
+    {
+      "cell": "TinyImageNet|ResNet18|ours|0.2|barlowtwins|Aircraft|1",
+      "status": "planned",
+      "job": "pp_ours_TinyImageNet_p0p2_barlowtwins_down_Aircraft_l1",
+      "missing_probes": 6
+    },
+    {
+      "cell": "TinyImageNet|ResNet18|ours|0.2|barlowtwins|CUB2011|1",
+      "status": "planned",
+      "job": "pp_ours_TinyImageNet_p0p2_barlowtwins_down_CUB2011_l1",
+      "missing_probes": 6
+    },
+    {
+      "cell": "TinyImageNet|ResNet18|ours|0.2|barlowtwins|Dogs|1",
+      "status": "planned",
+      "job": "pp_ours_TinyImageNet_p0p2_barlowtwins_down_Dogs_l1",
+      "missing_probes": 6
+    },
+    {
+      "cell": "TinyImageNet|ResNet18|ours|0.2|barlowtwins|Flowers|1",
+      "status": "planned",
+      "job": "pp_ours_TinyImageNet_p0p2_barlowtwins_down_Flowers_l1",
+      "missing_probes": 6
+    },
+    {
+      "cell": "TinyImageNet|ResNet18|ours|1|barlowtwins|CIFAR10|1",
+      "status": "planned",
+      "job": "pp_ours_TinyImageNet_p1_barlowtwins_down_CIFAR10_l1",
+      "missing_probes": 6
+    },
+    {
+      "cell": "TinyImageNet|ResNet18|ours|1|barlowtwins|CIFAR100|1",
+      "status": "planned",
+      "job": "pp_ours_TinyImageNet_p1_barlowtwins_down_CIFAR100_l1",
+      "missing_probes": 6
+    },
+    {
+      "cell": "TinyImageNet|ResNet18|ours|1|barlowtwins|Aircraft|1",
+      "status": "planned",
+      "job": "pp_ours_TinyImageNet_p1_barlowtwins_down_Aircraft_l1",
+      "missing_probes": 6
+    },
+    {
+      "cell": "TinyImageNet|ResNet18|ours|1|barlowtwins|CUB2011|1",
+      "status": "planned",
+      "job": "pp_ours_TinyImageNet_p1_barlowtwins_down_CUB2011_l1",
+      "missing_probes": 6
+    },
+    {
+      "cell": "TinyImageNet|ResNet18|ours|1|barlowtwins|Dogs|1",
+      "status": "planned",
+      "job": "pp_ours_TinyImageNet_p1_barlowtwins_down_Dogs_l1",
+      "missing_probes": 6
+    },
+    {
+      "cell": "TinyImageNet|ResNet18|ours|1|barlowtwins|Flowers|1",
+      "status": "planned",
+      "job": "pp_ours_TinyImageNet_p1_barlowtwins_down_Flowers_l1",
+      "missing_probes": 6
+    },
+    {
+      "cell": "TinyImageNet|ResNet18|mkdt|0.2|barlowtwins|CIFAR10|5",
+      "status": "planned",
+      "job": "pp_mkdt_TinyImageNet_p0p2_barlowtwins_CIFAR10_l5",
+      "missing_probes": 6
+    },
+    {
+      "cell": "TinyImageNet|ResNet18|mkdt|0.2|barlowtwins|CIFAR100|5",
+      "status": "planned",
+      "job": "pp_mkdt_TinyImageNet_p0p2_barlowtwins_CIFAR100_l5",
+      "missing_probes": 6
+    },
+    {
+      "cell": "TinyImageNet|ResNet18|mkdt|0.2|barlowtwins|Aircraft|5",
+      "status": "planned",
+      "job": "pp_mkdt_TinyImageNet_p0p2_barlowtwins_Aircraft_l5",
+      "missing_probes": 6
+    },
+    {
+      "cell": "TinyImageNet|ResNet18|mkdt|0.2|barlowtwins|CUB2011|5",
+      "status": "planned",
+      "job": "pp_mkdt_TinyImageNet_p0p2_barlowtwins_CUB2011_l5",
+      "missing_probes": 6
+    },
+    {
+      "cell": "TinyImageNet|ResNet18|mkdt|0.2|barlowtwins|Dogs|5",
+      "status": "planned",
+      "job": "pp_mkdt_TinyImageNet_p0p2_barlowtwins_Dogs_l5",
+      "missing_probes": 6
+    },
+    {
+      "cell": "TinyImageNet|ResNet18|mkdt|0.2|barlowtwins|Flowers|5",
+      "status": "planned",
+      "job": "pp_mkdt_TinyImageNet_p0p2_barlowtwins_Flowers_l5",
+      "missing_probes": 6
+    },
+    {
+      "cell": "TinyImageNet|ResNet18|ours|0.2|barlowtwins|CIFAR10|5",
+      "status": "planned",
+      "job": "pp_ours_TinyImageNet_p0p2_barlowtwins_down_CIFAR10_l5",
+      "missing_probes": 6
+    },
+    {
+      "cell": "TinyImageNet|ResNet18|ours|0.2|barlowtwins|CIFAR100|5",
+      "status": "planned",
+      "job": "pp_ours_TinyImageNet_p0p2_barlowtwins_down_CIFAR100_l5",
+      "missing_probes": 6
+    },
+    {
+      "cell": "TinyImageNet|ResNet18|ours|0.2|barlowtwins|Aircraft|5",
+      "status": "planned",
+      "job": "pp_ours_TinyImageNet_p0p2_barlowtwins_down_Aircraft_l5",
+      "missing_probes": 6
+    },
+    {
+      "cell": "TinyImageNet|ResNet18|ours|0.2|barlowtwins|CUB2011|5",
+      "status": "planned",
+      "job": "pp_ours_TinyImageNet_p0p2_barlowtwins_down_CUB2011_l5",
+      "missing_probes": 6
+    },
+    {
+      "cell": "TinyImageNet|ResNet18|ours|0.2|barlowtwins|Dogs|5",
+      "status": "planned",
+      "job": "pp_ours_TinyImageNet_p0p2_barlowtwins_down_Dogs_l5",
+      "missing_probes": 6
+    },
+    {
+      "cell": "TinyImageNet|ResNet18|ours|0.2|barlowtwins|Flowers|5",
+      "status": "planned",
+      "job": "pp_ours_TinyImageNet_p0p2_barlowtwins_down_Flowers_l5",
+      "missing_probes": 6
+    },
+    {
+      "cell": "TinyImageNet|ResNet18|ours|1|barlowtwins|CIFAR10|5",
+      "status": "planned",
+      "job": "pp_ours_TinyImageNet_p1_barlowtwins_down_CIFAR10_l5",
+      "missing_probes": 6
+    },
+    {
+      "cell": "TinyImageNet|ResNet18|ours|1|barlowtwins|CIFAR100|5",
+      "status": "planned",
+      "job": "pp_ours_TinyImageNet_p1_barlowtwins_down_CIFAR100_l5",
+      "missing_probes": 6
+    },
+    {
+      "cell": "TinyImageNet|ResNet18|ours|1|barlowtwins|Aircraft|5",
+      "status": "planned",
+      "job": "pp_ours_TinyImageNet_p1_barlowtwins_down_Aircraft_l5",
+      "missing_probes": 6
+    },
+    {
+      "cell": "TinyImageNet|ResNet18|ours|1|barlowtwins|CUB2011|5",
+      "status": "planned",
+      "job": "pp_ours_TinyImageNet_p1_barlowtwins_down_CUB2011_l5",
+      "missing_probes": 6
+    },
+    {
+      "cell": "TinyImageNet|ResNet18|ours|1|barlowtwins|Dogs|5",
+      "status": "planned",
+      "job": "pp_ours_TinyImageNet_p1_barlowtwins_down_Dogs_l5",
+      "missing_probes": 6
+    },
+    {
+      "cell": "TinyImageNet|ResNet18|ours|1|barlowtwins|Flowers|5",
+      "status": "planned",
+      "job": "pp_ours_TinyImageNet_p1_barlowtwins_down_Flowers_l5",
+      "missing_probes": 6
+    }
+  ]
+}

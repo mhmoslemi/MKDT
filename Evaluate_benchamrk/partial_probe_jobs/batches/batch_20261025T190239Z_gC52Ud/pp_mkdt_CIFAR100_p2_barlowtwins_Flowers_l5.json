@@ -1,0 +1,80 @@
+{
+  "name": "pp_mkdt_CIFAR100_p2_barlowtwins_Flowers_l5",
+  "group_id": "mkdt_CIFAR100_p2_barlowtwins",
+  "cell": {
+    "source": "CIFAR100",
+    "kind": "mkdt",
+    "subset": 2,
+    "ssl": "barlowtwins",
+    "target": "Flowers",
+    "labels": 5
+  },
+  "cell_key": "CIFAR100|ResNet18|mkdt|2|barlowtwins|Flowers|5",
+  "ssl_epochs": 6000,
+  "scheme": "four_ssl",
+  "repeated_encoders": true,
+  "samples": [
+    {
+      "ssl_seed": 0,
+      "probe_seed": 0,
+      "checkpoint_dir": "mkdt_ssl_checkpoints_cifar8k6k_tiny5k4k_6seeds/CIFAR100/ResNet18/mkdt/pt2/barlowtwins/seed_000",
+      "config_sha256": "e214971ca34f629b0c405224f77d18d2fe528b7330cd5fc67141760f06c0d62e",
+      "encoder_sha256": "6648c8fc44f82b7ec808b8e93f3831d1caaedf9dfb303fce305aa158434c7508",
+      "result_file": "mkdt_eval_results_interactive_6seeds/CIFAR100/ResNet18/mkdt/pt2/barlowtwins/seed_000/evaluations/Flowers_lbl5.json"
+    },
+    {
+      "ssl_seed": 1,
+      "probe_seed": 1,
+      "checkpoint_dir": "mkdt_ssl_checkpoints_cifar8k6k_tiny5k4k_6seeds/CIFAR100/ResNet18/mkdt/pt2/barlowtwins/seed_001",
+      "config_sha256": "495a0a0496e2e1eb6c1d4010ea8e09ab7d47837c7fac97abe184021837eb75b0",
+      "encoder_sha256": "25201a7b95e4ef64702673eda2e93c63533e8e5b133040b21bcfdb37e8653fb8",
+      "result_file": "mkdt_eval_results_interactive_6seeds/CIFAR100/ResNet18/mkdt/pt2/barlowtwins/seed_001/evaluations/Flowers_lbl5.json"
+    },
+    {
+      "ssl_seed": 2,
+      "probe_seed": 2,
+      "checkpoint_dir": "mkdt_ssl_checkpoints_cifar8k6k_tiny5k4k_6seeds/CIFAR100/ResNet18/mkdt/pt2/barlowtwins/seed_002",
+      "config_sha256": "b2fe9b5bd6689fc0b61876271e69758f3bb09e8044aaddd1217af6cbe7b1782e",
+      "encoder_sha256": "503b5aae04434bd1854073a94a2fb75478f7677e0c001bc1c08ae61295c11dc2",
+      "result_file": "mkdt_eval_results_interactive_6seeds/CIFAR100/ResNet18/mkdt/pt2/barlowtwins/seed_002/evaluations/Flowers_lbl5.json"
+    },
+    {
+      "ssl_seed": 4,
+      "probe_seed": 4,
+      "checkpoint_dir": "mkdt_ssl_checkpoints_cifar8k6k_tiny5k4k_6seeds/CIFAR100/ResNet18/mkdt/pt2/barlowtwins/seed_004",
+      "config_sha256": "f44854b1eaa644be3640a527710c4e8ac172566d922642d48782d254e08ea323",
+      "encoder_sha256": "ca732d609c72e0ae7b79301ba9eed11624c9af88983e423c12feec12d0ef8ce0",
+      "result_file": "mkdt_eval_results_interactive_6seeds/CIFAR100/ResNet18/mkdt/pt2/barlowtwins/seed_004/evaluations/Flowers_lbl5.json"
+    },
+    {
+      "ssl_seed": 0,
+      "probe_seed": 3,
+      "checkpoint_dir": "mkdt_ssl_checkpoints_cifar8k6k_tiny5k4k_6seeds/CIFAR100/ResNet18/mkdt/pt2/barlowtwins/seed_000",
+      "config_sha256": "e214971ca34f629b0c405224f77d18d2fe528b7330cd5fc67141760f06c0d62e",
+      "encoder_sha256": "6648c8fc44f82b7ec808b8e93f3831d1caaedf9dfb303fce305aa158434c7508",
+      "result_file": "partial_probe_results/mkdt_CIFAR100_p2_barlowtwins/Flowers_lbl5/ssl_seed_0_probe_3.json"
+    },
+    {
+      "ssl_seed": 1,
+      "probe_seed": 5,
+      "checkpoint_dir": "mkdt_ssl_checkpoints_cifar8k6k_tiny5k4k_6seeds/CIFAR100/ResNet18/mkdt/pt2/barlowtwins/seed_001",
+      "config_sha256": "495a0a0496e2e1eb6c1d4010ea8e09ab7d47837c7fac97abe184021837eb75b0",
+      "encoder_sha256": "25201a7b95e4ef64702673eda2e93c63533e8e5b133040b21bcfdb37e8653fb8",
+      "result_file": "partial_probe_results/mkdt_CIFAR100_p2_barlowtwins/Flowers_lbl5/ssl_seed_1_probe_5.json"
+    }
+  ],
+  "summary_file": "partial_probe_results/mkdt_CIFAR100_p2_barlowtwins/Flowers_lbl5/summary.json",
+  "code_hashes": {
+    "Evaluate_benchamrk/common.py": "67fcd33f581a34a7f764431b6761ac120cb080d4b2ea0d69b95074565a224f8b",
+    "Evaluate_benchamrk/data.py": "befcf535679e449b3544ae9b8578325e53f7995179591042315d8937cd55f6d9",
+    "Evaluate_benchamrk/evaluate.py": "2b2162a56878f48ade39d2b80d4316511f20a72d29eaa2cf70fe023d88ad722f",
+    "Evaluate_benchamrk/plan.py": "c6d9bd33b36d1d235a2f6af291b3a0a82187b1eea3a10b90a7f57317d8eee83e",
+    "Evaluate_benchamrk/run.py": "1c2b8d29ab47966f1178c9f04b3e1b7c72bd2f55fb65a32c32c77c3730faf45b",
+    "Evaluate_benchamrk/test_protocol.py": "f018562437924ced1d890343a4e898f10e48c50a63920d337031194671c4e43d",
+    "Evaluate_benchamrk/train_ssl.py": "3670781eb0f0f838ced6cc7ca9775791d4d52683fe25e489239f012937dc1a79",
+    "networks.py": "0c15ff3ef11f21df752e2a9a17851ab8c8a52ddc3969380682ea8bfcec1968fc",
+    "benchmarks/downstream_data.py": "081fe26e5dc81c96ce8e8ffe5a412302663de4a9d095684c5b37e7c615b4a6fd"
+  },
+  "seconds": 154,
+  "buffer_seconds": 60
+}

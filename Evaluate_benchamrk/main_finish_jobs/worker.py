@@ -25,8 +25,9 @@ def synthetic_config(task, args, datasets):
     protocol['subset_seeds'] = [0, 1]
     entry = base.mkdt.synthetic_entry(args.synthetic_root, task['source'], 'ResNet18', 0.2)
     marker = base.read(Path(entry['path']).parent / 'complete_0.2.json')
-    if (not marker['complete'] or marker['count'] != 200 or marker['iterations'] != 10000
-            or base.file_hash(entry['path']) != marker['files']['images_10000.pt']):
+    count, iterations = (200, 10000) if task['source'] == 'TinyImageNet' else (100, 5000)
+    if (not marker['complete'] or marker['count'] != count or marker['iterations'] != iterations
+            or base.file_hash(entry['path']) != marker['files'][f'images_{iterations}.pt']):
         raise ValueError('MKDT 0.2% generation is unfinished or its images changed')
     synthetic = base.SyntheticDataset(entry, task['source'], 0.2, protocol['input_size'][task['source']])
     signature = {'protocol': protocol, 'source': task['source'], 'model': 'ResNet18',

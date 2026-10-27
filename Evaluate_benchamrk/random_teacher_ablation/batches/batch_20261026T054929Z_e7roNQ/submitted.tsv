@@ -1,0 +1,11 @@
+name	job	account	walltime	dependency
+ab_rnet_C10_p0p2_gen	1947322	aip-yiweilu	00:46:23	-
+ab_rnet_C10_p0p2_ssl_s0	1947323	aip-boyuwang	00:05:23	--dependency=afterok:1947322 --kill-on-invalid-dep=yes
+ab_rnet_C10_p0p2_probe_s0	1947324	aip-boyuwang	00:24:57	--dependency=afterok:1947323 --kill-on-invalid-dep=yes
+ab_rnet_C10_p0p2_ssl_s1	1947325	aip-boyuwang	00:05:23	--dependency=afterok:1947322 --kill-on-invalid-dep=yes
+ab_rnet_C10_p0p2_probe_s1	1947326	aip-boyuwang	00:24:57	--dependency=afterok:1947325 --kill-on-invalid-dep=yes
+ab_rnet_C10_p1_gen	1947327	aip-yiweilu	00:48:04	-
+ab_rnet_C10_p1_ssl_s0	1947328	aip-boyuwang	00:11:31	--dependency=afterok:1947327 --kill-on-invalid-dep=yes
+ab_rnet_C10_p1_probe_s0	1947329	aip-boyuwang	00:24:18	--dependency=afterok:1947328 --kill-on-invalid-dep=yes
+ab_rnet_C10_p1_ssl_s1	1947330	aip-boyuwang	00:11:31	--dependency=afterok:1947327 --kill-on-invalid-dep=yes
+ab_rnet_C10_p1_probe_s1	1947331	aip-boyuwang	00:24:18	--dependency=afterok:1947330 --kill-on-invalid-dep=yes

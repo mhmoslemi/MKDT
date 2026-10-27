@@ -1,0 +1,80 @@
+{
+  "name": "pp_mkdt_CIFAR10_p1_simclr_TinyImageNet_l5",
+  "group_id": "mkdt_CIFAR10_p1_simclr",
+  "cell": {
+    "source": "CIFAR10",
+    "kind": "mkdt",
+    "subset": 1,
+    "ssl": "simclr",
+    "target": "TinyImageNet",
+    "labels": 5
+  },
+  "cell_key": "CIFAR10|ResNet18|mkdt|1|simclr|TinyImageNet|5",
+  "ssl_epochs": 2000,
+  "scheme": "two_ssl",
+  "repeated_encoders": false,
+  "samples": [
+    {
+      "ssl_seed": 0,
+      "probe_seed": 0,
+      "checkpoint_dir": "mkdt_eval_results_simclr2k_2ssl3probes/CIFAR10/ResNet18/mkdt/pt1/simclr/ssl_seed_000",
+      "config_sha256": "30741bc709a17d67fd62df5f9bf6e20a4a38559827be97e7b10fb763b8457e06",
+      "encoder_sha256": "bb3184a35aec519198d92c604ae47b67687041cb151d77364ca11338569a1df3",
+      "result_file": "mkdt_eval_results_simclr2k_2ssl3probes/CIFAR10/ResNet18/mkdt/pt1/simclr/ssl_seed_000/evaluations/TinyImageNet_lbl5_probe0.json"
+    },
+    {
+      "ssl_seed": 0,
+      "probe_seed": 1,
+      "checkpoint_dir": "mkdt_eval_results_simclr2k_2ssl3probes/CIFAR10/ResNet18/mkdt/pt1/simclr/ssl_seed_000",
+      "config_sha256": "30741bc709a17d67fd62df5f9bf6e20a4a38559827be97e7b10fb763b8457e06",
+      "encoder_sha256": "bb3184a35aec519198d92c604ae47b67687041cb151d77364ca11338569a1df3",
+      "result_file": "mkdt_eval_results_simclr2k_2ssl3probes/CIFAR10/ResNet18/mkdt/pt1/simclr/ssl_seed_000/evaluations/TinyImageNet_lbl5_probe1.json"
+    },
+    {
+      "ssl_seed": 0,
+      "probe_seed": 2,
+      "checkpoint_dir": "mkdt_eval_results_simclr2k_2ssl3probes/CIFAR10/ResNet18/mkdt/pt1/simclr/ssl_seed_000",
+      "config_sha256": "30741bc709a17d67fd62df5f9bf6e20a4a38559827be97e7b10fb763b8457e06",
+      "encoder_sha256": "bb3184a35aec519198d92c604ae47b67687041cb151d77364ca11338569a1df3",
+      "result_file": "mkdt_eval_results_simclr2k_2ssl3probes/CIFAR10/ResNet18/mkdt/pt1/simclr/ssl_seed_000/evaluations/TinyImageNet_lbl5_probe2.json"
+    },
+    {
+      "ssl_seed": 1,
+      "probe_seed": 0,
+      "checkpoint_dir": "mkdt_eval_results_simclr2k_2ssl3probes/CIFAR10/ResNet18/mkdt/pt1/simclr/ssl_seed_001",
+      "config_sha256": "ec4aef38fc910a8b3de3b48cf86abe5d40c74fd9904da6de0fca930bdecbcec5",
+      "encoder_sha256": "4b72fc14c6d7ee594e9a7c7622a8c2ae5dd21a71a4f0bd28b6bac04a5c9c41f5",
+      "result_file": "mkdt_eval_results_simclr2k_2ssl3probes/CIFAR10/ResNet18/mkdt/pt1/simclr/ssl_seed_001/evaluations/TinyImageNet_lbl5_probe0.json"
+    },
+    {
+      "ssl_seed": 1,
+      "probe_seed": 1,
+      "checkpoint_dir": "mkdt_eval_results_simclr2k_2ssl3probes/CIFAR10/ResNet18/mkdt/pt1/simclr/ssl_seed_001",
+      "config_sha256": "ec4aef38fc910a8b3de3b48cf86abe5d40c74fd9904da6de0fca930bdecbcec5",
+      "encoder_sha256": "4b72fc14c6d7ee594e9a7c7622a8c2ae5dd21a71a4f0bd28b6bac04a5c9c41f5",
+      "result_file": "mkdt_eval_results_simclr2k_2ssl3probes/CIFAR10/ResNet18/mkdt/pt1/simclr/ssl_seed_001/evaluations/TinyImageNet_lbl5_probe1.json"
+    },
+    {
+      "ssl_seed": 1,
+      "probe_seed": 2,
+      "checkpoint_dir": "mkdt_eval_results_simclr2k_2ssl3probes/CIFAR10/ResNet18/mkdt/pt1/simclr/ssl_seed_001",
+      "config_sha256": "ec4aef38fc910a8b3de3b48cf86abe5d40c74fd9904da6de0fca930bdecbcec5",
+      "encoder_sha256": "4b72fc14c6d7ee594e9a7c7622a8c2ae5dd21a71a4f0bd28b6bac04a5c9c41f5",
+      "result_file": "mkdt_eval_results_simclr2k_2ssl3probes/CIFAR10/ResNet18/mkdt/pt1/simclr/ssl_seed_001/evaluations/TinyImageNet_lbl5_probe2.json"
+    }
+  ],
+  "summary_file": "partial_probe_results/mkdt_CIFAR10_p1_simclr/TinyImageNet_lbl5/summary.json",
+  "code_hashes": {
+    "Evaluate_benchamrk/common.py": "67fcd33f581a34a7f764431b6761ac120cb080d4b2ea0d69b95074565a224f8b",
+    "Evaluate_benchamrk/data.py": "befcf535679e449b3544ae9b8578325e53f7995179591042315d8937cd55f6d9",
+    "Evaluate_benchamrk/evaluate.py": "2b2162a56878f48ade39d2b80d4316511f20a72d29eaa2cf70fe023d88ad722f",
+    "Evaluate_benchamrk/plan.py": "c6d9bd33b36d1d235a2f6af291b3a0a82187b1eea3a10b90a7f57317d8eee83e",
+    "Evaluate_benchamrk/run.py": "1c2b8d29ab47966f1178c9f04b3e1b7c72bd2f55fb65a32c32c77c3730faf45b",
+    "Evaluate_benchamrk/test_protocol.py": "f018562437924ced1d890343a4e898f10e48c50a63920d337031194671c4e43d",
+    "Evaluate_benchamrk/train_ssl.py": "3670781eb0f0f838ced6cc7ca9775791d4d52683fe25e489239f012937dc1a79",
+    "networks.py": "0c15ff3ef11f21df752e2a9a17851ab8c8a52ddc3969380682ea8bfcec1968fc",
+    "benchmarks/downstream_data.py": "081fe26e5dc81c96ce8e8ffe5a412302663de4a9d095684c5b37e7c615b4a6fd"
+  },
+  "seconds": 619,
+  "buffer_seconds": 60
+}

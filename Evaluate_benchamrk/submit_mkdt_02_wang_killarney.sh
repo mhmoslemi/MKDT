@@ -16,12 +16,15 @@ if [[ ${1:-} == --worker ]]; then
     export WANDB_MODE=offline TMPDIR="${SLURM_TMPDIR:?}"
     cd "$code"
     export PYTHONPATH="$code:$(cd -- "$work/../../.." && pwd -P)${PYTHONPATH:+:$PYTHONPATH}"
+    if [[ ${SLURM_CLUSTER_NAME:-${CC_CLUSTER:-}} == vulcan ]]; then
+        exec python -u vulcan_worker.py "$stage" "$dataset" "$stop" "$work" "$synthetic" "$data"
+    fi
     exec python -u worker.py "$stage" "$dataset" "$stop" "$work" "$synthetic" "$data"
 fi
 
 dry_run=0
 if [[ ${1:-} == --dry-run ]]; then dry_run=1; shift; fi
-[[ $# == 0 && -z ${SLURM_JOB_ID:-} ]] || { echo 'Run this submitter on the Killarney login node.' >&2; exit 2; }
+[[ $# == 0 && -z ${SLURM_JOB_ID:-} ]] || { echo 'Run this submitter on the destination login node.' >&2; exit 2; }
 bench=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)
 repo=$(cd -- "$bench/.." && pwd -P)
 work="$bench/mkdt_02_jobs/runs"
@@ -33,11 +36,16 @@ synthetic=$(cd -- "$synthetic" && pwd -P)
 data=$(cd -- "$data" && pwd -P)
 venv=$(cd -- "$venv" && pwd -P)
 cluster=$(scontrol show config | awk '$1=="ClusterName" {print $3}')
-[[ $cluster == killarney ]] || { echo 'Submit on Killarney only.' >&2; exit 2; }
+expected_cluster=${MKDT_SUBMIT_CLUSTER:-killarney}
+[[ $expected_cluster == killarney || $expected_cluster == vulcan ]] || exit 2
+[[ $cluster == "$expected_cluster" ]] || { echo "Submit on $expected_cluster only." >&2; exit 2; }
 inventory=$(sinfo -h -o '%G' --Node)
 [[ $inventory == *gpu:l40s:* ]] || { echo 'L40S GPU type not found.' >&2; exit 2; }
 accounts=$(sacctmgr -nP show assoc "user=$(id -un)" format=Account)
 awk -F '|' '$1=="aip-boyuwang" {found=1} END {exit !found}' <<< "$accounts" || { echo 'Wang account unavailable.' >&2; exit 2; }
+if [[ $cluster == vulcan ]]; then
+    awk -F '|' '$1=="aip-yiweilu" {found=1} END {exit !found}' <<< "$accounts" || { echo 'Lu account unavailable.' >&2; exit 2; }
+fi
 module spider python/3.11.5 >/dev/null 2>&1
 for dataset in CIFAR10 CIFAR100 Tiny; do
     [[ -s $synthetic/work/target_rep/barlow_twins/${dataset}_target_rep_train.pt ]] || {
@@ -62,23 +70,28 @@ fi
 batch=$(mktemp -d "$work/batches/batch_$(date -u +%Y%m%dT%H%M%SZ)_XXXXXX")
 mkdir "$batch/code"
 cp "${sources[@]}" "$batch/code/"
+[[ $cluster != vulcan ]] || cp "$bench/mkdt_02_jobs/vulcan_worker.py" "$batch/code/"
 cp "$bench/submit_mkdt_02_wang_killarney.sh" "$batch/submit.sh"
 declare -A active
 while IFS='|' read -r name id; do
     name=${name//[[:space:]]/}; id=${id//[[:space:]]/}
     [[ $name == mk02_* && $id =~ ^[0-9]+$ ]] && active[$name]=$id
 done < <(squeue -h -u "$(id -un)" -t PD,R,CF,CG -o '%150j|%i')
-printf 'name\tjob\tstage\tdataset\tstop\twalltime\tdependency\n' > "$batch/submitted.tsv"
+printf 'name\tjob\tstage\tdataset\tstop\twalltime\tdependency\taccount\n' > "$batch/submitted.tsv"
 submitted=0
 LAST_JOB=''
 submit() {
-    local name=$1 stage=$2 dataset=$3 stop=$4 seconds=$5 dependency=$6 walltime job
+    local name=$1 stage=$2 dataset=$3 stop=$4 seconds=$5 dependency=$6 walltime job account=aip-boyuwang
+    if [[ $cluster == vulcan && $dataset == CIFAR100 ]]; then account=aip-yiweilu; fi
     if [[ -n ${active[$name]:-} ]]; then LAST_JOB=${active[$name]}; echo "ALREADY QUEUED: $name ($LAST_JOB)"; return; fi
     printf -v walltime '%02d:%02d:%02d' "$((seconds/3600))" "$((seconds/60%60))" "$((seconds%60))"
-    local command=(sbatch --parsable --job-name="$name" --account=aip-boyuwang
+    local command=(sbatch --parsable --job-name="$name" --account="$account"
         --nodes=1 --ntasks=1 --cpus-per-task=1 --mem=6G --time="$walltime"
         --chdir="$repo" --output="$work/logs/%x-%j.out" --error="$work/logs/%x-%j.err")
-    [[ $stage == init ]] || command+=(--gres=gpu:l40s:1 --exclude=kn101)
+    if [[ $stage != init ]]; then
+        command+=(--gres=gpu:l40s:1)
+        [[ $cluster != killarney ]] || command+=(--exclude=kn101)
+    fi
     [[ -z $dependency ]] || command+=(--dependency="afterok:$dependency" --kill-on-invalid-dep=yes)
     submitted=$((submitted + 1))
     if (( dry_run )); then
@@ -89,8 +102,8 @@ submit() {
         [[ $job =~ ^[0-9]+$ ]] || { echo "Unexpected sbatch output: $job" >&2; exit 2; }
     fi
     LAST_JOB=$job
-    printf '%s\t%s\t%s\t%s\t%s\t%s\t%s\n' "$name" "$job" "$stage" "$dataset" "$stop" "$walltime" "$dependency" >> "$batch/submitted.tsv"
-    printf '%s: %s, Wang, dependency=%s\n' "$name" "$walltime" "${dependency:-none}"
+    printf '%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n' "$name" "$job" "$stage" "$dataset" "$stop" "$walltime" "$dependency" "$account" >> "$batch/submitted.tsv"
+    printf '%s: %s, %s, dependency=%s\n' "$name" "$walltime" "$account" "${dependency:-none}"
 }
 
 for dataset in CIFAR10 CIFAR100 Tiny; do

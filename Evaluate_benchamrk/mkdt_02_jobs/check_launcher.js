@@ -15,6 +15,7 @@ const write = (name, content) => {
 try {
   for (const name of ['buffer.py', 'sort_dset.py', 'distill.py', 'utils.py', 'networks.py', 'reparam_module.py',
     'Evaluate_benchamrk/mkdt_02_jobs/worker.py', 'Evaluate_benchamrk/mkdt_02_jobs/check_resume.py',
+    'Evaluate_benchamrk/mkdt_02_jobs/vulcan_worker.py',
     'Evaluate_benchamrk/submit_mkdt_02_wang_killarney.sh']) {
     write(path.join(temp, 'repo', name), fs.readFileSync(path.join(repo, name)));
   }
@@ -27,9 +28,9 @@ try {
   }
   write(path.join(temp, 'venv/bin/activate'), '');
   for (const [name, body] of Object.entries({
-    scontrol: "echo 'ClusterName = killarney'",
+    scontrol: 'echo "ClusterName = ${FAKE_CLUSTER:-killarney}"',
     sinfo: "echo 'gpu:l40s:4'",
-    sacctmgr: "echo 'aip-boyuwang|'",
+    sacctmgr: "printf '%s\\n' 'aip-boyuwang|' 'aip-yiweilu|'",
     squeue: "printf '%s' \"${FAKE_QUEUE:-}\"",
     module: 'exit 0',
     sbatch: 'printf "%s\\n" "$*" >> "$FAKE_CALLS"; n=0; [[ ! -f $FAKE_COUNTER ]] || read -r n < "$FAKE_COUNTER"; n=$((n+1)); echo "$n" > "$FAKE_COUNTER"; echo "$((800000000+n))"',
@@ -78,6 +79,25 @@ try {
   const partial = run({FAKE_QUEUE: 'mk02_CIFAR10_exp_5|12345\n'});
   assert.strictEqual(partial.length, 80);
   assert(partial.find(r => r[0] === 'mk02_CIFAR10_init')[6].split(':').includes('12345'));
+  fs.unlinkSync(path.join(work,'CIFAR10/distill_01000.json'));
+  for (const dataset of ['CIFAR10', 'CIFAR100']) {
+    for (let start=0;start<100;start+=5) write(path.join(work,dataset,`shard_${String(start).padStart(3,'0')}.json`),'{}');
+  }
+  const tinyOutput=path.join(synthetic,'generated/ConvNet/TinyImageNet/Tiny_0.2pct');
+  write(path.join(tinyOutput,'complete_0.2.json'),'{}');write(path.join(tinyOutput,'images_10000.pt'),'fixture');
+  const vulcan=run({MKDT_SUBMIT_CLUSTER:'vulcan',FAKE_CLUSTER:'vulcan'},false);
+  assert.strictEqual(vulcan.length,12);assert.strictEqual(vulcan.filter(r=>r[2]==='init').length,2);
+  assert.strictEqual(vulcan.filter(r=>r[2]==='experts').length,0);
+  assert.strictEqual(vulcan.filter(r=>r[7]==='aip-boyuwang').length,6);
+  assert.strictEqual(vulcan.filter(r=>r[7]==='aip-yiweilu').length,6);
+  for(const dataset of ['CIFAR10','CIFAR100']){
+    const stages=vulcan.filter(r=>r[3]===dataset);let previous=stages[0][1];assert.strictEqual(stages[0][6],'');
+    assert.deepStrictEqual(stages.slice(1).map(r=>Number(r[4])),[1000,2000,3000,4000,5000]);
+    for(const row of stages.slice(1)){assert.strictEqual(row[6],previous);previous=row[1];}
+  }
+  const vulcanCalls=fs.readFileSync(env.FAKE_CALLS,'utf8').trim().split('\n').slice(83);
+  assert.strictEqual(vulcanCalls.filter(c=>c.includes('--gres=gpu:l40s:1')).length,10);
+  assert(vulcanCalls.every(c=>!c.includes('--exclude=')&&!c.includes('--partition')&&!c.includes('--array')));
   for (const dataset of ['CIFAR10', 'CIFAR100', 'Tiny']) {
     const source = dataset === 'Tiny' ? 'TinyImageNet' : dataset;
     const output = path.join(synthetic, 'generated/ConvNet', source, `${dataset}_0.2pct`);
@@ -85,7 +105,7 @@ try {
     write(path.join(output, `images_${dataset === 'Tiny' ? 10000 : 5000}.pt`), 'fixture');
   }
   assert.strictEqual(run().length, 0);
-  console.log('PASS: 83 jobs, exact 100-expert coverage, dependencies, queued-job reuse, and completed-stage skips.');
+  console.log('PASS: original 83-job recipe; Vulcan resumes with 12 jobs, 6 per account, no expert retraining, exact dependencies and completed-Tiny skip.');
 } finally {
   fs.rmSync(temp, {recursive: true, force: true});
 }
