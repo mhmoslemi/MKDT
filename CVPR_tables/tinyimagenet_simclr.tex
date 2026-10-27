@@ -1,105 +1,4 @@
-\begin{table*}[t]
-\centering
-\def\dsacc#1#2{$#1${\footnotesize$\pm #2$}}
-\def\oldacc#1#2{\textcolor{red}{\dsacc{#1}{#2}}}
-\caption{Downstream results from Tiny ImageNet using ResNet18BN pretrained with SimCLR.}
-\label{tab:tinyimagenet-downstream-simclr}
-
-\setlength{\tabcolsep}{2pt}
-\renewcommand{\arraystretch}{1.1}
-\resizebox{0.6\textwidth}{!}{%
-\begin{tabular}{@{}c c l*{6}{c}@{}}
-\toprule
-\shortstack{Labeled\\(\%)}
-& \shortstack{PT\\(\%)}
-& Method
-& CIFAR-10 & CIFAR-100 & Aircraft & CUB-2011 & Dogs & Flowers \\
-\midrule
-
-\multirow{10}{*}{1\%} & -- & No Pre-Training
-& \dsacc{16.70}{0.70} & \dsacc{1.66}{0.15} & \dsacc{1.24}{0.15} & \dsacc{0.54}{0.12} & \dsacc{0.93}{0.13} & \dsacc{0.95}{0.33} \\
-\cmidrule(lr){2-9}
-
-& 100\% & Full Data
-& \dsacc{70.01}{0.35} & \dsacc{28.88}{1.01} & \dsacc{4.32}{0.86} & \dsacc{2.76}{0.38} & \dsacc{5.53}{0.23} & \dsacc{4.74}{0.60} \\
-\cmidrule(lr){2-9}
-
-& \multirow{4}{*}{0.2\%} & Random Subset
-& \dsacc{48.84}{1.44} & \dsacc{13.43}{0.97} & \dsacc{2.97}{0.53} & \dsacc{1.87}{0.20} & \dsacc{2.09}{0.39} & \dsacc{3.46}{0.49} \\
-& & K-means Subset
-& \dsacc{47.91}{1.25} & \dsacc{12.25}{1.06} & \dsacc{2.53}{0.80} & \dsacc{1.82}{0.22} & \dsacc{2.04}{0.35} & \dsacc{3.48}{0.62} \\
-& & MKDT
-& \dsacc{44.17}{0.61} & \dsacc{11.60}{0.55} & \dsacc{2.40}{0.33} & \dsacc{1.73}{0.06} & \dsacc{1.93}{0.21} & \dsacc{3.05}{0.54} \\
-& & Ours 
-& \dsacc{47.12}{0.77} & \dsacc{12.19}{0.66} & \dsacc{2.35}{0.21} & \dsacc{1.65}{0.07} & \dsacc{1.94}{0.23} & \dsacc{3.02}{0.21} \\
-\cmidrule(lr){2-9}
-
-& \multirow{4}{*}{1\%} & Random Subset
-& \dsacc{55.67}{0.49} & \dsacc{18.15}{0.96} & \dsacc{3.48}{0.39} & \dsacc{2.10}{0.15} & \dsacc{3.05}{0.38} & \dsacc{3.78}{0.61} \\
-& & K-means Subset
-& \dsacc{56.08}{0.43} & \dsacc{18.23}{0.81} & \dsacc{3.47}{0.42} & \dsacc{2.13}{0.29} & \dsacc{3.19}{0.28} & \dsacc{3.99}{0.36} \\
-& & MKDT
-& \dsacc{44.30}{1.01} & \dsacc{11.79}{0.64} & \dsacc{2.15}{0.29} & \dsacc{1.66}{0.12} & \dsacc{1.81}{0.14} & \dsacc{2.46}{0.63} \\
-& & Ours
-& \dsacc{51.14}{0.47} & \dsacc{12.67}{0.47} & \dsacc{2.16}{0.27} & \dsacc{1.40}{0.29} & \dsacc{2.19}{0.28} & \dsacc{3.34}{0.34} \\
-% BEGIN DISABLED: 5% pretraining subset
-% \cmidrule(lr){2-9}
-%
-% & \multirow{4}{*}{5\%} & Random Subset
-% & & & & & & \\
-% & & K-means Subset
-% & & & & & & \\
-% & & MKDT
-% & & & & & & \\
-% & & Ours
-% & & & & & & \\
-% END DISABLED: 5% pretraining subset
-
-\midrule
-
-\multirow{10}{*}{5\%} & -- & No Pre-Training
-& \dsacc{20.18}{0.80} & \dsacc{2.81}{0.30} & \dsacc{1.49}{0.32} & \dsacc{0.61}{0.10} & \dsacc{0.96}{0.14} & \dsacc{1.21}{0.41} \\
-\cmidrule(lr){2-9}
-
-& 100\% & Full Data
-& \dsacc{77.22}{0.32} & \dsacc{44.19}{0.48} & \dsacc{7.87}{0.29} & \dsacc{4.54}{0.66} & \dsacc{10.69}{0.52} & \dsacc{16.94}{2.20} \\
-\cmidrule(lr){2-9}
-
-& \multirow{4}{*}{0.2\%} & Random Subset
-& \dsacc{55.87}{1.18} & \dsacc{22.90}{0.90} & \dsacc{4.11}{0.52} & \dsacc{2.50}{0.32} & \dsacc{4.14}{0.28} & \dsacc{7.32}{1.03} \\
-& & K-means Subset
-& \dsacc{55.12}{0.94} & \dsacc{22.60}{0.77} & \dsacc{3.65}{0.65} & \dsacc{2.37}{0.31} & \dsacc{3.99}{0.37} & \dsacc{6.88}{0.80} \\
-& & MKDT
-& \dsacc{53.47}{0.76} & \dsacc{19.29}{0.14} & \dsacc{3.57}{0.41} & \dsacc{2.08}{0.09} & \dsacc{3.35}{0.25} & \dsacc{7.28}{0.67} \\
-& & Ours 
-& \dsacc{55.02}{0.33} & \dsacc{20.36}{0.26} & \dsacc{3.11}{0.42} & \dsacc{1.75}{0.19} & \dsacc{3.44}{0.26} & \dsacc{6.74}{0.36} \\
-\cmidrule(lr){2-9}
-
-& \multirow{4}{*}{1\%} & Random Subset
-& \dsacc{63.08}{0.47} & \dsacc{29.51}{0.62} & \dsacc{5.72}{0.50} & \dsacc{3.26}{0.36} & \dsacc{5.83}{0.39} & \dsacc{9.40}{0.94} \\
-& & K-means Subset
-& \dsacc{63.14}{0.57} & \dsacc{29.80}{0.34} & \dsacc{5.52}{0.72} & \dsacc{3.14}{0.53} & \dsacc{5.98}{0.28} & \dsacc{9.82}{0.85} \\
-& & MKDT
-& \dsacc{52.81}{1.12} & \dsacc{20.43}{0.76} & \dsacc{3.34}{0.44} & \dsacc{2.26}{0.20} & \dsacc{3.24}{0.36} & \dsacc{6.55}{0.65} \\
-& & Ours
-& \dsacc{58.42}{0.51} & \dsacc{23.48}{0.30} & \dsacc{3.31}{0.44} & \dsacc{1.64}{0.17} & \dsacc{4.10}{0.20} & \dsacc{8.65}{0.55} \\
-% BEGIN DISABLED: 5% pretraining subset
-% \cmidrule(lr){2-9}
-%
-% & \multirow{4}{*}{5\%} & Random Subset
-% & & & & & & \\
-% & & K-means Subset
-% & & & & & & \\
-% & & MKDT
-% & & & & & & \\
-% & & Ours
-% & & & & & & \\
-% END DISABLED: 5% pretraining subset
-
-\bottomrule
-\end{tabular}%
-}
-\end{table*}
+% Tiny ImageNet downstream results are included in cifar_downstream.tex.
 
 % Interactive evaluation snapshot: 2026-10-22T18:09:58Z.
 % K-means/MKDT: seeds 0--5; full data: seeds 0--2. Only complete per-cell seed sets are filled.
@@ -119,14 +18,11 @@
 % Synced completion update 2026-10-25: 11 MKDT 0.2% cells (2k SSL) and 11 Ours 2% cells (1k SSL); six validated probes each.
 % New sources: mkdt_eval_results_simclr2k_2ssl3probes/ and ours_eval_results_simclr1k_2ssl3probes_downstream/ under Evaluate_benchamrk/.
 % Probe completion: TinyImageNet|ResNet18|random|2|simclr|Aircraft|1; SSL epochs=4000; encoder seeds=0,1,2,3,4,5,6,7,8,9; 10 (SSL seed:probe seed) pairs=0:0,1:1,2:2,3:3,4:4,5:5,6:6,7:7,8:8,9:9.
-% Probe completion: TinyImageNet|ResNet18|mkdt|0.2|simclr|Flowers|1; SSL epochs=2000; encoder seeds=0,1; 6 (SSL seed:probe seed) pairs=0:0,0:1,0:2,1:0,1:1,1:2.
 % Probe completion: TinyImageNet|ResNet18|mkdt|2|simclr|CIFAR100|1; SSL epochs=2000; encoder seeds=0,1; 6 (SSL seed:probe seed) pairs=0:0,0:1,0:2,1:0,1:1,1:2.
 % Probe completion: TinyImageNet|ResNet18|mkdt|2|simclr|CIFAR10|1; SSL epochs=2000; encoder seeds=0,1; 6 (SSL seed:probe seed) pairs=0:0,0:1,0:2,1:0,1:1,1:2.
 % Probe completion: TinyImageNet|ResNet18|ours|2|simclr|CIFAR10|1; SSL epochs=1000; encoder seeds=0,1; 6 (SSL seed:probe seed) pairs=0:0,0:1,0:2,1:0,1:1,1:2.
-% Probe completion: TinyImageNet|ResNet18|mkdt|2|simclr|Flowers|1; SSL epochs=2000; encoder seeds=0,1; 6 (SSL seed:probe seed) pairs=0:0,0:1,0:2,1:0,1:1,1:2.
 % Probe completion: TinyImageNet|ResNet18|mkdt|2|simclr|CUB2011|1; SSL epochs=2000; encoder seeds=0,1; 6 (SSL seed:probe seed) pairs=0:0,0:1,0:2,1:0,1:1,1:2.
 % Probe completion: TinyImageNet|ResNet18|mkdt|2|simclr|Dogs|1; SSL epochs=2000; encoder seeds=0,1; 6 (SSL seed:probe seed) pairs=0:0,0:1,0:2,1:0,1:1,1:2.
-% Probe completion: TinyImageNet|ResNet18|mkdt|2|simclr|Flowers|5; SSL epochs=2000; encoder seeds=0,1; 6 (SSL seed:probe seed) pairs=0:0,0:1,0:2,1:0,1:1,1:2.
 % Probe completion: TinyImageNet|ResNet18|mkdt|2|simclr|Aircraft|1; SSL epochs=2000; encoder seeds=0,1; 6 (SSL seed:probe seed) pairs=0:0,0:1,0:2,1:0,1:1,1:2.
 % Probe completion: TinyImageNet|ResNet18|mkdt|2|simclr|CIFAR10|5; SSL epochs=2000; encoder seeds=0,1; 6 (SSL seed:probe seed) pairs=0:0,0:1,0:2,1:0,1:1,1:2.
 % Probe completion: TinyImageNet|ResNet18|mkdt|2|simclr|CIFAR100|5; SSL epochs=2000; encoder seeds=0,1; 6 (SSL seed:probe seed) pairs=0:0,0:1,0:2,1:0,1:1,1:2.
@@ -139,13 +35,9 @@
 % Probe completion: TinyImageNet|ResNet18|mkdt|1|simclr|Dogs|1; SSL epochs=2000; encoder seeds=0,1; 6 (SSL seed:probe seed) pairs=0:0,0:1,0:2,1:0,1:1,1:2.
 % Probe completion: TinyImageNet|ResNet18|ours|1|simclr|CIFAR10|1; SSL epochs=2000; encoder seeds=0,1; 6 (SSL seed:probe seed) pairs=0:0,0:1,0:2,1:0,1:1,1:2.
 % Probe completion: TinyImageNet|ResNet18|ours|1|simclr|CIFAR100|1; SSL epochs=2000; encoder seeds=0,1; 6 (SSL seed:probe seed) pairs=0:0,0:1,0:2,1:0,1:1,1:2.
-% Probe completion: TinyImageNet|ResNet18|mkdt|1|simclr|Flowers|1; SSL epochs=2000; encoder seeds=0,1; 6 (SSL seed:probe seed) pairs=0:0,0:1,0:2,1:0,1:1,1:2.
 % Probe completion: TinyImageNet|ResNet18|ours|1|simclr|CUB2011|1; SSL epochs=2000; encoder seeds=0,1; 6 (SSL seed:probe seed) pairs=0:0,0:1,0:2,1:0,1:1,1:2.
 % Probe completion: TinyImageNet|ResNet18|ours|1|simclr|Dogs|1; SSL epochs=2000; encoder seeds=0,1; 6 (SSL seed:probe seed) pairs=0:0,0:1,0:2,1:0,1:1,1:2.
 % Probe completion: TinyImageNet|ResNet18|ours|1|simclr|Aircraft|1; SSL epochs=2000; encoder seeds=0,1; 6 (SSL seed:probe seed) pairs=0:0,0:1,0:2,1:0,1:1,1:2.
-% Probe completion: TinyImageNet|ResNet18|ours|1|simclr|Flowers|1; SSL epochs=2000; encoder seeds=0,1; 6 (SSL seed:probe seed) pairs=0:0,0:1,0:2,1:0,1:1,1:2.
-% Probe completion: TinyImageNet|ResNet18|ours|1|simclr|Flowers|5; SSL epochs=2000; encoder seeds=0,1; 6 (SSL seed:probe seed) pairs=0:0,0:1,0:2,1:0,1:1,1:2.
-% Probe completion: TinyImageNet|ResNet18|mkdt|1|simclr|Flowers|5; SSL epochs=2000; encoder seeds=0,1; 6 (SSL seed:probe seed) pairs=0:0,0:1,0:2,1:0,1:1,1:2.
 % Probe completion: TinyImageNet|ResNet18|ours|1|simclr|CIFAR10|5; SSL epochs=2000; encoder seeds=0,1; 6 (SSL seed:probe seed) pairs=0:0,0:1,0:2,1:0,1:1,1:2.
 % Probe completion: TinyImageNet|ResNet18|ours|1|simclr|CIFAR100|5; SSL epochs=2000; encoder seeds=0,1; 6 (SSL seed:probe seed) pairs=0:0,0:1,0:2,1:0,1:1,1:2.
 % Probe completion: TinyImageNet|ResNet18|ours|1|simclr|CUB2011|5; SSL epochs=2000; encoder seeds=0,1; 6 (SSL seed:probe seed) pairs=0:0,0:1,0:2,1:0,1:1,1:2.

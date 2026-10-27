@@ -1,7 +1,7 @@
 \begin{table*}[t]
 \centering
 \def\dsacc#1#2{$#1${\footnotesize$\pm #2$}}
-\caption{Random-network ablation with ResNet18BN and SimCLR pretrained on CIFAR-10. Ours initializes a fresh frozen network at every distillation iteration. Full Data and Random Subset reuse the existing benchmark results. Each Ours entry averages three 100-epoch linear probes from each of two 2,000-epoch SSL encoders.}
+\caption{Random-network ablation with ResNet18 and SimCLR pretrained on CIFAR10. Ours initializes a fresh frozen network at every distillation iteration. Full Data and Random Subset reuse the existing benchmark results. Each Ours entry averages three 100-epoch linear probes from each of two 2,000-epoch SSL encoders.}
 \label{tab:cifar10-random-network-ablation}
 \setlength{\tabcolsep}{5pt}
 \renewcommand{\arraystretch}{1.1}
@@ -11,8 +11,8 @@
 \shortstack{Labeled data\\(\%)}
 & \shortstack{Pretraining subset\\(\%)}
 & Method
-& \shortstack{CIFAR-10\\Main}
-& \shortstack{CIFAR-100\\Downstream}
+& \shortstack{CIFAR10\\Main}
+& \shortstack{CIFAR100\\Downstream}
 & \shortstack{Tiny ImageNet\\Downstream} \\
 \midrule
 \multirow{5}{*}{1\%}

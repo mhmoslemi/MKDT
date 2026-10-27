@@ -2,42 +2,107 @@
 \centering
 \def\dsacc#1#2{$#1${\footnotesize$\pm #2$}}
 \def\bestacc#1#2{{\bfseries\boldmath\dsacc{#1}{#2}}}
-\caption{Downstream evaluation of ResNet18 pretrained with SimCLR on CIFAR-10 or CIFAR-100. Column groups indicate the pretraining dataset; individual columns indicate the downstream dataset. Bold denotes the best method at each data size and label budget, excluding Full Data.}
+\caption{Downstream evaluation of ResNet18 pretrained with SimCLR on CIFAR10, CIFAR100, or Tiny ImageNet. Column groups indicate the pretraining dataset; individual columns indicate the downstream dataset. Bold denotes the best method at each data size and label budget, excluding Full Data.}
 \label{tab:cifar-downstream-resnet18}
+\label{tab:tinyimagenet-downstream-simclr}
 
 \setlength{\tabcolsep}{2pt}
 \renewcommand{\arraystretch}{1.1}
 \resizebox{\textwidth}{!}{%
-\begin{tabular}{@{}ccl*{12}{c}@{}}
+\begin{tabular}{@{}ccl*{15}{c}@{}}
 \toprule
-\multirow{2}{*}{\shortstack{Labeled\\(\%)}} & \multirow{2}{*}{\shortstack{Data size\\(\%)}} & \multirow{2}{*}{Method} & \multicolumn{6}{c}{CIFAR-10 pretraining} & \multicolumn{6}{c}{CIFAR-100 pretraining} \\
-\cmidrule(lr){4-9} \cmidrule(l){10-15}
-& & & CIFAR-100 & \shortstack{Tiny\\ImageNet} & Aircraft & CUB-2011 & Dogs & Flowers & CIFAR-10 & \shortstack{Tiny\\ImageNet} & Aircraft & CUB-2011 & Dogs & Flowers \\
+\multirow{2}{*}{\shortstack{Labeled\\(\%)}} & \multirow{2}{*}{\shortstack{Data size\\(\%)}} & \multirow{2}{*}{Method} & \multicolumn{5}{c}{CIFAR10 pretraining} & \multicolumn{5}{c}{CIFAR100 pretraining} & \multicolumn{5}{c}{Tiny ImageNet pretraining} \\
+\cmidrule(lr){4-8} \cmidrule(lr){9-13} \cmidrule(l){14-18}
+& & & CIFAR100 & \shortstack{Tiny\\ImageNet} & Aircraft & CUB-2011 & Dogs & CIFAR10 & \shortstack{Tiny\\ImageNet} & Aircraft & CUB-2011 & Dogs & CIFAR10 & CIFAR100 & Aircraft & CUB-2011 & Dogs \\
 \midrule
-\multirow{9}{*}{1\%} & 100 & Full Data & \dsacc{24.04}{0.87} & \dsacc{11.89}{0.20} & \dsacc{4.10}{0.90} & \dsacc{2.53}{0.22} & \dsacc{4.83}{0.51} & \dsacc{4.58}{0.47} & \dsacc{67.00}{0.12} & \dsacc{14.70}{0.51} & \dsacc{3.61}{0.45} & \dsacc{2.43}{0.24} & \dsacc{4.11}{0.25} & \dsacc{5.11}{0.58} \\
-\cmidrule(lr){2-15}
-& \multirow{4}{*}{0.2} & Random & \dsacc{8.34}{0.75} & \dsacc{3.53}{0.38} & \dsacc{2.13}{0.33} & \dsacc{1.23}{0.21} & \dsacc{1.54}{0.18} & \dsacc{2.65}{0.43} & \dsacc{37.91}{1.51} & \dsacc{3.71}{0.35} & \dsacc{2.25}{0.40} & \dsacc{1.25}{0.20} & \dsacc{1.49}{0.17} & \dsacc{2.84}{0.38} \\
-& & K-means & \dsacc{7.75}{1.16} & \dsacc{3.12}{0.41} & \dsacc{2.03}{0.41} & \dsacc{1.17}{0.26} & \dsacc{1.55}{0.32} & \dsacc{2.51}{0.74} & \dsacc{37.11}{0.84} & \dsacc{3.51}{0.18} & \dsacc{2.01}{0.33} & \dsacc{1.40}{0.04} & \dsacc{1.55}{0.10} & \dsacc{2.71}{0.66} \\
-& & MKDT & \dsacc{9.03}{0.80} & \dsacc{4.15}{0.13} & \dsacc{2.09}{0.37} & \bestacc{1.53}{0.15} & \bestacc{1.96}{0.03} & \bestacc{2.92}{0.32} & \bestacc{39.52}{0.64} & \dsacc{4.14}{0.11} & \bestacc{2.37}{0.25} & \bestacc{1.47}{0.18} & \bestacc{1.86}{0.15} & \bestacc{3.17}{0.83} \\
-& & Ours & \bestacc{10.05}{0.73} & \bestacc{4.64}{0.11} & \bestacc{2.26}{0.18} & \dsacc{1.35}{0.10} & \dsacc{1.80}{0.15} & \dsacc{2.61}{0.34} & \dsacc{39.28}{0.42} & \bestacc{4.59}{0.08} & \dsacc{2.18}{0.32} & \dsacc{1.43}{0.10} & \dsacc{1.79}{0.12} & \dsacc{2.69}{0.38} \\
-\cmidrule(lr){2-15}
-& \multirow{4}{*}{1} & Random & \dsacc{8.63}{0.61} & \dsacc{3.62}{0.36} & \dsacc{2.09}{0.42} & \dsacc{1.26}{0.14} & \dsacc{1.75}{0.35} & \dsacc{2.96}{0.33} & \dsacc{41.59}{1.31} & \dsacc{4.11}{0.46} & \dsacc{2.22}{0.52} & \dsacc{1.43}{0.20} & \dsacc{1.73}{0.43} & \dsacc{3.15}{0.50} \\
-& & K-means & \dsacc{8.57}{0.53} & \dsacc{3.61}{0.34} & \dsacc{2.03}{0.23} & \dsacc{1.16}{0.22} & \dsacc{1.87}{0.38} & \dsacc{2.69}{0.42} & \dsacc{41.16}{1.57} & \dsacc{4.21}{0.66} & \dsacc{2.17}{0.60} & \dsacc{1.35}{0.26} & \dsacc{1.71}{0.16} & \dsacc{3.01}{0.30} \\
-& & MKDT & \dsacc{9.34}{0.88} & \dsacc{4.32}{0.18} & \dsacc{2.21}{0.27} & \dsacc{1.37}{0.05} & \dsacc{1.89}{0.14} & \bestacc{3.22}{0.49} & \dsacc{40.29}{1.23} & \dsacc{4.75}{0.15} & \dsacc{2.39}{0.19} & \bestacc{1.48}{0.09} & \bestacc{1.97}{0.18} & \bestacc{3.19}{0.45} \\
-& & Ours & \bestacc{10.89}{0.80} & \bestacc{5.05}{0.15} & \bestacc{2.22}{0.16} & \bestacc{1.50}{0.15} & \bestacc{2.27}{0.22} & \dsacc{2.64}{0.30} & \bestacc{42.84}{0.59} & \bestacc{5.24}{0.17} & \bestacc{2.53}{0.29} & \dsacc{1.39}{0.21} & \dsacc{1.95}{0.15} & \dsacc{2.93}{0.36} \\
+\multirow{9}{*}{1\%} & 100 & Full Data & \dsacc{24.0}{0.9} & \dsacc{11.9}{0.2} & \dsacc{4.1}{0.9} & \dsacc{2.5}{0.2} & \dsacc{4.8}{0.5} & \dsacc{67.0}{0.1} & \dsacc{14.7}{0.5} & \dsacc{3.6}{0.5} & \dsacc{2.4}{0.2} & \dsacc{4.1}{0.3} & \dsacc{70.0}{0.4} & \dsacc{28.9}{1.0} & \dsacc{4.3}{0.9} & \dsacc{2.8}{0.4} & \dsacc{5.5}{0.2} \\
+\cmidrule(lr){2-18}
+& \multirow{4}{*}{0.2} & Random & \dsacc{8.8}{0.5} & \dsacc{4.2}{0.1} & \bestacc{2.3}{0.4} & \bestacc{1.5}{0.1} & \dsacc{1.8}{0.1} & \bestacc{40.7}{0.5} & \dsacc{4.5}{0.2} & \dsacc{2.3}{0.4} & \dsacc{1.3}{0.2} & \dsacc{1.8}{0.2} & \dsacc{45.4}{1.0} & \dsacc{11.9}{0.4} & \bestacc{3.0}{0.5} & \bestacc{1.9}{0.2} & \bestacc{1.9}{0.1} \\
+& & K-means & \dsacc{8.6}{0.4} & \dsacc{4.3}{0.2} & \dsacc{2.0}{0.4} & \bestacc{1.5}{0.1} & \dsacc{1.7}{0.2} & \dsacc{39.0}{0.7} & \dsacc{4.1}{0.3} & \dsacc{2.1}{0.4} & \bestacc{1.6}{0.1} & \dsacc{1.8}{0.2} & \dsacc{43.0}{0.6} & \dsacc{10.3}{0.2} & \dsacc{2.0}{0.6} & \dsacc{1.6}{0.2} & \dsacc{1.7}{0.1} \\
+& & MKDT & \dsacc{9.0}{0.8} & \dsacc{4.2}{0.1} & \dsacc{2.1}{0.4} & \bestacc{1.5}{0.2} & \bestacc{2.0}{0.0} & \dsacc{39.5}{0.6} & \dsacc{4.1}{0.1} & \bestacc{2.4}{0.3} & \dsacc{1.5}{0.2} & \bestacc{1.9}{0.2} & \dsacc{44.2}{0.6} & \dsacc{11.6}{0.6} & \dsacc{2.4}{0.3} & \dsacc{1.7}{0.1} & \bestacc{1.9}{0.2} \\
+& & Ours & \bestacc{10.1}{0.7} & \bestacc{4.6}{0.1} & \bestacc{2.3}{0.2} & \dsacc{1.4}{0.1} & \dsacc{1.8}{0.2} & \dsacc{39.3}{0.4} & \bestacc{4.6}{0.1} & \dsacc{2.2}{0.3} & \dsacc{1.4}{0.1} & \dsacc{1.8}{0.1} & \bestacc{47.1}{0.8} & \bestacc{12.2}{0.7} & \dsacc{2.4}{0.2} & \dsacc{1.7}{0.1} & \bestacc{1.9}{0.2} \\
+\cmidrule(lr){2-18}
+& \multirow{4}{*}{1} & Random & \bestacc{11.3}{0.3} & \bestacc{5.1}{0.3} & \bestacc{2.7}{0.3} & \bestacc{1.7}{0.2} & \dsacc{2.1}{0.2} & \bestacc{43.5}{0.7} & \bestacc{5.4}{0.2} & \bestacc{2.6}{0.4} & \dsacc{1.4}{0.2} & \bestacc{2.0}{0.2} & \bestacc{52.6}{1.1} & \bestacc{13.7}{0.3} & \dsacc{2.6}{0.5} & \dsacc{2.1}{0.2} & \dsacc{2.3}{0.3} \\
+& & K-means & \dsacc{10.8}{0.5} & \dsacc{4.9}{0.2} & \dsacc{2.0}{0.2} & \dsacc{1.2}{0.2} & \dsacc{2.0}{0.2} & \dsacc{43.4}{0.8} & \dsacc{5.0}{0.1} & \dsacc{2.2}{0.6} & \dsacc{1.4}{0.3} & \dsacc{1.7}{0.2} & \bestacc{52.6}{0.8} & \dsacc{12.8}{0.3} & \bestacc{3.5}{0.4} & \bestacc{2.1}{0.3} & \bestacc{3.2}{0.3} \\
+& & MKDT & \dsacc{9.3}{0.9} & \dsacc{4.3}{0.2} & \dsacc{2.2}{0.3} & \dsacc{1.4}{0.1} & \dsacc{1.9}{0.1} & \dsacc{40.3}{1.2} & \dsacc{4.8}{0.2} & \dsacc{2.4}{0.2} & \bestacc{1.5}{0.1} & \bestacc{2.0}{0.2} & \dsacc{44.3}{1.0} & \dsacc{11.8}{0.6} & \dsacc{2.2}{0.3} & \dsacc{1.7}{0.1} & \dsacc{1.8}{0.1} \\
+& & Ours & \dsacc{10.9}{0.8} & \bestacc{5.1}{0.2} & \dsacc{2.2}{0.2} & \dsacc{1.5}{0.2} & \bestacc{2.3}{0.2} & \dsacc{42.8}{0.6} & \dsacc{5.2}{0.2} & \dsacc{2.5}{0.3} & \dsacc{1.4}{0.2} & \bestacc{2.0}{0.2} & \dsacc{51.1}{0.5} & \dsacc{12.7}{0.5} & \dsacc{2.2}{0.3} & \dsacc{1.4}{0.3} & \dsacc{2.2}{0.3} \\
 \midrule
-\multirow{9}{*}{5\%} & 100 & Full Data & \dsacc{38.03}{0.40} & \dsacc{20.57}{0.31} & \dsacc{7.87}{0.06} & \dsacc{3.81}{0.70} & \dsacc{8.69}{0.47} & \dsacc{12.36}{0.42} & \dsacc{74.39}{0.34} & \dsacc{24.72}{0.23} & \dsacc{6.29}{0.24} & \dsacc{3.72}{0.42} & \dsacc{7.67}{0.43} & \dsacc{15.56}{1.98} \\
-\cmidrule(lr){2-15}
-& \multirow{4}{*}{0.2} & Random & \dsacc{14.43}{0.71} & \dsacc{6.65}{0.46} & \dsacc{3.04}{0.54} & \dsacc{1.53}{0.29} & \dsacc{2.67}{0.27} & \dsacc{4.39}{0.70} & \dsacc{44.52}{1.38} & \dsacc{7.12}{0.44} & \bestacc{3.14}{0.53} & \dsacc{1.68}{0.19} & \dsacc{2.60}{0.22} & \dsacc{4.74}{0.85} \\
-& & K-means & \dsacc{13.64}{0.89} & \dsacc{6.33}{0.60} & \dsacc{2.91}{0.34} & \dsacc{1.39}{0.15} & \dsacc{2.46}{0.25} & \dsacc{4.08}{0.99} & \dsacc{44.69}{0.74} & \dsacc{6.90}{0.29} & \dsacc{3.05}{0.18} & \dsacc{1.75}{0.13} & \dsacc{2.62}{0.41} & \dsacc{4.44}{1.09} \\
-& & MKDT & \dsacc{15.63}{0.23} & \dsacc{7.86}{0.15} & \dsacc{2.62}{0.39} & \bestacc{2.02}{0.19} & \bestacc{2.94}{0.24} & \bestacc{7.06}{0.69} & \bestacc{46.56}{0.46} & \dsacc{7.97}{0.30} & \dsacc{3.03}{0.52} & \bestacc{1.91}{0.17} & \dsacc{2.76}{0.14} & \bestacc{7.16}{0.73} \\
-& & Ours & \bestacc{17.26}{0.20} & \bestacc{8.54}{0.23} & \bestacc{3.29}{0.29} & \dsacc{1.74}{0.13} & \dsacc{2.82}{0.17} & \dsacc{6.12}{0.74} & \dsacc{46.50}{0.62} & \bestacc{8.39}{0.11} & \dsacc{2.88}{0.23} & \dsacc{1.75}{0.08} & \bestacc{2.82}{0.16} & \dsacc{5.86}{1.09} \\
-\cmidrule(lr){2-15}
-& \multirow{4}{*}{1} & Random & \dsacc{15.58}{0.79} & \dsacc{7.05}{0.59} & \dsacc{3.02}{0.58} & \dsacc{1.55}{0.25} & \dsacc{3.01}{0.35} & \dsacc{4.27}{0.52} & \dsacc{47.75}{1.56} & \dsacc{8.06}{0.67} & \dsacc{3.13}{0.73} & \dsacc{1.75}{0.30} & \dsacc{3.13}{0.35} & \dsacc{5.07}{0.93} \\
-& & K-means & \dsacc{15.37}{0.75} & \dsacc{7.25}{0.43} & \dsacc{2.96}{0.52} & \dsacc{1.66}{0.27} & \dsacc{3.18}{0.31} & \dsacc{4.43}{0.73} & \dsacc{47.81}{1.46} & \dsacc{8.61}{0.80} & \dsacc{2.86}{0.72} & \dsacc{1.69}{0.28} & \dsacc{3.16}{0.27} & \dsacc{5.62}{1.23} \\
-& & MKDT & \dsacc{16.55}{0.36} & \dsacc{8.32}{0.13} & \dsacc{3.17}{0.15} & \dsacc{1.77}{0.08} & \dsacc{3.08}{0.33} & \bestacc{6.82}{0.49} & \dsacc{47.25}{1.14} & \dsacc{8.97}{0.23} & \dsacc{3.25}{0.37} & \bestacc{2.10}{0.07} & \dsacc{3.07}{0.23} & \bestacc{6.85}{0.58} \\
-& & Ours & \bestacc{18.69}{0.29} & \bestacc{9.51}{0.10} & \bestacc{3.68}{0.12} & \bestacc{1.94}{0.15} & \bestacc{3.46}{0.16} & \dsacc{5.69}{0.15} & \bestacc{50.63}{0.30} & \bestacc{9.88}{0.07} & \bestacc{3.47}{0.27} & \dsacc{1.95}{0.20} & \bestacc{3.20}{0.15} & \dsacc{6.32}{0.29} \\
+\multirow{9}{*}{5\%} & 100 & Full Data & \dsacc{38.0}{0.4} & \dsacc{20.6}{0.3} & \dsacc{7.9}{0.1} & \dsacc{3.8}{0.7} & \dsacc{8.7}{0.5} & \dsacc{74.4}{0.3} & \dsacc{24.7}{0.2} & \dsacc{6.3}{0.2} & \dsacc{3.7}{0.4} & \dsacc{7.7}{0.4} & \dsacc{77.2}{0.3} & \dsacc{44.2}{0.5} & \dsacc{7.9}{0.3} & \dsacc{4.5}{0.7} & \dsacc{10.7}{0.5} \\
+\cmidrule(lr){2-18}
+& \multirow{4}{*}{0.2} & Random & \dsacc{16.0}{0.3} & \dsacc{7.9}{0.3} & \dsacc{3.0}{0.5} & \dsacc{1.9}{0.1} & \dsacc{2.8}{0.2} & \dsacc{44.5}{1.4} & \dsacc{7.1}{0.4} & \bestacc{3.1}{0.5} & \dsacc{1.7}{0.2} & \dsacc{2.6}{0.2} & \dsacc{53.1}{0.2} & \dsacc{19.8}{0.1} & \bestacc{4.1}{0.5} & \bestacc{2.1}{0.3} & \dsacc{3.1}{0.2} \\
+& & K-means & \dsacc{15.4}{0.2} & \dsacc{8.0}{0.4} & \dsacc{2.9}{0.3} & \bestacc{2.1}{0.3} & \dsacc{2.7}{0.1} & \dsacc{45.3}{0.6} & \dsacc{6.9}{0.3} & \dsacc{3.1}{0.2} & \bestacc{1.9}{0.1} & \dsacc{2.6}{0.4} & \bestacc{55.1}{0.9} & \bestacc{22.6}{0.8} & \dsacc{3.7}{0.7} & \bestacc{2.1}{0.2} & \bestacc{4.0}{0.4} \\
+& & MKDT & \dsacc{15.6}{0.2} & \dsacc{7.9}{0.2} & \dsacc{2.6}{0.4} & \dsacc{2.0}{0.2} & \bestacc{2.9}{0.2} & \bestacc{46.6}{0.5} & \dsacc{8.0}{0.3} & \dsacc{3.0}{0.5} & \bestacc{1.9}{0.2} & \dsacc{2.8}{0.1} & \dsacc{53.5}{0.8} & \dsacc{19.3}{0.1} & \dsacc{3.6}{0.4} & \bestacc{2.1}{0.1} & \dsacc{3.4}{0.3} \\
+& & Ours & \bestacc{17.3}{0.2} & \bestacc{8.5}{0.2} & \bestacc{3.3}{0.3} & \dsacc{1.7}{0.1} & \dsacc{2.8}{0.2} & \dsacc{46.5}{0.6} & \bestacc{8.4}{0.1} & \dsacc{2.9}{0.2} & \dsacc{1.8}{0.1} & \bestacc{2.8}{0.2} & \dsacc{55.0}{0.3} & \dsacc{20.4}{0.3} & \dsacc{3.1}{0.4} & \dsacc{1.8}{0.2} & \dsacc{3.4}{0.3} \\
+\cmidrule(lr){2-18}
+& \multirow{4}{*}{1} & Random & \dsacc{15.6}{0.8} & \dsacc{7.1}{0.6} & \dsacc{3.0}{0.6} & \dsacc{1.6}{0.3} & \dsacc{3.0}{0.4} & \bestacc{51.0}{0.3} & \dsacc{8.1}{0.7} & \dsacc{3.1}{0.7} & \bestacc{2.1}{0.3} & \dsacc{3.1}{0.4} & \dsacc{63.1}{0.5} & \dsacc{29.5}{0.6} & \bestacc{5.7}{0.5} & \dsacc{2.3}{0.3} & \dsacc{5.8}{0.4} \\
+& & K-means & \dsacc{15.4}{0.8} & \dsacc{7.3}{0.4} & \dsacc{3.0}{0.5} & \dsacc{1.7}{0.3} & \dsacc{3.2}{0.3} & \dsacc{47.8}{1.5} & \dsacc{8.6}{0.8} & \dsacc{2.9}{0.7} & \dsacc{1.7}{0.3} & \dsacc{3.2}{0.3} & \bestacc{63.1}{0.6} & \bestacc{29.8}{0.3} & \dsacc{5.5}{0.7} & \bestacc{3.1}{0.5} & \bestacc{6.0}{0.3} \\
+& & MKDT & \dsacc{16.6}{0.4} & \dsacc{8.3}{0.1} & \dsacc{3.2}{0.2} & \dsacc{1.8}{0.1} & \dsacc{3.1}{0.3} & \dsacc{47.3}{1.1} & \dsacc{9.0}{0.2} & \dsacc{3.3}{0.4} & \bestacc{2.1}{0.1} & \dsacc{3.1}{0.2} & \dsacc{52.8}{1.1} & \dsacc{20.4}{0.8} & \dsacc{3.3}{0.4} & \dsacc{2.3}{0.2} & \dsacc{3.2}{0.4} \\
+& & Ours & \bestacc{18.7}{0.3} & \bestacc{9.5}{0.1} & \bestacc{3.7}{0.1} & \bestacc{1.9}{0.2} & \bestacc{3.5}{0.2} & \dsacc{50.6}{0.3} & \bestacc{9.9}{0.1} & \bestacc{3.5}{0.3} & \dsacc{2.0}{0.2} & \bestacc{3.2}{0.2} & \dsacc{58.4}{0.5} & \dsacc{23.5}{0.3} & \dsacc{3.3}{0.4} & \dsacc{1.6}{0.2} & \dsacc{4.1}{0.2} \\
 \bottomrule
 \end{tabular}%
 }
 \end{table*}
+% Downstream SimCLR 2k replacement: CIFAR10|ResNet18|random|0.2|simclr|CIFAR100|1; encoder seed=0; probe seeds=0,1,2,3,4; 100-epoch frozen probes; results=Evaluate_benchamrk/downstream_simclr2k_1ssl5probes.
+% Downstream SimCLR 2k replacement: CIFAR10|ResNet18|random|0.2|simclr|TinyImageNet|1; encoder seed=0; probe seeds=0,1,2,3,4; 100-epoch frozen probes; results=Evaluate_benchamrk/downstream_simclr2k_1ssl5probes.
+% Downstream SimCLR 2k replacement: CIFAR10|ResNet18|random|0.2|simclr|Dogs|1; encoder seed=0; probe seeds=0,1,2,3,4; 100-epoch frozen probes; results=Evaluate_benchamrk/downstream_simclr2k_1ssl5probes.
+% Downstream SimCLR 2k replacement: CIFAR10|ResNet18|kmeans|0.2|simclr|CIFAR100|1; encoder seed=0; probe seeds=0,1,2,3,4; 100-epoch frozen probes; results=Evaluate_benchamrk/downstream_simclr2k_1ssl5probes.
+% Downstream SimCLR 2k replacement: CIFAR100|ResNet18|random|0.2|simclr|CIFAR10|1; encoder seed=0; probe seeds=0,1,2,3,4; 100-epoch frozen probes; results=Evaluate_benchamrk/downstream_simclr2k_1ssl5probes.
+% Downstream SimCLR 2k replacement: CIFAR100|ResNet18|kmeans|0.2|simclr|CIFAR10|1; encoder seed=0; probe seeds=0,1,2,3,4; 100-epoch frozen probes; results=Evaluate_benchamrk/downstream_simclr2k_1ssl5probes.
+% Downstream SimCLR 2k replacement: CIFAR10|ResNet18|kmeans|0.2|simclr|Dogs|1; encoder seed=0; probe seeds=0,1,2,3,4; 100-epoch frozen probes; results=Evaluate_benchamrk/downstream_simclr2k_1ssl5probes.
+% Downstream SimCLR 2k replacement: CIFAR10|ResNet18|kmeans|0.2|simclr|TinyImageNet|1; encoder seed=0; probe seeds=0,1,2,3,4; 100-epoch frozen probes; results=Evaluate_benchamrk/downstream_simclr2k_1ssl5probes.
+% Downstream SimCLR 2k replacement: TinyImageNet|ResNet18|random|0.2|simclr|Dogs|1; encoder seed=0; probe seeds=0,1,2,3,4; 100-epoch frozen probes; results=Evaluate_benchamrk/downstream_simclr2k_1ssl5probes.
+% Downstream SimCLR 2k replacement: TinyImageNet|ResNet18|random|0.2|simclr|CIFAR10|1; encoder seed=0; probe seeds=0,1,2,3,4; 100-epoch frozen probes; results=Evaluate_benchamrk/downstream_simclr2k_1ssl5probes.
+% Downstream SimCLR 2k replacement: CIFAR10|ResNet18|random|0.2|simclr|CUB2011|5; encoder seed=0; probe seeds=0,1,2,3,4; 100-epoch frozen probes; results=Evaluate_benchamrk/downstream_simclr2k_1ssl5probes.
+% Downstream SimCLR 2k replacement: CIFAR10|ResNet18|random|0.2|simclr|CIFAR100|5; encoder seed=0; probe seeds=0,1,2,3,4; 100-epoch frozen probes; results=Evaluate_benchamrk/downstream_simclr2k_1ssl5probes.
+% Downstream SimCLR 2k replacement: CIFAR100|ResNet18|kmeans|0.2|simclr|TinyImageNet|1; encoder seed=0; probe seeds=0,1,2,3,4; 100-epoch frozen probes; results=Evaluate_benchamrk/downstream_simclr2k_1ssl5probes.
+% Downstream SimCLR 2k replacement: CIFAR10|ResNet18|random|1|simclr|CIFAR100|1; encoder seed=0; probe seeds=0,1,2,3,4; 100-epoch frozen probes; results=Evaluate_benchamrk/downstream_simclr2k_1ssl5probes.
+% Downstream SimCLR 2k replacement: CIFAR100|ResNet18|kmeans|0.2|simclr|Dogs|1; encoder seed=0; probe seeds=0,1,2,3,4; 100-epoch frozen probes; results=Evaluate_benchamrk/downstream_simclr2k_1ssl5probes.
+% Downstream SimCLR 2k replacement: TinyImageNet|ResNet18|kmeans|0.2|simclr|CIFAR10|1; encoder seed=0; probe seeds=0,1,2,3,4; 100-epoch frozen probes; results=Evaluate_benchamrk/downstream_simclr2k_1ssl5probes.
+% Downstream SimCLR 2k replacement: CIFAR10|ResNet18|random|0.2|simclr|Aircraft|1; encoder seed=0; probe seeds=0,1,2,3,4; 100-epoch frozen probes; results=Evaluate_benchamrk/downstream_simclr2k_1ssl5probes.
+% Downstream SimCLR 2k replacement: CIFAR10|ResNet18|kmeans|0.2|simclr|CIFAR100|5; encoder seed=0; probe seeds=0,1,2,3,4; 100-epoch frozen probes; results=Evaluate_benchamrk/downstream_simclr2k_1ssl5probes.
+% Downstream SimCLR 2k replacement: CIFAR10|ResNet18|kmeans|0.2|simclr|CUB2011|5; encoder seed=0; probe seeds=0,1,2,3,4; 100-epoch frozen probes; results=Evaluate_benchamrk/downstream_simclr2k_1ssl5probes.
+% Downstream SimCLR 2k replacement: CIFAR10|ResNet18|random|1|simclr|TinyImageNet|1; encoder seed=0; probe seeds=0,1,2,3,4; 100-epoch frozen probes; results=Evaluate_benchamrk/downstream_simclr2k_1ssl5probes.
+% Downstream SimCLR 2k replacement: TinyImageNet|ResNet18|random|0.2|simclr|CUB2011|5; encoder seed=0; probe seeds=0,1,2,3,4; 100-epoch frozen probes; results=Evaluate_benchamrk/downstream_simclr2k_1ssl5probes.
+% Downstream SimCLR 2k replacement: TinyImageNet|ResNet18|kmeans|0.2|simclr|CIFAR100|1; encoder seed=0; probe seeds=0,1,2,3,4; 100-epoch frozen probes; results=Evaluate_benchamrk/downstream_simclr2k_1ssl5probes.
+% Downstream SimCLR 2k replacement: CIFAR100|ResNet18|random|0.2|simclr|Dogs|1; encoder seed=0; probe seeds=0,1,2,3,4; 100-epoch frozen probes; results=Evaluate_benchamrk/downstream_simclr2k_1ssl5probes.
+% Downstream SimCLR 2k replacement: CIFAR10|ResNet18|random|0.2|simclr|CUB2011|1; encoder seed=0; probe seeds=0,1,2,3,4; 100-epoch frozen probes; results=Evaluate_benchamrk/downstream_simclr2k_1ssl5probes.
+% Downstream SimCLR 2k replacement: TinyImageNet|ResNet18|random|0.2|simclr|CIFAR100|1; encoder seed=0; probe seeds=0,1,2,3,4; 100-epoch frozen probes; results=Evaluate_benchamrk/downstream_simclr2k_1ssl5probes.
+% Downstream SimCLR 2k replacement: CIFAR100|ResNet18|random|1|simclr|CIFAR10|1; encoder seed=0; probe seeds=0,1,2,3,4; 100-epoch frozen probes; results=Evaluate_benchamrk/downstream_simclr2k_1ssl5probes.
+% Downstream SimCLR 2k replacement: CIFAR10|ResNet18|kmeans|0.2|simclr|Aircraft|1; encoder seed=0; probe seeds=0,1,2,3,4; 100-epoch frozen probes; results=Evaluate_benchamrk/downstream_simclr2k_1ssl5probes.
+% Downstream SimCLR 2k replacement: CIFAR100|ResNet18|random|0.2|simclr|TinyImageNet|1; encoder seed=0; probe seeds=0,1,2,3,4; 100-epoch frozen probes; results=Evaluate_benchamrk/downstream_simclr2k_1ssl5probes.
+% Downstream SimCLR 2k replacement: TinyImageNet|ResNet18|random|1|simclr|CIFAR10|1; encoder seed=0; probe seeds=0,1,2,3,4; 100-epoch frozen probes; results=Evaluate_benchamrk/downstream_simclr2k_1ssl5probes.
+% Downstream SimCLR 2k replacement: CIFAR100|ResNet18|kmeans|0.2|simclr|CIFAR10|5; encoder seed=0; probe seeds=0,1,2,3,4; 100-epoch frozen probes; results=Evaluate_benchamrk/downstream_simclr2k_1ssl5probes.
+% Downstream SimCLR 2k replacement: TinyImageNet|ResNet18|random|0.2|simclr|CIFAR10|5; encoder seed=0; probe seeds=0,1,2,3,4; 100-epoch frozen probes; results=Evaluate_benchamrk/downstream_simclr2k_1ssl5probes.
+% Downstream SimCLR 2k replacement: CIFAR100|ResNet18|kmeans|0.2|simclr|CUB2011|5; encoder seed=0; probe seeds=0,1,2,3,4; 100-epoch frozen probes; results=Evaluate_benchamrk/downstream_simclr2k_1ssl5probes.
+% Downstream SimCLR 2k replacement: CIFAR100|ResNet18|kmeans|0.2|simclr|Aircraft|1; encoder seed=0; probe seeds=0,1,2,3,4; 100-epoch frozen probes; results=Evaluate_benchamrk/downstream_simclr2k_1ssl5probes.
+% Downstream SimCLR 2k replacement: CIFAR10|ResNet18|random|1|simclr|Dogs|1; encoder seed=0; probe seeds=0,1,2,3,4; 100-epoch frozen probes; results=Evaluate_benchamrk/downstream_simclr2k_1ssl5probes.
+% Downstream SimCLR 2k replacement: CIFAR100|ResNet18|random|1|simclr|TinyImageNet|1; encoder seed=0; probe seeds=0,1,2,3,4; 100-epoch frozen probes; results=Evaluate_benchamrk/downstream_simclr2k_1ssl5probes.
+% Downstream SimCLR 2k replacement: CIFAR10|ResNet18|kmeans|0.2|simclr|CUB2011|1; encoder seed=0; probe seeds=0,1,2,3,4; 100-epoch frozen probes; results=Evaluate_benchamrk/downstream_simclr2k_1ssl5probes.
+% Downstream SimCLR 2k replacement: TinyImageNet|ResNet18|kmeans|0.2|simclr|CUB2011|5; encoder seed=0; probe seeds=0,1,2,3,4; 100-epoch frozen probes; results=Evaluate_benchamrk/downstream_simclr2k_1ssl5probes.
+% Downstream SimCLR 2k replacement: TinyImageNet|ResNet18|random|1|simclr|CIFAR100|1; encoder seed=0; probe seeds=0,1,2,3,4; 100-epoch frozen probes; results=Evaluate_benchamrk/downstream_simclr2k_1ssl5probes.
+% Downstream SimCLR 2k replacement: CIFAR10|ResNet18|kmeans|1|simclr|CIFAR100|1; encoder seed=0; probe seeds=0,1,2,3,4; 100-epoch frozen probes; results=Evaluate_benchamrk/downstream_simclr2k_1ssl5probes.
+% Downstream SimCLR 2k replacement: CIFAR100|ResNet18|kmeans|1|simclr|CIFAR10|1; encoder seed=0; probe seeds=0,1,2,3,4; 100-epoch frozen probes; results=Evaluate_benchamrk/downstream_simclr2k_1ssl5probes.
+% Downstream SimCLR 2k replacement: CIFAR10|ResNet18|random|0.2|simclr|Dogs|5; encoder seed=0; probe seeds=0,1,2,3,4; 100-epoch frozen probes; results=Evaluate_benchamrk/downstream_simclr2k_1ssl5probes.
+% Downstream SimCLR 2k replacement: CIFAR100|ResNet18|random|1|simclr|Dogs|1; encoder seed=0; probe seeds=0,1,2,3,4; 100-epoch frozen probes; results=Evaluate_benchamrk/downstream_simclr2k_1ssl5probes.
+% Downstream SimCLR 2k replacement: CIFAR100|ResNet18|kmeans|0.2|simclr|CUB2011|1; encoder seed=0; probe seeds=0,1,2,3,4; 100-epoch frozen probes; results=Evaluate_benchamrk/downstream_simclr2k_1ssl5probes.
+% Downstream SimCLR 2k replacement: CIFAR10|ResNet18|random|1|simclr|Aircraft|1; encoder seed=0; probe seeds=0,1,2,3,4; 100-epoch frozen probes; results=Evaluate_benchamrk/downstream_simclr2k_1ssl5probes.
+% Downstream SimCLR 2k replacement: TinyImageNet|ResNet18|kmeans|0.2|simclr|Dogs|1; encoder seed=0; probe seeds=0,1,2,3,4; 100-epoch frozen probes; results=Evaluate_benchamrk/downstream_simclr2k_1ssl5probes.
+% Downstream SimCLR 2k replacement: TinyImageNet|ResNet18|random|1|simclr|Dogs|1; encoder seed=0; probe seeds=0,1,2,3,4; 100-epoch frozen probes; results=Evaluate_benchamrk/downstream_simclr2k_1ssl5probes.
+% Downstream SimCLR 2k replacement: TinyImageNet|ResNet18|kmeans|0.2|simclr|Aircraft|1; encoder seed=0; probe seeds=0,1,2,3,4; 100-epoch frozen probes; results=Evaluate_benchamrk/downstream_simclr2k_1ssl5probes.
+% Downstream SimCLR 2k replacement: CIFAR10|ResNet18|random|0.2|simclr|TinyImageNet|5; encoder seed=0; probe seeds=0,1,2,3,4; 100-epoch frozen probes; results=Evaluate_benchamrk/downstream_simclr2k_1ssl5probes.
+% Downstream SimCLR 2k replacement: CIFAR10|ResNet18|kmeans|1|simclr|TinyImageNet|1; encoder seed=0; probe seeds=0,1,2,3,4; 100-epoch frozen probes; results=Evaluate_benchamrk/downstream_simclr2k_1ssl5probes.
+% Downstream SimCLR 2k replacement: CIFAR10|ResNet18|kmeans|1|simclr|Dogs|1; encoder seed=0; probe seeds=0,1,2,3,4; 100-epoch frozen probes; results=Evaluate_benchamrk/downstream_simclr2k_1ssl5probes.
+% Downstream SimCLR 2k replacement: CIFAR100|ResNet18|random|1|simclr|CUB2011|5; encoder seed=0; probe seeds=0,1,2,3,4; 100-epoch frozen probes; results=Evaluate_benchamrk/downstream_simclr2k_1ssl5probes.
+% Downstream SimCLR 2k replacement: CIFAR100|ResNet18|kmeans|1|simclr|TinyImageNet|1; encoder seed=0; probe seeds=0,1,2,3,4; 100-epoch frozen probes; results=Evaluate_benchamrk/downstream_simclr2k_1ssl5probes.
+% Downstream SimCLR 2k replacement: TinyImageNet|ResNet18|kmeans|1|simclr|CIFAR10|1; encoder seed=0; probe seeds=0,1,2,3,4; 100-epoch frozen probes; results=Evaluate_benchamrk/downstream_simclr2k_1ssl5probes.
+% Downstream SimCLR 2k replacement: CIFAR10|ResNet18|random|1|simclr|CUB2011|1; encoder seed=0; probe seeds=0,1,2,3,4; 100-epoch frozen probes; results=Evaluate_benchamrk/downstream_simclr2k_1ssl5probes.
+% Downstream SimCLR 2k replacement: TinyImageNet|ResNet18|random|1|simclr|CUB2011|5; encoder seed=0; probe seeds=0,1,2,3,4; 100-epoch frozen probes; results=Evaluate_benchamrk/downstream_simclr2k_1ssl5probes.
+% Downstream SimCLR 2k replacement: CIFAR10|ResNet18|kmeans|0.2|simclr|Dogs|5; encoder seed=0; probe seeds=0,1,2,3,4; 100-epoch frozen probes; results=Evaluate_benchamrk/downstream_simclr2k_1ssl5probes.
+% Downstream SimCLR 2k replacement: TinyImageNet|ResNet18|kmeans|0.2|simclr|CUB2011|1; encoder seed=0; probe seeds=0,1,2,3,4; 100-epoch frozen probes; results=Evaluate_benchamrk/downstream_simclr2k_1ssl5probes.
+% Downstream SimCLR 2k replacement: TinyImageNet|ResNet18|kmeans|1|simclr|CIFAR100|1; encoder seed=0; probe seeds=0,1,2,3,4; 100-epoch frozen probes; results=Evaluate_benchamrk/downstream_simclr2k_1ssl5probes.
+% Downstream SimCLR 2k replacement: CIFAR100|ResNet18|random|1|simclr|CIFAR10|5; encoder seed=0; probe seeds=0,1,2,3,4; 100-epoch frozen probes; results=Evaluate_benchamrk/downstream_simclr2k_1ssl5probes.
+% Downstream SimCLR 2k replacement: CIFAR10|ResNet18|kmeans|0.2|simclr|TinyImageNet|5; encoder seed=0; probe seeds=0,1,2,3,4; 100-epoch frozen probes; results=Evaluate_benchamrk/downstream_simclr2k_1ssl5probes.
+% Downstream SimCLR 2k replacement: CIFAR100|ResNet18|random|1|simclr|Aircraft|1; encoder seed=0; probe seeds=0,1,2,3,4; 100-epoch frozen probes; results=Evaluate_benchamrk/downstream_simclr2k_1ssl5probes.
+% Downstream SimCLR 2k replacement: TinyImageNet|ResNet18|random|0.2|simclr|CIFAR100|5; encoder seed=0; probe seeds=0,1,2,3,4; 100-epoch frozen probes; results=Evaluate_benchamrk/downstream_simclr2k_1ssl5probes.
+% Downstream SimCLR 2k replacement: TinyImageNet|ResNet18|random|1|simclr|Aircraft|1; encoder seed=0; probe seeds=0,1,2,3,4; 100-epoch frozen probes; results=Evaluate_benchamrk/downstream_simclr2k_1ssl5probes.
+% Downstream SimCLR 2k replacement: TinyImageNet|ResNet18|random|0.2|simclr|Dogs|5; encoder seed=0; probe seeds=0,1,2,3,4; 100-epoch frozen probes; results=Evaluate_benchamrk/downstream_simclr2k_1ssl5probes.

@@ -1,16 +1,16 @@
 \begin{table*}[t]
 \centering
 \def\dsacc#1#2{$#1${\footnotesize$\pm #2$}}
-\caption{Cross-architecture evaluation with SimCLR pretrained on CIFAR-10. Ours reuses synthetic data generated with ResNet18BN; SSL and frozen linear evaluation use ResNet34BN or ResNet50BN. Full Data uses 1,000 SSL epochs and five probes; Random Subset and Ours use 2,000 SSL epochs, two encoders and two probes per encoder. All probes run for 100 epochs. Entries report mean and sample standard deviation.}
+\caption{Cross-architecture evaluation with SimCLR pretrained on CIFAR10. Ours reuses synthetic data generated with ResNet18; SSL and frozen linear evaluation use ResNet34 or ResNet50. Full Data uses 1,000 SSL epochs and five probes; Random Subset and Ours use 2,000 SSL epochs, two encoders and two probes per encoder. All probes run for 100 epochs. Entries report mean and sample standard deviation.}
 \label{tab:cross-arch-cifar10}
 \setlength{\tabcolsep}{4pt}
 \renewcommand{\arraystretch}{1.1}
 \resizebox{\textwidth}{!}{%
 \begin{tabular}{@{}cclcccccc@{}}
 \toprule
-\multirow{2}{*}{Labels} & \multirow{2}{*}{Subset} & \multirow{2}{*}{Method} & \multicolumn{3}{c}{ResNet34BN} & \multicolumn{3}{c}{ResNet50BN} \\
+\multirow{2}{*}{Labels} & \multirow{2}{*}{Subset} & \multirow{2}{*}{Method} & \multicolumn{3}{c}{ResNet34} & \multicolumn{3}{c}{ResNet50} \\
 \cmidrule(lr){4-6}\cmidrule(lr){7-9}
-& & & CIFAR-10 & CIFAR-100 & Tiny ImageNet & CIFAR-10 & CIFAR-100 & Tiny ImageNet \\
+& & & CIFAR10 & CIFAR100 & Tiny ImageNet & CIFAR10 & CIFAR100 & Tiny ImageNet \\
 \midrule
 \multirow{5}{*}{1\%} & 100\% & Full Data &  &  &  &  &  &  \\ % crossarch kind=full pt=100 lbl=1
 \cmidrule(lr){2-9}

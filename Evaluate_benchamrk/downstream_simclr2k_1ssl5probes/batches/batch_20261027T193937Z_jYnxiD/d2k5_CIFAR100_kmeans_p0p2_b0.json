@@ -1,0 +1,98 @@
+{
+  "name": "d2k5_CIFAR100_kmeans_p0p2_b0",
+  "stage": "downstream_probe_bundle",
+  "cells": [
+    {
+      "source": "CIFAR100",
+      "target": "CIFAR10",
+      "subset": 0.2,
+      "kind": "kmeans",
+      "labels": 1,
+      "checkpoint_dir": "cifar_small_simclr2k_1ssl5probes/results/CIFAR100/ResNet18/kmeans/pt0.2/simclr/ssl_seed_000",
+      "output_dir": "downstream_simclr2k_1ssl5probes/results/CIFAR100/ResNet18/kmeans/pt0.2/simclr/ssl_seed_000",
+      "config_sha256": "55cfb65ef003fa0d7fe1ff7fd54ae63b58a43481198a9ddfedf588c78c4ce809",
+      "marker_sha256": "383466cf5d488dc77a72f8495fa6d8598401e3481254d4ccb885573d310aab8d",
+      "missing_probe_seeds": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "probe_seconds_p95": 11.746599446050823
+    },
+    {
+      "source": "CIFAR100",
+      "target": "TinyImageNet",
+      "subset": 0.2,
+      "kind": "kmeans",
+      "labels": 1,
+      "checkpoint_dir": "cifar_small_simclr2k_1ssl5probes/results/CIFAR100/ResNet18/kmeans/pt0.2/simclr/ssl_seed_000",
+      "output_dir": "downstream_simclr2k_1ssl5probes/results/CIFAR100/ResNet18/kmeans/pt0.2/simclr/ssl_seed_000",
+      "config_sha256": "55cfb65ef003fa0d7fe1ff7fd54ae63b58a43481198a9ddfedf588c78c4ce809",
+      "marker_sha256": "383466cf5d488dc77a72f8495fa6d8598401e3481254d4ccb885573d310aab8d",
+      "missing_probe_seeds": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "probe_seconds_p95": 31.499973956029862
+    },
+    {
+      "source": "CIFAR100",
+      "target": "Aircraft",
+      "subset": 0.2,
+      "kind": "kmeans",
+      "labels": 1,
+      "checkpoint_dir": "cifar_small_simclr2k_1ssl5probes/results/CIFAR100/ResNet18/kmeans/pt0.2/simclr/ssl_seed_000",
+      "output_dir": "downstream_simclr2k_1ssl5probes/results/CIFAR100/ResNet18/kmeans/pt0.2/simclr/ssl_seed_000",
+      "config_sha256": "55cfb65ef003fa0d7fe1ff7fd54ae63b58a43481198a9ddfedf588c78c4ce809",
+      "marker_sha256": "383466cf5d488dc77a72f8495fa6d8598401e3481254d4ccb885573d310aab8d",
+      "missing_probe_seeds": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "probe_seconds_p95": 94.27388723008335
+    },
+    {
+      "source": "CIFAR100",
+      "target": "CUB2011",
+      "subset": 0.2,
+      "kind": "kmeans",
+      "labels": 1,
+      "checkpoint_dir": "cifar_small_simclr2k_1ssl5probes/results/CIFAR100/ResNet18/kmeans/pt0.2/simclr/ssl_seed_000",
+      "output_dir": "downstream_simclr2k_1ssl5probes/results/CIFAR100/ResNet18/kmeans/pt0.2/simclr/ssl_seed_000",
+      "config_sha256": "55cfb65ef003fa0d7fe1ff7fd54ae63b58a43481198a9ddfedf588c78c4ce809",
+      "marker_sha256": "383466cf5d488dc77a72f8495fa6d8598401e3481254d4ccb885573d310aab8d",
+      "missing_probe_seeds": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "probe_seconds_p95": 40.08877527015284
+    }
+  ],
+  "seconds": 1179,
+  "buffer_seconds": 60,
+  "code_hashes": {
+    "Evaluate_benchamrk/common.py": "67fcd33f581a34a7f764431b6761ac120cb080d4b2ea0d69b95074565a224f8b",
+    "Evaluate_benchamrk/data.py": "befcf535679e449b3544ae9b8578325e53f7995179591042315d8937cd55f6d9",
+    "Evaluate_benchamrk/evaluate.py": "2b2162a56878f48ade39d2b80d4316511f20a72d29eaa2cf70fe023d88ad722f",
+    "Evaluate_benchamrk/plan.py": "c6d9bd33b36d1d235a2f6af291b3a0a82187b1eea3a10b90a7f57317d8eee83e",
+    "Evaluate_benchamrk/run.py": "1c2b8d29ab47966f1178c9f04b3e1b7c72bd2f55fb65a32c32c77c3730faf45b",
+    "Evaluate_benchamrk/test_protocol.py": "f018562437924ced1d890343a4e898f10e48c50a63920d337031194671c4e43d",
+    "Evaluate_benchamrk/train_ssl.py": "3670781eb0f0f838ced6cc7ca9775791d4d52683fe25e489239f012937dc1a79",
+    "networks.py": "0c15ff3ef11f21df752e2a9a17851ab8c8a52ddc3969380682ea8bfcec1968fc",
+    "benchmarks/downstream_data.py": "081fe26e5dc81c96ce8e8ffe5a412302663de4a9d095684c5b37e7c615b4a6fd",
+    "Evaluate_benchamrk/downstream_simclr2k_1ssl5probes/jobs.js": "914320ce4eca4b6c1041befeff0aa15c57cbd3c2f79e95e36cf397ee191cda12",
+    "Evaluate_benchamrk/downstream_simclr2k_1ssl5probes/worker.py": "bdbda773c81fb788d57ec5346963e14131accc1d9fdb57f4d1799009f52dd8c8",
+    "Evaluate_benchamrk/submit_downstream_simclr2k_5probes_wang_vulcan.sh": "4368c56af38f16ad6b8370dadb09f0d24ef38030b91f0584463feda6560ba87c"
+  }
+}
