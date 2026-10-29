@@ -3,9 +3,12 @@ Prevents stationary texture collapse by augmenting S into paired views (u_syn, v
 the bipartite cluster mutual information and the intra-pair view transition vectors (u - v)."""
 
 import argparse
+import importlib.util
+import json
 import math
 import os
 import random
+import sys
 from pathlib import Path
 
 import numpy as np
@@ -47,6 +50,34 @@ def set_random_seed(seed):
 
 def _images_from_batch(batch):
     return batch[0] if isinstance(batch, (tuple, list)) else batch
+
+
+def digit_training_data(args):
+    bench = ROOT / 'Evaluate_benchamrk'
+    paths = {'datasets': bench / 'digits_simclr/datasets.py'}
+    if args.dataset == 'FashionMNIST':
+        paths['_method1_fashion'] = bench / 'fashionmnist/dataset.py'
+    common = reference_modules()['common']
+    previous = {name: sys.modules.get(name) for name in ('common', *paths)}
+    try:
+        sys.modules['common'] = common
+        for name, path in paths.items():
+            spec = importlib.util.spec_from_file_location(name, path)
+            module = importlib.util.module_from_spec(spec)
+            sys.modules[name] = module
+            spec.loader.exec_module(module)
+        dataset_class = module.DigitDataset
+    finally:
+        for name, module in previous.items():
+            if module is None:
+                sys.modules.pop(name, None)
+            else:
+                sys.modules[name] = module
+    raw = dataset_class(args.data_path, args.dataset, True)
+    folder = 'fashionmnist/full' if args.dataset == 'FashionMNIST' else 'digits_simclr'
+    prepared = json.loads((bench / folder / 'prepared.json').read_text())
+    assert raw.fingerprint == prepared['datasets'][args.dataset]['train_fingerprint'], 'Digit training data differs from the saved teacher data'
+    return raw, prepared['protocol']['normalization'][args.dataset]
 
 
 def frozen_embedder(network):
@@ -172,7 +203,7 @@ def main():
 
     # 'teacher_source': 'pretrained', 'teacher_seed': 0, 'teacher_ssl': 'simclr', 'teacher_path': '/scratch/mmoslem3/MKDT/Evaluate_benchamrk/full_ssl_checkpoints_1000ep_3seeds', 'encoder_ssl_protocol': None, 'method': 'Bipartite_ViewTransition_MI', 'dsa_param': <utils.ParamDiffAug object at 0x723263394550>}
     # Data.
-    parser.add_argument('--dataset', choices=['CIFAR10', 'CIFAR100', 'TinyImageNet'], default='TinyImageNet')
+    parser.add_argument('--dataset', choices=['CIFAR10', 'CIFAR100', 'TinyImageNet', 'FashionMNIST', 'SVHN'], default='TinyImageNet')
     parser.add_argument('--percentage', type=float, default=0.2)
     parser.add_argument('--data_path', default='/home/mmoslem3/scratch/data')
     parser.add_argument('--device', choices=['cpu', 'cuda'], default='cuda' if torch.cuda.is_available() else 'cpu')
@@ -199,7 +230,7 @@ def main():
     parser.add_argument('--teacher_source', choices=['fresh', 'pretrained'], default='pretrained')
     parser.add_argument('--teacher_seed', type=int, nargs='+', default=[1], help='Saved teacher seeds; their losses are summed')
     parser.add_argument('--teacher_ssl', choices=['simclr', 'barlowtwins'], default='simclr')
-    parser.add_argument('--teacher_path', default=str(ROOT / 'Evaluate_benchamrk/full_ssl_checkpoints_1000ep_3seeds'))
+    parser.add_argument('--teacher_path', default=None, help='Automatically selects the saved teacher directory for the dataset')
 
     # Downstream SSL evaluation.
     parser.add_argument('--model', choices=['ConvNet', 'ConvNetBN', 'VGG11', 'VGG11BN', 'ResNet18', 'ResNet18BN'], default='ResNet18BN')
@@ -222,6 +253,10 @@ def main():
         parser.error('Iterations, saving interval, batches and augmentation draws must be positive')
     if not 0 < args.percentage <= 100:
         parser.error('percentage must be in (0, 100]')
+    if args.teacher_path is None:
+        teacher_folder = {'FashionMNIST': 'fashionmnist/full/checkpoints',
+                          'SVHN': 'digits_simclr/checkpoints'}.get(args.dataset, 'full_ssl_checkpoints_1000ep_3seeds')
+        args.teacher_path = str(ROOT / 'Evaluate_benchamrk' / teacher_folder)
 
     output = Path(args.save_path)
     output.mkdir(parents=True, exist_ok=True)
@@ -255,8 +290,11 @@ def main():
 
     os.makedirs(args.data_path, exist_ok=True)
     data = reference_modules()['data']
-    raw_train = data.RawDataset(args.data_path, args.dataset, True)
-    mean, std = SYNTHETIC_NORMALIZATION[args.dataset]
+    if args.dataset in ('FashionMNIST', 'SVHN'):
+        raw_train, (mean, std) = digit_training_data(args)
+    else:
+        raw_train = data.RawDataset(args.data_path, args.dataset, True)
+        mean, std = SYNTHETIC_NORMALIZATION[args.dataset]
     channel, im_size, num_classes = 3, ((64, 64) if args.dataset == 'TinyImageNet' else (32, 32)), raw_train.classes
     # Keep the same normalized training images without materializing all of TinyImageNet as float tensors.
     dst_train = data.ImageView(raw_train, transforms.Compose([transforms.ToTensor(), transforms.Normalize(mean, std)]))
