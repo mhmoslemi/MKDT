@@ -105,3 +105,141 @@ PROBE CIFAR10 lbl=5 seed=3: {'epoch': 60, 'lr': 0.03460897894916861, 'loss': 1.5
 PROBE CIFAR10 lbl=5 seed=3: {'epoch': 70, 'lr': 0.020648912648459073, 'loss': 1.5029971897125245, 'train_accuracy_percent': 48.6}
 PROBE CIFAR10 lbl=5 seed=3: {'epoch': 80, 'lr': 0.009567642583312259, 'loss': 1.472969517326355, 'train_accuracy_percent': 50.28}
 PROBE CIFAR10 lbl=5 seed=3: {'epoch': 90, 'lr': 0.002452035422983734, 'loss': 1.4695641498565675, 'train_accuracy_percent': 49.2}
+PROBE CIFAR10 lbl=5 seed=3: {'epoch': 100, 'lr': 0.0, 'loss': 1.4624547214508057, 'train_accuracy_percent': 50.0}
+RESULT CIFAR10 lbl=5 seed=3: 50.8800
+RUN probe: TinyImageNet kmeans 0.2 CIFAR10 5 4
+PROBE CIFAR10 lbl=5 seed=4: {'epoch': 10, 'lr': 0.09759636527645632, 'loss': 1.6250565631866456, 'train_accuracy_percent': 43.0}
+PROBE CIFAR10 lbl=5 seed=4: {'epoch': 20, 'lr': 0.0905246588405146, 'loss': 1.5888138107299805, 'train_accuracy_percent': 43.52}
+PROBE CIFAR10 lbl=5 seed=4: {'epoch': 30, 'lr': 0.07947823644532198, 'loss': 1.5376585096359252, 'train_accuracy_percent': 45.08}
+PROBE CIFAR10 lbl=5 seed=4: {'epoch': 40, 'lr': 0.06554054685128856, 'loss': 1.5350770162582397, 'train_accuracy_percent': 45.4}
+PROBE CIFAR10 lbl=5 seed=4: {'epoch': 50, 'lr': 0.05007861840237923, 'loss': 1.4872178373336793, 'train_accuracy_percent': 48.2}
+PROBE CIFAR10 lbl=5 seed=4: {'epoch': 60, 'lr': 0.03460897894916861, 'loss': 1.4933822715759277, 'train_accuracy_percent': 48.32}
+PROBE CIFAR10 lbl=5 seed=4: {'epoch': 70, 'lr': 0.020648912648459073, 'loss': 1.4756349864959717, 'train_accuracy_percent': 49.8}
+PROBE CIFAR10 lbl=5 seed=4: {'epoch': 80, 'lr': 0.009567642583312259, 'loss': 1.4757916580200194, 'train_accuracy_percent': 48.6}
+PROBE CIFAR10 lbl=5 seed=4: {'epoch': 90, 'lr': 0.002452035422983734, 'loss': 1.4661600196838378, 'train_accuracy_percent': 49.68}
+PROBE CIFAR10 lbl=5 seed=4: {'epoch': 100, 'lr': 0.0, 'loss': 1.4895787210464477, 'train_accuracy_percent': 48.12}
+RESULT CIFAR10 lbl=5 seed=4: 50.0200
+DOWNSTREAM TABLE UPDATED: TinyImageNet|ResNet18|kmeans|0.2|simclr|CIFAR10|5
+RUN probe: TinyImageNet kmeans 0.2 CIFAR100 5 0
+PROBE CIFAR100 lbl=5 seed=0: {'epoch': 10, 'lr': 0.09759636527645632, 'loss': 3.86031236000061, 'train_accuracy_percent': 15.12}
+PROBE CIFAR100 lbl=5 seed=0: {'epoch': 20, 'lr': 0.0905246588405146, 'loss': 3.6084798641204836, 'train_accuracy_percent': 18.16}
+PROBE CIFAR100 lbl=5 seed=0: {'epoch': 30, 'lr': 0.07947823644532198, 'loss': 3.4936366371154786, 'train_accuracy_percent': 20.4}
+PROBE CIFAR100 lbl=5 seed=0: {'epoch': 40, 'lr': 0.06554054685128856, 'loss': 3.402225834274292, 'train_accuracy_percent': 20.52}
+PROBE CIFAR100 lbl=5 seed=0: {'epoch': 50, 'lr': 0.05007861840237923, 'loss': 3.3709407665252686, 'train_accuracy_percent': 22.04}
+PROBE CIFAR100 lbl=5 seed=0: {'epoch': 60, 'lr': 0.03460897894916861, 'loss': 3.329558953857422, 'train_accuracy_percent': 22.96}
+PROBE CIFAR100 lbl=5 seed=0: {'epoch': 70, 'lr': 0.020648912648459073, 'loss': 3.3061687549591063, 'train_accuracy_percent': 24.08}
+PROBE CIFAR100 lbl=5 seed=0: {'epoch': 80, 'lr': 0.009567642583312259, 'loss': 3.2805666412353514, 'train_accuracy_percent': 24.12}
+PROBE CIFAR100 lbl=5 seed=0: {'epoch': 90, 'lr': 0.002452035422983734, 'loss': 3.280889680099487, 'train_accuracy_percent': 24.36}
+PROBE CIFAR100 lbl=5 seed=0: {'epoch': 100, 'lr': 0.0, 'loss': 3.2973160125732424, 'train_accuracy_percent': 22.84}
+RESULT CIFAR100 lbl=5 seed=0: 17.5700
+RUN probe: TinyImageNet kmeans 0.2 CIFAR100 5 1
+PROBE CIFAR100 lbl=5 seed=1: {'epoch': 10, 'lr': 0.09759636527645632, 'loss': 3.875267414855957, 'train_accuracy_percent': 14.24}
+PROBE CIFAR100 lbl=5 seed=1: {'epoch': 20, 'lr': 0.0905246588405146, 'loss': 3.6615955081939697, 'train_accuracy_percent': 16.8}
+PROBE CIFAR100 lbl=5 seed=1: {'epoch': 30, 'lr': 0.07947823644532198, 'loss': 3.521986401748657, 'train_accuracy_percent': 19.16}
+PROBE CIFAR100 lbl=5 seed=1: {'epoch': 40, 'lr': 0.06554054685128856, 'loss': 3.4594480628967283, 'train_accuracy_percent': 21.04}
+PROBE CIFAR100 lbl=5 seed=1: {'epoch': 50, 'lr': 0.05007861840237923, 'loss': 3.393498151397705, 'train_accuracy_percent': 22.04}
+PROBE CIFAR100 lbl=5 seed=1: {'epoch': 60, 'lr': 0.03460897894916861, 'loss': 3.3546203857421877, 'train_accuracy_percent': 23.68}
+PROBE CIFAR100 lbl=5 seed=1: {'epoch': 70, 'lr': 0.020648912648459073, 'loss': 3.3229610763549804, 'train_accuracy_percent': 23.6}
+PROBE CIFAR100 lbl=5 seed=1: {'epoch': 80, 'lr': 0.009567642583312259, 'loss': 3.328402547454834, 'train_accuracy_percent': 22.84}
+PROBE CIFAR100 lbl=5 seed=1: {'epoch': 90, 'lr': 0.002452035422983734, 'loss': 3.3104208797454833, 'train_accuracy_percent': 24.04}
+PROBE CIFAR100 lbl=5 seed=1: {'epoch': 100, 'lr': 0.0, 'loss': 3.3213424877166746, 'train_accuracy_percent': 22.56}
+RESULT CIFAR100 lbl=5 seed=1: 18.3400
+RUN probe: TinyImageNet kmeans 0.2 CIFAR100 5 2
+PROBE CIFAR100 lbl=5 seed=2: {'epoch': 10, 'lr': 0.09759636527645632, 'loss': 3.900624014663696, 'train_accuracy_percent': 14.2}
+PROBE CIFAR100 lbl=5 seed=2: {'epoch': 20, 'lr': 0.0905246588405146, 'loss': 3.675168388748169, 'train_accuracy_percent': 17.36}
+PROBE CIFAR100 lbl=5 seed=2: {'epoch': 30, 'lr': 0.07947823644532198, 'loss': 3.535414998626709, 'train_accuracy_percent': 20.0}
+PROBE CIFAR100 lbl=5 seed=2: {'epoch': 40, 'lr': 0.06554054685128856, 'loss': 3.4697058094024658, 'train_accuracy_percent': 20.4}
+PROBE CIFAR100 lbl=5 seed=2: {'epoch': 50, 'lr': 0.05007861840237923, 'loss': 3.427364762878418, 'train_accuracy_percent': 21.24}
+PROBE CIFAR100 lbl=5 seed=2: {'epoch': 60, 'lr': 0.03460897894916861, 'loss': 3.3952124004364013, 'train_accuracy_percent': 22.52}
+PROBE CIFAR100 lbl=5 seed=2: {'epoch': 70, 'lr': 0.020648912648459073, 'loss': 3.3634001892089844, 'train_accuracy_percent': 22.64}
+PROBE CIFAR100 lbl=5 seed=2: {'epoch': 80, 'lr': 0.009567642583312259, 'loss': 3.3393659248352052, 'train_accuracy_percent': 23.52}
+PROBE CIFAR100 lbl=5 seed=2: {'epoch': 90, 'lr': 0.002452035422983734, 'loss': 3.3630249996185304, 'train_accuracy_percent': 22.2}
+PROBE CIFAR100 lbl=5 seed=2: {'epoch': 100, 'lr': 0.0, 'loss': 3.3174238479614258, 'train_accuracy_percent': 23.44}
+RESULT CIFAR100 lbl=5 seed=2: 18.1100
+RUN probe: TinyImageNet kmeans 0.2 CIFAR100 5 3
+PROBE CIFAR100 lbl=5 seed=3: {'epoch': 10, 'lr': 0.09759636527645632, 'loss': 3.8597363208770754, 'train_accuracy_percent': 14.88}
+PROBE CIFAR100 lbl=5 seed=3: {'epoch': 20, 'lr': 0.0905246588405146, 'loss': 3.6085887462615966, 'train_accuracy_percent': 18.32}
+PROBE CIFAR100 lbl=5 seed=3: {'epoch': 30, 'lr': 0.07947823644532198, 'loss': 3.5055520298004152, 'train_accuracy_percent': 20.88}
+PROBE CIFAR100 lbl=5 seed=3: {'epoch': 40, 'lr': 0.06554054685128856, 'loss': 3.388435171890259, 'train_accuracy_percent': 22.4}
+PROBE CIFAR100 lbl=5 seed=3: {'epoch': 50, 'lr': 0.05007861840237923, 'loss': 3.3596770519256594, 'train_accuracy_percent': 23.32}
+PROBE CIFAR100 lbl=5 seed=3: {'epoch': 60, 'lr': 0.03460897894916861, 'loss': 3.330818839645386, 'train_accuracy_percent': 22.68}
+PROBE CIFAR100 lbl=5 seed=3: {'epoch': 70, 'lr': 0.020648912648459073, 'loss': 3.2895563709259035, 'train_accuracy_percent': 23.96}
+PROBE CIFAR100 lbl=5 seed=3: {'epoch': 80, 'lr': 0.009567642583312259, 'loss': 3.276434659576416, 'train_accuracy_percent': 23.6}
+PROBE CIFAR100 lbl=5 seed=3: {'epoch': 90, 'lr': 0.002452035422983734, 'loss': 3.2714935050964353, 'train_accuracy_percent': 24.4}
+PROBE CIFAR100 lbl=5 seed=3: {'epoch': 100, 'lr': 0.0, 'loss': 3.273612203216553, 'train_accuracy_percent': 24.84}
+RESULT CIFAR100 lbl=5 seed=3: 18.0800
+RUN probe: TinyImageNet kmeans 0.2 CIFAR100 5 4
+PROBE CIFAR100 lbl=5 seed=4: {'epoch': 10, 'lr': 0.09759636527645632, 'loss': 3.8715147205352785, 'train_accuracy_percent': 14.44}
+PROBE CIFAR100 lbl=5 seed=4: {'epoch': 20, 'lr': 0.0905246588405146, 'loss': 3.6146151180267334, 'train_accuracy_percent': 19.64}
+PROBE CIFAR100 lbl=5 seed=4: {'epoch': 30, 'lr': 0.07947823644532198, 'loss': 3.5129168167114257, 'train_accuracy_percent': 20.72}
+PROBE CIFAR100 lbl=5 seed=4: {'epoch': 40, 'lr': 0.06554054685128856, 'loss': 3.426589444351196, 'train_accuracy_percent': 20.84}
+PROBE CIFAR100 lbl=5 seed=4: {'epoch': 50, 'lr': 0.05007861840237923, 'loss': 3.3798228771209717, 'train_accuracy_percent': 22.44}
+PROBE CIFAR100 lbl=5 seed=4: {'epoch': 60, 'lr': 0.03460897894916861, 'loss': 3.3421408893585207, 'train_accuracy_percent': 23.24}
+PROBE CIFAR100 lbl=5 seed=4: {'epoch': 70, 'lr': 0.020648912648459073, 'loss': 3.30663037109375, 'train_accuracy_percent': 23.24}
+PROBE CIFAR100 lbl=5 seed=4: {'epoch': 80, 'lr': 0.009567642583312259, 'loss': 3.30750637550354, 'train_accuracy_percent': 23.72}
+PROBE CIFAR100 lbl=5 seed=4: {'epoch': 90, 'lr': 0.002452035422983734, 'loss': 3.2811308097839356, 'train_accuracy_percent': 24.48}
+PROBE CIFAR100 lbl=5 seed=4: {'epoch': 100, 'lr': 0.0, 'loss': 3.3054678924560545, 'train_accuracy_percent': 23.28}
+RESULT CIFAR100 lbl=5 seed=4: 18.2700
+DOWNSTREAM TABLE UPDATED: TinyImageNet|ResNet18|kmeans|0.2|simclr|CIFAR100|5
+RUN probe: TinyImageNet kmeans 0.2 Aircraft 5 0
+PROBE Aircraft lbl=5 seed=0: {'epoch': 10, 'lr': 0.09776754757575974, 'loss': 4.421651552389334, 'train_accuracy_percent': 3.903903903903904}
+PROBE Aircraft lbl=5 seed=0: {'epoch': 20, 'lr': 0.09081878607071997, 'loss': 4.180012100093715, 'train_accuracy_percent': 8.408408408408409}
+PROBE Aircraft lbl=5 seed=0: {'epoch': 30, 'lr': 0.0798344744144428, 'loss': 4.012808216942681, 'train_accuracy_percent': 14.714714714714715}
+PROBE Aircraft lbl=5 seed=0: {'epoch': 40, 'lr': 0.06590057681196192, 'loss': 3.877634062781348, 'train_accuracy_percent': 15.315315315315315}
+PROBE Aircraft lbl=5 seed=0: {'epoch': 50, 'lr': 0.05039466834548567, 'loss': 3.8145948952740736, 'train_accuracy_percent': 24.024024024024023}
+PROBE Aircraft lbl=5 seed=0: {'epoch': 60, 'lr': 0.03484974098465636, 'loss': 3.765192246651864, 'train_accuracy_percent': 19.21921921921922}
+PROBE Aircraft lbl=5 seed=0: {'epoch': 70, 'lr': 0.020802644302934683, 'loss': 3.7354637617105477, 'train_accuracy_percent': 20.72072072072072}
+PROBE Aircraft lbl=5 seed=0: {'epoch': 80, 'lr': 0.00964214481190074, 'loss': 3.6859943616139637, 'train_accuracy_percent': 21.02102102102102}
+PROBE Aircraft lbl=5 seed=0: {'epoch': 90, 'lr': 0.0024716255306108607, 'loss': 3.698488703003159, 'train_accuracy_percent': 21.32132132132132}
+PROBE Aircraft lbl=5 seed=0: {'epoch': 100, 'lr': 0.0, 'loss': 3.6907744615285605, 'train_accuracy_percent': 22.22222222222222}
+RESULT Aircraft lbl=5 seed=0: 2.5503
+RUN probe: TinyImageNet kmeans 0.2 Aircraft 5 1
+PROBE Aircraft lbl=5 seed=1: {'epoch': 10, 'lr': 0.09776754757575974, 'loss': 4.448413326217605, 'train_accuracy_percent': 4.804804804804805}
+PROBE Aircraft lbl=5 seed=1: {'epoch': 20, 'lr': 0.09081878607071997, 'loss': 4.2303827689574645, 'train_accuracy_percent': 9.90990990990991}
+PROBE Aircraft lbl=5 seed=1: {'epoch': 30, 'lr': 0.0798344744144428, 'loss': 4.10448563922275, 'train_accuracy_percent': 11.711711711711711}
+PROBE Aircraft lbl=5 seed=1: {'epoch': 40, 'lr': 0.06590057681196192, 'loss': 3.9861512642364962, 'train_accuracy_percent': 12.612612612612613}
+PROBE Aircraft lbl=5 seed=1: {'epoch': 50, 'lr': 0.05039466834548567, 'loss': 3.8849432504212893, 'train_accuracy_percent': 16.516516516516518}
+PROBE Aircraft lbl=5 seed=1: {'epoch': 60, 'lr': 0.03484974098465636, 'loss': 3.83658989628514, 'train_accuracy_percent': 22.52252252252252}
+PROBE Aircraft lbl=5 seed=1: {'epoch': 70, 'lr': 0.020802644302934683, 'loss': 3.7913803510121755, 'train_accuracy_percent': 18.31831831831832}
+PROBE Aircraft lbl=5 seed=1: {'epoch': 80, 'lr': 0.00964214481190074, 'loss': 3.774888853411059, 'train_accuracy_percent': 17.71771771771772}
+PROBE Aircraft lbl=5 seed=1: {'epoch': 90, 'lr': 0.0024716255306108607, 'loss': 3.7642725774117776, 'train_accuracy_percent': 21.32132132132132}
+PROBE Aircraft lbl=5 seed=1: {'epoch': 100, 'lr': 0.0, 'loss': 3.7930044204265148, 'train_accuracy_percent': 17.117117117117118}
+RESULT Aircraft lbl=5 seed=1: 2.2202
+RUN probe: TinyImageNet kmeans 0.2 Aircraft 5 2
+PROBE Aircraft lbl=5 seed=2: {'epoch': 10, 'lr': 0.09776754757575974, 'loss': 4.425042046440972, 'train_accuracy_percent': 3.003003003003003}
+PROBE Aircraft lbl=5 seed=2: {'epoch': 20, 'lr': 0.09081878607071997, 'loss': 4.197793718572852, 'train_accuracy_percent': 6.906906906906907}
+PROBE Aircraft lbl=5 seed=2: {'epoch': 30, 'lr': 0.0798344744144428, 'loss': 4.014195157958938, 'train_accuracy_percent': 15.915915915915916}
+PROBE Aircraft lbl=5 seed=2: {'epoch': 40, 'lr': 0.06590057681196192, 'loss': 3.9068618930495895, 'train_accuracy_percent': 14.114114114114114}
+PROBE Aircraft lbl=5 seed=2: {'epoch': 50, 'lr': 0.05039466834548567, 'loss': 3.839185020229122, 'train_accuracy_percent': 15.315315315315315}
+PROBE Aircraft lbl=5 seed=2: {'epoch': 60, 'lr': 0.03484974098465636, 'loss': 3.7788964148398274, 'train_accuracy_percent': 17.71771771771772}
+PROBE Aircraft lbl=5 seed=2: {'epoch': 70, 'lr': 0.020802644302934683, 'loss': 3.6936842342754743, 'train_accuracy_percent': 20.72072072072072}
+PROBE Aircraft lbl=5 seed=2: {'epoch': 80, 'lr': 0.00964214481190074, 'loss': 3.7291204650122842, 'train_accuracy_percent': 20.72072072072072}
+PROBE Aircraft lbl=5 seed=2: {'epoch': 90, 'lr': 0.0024716255306108607, 'loss': 3.687311577009367, 'train_accuracy_percent': 19.51951951951952}
+PROBE Aircraft lbl=5 seed=2: {'epoch': 100, 'lr': 0.0, 'loss': 3.700961209632255, 'train_accuracy_percent': 20.72072072072072}
+RESULT Aircraft lbl=5 seed=2: 2.8203
+RUN probe: TinyImageNet kmeans 0.2 Aircraft 5 3
+PROBE Aircraft lbl=5 seed=3: {'epoch': 10, 'lr': 0.09776754757575974, 'loss': 4.407370847982687, 'train_accuracy_percent': 3.6036036036036037}
+PROBE Aircraft lbl=5 seed=3: {'epoch': 20, 'lr': 0.09081878607071997, 'loss': 4.147742963052011, 'train_accuracy_percent': 9.00900900900901}
+PROBE Aircraft lbl=5 seed=3: {'epoch': 30, 'lr': 0.0798344744144428, 'loss': 3.9960890045395128, 'train_accuracy_percent': 13.813813813813814}
+PROBE Aircraft lbl=5 seed=3: {'epoch': 40, 'lr': 0.06590057681196192, 'loss': 3.856442490139523, 'train_accuracy_percent': 20.42042042042042}
+PROBE Aircraft lbl=5 seed=3: {'epoch': 50, 'lr': 0.05039466834548567, 'loss': 3.7878872632264375, 'train_accuracy_percent': 17.117117117117118}
+PROBE Aircraft lbl=5 seed=3: {'epoch': 60, 'lr': 0.03484974098465636, 'loss': 3.7365809847284726, 'train_accuracy_percent': 20.42042042042042}
+PROBE Aircraft lbl=5 seed=3: {'epoch': 70, 'lr': 0.020802644302934683, 'loss': 3.6816624456697755, 'train_accuracy_percent': 21.02102102102102}
+PROBE Aircraft lbl=5 seed=3: {'epoch': 80, 'lr': 0.00964214481190074, 'loss': 3.70117919795864, 'train_accuracy_percent': 20.72072072072072}
+PROBE Aircraft lbl=5 seed=3: {'epoch': 90, 'lr': 0.0024716255306108607, 'loss': 3.6697548946460805, 'train_accuracy_percent': 22.52252252252252}
+PROBE Aircraft lbl=5 seed=3: {'epoch': 100, 'lr': 0.0, 'loss': 3.685275990683753, 'train_accuracy_percent': 20.72072072072072}
+RESULT Aircraft lbl=5 seed=3: 2.8803
+RUN probe: TinyImageNet kmeans 0.2 Aircraft 5 4
+PROBE Aircraft lbl=5 seed=4: {'epoch': 10, 'lr': 0.09776754757575974, 'loss': 4.440589160174579, 'train_accuracy_percent': 4.2042042042042045}
+PROBE Aircraft lbl=5 seed=4: {'epoch': 20, 'lr': 0.09081878607071997, 'loss': 4.235530400777364, 'train_accuracy_percent': 10.21021021021021}
+PROBE Aircraft lbl=5 seed=4: {'epoch': 30, 'lr': 0.0798344744144428, 'loss': 4.048455347169985, 'train_accuracy_percent': 13.213213213213214}
+PROBE Aircraft lbl=5 seed=4: {'epoch': 40, 'lr': 0.06590057681196192, 'loss': 3.9720897015866576, 'train_accuracy_percent': 13.513513513513514}
+PROBE Aircraft lbl=5 seed=4: {'epoch': 50, 'lr': 0.05039466834548567, 'loss': 3.8488278181345255, 'train_accuracy_percent': 17.41741741741742}
+PROBE Aircraft lbl=5 seed=4: {'epoch': 60, 'lr': 0.03484974098465636, 'loss': 3.795491091839902, 'train_accuracy_percent': 16.516516516516518}
+PROBE Aircraft lbl=5 seed=4: {'epoch': 70, 'lr': 0.020802644302934683, 'loss': 3.785280261311803, 'train_accuracy_percent': 20.42042042042042}
+PROBE Aircraft lbl=5 seed=4: {'epoch': 80, 'lr': 0.00964214481190074, 'loss': 3.7389185399980516, 'train_accuracy_percent': 20.42042042042042}
+PROBE Aircraft lbl=5 seed=4: {'epoch': 90, 'lr': 0.0024716255306108607, 'loss': 3.788539918693336, 'train_accuracy_percent': 17.41741741741742}
+PROBE Aircraft lbl=5 seed=4: {'epoch': 100, 'lr': 0.0, 'loss': 3.7607413562568457, 'train_accuracy_percent': 20.42042042042042}
+RESULT Aircraft lbl=5 seed=4: 3.2703
+DOWNSTREAM TABLE UPDATED: TinyImageNet|ResNet18|kmeans|0.2|simclr|Aircraft|5
+BUNDLE COMPLETE: d2k5_TinyImageNet_kmeans_p0p2_b1

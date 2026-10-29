@@ -1,0 +1,22 @@
+Loaded fixed teacher seed 0: /scratch/mmoslem3/MKDT/Evaluate_benchamrk/full_ssl_checkpoints_1000ep_3seeds/CIFAR100/ResNet18/full/pt100/simclr/seed_000/encoder.pt
+RESUME iteration 3000 -> 5000, including Adam, sampling and RNG state: /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_b6000_i5000_lr0p0015/CIFAR100/ResNet18BN/pt2/res_IIC_CIFAR100_ResNet18BN_2percent_final.pt
+Hyper-parameters: 
+ {'dataset': 'CIFAR100', 'percentage': 2.0, 'data_path': '/scratch/mmoslem3/data', 'device': 'cuda', 'seed': 0, 'Iteration': 5000, 'lr_img': 0.0015, 'batch_real': 6000, 'temperature': 0.2, 'disp_weight': 0.0, 'pair_weight': 0.0, 'num_random_networks': 1, 'random_models': 'ResNet18BN', 'distill_aug_strategy': 'color_crop_cutout_flip_scale_rotate', 'dsa': True, 'distill_aug_mode': 'M', 'teacher_source': 'pretrained', 'teacher_seed': [0], 'teacher_ssl': 'simclr', 'teacher_path': '/scratch/mmoslem3/MKDT/Evaluate_benchamrk/full_ssl_checkpoints_1000ep_3seeds', 'model': 'ResNet18BN', 'ssl_method': 'simclr', 'eval_mode': 'S', 'num_eval': 0, 'epoch_eval_train': 10000, 'label_percentage': 1.0, 'lr_linear': 0.1, 'batch_linear': 256, 'save_path': '/scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_b6000_i5000_lr0p0015/CIFAR100/ResNet18BN/pt2', 'resume': True, 'save_every': 100, 'feature_batch': 128}
+P_net support: ResNet18BN
+Objective: sum teacher losses (-MI + 0 * displacement + 0 * pair_similarity), averaged over 1 augmentation draw(s).
+[2026-10-27 20:25:58] distillation begins
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_b6000_i5000_lr0p0015/CIFAR100/ResNet18BN/pt2/res_IIC_CIFAR100_ResNet18BN_2percent_final.pt (iteration 3100/5000)
+[2026-10-27 20:29:44] iter = 03200, neg_MI = -0.038492, displacement = 0.000178, pair_similarity = 0.001656, total_loss = -0.038492, pixel drift RMS = 17.43603/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_b6000_i5000_lr0p0015/CIFAR100/ResNet18BN/pt2/res_IIC_CIFAR100_ResNet18BN_2percent_final.pt (iteration 3200/5000)
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_b6000_i5000_lr0p0015/CIFAR100/ResNet18BN/pt2/res_IIC_CIFAR100_ResNet18BN_2percent_final.pt (iteration 3300/5000)
+[2026-10-27 20:33:27] iter = 03400, neg_MI = -0.039436, displacement = 0.000166, pair_similarity = 0.001989, total_loss = -0.039436, pixel drift RMS = 17.78826/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_b6000_i5000_lr0p0015/CIFAR100/ResNet18BN/pt2/res_IIC_CIFAR100_ResNet18BN_2percent_final.pt (iteration 3400/5000)
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_b6000_i5000_lr0p0015/CIFAR100/ResNet18BN/pt2/res_IIC_CIFAR100_ResNet18BN_2percent_final.pt (iteration 3500/5000)
+[2026-10-27 20:37:09] iter = 03600, neg_MI = -0.050883, displacement = 0.000087, pair_similarity = 0.000230, total_loss = -0.050883, pixel drift RMS = 18.14262/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_b6000_i5000_lr0p0015/CIFAR100/ResNet18BN/pt2/res_IIC_CIFAR100_ResNet18BN_2percent_final.pt (iteration 3600/5000)
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_b6000_i5000_lr0p0015/CIFAR100/ResNet18BN/pt2/res_IIC_CIFAR100_ResNet18BN_2percent_final.pt (iteration 3700/5000)
+[2026-10-27 20:40:56] iter = 03800, neg_MI = -0.055202, displacement = 0.000047, pair_similarity = 0.000054, total_loss = -0.055202, pixel drift RMS = 18.48362/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_b6000_i5000_lr0p0015/CIFAR100/ResNet18BN/pt2/res_IIC_CIFAR100_ResNet18BN_2percent_final.pt (iteration 3800/5000)
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_b6000_i5000_lr0p0015/CIFAR100/ResNet18BN/pt2/res_IIC_CIFAR100_ResNet18BN_2percent_final.pt (iteration 3900/5000)
+[2026-10-27 20:44:52] iter = 04000, neg_MI = -0.032457, displacement = 0.000223, pair_similarity = 0.002096, total_loss = -0.032457, pixel drift RMS = 18.81888/255
+SEGMENT SAVED: iteration 4000/5000; Adam and RNG retained

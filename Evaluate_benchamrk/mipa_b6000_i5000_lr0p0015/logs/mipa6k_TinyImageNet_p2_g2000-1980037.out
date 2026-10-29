@@ -1,0 +1,17 @@
+Loaded fixed teacher seed 1: /scratch/mmoslem3/MKDT/Evaluate_benchamrk/full_ssl_checkpoints_1000ep_3seeds/TinyImageNet/ResNet18/full/pt100/simclr/seed_001/encoder.pt
+RESUME iteration 1000 -> 5000, including Adam, sampling and RNG state: /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_b6000_i5000_lr0p0015/TinyImageNet/ResNet18BN/pt2/res_IIC_TinyImageNet_ResNet18BN_2percent_final.pt
+Hyper-parameters: 
+ {'dataset': 'TinyImageNet', 'percentage': 2.0, 'data_path': '/scratch/mmoslem3/data', 'device': 'cuda', 'seed': 0, 'Iteration': 5000, 'lr_img': 0.0015, 'batch_real': 6000, 'temperature': 0.2, 'disp_weight': 0.0, 'pair_weight': 0.0, 'num_random_networks': 1, 'random_models': 'ResNet18BN', 'distill_aug_strategy': 'color_crop_cutout_flip_scale_rotate', 'dsa': True, 'distill_aug_mode': 'M', 'teacher_source': 'pretrained', 'teacher_seed': [1], 'teacher_ssl': 'simclr', 'teacher_path': '/scratch/mmoslem3/MKDT/Evaluate_benchamrk/full_ssl_checkpoints_1000ep_3seeds', 'model': 'ResNet18BN', 'ssl_method': 'simclr', 'eval_mode': 'S', 'num_eval': 0, 'epoch_eval_train': 10000, 'label_percentage': 1.0, 'lr_linear': 0.1, 'batch_linear': 256, 'save_path': '/scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_b6000_i5000_lr0p0015/TinyImageNet/ResNet18BN/pt2', 'resume': True, 'save_every': 100, 'feature_batch': 128}
+P_net support: ResNet18BN
+Objective: sum teacher losses (-MI + 0 * displacement + 0 * pair_similarity), averaged over 1 augmentation draw(s).
+[2026-10-27 20:53:46] distillation begins
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_b6000_i5000_lr0p0015/TinyImageNet/ResNet18BN/pt2/res_IIC_TinyImageNet_ResNet18BN_2percent_final.pt (iteration 1100/5000)
+[2026-10-27 21:09:58] iter = 01200, neg_MI = -0.042091, displacement = 0.000054, pair_similarity = 0.000030, total_loss = -0.042091, pixel drift RMS = 9.39384/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_b6000_i5000_lr0p0015/TinyImageNet/ResNet18BN/pt2/res_IIC_TinyImageNet_ResNet18BN_2percent_final.pt (iteration 1200/5000)
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_b6000_i5000_lr0p0015/TinyImageNet/ResNet18BN/pt2/res_IIC_TinyImageNet_ResNet18BN_2percent_final.pt (iteration 1300/5000)
+[2026-10-27 21:26:10] iter = 01400, neg_MI = -0.038239, displacement = 0.000314, pair_similarity = 0.006504, total_loss = -0.038239, pixel drift RMS = 9.99631/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_b6000_i5000_lr0p0015/TinyImageNet/ResNet18BN/pt2/res_IIC_TinyImageNet_ResNet18BN_2percent_final.pt (iteration 1400/5000)
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_b6000_i5000_lr0p0015/TinyImageNet/ResNet18BN/pt2/res_IIC_TinyImageNet_ResNet18BN_2percent_final.pt (iteration 1500/5000)
+[2026-10-27 21:42:19] iter = 01600, neg_MI = -0.049986, displacement = 0.000114, pair_similarity = 0.000299, total_loss = -0.049986, pixel drift RMS = 10.53389/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_b6000_i5000_lr0p0015/TinyImageNet/ResNet18BN/pt2/res_IIC_TinyImageNet_ResNet18BN_2percent_final.pt (iteration 1600/5000)
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_b6000_i5000_lr0p0015/TinyImageNet/ResNet18BN/pt2/res_IIC_TinyImageNet_ResNet18BN_2percent_final.pt (iteration 1700/5000)

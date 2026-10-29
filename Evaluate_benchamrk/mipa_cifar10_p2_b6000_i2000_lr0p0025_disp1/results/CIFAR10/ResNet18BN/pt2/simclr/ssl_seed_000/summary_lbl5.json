@@ -1,0 +1,81 @@
+{
+  "complete": true,
+  "completed_probes": 6,
+  "expected_probes": 6,
+  "experiment": "mipa_cifar10_p2_b6000_i2000_lr0p0025_disp1",
+  "generation_args": {
+    "Iteration": 2000,
+    "batch_real": 6000,
+    "dataset": "CIFAR10",
+    "disp_weight": 1,
+    "distill_aug_mode": "M",
+    "distill_aug_strategy": "color_crop_cutout_flip_scale_rotate",
+    "dsa": true,
+    "feature_batch": 128,
+    "lr_img": 0.0025,
+    "model": "ResNet18BN",
+    "num_random_networks": 1,
+    "pair_weight": 0,
+    "percentage": 2,
+    "random_models": "ResNet18BN",
+    "seed": 0,
+    "teacher_path": "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/full_ssl_checkpoints_1000ep_3seeds",
+    "teacher_seed": [
+      0
+    ],
+    "teacher_source": "pretrained",
+    "teacher_ssl": "simclr",
+    "temperature": 0.2
+  },
+  "kind": "ours",
+  "labels": 5,
+  "linear_epochs": 100,
+  "mean_percent": 59.53666666666667,
+  "model": "ResNet18",
+  "samples": [
+    {
+      "accuracy_percent": 59.6,
+      "probe_seed": 0,
+      "result_file": "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_cifar10_p2_b6000_i2000_lr0p0025_disp1/results/CIFAR10/ResNet18BN/pt2/simclr/ssl_seed_000/evaluations/CIFAR10_lbl5_probe0.json",
+      "ssl_seed": 0
+    },
+    {
+      "accuracy_percent": 59.72,
+      "probe_seed": 1,
+      "result_file": "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_cifar10_p2_b6000_i2000_lr0p0025_disp1/results/CIFAR10/ResNet18BN/pt2/simclr/ssl_seed_000/evaluations/CIFAR10_lbl5_probe1.json",
+      "ssl_seed": 0
+    },
+    {
+      "accuracy_percent": 59.21,
+      "probe_seed": 2,
+      "result_file": "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_cifar10_p2_b6000_i2000_lr0p0025_disp1/results/CIFAR10/ResNet18BN/pt2/simclr/ssl_seed_000/evaluations/CIFAR10_lbl5_probe2.json",
+      "ssl_seed": 0
+    },
+    {
+      "accuracy_percent": 59.75,
+      "probe_seed": 3,
+      "result_file": "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_cifar10_p2_b6000_i2000_lr0p0025_disp1/results/CIFAR10/ResNet18BN/pt2/simclr/ssl_seed_000/evaluations/CIFAR10_lbl5_probe3.json",
+      "ssl_seed": 0
+    },
+    {
+      "accuracy_percent": 59.64,
+      "probe_seed": 4,
+      "result_file": "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_cifar10_p2_b6000_i2000_lr0p0025_disp1/results/CIFAR10/ResNet18BN/pt2/simclr/ssl_seed_000/evaluations/CIFAR10_lbl5_probe4.json",
+      "ssl_seed": 0
+    },
+    {
+      "accuracy_percent": 59.3,
+      "probe_seed": 5,
+      "result_file": "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_cifar10_p2_b6000_i2000_lr0p0025_disp1/results/CIFAR10/ResNet18BN/pt2/simclr/ssl_seed_000/evaluations/CIFAR10_lbl5_probe5.json",
+      "ssl_seed": 0
+    }
+  ],
+  "source": "CIFAR10",
+  "ssl": "simclr",
+  "ssl_epochs": 2000,
+  "std_ddof": 1,
+  "std_percent": 0.22650974960620746,
+  "subset": 2,
+  "target": "CIFAR10",
+  "tex_value": "\\dsacc{59.54}{0.23}"
+}

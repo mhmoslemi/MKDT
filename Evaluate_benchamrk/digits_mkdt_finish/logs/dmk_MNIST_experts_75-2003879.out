@@ -1,0 +1,136 @@
+Hyper-parameters: 
+ {'dataset': 'MNIST', 'model': 'ConvNet', 'num_experts': 5, 'lr_teacher': 0.1, 'batch_train': 256, 'data_path': '/scratch/mmoslem3/data', 'buffer_path': '/scratch/mmoslem3/MKDT/Evaluate_benchamrk/digits_mkdt/work/MNIST/buffers', 'train_epochs': 20, 'mom': 0.9, 'l2': 0.0001, 'train_labels_path': '/scratch/mmoslem3/MKDT/Evaluate_benchamrk/digits_mkdt/target_rep/barlow_twins/MNIST_target_rep_train.pt', 'criterion': 'mse', 'device': 'cuda:0', 'start_index': 75, 'seed': 0, 'stream_data': True, 'workers': 0, 'progress_percent_step': 0}
+BUILDING TRAINSET
+train label shape torch.Size([60000, 512])
+Dataset creation complete
+ConvNet(
+  (features): Sequential(
+    (0): Conv2d(3, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (1): GroupNorm(128, 128, eps=1e-05, affine=True)
+    (2): ReLU(inplace=True)
+    (3): AvgPool2d(kernel_size=2, stride=2, padding=0)
+    (4): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (5): GroupNorm(128, 128, eps=1e-05, affine=True)
+    (6): ReLU(inplace=True)
+    (7): AvgPool2d(kernel_size=2, stride=2, padding=0)
+    (8): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (9): GroupNorm(128, 128, eps=1e-05, affine=True)
+    (10): ReLU(inplace=True)
+    (11): AvgPool2d(kernel_size=2, stride=2, padding=0)
+  )
+  (classifier): Linear(in_features=2048, out_features=512, bias=True)
+)
+Itr: 0 	Epoch: 0 	Train Loss: 0.2928551928520203
+Itr: 0 	Epoch: 1 	Train Loss: 0.22908433367411296
+Itr: 0 	Epoch: 2 	Train Loss: 0.20092339494228362
+Itr: 0 	Epoch: 3 	Train Loss: 0.18324786658287048
+Itr: 0 	Epoch: 4 	Train Loss: 0.1703760927518209
+Itr: 0 	Epoch: 5 	Train Loss: 0.16083815350532532
+Itr: 0 	Epoch: 6 	Train Loss: 0.1531506565729777
+Itr: 0 	Epoch: 7 	Train Loss: 0.1470809323310852
+Itr: 0 	Epoch: 8 	Train Loss: 0.141709814786911
+Itr: 0 	Epoch: 9 	Train Loss: 0.13705812684694926
+Itr: 0 	Epoch: 10 	Train Loss: 0.13327545549869538
+Itr: 0 	Epoch: 11 	Train Loss: 0.12991963704427084
+Itr: 0 	Epoch: 12 	Train Loss: 0.12699063167572022
+Itr: 0 	Epoch: 13 	Train Loss: 0.12427829027573267
+Itr: 0 	Epoch: 14 	Train Loss: 0.12174669782320659
+Itr: 0 	Epoch: 15 	Train Loss: 0.11966163256963094
+Itr: 0 	Epoch: 16 	Train Loss: 0.11768301703929901
+Itr: 0 	Epoch: 17 	Train Loss: 0.11600378550291061
+Itr: 0 	Epoch: 18 	Train Loss: 0.11428843339284261
+Itr: 0 	Epoch: 19 	Train Loss: 0.11303344002167384
+Saving trajectory checkpoint
+Saving /scratch/mmoslem3/MKDT/Evaluate_benchamrk/digits_mkdt/work/MNIST/buffers/MNIST/ConvNet/replay_buffer_75.pt
+Itr: 1 	Epoch: 0 	Train Loss: 0.2910996437708537
+Itr: 1 	Epoch: 1 	Train Loss: 0.22771109832922617
+Itr: 1 	Epoch: 2 	Train Loss: 0.1997719295501709
+Itr: 1 	Epoch: 3 	Train Loss: 0.18180344252586364
+Itr: 1 	Epoch: 4 	Train Loss: 0.16926888085206349
+Itr: 1 	Epoch: 5 	Train Loss: 0.1597087916135788
+Itr: 1 	Epoch: 6 	Train Loss: 0.15207288161913554
+Itr: 1 	Epoch: 7 	Train Loss: 0.14602276548544565
+Itr: 1 	Epoch: 8 	Train Loss: 0.14068578995863595
+Itr: 1 	Epoch: 9 	Train Loss: 0.13628099091847737
+Itr: 1 	Epoch: 10 	Train Loss: 0.13242369367281595
+Itr: 1 	Epoch: 11 	Train Loss: 0.12890476795832317
+Itr: 1 	Epoch: 12 	Train Loss: 0.12616643257141114
+Itr: 1 	Epoch: 13 	Train Loss: 0.12355280017058054
+Itr: 1 	Epoch: 14 	Train Loss: 0.1209924375295639
+Itr: 1 	Epoch: 15 	Train Loss: 0.11892230234543483
+Itr: 1 	Epoch: 16 	Train Loss: 0.11709333544572194
+Itr: 1 	Epoch: 17 	Train Loss: 0.11507544577121735
+Itr: 1 	Epoch: 18 	Train Loss: 0.11368842278321584
+Itr: 1 	Epoch: 19 	Train Loss: 0.11210758364995321
+Saving trajectory checkpoint
+Saving /scratch/mmoslem3/MKDT/Evaluate_benchamrk/digits_mkdt/work/MNIST/buffers/MNIST/ConvNet/replay_buffer_76.pt
+Itr: 2 	Epoch: 0 	Train Loss: 0.29300707308451335
+Itr: 2 	Epoch: 1 	Train Loss: 0.2301059895992279
+Itr: 2 	Epoch: 2 	Train Loss: 0.2016086892525355
+Itr: 2 	Epoch: 3 	Train Loss: 0.18357627531687418
+Itr: 2 	Epoch: 4 	Train Loss: 0.170868976020813
+Itr: 2 	Epoch: 5 	Train Loss: 0.16131366329193114
+Itr: 2 	Epoch: 6 	Train Loss: 0.1532630494594574
+Itr: 2 	Epoch: 7 	Train Loss: 0.1468377247174581
+Itr: 2 	Epoch: 8 	Train Loss: 0.14186249315738678
+Itr: 2 	Epoch: 9 	Train Loss: 0.13707381750742595
+Itr: 2 	Epoch: 10 	Train Loss: 0.13359306627114614
+Itr: 2 	Epoch: 11 	Train Loss: 0.12966654251416523
+Itr: 2 	Epoch: 12 	Train Loss: 0.12675564411481222
+Itr: 2 	Epoch: 13 	Train Loss: 0.12427832581996917
+Itr: 2 	Epoch: 14 	Train Loss: 0.12167566460768382
+Itr: 2 	Epoch: 15 	Train Loss: 0.11942991387049356
+Itr: 2 	Epoch: 16 	Train Loss: 0.11757383633057276
+Itr: 2 	Epoch: 17 	Train Loss: 0.11580444711844126
+Itr: 2 	Epoch: 18 	Train Loss: 0.11439822618166606
+Itr: 2 	Epoch: 19 	Train Loss: 0.1125702265103658
+Saving trajectory checkpoint
+Saving /scratch/mmoslem3/MKDT/Evaluate_benchamrk/digits_mkdt/work/MNIST/buffers/MNIST/ConvNet/replay_buffer_77.pt
+Itr: 3 	Epoch: 0 	Train Loss: 0.29028535855611165
+Itr: 3 	Epoch: 1 	Train Loss: 0.22679100743929545
+Itr: 3 	Epoch: 2 	Train Loss: 0.19851797728538514
+Itr: 3 	Epoch: 3 	Train Loss: 0.1807794958114624
+Itr: 3 	Epoch: 4 	Train Loss: 0.16842282576560974
+Itr: 3 	Epoch: 5 	Train Loss: 0.1590259441614151
+Itr: 3 	Epoch: 6 	Train Loss: 0.15162587620417278
+Itr: 3 	Epoch: 7 	Train Loss: 0.14587973279953004
+Itr: 3 	Epoch: 8 	Train Loss: 0.14034783187707264
+Itr: 3 	Epoch: 9 	Train Loss: 0.13600629244645437
+Itr: 3 	Epoch: 10 	Train Loss: 0.13217324884732565
+Itr: 3 	Epoch: 11 	Train Loss: 0.12887772267659506
+Itr: 3 	Epoch: 12 	Train Loss: 0.1261522801955541
+Itr: 3 	Epoch: 13 	Train Loss: 0.12327973575592041
+Itr: 3 	Epoch: 14 	Train Loss: 0.12088280461629232
+Itr: 3 	Epoch: 15 	Train Loss: 0.11914032475948334
+Itr: 3 	Epoch: 16 	Train Loss: 0.11697685051759084
+Itr: 3 	Epoch: 17 	Train Loss: 0.11532176625728607
+Itr: 3 	Epoch: 18 	Train Loss: 0.11375703802506129
+Itr: 3 	Epoch: 19 	Train Loss: 0.1123913548986117
+Saving trajectory checkpoint
+Saving /scratch/mmoslem3/MKDT/Evaluate_benchamrk/digits_mkdt/work/MNIST/buffers/MNIST/ConvNet/replay_buffer_78.pt
+Itr: 4 	Epoch: 0 	Train Loss: 0.29154912776947023
+Itr: 4 	Epoch: 1 	Train Loss: 0.22857648005485534
+Itr: 4 	Epoch: 2 	Train Loss: 0.2005911467552185
+Itr: 4 	Epoch: 3 	Train Loss: 0.18272299131552378
+Itr: 4 	Epoch: 4 	Train Loss: 0.17018844137191771
+Itr: 4 	Epoch: 5 	Train Loss: 0.1602533643802007
+Itr: 4 	Epoch: 6 	Train Loss: 0.1529032856464386
+Itr: 4 	Epoch: 7 	Train Loss: 0.14643394451141356
+Itr: 4 	Epoch: 8 	Train Loss: 0.14137180608113606
+Itr: 4 	Epoch: 9 	Train Loss: 0.13690105357170104
+Itr: 4 	Epoch: 10 	Train Loss: 0.13295700000921884
+Itr: 4 	Epoch: 11 	Train Loss: 0.12962693565686545
+Itr: 4 	Epoch: 12 	Train Loss: 0.1266271360874176
+Itr: 4 	Epoch: 13 	Train Loss: 0.12380613387823104
+Itr: 4 	Epoch: 14 	Train Loss: 0.12183687660694122
+Itr: 4 	Epoch: 15 	Train Loss: 0.11959392395416896
+Itr: 4 	Epoch: 16 	Train Loss: 0.11733405308723449
+Itr: 4 	Epoch: 17 	Train Loss: 0.11587424367666245
+Itr: 4 	Epoch: 18 	Train Loss: 0.11404653247197469
+Itr: 4 	Epoch: 19 	Train Loss: 0.11289123936096827
+Saving trajectory checkpoint
+Saving /scratch/mmoslem3/MKDT/Evaluate_benchamrk/digits_mkdt/work/MNIST/buffers/MNIST/ConvNet/replay_buffer_79.pt
+BUILDING TRAINSET
+train label shape torch.Size([60000, 512])
+Dataset creation complete
+60000

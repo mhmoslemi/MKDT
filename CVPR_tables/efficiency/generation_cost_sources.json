@@ -1,5 +1,5 @@
 {
-  "scope": "Historical costs for the synthetic sets evaluated with ResNet18 in the main tables; one set per dataset and budget, not an average over repeated generation runs.",
+  "scope": "Costs for the synthetic sets currently reported with ResNet18 in the main tables: retained large-batch MIPA at 0.2%, exact-Random-initialized batch-128 MIPA at 1%/2%, and unchanged MKDT runs; one set per dataset and budget, not an average over repeated generation runs.",
   "runtime_definition": "Ours: sum of bracketed local-time distillation-start to retained-iteration timestamps. MKDT: completed tqdm optimization elapsed times, summed over sequential chunks when necessary. Neither is end-to-end generation time.",
   "runtime_exclusions": ["Dataset loading", "Initialization and clustering", "Teacher training", "Teacher-feature extraction", "Expert-bank construction and ranking", "Queue and interruption gaps", "Repeated work discarded before a resume checkpoint", "Downstream SSL and linear probing"],
   "hardware_limit": "Historical Vulcan/Killarney runs, not a controlled hardware-matched comparison. Accounting confirms NVIDIA L40S for the listed Vulcan MKDT jobs. Ours interactive generation logs do not record a GPU model.",
@@ -13,6 +13,8 @@
     "generation_model": "ResNet18BN",
     "teacher_method": "simclr",
     "iterations_by_percentage": {"0.2": 10000, "1": 8000, "2": 6000},
+    "batch_real_by_percentage": {"0.2": 1024, "1": 128, "2": 128},
+    "initialization_by_percentage": {"0.2": "Retained DeepCluster K-Means initialization", "1": "Exact saved Random seed-0 subset images", "2": "Exact saved Random seed-0 subset images"},
     "datasets": {
       "CIFAR10": {
         "teacher_seed": 0,
@@ -22,8 +24,8 @@
         "teacher_checkpoint_bytes": 44754295,
         "generation": {
           "0.2": {"seconds": 1793, "log": "OT-SSL-DD/ours_syntehtic/logs/CIFAR10_ResNet18BN_pt0.2.log", "segments": [[0, 10000, "2026-10-23 09:57:50", "2026-10-23 10:27:43"]]},
-          "1": {"seconds": 1984, "log": "OT-SSL-DD/ours_syntehtic/logs/CIFAR10_ResNet18BN_pt1.log", "segments": [[0, 8000, "2026-10-23 10:28:01", "2026-10-23 11:01:05"]]},
-          "2": {"seconds": 2029, "log": "OT-SSL-DD/ours_syntehtic/logs/CIFAR10_ResNet18BN_pt2.log", "segments": [[0, 6000, "2026-10-23 11:01:27", "2026-10-23 11:35:16"]]}
+          "1": {"seconds": 844, "log": "Evaluate_benchamrk/mipa_random128/logs/r128_CIFAR10_p1_gen-1997025.out", "segments": [[0, 8000, "2026-10-28 15:01:28", "2026-10-28 15:15:32"]], "generation_state": "OT-SSL-DD/ours_syntehtic_random128/CIFAR10/ResNet18BN/pt1/generation_state.json"},
+          "2": {"seconds": 1169, "log": "Evaluate_benchamrk/mipa_random128/logs/r128_CIFAR10_p2_gen-1997035.out", "segments": [[0, 6000, "2026-10-28 15:03:02", "2026-10-28 15:22:31"]], "generation_state": "OT-SSL-DD/ours_syntehtic_random128/CIFAR10/ResNet18BN/pt2/generation_state.json"}
         }
       },
       "CIFAR100": {
@@ -34,8 +36,8 @@
         "teacher_checkpoint_bytes": 44754295,
         "generation": {
           "0.2": {"seconds": 1670, "log": "OT-SSL-DD/ours_syntehtic/logs/CIFAR100_ResNet18BN_pt0.2.log", "segments": [[0, 10000, "2026-10-23 09:58:12", "2026-10-23 10:26:02"]]},
-          "1": {"seconds": 1832, "log": "OT-SSL-DD/ours_syntehtic/logs/CIFAR100_ResNet18BN_pt1.log", "segments": [[0, 8000, "2026-10-23 10:26:17", "2026-10-23 10:56:49"]]},
-          "2": {"seconds": 1877, "log": "OT-SSL-DD/ours_syntehtic/logs/CIFAR100_ResNet18BN_pt2.log", "segments": [[0, 6000, "2026-10-23 10:57:07", "2026-10-23 11:28:24"]]}
+          "1": {"seconds": 847, "log": "Evaluate_benchamrk/mipa_random128/logs/r128_CIFAR100_p1_gen-1997047.out", "segments": [[0, 8000, "2026-10-28 15:05:05", "2026-10-28 15:19:12"]], "generation_state": "OT-SSL-DD/ours_syntehtic_random128/CIFAR100/ResNet18BN/pt1/generation_state.json"},
+          "2": {"seconds": 1170, "log": "Evaluate_benchamrk/mipa_random128/logs/r128_CIFAR100_p2_gen-1997057.out", "segments": [[0, 6000, "2026-10-28 15:05:06", "2026-10-28 15:24:36"]], "generation_state": "OT-SSL-DD/ours_syntehtic_random128/CIFAR100/ResNet18BN/pt2/generation_state.json"}
         }
       },
       "TinyImageNet": {
@@ -46,8 +48,8 @@
         "teacher_checkpoint_bytes": 44754295,
         "generation": {
           "0.2": {"seconds": 6664, "log": "OT-SSL-DD/ours_syntehtic/logs/TinyImageNet_ResNet18BN_pt0.2.log", "segments": [[0, 600, "2026-10-23 13:59:23", "2026-10-23 14:06:12"], [600, 10000, "2026-10-23 22:40:39", "2026-10-24 00:24:54"]]},
-          "1": {"seconds": 11004, "log": "OT-SSL-DD/ours_syntehtic/logs/TinyImageNet_ResNet18BN_pt1.log", "segments": [[0, 8000, "2026-10-24 00:26:17", "2026-10-24 03:29:41"]]},
-          "2": {"seconds": 14109, "log": "OT-SSL-DD/ours_syntehtic/logs/TinyImageNet_ResNet18BN_pt2.log", "segments": [[0, 700, "2026-10-24 03:31:49", "2026-10-24 03:58:22"], [700, 3900, "2026-10-24 09:53:35", "2026-10-24 11:57:13"], [3900, 6000, "2026-10-24 16:15:52", "2026-10-24 17:40:50"]], "note": "Uses the first fully logged 0-to-6000 sequence. A later repeat from iteration 3900 in job 1946354 is not added. Discarded updates 701-725 and 3901-3975 before earlier timeouts are excluded."}
+          "1": {"seconds": 7715, "log": "Evaluate_benchamrk/mipa_random128/logs/r128_TinyImageNet_p1_gen-1997069.out", "segments": [[0, 8000, "2026-10-28 15:05:07", "2026-10-28 17:13:42"]], "generation_state": "OT-SSL-DD/ours_syntehtic_random128/TinyImageNet/ResNet18BN/pt1/generation_state.json"},
+          "2": {"seconds": 11561, "log": "Evaluate_benchamrk/mipa_random128/logs/r128_TinyImageNet_p2_gen-1997079.out", "segments": [[0, 6000, "2026-10-28 14:59:03", "2026-10-28 18:11:44"]], "generation_state": "OT-SSL-DD/ours_syntehtic_random128/TinyImageNet/ResNet18BN/pt2/generation_state.json"}
         }
       }
     }

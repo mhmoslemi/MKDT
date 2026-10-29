@@ -1,0 +1,13 @@
+name	stage	job	account	walltime	dependency
+mipa6ks_CIFAR10_p2_ssl2k	ssl	DRY_RUN	aip-boyuwang	00:31:13	-
+mipa6ks_CIFAR10_p2_lbl1	probe	DRY_RUN	aip-yiweilu	00:02:29	--dependency=afterok:DRY_RUN --kill-on-invalid-dep=yes
+mipa6ks_CIFAR10_p2_lbl5	probe	DRY_RUN	aip-boyuwang	00:06:44	--dependency=afterok:DRY_RUN --kill-on-invalid-dep=yes
+mipa6ks_TinyImageNet_p0p2_ssl2k	ssl	DRY_RUN	aip-yiweilu	00:19:42	-
+mipa6ks_TinyImageNet_p0p2_lbl1	probe	DRY_RUN	aip-boyuwang	00:06:29	--dependency=afterok:DRY_RUN --kill-on-invalid-dep=yes
+mipa6ks_TinyImageNet_p0p2_lbl5	probe	DRY_RUN	aip-yiweilu	00:25:34	--dependency=afterok:DRY_RUN --kill-on-invalid-dep=yes
+mipa6ks_TinyImageNet_p1_ssl2k	ssl	DRY_RUN	aip-boyuwang	01:10:26	-
+mipa6ks_TinyImageNet_p1_lbl1	probe	DRY_RUN	aip-yiweilu	00:06:22	--dependency=afterok:DRY_RUN --kill-on-invalid-dep=yes
+mipa6ks_TinyImageNet_p1_lbl5	probe	DRY_RUN	aip-boyuwang	00:25:18	--dependency=afterok:DRY_RUN --kill-on-invalid-dep=yes
+mipa6ks_TinyImageNet_p2_ssl2k	ssl	DRY_RUN	aip-yiweilu	02:45:16	-
+mipa6ks_TinyImageNet_p2_lbl1	probe	DRY_RUN	aip-boyuwang	00:06:22	--dependency=afterok:DRY_RUN --kill-on-invalid-dep=yes
+mipa6ks_TinyImageNet_p2_lbl5	probe	DRY_RUN	aip-yiweilu	00:25:28	--dependency=afterok:DRY_RUN --kill-on-invalid-dep=yes

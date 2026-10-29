@@ -1,39 +1,54 @@
-% Preamble: \usepackage[table]{xcolor} (for light-blue same-dataset cells).
+% Preamble: \usepackage[table]{xcolor} (for light-grey same-dataset cells).
 \begin{table*}[t]
 \centering
 \def\dsacc#1#2{$#1${\footnotesize$\pm #2$}}
 \def\bestacc#1#2{{\bfseries\boldmath\dsacc{#1}{#2}}}
-\caption{Cross-architecture evaluation with SimCLR. Ours reuses synthetic data generated with ResNet18; SSL training and frozen linear evaluation use the indicated ResNet34 or ResNet50 architecture. Full Data uses 1,000 SSL epochs and five probes; Random and Ours use 2,000 SSL epochs, two encoders and two probes per encoder. All probes run for 100 epochs. Entries report mean and sample standard deviation (\%). Bold indicates the better of Random and Ours for each matched setting; empty cells are pending results. Light blue marks evaluation on the pretraining dataset.}
+% Completed 1%-size MIPA replacements: Evaluate_benchamrk/cross_arch_ablation/random128_p1/results/ (batch-128 synthetic sets; two 2k-epoch encoders, two 100-epoch probes each).
+\caption{Cross-architecture evaluation with SimCLR. Ours reuses synthetic data generated with ResNet18.}
 \label{tab:cross-arch-combined}
 \setlength{\tabcolsep}{2.5pt}
 \renewcommand{\arraystretch}{1.1}
 \resizebox{\textwidth}{!}{%
-\begin{tabular}{@{}lcl*{10}{c}@{}}
+\begin{tabular}{@{}cccl*{3}{c}@{\hspace{9pt}}*{3}{c}@{}}
 \toprule
-\multirow{3}{*}{\shortstack{Pretraining\\dataset}} & \multirow{3}{*}{Architecture} & \multirow{3}{*}{\shortstack{Evaluation\\dataset}} & \multicolumn{5}{c}{1\% labeled data} & \multicolumn{5}{c}{5\% labeled data} \\
-\cmidrule(lr){4-8} \cmidrule(l){9-13}
- & & & \multicolumn{2}{c}{0.2\% data} & \multicolumn{2}{c}{1\% data} & \multirow{2}{*}{\shortstack{Full\\Data}} & \multicolumn{2}{c}{0.2\% data} & \multicolumn{2}{c}{1\% data} & \multirow{2}{*}{\shortstack{Full\\Data}} \\
-\cmidrule(lr){4-5} \cmidrule(lr){6-7} \cmidrule(lr){9-10} \cmidrule(l){11-12}
- & & & Random & Ours & Random & Ours & & Random & Ours & Random & Ours & \\
+\multirow{2}{*}{Architecture} & \multirow{2}{*}{\shortstack{Labeled\\(\%)}} & \multirow{2}{*}{\shortstack{Data size\\(\%)}} & \multirow{2}{*}{Method} & \multicolumn{3}{c}{CIFAR10 pretraining} & \multicolumn{3}{c}{CIFAR100 pretraining} \\
+\cmidrule(lr){5-7} \cmidrule(l){8-10}
+& & & & CIFAR10 & CIFAR100 & \shortstack{Tiny\\ImageNet} & CIFAR100 & CIFAR10 & \shortstack{Tiny\\ImageNet} \\
 \midrule
-\multirow{6}{*}{CIFAR10} & \multirow{3}{*}{ResNet34} & \cellcolor{blue!8}CIFAR10 & \cellcolor{blue!8}\dsacc{39.39}{1.77} & \cellcolor{blue!8}\bestacc{43.54}{0.73} & \cellcolor{blue!8}\dsacc{47.20}{0.25} & \cellcolor{blue!8}\bestacc{50.41}{0.51} & \cellcolor{blue!8} & \cellcolor{blue!8}\dsacc{46.49}{1.38} & \cellcolor{blue!8}\bestacc{49.85}{0.11} & \cellcolor{blue!8}\dsacc{53.54}{0.17} & \cellcolor{blue!8}\bestacc{55.87}{0.24} & \cellcolor{blue!8} \\ % crossarch source=CIFAR10 backbone=ResNet34 target=CIFAR10
- &  & CIFAR100 & \dsacc{9.27}{0.57} & \bestacc{9.46}{0.86} & \bestacc{11.39}{0.29} & \dsacc{10.59}{0.13} &  & \dsacc{16.02}{0.44} & \bestacc{16.28}{0.33} & \bestacc{18.59}{0.39} & \dsacc{18.18}{0.34} &  \\ % crossarch source=CIFAR10 backbone=ResNet34 target=CIFAR100
- &  & Tiny ImageNet & \dsacc{3.99}{0.29} & \bestacc{4.27}{0.13} & \dsacc{4.71}{0.13} & \bestacc{4.75}{0.21} &  & \dsacc{7.71}{0.23} & \bestacc{7.89}{0.18} & \bestacc{9.15}{0.26} & \dsacc{8.78}{0.23} &  \\ % crossarch source=CIFAR10 backbone=ResNet34 target=TinyImageNet
-\cmidrule(lr){2-13}
- & \multirow{3}{*}{ResNet50} & \cellcolor{blue!8}CIFAR10 & \cellcolor{blue!8}\dsacc{37.48}{1.11} & \cellcolor{blue!8}\bestacc{42.32}{0.71} & \cellcolor{blue!8}\dsacc{46.09}{0.56} & \cellcolor{blue!8}\bestacc{47.72}{0.44} & \cellcolor{blue!8} & \cellcolor{blue!8}\dsacc{44.20}{1.24} & \cellcolor{blue!8}\bestacc{48.71}{0.42} & \cellcolor{blue!8}\dsacc{54.00}{0.43} & \cellcolor{blue!8}\bestacc{55.14}{0.16} & \cellcolor{blue!8} \\ % crossarch source=CIFAR10 backbone=ResNet50 target=CIFAR10
- &  & CIFAR100 & \dsacc{8.43}{0.55} & \bestacc{9.67}{0.97} & \bestacc{11.78}{0.29} & \dsacc{11.47}{0.85} &  & \dsacc{15.33}{0.12} & \bestacc{16.99}{0.31} & \dsacc{19.96}{0.34} & \bestacc{19.98}{0.28} &  \\ % crossarch source=CIFAR10 backbone=ResNet50 target=CIFAR100
- &  & Tiny ImageNet & \dsacc{3.95}{0.18} & \bestacc{4.47}{0.20} & \dsacc{5.13}{0.19} & \bestacc{5.26}{0.09} &  & \dsacc{8.07}{0.11} & \bestacc{8.67}{0.19} & \bestacc{10.26}{0.21} & \dsacc{10.14}{0.17} &  \\ % crossarch source=CIFAR10 backbone=ResNet50 target=TinyImageNet
+\multirow{10}{*}{ResNet34} & \multirow{5}{*}{1\%} & 100 & Full Data & \cellcolor{gray!12} &  &  & \cellcolor{gray!12}\dsacc{49.60}{0.56} & \dsacc{66.70}{0.26} & \dsacc{14.95}{0.19} \\ % crossarch backbone=ResNet34 kind=full pt=100 lbl=1
+\cmidrule(lr){3-10}
+ &  & \multirow{2}{*}{0.2} & Random & \cellcolor{gray!12}\dsacc{39.39}{1.77} & \dsacc{9.27}{0.57} & \dsacc{3.99}{0.29} & \cellcolor{gray!12}\dsacc{10.15}{0.36} & \bestacc{39.12}{0.67} & \dsacc{4.00}{0.13} \\ % crossarch backbone=ResNet34 kind=random pt=0.2 lbl=1
+ &  &  & MIPA & \cellcolor{gray!12}\bestacc{43.54}{0.73} & \bestacc{9.46}{0.86} & \bestacc{4.27}{0.13} & \cellcolor{gray!12}\bestacc{10.65}{0.42} & \dsacc{38.40}{0.17} & \bestacc{4.09}{0.10} \\ % crossarch backbone=ResNet34 kind=ours pt=0.2 lbl=1
+\cmidrule(lr){3-10}
+ &  & \multirow{2}{*}{1} & Random & \cellcolor{gray!12}\dsacc{47.20}{0.25} & \bestacc{11.39}{0.29} & \bestacc{4.71}{0.13} & \cellcolor{gray!12}\dsacc{12.48}{0.46} & \dsacc{41.98}{0.43} & \bestacc{4.92}{0.17} \\ % crossarch backbone=ResNet34 kind=random pt=1 lbl=1
+ &  &  & MIPA & \cellcolor{gray!12}\bestacc{50.33}{0.29} & \dsacc{10.55}{0.47} & \dsacc{4.70}{0.18} & \cellcolor{gray!12}\bestacc{13.98}{0.37} & \bestacc{42.65}{0.48} & \dsacc{4.90}{0.07} \\ % crossarch backbone=ResNet34 kind=ours pt=1 lbl=1
+\cmidrule(lr){2-10}
+ & \multirow{5}{*}{5\%} & 100 & Full Data & \cellcolor{gray!12} &  &  & \cellcolor{gray!12}\dsacc{58.09}{0.39} & \dsacc{74.22}{0.31} & \dsacc{24.57}{0.28} \\ % crossarch backbone=ResNet34 kind=full pt=100 lbl=5
+\cmidrule(lr){3-10}
+ &  & \multirow{2}{*}{0.2} & Random & \cellcolor{gray!12}\dsacc{46.49}{1.38} & \dsacc{16.02}{0.44} & \dsacc{7.71}{0.23} & \cellcolor{gray!12}\bestacc{16.38}{0.38} & \dsacc{45.77}{0.43} & \dsacc{7.69}{0.21} \\ % crossarch backbone=ResNet34 kind=random pt=0.2 lbl=5
+ &  &  & MIPA & \cellcolor{gray!12}\bestacc{49.85}{0.11} & \bestacc{16.28}{0.33} & \bestacc{7.89}{0.18} & \cellcolor{gray!12}\dsacc{16.29}{0.16} & \bestacc{45.84}{0.54} & \bestacc{7.77}{0.31} \\ % crossarch backbone=ResNet34 kind=ours pt=0.2 lbl=5
+\cmidrule(lr){3-10}
+ &  & \multirow{2}{*}{1} & Random & \cellcolor{gray!12}\dsacc{53.54}{0.17} & \bestacc{18.59}{0.39} & \bestacc{9.15}{0.26} & \cellcolor{gray!12}\dsacc{19.37}{0.24} & \dsacc{49.52}{0.24} & \dsacc{9.21}{0.24} \\ % crossarch backbone=ResNet34 kind=random pt=1 lbl=5
+ &  &  & MIPA & \cellcolor{gray!12}\bestacc{55.65}{0.36} & \dsacc{17.97}{0.52} & \dsacc{8.91}{0.36} & \cellcolor{gray!12}\bestacc{21.07}{0.47} & \bestacc{50.23}{0.28} & \bestacc{9.34}{0.16} \\ % crossarch backbone=ResNet34 kind=ours pt=1 lbl=5
 \midrule
-\multirow{6}{*}{CIFAR100} & \multirow{3}{*}{ResNet34} & CIFAR10 & \bestacc{39.12}{0.67} & \dsacc{38.40}{0.17} & \bestacc{41.98}{0.43} & \dsacc{41.22}{0.82} & \dsacc{66.70}{0.26} & \dsacc{45.77}{0.43} & \bestacc{45.84}{0.54} & \bestacc{49.52}{0.24} & \dsacc{49.07}{0.23} & \dsacc{74.22}{0.31} \\ % crossarch source=CIFAR100 backbone=ResNet34 target=CIFAR10
- &  & \cellcolor{blue!8}CIFAR100 & \cellcolor{blue!8}\dsacc{10.15}{0.36} & \cellcolor{blue!8}\bestacc{10.65}{0.42} & \cellcolor{blue!8}\dsacc{12.48}{0.46} & \cellcolor{blue!8}\bestacc{13.89}{0.39} & \cellcolor{blue!8}\dsacc{49.60}{0.56} & \cellcolor{blue!8}\bestacc{16.38}{0.38} & \cellcolor{blue!8}\dsacc{16.29}{0.16} & \cellcolor{blue!8}\dsacc{19.37}{0.24} & \cellcolor{blue!8}\bestacc{20.36}{0.23} & \cellcolor{blue!8}\dsacc{58.09}{0.39} \\ % crossarch source=CIFAR100 backbone=ResNet34 target=CIFAR100
- &  & Tiny ImageNet & \dsacc{4.00}{0.13} & \bestacc{4.09}{0.10} & \bestacc{4.92}{0.17} & \dsacc{4.91}{0.04} & \dsacc{14.95}{0.19} & \dsacc{7.69}{0.21} & \bestacc{7.77}{0.31} & \bestacc{9.21}{0.24} & \dsacc{9.00}{0.01} & \dsacc{24.57}{0.28} \\ % crossarch source=CIFAR100 backbone=ResNet34 target=TinyImageNet
-\cmidrule(lr){2-13}
- & \multirow{3}{*}{ResNet50} & CIFAR10 & \dsacc{36.68}{0.75} & \bestacc{38.04}{0.65} & \dsacc{42.66}{0.28} & \bestacc{43.85}{0.34} &  & \dsacc{43.76}{0.43} & \bestacc{45.63}{0.41} & \dsacc{51.88}{0.43} & \bestacc{51.95}{0.52} &  \\ % crossarch source=CIFAR100 backbone=ResNet50 target=CIFAR10
- &  & \cellcolor{blue!8}CIFAR100 & \cellcolor{blue!8}\dsacc{9.22}{0.55} & \cellcolor{blue!8}\bestacc{9.95}{0.72} & \cellcolor{blue!8}\dsacc{12.47}{0.58} & \cellcolor{blue!8}\bestacc{13.46}{0.53} & \cellcolor{blue!8} & \cellcolor{blue!8}\dsacc{15.59}{0.51} & \cellcolor{blue!8}\bestacc{16.64}{0.48} & \cellcolor{blue!8}\dsacc{20.82}{0.44} & \cellcolor{blue!8}\bestacc{21.49}{0.20} & \cellcolor{blue!8} \\ % crossarch source=CIFAR100 backbone=ResNet50 target=CIFAR100
- &  & Tiny ImageNet & \dsacc{4.06}{0.24} & \bestacc{4.26}{0.44} & \bestacc{5.30}{0.24} & \dsacc{5.26}{0.11} &  & \dsacc{8.09}{0.21} & \bestacc{8.34}{0.17} & \dsacc{10.25}{0.41} & \bestacc{10.33}{0.29} &  \\ % crossarch source=CIFAR100 backbone=ResNet50 target=TinyImageNet
+\multirow{10}{*}{ResNet50} & \multirow{5}{*}{1\%} & 100 & Full Data & \cellcolor{gray!12} &  &  & \cellcolor{gray!12} &  &  \\ % crossarch backbone=ResNet50 kind=full pt=100 lbl=1
+\cmidrule(lr){3-10}
+ &  & \multirow{2}{*}{0.2} & Random & \cellcolor{gray!12}\dsacc{37.48}{1.11} & \dsacc{8.43}{0.55} & \dsacc{3.95}{0.18} & \cellcolor{gray!12}\dsacc{9.22}{0.55} & \dsacc{36.68}{0.75} & \dsacc{4.06}{0.24} \\ % crossarch backbone=ResNet50 kind=random pt=0.2 lbl=1
+ &  &  & MIPA & \cellcolor{gray!12}\bestacc{42.32}{0.71} & \bestacc{9.67}{0.97} & \bestacc{4.47}{0.20} & \cellcolor{gray!12}\bestacc{9.95}{0.72} & \bestacc{38.04}{0.65} & \bestacc{4.26}{0.44} \\ % crossarch backbone=ResNet50 kind=ours pt=0.2 lbl=1
+\cmidrule(lr){3-10}
+ &  & \multirow{2}{*}{1} & Random & \cellcolor{gray!12}\dsacc{46.09}{0.56} & \bestacc{11.78}{0.29} & \dsacc{5.13}{0.19} & \cellcolor{gray!12}\dsacc{12.47}{0.58} & \dsacc{42.66}{0.28} & \dsacc{5.30}{0.24} \\ % crossarch backbone=ResNet50 kind=random pt=1 lbl=1
+ &  &  & MIPA & \cellcolor{gray!12}\bestacc{47.72}{0.42} & \dsacc{11.56}{0.92} & \bestacc{5.44}{0.18} & \cellcolor{gray!12}\bestacc{13.60}{0.57} & \bestacc{42.95}{0.77} & \bestacc{5.38}{0.14} \\ % crossarch backbone=ResNet50 kind=ours pt=1 lbl=1
+\cmidrule(lr){2-10}
+ & \multirow{5}{*}{5\%} & 100 & Full Data & \cellcolor{gray!12} &  &  & \cellcolor{gray!12} &  &  \\ % crossarch backbone=ResNet50 kind=full pt=100 lbl=5
+\cmidrule(lr){3-10}
+ &  & \multirow{2}{*}{0.2} & Random & \cellcolor{gray!12}\dsacc{44.20}{1.24} & \dsacc{15.33}{0.12} & \dsacc{8.07}{0.11} & \cellcolor{gray!12}\dsacc{15.59}{0.51} & \dsacc{43.76}{0.43} & \dsacc{8.09}{0.21} \\ % crossarch backbone=ResNet50 kind=random pt=0.2 lbl=5
+ &  &  & MIPA & \cellcolor{gray!12}\bestacc{48.71}{0.42} & \bestacc{16.99}{0.31} & \bestacc{8.67}{0.19} & \cellcolor{gray!12}\bestacc{16.64}{0.48} & \bestacc{45.63}{0.41} & \bestacc{8.34}{0.17} \\ % crossarch backbone=ResNet50 kind=ours pt=0.2 lbl=5
+\cmidrule(lr){3-10}
+ &  & \multirow{2}{*}{1} & Random & \cellcolor{gray!12}\dsacc{54.00}{0.43} & \dsacc{19.96}{0.34} & \bestacc{10.26}{0.21} & \cellcolor{gray!12}\dsacc{20.82}{0.44} & \dsacc{51.88}{0.43} & \dsacc{10.25}{0.41} \\ % crossarch backbone=ResNet50 kind=random pt=1 lbl=5
+ &  &  & MIPA & \cellcolor{gray!12}\bestacc{55.38}{0.46} & \bestacc{20.18}{0.30} & \dsacc{10.07}{0.17} & \cellcolor{gray!12}\bestacc{22.04}{0.57} & \bestacc{52.09}{0.50} & \bestacc{10.42}{0.16} \\ % crossarch backbone=ResNet50 kind=ours pt=1 lbl=5
 \bottomrule
 \end{tabular}%
 }
 \end{table*}
-% Source values: cross_arch_cifar10.tex and cross_arch_cifar100.tex; missing values remain empty.
+% Baselines and 0.2%-size MIPA: cross_arch_cifar10.tex and cross_arch_cifar100.tex; 1%-size MIPA: completed results above. Missing values remain empty.
 

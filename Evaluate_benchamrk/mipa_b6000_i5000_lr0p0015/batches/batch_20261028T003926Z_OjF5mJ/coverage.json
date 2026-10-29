@@ -1,0 +1,135 @@
+{
+  "synthetic_sets": 5,
+  "generation_iterations": 5000,
+  "generation_batch": 6000,
+  "generation_lr": 0.0015,
+  "model": "ResNet18BN",
+  "generation_jobs": 25,
+  "ssl_jobs": 5,
+  "probe_jobs": 10,
+  "ssl_epochs": 2000,
+  "ssl_seeds": [
+    0
+  ],
+  "probe_epochs": 100,
+  "probe_seeds": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5
+  ],
+  "labels": [
+    1,
+    5
+  ],
+  "expected_total_probes": 60,
+  "jobs": 40,
+  "accounts": {
+    "aip-boyuwang": 20,
+    "aip-yiweilu": 20
+  },
+  "minimum_seconds": 146,
+  "maximum_seconds": 9916,
+  "synthetic_root": "/scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_b6000_i5000_lr0p0015",
+  "result_root": "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_b6000_i5000_lr0p0015/results",
+  "table_updates": false,
+  "timings": [
+    {
+      "source": "CIFAR10",
+      "subset": 2,
+      "generation": {
+        "old_log": "OT-SSL-DD/ours_syntehtic/logs/CIFAR10_ResNet18BN_pt2.log",
+        "samples": 239,
+        "old_batch": 1024,
+        "new_batch": 6000,
+        "old_iteration_seconds_p95": 0.36,
+        "estimated_iteration_seconds": 1.2450592885375493,
+        "initialization_seconds": 21,
+        "estimate": "Scale frozen-feature passes by (6000 + synthetic count)/(1024 + synthetic count); approximate."
+      },
+      "ssl_epoch_seconds_p95": 0.9006773084402084,
+      "probe_seconds_p95": {
+        "1": 12.803842706605792,
+        "5": 55.398499871604145
+      }
+    },
+    {
+      "source": "CIFAR100",
+      "subset": 2,
+      "generation": {
+        "old_log": "OT-SSL-DD/ours_syntehtic/logs/CIFAR100_ResNet18BN_pt2.log",
+        "samples": 239,
+        "old_batch": 1024,
+        "new_batch": 6000,
+        "old_iteration_seconds_p95": 0.32,
+        "estimated_iteration_seconds": 1.1067193675889329,
+        "initialization_seconds": 17,
+        "estimate": "Scale frozen-feature passes by (6000 + synthetic count)/(1024 + synthetic count); approximate."
+      },
+      "ssl_epoch_seconds_p95": 0.9038778822869062,
+      "probe_seconds_p95": {
+        "1": 12.293966523371637,
+        "5": 55.56445320136845
+      }
+    },
+    {
+      "source": "TinyImageNet",
+      "subset": 0.2,
+      "generation": {
+        "old_log": "OT-SSL-DD/ours_syntehtic/logs/TinyImageNet_ResNet18BN_pt0.2.log",
+        "samples": 398,
+        "old_batch": 1024,
+        "new_batch": 6000,
+        "old_iteration_seconds_p95": 0.68,
+        "estimated_iteration_seconds": 3.4444444444444446,
+        "initialization_seconds": 47,
+        "estimate": "Scale frozen-feature passes by (6000 + synthetic count)/(1024 + synthetic count); approximate."
+      },
+      "ssl_epoch_seconds_p95": 0.554787599015981,
+      "probe_seconds_p95": {
+        "1": 52.83398932404816,
+        "5": 243.645474224817
+      }
+    },
+    {
+      "source": "TinyImageNet",
+      "subset": 1,
+      "generation": {
+        "old_log": "OT-SSL-DD/ours_syntehtic/logs/TinyImageNet_ResNet18BN_pt1.log",
+        "samples": 319,
+        "old_batch": 1024,
+        "new_batch": 6000,
+        "old_iteration_seconds_p95": 1.4,
+        "estimated_iteration_seconds": 4.841897233201581,
+        "initialization_seconds": 82,
+        "estimate": "Scale frozen-feature passes by (6000 + synthetic count)/(1024 + synthetic count); approximate."
+      },
+      "ssl_epoch_seconds_p95": 2.0769896041601896,
+      "probe_seconds_p95": {
+        "1": 51.67108076438308,
+        "5": 241.04350407980382
+      }
+    },
+    {
+      "source": "TinyImageNet",
+      "subset": 2,
+      "generation": {
+        "old_log": "OT-SSL-DD/ours_syntehtic/logs/TinyImageNet_ResNet18BN_pt2.log",
+        "samples": 241,
+        "old_batch": 1024,
+        "new_batch": 6000,
+        "old_iteration_seconds_p95": 2.44,
+        "estimated_iteration_seconds": 6.455026455026455,
+        "initialization_seconds": 126,
+        "estimate": "Scale frozen-feature passes by (6000 + synthetic count)/(1024 + synthetic count); approximate."
+      },
+      "ssl_epoch_seconds_p95": 4.921851705759764,
+      "probe_seconds_p95": {
+        "1": 51.61339556518942,
+        "5": 242.69751224014908
+      }
+    }
+  ]
+}

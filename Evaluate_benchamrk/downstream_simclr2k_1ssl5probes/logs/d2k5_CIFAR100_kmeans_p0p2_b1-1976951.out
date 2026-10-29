@@ -172,3 +172,74 @@ RUN probe: CIFAR100 kmeans 0.2 TinyImageNet 5 4
 PROBE TinyImageNet lbl=5 seed=4: {'epoch': 10, 'lr': 0.09757463229171759, 'loss': 4.6646238075256345, 'train_accuracy_percent': 6.46}
 PROBE TinyImageNet lbl=5 seed=4: {'epoch': 20, 'lr': 0.09048776785000918, 'loss': 4.480362158203125, 'train_accuracy_percent': 8.7}
 PROBE TinyImageNet lbl=5 seed=4: {'epoch': 30, 'lr': 0.0794337451041197, 'loss': 4.393812659454346, 'train_accuracy_percent': 9.44}
+PROBE TinyImageNet lbl=5 seed=4: {'epoch': 40, 'lr': 0.06549568274543809, 'loss': 4.302232886505127, 'train_accuracy_percent': 11.22}
+PROBE TinyImageNet lbl=5 seed=4: {'epoch': 50, 'lr': 0.050039289548903014, 'loss': 4.256467742156983, 'train_accuracy_percent': 11.96}
+PROBE TinyImageNet lbl=5 seed=4: {'epoch': 60, 'lr': 0.03457904660049288, 'loss': 4.20355058517456, 'train_accuracy_percent': 11.88}
+PROBE TinyImageNet lbl=5 seed=4: {'epoch': 70, 'lr': 0.020629812200735793, 'loss': 4.185226171112061, 'train_accuracy_percent': 12.78}
+PROBE TinyImageNet lbl=5 seed=4: {'epoch': 80, 'lr': 0.009558389807184015, 'loss': 4.152881811523438, 'train_accuracy_percent': 13.08}
+PROBE TinyImageNet lbl=5 seed=4: {'epoch': 90, 'lr': 0.00244960300039126, 'loss': 4.17205350189209, 'train_accuracy_percent': 13.62}
+PROBE TinyImageNet lbl=5 seed=4: {'epoch': 100, 'lr': 0.0, 'loss': 4.164555983734131, 'train_accuracy_percent': 13.2}
+RESULT TinyImageNet lbl=5 seed=4: 8.2900
+DOWNSTREAM TABLE UPDATED: CIFAR100|ResNet18|kmeans|0.2|simclr|TinyImageNet|5
+RUN probe: CIFAR100 kmeans 0.2 Aircraft 5 0
+PROBE Aircraft lbl=5 seed=0: {'epoch': 10, 'lr': 0.09776754757575974, 'loss': 4.208263864030351, 'train_accuracy_percent': 8.70870870870871}
+PROBE Aircraft lbl=5 seed=0: {'epoch': 20, 'lr': 0.09081878607071997, 'loss': 3.8248609873625607, 'train_accuracy_percent': 11.711711711711711}
+PROBE Aircraft lbl=5 seed=0: {'epoch': 30, 'lr': 0.0798344744144428, 'loss': 3.557417792958898, 'train_accuracy_percent': 16.216216216216218}
+PROBE Aircraft lbl=5 seed=0: {'epoch': 40, 'lr': 0.06590057681196192, 'loss': 3.371373555323741, 'train_accuracy_percent': 24.024024024024023}
+PROBE Aircraft lbl=5 seed=0: {'epoch': 50, 'lr': 0.05039466834548567, 'loss': 3.308404973319343, 'train_accuracy_percent': 24.924924924924923}
+PROBE Aircraft lbl=5 seed=0: {'epoch': 60, 'lr': 0.03484974098465636, 'loss': 3.3137300508516327, 'train_accuracy_percent': 21.62162162162162}
+PROBE Aircraft lbl=5 seed=0: {'epoch': 70, 'lr': 0.020802644302934683, 'loss': 3.241183497884252, 'train_accuracy_percent': 22.52252252252252}
+PROBE Aircraft lbl=5 seed=0: {'epoch': 80, 'lr': 0.00964214481190074, 'loss': 3.182680160791666, 'train_accuracy_percent': 29.72972972972973}
+PROBE Aircraft lbl=5 seed=0: {'epoch': 90, 'lr': 0.0024716255306108607, 'loss': 3.1645475522175923, 'train_accuracy_percent': 25.825825825825827}
+PROBE Aircraft lbl=5 seed=0: {'epoch': 100, 'lr': 0.0, 'loss': 3.106491013690158, 'train_accuracy_percent': 32.432432432432435}
+RESULT Aircraft lbl=5 seed=0: 2.5203
+RUN probe: CIFAR100 kmeans 0.2 Aircraft 5 1
+PROBE Aircraft lbl=5 seed=1: {'epoch': 10, 'lr': 0.09776754757575974, 'loss': 4.266692193062814, 'train_accuracy_percent': 7.207207207207207}
+PROBE Aircraft lbl=5 seed=1: {'epoch': 20, 'lr': 0.09081878607071997, 'loss': 3.890781043170093, 'train_accuracy_percent': 12.312312312312311}
+PROBE Aircraft lbl=5 seed=1: {'epoch': 30, 'lr': 0.0798344744144428, 'loss': 3.7070845970520385, 'train_accuracy_percent': 16.516516516516518}
+PROBE Aircraft lbl=5 seed=1: {'epoch': 40, 'lr': 0.06590057681196192, 'loss': 3.566050668378492, 'train_accuracy_percent': 18.91891891891892}
+PROBE Aircraft lbl=5 seed=1: {'epoch': 50, 'lr': 0.05039466834548567, 'loss': 3.4288534509527073, 'train_accuracy_percent': 21.92192192192192}
+PROBE Aircraft lbl=5 seed=1: {'epoch': 60, 'lr': 0.03484974098465636, 'loss': 3.3738916450076633, 'train_accuracy_percent': 24.324324324324323}
+PROBE Aircraft lbl=5 seed=1: {'epoch': 70, 'lr': 0.020802644302934683, 'loss': 3.29215258234614, 'train_accuracy_percent': 24.324324324324323}
+PROBE Aircraft lbl=5 seed=1: {'epoch': 80, 'lr': 0.00964214481190074, 'loss': 3.3147069656097137, 'train_accuracy_percent': 24.024024024024023}
+PROBE Aircraft lbl=5 seed=1: {'epoch': 90, 'lr': 0.0024716255306108607, 'loss': 3.236657888681681, 'train_accuracy_percent': 29.12912912912913}
+PROBE Aircraft lbl=5 seed=1: {'epoch': 100, 'lr': 0.0, 'loss': 3.3296405488664322, 'train_accuracy_percent': 27.32732732732733}
+RESULT Aircraft lbl=5 seed=1: 2.7003
+RUN probe: CIFAR100 kmeans 0.2 Aircraft 5 2
+PROBE Aircraft lbl=5 seed=2: {'epoch': 10, 'lr': 0.09776754757575974, 'loss': 4.255482868389325, 'train_accuracy_percent': 5.105105105105105}
+PROBE Aircraft lbl=5 seed=2: {'epoch': 20, 'lr': 0.09081878607071997, 'loss': 3.898371526070901, 'train_accuracy_percent': 12.012012012012011}
+PROBE Aircraft lbl=5 seed=2: {'epoch': 30, 'lr': 0.0798344744144428, 'loss': 3.6733022466436163, 'train_accuracy_percent': 16.216216216216218}
+PROBE Aircraft lbl=5 seed=2: {'epoch': 40, 'lr': 0.06590057681196192, 'loss': 3.5397874070359423, 'train_accuracy_percent': 18.31831831831832}
+PROBE Aircraft lbl=5 seed=2: {'epoch': 50, 'lr': 0.05039466834548567, 'loss': 3.387865428810005, 'train_accuracy_percent': 20.72072072072072}
+PROBE Aircraft lbl=5 seed=2: {'epoch': 60, 'lr': 0.03484974098465636, 'loss': 3.4071079553426564, 'train_accuracy_percent': 20.72072072072072}
+PROBE Aircraft lbl=5 seed=2: {'epoch': 70, 'lr': 0.020802644302934683, 'loss': 3.290339202136249, 'train_accuracy_percent': 24.324324324324323}
+PROBE Aircraft lbl=5 seed=2: {'epoch': 80, 'lr': 0.00964214481190074, 'loss': 3.3542455896600947, 'train_accuracy_percent': 24.024024024024023}
+PROBE Aircraft lbl=5 seed=2: {'epoch': 90, 'lr': 0.0024716255306108607, 'loss': 3.2498901864071867, 'train_accuracy_percent': 26.726726726726728}
+PROBE Aircraft lbl=5 seed=2: {'epoch': 100, 'lr': 0.0, 'loss': 3.2494928235406273, 'train_accuracy_percent': 26.726726726726728}
+RESULT Aircraft lbl=5 seed=2: 3.0903
+RUN probe: CIFAR100 kmeans 0.2 Aircraft 5 3
+PROBE Aircraft lbl=5 seed=3: {'epoch': 10, 'lr': 0.09776754757575974, 'loss': 4.209899303791401, 'train_accuracy_percent': 7.5075075075075075}
+PROBE Aircraft lbl=5 seed=3: {'epoch': 20, 'lr': 0.09081878607071997, 'loss': 3.7690683470831976, 'train_accuracy_percent': 14.714714714714715}
+PROBE Aircraft lbl=5 seed=3: {'epoch': 30, 'lr': 0.0798344744144428, 'loss': 3.6109126072388156, 'train_accuracy_percent': 17.117117117117118}
+PROBE Aircraft lbl=5 seed=3: {'epoch': 40, 'lr': 0.06590057681196192, 'loss': 3.3795605865684717, 'train_accuracy_percent': 25.525525525525527}
+PROBE Aircraft lbl=5 seed=3: {'epoch': 50, 'lr': 0.05039466834548567, 'loss': 3.3281653235266515, 'train_accuracy_percent': 21.92192192192192}
+PROBE Aircraft lbl=5 seed=3: {'epoch': 60, 'lr': 0.03484974098465636, 'loss': 3.2770496553128905, 'train_accuracy_percent': 25.825825825825827}
+PROBE Aircraft lbl=5 seed=3: {'epoch': 70, 'lr': 0.020802644302934683, 'loss': 3.166316239325492, 'train_accuracy_percent': 26.426426426426428}
+PROBE Aircraft lbl=5 seed=3: {'epoch': 80, 'lr': 0.00964214481190074, 'loss': 3.216295553041292, 'train_accuracy_percent': 27.027027027027028}
+PROBE Aircraft lbl=5 seed=3: {'epoch': 90, 'lr': 0.0024716255306108607, 'loss': 3.1845711945771455, 'train_accuracy_percent': 27.92792792792793}
+PROBE Aircraft lbl=5 seed=3: {'epoch': 100, 'lr': 0.0, 'loss': 3.142165201920289, 'train_accuracy_percent': 31.83183183183183}
+RESULT Aircraft lbl=5 seed=3: 3.3303
+RUN probe: CIFAR100 kmeans 0.2 Aircraft 5 4
+PROBE Aircraft lbl=5 seed=4: {'epoch': 10, 'lr': 0.09776754757575974, 'loss': 4.255095605019693, 'train_accuracy_percent': 7.207207207207207}
+PROBE Aircraft lbl=5 seed=4: {'epoch': 20, 'lr': 0.09081878607071997, 'loss': 3.9784210895274854, 'train_accuracy_percent': 10.51051051051051}
+PROBE Aircraft lbl=5 seed=4: {'epoch': 30, 'lr': 0.0798344744144428, 'loss': 3.666448545169544, 'train_accuracy_percent': 17.117117117117118}
+PROBE Aircraft lbl=5 seed=4: {'epoch': 40, 'lr': 0.06590057681196192, 'loss': 3.54361536910942, 'train_accuracy_percent': 19.81981981981982}
+PROBE Aircraft lbl=5 seed=4: {'epoch': 50, 'lr': 0.05039466834548567, 'loss': 3.436314574949018, 'train_accuracy_percent': 21.02102102102102}
+PROBE Aircraft lbl=5 seed=4: {'epoch': 60, 'lr': 0.03484974098465636, 'loss': 3.3319275329062887, 'train_accuracy_percent': 24.924924924924923}
+PROBE Aircraft lbl=5 seed=4: {'epoch': 70, 'lr': 0.020802644302934683, 'loss': 3.3006186721561193, 'train_accuracy_percent': 25.225225225225227}
+PROBE Aircraft lbl=5 seed=4: {'epoch': 80, 'lr': 0.00964214481190074, 'loss': 3.2657071670612416, 'train_accuracy_percent': 27.32732732732733}
+PROBE Aircraft lbl=5 seed=4: {'epoch': 90, 'lr': 0.0024716255306108607, 'loss': 3.291389352924473, 'train_accuracy_percent': 30.63063063063063}
+PROBE Aircraft lbl=5 seed=4: {'epoch': 100, 'lr': 0.0, 'loss': 3.258770256071119, 'train_accuracy_percent': 25.825825825825827}
+RESULT Aircraft lbl=5 seed=4: 3.1203
+DOWNSTREAM TABLE UPDATED: CIFAR100|ResNet18|kmeans|0.2|simclr|Aircraft|5
+BUNDLE COMPLETE: d2k5_CIFAR100_kmeans_p0p2_b1

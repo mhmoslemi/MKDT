@@ -1,0 +1,40 @@
+{
+  "name": "mipa6k_CIFAR100_p2_lbl1",
+  "stage": "probe",
+  "labels": 1,
+  "source": "CIFAR100",
+  "subset": 2,
+  "account": "aip-boyuwang",
+  "parents": [
+    "mipa6k_CIFAR100_p2_ssl2k"
+  ],
+  "seconds": 146,
+  "buffer_seconds": 60,
+  "missing_probes": 6,
+  "teacher": {
+    "seed": 0,
+    "checkpoint": "Evaluate_benchamrk/full_ssl_checkpoints_1000ep_3seeds/CIFAR100/ResNet18/full/pt100/simclr/seed_000/encoder.pt",
+    "marker_sha256": "551cd953c7da8bb9dd51731307854330902c8550fa4cec8cf93016fe30652e12"
+  },
+  "code_hashes": {
+    "Evaluate_benchamrk/common.py": "67fcd33f581a34a7f764431b6761ac120cb080d4b2ea0d69b95074565a224f8b",
+    "Evaluate_benchamrk/data.py": "befcf535679e449b3544ae9b8578325e53f7995179591042315d8937cd55f6d9",
+    "Evaluate_benchamrk/evaluate.py": "2b2162a56878f48ade39d2b80d4316511f20a72d29eaa2cf70fe023d88ad722f",
+    "Evaluate_benchamrk/plan.py": "c6d9bd33b36d1d235a2f6af291b3a0a82187b1eea3a10b90a7f57317d8eee83e",
+    "Evaluate_benchamrk/run.py": "1c2b8d29ab47966f1178c9f04b3e1b7c72bd2f55fb65a32c32c77c3730faf45b",
+    "Evaluate_benchamrk/test_protocol.py": "f018562437924ced1d890343a4e898f10e48c50a63920d337031194671c4e43d",
+    "Evaluate_benchamrk/train_ssl.py": "3670781eb0f0f838ced6cc7ca9775791d4d52683fe25e489239f012937dc1a79",
+    "networks.py": "0c15ff3ef11f21df752e2a9a17851ab8c8a52ddc3969380682ea8bfcec1968fc",
+    "benchmarks/downstream_data.py": "081fe26e5dc81c96ce8e8ffe5a412302663de4a9d095684c5b37e7c615b4a6fd",
+    "Evaluate_benchamrk/protocol.json": "088b30569317c167f7f2a77a1f889d593b620ea31bdc93c5120b183c71e4a570",
+    "OT-SSL-DD/method1.py": "30d1ebb9f24e32da779f7ddcdc6525ca836a95ae8d8fc2297b2a1121ee74f2e8",
+    "OT-SSL-DD/eval.py": "e99598e87163247f61f8249ebe9bafa1e7037d7b28a441a21135e366d5daadc5",
+    "OT-SSL-DD/dm_dsa.py": "6f2a8dfe7e303d947f66619a7ceca826182bf21ba0f2074a5e2b051c81e97884",
+    "OT-SSL-DD/dd_teachers.py": "1ebc40b7633a29f8b2e30757b8edb1b9523ce7b93b33422e17d0c68fcca9fcff",
+    "OT-SSL-DD/utils.py": "a6b914119f89c5ac26ee1b0b5e3f4f05f1a8f5665dab9c5f78f879a00380d0b1",
+    "OT-SSL-DD/networks.py": "36fc42deb28aac8487b2cc2ea012e277691b56682cb2a7bcf0817976b6a3aa62",
+    "Evaluate_benchamrk/mipa_b6000_i5000_lr0p0015/worker.py": "a916e5cd0d7e517522b4492e5efe99097e2b8bbe79b343b30310ac1186bf9823",
+    "Evaluate_benchamrk/mipa_b6000_i5000_lr0p0015/plan.js": "ed0a0125cc9e8face60bb94739e01a6aa0f831ae6da09ba77d02263093c22593",
+    "Evaluate_benchamrk/submit_mipa_b6000_i5000_lr0p0015_vulcan.sh": "66bb270e7b138a08d22a03a33ea661c9ac59b0463e0fac1716af80c7ef8a2fe6"
+  }
+}

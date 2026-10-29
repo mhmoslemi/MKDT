@@ -1,0 +1,24 @@
+Loaded fixed teacher seed 1: /scratch/mmoslem3/MKDT/Evaluate_benchamrk/full_ssl_checkpoints_1000ep_3seeds/TinyImageNet/ResNet18/full/pt100/simclr/seed_001/encoder.pt
+Initializing 1000 synthetic prototypes via DeepCluster K-Means on ResNet18BN...
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_b6000_i5000_lr0p0015/TinyImageNet/ResNet18BN/pt1/res_IIC_TinyImageNet_ResNet18BN_1percent_final.pt (iteration 0/5000)
+Hyper-parameters: 
+ {'dataset': 'TinyImageNet', 'percentage': 1.0, 'data_path': '/scratch/mmoslem3/data', 'device': 'cuda', 'seed': 0, 'Iteration': 5000, 'lr_img': 0.0015, 'batch_real': 6000, 'temperature': 0.2, 'disp_weight': 0.0, 'pair_weight': 0.0, 'num_random_networks': 1, 'random_models': 'ResNet18BN', 'distill_aug_strategy': 'color_crop_cutout_flip_scale_rotate', 'dsa': True, 'distill_aug_mode': 'M', 'teacher_source': 'pretrained', 'teacher_seed': [1], 'teacher_ssl': 'simclr', 'teacher_path': '/scratch/mmoslem3/MKDT/Evaluate_benchamrk/full_ssl_checkpoints_1000ep_3seeds', 'model': 'ResNet18BN', 'ssl_method': 'simclr', 'eval_mode': 'S', 'num_eval': 0, 'epoch_eval_train': 10000, 'label_percentage': 1.0, 'lr_linear': 0.1, 'batch_linear': 256, 'save_path': '/scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_b6000_i5000_lr0p0015/TinyImageNet/ResNet18BN/pt1', 'resume': True, 'save_every': 100, 'feature_batch': 128}
+P_net support: ResNet18BN
+Objective: sum teacher losses (-MI + 0 * displacement + 0 * pair_similarity), averaged over 1 augmentation draw(s).
+[2026-10-27 19:28:27] distillation begins
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_b6000_i5000_lr0p0015/TinyImageNet/ResNet18BN/pt1/res_IIC_TinyImageNet_ResNet18BN_1percent_final.pt (iteration 1/5000)
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_b6000_i5000_lr0p0015/TinyImageNet/ResNet18BN/pt1/res_IIC_TinyImageNet_ResNet18BN_1percent_final.pt (iteration 100/5000)
+[2026-10-27 19:41:39] iter = 00200, neg_MI = -0.025015, displacement = 0.000087, pair_similarity = 0.000074, total_loss = -0.025015, pixel drift RMS = 4.17815/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_b6000_i5000_lr0p0015/TinyImageNet/ResNet18BN/pt1/res_IIC_TinyImageNet_ResNet18BN_1percent_final.pt (iteration 200/5000)
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_b6000_i5000_lr0p0015/TinyImageNet/ResNet18BN/pt1/res_IIC_TinyImageNet_ResNet18BN_1percent_final.pt (iteration 300/5000)
+[2026-10-27 19:54:57] iter = 00400, neg_MI = -0.032288, displacement = 0.000136, pair_similarity = 0.000241, total_loss = -0.032288, pixel drift RMS = 6.24458/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_b6000_i5000_lr0p0015/TinyImageNet/ResNet18BN/pt1/res_IIC_TinyImageNet_ResNet18BN_1percent_final.pt (iteration 400/5000)
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_b6000_i5000_lr0p0015/TinyImageNet/ResNet18BN/pt1/res_IIC_TinyImageNet_ResNet18BN_1percent_final.pt (iteration 500/5000)
+[2026-10-27 20:08:06] iter = 00600, neg_MI = -0.047598, displacement = 0.000062, pair_similarity = 0.000044, total_loss = -0.047598, pixel drift RMS = 7.61446/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_b6000_i5000_lr0p0015/TinyImageNet/ResNet18BN/pt1/res_IIC_TinyImageNet_ResNet18BN_1percent_final.pt (iteration 600/5000)
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_b6000_i5000_lr0p0015/TinyImageNet/ResNet18BN/pt1/res_IIC_TinyImageNet_ResNet18BN_1percent_final.pt (iteration 700/5000)
+[2026-10-27 20:21:20] iter = 00800, neg_MI = -0.042894, displacement = 0.000159, pair_similarity = 0.000910, total_loss = -0.042894, pixel drift RMS = 8.67139/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_b6000_i5000_lr0p0015/TinyImageNet/ResNet18BN/pt1/res_IIC_TinyImageNet_ResNet18BN_1percent_final.pt (iteration 800/5000)
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_b6000_i5000_lr0p0015/TinyImageNet/ResNet18BN/pt1/res_IIC_TinyImageNet_ResNet18BN_1percent_final.pt (iteration 900/5000)
+[2026-10-27 20:34:32] iter = 01000, neg_MI = -0.042795, displacement = 0.000141, pair_similarity = 0.000303, total_loss = -0.042795, pixel drift RMS = 9.53968/255
+SEGMENT SAVED: iteration 1000/5000; Adam and RNG retained

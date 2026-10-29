@@ -1,0 +1,152 @@
+{
+  "checkpoint": "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/a2mim_teacher/checkpoints/CIFAR10/ResNet18/full/pt100/a2mim/seed_000/encoder.pt",
+  "checkpoint_file_sha256": "b45b161875c9b8ff3382bf782aa29bd3717ec57a973c363f1cf63c54cc6dd6b6",
+  "config": {
+    "identity": {
+      "seed": 0,
+      "selection": {
+        "scope": "full"
+      },
+      "selection_method": "full",
+      "signature": "194f32827b2b3b391eb35607ed67f29f4ce33e16f280042b27dce89f94a2d6a1"
+    },
+    "signature": {
+      "augmentation": "random_resized_crop_0.8_1.0_bilinear_and_flip",
+      "batch_size": 256,
+      "betas": [
+        0.9,
+        0.999
+      ],
+      "checkpoint_every_epochs": 10,
+      "code_hashes": {
+        "Evaluate_benchamrk/a2mim_teacher/model.py": "584adbe1af8325eee8bfaf4c277f70ac30a3d657b0be2fd0d4c9f1684794d524",
+        "Evaluate_benchamrk/a2mim_teacher/train.py": "cc11ba04550350f0796345fd593392d9be6b88e4da32aa85141036b21d9ba810",
+        "Evaluate_benchamrk/common.py": "67fcd33f581a34a7f764431b6761ac120cb080d4b2ea0d69b95074565a224f8b",
+        "Evaluate_benchamrk/data.py": "befcf535679e449b3544ae9b8578325e53f7995179591042315d8937cd55f6d9",
+        "benchmarks/downstream_data.py": "081fe26e5dc81c96ce8e8ffe5a412302663de4a9d095684c5b37e7c615b4a6fd",
+        "networks.py": "0c15ff3ef11f21df752e2a9a17851ab8c8a52ddc3969380682ea8bfcec1968fc"
+      },
+      "count": 50000,
+      "encoder_stride": 8,
+      "epochs": 300,
+      "eps": 1e-08,
+      "feature_mask_channels": 256,
+      "feature_mask_stage": "before_layer4",
+      "fft_unmask_replace": "mixed",
+      "fft_unmask_weight": 0.001,
+      "frequency_loss": "official_FocalFrequencyLoss_ave_spectrum_log_matrix_batch_matrix",
+      "frequency_weight": 0.5,
+      "input_size": 32,
+      "mask_gamma_init": 1e-06,
+      "mask_patch_size": 8,
+      "mask_ratio": 0.6,
+      "mask_token_init_std": 0.02,
+      "mask_token_lr_mult": 0.1,
+      "method": "a2mim",
+      "minimum_lr": 1e-05,
+      "model": "ResNet18",
+      "normalization": [
+        [
+          0.4914,
+          0.4822,
+          0.4465
+        ],
+        [
+          0.247,
+          0.2435,
+          0.2616
+        ]
+      ],
+      "optimizer": "adamw",
+      "peak_lr": 0.00015,
+      "pixel_loss": "official_focal_l1_alpha0.2_gamma1_sigmoid",
+      "precision": "float32",
+      "pretrained": false,
+      "reference": {
+        "a2mim_commit": "ccca6dc21995b8e39e5571bd189c1ebce93bf49d",
+        "a2mim_repository": "https://github.com/Westlake-AI/A2MIM",
+        "implementation_commit": "37e1372446ab35c03fcf77302539bd4a5bee47eb",
+        "implementation_repository": "https://github.com/Westlake-AI/openmixup",
+        "license": "Apache-2.0",
+        "sha256": {
+          "LICENSE": "a982f2556c69a656f966117814c7b91a962681ab086e55a22d73655297229425",
+          "focal_loss.py.txt": "6f86d8f9ea1d4b538400a82f5908c54380f78325f8d091c06a4c47981a6446d3",
+          "mim_head.py.txt": "55cbd75123853b120968c208f8317dc87d1a97acbe024733674469ce4c30ec0a",
+          "mim_resnet.py.txt": "275bdfd81971b9f369bc3306c07ff73b38e57f1ace5a959420de15584323670b",
+          "model_config.py.txt": "f9ea5d9af0ae049a2f56c681d7cfbab0285ee8b8725d03c8676da6d881c5024e",
+          "regression_loss.py.txt": "0ab1d3c3ac4dc139bf1419db509c703d506d33ca45456249be59221b8b66d673",
+          "train_config.py.txt": "fffe425714d161772512c3517e2789ec1fe9109135830c5e5d1ce0f12daf578a"
+        }
+      },
+      "schedule": "official_StepFixCosineAnnealing",
+      "seed": 0,
+      "source": "CIFAR10",
+      "training_split_fingerprint": "47c1a4816becad3cadf1c29ae31c86712d7a51b264ec33e791d79661adfffef5",
+      "warmup_epochs": 10,
+      "weight_decay": 0.05
+    }
+  },
+  "driver_code_hashes": {
+    "Evaluate_benchamrk/a2mim_eval_2k_1ssl5probes/jobs.js": "7318e96dc7a52b2b988e415779cdad2defac3914ed480cf979dde95b8fed6947",
+    "Evaluate_benchamrk/a2mim_eval_2k_1ssl5probes/train_subset.py": "e2d7e1ba25c345bf4b18c0d0ff3da53f3db0ceac08136c5595869742efa6ba1a",
+    "Evaluate_benchamrk/a2mim_eval_2k_1ssl5probes/worker.py": "109c6412466e5af98daf1eacfa43ce25e3e21054c954b036977fd145e314141b",
+    "Evaluate_benchamrk/a2mim_teacher/model.py": "584adbe1af8325eee8bfaf4c277f70ac30a3d657b0be2fd0d4c9f1684794d524",
+    "Evaluate_benchamrk/a2mim_teacher/sources.json": "fb8f9f86ca0f9c68e2f3890ad3f6e5c9b0eca598cc83d4243f551ae10dc2d914",
+    "Evaluate_benchamrk/a2mim_teacher/train.py": "cc11ba04550350f0796345fd593392d9be6b88e4da32aa85141036b21d9ba810",
+    "Evaluate_benchamrk/common.py": "67fcd33f581a34a7f764431b6761ac120cb080d4b2ea0d69b95074565a224f8b",
+    "Evaluate_benchamrk/data.py": "befcf535679e449b3544ae9b8578325e53f7995179591042315d8937cd55f6d9",
+    "Evaluate_benchamrk/evaluate.py": "2b2162a56878f48ade39d2b80d4316511f20a72d29eaa2cf70fe023d88ad722f",
+    "Evaluate_benchamrk/plan.py": "c6d9bd33b36d1d235a2f6af291b3a0a82187b1eea3a10b90a7f57317d8eee83e",
+    "Evaluate_benchamrk/protocol.json": "088b30569317c167f7f2a77a1f889d593b620ea31bdc93c5120b183c71e4a570",
+    "Evaluate_benchamrk/run.py": "1c2b8d29ab47966f1178c9f04b3e1b7c72bd2f55fb65a32c32c77c3730faf45b",
+    "Evaluate_benchamrk/submit_a2mim_table_2k_1ssl5probes_vulcan.sh": "c12344c24c7b8c4a6c98c6bc973e213c5b81f8ae4da7e1a88cd120d820e83536",
+    "Evaluate_benchamrk/test_protocol.py": "f018562437924ced1d890343a4e898f10e48c50a63920d337031194671c4e43d",
+    "Evaluate_benchamrk/train_ssl.py": "3670781eb0f0f838ced6cc7ca9775791d4d52683fe25e489239f012937dc1a79",
+    "benchmarks/downstream_data.py": "081fe26e5dc81c96ce8e8ffe5a412302663de4a9d095684c5b37e7c615b4a6fd",
+    "networks.py": "0c15ff3ef11f21df752e2a9a17851ab8c8a52ddc3969380682ea8bfcec1968fc"
+  },
+  "encoder_sha256": "6e338cd1f630e8730142a6af353e251184ee8a5322bddd87014f40faa4103978",
+  "epochs": 300,
+  "evaluation": {
+    "baseline": "frozen_random_encoder",
+    "batch_size": 256,
+    "checkpoint_selection": "final_epoch_no_test_selection",
+    "epochs": 100,
+    "full_data_sanity_label_percentage": 100,
+    "head_init_std": 0.01,
+    "label_percentages": [
+      1,
+      5
+    ],
+    "label_policy": "exact",
+    "lr": 0.1,
+    "momentum": 0.9,
+    "normalize_using": "source_statistics",
+    "optimizer": "sgd",
+    "schedule": "cosine_per_step",
+    "test_resize_ratio": 1.1428571428571428,
+    "test_transform": "resize_short_side_and_center_crop",
+    "train_transform": "random_resized_crop_and_flip",
+    "warmup_epochs": 0,
+    "weight_decay": 0.0
+  },
+  "evaluation_code_hashes": {
+    "Evaluate_benchamrk/common.py": "67fcd33f581a34a7f764431b6761ac120cb080d4b2ea0d69b95074565a224f8b",
+    "Evaluate_benchamrk/data.py": "befcf535679e449b3544ae9b8578325e53f7995179591042315d8937cd55f6d9",
+    "Evaluate_benchamrk/evaluate.py": "2b2162a56878f48ade39d2b80d4316511f20a72d29eaa2cf70fe023d88ad722f",
+    "Evaluate_benchamrk/plan.py": "c6d9bd33b36d1d235a2f6af291b3a0a82187b1eea3a10b90a7f57317d8eee83e",
+    "Evaluate_benchamrk/run.py": "1c2b8d29ab47966f1178c9f04b3e1b7c72bd2f55fb65a32c32c77c3730faf45b",
+    "Evaluate_benchamrk/test_protocol.py": "f018562437924ced1d890343a4e898f10e48c50a63920d337031194671c4e43d",
+    "Evaluate_benchamrk/train_ssl.py": "3670781eb0f0f838ced6cc7ca9775791d4d52683fe25e489239f012937dc1a79",
+    "benchmarks/downstream_data.py": "081fe26e5dc81c96ce8e8ffe5a412302663de4a9d095684c5b37e7c615b4a6fd",
+    "networks.py": "0c15ff3ef11f21df752e2a9a17851ab8c8a52ddc3969380682ea8bfcec1968fc"
+  },
+  "identity": {
+    "seed": 0,
+    "selection": {
+      "scope": "full"
+    },
+    "selection_method": "full",
+    "signature": "194f32827b2b3b391eb35607ed67f29f4ce33e16f280042b27dce89f94a2d6a1"
+  }
+}

@@ -1,0 +1,24 @@
+Loaded fixed teacher seed 0: /scratch/mmoslem3/MKDT/Evaluate_benchamrk/full_ssl_checkpoints_1000ep_3seeds/CIFAR10/ResNet18/full/pt100/simclr/seed_000/encoder.pt
+Initializing 1000 synthetic prototypes via DeepCluster K-Means on ResNet18BN...
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_b6000_i5000_lr0p0015/CIFAR10/ResNet18BN/pt2/res_IIC_CIFAR10_ResNet18BN_2percent_final.pt (iteration 0/5000)
+Hyper-parameters: 
+ {'dataset': 'CIFAR10', 'percentage': 2.0, 'data_path': '/scratch/mmoslem3/data', 'device': 'cuda', 'seed': 0, 'Iteration': 5000, 'lr_img': 0.0015, 'batch_real': 6000, 'temperature': 0.2, 'disp_weight': 0.0, 'pair_weight': 0.0, 'num_random_networks': 1, 'random_models': 'ResNet18BN', 'distill_aug_strategy': 'color_crop_cutout_flip_scale_rotate', 'dsa': True, 'distill_aug_mode': 'M', 'teacher_source': 'pretrained', 'teacher_seed': [0], 'teacher_ssl': 'simclr', 'teacher_path': '/scratch/mmoslem3/MKDT/Evaluate_benchamrk/full_ssl_checkpoints_1000ep_3seeds', 'model': 'ResNet18BN', 'ssl_method': 'simclr', 'eval_mode': 'S', 'num_eval': 0, 'epoch_eval_train': 10000, 'label_percentage': 1.0, 'lr_linear': 0.1, 'batch_linear': 256, 'save_path': '/scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_b6000_i5000_lr0p0015/CIFAR10/ResNet18BN/pt2', 'resume': True, 'save_every': 100, 'feature_batch': 128}
+P_net support: ResNet18BN
+Objective: sum teacher losses (-MI + 0 * displacement + 0 * pair_similarity), averaged over 1 augmentation draw(s).
+[2026-10-27 18:40:19] distillation begins
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_b6000_i5000_lr0p0015/CIFAR10/ResNet18BN/pt2/res_IIC_CIFAR10_ResNet18BN_2percent_final.pt (iteration 1/5000)
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_b6000_i5000_lr0p0015/CIFAR10/ResNet18BN/pt2/res_IIC_CIFAR10_ResNet18BN_2percent_final.pt (iteration 100/5000)
+[2026-10-27 18:44:06] iter = 00200, neg_MI = -0.034599, displacement = 0.000162, pair_similarity = 0.000275, total_loss = -0.034599, pixel drift RMS = 4.67257/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_b6000_i5000_lr0p0015/CIFAR10/ResNet18BN/pt2/res_IIC_CIFAR10_ResNet18BN_2percent_final.pt (iteration 200/5000)
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_b6000_i5000_lr0p0015/CIFAR10/ResNet18BN/pt2/res_IIC_CIFAR10_ResNet18BN_2percent_final.pt (iteration 300/5000)
+[2026-10-27 18:47:51] iter = 00400, neg_MI = -0.054084, displacement = 0.000152, pair_similarity = 0.000317, total_loss = -0.054084, pixel drift RMS = 6.82596/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_b6000_i5000_lr0p0015/CIFAR10/ResNet18BN/pt2/res_IIC_CIFAR10_ResNet18BN_2percent_final.pt (iteration 400/5000)
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_b6000_i5000_lr0p0015/CIFAR10/ResNet18BN/pt2/res_IIC_CIFAR10_ResNet18BN_2percent_final.pt (iteration 500/5000)
+[2026-10-27 18:51:39] iter = 00600, neg_MI = -0.078444, displacement = 0.000070, pair_similarity = 0.000065, total_loss = -0.078444, pixel drift RMS = 8.28860/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_b6000_i5000_lr0p0015/CIFAR10/ResNet18BN/pt2/res_IIC_CIFAR10_ResNet18BN_2percent_final.pt (iteration 600/5000)
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_b6000_i5000_lr0p0015/CIFAR10/ResNet18BN/pt2/res_IIC_CIFAR10_ResNet18BN_2percent_final.pt (iteration 700/5000)
+[2026-10-27 18:55:25] iter = 00800, neg_MI = -0.062843, displacement = 0.000154, pair_similarity = 0.000572, total_loss = -0.062843, pixel drift RMS = 9.44491/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_b6000_i5000_lr0p0015/CIFAR10/ResNet18BN/pt2/res_IIC_CIFAR10_ResNet18BN_2percent_final.pt (iteration 800/5000)
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_b6000_i5000_lr0p0015/CIFAR10/ResNet18BN/pt2/res_IIC_CIFAR10_ResNet18BN_2percent_final.pt (iteration 900/5000)
+[2026-10-27 18:59:14] iter = 01000, neg_MI = -0.070923, displacement = 0.000126, pair_similarity = 0.000226, total_loss = -0.070923, pixel drift RMS = 10.39727/255
+SEGMENT SAVED: iteration 1000/5000; Adam and RNG retained

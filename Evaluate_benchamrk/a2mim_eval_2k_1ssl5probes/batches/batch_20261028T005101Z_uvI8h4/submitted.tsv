@@ -1,0 +1,41 @@
+name	stage	job	account	walltime	dependency
+a25_CIFAR10_full_p100_p0	probe_bundle	1980602	aip-boyuwang	00:12:14	-
+a25_CIFAR10_full_p100_p1	probe_bundle	1980603	aip-yiweilu	00:16:10	-
+a25_CIFAR10_random_p0p2_ssl	ssl	1980604	aip-boyuwang	00:02:52	-
+a25_CIFAR10_random_p0p2_p0	probe_bundle	1980605	aip-yiweilu	00:12:14	--dependency=afterok:1980604 --kill-on-invalid-dep=yes
+a25_CIFAR10_random_p0p2_p1	probe_bundle	1980606	aip-boyuwang	00:16:10	--dependency=afterok:1980604 --kill-on-invalid-dep=yes
+a25_CIFAR10_mkdt_p0p2_ssl	ssl	1980607	aip-yiweilu	00:02:52	-
+a25_CIFAR10_mkdt_p0p2_p0	probe_bundle	1980608	aip-boyuwang	00:12:14	--dependency=afterok:1980607 --kill-on-invalid-dep=yes
+a25_CIFAR10_mkdt_p0p2_p1	probe_bundle	1980609	aip-yiweilu	00:16:10	--dependency=afterok:1980607 --kill-on-invalid-dep=yes
+a25_CIFAR10_ours_p0p2_ssl	ssl	1980610	aip-boyuwang	00:02:52	-
+a25_CIFAR10_ours_p0p2_p0	probe_bundle	1980611	aip-yiweilu	00:12:14	--dependency=afterok:1980610 --kill-on-invalid-dep=yes
+a25_CIFAR10_ours_p0p2_p1	probe_bundle	1980612	aip-boyuwang	00:16:10	--dependency=afterok:1980610 --kill-on-invalid-dep=yes
+a25_CIFAR10_random_p1_ssl	ssl	1980613	aip-yiweilu	00:09:33	-
+a25_CIFAR10_random_p1_p0	probe_bundle	1980614	aip-boyuwang	00:12:14	--dependency=afterok:1980613 --kill-on-invalid-dep=yes
+a25_CIFAR10_random_p1_p1	probe_bundle	1980615	aip-yiweilu	00:16:10	--dependency=afterok:1980613 --kill-on-invalid-dep=yes
+a25_CIFAR10_mkdt_p1_ssl	ssl	1980616	aip-boyuwang	00:09:33	-
+a25_CIFAR10_mkdt_p1_p0	probe_bundle	1980617	aip-yiweilu	00:12:14	--dependency=afterok:1980616 --kill-on-invalid-dep=yes
+a25_CIFAR10_mkdt_p1_p1	probe_bundle	1980618	aip-boyuwang	00:16:10	--dependency=afterok:1980616 --kill-on-invalid-dep=yes
+a25_CIFAR10_ours_p1_ssl	ssl	1980619	aip-yiweilu	00:09:33	-
+a25_CIFAR10_ours_p1_p0	probe_bundle	1980620	aip-boyuwang	00:12:14	--dependency=afterok:1980619 --kill-on-invalid-dep=yes
+a25_CIFAR10_ours_p1_p1	probe_bundle	1980621	aip-yiweilu	00:16:10	--dependency=afterok:1980619 --kill-on-invalid-dep=yes
+a25_CIFAR100_full_p100_p0	probe_bundle	1980622	aip-boyuwang	00:12:07	-
+a25_CIFAR100_full_p100_p1	probe_bundle	1980623	aip-yiweilu	00:16:02	-
+a25_CIFAR100_random_p0p2_ssl	ssl	1980624	aip-boyuwang	00:02:52	-
+a25_CIFAR100_random_p0p2_p0	probe_bundle	1980625	aip-yiweilu	00:12:07	--dependency=afterok:1980624 --kill-on-invalid-dep=yes
+a25_CIFAR100_random_p0p2_p1	probe_bundle	1980626	aip-boyuwang	00:16:02	--dependency=afterok:1980624 --kill-on-invalid-dep=yes
+a25_CIFAR100_mkdt_p0p2_ssl	ssl	1980627	aip-yiweilu	00:02:52	-
+a25_CIFAR100_mkdt_p0p2_p0	probe_bundle	1980628	aip-boyuwang	00:12:07	--dependency=afterok:1980627 --kill-on-invalid-dep=yes
+a25_CIFAR100_mkdt_p0p2_p1	probe_bundle	1980629	aip-yiweilu	00:16:02	--dependency=afterok:1980627 --kill-on-invalid-dep=yes
+a25_CIFAR100_ours_p0p2_ssl	ssl	1980630	aip-boyuwang	00:02:52	-
+a25_CIFAR100_ours_p0p2_p0	probe_bundle	1980631	aip-yiweilu	00:12:07	--dependency=afterok:1980630 --kill-on-invalid-dep=yes
+a25_CIFAR100_ours_p0p2_p1	probe_bundle	1980632	aip-boyuwang	00:16:02	--dependency=afterok:1980630 --kill-on-invalid-dep=yes
+a25_CIFAR100_random_p1_ssl	ssl	1980633	aip-yiweilu	00:09:33	-
+a25_CIFAR100_random_p1_p0	probe_bundle	1980634	aip-boyuwang	00:12:07	--dependency=afterok:1980633 --kill-on-invalid-dep=yes
+a25_CIFAR100_random_p1_p1	probe_bundle	1980635	aip-yiweilu	00:16:02	--dependency=afterok:1980633 --kill-on-invalid-dep=yes
+a25_CIFAR100_mkdt_p1_ssl	ssl	1980636	aip-boyuwang	00:09:33	-
+a25_CIFAR100_mkdt_p1_p0	probe_bundle	1980637	aip-yiweilu	00:12:07	--dependency=afterok:1980636 --kill-on-invalid-dep=yes
+a25_CIFAR100_mkdt_p1_p1	probe_bundle	1980638	aip-boyuwang	00:16:02	--dependency=afterok:1980636 --kill-on-invalid-dep=yes
+a25_CIFAR100_ours_p1_ssl	ssl	1980639	aip-yiweilu	00:09:33	-
+a25_CIFAR100_ours_p1_p0	probe_bundle	1980640	aip-boyuwang	00:12:07	--dependency=afterok:1980639 --kill-on-invalid-dep=yes
+a25_CIFAR100_ours_p1_p1	probe_bundle	1980641	aip-yiweilu	00:16:02	--dependency=afterok:1980639 --kill-on-invalid-dep=yes

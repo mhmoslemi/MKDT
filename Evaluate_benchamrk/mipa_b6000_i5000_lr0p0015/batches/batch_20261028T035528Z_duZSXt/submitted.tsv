@@ -1,0 +1,13 @@
+name	stage	job	account	walltime	dependency
+mipa6ks_CIFAR10_p2_ssl2k	ssl	1985330	aip-boyuwang	00:31:13	-
+mipa6ks_CIFAR10_p2_lbl1	probe	1985331	aip-yiweilu	00:02:29	--dependency=afterok:1985330 --kill-on-invalid-dep=yes
+mipa6ks_CIFAR10_p2_lbl5	probe	1985332	aip-boyuwang	00:06:44	--dependency=afterok:1985330 --kill-on-invalid-dep=yes
+mipa6ks_TinyImageNet_p0p2_ssl2k	ssl	1985333	aip-yiweilu	00:19:42	-
+mipa6ks_TinyImageNet_p0p2_lbl1	probe	1985334	aip-boyuwang	00:06:29	--dependency=afterok:1985333 --kill-on-invalid-dep=yes
+mipa6ks_TinyImageNet_p0p2_lbl5	probe	1985335	aip-yiweilu	00:25:34	--dependency=afterok:1985333 --kill-on-invalid-dep=yes
+mipa6ks_TinyImageNet_p1_ssl2k	ssl	1985336	aip-boyuwang	01:10:26	-
+mipa6ks_TinyImageNet_p1_lbl1	probe	1985337	aip-yiweilu	00:06:22	--dependency=afterok:1985336 --kill-on-invalid-dep=yes
+mipa6ks_TinyImageNet_p1_lbl5	probe	1985338	aip-boyuwang	00:25:18	--dependency=afterok:1985336 --kill-on-invalid-dep=yes
+mipa6ks_TinyImageNet_p2_ssl2k	ssl	1985339	aip-yiweilu	02:45:16	-
+mipa6ks_TinyImageNet_p2_lbl1	probe	1985340	aip-boyuwang	00:06:22	--dependency=afterok:1985339 --kill-on-invalid-dep=yes
+mipa6ks_TinyImageNet_p2_lbl5	probe	1985341	aip-yiweilu	00:25:28	--dependency=afterok:1985339 --kill-on-invalid-dep=yes

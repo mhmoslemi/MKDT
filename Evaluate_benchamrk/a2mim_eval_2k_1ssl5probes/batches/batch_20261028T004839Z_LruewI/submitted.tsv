@@ -1,0 +1,41 @@
+name	stage	job	account	walltime	dependency
+a25_CIFAR10_full_p100_p0	probe_bundle	DRY_RUN	aip-boyuwang	00:12:14	-
+a25_CIFAR10_full_p100_p1	probe_bundle	DRY_RUN	aip-yiweilu	00:16:10	-
+a25_CIFAR10_random_p0p2_ssl	ssl	DRY_RUN	aip-boyuwang	00:02:52	-
+a25_CIFAR10_random_p0p2_p0	probe_bundle	DRY_RUN	aip-yiweilu	00:12:14	--dependency=afterok:DRY_RUN --kill-on-invalid-dep=yes
+a25_CIFAR10_random_p0p2_p1	probe_bundle	DRY_RUN	aip-boyuwang	00:16:10	--dependency=afterok:DRY_RUN --kill-on-invalid-dep=yes
+a25_CIFAR10_mkdt_p0p2_ssl	ssl	DRY_RUN	aip-yiweilu	00:02:52	-
+a25_CIFAR10_mkdt_p0p2_p0	probe_bundle	DRY_RUN	aip-boyuwang	00:12:14	--dependency=afterok:DRY_RUN --kill-on-invalid-dep=yes
+a25_CIFAR10_mkdt_p0p2_p1	probe_bundle	DRY_RUN	aip-yiweilu	00:16:10	--dependency=afterok:DRY_RUN --kill-on-invalid-dep=yes
+a25_CIFAR10_ours_p0p2_ssl	ssl	DRY_RUN	aip-boyuwang	00:02:52	-
+a25_CIFAR10_ours_p0p2_p0	probe_bundle	DRY_RUN	aip-yiweilu	00:12:14	--dependency=afterok:DRY_RUN --kill-on-invalid-dep=yes
+a25_CIFAR10_ours_p0p2_p1	probe_bundle	DRY_RUN	aip-boyuwang	00:16:10	--dependency=afterok:DRY_RUN --kill-on-invalid-dep=yes
+a25_CIFAR10_random_p1_ssl	ssl	DRY_RUN	aip-yiweilu	00:09:33	-
+a25_CIFAR10_random_p1_p0	probe_bundle	DRY_RUN	aip-boyuwang	00:12:14	--dependency=afterok:DRY_RUN --kill-on-invalid-dep=yes
+a25_CIFAR10_random_p1_p1	probe_bundle	DRY_RUN	aip-yiweilu	00:16:10	--dependency=afterok:DRY_RUN --kill-on-invalid-dep=yes
+a25_CIFAR10_mkdt_p1_ssl	ssl	DRY_RUN	aip-boyuwang	00:09:33	-
+a25_CIFAR10_mkdt_p1_p0	probe_bundle	DRY_RUN	aip-yiweilu	00:12:14	--dependency=afterok:DRY_RUN --kill-on-invalid-dep=yes
+a25_CIFAR10_mkdt_p1_p1	probe_bundle	DRY_RUN	aip-boyuwang	00:16:10	--dependency=afterok:DRY_RUN --kill-on-invalid-dep=yes
+a25_CIFAR10_ours_p1_ssl	ssl	DRY_RUN	aip-yiweilu	00:09:33	-
+a25_CIFAR10_ours_p1_p0	probe_bundle	DRY_RUN	aip-boyuwang	00:12:14	--dependency=afterok:DRY_RUN --kill-on-invalid-dep=yes
+a25_CIFAR10_ours_p1_p1	probe_bundle	DRY_RUN	aip-yiweilu	00:16:10	--dependency=afterok:DRY_RUN --kill-on-invalid-dep=yes
+a25_CIFAR100_full_p100_p0	probe_bundle	DRY_RUN	aip-boyuwang	00:12:07	-
+a25_CIFAR100_full_p100_p1	probe_bundle	DRY_RUN	aip-yiweilu	00:16:02	-
+a25_CIFAR100_random_p0p2_ssl	ssl	DRY_RUN	aip-boyuwang	00:02:52	-
+a25_CIFAR100_random_p0p2_p0	probe_bundle	DRY_RUN	aip-yiweilu	00:12:07	--dependency=afterok:DRY_RUN --kill-on-invalid-dep=yes
+a25_CIFAR100_random_p0p2_p1	probe_bundle	DRY_RUN	aip-boyuwang	00:16:02	--dependency=afterok:DRY_RUN --kill-on-invalid-dep=yes
+a25_CIFAR100_mkdt_p0p2_ssl	ssl	DRY_RUN	aip-yiweilu	00:02:52	-
+a25_CIFAR100_mkdt_p0p2_p0	probe_bundle	DRY_RUN	aip-boyuwang	00:12:07	--dependency=afterok:DRY_RUN --kill-on-invalid-dep=yes
+a25_CIFAR100_mkdt_p0p2_p1	probe_bundle	DRY_RUN	aip-yiweilu	00:16:02	--dependency=afterok:DRY_RUN --kill-on-invalid-dep=yes
+a25_CIFAR100_ours_p0p2_ssl	ssl	DRY_RUN	aip-boyuwang	00:02:52	-
+a25_CIFAR100_ours_p0p2_p0	probe_bundle	DRY_RUN	aip-yiweilu	00:12:07	--dependency=afterok:DRY_RUN --kill-on-invalid-dep=yes
+a25_CIFAR100_ours_p0p2_p1	probe_bundle	DRY_RUN	aip-boyuwang	00:16:02	--dependency=afterok:DRY_RUN --kill-on-invalid-dep=yes
+a25_CIFAR100_random_p1_ssl	ssl	DRY_RUN	aip-yiweilu	00:09:33	-
+a25_CIFAR100_random_p1_p0	probe_bundle	DRY_RUN	aip-boyuwang	00:12:07	--dependency=afterok:DRY_RUN --kill-on-invalid-dep=yes
+a25_CIFAR100_random_p1_p1	probe_bundle	DRY_RUN	aip-yiweilu	00:16:02	--dependency=afterok:DRY_RUN --kill-on-invalid-dep=yes
+a25_CIFAR100_mkdt_p1_ssl	ssl	DRY_RUN	aip-boyuwang	00:09:33	-
+a25_CIFAR100_mkdt_p1_p0	probe_bundle	DRY_RUN	aip-yiweilu	00:12:07	--dependency=afterok:DRY_RUN --kill-on-invalid-dep=yes
+a25_CIFAR100_mkdt_p1_p1	probe_bundle	DRY_RUN	aip-boyuwang	00:16:02	--dependency=afterok:DRY_RUN --kill-on-invalid-dep=yes
+a25_CIFAR100_ours_p1_ssl	ssl	DRY_RUN	aip-yiweilu	00:09:33	-
+a25_CIFAR100_ours_p1_p0	probe_bundle	DRY_RUN	aip-boyuwang	00:12:07	--dependency=afterok:DRY_RUN --kill-on-invalid-dep=yes
+a25_CIFAR100_ours_p1_p1	probe_bundle	DRY_RUN	aip-yiweilu	00:16:02	--dependency=afterok:DRY_RUN --kill-on-invalid-dep=yes

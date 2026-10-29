@@ -1,0 +1,786 @@
+{
+  "expected_cells": 84,
+  "expected_probes": 420,
+  "full_encoders_reused": 2,
+  "full_epochs": 300,
+  "subset_epochs": 2000,
+  "probe_epochs": 100,
+  "probe_seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "jobs": 40,
+  "ssl_jobs": 12,
+  "probe_bundles": 28,
+  "probes_to_run": 420,
+  "completed_probes_skipped": 0,
+  "accounts": {
+    "aip-boyuwang": 20,
+    "aip-yiweilu": 20
+  },
+  "buffer_seconds": 60,
+  "min_seconds": 172,
+  "max_seconds": 970,
+  "table": "CVPR_tables/ablations/ssl_methods_combined.tex",
+  "timings": [
+    {
+      "name": "a25_CIFAR10_full_p100_p0",
+      "seconds": 734,
+      "observations": [
+        {
+          "target": "CIFAR10",
+          "labels": 1,
+          "probe_seconds_p95": 11.907805587630719,
+          "samples": 6
+        },
+        {
+          "target": "CIFAR10",
+          "labels": 5,
+          "probe_seconds_p95": 54.329310244414955,
+          "samples": 6
+        },
+        {
+          "target": "CIFAR100",
+          "labels": 1,
+          "probe_seconds_p95": 11.871046726126224,
+          "samples": 6
+        },
+        {
+          "target": "CIFAR100",
+          "labels": 5,
+          "probe_seconds_p95": 54.308165600989014,
+          "samples": 6
+        }
+      ]
+    },
+    {
+      "name": "a25_CIFAR10_full_p100_p1",
+      "seconds": 970,
+      "observations": [
+        {
+          "target": "TinyImageNet",
+          "labels": 1,
+          "probe_seconds_p95": 31.732884153258055,
+          "samples": 6
+        },
+        {
+          "target": "TinyImageNet",
+          "labels": 5,
+          "probe_seconds_p95": 147.88103728787974,
+          "samples": 6
+        }
+      ]
+    },
+    {
+      "name": "a25_CIFAR10_random_p0p2_ssl",
+      "full_epoch_p95": 25.05257902108133,
+      "subset_count": 100,
+      "seconds": 172,
+      "estimate": "Scale measured A2MIM full-data time by image count; approximate."
+    },
+    {
+      "name": "a25_CIFAR10_random_p0p2_p0",
+      "seconds": 734,
+      "observations": [
+        {
+          "target": "CIFAR10",
+          "labels": 1,
+          "probe_seconds_p95": 11.907805587630719,
+          "samples": 6
+        },
+        {
+          "target": "CIFAR10",
+          "labels": 5,
+          "probe_seconds_p95": 54.329310244414955,
+          "samples": 6
+        },
+        {
+          "target": "CIFAR100",
+          "labels": 1,
+          "probe_seconds_p95": 11.871046726126224,
+          "samples": 6
+        },
+        {
+          "target": "CIFAR100",
+          "labels": 5,
+          "probe_seconds_p95": 54.308165600989014,
+          "samples": 6
+        }
+      ]
+    },
+    {
+      "name": "a25_CIFAR10_random_p0p2_p1",
+      "seconds": 970,
+      "observations": [
+        {
+          "target": "TinyImageNet",
+          "labels": 1,
+          "probe_seconds_p95": 31.732884153258055,
+          "samples": 6
+        },
+        {
+          "target": "TinyImageNet",
+          "labels": 5,
+          "probe_seconds_p95": 147.88103728787974,
+          "samples": 6
+        }
+      ]
+    },
+    {
+      "name": "a25_CIFAR10_mkdt_p0p2_ssl",
+      "full_epoch_p95": 25.05257902108133,
+      "subset_count": 100,
+      "seconds": 172,
+      "estimate": "Scale measured A2MIM full-data time by image count; approximate."
+    },
+    {
+      "name": "a25_CIFAR10_mkdt_p0p2_p0",
+      "seconds": 734,
+      "observations": [
+        {
+          "target": "CIFAR10",
+          "labels": 1,
+          "probe_seconds_p95": 11.907805587630719,
+          "samples": 6
+        },
+        {
+          "target": "CIFAR10",
+          "labels": 5,
+          "probe_seconds_p95": 54.329310244414955,
+          "samples": 6
+        },
+        {
+          "target": "CIFAR100",
+          "labels": 1,
+          "probe_seconds_p95": 11.871046726126224,
+          "samples": 6
+        },
+        {
+          "target": "CIFAR100",
+          "labels": 5,
+          "probe_seconds_p95": 54.308165600989014,
+          "samples": 6
+        }
+      ]
+    },
+    {
+      "name": "a25_CIFAR10_mkdt_p0p2_p1",
+      "seconds": 970,
+      "observations": [
+        {
+          "target": "TinyImageNet",
+          "labels": 1,
+          "probe_seconds_p95": 31.732884153258055,
+          "samples": 6
+        },
+        {
+          "target": "TinyImageNet",
+          "labels": 5,
+          "probe_seconds_p95": 147.88103728787974,
+          "samples": 6
+        }
+      ]
+    },
+    {
+      "name": "a25_CIFAR10_ours_p0p2_ssl",
+      "full_epoch_p95": 25.05257902108133,
+      "subset_count": 100,
+      "seconds": 172,
+      "estimate": "Scale measured A2MIM full-data time by image count; approximate."
+    },
+    {
+      "name": "a25_CIFAR10_ours_p0p2_p0",
+      "seconds": 734,
+      "observations": [
+        {
+          "target": "CIFAR10",
+          "labels": 1,
+          "probe_seconds_p95": 11.907805587630719,
+          "samples": 6
+        },
+        {
+          "target": "CIFAR10",
+          "labels": 5,
+          "probe_seconds_p95": 54.329310244414955,
+          "samples": 6
+        },
+        {
+          "target": "CIFAR100",
+          "labels": 1,
+          "probe_seconds_p95": 11.871046726126224,
+          "samples": 6
+        },
+        {
+          "target": "CIFAR100",
+          "labels": 5,
+          "probe_seconds_p95": 54.308165600989014,
+          "samples": 6
+        }
+      ]
+    },
+    {
+      "name": "a25_CIFAR10_ours_p0p2_p1",
+      "seconds": 970,
+      "observations": [
+        {
+          "target": "TinyImageNet",
+          "labels": 1,
+          "probe_seconds_p95": 31.732884153258055,
+          "samples": 6
+        },
+        {
+          "target": "TinyImageNet",
+          "labels": 5,
+          "probe_seconds_p95": 147.88103728787974,
+          "samples": 6
+        }
+      ]
+    },
+    {
+      "name": "a25_CIFAR10_random_p1_ssl",
+      "full_epoch_p95": 25.05257902108133,
+      "subset_count": 500,
+      "seconds": 573,
+      "estimate": "Scale measured A2MIM full-data time by image count; approximate."
+    },
+    {
+      "name": "a25_CIFAR10_random_p1_p0",
+      "seconds": 734,
+      "observations": [
+        {
+          "target": "CIFAR10",
+          "labels": 1,
+          "probe_seconds_p95": 11.907805587630719,
+          "samples": 6
+        },
+        {
+          "target": "CIFAR10",
+          "labels": 5,
+          "probe_seconds_p95": 54.329310244414955,
+          "samples": 6
+        },
+        {
+          "target": "CIFAR100",
+          "labels": 1,
+          "probe_seconds_p95": 11.871046726126224,
+          "samples": 6
+        },
+        {
+          "target": "CIFAR100",
+          "labels": 5,
+          "probe_seconds_p95": 54.308165600989014,
+          "samples": 6
+        }
+      ]
+    },
+    {
+      "name": "a25_CIFAR10_random_p1_p1",
+      "seconds": 970,
+      "observations": [
+        {
+          "target": "TinyImageNet",
+          "labels": 1,
+          "probe_seconds_p95": 31.732884153258055,
+          "samples": 6
+        },
+        {
+          "target": "TinyImageNet",
+          "labels": 5,
+          "probe_seconds_p95": 147.88103728787974,
+          "samples": 6
+        }
+      ]
+    },
+    {
+      "name": "a25_CIFAR10_mkdt_p1_ssl",
+      "full_epoch_p95": 25.05257902108133,
+      "subset_count": 500,
+      "seconds": 573,
+      "estimate": "Scale measured A2MIM full-data time by image count; approximate."
+    },
+    {
+      "name": "a25_CIFAR10_mkdt_p1_p0",
+      "seconds": 734,
+      "observations": [
+        {
+          "target": "CIFAR10",
+          "labels": 1,
+          "probe_seconds_p95": 11.907805587630719,
+          "samples": 6
+        },
+        {
+          "target": "CIFAR10",
+          "labels": 5,
+          "probe_seconds_p95": 54.329310244414955,
+          "samples": 6
+        },
+        {
+          "target": "CIFAR100",
+          "labels": 1,
+          "probe_seconds_p95": 11.871046726126224,
+          "samples": 6
+        },
+        {
+          "target": "CIFAR100",
+          "labels": 5,
+          "probe_seconds_p95": 54.308165600989014,
+          "samples": 6
+        }
+      ]
+    },
+    {
+      "name": "a25_CIFAR10_mkdt_p1_p1",
+      "seconds": 970,
+      "observations": [
+        {
+          "target": "TinyImageNet",
+          "labels": 1,
+          "probe_seconds_p95": 31.732884153258055,
+          "samples": 6
+        },
+        {
+          "target": "TinyImageNet",
+          "labels": 5,
+          "probe_seconds_p95": 147.88103728787974,
+          "samples": 6
+        }
+      ]
+    },
+    {
+      "name": "a25_CIFAR10_ours_p1_ssl",
+      "full_epoch_p95": 25.05257902108133,
+      "subset_count": 500,
+      "seconds": 573,
+      "estimate": "Scale measured A2MIM full-data time by image count; approximate."
+    },
+    {
+      "name": "a25_CIFAR10_ours_p1_p0",
+      "seconds": 734,
+      "observations": [
+        {
+          "target": "CIFAR10",
+          "labels": 1,
+          "probe_seconds_p95": 11.907805587630719,
+          "samples": 6
+        },
+        {
+          "target": "CIFAR10",
+          "labels": 5,
+          "probe_seconds_p95": 54.329310244414955,
+          "samples": 6
+        },
+        {
+          "target": "CIFAR100",
+          "labels": 1,
+          "probe_seconds_p95": 11.871046726126224,
+          "samples": 6
+        },
+        {
+          "target": "CIFAR100",
+          "labels": 5,
+          "probe_seconds_p95": 54.308165600989014,
+          "samples": 6
+        }
+      ]
+    },
+    {
+      "name": "a25_CIFAR10_ours_p1_p1",
+      "seconds": 970,
+      "observations": [
+        {
+          "target": "TinyImageNet",
+          "labels": 1,
+          "probe_seconds_p95": 31.732884153258055,
+          "samples": 6
+        },
+        {
+          "target": "TinyImageNet",
+          "labels": 5,
+          "probe_seconds_p95": 147.88103728787974,
+          "samples": 6
+        }
+      ]
+    },
+    {
+      "name": "a25_CIFAR100_full_p100_p0",
+      "seconds": 727,
+      "observations": [
+        {
+          "target": "CIFAR100",
+          "labels": 1,
+          "probe_seconds_p95": 11.753008120227605,
+          "samples": 6
+        },
+        {
+          "target": "CIFAR100",
+          "labels": 5,
+          "probe_seconds_p95": 53.838565106038004,
+          "samples": 6
+        },
+        {
+          "target": "CIFAR10",
+          "labels": 1,
+          "probe_seconds_p95": 11.746599446050823,
+          "samples": 6
+        },
+        {
+          "target": "CIFAR10",
+          "labels": 5,
+          "probe_seconds_p95": 53.72139061195776,
+          "samples": 6
+        }
+      ]
+    },
+    {
+      "name": "a25_CIFAR100_full_p100_p1",
+      "seconds": 962,
+      "observations": [
+        {
+          "target": "TinyImageNet",
+          "labels": 1,
+          "probe_seconds_p95": 31.499973956029862,
+          "samples": 6
+        },
+        {
+          "target": "TinyImageNet",
+          "labels": 5,
+          "probe_seconds_p95": 146.5295642130077,
+          "samples": 6
+        }
+      ]
+    },
+    {
+      "name": "a25_CIFAR100_random_p0p2_ssl",
+      "full_epoch_p95": 25.070832228986546,
+      "subset_count": 100,
+      "seconds": 172,
+      "estimate": "Scale measured A2MIM full-data time by image count; approximate."
+    },
+    {
+      "name": "a25_CIFAR100_random_p0p2_p0",
+      "seconds": 727,
+      "observations": [
+        {
+          "target": "CIFAR100",
+          "labels": 1,
+          "probe_seconds_p95": 11.753008120227605,
+          "samples": 6
+        },
+        {
+          "target": "CIFAR100",
+          "labels": 5,
+          "probe_seconds_p95": 53.838565106038004,
+          "samples": 6
+        },
+        {
+          "target": "CIFAR10",
+          "labels": 1,
+          "probe_seconds_p95": 11.746599446050823,
+          "samples": 6
+        },
+        {
+          "target": "CIFAR10",
+          "labels": 5,
+          "probe_seconds_p95": 53.72139061195776,
+          "samples": 6
+        }
+      ]
+    },
+    {
+      "name": "a25_CIFAR100_random_p0p2_p1",
+      "seconds": 962,
+      "observations": [
+        {
+          "target": "TinyImageNet",
+          "labels": 1,
+          "probe_seconds_p95": 31.499973956029862,
+          "samples": 6
+        },
+        {
+          "target": "TinyImageNet",
+          "labels": 5,
+          "probe_seconds_p95": 146.5295642130077,
+          "samples": 6
+        }
+      ]
+    },
+    {
+      "name": "a25_CIFAR100_mkdt_p0p2_ssl",
+      "full_epoch_p95": 25.070832228986546,
+      "subset_count": 100,
+      "seconds": 172,
+      "estimate": "Scale measured A2MIM full-data time by image count; approximate."
+    },
+    {
+      "name": "a25_CIFAR100_mkdt_p0p2_p0",
+      "seconds": 727,
+      "observations": [
+        {
+          "target": "CIFAR100",
+          "labels": 1,
+          "probe_seconds_p95": 11.753008120227605,
+          "samples": 6
+        },
+        {
+          "target": "CIFAR100",
+          "labels": 5,
+          "probe_seconds_p95": 53.838565106038004,
+          "samples": 6
+        },
+        {
+          "target": "CIFAR10",
+          "labels": 1,
+          "probe_seconds_p95": 11.746599446050823,
+          "samples": 6
+        },
+        {
+          "target": "CIFAR10",
+          "labels": 5,
+          "probe_seconds_p95": 53.72139061195776,
+          "samples": 6
+        }
+      ]
+    },
+    {
+      "name": "a25_CIFAR100_mkdt_p0p2_p1",
+      "seconds": 962,
+      "observations": [
+        {
+          "target": "TinyImageNet",
+          "labels": 1,
+          "probe_seconds_p95": 31.499973956029862,
+          "samples": 6
+        },
+        {
+          "target": "TinyImageNet",
+          "labels": 5,
+          "probe_seconds_p95": 146.5295642130077,
+          "samples": 6
+        }
+      ]
+    },
+    {
+      "name": "a25_CIFAR100_ours_p0p2_ssl",
+      "full_epoch_p95": 25.070832228986546,
+      "subset_count": 100,
+      "seconds": 172,
+      "estimate": "Scale measured A2MIM full-data time by image count; approximate."
+    },
+    {
+      "name": "a25_CIFAR100_ours_p0p2_p0",
+      "seconds": 727,
+      "observations": [
+        {
+          "target": "CIFAR100",
+          "labels": 1,
+          "probe_seconds_p95": 11.753008120227605,
+          "samples": 6
+        },
+        {
+          "target": "CIFAR100",
+          "labels": 5,
+          "probe_seconds_p95": 53.838565106038004,
+          "samples": 6
+        },
+        {
+          "target": "CIFAR10",
+          "labels": 1,
+          "probe_seconds_p95": 11.746599446050823,
+          "samples": 6
+        },
+        {
+          "target": "CIFAR10",
+          "labels": 5,
+          "probe_seconds_p95": 53.72139061195776,
+          "samples": 6
+        }
+      ]
+    },
+    {
+      "name": "a25_CIFAR100_ours_p0p2_p1",
+      "seconds": 962,
+      "observations": [
+        {
+          "target": "TinyImageNet",
+          "labels": 1,
+          "probe_seconds_p95": 31.499973956029862,
+          "samples": 6
+        },
+        {
+          "target": "TinyImageNet",
+          "labels": 5,
+          "probe_seconds_p95": 146.5295642130077,
+          "samples": 6
+        }
+      ]
+    },
+    {
+      "name": "a25_CIFAR100_random_p1_ssl",
+      "full_epoch_p95": 25.070832228986546,
+      "subset_count": 500,
+      "seconds": 573,
+      "estimate": "Scale measured A2MIM full-data time by image count; approximate."
+    },
+    {
+      "name": "a25_CIFAR100_random_p1_p0",
+      "seconds": 727,
+      "observations": [
+        {
+          "target": "CIFAR100",
+          "labels": 1,
+          "probe_seconds_p95": 11.753008120227605,
+          "samples": 6
+        },
+        {
+          "target": "CIFAR100",
+          "labels": 5,
+          "probe_seconds_p95": 53.838565106038004,
+          "samples": 6
+        },
+        {
+          "target": "CIFAR10",
+          "labels": 1,
+          "probe_seconds_p95": 11.746599446050823,
+          "samples": 6
+        },
+        {
+          "target": "CIFAR10",
+          "labels": 5,
+          "probe_seconds_p95": 53.72139061195776,
+          "samples": 6
+        }
+      ]
+    },
+    {
+      "name": "a25_CIFAR100_random_p1_p1",
+      "seconds": 962,
+      "observations": [
+        {
+          "target": "TinyImageNet",
+          "labels": 1,
+          "probe_seconds_p95": 31.499973956029862,
+          "samples": 6
+        },
+        {
+          "target": "TinyImageNet",
+          "labels": 5,
+          "probe_seconds_p95": 146.5295642130077,
+          "samples": 6
+        }
+      ]
+    },
+    {
+      "name": "a25_CIFAR100_mkdt_p1_ssl",
+      "full_epoch_p95": 25.070832228986546,
+      "subset_count": 500,
+      "seconds": 573,
+      "estimate": "Scale measured A2MIM full-data time by image count; approximate."
+    },
+    {
+      "name": "a25_CIFAR100_mkdt_p1_p0",
+      "seconds": 727,
+      "observations": [
+        {
+          "target": "CIFAR100",
+          "labels": 1,
+          "probe_seconds_p95": 11.753008120227605,
+          "samples": 6
+        },
+        {
+          "target": "CIFAR100",
+          "labels": 5,
+          "probe_seconds_p95": 53.838565106038004,
+          "samples": 6
+        },
+        {
+          "target": "CIFAR10",
+          "labels": 1,
+          "probe_seconds_p95": 11.746599446050823,
+          "samples": 6
+        },
+        {
+          "target": "CIFAR10",
+          "labels": 5,
+          "probe_seconds_p95": 53.72139061195776,
+          "samples": 6
+        }
+      ]
+    },
+    {
+      "name": "a25_CIFAR100_mkdt_p1_p1",
+      "seconds": 962,
+      "observations": [
+        {
+          "target": "TinyImageNet",
+          "labels": 1,
+          "probe_seconds_p95": 31.499973956029862,
+          "samples": 6
+        },
+        {
+          "target": "TinyImageNet",
+          "labels": 5,
+          "probe_seconds_p95": 146.5295642130077,
+          "samples": 6
+        }
+      ]
+    },
+    {
+      "name": "a25_CIFAR100_ours_p1_ssl",
+      "full_epoch_p95": 25.070832228986546,
+      "subset_count": 500,
+      "seconds": 573,
+      "estimate": "Scale measured A2MIM full-data time by image count; approximate."
+    },
+    {
+      "name": "a25_CIFAR100_ours_p1_p0",
+      "seconds": 727,
+      "observations": [
+        {
+          "target": "CIFAR100",
+          "labels": 1,
+          "probe_seconds_p95": 11.753008120227605,
+          "samples": 6
+        },
+        {
+          "target": "CIFAR100",
+          "labels": 5,
+          "probe_seconds_p95": 53.838565106038004,
+          "samples": 6
+        },
+        {
+          "target": "CIFAR10",
+          "labels": 1,
+          "probe_seconds_p95": 11.746599446050823,
+          "samples": 6
+        },
+        {
+          "target": "CIFAR10",
+          "labels": 5,
+          "probe_seconds_p95": 53.72139061195776,
+          "samples": 6
+        }
+      ]
+    },
+    {
+      "name": "a25_CIFAR100_ours_p1_p1",
+      "seconds": 962,
+      "observations": [
+        {
+          "target": "TinyImageNet",
+          "labels": 1,
+          "probe_seconds_p95": 31.499973956029862,
+          "samples": 6
+        },
+        {
+          "target": "TinyImageNet",
+          "labels": 5,
+          "probe_seconds_p95": 146.5295642130077,
+          "samples": 6
+        }
+      ]
+    }
+  ]
+}

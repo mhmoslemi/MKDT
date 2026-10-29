@@ -1,0 +1,1246 @@
+{
+  "synthetic_sets": 9,
+  "distillation_iterations": 5000,
+  "chunk_iterations": 1000,
+  "ssl_epochs": 2000,
+  "encoders": 9,
+  "linear_epochs": 100,
+  "probes_per_label_budget": 5,
+  "label_percentages": [
+    1,
+    5
+  ],
+  "total_probes": 90,
+  "jobs": [
+    {
+      "name": "dmk_MNIST_teacher",
+      "stage": "prerequisite",
+      "seconds": 3089,
+      "dependencies": [],
+      "account": "aip-yiweilu",
+      "buffer_seconds": 60,
+      "startup_seconds": 120,
+      "phase": "teacher",
+      "start": 0,
+      "source": "MNIST",
+      "resume_epoch": 950,
+      "gpu": true
+    },
+    {
+      "name": "dmk_MNIST_features",
+      "stage": "prerequisite",
+      "seconds": 180,
+      "dependencies": [
+        "dmk_MNIST_teacher"
+      ],
+      "account": "aip-yiweilu",
+      "buffer_seconds": 60,
+      "startup_seconds": 120,
+      "phase": "features",
+      "start": 0,
+      "source": "MNIST",
+      "gpu": true
+    },
+    {
+      "name": "dmk_MNIST_experts_0",
+      "stage": "prerequisite",
+      "seconds": 1044,
+      "dependencies": [
+        "dmk_MNIST_features"
+      ],
+      "account": "aip-yiweilu",
+      "buffer_seconds": 60,
+      "startup_seconds": 120,
+      "phase": "experts",
+      "start": 0,
+      "source": "MNIST",
+      "gpu": true
+    },
+    {
+      "name": "dmk_MNIST_experts_5",
+      "stage": "prerequisite",
+      "seconds": 1044,
+      "dependencies": [
+        "dmk_MNIST_features"
+      ],
+      "account": "aip-yiweilu",
+      "buffer_seconds": 60,
+      "startup_seconds": 120,
+      "phase": "experts",
+      "start": 5,
+      "source": "MNIST",
+      "gpu": true
+    },
+    {
+      "name": "dmk_MNIST_experts_10",
+      "stage": "prerequisite",
+      "seconds": 1044,
+      "dependencies": [
+        "dmk_MNIST_features"
+      ],
+      "account": "aip-yiweilu",
+      "buffer_seconds": 60,
+      "startup_seconds": 120,
+      "phase": "experts",
+      "start": 10,
+      "source": "MNIST",
+      "gpu": true
+    },
+    {
+      "name": "dmk_MNIST_experts_15",
+      "stage": "prerequisite",
+      "seconds": 1044,
+      "dependencies": [
+        "dmk_MNIST_features"
+      ],
+      "account": "aip-yiweilu",
+      "buffer_seconds": 60,
+      "startup_seconds": 120,
+      "phase": "experts",
+      "start": 15,
+      "source": "MNIST",
+      "gpu": true
+    },
+    {
+      "name": "dmk_MNIST_experts_20",
+      "stage": "prerequisite",
+      "seconds": 1044,
+      "dependencies": [
+        "dmk_MNIST_features"
+      ],
+      "account": "aip-yiweilu",
+      "buffer_seconds": 60,
+      "startup_seconds": 120,
+      "phase": "experts",
+      "start": 20,
+      "source": "MNIST",
+      "gpu": true
+    },
+    {
+      "name": "dmk_MNIST_experts_25",
+      "stage": "prerequisite",
+      "seconds": 1044,
+      "dependencies": [
+        "dmk_MNIST_features"
+      ],
+      "account": "aip-yiweilu",
+      "buffer_seconds": 60,
+      "startup_seconds": 120,
+      "phase": "experts",
+      "start": 25,
+      "source": "MNIST",
+      "gpu": true
+    },
+    {
+      "name": "dmk_MNIST_experts_30",
+      "stage": "prerequisite",
+      "seconds": 1044,
+      "dependencies": [
+        "dmk_MNIST_features"
+      ],
+      "account": "aip-yiweilu",
+      "buffer_seconds": 60,
+      "startup_seconds": 120,
+      "phase": "experts",
+      "start": 30,
+      "source": "MNIST",
+      "gpu": true
+    },
+    {
+      "name": "dmk_MNIST_experts_35",
+      "stage": "prerequisite",
+      "seconds": 1044,
+      "dependencies": [
+        "dmk_MNIST_features"
+      ],
+      "account": "aip-yiweilu",
+      "buffer_seconds": 60,
+      "startup_seconds": 120,
+      "phase": "experts",
+      "start": 35,
+      "source": "MNIST",
+      "gpu": true
+    },
+    {
+      "name": "dmk_MNIST_experts_40",
+      "stage": "prerequisite",
+      "seconds": 1044,
+      "dependencies": [
+        "dmk_MNIST_features"
+      ],
+      "account": "aip-yiweilu",
+      "buffer_seconds": 60,
+      "startup_seconds": 120,
+      "phase": "experts",
+      "start": 40,
+      "source": "MNIST",
+      "gpu": true
+    },
+    {
+      "name": "dmk_MNIST_experts_45",
+      "stage": "prerequisite",
+      "seconds": 1044,
+      "dependencies": [
+        "dmk_MNIST_features"
+      ],
+      "account": "aip-yiweilu",
+      "buffer_seconds": 60,
+      "startup_seconds": 120,
+      "phase": "experts",
+      "start": 45,
+      "source": "MNIST",
+      "gpu": true
+    },
+    {
+      "name": "dmk_MNIST_experts_50",
+      "stage": "prerequisite",
+      "seconds": 1044,
+      "dependencies": [
+        "dmk_MNIST_features"
+      ],
+      "account": "aip-yiweilu",
+      "buffer_seconds": 60,
+      "startup_seconds": 120,
+      "phase": "experts",
+      "start": 50,
+      "source": "MNIST",
+      "gpu": true
+    },
+    {
+      "name": "dmk_MNIST_experts_55",
+      "stage": "prerequisite",
+      "seconds": 1044,
+      "dependencies": [
+        "dmk_MNIST_features"
+      ],
+      "account": "aip-yiweilu",
+      "buffer_seconds": 60,
+      "startup_seconds": 120,
+      "phase": "experts",
+      "start": 55,
+      "source": "MNIST",
+      "gpu": true
+    },
+    {
+      "name": "dmk_MNIST_experts_60",
+      "stage": "prerequisite",
+      "seconds": 1044,
+      "dependencies": [
+        "dmk_MNIST_features"
+      ],
+      "account": "aip-yiweilu",
+      "buffer_seconds": 60,
+      "startup_seconds": 120,
+      "phase": "experts",
+      "start": 60,
+      "source": "MNIST",
+      "gpu": true
+    },
+    {
+      "name": "dmk_MNIST_experts_65",
+      "stage": "prerequisite",
+      "seconds": 1044,
+      "dependencies": [
+        "dmk_MNIST_features"
+      ],
+      "account": "aip-yiweilu",
+      "buffer_seconds": 60,
+      "startup_seconds": 120,
+      "phase": "experts",
+      "start": 65,
+      "source": "MNIST",
+      "gpu": true
+    },
+    {
+      "name": "dmk_MNIST_experts_70",
+      "stage": "prerequisite",
+      "seconds": 1044,
+      "dependencies": [
+        "dmk_MNIST_features"
+      ],
+      "account": "aip-yiweilu",
+      "buffer_seconds": 60,
+      "startup_seconds": 120,
+      "phase": "experts",
+      "start": 70,
+      "source": "MNIST",
+      "gpu": true
+    },
+    {
+      "name": "dmk_MNIST_experts_75",
+      "stage": "prerequisite",
+      "seconds": 1044,
+      "dependencies": [
+        "dmk_MNIST_features"
+      ],
+      "account": "aip-yiweilu",
+      "buffer_seconds": 60,
+      "startup_seconds": 120,
+      "phase": "experts",
+      "start": 75,
+      "source": "MNIST",
+      "gpu": true
+    },
+    {
+      "name": "dmk_MNIST_experts_80",
+      "stage": "prerequisite",
+      "seconds": 1044,
+      "dependencies": [
+        "dmk_MNIST_features"
+      ],
+      "account": "aip-yiweilu",
+      "buffer_seconds": 60,
+      "startup_seconds": 120,
+      "phase": "experts",
+      "start": 80,
+      "source": "MNIST",
+      "gpu": true
+    },
+    {
+      "name": "dmk_MNIST_experts_85",
+      "stage": "prerequisite",
+      "seconds": 1044,
+      "dependencies": [
+        "dmk_MNIST_features"
+      ],
+      "account": "aip-yiweilu",
+      "buffer_seconds": 60,
+      "startup_seconds": 120,
+      "phase": "experts",
+      "start": 85,
+      "source": "MNIST",
+      "gpu": true
+    },
+    {
+      "name": "dmk_MNIST_experts_90",
+      "stage": "prerequisite",
+      "seconds": 1044,
+      "dependencies": [
+        "dmk_MNIST_features"
+      ],
+      "account": "aip-yiweilu",
+      "buffer_seconds": 60,
+      "startup_seconds": 120,
+      "phase": "experts",
+      "start": 90,
+      "source": "MNIST",
+      "gpu": true
+    },
+    {
+      "name": "dmk_MNIST_experts_95",
+      "stage": "prerequisite",
+      "seconds": 1044,
+      "dependencies": [
+        "dmk_MNIST_features"
+      ],
+      "account": "aip-yiweilu",
+      "buffer_seconds": 60,
+      "startup_seconds": 120,
+      "phase": "experts",
+      "start": 95,
+      "source": "MNIST",
+      "gpu": true
+    },
+    {
+      "name": "dmk_MNIST_init",
+      "stage": "prerequisite",
+      "seconds": 240,
+      "dependencies": [
+        "dmk_MNIST_experts_0",
+        "dmk_MNIST_experts_5",
+        "dmk_MNIST_experts_10",
+        "dmk_MNIST_experts_15",
+        "dmk_MNIST_experts_20",
+        "dmk_MNIST_experts_25",
+        "dmk_MNIST_experts_30",
+        "dmk_MNIST_experts_35",
+        "dmk_MNIST_experts_40",
+        "dmk_MNIST_experts_45",
+        "dmk_MNIST_experts_50",
+        "dmk_MNIST_experts_55",
+        "dmk_MNIST_experts_60",
+        "dmk_MNIST_experts_65",
+        "dmk_MNIST_experts_70",
+        "dmk_MNIST_experts_75",
+        "dmk_MNIST_experts_80",
+        "dmk_MNIST_experts_85",
+        "dmk_MNIST_experts_90",
+        "dmk_MNIST_experts_95"
+      ],
+      "account": "aip-yiweilu",
+      "buffer_seconds": 60,
+      "startup_seconds": 120,
+      "phase": "init",
+      "start": 0,
+      "source": "MNIST",
+      "gpu": false
+    },
+    {
+      "name": "dmkf_check",
+      "stage": "check",
+      "seconds": 180,
+      "dependencies": [],
+      "account": "aip-boyuwang",
+      "buffer_seconds": 60,
+      "startup_seconds": 120,
+      "gpu": true
+    },
+    {
+      "name": "dmkf_MNIST_p0p2_g1000",
+      "stage": "generation",
+      "seconds": 899,
+      "dependencies": [
+        "dmk_MNIST_init",
+        "dmkf_check"
+      ],
+      "account": "aip-boyuwang",
+      "buffer_seconds": 60,
+      "startup_seconds": 120,
+      "source": "MNIST",
+      "subset": 0.2,
+      "stop": 1000,
+      "gpu": true
+    },
+    {
+      "name": "dmkf_MNIST_p0p2_g2000",
+      "stage": "generation",
+      "seconds": 899,
+      "dependencies": [
+        "dmkf_MNIST_p0p2_g1000",
+        "dmkf_check"
+      ],
+      "account": "aip-boyuwang",
+      "buffer_seconds": 60,
+      "startup_seconds": 120,
+      "source": "MNIST",
+      "subset": 0.2,
+      "stop": 2000,
+      "gpu": true
+    },
+    {
+      "name": "dmkf_MNIST_p0p2_g3000",
+      "stage": "generation",
+      "seconds": 899,
+      "dependencies": [
+        "dmkf_MNIST_p0p2_g2000",
+        "dmkf_check"
+      ],
+      "account": "aip-boyuwang",
+      "buffer_seconds": 60,
+      "startup_seconds": 120,
+      "source": "MNIST",
+      "subset": 0.2,
+      "stop": 3000,
+      "gpu": true
+    },
+    {
+      "name": "dmkf_MNIST_p0p2_g4000",
+      "stage": "generation",
+      "seconds": 899,
+      "dependencies": [
+        "dmkf_MNIST_p0p2_g3000",
+        "dmkf_check"
+      ],
+      "account": "aip-boyuwang",
+      "buffer_seconds": 60,
+      "startup_seconds": 120,
+      "source": "MNIST",
+      "subset": 0.2,
+      "stop": 4000,
+      "gpu": true
+    },
+    {
+      "name": "dmkf_MNIST_p0p2_g5000",
+      "stage": "generation",
+      "seconds": 899,
+      "dependencies": [
+        "dmkf_MNIST_p0p2_g4000",
+        "dmkf_check"
+      ],
+      "account": "aip-boyuwang",
+      "buffer_seconds": 60,
+      "startup_seconds": 120,
+      "source": "MNIST",
+      "subset": 0.2,
+      "stop": 5000,
+      "gpu": true
+    },
+    {
+      "name": "dmkf_MNIST_p0p2_ssl",
+      "stage": "evaluation",
+      "seconds": 866,
+      "dependencies": [
+        "dmkf_MNIST_p0p2_g5000",
+        "dmkf_check"
+      ],
+      "account": "aip-boyuwang",
+      "buffer_seconds": 60,
+      "startup_seconds": 120,
+      "source": "MNIST",
+      "subset": 0.2,
+      "gpu": true
+    },
+    {
+      "name": "dmkf_MNIST_p1_g1000",
+      "stage": "generation",
+      "seconds": 1586,
+      "dependencies": [
+        "dmk_MNIST_init",
+        "dmkf_check"
+      ],
+      "account": "aip-boyuwang",
+      "buffer_seconds": 60,
+      "startup_seconds": 120,
+      "source": "MNIST",
+      "subset": 1,
+      "stop": 1000,
+      "gpu": true
+    },
+    {
+      "name": "dmkf_MNIST_p1_g2000",
+      "stage": "generation",
+      "seconds": 1586,
+      "dependencies": [
+        "dmkf_MNIST_p1_g1000",
+        "dmkf_check"
+      ],
+      "account": "aip-boyuwang",
+      "buffer_seconds": 60,
+      "startup_seconds": 120,
+      "source": "MNIST",
+      "subset": 1,
+      "stop": 2000,
+      "gpu": true
+    },
+    {
+      "name": "dmkf_MNIST_p1_g3000",
+      "stage": "generation",
+      "seconds": 1586,
+      "dependencies": [
+        "dmkf_MNIST_p1_g2000",
+        "dmkf_check"
+      ],
+      "account": "aip-boyuwang",
+      "buffer_seconds": 60,
+      "startup_seconds": 120,
+      "source": "MNIST",
+      "subset": 1,
+      "stop": 3000,
+      "gpu": true
+    },
+    {
+      "name": "dmkf_MNIST_p1_g4000",
+      "stage": "generation",
+      "seconds": 1586,
+      "dependencies": [
+        "dmkf_MNIST_p1_g3000",
+        "dmkf_check"
+      ],
+      "account": "aip-boyuwang",
+      "buffer_seconds": 60,
+      "startup_seconds": 120,
+      "source": "MNIST",
+      "subset": 1,
+      "stop": 4000,
+      "gpu": true
+    },
+    {
+      "name": "dmkf_MNIST_p1_g5000",
+      "stage": "generation",
+      "seconds": 1586,
+      "dependencies": [
+        "dmkf_MNIST_p1_g4000",
+        "dmkf_check"
+      ],
+      "account": "aip-boyuwang",
+      "buffer_seconds": 60,
+      "startup_seconds": 120,
+      "source": "MNIST",
+      "subset": 1,
+      "stop": 5000,
+      "gpu": true
+    },
+    {
+      "name": "dmkf_MNIST_p1_ssl",
+      "stage": "evaluation",
+      "seconds": 1716,
+      "dependencies": [
+        "dmkf_MNIST_p1_g5000",
+        "dmkf_check"
+      ],
+      "account": "aip-boyuwang",
+      "buffer_seconds": 60,
+      "startup_seconds": 120,
+      "source": "MNIST",
+      "subset": 1,
+      "gpu": true
+    },
+    {
+      "name": "dmkf_MNIST_p2_g1000",
+      "stage": "generation",
+      "seconds": 1586,
+      "dependencies": [
+        "dmk_MNIST_init",
+        "dmkf_check"
+      ],
+      "account": "aip-boyuwang",
+      "buffer_seconds": 60,
+      "startup_seconds": 120,
+      "source": "MNIST",
+      "subset": 2,
+      "stop": 1000,
+      "gpu": true
+    },
+    {
+      "name": "dmkf_MNIST_p2_g2000",
+      "stage": "generation",
+      "seconds": 1586,
+      "dependencies": [
+        "dmkf_MNIST_p2_g1000",
+        "dmkf_check"
+      ],
+      "account": "aip-boyuwang",
+      "buffer_seconds": 60,
+      "startup_seconds": 120,
+      "source": "MNIST",
+      "subset": 2,
+      "stop": 2000,
+      "gpu": true
+    },
+    {
+      "name": "dmkf_MNIST_p2_g3000",
+      "stage": "generation",
+      "seconds": 1586,
+      "dependencies": [
+        "dmkf_MNIST_p2_g2000",
+        "dmkf_check"
+      ],
+      "account": "aip-boyuwang",
+      "buffer_seconds": 60,
+      "startup_seconds": 120,
+      "source": "MNIST",
+      "subset": 2,
+      "stop": 3000,
+      "gpu": true
+    },
+    {
+      "name": "dmkf_MNIST_p2_g4000",
+      "stage": "generation",
+      "seconds": 1586,
+      "dependencies": [
+        "dmkf_MNIST_p2_g3000",
+        "dmkf_check"
+      ],
+      "account": "aip-boyuwang",
+      "buffer_seconds": 60,
+      "startup_seconds": 120,
+      "source": "MNIST",
+      "subset": 2,
+      "stop": 4000,
+      "gpu": true
+    },
+    {
+      "name": "dmkf_MNIST_p2_g5000",
+      "stage": "generation",
+      "seconds": 1586,
+      "dependencies": [
+        "dmkf_MNIST_p2_g4000",
+        "dmkf_check"
+      ],
+      "account": "aip-boyuwang",
+      "buffer_seconds": 60,
+      "startup_seconds": 120,
+      "source": "MNIST",
+      "subset": 2,
+      "stop": 5000,
+      "gpu": true
+    },
+    {
+      "name": "dmkf_MNIST_p2_ssl",
+      "stage": "evaluation",
+      "seconds": 2860,
+      "dependencies": [
+        "dmkf_MNIST_p2_g5000",
+        "dmkf_check"
+      ],
+      "account": "aip-boyuwang",
+      "buffer_seconds": 60,
+      "startup_seconds": 120,
+      "source": "MNIST",
+      "subset": 2,
+      "gpu": true
+    },
+    {
+      "name": "dmkf_FashionMNIST_p0p2_g1000",
+      "stage": "generation",
+      "seconds": 899,
+      "dependencies": [
+        "fashion_init",
+        "dmkf_check"
+      ],
+      "account": "aip-boyuwang",
+      "buffer_seconds": 60,
+      "startup_seconds": 120,
+      "source": "FashionMNIST",
+      "subset": 0.2,
+      "stop": 1000,
+      "gpu": true
+    },
+    {
+      "name": "dmkf_FashionMNIST_p0p2_g2000",
+      "stage": "generation",
+      "seconds": 899,
+      "dependencies": [
+        "dmkf_FashionMNIST_p0p2_g1000",
+        "dmkf_check"
+      ],
+      "account": "aip-boyuwang",
+      "buffer_seconds": 60,
+      "startup_seconds": 120,
+      "source": "FashionMNIST",
+      "subset": 0.2,
+      "stop": 2000,
+      "gpu": true
+    },
+    {
+      "name": "dmkf_FashionMNIST_p0p2_g3000",
+      "stage": "generation",
+      "seconds": 899,
+      "dependencies": [
+        "dmkf_FashionMNIST_p0p2_g2000",
+        "dmkf_check"
+      ],
+      "account": "aip-boyuwang",
+      "buffer_seconds": 60,
+      "startup_seconds": 120,
+      "source": "FashionMNIST",
+      "subset": 0.2,
+      "stop": 3000,
+      "gpu": true
+    },
+    {
+      "name": "dmkf_FashionMNIST_p0p2_g4000",
+      "stage": "generation",
+      "seconds": 899,
+      "dependencies": [
+        "dmkf_FashionMNIST_p0p2_g3000",
+        "dmkf_check"
+      ],
+      "account": "aip-boyuwang",
+      "buffer_seconds": 60,
+      "startup_seconds": 120,
+      "source": "FashionMNIST",
+      "subset": 0.2,
+      "stop": 4000,
+      "gpu": true
+    },
+    {
+      "name": "dmkf_FashionMNIST_p0p2_g5000",
+      "stage": "generation",
+      "seconds": 899,
+      "dependencies": [
+        "dmkf_FashionMNIST_p0p2_g4000",
+        "dmkf_check"
+      ],
+      "account": "aip-boyuwang",
+      "buffer_seconds": 60,
+      "startup_seconds": 120,
+      "source": "FashionMNIST",
+      "subset": 0.2,
+      "stop": 5000,
+      "gpu": true
+    },
+    {
+      "name": "dmkf_FashionMNIST_p0p2_ssl",
+      "stage": "evaluation",
+      "seconds": 862,
+      "dependencies": [
+        "dmkf_FashionMNIST_p0p2_g5000",
+        "dmkf_check"
+      ],
+      "account": "aip-boyuwang",
+      "buffer_seconds": 60,
+      "startup_seconds": 120,
+      "source": "FashionMNIST",
+      "subset": 0.2,
+      "gpu": true
+    },
+    {
+      "name": "dmkf_FashionMNIST_p1_g1000",
+      "stage": "generation",
+      "seconds": 1586,
+      "dependencies": [
+        "fashion_init",
+        "dmkf_check"
+      ],
+      "account": "aip-boyuwang",
+      "buffer_seconds": 60,
+      "startup_seconds": 120,
+      "source": "FashionMNIST",
+      "subset": 1,
+      "stop": 1000,
+      "gpu": true
+    },
+    {
+      "name": "dmkf_FashionMNIST_p1_g2000",
+      "stage": "generation",
+      "seconds": 1586,
+      "dependencies": [
+        "dmkf_FashionMNIST_p1_g1000",
+        "dmkf_check"
+      ],
+      "account": "aip-boyuwang",
+      "buffer_seconds": 60,
+      "startup_seconds": 120,
+      "source": "FashionMNIST",
+      "subset": 1,
+      "stop": 2000,
+      "gpu": true
+    },
+    {
+      "name": "dmkf_FashionMNIST_p1_g3000",
+      "stage": "generation",
+      "seconds": 1586,
+      "dependencies": [
+        "dmkf_FashionMNIST_p1_g2000",
+        "dmkf_check"
+      ],
+      "account": "aip-boyuwang",
+      "buffer_seconds": 60,
+      "startup_seconds": 120,
+      "source": "FashionMNIST",
+      "subset": 1,
+      "stop": 3000,
+      "gpu": true
+    },
+    {
+      "name": "dmkf_FashionMNIST_p1_g4000",
+      "stage": "generation",
+      "seconds": 1586,
+      "dependencies": [
+        "dmkf_FashionMNIST_p1_g3000",
+        "dmkf_check"
+      ],
+      "account": "aip-boyuwang",
+      "buffer_seconds": 60,
+      "startup_seconds": 120,
+      "source": "FashionMNIST",
+      "subset": 1,
+      "stop": 4000,
+      "gpu": true
+    },
+    {
+      "name": "dmkf_FashionMNIST_p1_g5000",
+      "stage": "generation",
+      "seconds": 1586,
+      "dependencies": [
+        "dmkf_FashionMNIST_p1_g4000",
+        "dmkf_check"
+      ],
+      "account": "aip-boyuwang",
+      "buffer_seconds": 60,
+      "startup_seconds": 120,
+      "source": "FashionMNIST",
+      "subset": 1,
+      "stop": 5000,
+      "gpu": true
+    },
+    {
+      "name": "dmkf_FashionMNIST_p1_ssl",
+      "stage": "evaluation",
+      "seconds": 1718,
+      "dependencies": [
+        "dmkf_FashionMNIST_p1_g5000",
+        "dmkf_check"
+      ],
+      "account": "aip-boyuwang",
+      "buffer_seconds": 60,
+      "startup_seconds": 120,
+      "source": "FashionMNIST",
+      "subset": 1,
+      "gpu": true
+    },
+    {
+      "name": "dmkf_FashionMNIST_p2_g1000",
+      "stage": "generation",
+      "seconds": 1586,
+      "dependencies": [
+        "fashion_init",
+        "dmkf_check"
+      ],
+      "account": "aip-boyuwang",
+      "buffer_seconds": 60,
+      "startup_seconds": 120,
+      "source": "FashionMNIST",
+      "subset": 2,
+      "stop": 1000,
+      "gpu": true
+    },
+    {
+      "name": "dmkf_FashionMNIST_p2_g2000",
+      "stage": "generation",
+      "seconds": 1586,
+      "dependencies": [
+        "dmkf_FashionMNIST_p2_g1000",
+        "dmkf_check"
+      ],
+      "account": "aip-boyuwang",
+      "buffer_seconds": 60,
+      "startup_seconds": 120,
+      "source": "FashionMNIST",
+      "subset": 2,
+      "stop": 2000,
+      "gpu": true
+    },
+    {
+      "name": "dmkf_FashionMNIST_p2_g3000",
+      "stage": "generation",
+      "seconds": 1586,
+      "dependencies": [
+        "dmkf_FashionMNIST_p2_g2000",
+        "dmkf_check"
+      ],
+      "account": "aip-boyuwang",
+      "buffer_seconds": 60,
+      "startup_seconds": 120,
+      "source": "FashionMNIST",
+      "subset": 2,
+      "stop": 3000,
+      "gpu": true
+    },
+    {
+      "name": "dmkf_FashionMNIST_p2_g4000",
+      "stage": "generation",
+      "seconds": 1586,
+      "dependencies": [
+        "dmkf_FashionMNIST_p2_g3000",
+        "dmkf_check"
+      ],
+      "account": "aip-boyuwang",
+      "buffer_seconds": 60,
+      "startup_seconds": 120,
+      "source": "FashionMNIST",
+      "subset": 2,
+      "stop": 4000,
+      "gpu": true
+    },
+    {
+      "name": "dmkf_FashionMNIST_p2_g5000",
+      "stage": "generation",
+      "seconds": 1586,
+      "dependencies": [
+        "dmkf_FashionMNIST_p2_g4000",
+        "dmkf_check"
+      ],
+      "account": "aip-boyuwang",
+      "buffer_seconds": 60,
+      "startup_seconds": 120,
+      "source": "FashionMNIST",
+      "subset": 2,
+      "stop": 5000,
+      "gpu": true
+    },
+    {
+      "name": "dmkf_FashionMNIST_p2_ssl",
+      "stage": "evaluation",
+      "seconds": 2857,
+      "dependencies": [
+        "dmkf_FashionMNIST_p2_g5000",
+        "dmkf_check"
+      ],
+      "account": "aip-boyuwang",
+      "buffer_seconds": 60,
+      "startup_seconds": 120,
+      "source": "FashionMNIST",
+      "subset": 2,
+      "gpu": true
+    },
+    {
+      "name": "dmkf_SVHN_p0p2_g1000",
+      "stage": "generation",
+      "seconds": 1055,
+      "dependencies": [
+        "dmk_SVHN_init",
+        "dmkf_check"
+      ],
+      "account": "aip-boyuwang",
+      "buffer_seconds": 60,
+      "startup_seconds": 120,
+      "source": "SVHN",
+      "subset": 0.2,
+      "stop": 1000,
+      "gpu": true
+    },
+    {
+      "name": "dmkf_SVHN_p0p2_g2000",
+      "stage": "generation",
+      "seconds": 1055,
+      "dependencies": [
+        "dmkf_SVHN_p0p2_g1000",
+        "dmkf_check"
+      ],
+      "account": "aip-boyuwang",
+      "buffer_seconds": 60,
+      "startup_seconds": 120,
+      "source": "SVHN",
+      "subset": 0.2,
+      "stop": 2000,
+      "gpu": true
+    },
+    {
+      "name": "dmkf_SVHN_p0p2_g3000",
+      "stage": "generation",
+      "seconds": 1055,
+      "dependencies": [
+        "dmkf_SVHN_p0p2_g2000",
+        "dmkf_check"
+      ],
+      "account": "aip-boyuwang",
+      "buffer_seconds": 60,
+      "startup_seconds": 120,
+      "source": "SVHN",
+      "subset": 0.2,
+      "stop": 3000,
+      "gpu": true
+    },
+    {
+      "name": "dmkf_SVHN_p0p2_g4000",
+      "stage": "generation",
+      "seconds": 1055,
+      "dependencies": [
+        "dmkf_SVHN_p0p2_g3000",
+        "dmkf_check"
+      ],
+      "account": "aip-boyuwang",
+      "buffer_seconds": 60,
+      "startup_seconds": 120,
+      "source": "SVHN",
+      "subset": 0.2,
+      "stop": 4000,
+      "gpu": true
+    },
+    {
+      "name": "dmkf_SVHN_p0p2_g5000",
+      "stage": "generation",
+      "seconds": 1055,
+      "dependencies": [
+        "dmkf_SVHN_p0p2_g4000",
+        "dmkf_check"
+      ],
+      "account": "aip-boyuwang",
+      "buffer_seconds": 60,
+      "startup_seconds": 120,
+      "source": "SVHN",
+      "subset": 0.2,
+      "stop": 5000,
+      "gpu": true
+    },
+    {
+      "name": "dmkf_SVHN_p0p2_ssl",
+      "stage": "evaluation",
+      "seconds": 1108,
+      "dependencies": [
+        "dmkf_SVHN_p0p2_g5000",
+        "dmkf_check"
+      ],
+      "account": "aip-boyuwang",
+      "buffer_seconds": 60,
+      "startup_seconds": 120,
+      "source": "SVHN",
+      "subset": 0.2,
+      "gpu": true
+    },
+    {
+      "name": "dmkf_SVHN_p1_g1000",
+      "stage": "generation",
+      "seconds": 1586,
+      "dependencies": [
+        "dmk_SVHN_init",
+        "dmkf_check"
+      ],
+      "account": "aip-boyuwang",
+      "buffer_seconds": 60,
+      "startup_seconds": 120,
+      "source": "SVHN",
+      "subset": 1,
+      "stop": 1000,
+      "gpu": true
+    },
+    {
+      "name": "dmkf_SVHN_p1_g2000",
+      "stage": "generation",
+      "seconds": 1586,
+      "dependencies": [
+        "dmkf_SVHN_p1_g1000",
+        "dmkf_check"
+      ],
+      "account": "aip-boyuwang",
+      "buffer_seconds": 60,
+      "startup_seconds": 120,
+      "source": "SVHN",
+      "subset": 1,
+      "stop": 2000,
+      "gpu": true
+    },
+    {
+      "name": "dmkf_SVHN_p1_g3000",
+      "stage": "generation",
+      "seconds": 1586,
+      "dependencies": [
+        "dmkf_SVHN_p1_g2000",
+        "dmkf_check"
+      ],
+      "account": "aip-boyuwang",
+      "buffer_seconds": 60,
+      "startup_seconds": 120,
+      "source": "SVHN",
+      "subset": 1,
+      "stop": 3000,
+      "gpu": true
+    },
+    {
+      "name": "dmkf_SVHN_p1_g4000",
+      "stage": "generation",
+      "seconds": 1586,
+      "dependencies": [
+        "dmkf_SVHN_p1_g3000",
+        "dmkf_check"
+      ],
+      "account": "aip-boyuwang",
+      "buffer_seconds": 60,
+      "startup_seconds": 120,
+      "source": "SVHN",
+      "subset": 1,
+      "stop": 4000,
+      "gpu": true
+    },
+    {
+      "name": "dmkf_SVHN_p1_g5000",
+      "stage": "generation",
+      "seconds": 1586,
+      "dependencies": [
+        "dmkf_SVHN_p1_g4000",
+        "dmkf_check"
+      ],
+      "account": "aip-boyuwang",
+      "buffer_seconds": 60,
+      "startup_seconds": 120,
+      "source": "SVHN",
+      "subset": 1,
+      "stop": 5000,
+      "gpu": true
+    },
+    {
+      "name": "dmkf_SVHN_p1_ssl",
+      "stage": "evaluation",
+      "seconds": 1957,
+      "dependencies": [
+        "dmkf_SVHN_p1_g5000",
+        "dmkf_check"
+      ],
+      "account": "aip-boyuwang",
+      "buffer_seconds": 60,
+      "startup_seconds": 120,
+      "source": "SVHN",
+      "subset": 1,
+      "gpu": true
+    },
+    {
+      "name": "dmkf_SVHN_p2_g1000",
+      "stage": "generation",
+      "seconds": 1586,
+      "dependencies": [
+        "dmk_SVHN_init",
+        "dmkf_check"
+      ],
+      "account": "aip-boyuwang",
+      "buffer_seconds": 60,
+      "startup_seconds": 120,
+      "source": "SVHN",
+      "subset": 2,
+      "stop": 1000,
+      "gpu": true
+    },
+    {
+      "name": "dmkf_SVHN_p2_g2000",
+      "stage": "generation",
+      "seconds": 1586,
+      "dependencies": [
+        "dmkf_SVHN_p2_g1000",
+        "dmkf_check"
+      ],
+      "account": "aip-boyuwang",
+      "buffer_seconds": 60,
+      "startup_seconds": 120,
+      "source": "SVHN",
+      "subset": 2,
+      "stop": 2000,
+      "gpu": true
+    },
+    {
+      "name": "dmkf_SVHN_p2_g3000",
+      "stage": "generation",
+      "seconds": 1586,
+      "dependencies": [
+        "dmkf_SVHN_p2_g2000",
+        "dmkf_check"
+      ],
+      "account": "aip-boyuwang",
+      "buffer_seconds": 60,
+      "startup_seconds": 120,
+      "source": "SVHN",
+      "subset": 2,
+      "stop": 3000,
+      "gpu": true
+    },
+    {
+      "name": "dmkf_SVHN_p2_g4000",
+      "stage": "generation",
+      "seconds": 1586,
+      "dependencies": [
+        "dmkf_SVHN_p2_g3000",
+        "dmkf_check"
+      ],
+      "account": "aip-boyuwang",
+      "buffer_seconds": 60,
+      "startup_seconds": 120,
+      "source": "SVHN",
+      "subset": 2,
+      "stop": 4000,
+      "gpu": true
+    },
+    {
+      "name": "dmkf_SVHN_p2_g5000",
+      "stage": "generation",
+      "seconds": 1586,
+      "dependencies": [
+        "dmkf_SVHN_p2_g4000",
+        "dmkf_check"
+      ],
+      "account": "aip-boyuwang",
+      "buffer_seconds": 60,
+      "startup_seconds": 120,
+      "source": "SVHN",
+      "subset": 2,
+      "stop": 5000,
+      "gpu": true
+    },
+    {
+      "name": "dmkf_SVHN_p2_ssl",
+      "stage": "evaluation",
+      "seconds": 3831,
+      "dependencies": [
+        "dmkf_SVHN_p2_g5000",
+        "dmkf_check"
+      ],
+      "account": "aip-boyuwang",
+      "buffer_seconds": 60,
+      "startup_seconds": 120,
+      "source": "SVHN",
+      "subset": 2,
+      "gpu": true
+    }
+  ],
+  "active": [],
+  "scope": "main table only"
+}
