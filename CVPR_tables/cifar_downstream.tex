@@ -1,9 +1,9 @@
 \begin{table*}[t]
 \centering
 \def\dsacc#1#2{$#1${\footnotesize$\pm #2$}}
-\def\bestacc#1#2{{\bfseries\boldmath\dsacc{#1}{#2}}}
-% Completed MIPA updates in existing rows: Evaluate_benchamrk/mipa_random128/results/; one 2k-epoch encoder, five 100-epoch probes per cell.
-\caption{Downstream evaluation of ResNet18 pretrained with SimCLR on CIFAR10, CIFAR100, or Tiny ImageNet}
+\def\bestacc#1#2{\textbf{\boldmath\dsacc{#1}{#2}}}
+% MIPA results: Evaluate_benchamrk/mipa_random128/results/ and Evaluate_benchamrk/ours_eval_results_simclr2k_barlow10k_2ssl3probes_downstream/.
+\caption{Downstream evaluation of ResNet18 pretrained with SimCLR on CIFAR10, CIFAR100, or Tiny ImageNet.}
 \label{tab:cifar-downstream-resnet18}
 \label{tab:tinyimagenet-downstream-simclr}
 
@@ -18,22 +18,22 @@
 \midrule
 \multirow{9}{*}{1\%} & 100 & Full Data & \dsacc{24.0}{0.9} & \dsacc{11.9}{0.2} & \dsacc{4.1}{0.9} & \dsacc{4.8}{0.5} & \dsacc{67.0}{0.1} & \dsacc{14.7}{0.5} & \dsacc{3.6}{0.5} & \dsacc{4.1}{0.3} & \dsacc{70.0}{0.4} & \dsacc{28.9}{1.0} & \dsacc{4.3}{0.9} & \dsacc{5.5}{0.2} \\
 \cmidrule(lr){2-15}
-& \multirow{4}{*}{0.2} & Random & \dsacc{8.3}{0.8} & \dsacc{3.5}{0.4} & \dsacc{2.1}{0.3} & \dsacc{1.5}{0.2} & \dsacc{37.9}{1.5} & \dsacc{3.7}{0.4} & \dsacc{2.3}{0.4} & \dsacc{1.5}{0.2} & \dsacc{45.4}{1.0} & \bestacc{11.9}{0.4} & \bestacc{3.0}{0.5} & \dsacc{1.9}{0.1} \\
+& \multirow{4}{*}{0.2} & Random & \dsacc{8.3}{0.8} & \dsacc{3.5}{0.4} & \dsacc{2.1}{0.3} & \dsacc{1.5}{0.2} & \dsacc{37.9}{1.5} & \dsacc{3.7}{0.4} & \dsacc{2.3}{0.4} & \dsacc{1.5}{0.2} & \dsacc{45.4}{1.0} & \dsacc{11.9}{0.4} & \bestacc{3.0}{0.5} & \dsacc{1.9}{0.1} \\
 & & K-means & \dsacc{7.7}{1.2} & \dsacc{3.1}{0.4} & \dsacc{2.0}{0.4} & \dsacc{1.5}{0.3} & \dsacc{37.1}{0.8} & \dsacc{3.5}{0.2} & \dsacc{2.0}{0.3} & \dsacc{1.6}{0.1} & \dsacc{43.0}{0.6} & \dsacc{10.3}{0.2} & \dsacc{2.0}{0.6} & \dsacc{1.7}{0.1} \\
 & & MKDT & \dsacc{9.0}{0.8} & \dsacc{4.2}{0.1} & \dsacc{2.1}{0.4} & \bestacc{2.0}{0.0} & \dsacc{39.5}{0.6} & \dsacc{4.1}{0.1} & \bestacc{2.4}{0.3} & \bestacc{1.9}{0.2} & \dsacc{44.2}{0.6} & \dsacc{11.6}{0.6} & \dsacc{2.4}{0.3} & \dsacc{1.9}{0.2} \\
-& & MIPA & \bestacc{9.9}{0.8} & \bestacc{4.7}{0.2} & \bestacc{2.4}{0.4} & \bestacc{2.0}{0.2} & \bestacc{40.0}{0.5} & \bestacc{4.6}{0.2} & \dsacc{2.2}{0.4} & \dsacc{1.7}{0.1} & \bestacc{46.4}{0.9} & \bestacc{11.9}{0.5} & \dsacc{2.5}{0.5} & \bestacc{2.0}{0.2} \\
+& & MIPA & \bestacc{9.9}{0.8} & \bestacc{4.7}{0.2} & \bestacc{2.4}{0.4} & \bestacc{2.0}{0.2} & \bestacc{40.0}{0.5} & \bestacc{4.6}{0.2} & \dsacc{2.2}{0.4} & \dsacc{1.7}{0.1} & \bestacc{46.4}{0.9} & \bestacc{12.2}{0.7} & \dsacc{2.5}{0.5} & \bestacc{2.0}{0.2} \\
 \cmidrule(lr){2-15}
 & \multirow{4}{*}{1} & Random & \dsacc{8.6}{0.6} & \dsacc{3.6}{0.4} & \dsacc{2.1}{0.4} & \dsacc{1.8}{0.3} & \dsacc{41.6}{1.3} & \dsacc{4.1}{0.5} & \dsacc{2.2}{0.5} & \dsacc{1.7}{0.4} & \dsacc{52.6}{1.1} & \bestacc{13.7}{0.3} & \dsacc{2.6}{0.5} & \bestacc{2.3}{0.3} \\
 & & K-means & \dsacc{8.6}{0.5} & \dsacc{3.6}{0.3} & \dsacc{2.0}{0.2} & \dsacc{1.9}{0.4} & \dsacc{41.2}{1.6} & \dsacc{4.2}{0.7} & \dsacc{2.2}{0.6} & \dsacc{1.7}{0.2} & \dsacc{52.6}{0.8} & \dsacc{12.8}{0.3} & \bestacc{2.8}{0.3} & \dsacc{2.1}{0.3} \\
 & & MKDT & \dsacc{9.3}{0.9} & \dsacc{4.3}{0.2} & \dsacc{2.2}{0.3} & \dsacc{1.9}{0.1} & \dsacc{40.3}{1.2} & \dsacc{4.8}{0.2} & \dsacc{2.4}{0.2} & \bestacc{2.0}{0.2} & \dsacc{44.3}{1.0} & \dsacc{11.8}{0.6} & \dsacc{2.2}{0.3} & \dsacc{1.8}{0.1} \\
-& & MIPA & \bestacc{11.0}{0.5} & \bestacc{5.2}{0.3} & \bestacc{2.7}{0.5} & \bestacc{2.2}{0.2} & \bestacc{43.5}{0.6} & \bestacc{5.4}{0.4} & \bestacc{2.5}{0.3} & \dsacc{1.9}{0.2} & \bestacc{53.2}{0.8} & \bestacc{13.7}{0.4} & \dsacc{2.7}{0.5} & \dsacc{2.0}{0.3} \\
+& & MIPA & \bestacc{11.0}{0.5} & \bestacc{5.2}{0.3} & \bestacc{2.7}{0.5} & \bestacc{2.2}{0.2} & \bestacc{43.5}{0.6} & \bestacc{5.4}{0.4} & \bestacc{2.5}{0.3} & \dsacc{1.9}{0.2} & \bestacc{53.2}{0.8} & \bestacc{13.7}{0.4} & \dsacc{2.7}{0.5} & \dsacc{2.2}{0.3} \\
 \midrule
 \multirow{9}{*}{5\%} & 100 & Full Data & \dsacc{38.0}{0.4} & \dsacc{20.6}{0.3} & \dsacc{7.9}{0.1} & \dsacc{8.7}{0.5} & \dsacc{74.4}{0.3} & \dsacc{24.7}{0.2} & \dsacc{6.3}{0.2} & \dsacc{7.7}{0.4} & \dsacc{77.2}{0.3} & \dsacc{44.2}{0.5} & \dsacc{7.9}{0.3} & \dsacc{10.7}{0.5} \\
 \cmidrule(lr){2-15}
 & \multirow{4}{*}{0.2} & Random & \dsacc{14.4}{0.7} & \dsacc{6.7}{0.5} & \dsacc{3.0}{0.5} & \dsacc{2.7}{0.3} & \dsacc{44.5}{1.4} & \dsacc{7.1}{0.4} & \bestacc{3.1}{0.5} & \dsacc{2.6}{0.2} & \dsacc{53.1}{0.2} & \dsacc{19.8}{0.1} & \dsacc{3.3}{0.4} & \dsacc{3.1}{0.2} \\
 & & K-means & \dsacc{13.6}{0.9} & \dsacc{6.3}{0.6} & \dsacc{2.9}{0.3} & \dsacc{2.5}{0.3} & \dsacc{44.7}{0.7} & \dsacc{6.9}{0.3} & \dsacc{3.0}{0.2} & \dsacc{2.6}{0.4} & \dsacc{50.3}{0.4} & \dsacc{18.1}{0.3} & \dsacc{2.7}{0.4} & \dsacc{3.2}{0.2} \\
 & & MKDT & \dsacc{15.6}{0.2} & \dsacc{7.9}{0.2} & \dsacc{2.6}{0.4} & \bestacc{2.9}{0.2} & \dsacc{46.6}{0.5} & \dsacc{8.0}{0.3} & \dsacc{3.0}{0.5} & \bestacc{2.8}{0.1} & \dsacc{53.5}{0.8} & \dsacc{19.3}{0.1} & \dsacc{3.6}{0.4} & \bestacc{3.4}{0.3} \\
-& & MIPA & \bestacc{17.0}{0.2} & \bestacc{8.7}{0.3} & \bestacc{3.3}{0.2} & \dsacc{2.8}{0.2} & \bestacc{47.0}{0.6} & \bestacc{8.4}{0.2} & \bestacc{3.1}{0.2} & \bestacc{2.8}{0.2} & \bestacc{53.8}{0.4} & \bestacc{20.0}{0.2} & \bestacc{3.7}{0.3} & \dsacc{3.1}{0.1} \\
+& & MIPA & \bestacc{17.0}{0.2} & \bestacc{8.7}{0.3} & \bestacc{3.3}{0.2} & \dsacc{2.8}{0.2} & \bestacc{47.0}{0.6} & \bestacc{8.4}{0.2} & \bestacc{3.1}{0.2} & \bestacc{2.8}{0.2} & \bestacc{53.8}{0.4} & \bestacc{20.0}{0.2} & \bestacc{3.7}{0.3} & \bestacc{3.4}{0.3} \\
 \cmidrule(lr){2-15}
 & \multirow{4}{*}{1} & Random & \dsacc{15.6}{0.8} & \dsacc{7.1}{0.6} & \dsacc{3.0}{0.6} & \dsacc{3.0}{0.4} & \dsacc{47.7}{1.6} & \dsacc{8.1}{0.7} & \dsacc{3.1}{0.7} & \dsacc{3.1}{0.3} & \dsacc{60.4}{0.3} & \bestacc{25.4}{0.3} & \bestacc{3.6}{0.1} & \bestacc{4.9}{0.1} \\
 & & K-means & \dsacc{15.4}{0.8} & \dsacc{7.3}{0.4} & \dsacc{3.0}{0.5} & \dsacc{3.2}{0.3} & \dsacc{47.8}{1.5} & \dsacc{8.6}{0.8} & \dsacc{2.9}{0.7} & \dsacc{3.2}{0.3} & \bestacc{60.8}{0.2} & \dsacc{25.0}{0.7} & \dsacc{3.3}{0.5} & \dsacc{4.8}{0.2} \\

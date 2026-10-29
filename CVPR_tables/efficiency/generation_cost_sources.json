@@ -1,8 +1,8 @@
 {
-  "scope": "Costs for the synthetic sets currently reported with ResNet18 in the main tables: retained large-batch MIPA at 0.2%, exact-Random-initialized batch-128 MIPA at 1%/2%, and unchanged MKDT runs; one set per dataset and budget, not an average over repeated generation runs.",
+  "scope": "Costs for exact-Random-initialized batch-128 MIPA at 0.2%/1%/2% and unchanged MKDT runs, using ResNet18 for MIPA generation; one set per dataset and budget, not an average over repeated generation runs.",
   "runtime_definition": "Ours: sum of bracketed local-time distillation-start to retained-iteration timestamps. MKDT: completed tqdm optimization elapsed times, summed over sequential chunks when necessary. Neither is end-to-end generation time.",
   "runtime_exclusions": ["Dataset loading", "Initialization and clustering", "Teacher training", "Teacher-feature extraction", "Expert-bank construction and ranking", "Queue and interruption gaps", "Repeated work discarded before a resume checkpoint", "Downstream SSL and linear probing"],
-  "hardware_limit": "Historical Vulcan/Killarney runs, not a controlled hardware-matched comparison. Accounting confirms NVIDIA L40S for the listed Vulcan MKDT jobs. Ours interactive generation logs do not record a GPU model.",
+  "hardware_limit": "Historical Vulcan/Killarney runs, not a controlled hardware-matched comparison. Accounting confirms NVIDIA L40S for the listed Vulcan MKDT jobs. MIPA generation logs do not record a GPU model.",
   "random": {
     "selection_seconds": null,
     "reason": "Selection latency was not recorded. Do not substitute zero for unmeasured selection time.",
@@ -13,8 +13,8 @@
     "generation_model": "ResNet18BN",
     "teacher_method": "simclr",
     "iterations_by_percentage": {"0.2": 10000, "1": 8000, "2": 6000},
-    "batch_real_by_percentage": {"0.2": 1024, "1": 128, "2": 128},
-    "initialization_by_percentage": {"0.2": "Retained DeepCluster K-Means initialization", "1": "Exact saved Random seed-0 subset images", "2": "Exact saved Random seed-0 subset images"},
+    "batch_real_by_percentage": {"0.2": 128, "1": 128, "2": 128},
+    "initialization_by_percentage": {"0.2": "Exact saved Random seed-0 subset images", "1": "Exact saved Random seed-0 subset images", "2": "Exact saved Random seed-0 subset images"},
     "datasets": {
       "CIFAR10": {
         "teacher_seed": 0,
@@ -23,7 +23,7 @@
         "teacher_training_seconds": 58368.561610376,
         "teacher_checkpoint_bytes": 44754295,
         "generation": {
-          "0.2": {"seconds": 1793, "log": "OT-SSL-DD/ours_syntehtic/logs/CIFAR10_ResNet18BN_pt0.2.log", "segments": [[0, 10000, "2026-10-23 09:57:50", "2026-10-23 10:27:43"]]},
+          "0.2": {"seconds": 386, "log": "Evaluate_benchamrk/mipa_random128/logs/r128_CIFAR10_p0p2_gen-1997015.out", "segments": [[0, 10000, "2026-10-28 15:00:04", "2026-10-28 15:06:30"]], "generation_state": "OT-SSL-DD/ours_syntehtic_random128/CIFAR10/ResNet18BN/pt0.2/generation_state.json"},
           "1": {"seconds": 844, "log": "Evaluate_benchamrk/mipa_random128/logs/r128_CIFAR10_p1_gen-1997025.out", "segments": [[0, 8000, "2026-10-28 15:01:28", "2026-10-28 15:15:32"]], "generation_state": "OT-SSL-DD/ours_syntehtic_random128/CIFAR10/ResNet18BN/pt1/generation_state.json"},
           "2": {"seconds": 1169, "log": "Evaluate_benchamrk/mipa_random128/logs/r128_CIFAR10_p2_gen-1997035.out", "segments": [[0, 6000, "2026-10-28 15:03:02", "2026-10-28 15:22:31"]], "generation_state": "OT-SSL-DD/ours_syntehtic_random128/CIFAR10/ResNet18BN/pt2/generation_state.json"}
         }
@@ -35,7 +35,7 @@
         "teacher_training_seconds": 58430.00133425463,
         "teacher_checkpoint_bytes": 44754295,
         "generation": {
-          "0.2": {"seconds": 1670, "log": "OT-SSL-DD/ours_syntehtic/logs/CIFAR100_ResNet18BN_pt0.2.log", "segments": [[0, 10000, "2026-10-23 09:58:12", "2026-10-23 10:26:02"]]},
+          "0.2": {"seconds": 383, "log": "Evaluate_benchamrk/mipa_random128/logs/r128_CIFAR100_p0p2_gen-1997037.out", "segments": [[0, 10000, "2026-10-28 15:05:05", "2026-10-28 15:11:28"]], "generation_state": "OT-SSL-DD/ours_syntehtic_random128/CIFAR100/ResNet18BN/pt0.2/generation_state.json"},
           "1": {"seconds": 847, "log": "Evaluate_benchamrk/mipa_random128/logs/r128_CIFAR100_p1_gen-1997047.out", "segments": [[0, 8000, "2026-10-28 15:05:05", "2026-10-28 15:19:12"]], "generation_state": "OT-SSL-DD/ours_syntehtic_random128/CIFAR100/ResNet18BN/pt1/generation_state.json"},
           "2": {"seconds": 1170, "log": "Evaluate_benchamrk/mipa_random128/logs/r128_CIFAR100_p2_gen-1997057.out", "segments": [[0, 6000, "2026-10-28 15:05:06", "2026-10-28 15:24:36"]], "generation_state": "OT-SSL-DD/ours_syntehtic_random128/CIFAR100/ResNet18BN/pt2/generation_state.json"}
         }
@@ -47,7 +47,7 @@
         "teacher_training_seconds": 269164.37598847505,
         "teacher_checkpoint_bytes": 44754295,
         "generation": {
-          "0.2": {"seconds": 6664, "log": "OT-SSL-DD/ours_syntehtic/logs/TinyImageNet_ResNet18BN_pt0.2.log", "segments": [[0, 600, "2026-10-23 13:59:23", "2026-10-23 14:06:12"], [600, 10000, "2026-10-23 22:40:39", "2026-10-24 00:24:54"]]},
+          "0.2": {"seconds": 2349, "log": "Evaluate_benchamrk/mipa_random128/logs/r128_TinyImageNet_p0p2_gen-1997059.out", "segments": [[0, 10000, "2026-10-28 15:05:06", "2026-10-28 15:44:15"]], "generation_state": "OT-SSL-DD/ours_syntehtic_random128/TinyImageNet/ResNet18BN/pt0.2/generation_state.json"},
           "1": {"seconds": 7715, "log": "Evaluate_benchamrk/mipa_random128/logs/r128_TinyImageNet_p1_gen-1997069.out", "segments": [[0, 8000, "2026-10-28 15:05:07", "2026-10-28 17:13:42"]], "generation_state": "OT-SSL-DD/ours_syntehtic_random128/TinyImageNet/ResNet18BN/pt1/generation_state.json"},
           "2": {"seconds": 11561, "log": "Evaluate_benchamrk/mipa_random128/logs/r128_TinyImageNet_p2_gen-1997079.out", "segments": [[0, 6000, "2026-10-28 14:59:03", "2026-10-28 18:11:44"]], "generation_state": "OT-SSL-DD/ours_syntehtic_random128/TinyImageNet/ResNet18BN/pt2/generation_state.json"}
         }
