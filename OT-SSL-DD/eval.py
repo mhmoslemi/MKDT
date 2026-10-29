@@ -18,6 +18,8 @@ SSL_EPOCHS = {
     "CIFAR10": {0.2: 2000, 1: 2000, 2: 1000},
     "CIFAR100": {0.2: 3000, 1: 8000, 2: 6000},
     "TinyImageNet": {0.2: 6000, 1: 5000, 2: 4000},
+    "FashionMNIST": {0.2: 2000, 1: 2000, 2: 2000},
+    "SVHN": {0.2: 2000, 1: 2000, 2: 2000},
 }
 PROBE_EPOCHS = {1: 100, 5: 100}
 
@@ -29,6 +31,10 @@ SYNTHETIC_NORMALIZATION = {
 }
 
 ROOT = Path(__file__).resolve().parents[1]
+DIGIT_PREPARED = {
+    "FashionMNIST": ROOT / "Evaluate_benchamrk/fashionmnist/full/prepared.json",
+    "SVHN": ROOT / "Evaluate_benchamrk/digits_simclr/prepared.json",
+}
 _REFERENCE = None
 
 
@@ -41,6 +47,8 @@ def reference_modules():
             "downstream_data": ROOT / "benchmarks/downstream_data.py",
             **{name: ROOT / "Evaluate_benchamrk" / (name + ".py")
                for name in ("common", "data", "train_ssl", "evaluate")},
+            "datasets": ROOT / "Evaluate_benchamrk/digits_simclr/datasets.py",
+            "_fashion_dataset": ROOT / "Evaluate_benchamrk/fashionmnist/dataset.py",
         }
         previous = {name: sys.modules.get(name) for name in paths}
         search_path = sys.path[:]
@@ -114,14 +122,24 @@ def evaluate_synset_SSL(it_eval, model, images_train, args, output, normalizatio
         raise ValueError("Reference evaluation requires ConvNet, VGG11 or ResNet18 (BN), not AP/cover")
 
     # Fresh benchmark recipe: generation augmentation/temperature/projector args do not enter here.
-    protocol = json.loads((ROOT / "Evaluate_benchamrk/protocol.json").read_text())
+    if args.dataset in DIGIT_PREPARED:
+        prepared = json.loads(DIGIT_PREPARED[args.dataset].read_text())
+        protocol = prepared["protocol"]
+        module = reference["_fashion_dataset" if args.dataset == "FashionMNIST" else "datasets"]
+        train_set = module.DigitDataset(args.data_path, args.dataset, True)
+        test_set = module.DigitDataset(args.data_path, args.dataset, False)
+        expected = prepared["datasets"][args.dataset]
+        assert train_set.fingerprint == expected["train_fingerprint"], "Digit training data changed"
+        assert test_set.fingerprint == expected["test_fingerprint"], "Digit test data changed"
+    else:
+        protocol = json.loads((ROOT / "Evaluate_benchamrk/protocol.json").read_text())
+        train_set = data.RawDataset(args.data_path, args.dataset, True)
+        test_set = data.RawDataset(args.data_path, args.dataset, False)
     protocol["ssl"]["subset_epochs"] = ssl_epochs
     protocol["ssl"]["checkpoint_every_epochs"] = 500
     protocol["evaluation"].update(epochs=probe_epochs, lr=args.lr_linear, batch_size=args.batch_linear)
     size = protocol["input_size"][args.dataset]
-    count = int(data.SOURCE_COUNTS[args.dataset] * args.percentage / 100)
-    train_set = data.RawDataset(args.data_path, args.dataset, True)
-    test_set = data.RawDataset(args.data_path, args.dataset, False)
+    count = int(len(train_set) * args.percentage / 100)
     selection_method = "random" if getattr(args, "random_subset", False) else "ours"
     if selection_method == "random":
         synthetic, selection = data.select_subset(
@@ -136,7 +154,8 @@ def evaluate_synset_SSL(it_eval, model, images_train, args, output, normalizatio
         images = images_train.detach().cpu().contiguous()
         if not images.is_floating_point() or not torch.isfinite(images).all():
             raise ValueError("Synthetic images must be finite, normalized floating-point tensors")
-        normalization = SYNTHETIC_NORMALIZATION[args.dataset] if normalization is None else normalization
+        if normalization is None:
+            normalization = SYNTHETIC_NORMALIZATION.get(args.dataset, protocol["normalization"][args.dataset])
         mean, std = (torch.tensor(value).view(1, 3, 1, 1) for value in normalization)
         if not torch.isfinite(mean).all() or not torch.isfinite(std).all() or (std <= 0).any():
             raise ValueError("Invalid synthetic normalization")
@@ -227,7 +246,10 @@ def main():
     saved = {} if args.random_subset else torch.load(checkpoint_path, map_location="cpu", weights_only=True)
     if isinstance(saved, torch.Tensor):
         # MKDT images_*.pt files are raw tensors normalized by the root dataset loader.
-        _, mean, std = reference_modules()["data"].SPECS[args.dataset]
+        if args.dataset in DIGIT_PREPARED:
+            mean, std = json.loads(DIGIT_PREPARED[args.dataset].read_text())["protocol"]["normalization"][args.dataset]
+        else:
+            _, mean, std = reference_modules()["data"].SPECS[args.dataset]
         saved = {"data": saved, "normalization": [mean, std]}
     elif not isinstance(saved, dict):
         raise ValueError("Synthetic checkpoint must contain an image tensor or a dictionary with a data key")
