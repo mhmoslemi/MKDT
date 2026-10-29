@@ -1,0 +1,76 @@
+{
+  "receipt": "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/cross_arch_ablation/batches/account_move_wang_20261028T175447Z_mV2vrh",
+  "targets": [
+    {
+      "old": "6762739",
+      "source": "CIFAR10",
+      "end": 600,
+      "parent": null,
+      "name": "xa_CIFAR10_ResNet50_full_p100_s0_e600",
+      "manifest": "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/cross_arch_ablation/batches/batch_20261026T062122Z_smjkx2/xa_CIFAR10_ResNet50_full_p100_s0_e600.json",
+      "before": "JobId=6762739 JobName=xa_CIFAR10_ResNet50_full_p100_s0_e600 UserId=mmoslem3(3140230) GroupId=mmoslem3(3140230) MCS_label=N/A Priority=636118 Nice=0 Account=aip-yiweilu QOS=normal JobState=RUNNING Reason=None Dependency=(null) Requeue=1 Restarts=0 BatchFlag=1 Reboot=0 ExitCode=0:0 RunTime=00:00:55 TimeLimit=03:56:00 TimeMin=N/A SubmitTime=2026-10-26T18:27:20 EligibleTime=2026-10-27T23:24:13 AccrueTime=2026-10-27T23:24:13 StartTime=2026-10-28T13:53:52 EndTime=2026-10-28T17:49:52 Deadline=N/A SuspendTime=None SecsPreSuspend=0 LastSchedEval=2026-10-28T13:53:52 Scheduler=Backfill Partition=gpubase_l40s_b2 AllocNode:Sid=klogin02:2261411 ReqNodeList=(null) ExcNodeList=(null) NodeList=kn081 BatchHost=kn081 NumNodes=1 NumCPUs=1 NumTasks=1 CPUs/Task=1 ReqB:S:C:T=0:0:*:* ReqTRES=cpu=1,mem=6G,node=1,billing=10300,gres/gpu=1,gres/gpu:l40s=1 AllocTRES=cpu=1,mem=6G,node=1,billing=10300,gres/gpu=1,gres/gpu:l40s=1 Socks/Node=* NtasksPerN:B:S:C=0:0:*:* CoreSpec=* MinCPUsNode=1 MinMemoryNode=6G MinTmpDiskNode=0 Features=(null) DelayBoot=00:00:00 OverSubscribe=OK Contiguous=0 Licenses=(null) LicensesAlloc=(null) Network=(null) Command=/scratch/mmoslem3/MKDT/Evaluate_benchamrk/submit_cross_arch_ablation_wang_vulcan.sh WorkDir=/scratch/mmoslem3/MKDT/Evaluate_benchamrk StdErr=/scratch/mmoslem3/MKDT/Evaluate_benchamrk/cross_arch_ablation/logs/xa_CIFAR10_ResNet50_full_p100_s0_e600-6762739.err StdIn=/dev/null StdOut=/scratch/mmoslem3/MKDT/Evaluate_benchamrk/cross_arch_ablation/logs/xa_CIFAR10_ResNet50_full_p100_s0_e600-6762739.out KillOInInvalidDependent=Yes TresPerNode=gres/gpu:l40s:1 TresPerTask=cpu=1",
+      "script": "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/cross_arch_ablation/batches/account_move_wang_20261028T175447Z_mV2vrh/original_6762739.sh",
+      "new": "6904187"
+    },
+    {
+      "old": "6762740",
+      "source": "CIFAR10",
+      "end": 700,
+      "parent": "6762739",
+      "name": "xa_CIFAR10_ResNet50_full_p100_s0_e700",
+      "manifest": "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/cross_arch_ablation/batches/batch_20261026T062122Z_smjkx2/xa_CIFAR10_ResNet50_full_p100_s0_e700.json",
+      "before": "JobId=6762740 JobName=xa_CIFAR10_ResNet50_full_p100_s0_e700 UserId=mmoslem3(3140230) GroupId=mmoslem3(3140230) MCS_label=N/A Priority=635903 Nice=0 Account=aip-yiweilu QOS=normal JobState=PENDING Reason=Dependency Dependency=afterok:6762739(unfulfilled) Requeue=1 Restarts=0 BatchFlag=1 Reboot=0 ExitCode=0:0 RunTime=00:00:00 TimeLimit=03:56:00 TimeMin=N/A SubmitTime=2026-10-26T18:27:20 EligibleTime=Unknown AccrueTime=Unknown StartTime=Unknown EndTime=Unknown Deadline=N/A SuspendTime=None SecsPreSuspend=0 LastSchedEval=2026-10-26T18:27:20 Scheduler=Main Partition=gpubase_l40s_b2 AllocNode:Sid=klogin02:2261411 ReqNodeList=(null) ExcNodeList=(null) NodeList= NumNodes=1-1 NumCPUs=1 NumTasks=1 CPUs/Task=1 ReqB:S:C:T=0:0:*:* ReqTRES=cpu=1,mem=6G,node=1,billing=10300,gres/gpu=1,gres/gpu:l40s=1 AllocTRES=(null) Socks/Node=* NtasksPerN:B:S:C=0:0:*:* CoreSpec=* MinCPUsNode=1 MinMemoryNode=6G MinTmpDiskNode=0 Features=(null) DelayBoot=00:00:00 OverSubscribe=OK Contiguous=0 Licenses=(null) LicensesAlloc=(null) Network=(null) Command=/scratch/mmoslem3/MKDT/Evaluate_benchamrk/submit_cross_arch_ablation_wang_vulcan.sh WorkDir=/scratch/mmoslem3/MKDT/Evaluate_benchamrk StdErr=/scratch/mmoslem3/MKDT/Evaluate_benchamrk/cross_arch_ablation/logs/xa_CIFAR10_ResNet50_full_p100_s0_e700-6762740.err StdIn=/dev/null StdOut=/scratch/mmoslem3/MKDT/Evaluate_benchamrk/cross_arch_ablation/logs/xa_CIFAR10_ResNet50_full_p100_s0_e700-6762740.out KillOInInvalidDependent=Yes TresPerNode=gres/gpu:l40s:1 TresPerTask=cpu=1",
+      "script": "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/cross_arch_ablation/batches/account_move_wang_20261028T175447Z_mV2vrh/original_6762740.sh",
+      "new": "6904188"
+    },
+    {
+      "old": "6762741",
+      "source": "CIFAR10",
+      "end": 800,
+      "parent": "6762740",
+      "name": "xa_CIFAR10_ResNet50_full_p100_s0_e800",
+      "manifest": "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/cross_arch_ablation/batches/batch_20261026T062122Z_smjkx2/xa_CIFAR10_ResNet50_full_p100_s0_e800.json",
+      "before": "JobId=6762741 JobName=xa_CIFAR10_ResNet50_full_p100_s0_e800 UserId=mmoslem3(3140230) GroupId=mmoslem3(3140230) MCS_label=N/A Priority=635903 Nice=0 Account=aip-yiweilu QOS=normal JobState=PENDING Reason=Dependency Dependency=afterok:6762740(unfulfilled) Requeue=1 Restarts=0 BatchFlag=1 Reboot=0 ExitCode=0:0 RunTime=00:00:00 TimeLimit=03:56:00 TimeMin=N/A SubmitTime=2026-10-26T18:27:20 EligibleTime=Unknown AccrueTime=Unknown StartTime=Unknown EndTime=Unknown Deadline=N/A SuspendTime=None SecsPreSuspend=0 LastSchedEval=2026-10-26T18:27:20 Scheduler=Main Partition=gpubase_l40s_b2 AllocNode:Sid=klogin02:2261411 ReqNodeList=(null) ExcNodeList=(null) NodeList= NumNodes=1-1 NumCPUs=1 NumTasks=1 CPUs/Task=1 ReqB:S:C:T=0:0:*:* ReqTRES=cpu=1,mem=6G,node=1,billing=10300,gres/gpu=1,gres/gpu:l40s=1 AllocTRES=(null) Socks/Node=* NtasksPerN:B:S:C=0:0:*:* CoreSpec=* MinCPUsNode=1 MinMemoryNode=6G MinTmpDiskNode=0 Features=(null) DelayBoot=00:00:00 OverSubscribe=OK Contiguous=0 Licenses=(null) LicensesAlloc=(null) Network=(null) Command=/scratch/mmoslem3/MKDT/Evaluate_benchamrk/submit_cross_arch_ablation_wang_vulcan.sh WorkDir=/scratch/mmoslem3/MKDT/Evaluate_benchamrk StdErr=/scratch/mmoslem3/MKDT/Evaluate_benchamrk/cross_arch_ablation/logs/xa_CIFAR10_ResNet50_full_p100_s0_e800-6762741.err StdIn=/dev/null StdOut=/scratch/mmoslem3/MKDT/Evaluate_benchamrk/cross_arch_ablation/logs/xa_CIFAR10_ResNet50_full_p100_s0_e800-6762741.out KillOInInvalidDependent=Yes TresPerNode=gres/gpu:l40s:1 TresPerTask=cpu=1",
+      "script": "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/cross_arch_ablation/batches/account_move_wang_20261028T175447Z_mV2vrh/original_6762741.sh",
+      "new": "6904189"
+    },
+    {
+      "old": "6762742",
+      "source": "CIFAR10",
+      "end": 900,
+      "parent": "6762741",
+      "name": "xa_CIFAR10_ResNet50_full_p100_s0_e900",
+      "manifest": "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/cross_arch_ablation/batches/batch_20261026T062122Z_smjkx2/xa_CIFAR10_ResNet50_full_p100_s0_e900.json",
+      "before": "JobId=6762742 JobName=xa_CIFAR10_ResNet50_full_p100_s0_e900 UserId=mmoslem3(3140230) GroupId=mmoslem3(3140230) MCS_label=N/A Priority=635903 Nice=0 Account=aip-yiweilu QOS=normal JobState=PENDING Reason=Dependency Dependency=afterok:6762741(unfulfilled) Requeue=1 Restarts=0 BatchFlag=1 Reboot=0 ExitCode=0:0 RunTime=00:00:00 TimeLimit=03:56:00 TimeMin=N/A SubmitTime=2026-10-26T18:27:20 EligibleTime=Unknown AccrueTime=Unknown StartTime=Unknown EndTime=Unknown Deadline=N/A SuspendTime=None SecsPreSuspend=0 LastSchedEval=2026-10-26T18:27:20 Scheduler=Main Partition=gpubase_l40s_b2 AllocNode:Sid=klogin02:2261411 ReqNodeList=(null) ExcNodeList=(null) NodeList= NumNodes=1-1 NumCPUs=1 NumTasks=1 CPUs/Task=1 ReqB:S:C:T=0:0:*:* ReqTRES=cpu=1,mem=6G,node=1,billing=10300,gres/gpu=1,gres/gpu:l40s=1 AllocTRES=(null) Socks/Node=* NtasksPerN:B:S:C=0:0:*:* CoreSpec=* MinCPUsNode=1 MinMemoryNode=6G MinTmpDiskNode=0 Features=(null) DelayBoot=00:00:00 OverSubscribe=OK Contiguous=0 Licenses=(null) LicensesAlloc=(null) Network=(null) Command=/scratch/mmoslem3/MKDT/Evaluate_benchamrk/submit_cross_arch_ablation_wang_vulcan.sh WorkDir=/scratch/mmoslem3/MKDT/Evaluate_benchamrk StdErr=/scratch/mmoslem3/MKDT/Evaluate_benchamrk/cross_arch_ablation/logs/xa_CIFAR10_ResNet50_full_p100_s0_e900-6762742.err StdIn=/dev/null StdOut=/scratch/mmoslem3/MKDT/Evaluate_benchamrk/cross_arch_ablation/logs/xa_CIFAR10_ResNet50_full_p100_s0_e900-6762742.out KillOInInvalidDependent=Yes TresPerNode=gres/gpu:l40s:1 TresPerTask=cpu=1",
+      "script": "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/cross_arch_ablation/batches/account_move_wang_20261028T175447Z_mV2vrh/original_6762742.sh",
+      "new": "6904190"
+    },
+    {
+      "old": "6762749",
+      "source": "CIFAR100",
+      "end": 600,
+      "parent": null,
+      "name": "xa_CIFAR100_ResNet50_full_p100_s0_e600",
+      "manifest": "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/cross_arch_ablation/batches/batch_20261026T062122Z_smjkx2/xa_CIFAR100_ResNet50_full_p100_s0_e600.json",
+      "before": "JobId=6762749 JobName=xa_CIFAR100_ResNet50_full_p100_s0_e600 UserId=mmoslem3(3140230) GroupId=mmoslem3(3140230) MCS_label=N/A Priority=636103 Nice=0 Account=aip-yiweilu QOS=normal JobState=PENDING Reason=Priority Dependency=(null) Requeue=1 Restarts=0 BatchFlag=1 Reboot=0 ExitCode=0:0 RunTime=00:00:00 TimeLimit=03:56:00 TimeMin=N/A SubmitTime=2026-10-26T18:27:20 EligibleTime=2026-10-28T00:24:50 AccrueTime=2026-10-28T00:24:50 StartTime=2026-10-28T18:23:00 EndTime=2026-10-28T22:19:00 Deadline=N/A SuspendTime=None SecsPreSuspend=0 LastSchedEval=2026-10-28T13:54:27 Scheduler=Main Partition=gpubase_l40s_b2 AllocNode:Sid=klogin02:2261411 ReqNodeList=(null) ExcNodeList=(null) NodeList= SchedNodeList=kn117 NumNodes=1-1 NumCPUs=1 NumTasks=1 CPUs/Task=1 ReqB:S:C:T=0:0:*:* ReqTRES=cpu=1,mem=6G,node=1,billing=10300,gres/gpu=1,gres/gpu:l40s=1 AllocTRES=(null) Socks/Node=* NtasksPerN:B:S:C=0:0:*:* CoreSpec=* MinCPUsNode=1 MinMemoryNode=6G MinTmpDiskNode=0 Features=(null) DelayBoot=00:00:00 OverSubscribe=OK Contiguous=0 Licenses=(null) LicensesAlloc=(null) Network=(null) Command=/scratch/mmoslem3/MKDT/Evaluate_benchamrk/submit_cross_arch_ablation_wang_vulcan.sh WorkDir=/scratch/mmoslem3/MKDT/Evaluate_benchamrk StdErr=/scratch/mmoslem3/MKDT/Evaluate_benchamrk/cross_arch_ablation/logs/xa_CIFAR100_ResNet50_full_p100_s0_e600-6762749.err StdIn=/dev/null StdOut=/scratch/mmoslem3/MKDT/Evaluate_benchamrk/cross_arch_ablation/logs/xa_CIFAR100_ResNet50_full_p100_s0_e600-6762749.out KillOInInvalidDependent=Yes TresPerNode=gres/gpu:l40s:1 TresPerTask=cpu=1",
+      "script": "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/cross_arch_ablation/batches/account_move_wang_20261028T175447Z_mV2vrh/original_6762749.sh",
+      "new": "6904191"
+    }
+  ],
+  "dependents": [
+    {
+      "id": "6762743",
+      "old_parent": "6762742",
+      "before": "JobId=6762743 JobName=xa_CIFAR10_ResNet50_full_p100_s0_e1000 UserId=mmoslem3(3140230) GroupId=mmoslem3(3140230) MCS_label=N/A Priority=635903 Nice=0 Account=aip-yiweilu QOS=normal JobState=PENDING Reason=Dependency Dependency=afterok:6762742(unfulfilled) Requeue=1 Restarts=0 BatchFlag=1 Reboot=0 ExitCode=0:0 RunTime=00:00:00 TimeLimit=03:56:00 TimeMin=N/A SubmitTime=2026-10-26T18:27:20 EligibleTime=Unknown AccrueTime=Unknown StartTime=Unknown EndTime=Unknown Deadline=N/A SuspendTime=None SecsPreSuspend=0 LastSchedEval=2026-10-26T18:27:20 Scheduler=Main Partition=gpubase_l40s_b2 AllocNode:Sid=klogin02:2261411 ReqNodeList=(null) ExcNodeList=(null) NodeList= NumNodes=1-1 NumCPUs=1 NumTasks=1 CPUs/Task=1 ReqB:S:C:T=0:0:*:* ReqTRES=cpu=1,mem=6G,node=1,billing=10300,gres/gpu=1,gres/gpu:l40s=1 AllocTRES=(null) Socks/Node=* NtasksPerN:B:S:C=0:0:*:* CoreSpec=* MinCPUsNode=1 MinMemoryNode=6G MinTmpDiskNode=0 Features=(null) DelayBoot=00:00:00 OverSubscribe=OK Contiguous=0 Licenses=(null) LicensesAlloc=(null) Network=(null) Command=/scratch/mmoslem3/MKDT/Evaluate_benchamrk/submit_cross_arch_ablation_wang_vulcan.sh WorkDir=/scratch/mmoslem3/MKDT/Evaluate_benchamrk StdErr=/scratch/mmoslem3/MKDT/Evaluate_benchamrk/cross_arch_ablation/logs/xa_CIFAR10_ResNet50_full_p100_s0_e1000-6762743.err StdIn=/dev/null StdOut=/scratch/mmoslem3/MKDT/Evaluate_benchamrk/cross_arch_ablation/logs/xa_CIFAR10_ResNet50_full_p100_s0_e1000-6762743.out KillOInInvalidDependent=Yes TresPerNode=gres/gpu:l40s:1 TresPerTask=cpu=1",
+      "new_parent": "6904190"
+    },
+    {
+      "id": "6762750",
+      "old_parent": "6762749",
+      "before": "JobId=6762750 JobName=xa_CIFAR100_ResNet50_full_p100_s0_e700 UserId=mmoslem3(3140230) GroupId=mmoslem3(3140230) MCS_label=N/A Priority=635903 Nice=0 Account=aip-yiweilu QOS=normal JobState=PENDING Reason=Dependency Dependency=afterok:6762749(unfulfilled) Requeue=1 Restarts=0 BatchFlag=1 Reboot=0 ExitCode=0:0 RunTime=00:00:00 TimeLimit=03:56:00 TimeMin=N/A SubmitTime=2026-10-26T18:27:20 EligibleTime=Unknown AccrueTime=Unknown StartTime=Unknown EndTime=Unknown Deadline=N/A SuspendTime=None SecsPreSuspend=0 LastSchedEval=2026-10-26T18:27:20 Scheduler=Main Partition=gpubase_l40s_b2 AllocNode:Sid=klogin02:2261411 ReqNodeList=(null) ExcNodeList=(null) NodeList= NumNodes=1-1 NumCPUs=1 NumTasks=1 CPUs/Task=1 ReqB:S:C:T=0:0:*:* ReqTRES=cpu=1,mem=6G,node=1,billing=10300,gres/gpu=1,gres/gpu:l40s=1 AllocTRES=(null) Socks/Node=* NtasksPerN:B:S:C=0:0:*:* CoreSpec=* MinCPUsNode=1 MinMemoryNode=6G MinTmpDiskNode=0 Features=(null) DelayBoot=00:00:00 OverSubscribe=OK Contiguous=0 Licenses=(null) LicensesAlloc=(null) Network=(null) Command=/scratch/mmoslem3/MKDT/Evaluate_benchamrk/submit_cross_arch_ablation_wang_vulcan.sh WorkDir=/scratch/mmoslem3/MKDT/Evaluate_benchamrk StdErr=/scratch/mmoslem3/MKDT/Evaluate_benchamrk/cross_arch_ablation/logs/xa_CIFAR100_ResNet50_full_p100_s0_e700-6762750.err StdIn=/dev/null StdOut=/scratch/mmoslem3/MKDT/Evaluate_benchamrk/cross_arch_ablation/logs/xa_CIFAR100_ResNet50_full_p100_s0_e700-6762750.out KillOInInvalidDependent=Yes TresPerNode=gres/gpu:l40s:1 TresPerTask=cpu=1",
+      "new_parent": "6904191"
+    }
+  ],
+  "originals_cancelled": true,
+  "replacements_released": true
+}
