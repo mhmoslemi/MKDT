@@ -203,7 +203,7 @@ def main():
 
     # 'teacher_source': 'pretrained', 'teacher_seed': 0, 'teacher_ssl': 'simclr', 'teacher_path': '/scratch/mmoslem3/MKDT/Evaluate_benchamrk/full_ssl_checkpoints_1000ep_3seeds', 'encoder_ssl_protocol': None, 'method': 'Bipartite_ViewTransition_MI', 'dsa_param': <utils.ParamDiffAug object at 0x723263394550>}
     # Data.
-    parser.add_argument('--dataset', choices=['CIFAR10', 'CIFAR100', 'TinyImageNet', 'FashionMNIST', 'SVHN'], default='TinyImageNet')
+    parser.add_argument('--dataset', choices=['CIFAR10', 'CIFAR100', 'TinyImageNet', 'FashionMNIST', 'SVHN'], default='FashionMNIST')
     parser.add_argument('--percentage', type=float, default=0.2)
     parser.add_argument('--data_path', default='/home/mmoslem3/scratch/data')
     parser.add_argument('--device', choices=['cpu', 'cuda'], default='cuda' if torch.cuda.is_available() else 'cpu')
@@ -212,7 +212,7 @@ def main():
     # Information-Theoretic Objective.
     parser.add_argument('--Iteration', type=int, default=2000)
     parser.add_argument('--lr_img', type=float, default=0.002, help='Higher LR, decays via CosineAnnealing')
-    parser.add_argument('--batch_real', type=int, default=4096)
+    parser.add_argument('--batch_real', type=int, default=256)
 
     parser.add_argument('--temperature', type=float, default=0.2, help='Softmax temperature for prototype assignment')
     parser.add_argument('--disp_weight', type=nonnegative_float, default=0.0, help='Weight for feature displacement matching')
@@ -243,7 +243,7 @@ def main():
     parser.add_argument('--batch_linear', type=int, default=256)
 
     # Output.
-    parser.add_argument('--save_path', default='test')
+    parser.add_argument('--save_path', default='newdata')
     parser.add_argument('--resume', action='store_true', help='Resume the checkpoint in save_path, or skip a completed run')
     parser.add_argument('--save_every', type=int, default=100, help='Replace the single checkpoint every N iterations')
     parser.add_argument('--feature_batch', type=int, default=128, help='Frozen feature extraction chunk size')
