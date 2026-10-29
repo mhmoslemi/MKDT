@@ -141,7 +141,27 @@ def deepcluster_initialize(dst_train, num_syn, device, seed, channel, num_classe
     return images.to(device)
 
 
-def bipartite_view_transition_loss(features_u_real, features_v_real, features_u_syn, features_v_syn, tau):
+def feature_similarity(real, synthetic, metric='cosine', mmd_sigma=1.0):
+    """Pairwise scores on normalized features; larger means more similar."""
+    if metric == 'cosine':
+        scores = torch.mm(real, synthetic.t())
+    elif metric == 'l1':
+        scores = -torch.cdist(real, synthetic, p=1)
+    elif metric == 'l2':
+        scores = -torch.cdist(real, synthetic, p=2)
+    elif metric == 'mmd':
+        squared_distance = torch.cdist(real, synthetic, p=2).square()
+        kernel = torch.exp(-squared_distance / (2 * mmd_sigma ** 2))
+        # For singleton distributions, RBF-MMD squared is k(x,x)+k(y,y)-2k(x,y).
+        scores = -2 * (1 - kernel)
+    else:
+        raise ValueError('Unknown feature similarity: ' + metric)
+    assert scores.shape == (len(real), len(synthetic)), 'Similarity must remain a real-by-synthetic matrix'
+    return scores
+
+
+def bipartite_view_transition_loss(features_u_real, features_v_real, features_u_syn, features_v_syn, tau,
+                                  similarity='cosine', mmd_sigma=1.0):
     """Compute assignment MI, displacement loss, and view-pair similarity loss."""
     u_r = F.normalize(features_u_real, dim=1)
     v_r = F.normalize(features_v_real, dim=1)
@@ -149,8 +169,8 @@ def bipartite_view_transition_loss(features_u_real, features_v_real, features_u_
     v_s = F.normalize(features_v_syn, dim=1)
 
     # Bipartite similarities: u_r -> u_s and v_r -> v_s [Batch, Num_Syn]
-    sim_u = torch.mm(u_r, u_s.t())
-    sim_v = torch.mm(v_r, v_s.t())
+    sim_u = feature_similarity(u_r, u_s, similarity, mmd_sigma)
+    sim_v = feature_similarity(v_r, v_s, similarity, mmd_sigma)
 
     # Soft assignments to paired synthetic prototypes
     p_u = F.softmax(sim_u / tau, dim=1)
@@ -211,6 +231,8 @@ def main():
     parser.add_argument('--batch_real', type=int, default=256)
 
     parser.add_argument('--temperature', type=float, default=0.2, help='Softmax temperature for prototype assignment')
+    parser.add_argument('--similarity', choices=['cosine', 'l1', 'l2', 'mmd'], default='cosine', help='Pairwise feature score used for prototype assignments')
+    parser.add_argument('--mmd_sigma', type=float, default=1.0, help='RBF bandwidth for pairwise singleton MMD squared')
     parser.add_argument('--disp_weight', type=nonnegative_float, default=0.0, help='Weight for feature displacement matching')
     parser.add_argument('--pair_weight', type=nonnegative_float, default=0.0, help='Weight for view-pair similarity matching')
     
@@ -249,6 +271,8 @@ def main():
         parser.error('Iterations, saving interval, batches and augmentation draws must be positive')
     if not 0 < args.percentage <= 100:
         parser.error('percentage must be in (0, 100]')
+    if not math.isfinite(args.mmd_sigma) or args.mmd_sigma <= 0:
+        parser.error('mmd_sigma must be finite and positive')
     if args.teacher_path is None:
         teacher_folder = {'FashionMNIST': 'fashionmnist/full/checkpoints',
                           'SVHN': 'digits_simclr/checkpoints'}.get(args.dataset, 'full_ssl_checkpoints_1000ep_3seeds')
@@ -266,6 +290,10 @@ def main():
     saved = None
     if args.resume and result_path.exists():
         saved = torch.load(result_path, map_location='cpu', weights_only=True)
+        previous_similarity = saved.get('iic_params', {})
+        if (previous_similarity.get('similarity', 'cosine') != args.similarity
+                or (args.similarity == 'mmd' and previous_similarity.get('mmd_sigma', 1.0) != args.mmd_sigma)):
+            raise ValueError('Checkpoint similarity or MMD bandwidth differs from this run')
         if 'init' in saved and saved['init'] != args.init:
             raise ValueError('Checkpoint initialization differs from --init')
         if saved.get('run_args') != run_args:
@@ -388,6 +416,7 @@ def main():
             'total_loss_history': torch.tensor(total_loss_history, dtype=torch.float64),
             'iic_params': {'tau': args.temperature, 'disp_weight': args.disp_weight,
                            'pair_weight': args.pair_weight, 'strategy': args.distill_aug_strategy,
+                           'similarity': args.similarity, 'mmd_sigma': args.mmd_sigma,
                            'batch_real': args.batch_real}
         })
         print('Saved synthetic data to %s (iteration %d/%d)' % (result_path, iteration, args.Iteration), flush=True)
@@ -455,7 +484,8 @@ def main():
                 features_v_syn = embed(view_v_syn)
 
                 negative_mi, disp_loss, pair_loss = bipartite_view_transition_loss(
-                    features_u_real, features_v_real, features_u_syn, features_v_syn, tau=args.temperature
+                    features_u_real, features_v_real, features_u_syn, features_v_syn, tau=args.temperature,
+                    similarity=args.similarity, mmd_sigma=args.mmd_sigma
                 )
                 network_loss = (negative_mi + args.disp_weight * disp_loss
                                 + args.pair_weight * pair_loss)

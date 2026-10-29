@@ -23,11 +23,15 @@ SSL_EPOCHS = {
 }
 PROBE_EPOCHS = {1: 100, 5: 100}
 
-# Undo OT utils.get_dataset normalization before applying the benchmark transforms.
+# Undo synthetic-image normalization before applying the benchmark transforms.
 SYNTHETIC_NORMALIZATION = {
     "CIFAR10": [[0.4914, 0.4822, 0.4465], [0.2023, 0.1994, 0.2010]],
     "CIFAR100": [[0.5071, 0.4866, 0.4409], [0.2673, 0.2564, 0.2762]],
     "TinyImageNet": [[0.485, 0.456, 0.406], [0.229, 0.224, 0.225]],
+    "FashionMNIST": [[0.2877805110038807, 0.2877805110038807, 0.2877805110038807],
+                    [0.3458506385739246, 0.3458506385739246, 0.3458506385739246]],
+    "SVHN": [[0.43768210460907253, 0.44376970456396875, 0.47280442222972685],
+             [0.19803012447157153, 0.2010156247182884, 0.19703614172172385]],
 }
 
 ROOT = Path(__file__).resolve().parents[1]
