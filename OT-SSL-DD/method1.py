@@ -104,46 +104,41 @@ def make_diff_augmenter(strategy, param, dsa=False):
 
 
 @torch.no_grad()
-def deepcluster_initialize(dst_train, num_syn, device, seed, channel, num_classes, im_size, model_name='ConvNet', batch_size=128):
-    """Extract features with a random network and perform K-Means to initialize synthetic images as cluster centroids."""
+def deepcluster_initialize(dst_train, num_syn, device, seed, channel, num_classes, im_size, model_name='ConvNet', batch_size=128, init='random'):
+    """Initialize from random real images or random-feature K-Means medoids."""
+    rng = torch.Generator().manual_seed(seed)
+    indices = torch.randperm(len(dst_train), generator=rng)[:num_syn]
+    assert len(indices) == num_syn, 'Not enough real images for initialization'
+    if init == 'random':
+        print(f'Initializing {num_syn} synthetic images from random real training images (seed={seed})...', flush=True)
+        return torch.stack([_images_from_batch(dst_train[int(index)]) for index in indices]).to(device)
+
+    assert init == 'kmeans'
     print(f'Initializing {num_syn} synthetic prototypes via DeepCluster K-Means on {model_name}...', flush=True)
     network = get_network(model_name, channel, num_classes, im_size, seed=seed).to(device)
     encoder = frozen_embedder(network)
-
     loader = torch.utils.data.DataLoader(dst_train, batch_size=batch_size, shuffle=False, num_workers=0)
     features = None
     position = 0
-
     for batch in loader:
-        imgs = _images_from_batch(batch).to(device)
-        feats = encoder(imgs).cpu()
+        feats = encoder(_images_from_batch(batch).to(device)).cpu()
         if features is None:
             features = torch.empty(len(dst_train), feats.shape[1], dtype=feats.dtype)
         features[position:position + len(feats)] = feats
         position += len(feats)
-
-    N, D = features.shape
-    M = num_syn
-
-    rng = torch.Generator().manual_seed(seed)
-    indices = torch.randperm(N, generator=rng)[:M]
     centers = features[indices].clone()
-
     for _ in range(5):
         assigns = torch.cat([torch.cdist(block, centers).argmin(dim=1) for block in features.split(1024)])
-        counts = torch.bincount(assigns, minlength=M)
+        counts = torch.bincount(assigns, minlength=num_syn)
         new_centers = torch.zeros_like(centers).index_add_(0, assigns, features)
         new_centers /= counts.clamp_min(1)[:, None]
         new_centers[counts == 0] = centers[counts == 0]
         if torch.allclose(centers, new_centers, atol=1e-4):
             break
         centers = new_centers
-
     closest_indices = torch.cat([torch.cdist(block, features).argmin(dim=1) for block in centers.split(32)])
-    initial_syn_images = torch.stack([_images_from_batch(dst_train[int(index)]) for index in closest_indices])
-
-    del network, encoder, features, centers
-    return initial_syn_images.to(device)
+    images = torch.stack([_images_from_batch(dst_train[int(index)]) for index in closest_indices])
+    return images.to(device)
 
 
 def bipartite_view_transition_loss(features_u_real, features_v_real, features_u_syn, features_v_syn, tau):
@@ -208,6 +203,7 @@ def main():
     parser.add_argument('--data_path', default='/home/mmoslem3/scratch/data')
     parser.add_argument('--device', choices=['cpu', 'cuda'], default='cuda' if torch.cuda.is_available() else 'cpu')
     parser.add_argument('--seed', type=int, default=0)
+    parser.add_argument('--init', choices=['random', 'kmeans'], default='random', help='Synthetic-image initialization from real training data')
 
     # Information-Theoretic Objective.
     parser.add_argument('--Iteration', type=int, default=2000)
@@ -270,6 +266,8 @@ def main():
     saved = None
     if args.resume and result_path.exists():
         saved = torch.load(result_path, map_location='cpu', weights_only=True)
+        if 'init' in saved and saved['init'] != args.init:
+            raise ValueError('Checkpoint initialization differs from --init')
         if saved.get('run_args') != run_args:
             raise ValueError('Checkpoint settings differ from this run; do not resume with changed parameters')
         if not 0 <= saved['iteration'] <= args.Iteration:
@@ -305,9 +303,10 @@ def main():
     if not 2 <= num_syn <= len(dst_train) or args.batch_real > len(dst_train):
         raise ValueError('Invalid synthetic count or real batch size')
     if saved is None:
+        init_options = {'init': 'kmeans'} if args.init == 'kmeans' else {}
         image_syn_init = deepcluster_initialize(
             dst_train, num_syn, args.device, args.seed, channel, num_classes, im_size,
-            model_name=random_models[0], batch_size=args.feature_batch
+            model_name=random_models[0], batch_size=args.feature_batch, **init_options
         )
         image_syn = image_syn_init.detach().requires_grad_(True)
         image_syn_initial = image_syn.detach().clone()
@@ -377,7 +376,7 @@ def main():
             'data': image_syn.detach().cpu(), 'initial_data': image_syn_initial.detach().cpu(),
             'dataset': args.dataset, 'percentage': args.percentage, 'normalization': [mean, std],
             'method': method, 'iteration': iteration, 'complete': iteration == args.Iteration,
-            'run_args': run_args, 'optimizer': optimizer_img.state_dict(), 'scheduler': scheduler_img.state_dict(),
+            'run_args': run_args, 'init': args.init, 'optimizer': optimizer_img.state_dict(), 'scheduler': scheduler_img.state_dict(),
             'rng': common.rng_state(), 'numpy_rng': (numpy_rng[0], numpy_rng[1].tolist(), *numpy_rng[2:]),
             'objective_rng': objective_rng.bit_generator.state, 'data_rng': data_rng.get_state(),
             'real_order': real_order, 'real_position': real_position,
