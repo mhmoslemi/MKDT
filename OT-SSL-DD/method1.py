@@ -206,7 +206,7 @@ def main():
     parser.add_argument('--init', choices=['random', 'kmeans'], default='random', help='Synthetic-image initialization from real training data')
 
     # Information-Theoretic Objective.
-    parser.add_argument('--Iteration', type=int, default=2000)
+    parser.add_argument('--Iteration', type=int, default=5000)
     parser.add_argument('--lr_img', type=float, default=0.002, help='Higher LR, decays via CosineAnnealing')
     parser.add_argument('--batch_real', type=int, default=256)
 
@@ -224,7 +224,7 @@ def main():
 
     # Teacher.
     parser.add_argument('--teacher_source', choices=['fresh', 'pretrained'], default='pretrained')
-    parser.add_argument('--teacher_seed', type=int, nargs='+', default=[1], help='Saved teacher seeds; their losses are summed')
+    parser.add_argument('--teacher_seed', type=int, nargs='+', default=[0,1,2], help='Saved teacher seeds; their losses are summed')
     parser.add_argument('--teacher_ssl', choices=['simclr', 'barlowtwins'], default='simclr')
     parser.add_argument('--teacher_path', default=None, help='Automatically selects the saved teacher directory for the dataset')
 

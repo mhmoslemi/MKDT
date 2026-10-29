@@ -16,7 +16,7 @@ class DigitDataset(BaseDataset):
     def __init__(self, root, name, training):
         assert name == 'FashionMNIST'
         self.name, self.classes = name, 10
-        base = FashionMNIST(str(root), train=training, download=False)
+        base = FashionMNIST(str(root), train=training, download=True)
         pixels = [np.array(Image.fromarray(image.numpy()).resize(
             (32, 32), Image.Resampling.BICUBIC), copy=True) for image in base.data]
         self.images = torch.from_numpy(np.stack(pixels))[:, None]
