@@ -51,8 +51,22 @@ assert.equal(teacherConfig.signature.source,dataset);assert.equal(teacherConfig.
 assert.equal(teacherConfig.signature.ssl,'simclr');assert.equal(teacherConfig.identity.seed,seed);
 assert.deepEqual(marker.identity,teacherConfig.identity);assert.equal(hash(path),marker.checkpoint_file_sha256);
 assert.equal(teacherConfig.signature.image_count,train_count);
-const data_root=p.resolve(root,'../data');
-assert.ok(fs.existsSync(p.join(data_root,dataset==='SVHN'?'SVHN/train_32x32.mat':'tinyimagenet.pt')),'Training data missing');
+const requested_root=process.env.BENCH_DATA_ROOT||p.resolve(root,'../data');
+assert.ok(fs.existsSync(requested_root),`Data directory missing: ${requested_root}. Set BENCH_DATA_ROOT to its location.`);
+const data_root=fs.realpathSync(requested_root);
+const required=p.join(data_root,dataset==='SVHN'?'SVHN/train_32x32.mat':'tinyimagenet.pt');
+if(dataset==='SVHN'&&!fs.existsSync(required)){
+ const flat=p.join(data_root,'train_32x32.mat');
+ if(fs.existsSync(flat)&&fs.statSync(flat).isFile()){
+  assert.ok(!fs.lstatSync(required,{throwIfNoEntry:false}),`Existing broken SVHN path preserved: ${required}`);
+  fs.mkdirSync(p.dirname(required),{recursive:true});
+  fs.symlinkSync(flat,required);
+  process.stderr.write(`Using existing SVHN archive: ${required} -> ${flat}\n`);
+ }
+}
+assert.ok(fs.existsSync(required)&&fs.statSync(required).isFile(),
+ `${dataset} training data missing: ${required}`+(dataset==='SVHN'?` (also checked ${p.join(data_root,'train_32x32.mat')})`:'')+
+ '. Set BENCH_DATA_ROOT to the directory containing the dataset.');
 const files=['networks.py','benchmarks/downstream_data.py','Evaluate_benchamrk/common.py','Evaluate_benchamrk/data.py',
  'Evaluate_benchamrk/digits_simclr/datasets.py','Evaluate_benchamrk/iic_init/train_svhn_tiny_killarney.py',
  'Evaluate_benchamrk/submit_iic_svhn_tiny_lu_killarney.sh'];
