@@ -359,7 +359,8 @@ def feature_similarity(real, synthetic, metric='cosine', mmd_sigma=1.0,
 def bipartite_view_transition_loss(features_u_real, features_v_real, features_u_syn, features_v_syn, tau,
                                   similarity='cosine', mmd_sigma=1.0,
                                   whitening=None, sinkhorn_epsilon=0.1, sinkhorn_iterations=50,
-                                  d3s_stats=None, d3s_weight=1.0):
+                                  d3s_stats=None, d3s_weight=1.0,
+                                  assignment_filter=False, assignment_threshold=0.05):
     """Compute the same MI objective with the selected soft-assignment similarity."""
     if similarity == 'd3s':
         u_r, v_r, u_s, v_s = features_u_real, features_v_real, features_u_syn, features_v_syn
@@ -376,6 +377,20 @@ def bipartite_view_transition_loss(features_u_real, features_v_real, features_u_
     # Soft assignments to paired synthetic prototypes
     p_u = F.softmax(sim_u / tau, dim=1)
     p_v = F.softmax(sim_v / tau, dim=1)
+
+    if assignment_filter:
+        with torch.no_grad():
+            log_prototypes = math.log(p_u.shape[1])
+            confidence = [((p * (p.clamp_min(torch.finfo(p.dtype).tiny).log() + log_prototypes)).sum(1)
+                           / log_prototypes).clamp(0, 1) if log_prototypes else torch.zeros_like(p[:, 0])
+                          for p in (p_u, p_v)]
+            keep = (torch.minimum(*confidence) > assignment_threshold)
+        if not keep.any():
+            # No accepted pairs: detached zeros also prevent an Adam momentum-only update.
+            zero = p_u.new_zeros(())
+            return zero, zero, zero
+        p_u, p_v = p_u[keep], p_v[keep]
+        u_r, v_r = u_r[keep], v_r[keep]
 
     # Joint probability matrix P [Num_Syn, Num_Syn]
     B = u_r.shape[0]
@@ -440,6 +455,8 @@ def main():
     parser.add_argument('--batch_real', type=int, default=256)
 
     parser.add_argument('--temperature', type=float, default=0.2, help='Softmax temperature for prototype assignment')
+    parser.add_argument('--assignment_filter', action='store_true', help='Exclude real images unless both branches pass the normalized KL-to-uniform threshold')
+    parser.add_argument('--assignment_threshold', type=float, default=0.05, help='Minimum KL(assignment || uniform) / log(num_syn) in both branches, in [0,1]; ignored unless assignment_filter is enabled')
     parser.add_argument('--similarity', choices=['cosine', 'l1', 'l2', 'mmd', 'mmd-dist', 'dm', 'energy', 'whitened-cosine', 'sinkhorn', 'd3s'], default='cosine', help='Similarity inside softmax assignments; d3s always uses middle-layer full Gaussian KL plus final cosine; every option keeps MI')
     parser.add_argument('--feature_layers', choices=['last', 'all'], default='last', help='For non-d3s similarities: last uses existing final features; all adds separately normalized ResNet layer2/layer3 channel mean+std')
     parser.add_argument('--d3s_weight', type=nonnegative_float, default=1.0, help='Weight of real-calibrated middle-layer Gaussian KL inside d3s similarity; final cosine keeps weight 1')
@@ -489,6 +506,8 @@ def main():
     parser.add_argument('--feature_batch', type=int, default=128, help='Frozen feature extraction chunk size')
 
     args = parser.parse_args()
+    if not math.isfinite(args.assignment_threshold) or not 0 <= args.assignment_threshold <= 1:
+        parser.error('assignment_threshold must be finite and in [0, 1]')
     if args.feature_layers == 'all' or args.similarity == 'd3s':
         feature_models = [args.model] if args.teacher_source == 'pretrained' else (args.random_models or args.model).split(',')
         if any(name.strip() not in ('ResNet18', 'ResNet18BN') for name in feature_models):
@@ -542,12 +561,17 @@ def main():
         run_args.update(d3s_weight=args.d3s_weight, d3s_reg=args.d3s_reg)
     if args.similarity == 'cosine' and args.cosine_views > 1:
         run_args['cosine_views'] = args.cosine_views
+    if args.assignment_filter:
+        run_args.update(assignment_filter=True, assignment_threshold=args.assignment_threshold)
     if args.distill_aug_backend == 'simclr':
         run_args.update(distill_aug_backend='simclr', simclr_compose_probability=args.simclr_compose_probability)
     saved = None
     if args.resume and result_path.exists():
         saved = torch.load(result_path, map_location='cpu', weights_only=True)
         previous_similarity = saved.get('iic_params', {})
+        if (previous_similarity.get('assignment_filter', False) != args.assignment_filter
+                or (args.assignment_filter and previous_similarity.get('assignment_threshold') != args.assignment_threshold)):
+            raise ValueError('Checkpoint assignment filtering settings differ from this run')
         if previous_similarity.get('feature_layers', 'last') != args.feature_layers:
             raise ValueError('Checkpoint feature layers differ from this run')
         if (previous_similarity.get('similarity', 'cosine') != args.similarity
@@ -742,6 +766,7 @@ def main():
                            'pair_weight': args.pair_weight, 'strategy': 'simclr_single_or_composed' if args.distill_aug_backend == 'simclr' else args.distill_aug_strategy,
                            'similarity': args.similarity, 'feature_layers': args.feature_layers, 'mmd_sigma': args.mmd_sigma,
                            'cosine_views': args.cosine_views if args.similarity == 'cosine' else 1,
+                           'assignment_filter': args.assignment_filter, 'assignment_threshold': args.assignment_threshold,
                            'mmd_views': args.mmd_views if args.similarity == 'mmd-dist' else 1,
                            'dm_views': args.dm_views if args.similarity == 'dm' else 1,
                            'energy_views': args.energy_views, 'sinkhorn_views': args.sinkhorn_views,
@@ -757,6 +782,8 @@ def main():
 
     print('Hyper-parameters: \n', args.__dict__)
     print('P_net support: %s' % ', '.join(random_models), flush=True)
+    if args.assignment_filter:
+        print('Assignment filter: normalized KL > %g in both branches; empty draws skip optimization.' % args.assignment_threshold, flush=True)
     print('Objective: sum teacher losses (-MI + %g * displacement + %g * pair_similarity), averaged over %d augmentation draw(s).' %
           (args.disp_weight, args.pair_weight, args.num_random_networks), flush=True)
     print('%s distillation begins' % get_time(), flush=True)
@@ -827,12 +854,14 @@ def main():
                     similarity=args.similarity, mmd_sigma=args.mmd_sigma,
                     whitening=None if whitening_stats is None else whitening_stats[teacher_index],
                     sinkhorn_epsilon=args.sinkhorn_epsilon, sinkhorn_iterations=args.sinkhorn_iterations,
-                    d3s_stats=None if d3s_stats is None else d3s_stats[teacher_index], d3s_weight=args.d3s_weight
+                    d3s_stats=None if d3s_stats is None else d3s_stats[teacher_index], d3s_weight=args.d3s_weight,
+                    assignment_filter=args.assignment_filter, assignment_threshold=args.assignment_threshold
                 )
                 network_loss = (negative_mi + args.disp_weight * disp_loss
                                 + args.pair_weight * pair_loss)
 
-                (network_loss / args.num_random_networks).backward()
+                if network_loss.requires_grad:
+                    (network_loss / args.num_random_networks).backward()
 
                 sampled_losses.append(network_loss.detach())
                 sampled_negative_mi_losses.append(negative_mi.detach())
@@ -850,11 +879,13 @@ def main():
         pair_loss_value = torch.stack(sampled_pair_losses).sum().item() / args.num_random_networks
         total_loss_value = objective
 
-        optimizer_img.step()
-        scheduler_img.step()
+        if image_syn.grad is not None:
+            optimizer_img.step()
+            scheduler_img.step()
 
         with torch.no_grad():
-            image_syn.copy_(torch.maximum(torch.minimum(image_syn, pixel_max), pixel_min))
+            if image_syn.grad is not None:
+                image_syn.copy_(torch.maximum(torch.minimum(image_syn, pixel_max), pixel_min))
             drift = ((image_syn - image_syn_initial) * diag_std * 255).square().mean().sqrt().item()
 
         loss_history.append(objective)

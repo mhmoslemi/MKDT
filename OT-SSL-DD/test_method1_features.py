@@ -134,6 +134,59 @@ class FeatureTests(unittest.TestCase):
                     with self.assertRaisesRegex(ValueError, 'different number of cosine views'):
                         method1.main()
 
+    def test_assignment_filter_matches_retained_batch_and_blocks_rejected_gradients(self):
+        real_u = torch.tensor([[1., 0, 0], [0., 0, 0], [0., 1, 0], [1., 0, 0]], requires_grad=True)
+        real_v = torch.tensor([[1., 0, 0], [0., 1, 0], [0., 1, 0], [0., 0, 0]], requires_grad=True)
+        syn_u, syn_v = [torch.eye(3).requires_grad_() for _ in range(2)]
+        actual = method1.bipartite_view_transition_loss(real_u, real_v, syn_u, syn_v, tau=0.2,
+            assignment_filter=True, assignment_threshold=0.2)
+        expected = method1.bipartite_view_transition_loss(real_u[[0, 2]], real_v[[0, 2]], syn_u, syn_v, tau=0.2)
+        for first, second in zip(actual, expected):
+            torch.testing.assert_close(first, second)
+        inputs = real_u, real_v, syn_u, syn_v
+        actual_grads = torch.autograd.grad(sum(actual), inputs, retain_graph=True)
+        expected_grads = torch.autograd.grad(sum(expected), inputs)
+        for first, second in zip(actual_grads, expected_grads):
+            torch.testing.assert_close(first, second)
+            self.assertTrue(torch.isfinite(first).all())
+        for gradient in actual_grads[:2]:
+            torch.testing.assert_close(gradient[[1, 3]], torch.zeros(2, 3))
+
+    def test_assignment_filter_off_is_unchanged_and_empty_batches_skip_updates(self):
+        real = torch.eye(3)
+        synthetic = torch.eye(3).requires_grad_()
+        default = method1.bipartite_view_transition_loss(real, real, synthetic, synthetic, tau=0.2)
+        disabled = method1.bipartite_view_transition_loss(real, real, synthetic, synthetic, tau=0.2,
+            assignment_filter=False, assignment_threshold=1)
+        for first, second in zip(default, disabled):
+            self.assertTrue(torch.equal(first, second))
+        for count in (1, 3):
+            empty = method1.bipartite_view_transition_loss(torch.zeros(2, 3), torch.zeros(2, 3),
+                synthetic[:count], synthetic[:count], tau=0.2, assignment_filter=True)
+            self.assertTrue(all(value.item() == 0 and not value.requires_grad for value in empty))
+        boundary = method1.bipartite_view_transition_loss(real, real, synthetic, synthetic, tau=0.2,
+            assignment_filter=True, assignment_threshold=1)
+        self.assertTrue(all(value.item() == 0 and not value.requires_grad for value in boundary))
+
+    def test_assignment_threshold_validation_and_resume_guard(self):
+        for value in ('nan', 'inf', '-0.1', '1.1'):
+            argv = ['method1.py', '--device', 'cpu', '--assignment_threshold', value]
+            with patch.object(sys, 'argv', argv), patch.object(sys, 'stderr', io.StringIO()):
+                with self.assertRaises(SystemExit) as error:
+                    method1.main()
+                self.assertEqual(error.exception.code, 2)
+        for before, requested, threshold in ((False, True, 0.05), (True, False, 0.05), (True, True, 0.1)):
+            with tempfile.TemporaryDirectory() as temporary:
+                (Path(temporary) / 'res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt').touch()
+                saved = {'iic_params': dict(assignment_filter=before, assignment_threshold=0.05)}
+                argv = ['method1.py', '--dataset', 'CIFAR10', '--device', 'cpu', '--resume',
+                        '--save_path', temporary, '--assignment_threshold', str(threshold)]
+                if requested:
+                    argv.append('--assignment_filter')
+                with patch.object(sys, 'argv', argv), patch.object(torch, 'load', return_value=saved):
+                    with self.assertRaisesRegex(ValueError, 'Checkpoint assignment filtering settings differ'):
+                        method1.main()
+
     def test_d3s_calibration_checkpointed_middle_gradients_and_zero_weight(self):
         embed = method1.frozen_embedder(self.teacher, similarity='d3s')
         dataset = torch.utils.data.TensorDataset(torch.randn(6, 3, 32, 32))
