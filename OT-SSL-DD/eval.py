@@ -224,7 +224,7 @@ def main():
     parser.add_argument("--device", choices=["cuda", "cpu"], default="cuda")
     parser.add_argument("--data-path", default=str(ROOT.parent / "data"))
     synthetic_source = parser.add_mutually_exclusive_group()
-    synthetic_source.add_argument("--synthetic-checkpoint", type=Path, default=Path("newdata_l1/res_IIC_FashionMNIST_ResNet18BN_0.2percent_final.pt"))
+    synthetic_source.add_argument("--synthetic-checkpoint", type=Path, default=Path("newdata/res_IIC_FashionMNIST_ResNet18BN_0.2percent_final.pt"))
 
     synthetic_source.add_argument("--synthetic-root", type=Path, default=None, help="Legacy sizeN/res_IIC_DATASET_ConvNet_Npercent.pt layout")
     synthetic_source.add_argument("--random-subset", action="store_true", help="Use randomly selected real training images instead of a synthetic checkpoint")
