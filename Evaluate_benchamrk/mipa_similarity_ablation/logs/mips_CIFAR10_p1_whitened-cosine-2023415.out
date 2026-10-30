@@ -1,0 +1,284 @@
+Loaded fixed teacher seed 0: /scratch/mmoslem3/MKDT/Evaluate_benchamrk/full_ssl_checkpoints_1000ep_3seeds/CIFAR10/ResNet18/full/pt100/simclr/seed_000/encoder.pt
+Computing fixed real-feature whitening for teacher seed 0...
+INITIALIZATION: exact saved Random seed-0 indices, 500 images
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/CIFAR10/ResNet18BN/pt1/whitened-cosine/res_IIC_CIFAR10_ResNet18BN_1percent_final.pt (iteration 0/10000)
+Hyper-parameters: 
+ {'dataset': 'CIFAR10', 'percentage': 1.0, 'data_path': '/scratch/mmoslem3/data', 'device': 'cuda', 'seed': 0, 'init': 'random', 'Iteration': 10000, 'lr_img': 0.002, 'batch_real': 128, 'temperature': 0.2, 'similarity': 'whitened-cosine', 'mmd_sigma': 1.0, 'mmd_views': 2, 'dm_views': 2, 'energy_views': 2, 'sinkhorn_views': 2, 'sinkhorn_epsilon': 0.1, 'sinkhorn_iterations': 50, 'whitening_reg': 0.001, 'disp_weight': 0.0, 'pair_weight': 0.0, 'num_random_networks': 1, 'random_models': 'ResNet18BN', 'distill_aug_strategy': 'color_crop_cutout_flip_scale_rotate', 'dsa': True, 'distill_aug_mode': 'M', 'teacher_source': 'pretrained', 'teacher_seed': [0], 'teacher_ssl': 'simclr', 'teacher_path': '/scratch/mmoslem3/MKDT/Evaluate_benchamrk/full_ssl_checkpoints_1000ep_3seeds', 'model': 'ResNet18BN', 'ssl_method': 'simclr', 'eval_mode': 'S', 'num_eval': 0, 'epoch_eval_train': 10000, 'label_percentage': 1.0, 'lr_linear': 0.1, 'batch_linear': 256, 'save_path': '/scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/CIFAR10/ResNet18BN/pt1/whitened-cosine', 'resume': True, 'save_every': 100, 'feature_batch': 128}
+P_net support: ResNet18BN
+Objective: sum teacher losses (-MI + 0 * displacement + 0 * pair_similarity), averaged over 1 augmentation draw(s).
+[2026-10-29 19:09:22] distillation begins
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/CIFAR10/ResNet18BN/pt1/whitened-cosine/res_IIC_CIFAR10_ResNet18BN_1percent_final.pt (iteration 1/10000)
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/CIFAR10/ResNet18BN/pt1/whitened-cosine/res_IIC_CIFAR10_ResNet18BN_1percent_final.pt (iteration 100/10000)
+[2026-10-29 19:09:43] iter = 00200, neg_MI = -0.001535, displacement = 0.000159, pair_similarity = 0.000411, total_loss = -0.001535, pixel drift RMS = 1.76493/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/CIFAR10/ResNet18BN/pt1/whitened-cosine/res_IIC_CIFAR10_ResNet18BN_1percent_final.pt (iteration 200/10000)
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/CIFAR10/ResNet18BN/pt1/whitened-cosine/res_IIC_CIFAR10_ResNet18BN_1percent_final.pt (iteration 300/10000)
+[2026-10-29 19:10:04] iter = 00400, neg_MI = -0.003118, displacement = 0.000120, pair_similarity = 0.000192, total_loss = -0.003118, pixel drift RMS = 2.57138/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/CIFAR10/ResNet18BN/pt1/whitened-cosine/res_IIC_CIFAR10_ResNet18BN_1percent_final.pt (iteration 400/10000)
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/CIFAR10/ResNet18BN/pt1/whitened-cosine/res_IIC_CIFAR10_ResNet18BN_1percent_final.pt (iteration 500/10000)
+[2026-10-29 19:10:25] iter = 00600, neg_MI = -0.001903, displacement = 0.000085, pair_similarity = 0.000174, total_loss = -0.001903, pixel drift RMS = 3.23414/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/CIFAR10/ResNet18BN/pt1/whitened-cosine/res_IIC_CIFAR10_ResNet18BN_1percent_final.pt (iteration 600/10000)
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/CIFAR10/ResNet18BN/pt1/whitened-cosine/res_IIC_CIFAR10_ResNet18BN_1percent_final.pt (iteration 700/10000)
+[2026-10-29 19:10:45] iter = 00800, neg_MI = -0.002058, displacement = 0.000180, pair_similarity = 0.000693, total_loss = -0.002058, pixel drift RMS = 3.77700/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/CIFAR10/ResNet18BN/pt1/whitened-cosine/res_IIC_CIFAR10_ResNet18BN_1percent_final.pt (iteration 800/10000)
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/CIFAR10/ResNet18BN/pt1/whitened-cosine/res_IIC_CIFAR10_ResNet18BN_1percent_final.pt (iteration 900/10000)
+[2026-10-29 19:11:06] iter = 01000, neg_MI = -0.001935, displacement = 0.000135, pair_similarity = 0.000452, total_loss = -0.001935, pixel drift RMS = 4.25168/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/CIFAR10/ResNet18BN/pt1/whitened-cosine/res_IIC_CIFAR10_ResNet18BN_1percent_final.pt (iteration 1000/10000)
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/CIFAR10/ResNet18BN/pt1/whitened-cosine/res_IIC_CIFAR10_ResNet18BN_1percent_final.pt (iteration 1100/10000)
+[2026-10-29 19:11:27] iter = 01200, neg_MI = -0.002943, displacement = 0.000185, pair_similarity = 0.000715, total_loss = -0.002943, pixel drift RMS = 4.66714/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/CIFAR10/ResNet18BN/pt1/whitened-cosine/res_IIC_CIFAR10_ResNet18BN_1percent_final.pt (iteration 1200/10000)
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/CIFAR10/ResNet18BN/pt1/whitened-cosine/res_IIC_CIFAR10_ResNet18BN_1percent_final.pt (iteration 1300/10000)
+[2026-10-29 19:11:48] iter = 01400, neg_MI = -0.003063, displacement = 0.000202, pair_similarity = 0.002136, total_loss = -0.003063, pixel drift RMS = 5.04932/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/CIFAR10/ResNet18BN/pt1/whitened-cosine/res_IIC_CIFAR10_ResNet18BN_1percent_final.pt (iteration 1400/10000)
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/CIFAR10/ResNet18BN/pt1/whitened-cosine/res_IIC_CIFAR10_ResNet18BN_1percent_final.pt (iteration 1500/10000)
+[2026-10-29 19:12:08] iter = 01600, neg_MI = -0.007365, displacement = 0.000081, pair_similarity = 0.000174, total_loss = -0.007365, pixel drift RMS = 5.39145/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/CIFAR10/ResNet18BN/pt1/whitened-cosine/res_IIC_CIFAR10_ResNet18BN_1percent_final.pt (iteration 1600/10000)
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/CIFAR10/ResNet18BN/pt1/whitened-cosine/res_IIC_CIFAR10_ResNet18BN_1percent_final.pt (iteration 1700/10000)
+[2026-10-29 19:12:29] iter = 01800, neg_MI = -0.004015, displacement = 0.000212, pair_similarity = 0.001146, total_loss = -0.004015, pixel drift RMS = 5.69563/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/CIFAR10/ResNet18BN/pt1/whitened-cosine/res_IIC_CIFAR10_ResNet18BN_1percent_final.pt (iteration 1800/10000)
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/CIFAR10/ResNet18BN/pt1/whitened-cosine/res_IIC_CIFAR10_ResNet18BN_1percent_final.pt (iteration 1900/10000)
+[2026-10-29 19:12:49] iter = 02000, neg_MI = -0.003965, displacement = 0.000394, pair_similarity = 0.005493, total_loss = -0.003965, pixel drift RMS = 5.99621/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/CIFAR10/ResNet18BN/pt1/whitened-cosine/res_IIC_CIFAR10_ResNet18BN_1percent_final.pt (iteration 2000/10000)
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/CIFAR10/ResNet18BN/pt1/whitened-cosine/res_IIC_CIFAR10_ResNet18BN_1percent_final.pt (iteration 2100/10000)
+[2026-10-29 19:13:10] iter = 02200, neg_MI = -0.002231, displacement = 0.000370, pair_similarity = 0.005790, total_loss = -0.002231, pixel drift RMS = 6.29242/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/CIFAR10/ResNet18BN/pt1/whitened-cosine/res_IIC_CIFAR10_ResNet18BN_1percent_final.pt (iteration 2200/10000)
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/CIFAR10/ResNet18BN/pt1/whitened-cosine/res_IIC_CIFAR10_ResNet18BN_1percent_final.pt (iteration 2300/10000)
+[2026-10-29 19:13:31] iter = 02400, neg_MI = -0.007852, displacement = 0.000143, pair_similarity = 0.000506, total_loss = -0.007852, pixel drift RMS = 6.54299/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/CIFAR10/ResNet18BN/pt1/whitened-cosine/res_IIC_CIFAR10_ResNet18BN_1percent_final.pt (iteration 2400/10000)
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/CIFAR10/ResNet18BN/pt1/whitened-cosine/res_IIC_CIFAR10_ResNet18BN_1percent_final.pt (iteration 2500/10000)
+[2026-10-29 19:13:52] iter = 02600, neg_MI = -0.002442, displacement = 0.000592, pair_similarity = 0.010318, total_loss = -0.002442, pixel drift RMS = 6.79790/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/CIFAR10/ResNet18BN/pt1/whitened-cosine/res_IIC_CIFAR10_ResNet18BN_1percent_final.pt (iteration 2600/10000)
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/CIFAR10/ResNet18BN/pt1/whitened-cosine/res_IIC_CIFAR10_ResNet18BN_1percent_final.pt (iteration 2700/10000)
+[2026-10-29 19:14:12] iter = 02800, neg_MI = -0.007347, displacement = 0.000138, pair_similarity = 0.000510, total_loss = -0.007347, pixel drift RMS = 7.04304/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/CIFAR10/ResNet18BN/pt1/whitened-cosine/res_IIC_CIFAR10_ResNet18BN_1percent_final.pt (iteration 2800/10000)
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/CIFAR10/ResNet18BN/pt1/whitened-cosine/res_IIC_CIFAR10_ResNet18BN_1percent_final.pt (iteration 2900/10000)
+[2026-10-29 19:14:33] iter = 03000, neg_MI = -0.002728, displacement = 0.000548, pair_similarity = 0.010500, total_loss = -0.002728, pixel drift RMS = 7.26610/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/CIFAR10/ResNet18BN/pt1/whitened-cosine/res_IIC_CIFAR10_ResNet18BN_1percent_final.pt (iteration 3000/10000)
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/CIFAR10/ResNet18BN/pt1/whitened-cosine/res_IIC_CIFAR10_ResNet18BN_1percent_final.pt (iteration 3100/10000)
+[2026-10-29 19:14:53] iter = 03200, neg_MI = -0.008255, displacement = 0.000185, pair_similarity = 0.001685, total_loss = -0.008255, pixel drift RMS = 7.47505/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/CIFAR10/ResNet18BN/pt1/whitened-cosine/res_IIC_CIFAR10_ResNet18BN_1percent_final.pt (iteration 3200/10000)
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/CIFAR10/ResNet18BN/pt1/whitened-cosine/res_IIC_CIFAR10_ResNet18BN_1percent_final.pt (iteration 3300/10000)
+[2026-10-29 19:15:14] iter = 03400, neg_MI = -0.005167, displacement = 0.000195, pair_similarity = 0.001358, total_loss = -0.005167, pixel drift RMS = 7.67931/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/CIFAR10/ResNet18BN/pt1/whitened-cosine/res_IIC_CIFAR10_ResNet18BN_1percent_final.pt (iteration 3400/10000)
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/CIFAR10/ResNet18BN/pt1/whitened-cosine/res_IIC_CIFAR10_ResNet18BN_1percent_final.pt (iteration 3500/10000)
+[2026-10-29 19:15:34] iter = 03600, neg_MI = -0.004150, displacement = 0.000075, pair_similarity = 0.000197, total_loss = -0.004150, pixel drift RMS = 7.86972/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/CIFAR10/ResNet18BN/pt1/whitened-cosine/res_IIC_CIFAR10_ResNet18BN_1percent_final.pt (iteration 3600/10000)
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/CIFAR10/ResNet18BN/pt1/whitened-cosine/res_IIC_CIFAR10_ResNet18BN_1percent_final.pt (iteration 3700/10000)
+[2026-10-29 19:15:55] iter = 03800, neg_MI = -0.004844, displacement = 0.000039, pair_similarity = 0.000051, total_loss = -0.004844, pixel drift RMS = 8.04650/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/CIFAR10/ResNet18BN/pt1/whitened-cosine/res_IIC_CIFAR10_ResNet18BN_1percent_final.pt (iteration 3800/10000)
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/CIFAR10/ResNet18BN/pt1/whitened-cosine/res_IIC_CIFAR10_ResNet18BN_1percent_final.pt (iteration 3900/10000)
+[2026-10-29 19:16:16] iter = 04000, neg_MI = -0.006713, displacement = 0.000216, pair_similarity = 0.001352, total_loss = -0.006713, pixel drift RMS = 8.22983/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/CIFAR10/ResNet18BN/pt1/whitened-cosine/res_IIC_CIFAR10_ResNet18BN_1percent_final.pt (iteration 4000/10000)
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/CIFAR10/ResNet18BN/pt1/whitened-cosine/res_IIC_CIFAR10_ResNet18BN_1percent_final.pt (iteration 4100/10000)
+[2026-10-29 19:16:37] iter = 04200, neg_MI = -0.003502, displacement = 0.000101, pair_similarity = 0.000528, total_loss = -0.003502, pixel drift RMS = 8.40084/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/CIFAR10/ResNet18BN/pt1/whitened-cosine/res_IIC_CIFAR10_ResNet18BN_1percent_final.pt (iteration 4200/10000)
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/CIFAR10/ResNet18BN/pt1/whitened-cosine/res_IIC_CIFAR10_ResNet18BN_1percent_final.pt (iteration 4300/10000)
+[2026-10-29 19:16:57] iter = 04400, neg_MI = -0.003622, displacement = 0.000162, pair_similarity = 0.000910, total_loss = -0.003622, pixel drift RMS = 8.56488/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/CIFAR10/ResNet18BN/pt1/whitened-cosine/res_IIC_CIFAR10_ResNet18BN_1percent_final.pt (iteration 4400/10000)
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/CIFAR10/ResNet18BN/pt1/whitened-cosine/res_IIC_CIFAR10_ResNet18BN_1percent_final.pt (iteration 4500/10000)
+[2026-10-29 19:17:18] iter = 04600, neg_MI = -0.003376, displacement = 0.000322, pair_similarity = 0.005246, total_loss = -0.003376, pixel drift RMS = 8.74987/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/CIFAR10/ResNet18BN/pt1/whitened-cosine/res_IIC_CIFAR10_ResNet18BN_1percent_final.pt (iteration 4600/10000)
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/CIFAR10/ResNet18BN/pt1/whitened-cosine/res_IIC_CIFAR10_ResNet18BN_1percent_final.pt (iteration 4700/10000)
+[2026-10-29 19:17:39] iter = 04800, neg_MI = -0.000973, displacement = 0.001193, pair_similarity = 0.020011, total_loss = -0.000973, pixel drift RMS = 8.91097/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/CIFAR10/ResNet18BN/pt1/whitened-cosine/res_IIC_CIFAR10_ResNet18BN_1percent_final.pt (iteration 4800/10000)
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/CIFAR10/ResNet18BN/pt1/whitened-cosine/res_IIC_CIFAR10_ResNet18BN_1percent_final.pt (iteration 4900/10000)
+[2026-10-29 19:17:59] iter = 05000, neg_MI = -0.008380, displacement = 0.000113, pair_similarity = 0.000464, total_loss = -0.008380, pixel drift RMS = 9.06668/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/CIFAR10/ResNet18BN/pt1/whitened-cosine/res_IIC_CIFAR10_ResNet18BN_1percent_final.pt (iteration 5000/10000)
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/CIFAR10/ResNet18BN/pt1/whitened-cosine/res_IIC_CIFAR10_ResNet18BN_1percent_final.pt (iteration 5100/10000)
+[2026-10-29 19:18:20] iter = 05200, neg_MI = -0.003380, displacement = 0.000251, pair_similarity = 0.003425, total_loss = -0.003380, pixel drift RMS = 9.21922/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/CIFAR10/ResNet18BN/pt1/whitened-cosine/res_IIC_CIFAR10_ResNet18BN_1percent_final.pt (iteration 5200/10000)
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/CIFAR10/ResNet18BN/pt1/whitened-cosine/res_IIC_CIFAR10_ResNet18BN_1percent_final.pt (iteration 5300/10000)
+[2026-10-29 19:18:41] iter = 05400, neg_MI = -0.001129, displacement = 0.001143, pair_similarity = 0.019007, total_loss = -0.001129, pixel drift RMS = 9.38662/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/CIFAR10/ResNet18BN/pt1/whitened-cosine/res_IIC_CIFAR10_ResNet18BN_1percent_final.pt (iteration 5400/10000)
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/CIFAR10/ResNet18BN/pt1/whitened-cosine/res_IIC_CIFAR10_ResNet18BN_1percent_final.pt (iteration 5500/10000)
+[2026-10-29 19:19:01] iter = 05600, neg_MI = -0.002442, displacement = 0.000445, pair_similarity = 0.009139, total_loss = -0.002442, pixel drift RMS = 9.51885/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/CIFAR10/ResNet18BN/pt1/whitened-cosine/res_IIC_CIFAR10_ResNet18BN_1percent_final.pt (iteration 5600/10000)
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/CIFAR10/ResNet18BN/pt1/whitened-cosine/res_IIC_CIFAR10_ResNet18BN_1percent_final.pt (iteration 5700/10000)
+[2026-10-29 19:19:22] iter = 05800, neg_MI = -0.008723, displacement = 0.000000, pair_similarity = 0.000000, total_loss = -0.008723, pixel drift RMS = 9.66988/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/CIFAR10/ResNet18BN/pt1/whitened-cosine/res_IIC_CIFAR10_ResNet18BN_1percent_final.pt (iteration 5800/10000)
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/CIFAR10/ResNet18BN/pt1/whitened-cosine/res_IIC_CIFAR10_ResNet18BN_1percent_final.pt (iteration 5900/10000)
+[2026-10-29 19:19:43] iter = 06000, neg_MI = -0.006500, displacement = 0.000095, pair_similarity = 0.000329, total_loss = -0.006500, pixel drift RMS = 9.80756/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/CIFAR10/ResNet18BN/pt1/whitened-cosine/res_IIC_CIFAR10_ResNet18BN_1percent_final.pt (iteration 6000/10000)
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/CIFAR10/ResNet18BN/pt1/whitened-cosine/res_IIC_CIFAR10_ResNet18BN_1percent_final.pt (iteration 6100/10000)
+[2026-10-29 19:20:03] iter = 06200, neg_MI = -0.009893, displacement = 0.000103, pair_similarity = 0.000519, total_loss = -0.009893, pixel drift RMS = 9.95082/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/CIFAR10/ResNet18BN/pt1/whitened-cosine/res_IIC_CIFAR10_ResNet18BN_1percent_final.pt (iteration 6200/10000)
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/CIFAR10/ResNet18BN/pt1/whitened-cosine/res_IIC_CIFAR10_ResNet18BN_1percent_final.pt (iteration 6300/10000)
+[2026-10-29 19:20:24] iter = 06400, neg_MI = -0.006459, displacement = 0.000054, pair_similarity = 0.000093, total_loss = -0.006459, pixel drift RMS = 10.09480/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/CIFAR10/ResNet18BN/pt1/whitened-cosine/res_IIC_CIFAR10_ResNet18BN_1percent_final.pt (iteration 6400/10000)
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/CIFAR10/ResNet18BN/pt1/whitened-cosine/res_IIC_CIFAR10_ResNet18BN_1percent_final.pt (iteration 6500/10000)
+[2026-10-29 19:20:45] iter = 06600, neg_MI = -0.006481, displacement = 0.000181, pair_similarity = 0.000954, total_loss = -0.006481, pixel drift RMS = 10.22491/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/CIFAR10/ResNet18BN/pt1/whitened-cosine/res_IIC_CIFAR10_ResNet18BN_1percent_final.pt (iteration 6600/10000)
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/CIFAR10/ResNet18BN/pt1/whitened-cosine/res_IIC_CIFAR10_ResNet18BN_1percent_final.pt (iteration 6700/10000)
+[2026-10-29 19:21:06] iter = 06800, neg_MI = -0.003048, displacement = 0.000201, pair_similarity = 0.002551, total_loss = -0.003048, pixel drift RMS = 10.35429/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/CIFAR10/ResNet18BN/pt1/whitened-cosine/res_IIC_CIFAR10_ResNet18BN_1percent_final.pt (iteration 6800/10000)
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/CIFAR10/ResNet18BN/pt1/whitened-cosine/res_IIC_CIFAR10_ResNet18BN_1percent_final.pt (iteration 6900/10000)
+[2026-10-29 19:21:26] iter = 07000, neg_MI = -0.006331, displacement = 0.000146, pair_similarity = 0.000972, total_loss = -0.006331, pixel drift RMS = 10.47464/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/CIFAR10/ResNet18BN/pt1/whitened-cosine/res_IIC_CIFAR10_ResNet18BN_1percent_final.pt (iteration 7000/10000)
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/CIFAR10/ResNet18BN/pt1/whitened-cosine/res_IIC_CIFAR10_ResNet18BN_1percent_final.pt (iteration 7100/10000)
+[2026-10-29 19:21:47] iter = 07200, neg_MI = -0.009808, displacement = 0.000127, pair_similarity = 0.000548, total_loss = -0.009808, pixel drift RMS = 10.59655/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/CIFAR10/ResNet18BN/pt1/whitened-cosine/res_IIC_CIFAR10_ResNet18BN_1percent_final.pt (iteration 7200/10000)
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/CIFAR10/ResNet18BN/pt1/whitened-cosine/res_IIC_CIFAR10_ResNet18BN_1percent_final.pt (iteration 7300/10000)
+[2026-10-29 19:22:07] iter = 07400, neg_MI = -0.008773, displacement = 0.000037, pair_similarity = 0.000038, total_loss = -0.008773, pixel drift RMS = 10.72554/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/CIFAR10/ResNet18BN/pt1/whitened-cosine/res_IIC_CIFAR10_ResNet18BN_1percent_final.pt (iteration 7400/10000)
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/CIFAR10/ResNet18BN/pt1/whitened-cosine/res_IIC_CIFAR10_ResNet18BN_1percent_final.pt (iteration 7500/10000)
+[2026-10-29 19:22:28] iter = 07600, neg_MI = -0.006486, displacement = 0.000172, pair_similarity = 0.001113, total_loss = -0.006486, pixel drift RMS = 10.85068/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/CIFAR10/ResNet18BN/pt1/whitened-cosine/res_IIC_CIFAR10_ResNet18BN_1percent_final.pt (iteration 7600/10000)
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/CIFAR10/ResNet18BN/pt1/whitened-cosine/res_IIC_CIFAR10_ResNet18BN_1percent_final.pt (iteration 7700/10000)
+[2026-10-29 19:22:49] iter = 07800, neg_MI = -0.004001, displacement = 0.000156, pair_similarity = 0.000968, total_loss = -0.004001, pixel drift RMS = 10.96562/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/CIFAR10/ResNet18BN/pt1/whitened-cosine/res_IIC_CIFAR10_ResNet18BN_1percent_final.pt (iteration 7800/10000)
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/CIFAR10/ResNet18BN/pt1/whitened-cosine/res_IIC_CIFAR10_ResNet18BN_1percent_final.pt (iteration 7900/10000)
+[2026-10-29 19:23:09] iter = 08000, neg_MI = -0.007775, displacement = 0.000086, pair_similarity = 0.000280, total_loss = -0.007775, pixel drift RMS = 11.08143/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/CIFAR10/ResNet18BN/pt1/whitened-cosine/res_IIC_CIFAR10_ResNet18BN_1percent_final.pt (iteration 8000/10000)
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/CIFAR10/ResNet18BN/pt1/whitened-cosine/res_IIC_CIFAR10_ResNet18BN_1percent_final.pt (iteration 8100/10000)
+[2026-10-29 19:23:30] iter = 08200, neg_MI = -0.005628, displacement = 0.000082, pair_similarity = 0.000405, total_loss = -0.005628, pixel drift RMS = 11.19956/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/CIFAR10/ResNet18BN/pt1/whitened-cosine/res_IIC_CIFAR10_ResNet18BN_1percent_final.pt (iteration 8200/10000)
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/CIFAR10/ResNet18BN/pt1/whitened-cosine/res_IIC_CIFAR10_ResNet18BN_1percent_final.pt (iteration 8300/10000)
+[2026-10-29 19:23:51] iter = 08400, neg_MI = -0.005304, displacement = 0.000173, pair_similarity = 0.001046, total_loss = -0.005304, pixel drift RMS = 11.31681/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/CIFAR10/ResNet18BN/pt1/whitened-cosine/res_IIC_CIFAR10_ResNet18BN_1percent_final.pt (iteration 8400/10000)
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/CIFAR10/ResNet18BN/pt1/whitened-cosine/res_IIC_CIFAR10_ResNet18BN_1percent_final.pt (iteration 8500/10000)
+[2026-10-29 19:24:11] iter = 08600, neg_MI = -0.013983, displacement = 0.000065, pair_similarity = 0.000119, total_loss = -0.013983, pixel drift RMS = 11.42004/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/CIFAR10/ResNet18BN/pt1/whitened-cosine/res_IIC_CIFAR10_ResNet18BN_1percent_final.pt (iteration 8600/10000)
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/CIFAR10/ResNet18BN/pt1/whitened-cosine/res_IIC_CIFAR10_ResNet18BN_1percent_final.pt (iteration 8700/10000)
+[2026-10-29 19:24:32] iter = 08800, neg_MI = -0.006587, displacement = 0.000000, pair_similarity = 0.000000, total_loss = -0.006587, pixel drift RMS = 11.52779/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/CIFAR10/ResNet18BN/pt1/whitened-cosine/res_IIC_CIFAR10_ResNet18BN_1percent_final.pt (iteration 8800/10000)
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/CIFAR10/ResNet18BN/pt1/whitened-cosine/res_IIC_CIFAR10_ResNet18BN_1percent_final.pt (iteration 8900/10000)
+[2026-10-29 19:24:52] iter = 09000, neg_MI = -0.004836, displacement = 0.000074, pair_similarity = 0.000256, total_loss = -0.004836, pixel drift RMS = 11.63069/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/CIFAR10/ResNet18BN/pt1/whitened-cosine/res_IIC_CIFAR10_ResNet18BN_1percent_final.pt (iteration 9000/10000)
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/CIFAR10/ResNet18BN/pt1/whitened-cosine/res_IIC_CIFAR10_ResNet18BN_1percent_final.pt (iteration 9100/10000)
+[2026-10-29 19:25:13] iter = 09200, neg_MI = -0.011850, displacement = 0.000160, pair_similarity = 0.000910, total_loss = -0.011850, pixel drift RMS = 11.73720/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/CIFAR10/ResNet18BN/pt1/whitened-cosine/res_IIC_CIFAR10_ResNet18BN_1percent_final.pt (iteration 9200/10000)
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/CIFAR10/ResNet18BN/pt1/whitened-cosine/res_IIC_CIFAR10_ResNet18BN_1percent_final.pt (iteration 9300/10000)
+[2026-10-29 19:25:34] iter = 09400, neg_MI = -0.008585, displacement = 0.000122, pair_similarity = 0.000665, total_loss = -0.008585, pixel drift RMS = 11.83500/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/CIFAR10/ResNet18BN/pt1/whitened-cosine/res_IIC_CIFAR10_ResNet18BN_1percent_final.pt (iteration 9400/10000)
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/CIFAR10/ResNet18BN/pt1/whitened-cosine/res_IIC_CIFAR10_ResNet18BN_1percent_final.pt (iteration 9500/10000)
+[2026-10-29 19:25:54] iter = 09600, neg_MI = -0.005656, displacement = 0.000259, pair_similarity = 0.003738, total_loss = -0.005656, pixel drift RMS = 11.93798/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/CIFAR10/ResNet18BN/pt1/whitened-cosine/res_IIC_CIFAR10_ResNet18BN_1percent_final.pt (iteration 9600/10000)
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/CIFAR10/ResNet18BN/pt1/whitened-cosine/res_IIC_CIFAR10_ResNet18BN_1percent_final.pt (iteration 9700/10000)
+[2026-10-29 19:26:15] iter = 09800, neg_MI = -0.006689, displacement = 0.000101, pair_similarity = 0.000415, total_loss = -0.006689, pixel drift RMS = 12.03025/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/CIFAR10/ResNet18BN/pt1/whitened-cosine/res_IIC_CIFAR10_ResNet18BN_1percent_final.pt (iteration 9800/10000)
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/CIFAR10/ResNet18BN/pt1/whitened-cosine/res_IIC_CIFAR10_ResNet18BN_1percent_final.pt (iteration 9900/10000)
+[2026-10-29 19:26:35] iter = 10000, neg_MI = -0.006158, displacement = 0.000047, pair_similarity = 0.000071, total_loss = -0.006158, pixel drift RMS = 12.12135/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/CIFAR10/ResNet18BN/pt1/whitened-cosine/res_IIC_CIFAR10_ResNet18BN_1percent_final.pt (iteration 10000/10000)
+DONE: /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/CIFAR10/ResNet18BN/pt1/whitened-cosine/res_IIC_CIFAR10_ResNet18BN_1percent_final.pt
+SSL CIFAR10/ResNet18/simclr seed=0: {"epoch": 1, "steps": 1, "lr": 3e-05, "loss": 6.225564956665039, "examples": 256}
+SSL CIFAR10/ResNet18/simclr seed=0: {"epoch": 200, "steps": 200, "lr": 0.3911544225902708, "loss": 5.88528299331665, "examples": 256}
+SSL CIFAR10/ResNet18/simclr seed=0: {"epoch": 400, "steps": 400, "lr": 0.3634216956182633, "loss": 5.4855732917785645, "examples": 256}
+SSL CIFAR10/ResNet18/simclr seed=0: {"epoch": 600, "steps": 600, "lr": 0.31951616447274234, "loss": 5.121654510498047, "examples": 256}
+SSL CIFAR10/ResNet18/simclr seed=0: {"epoch": 800, "steps": 800, "lr": 0.26378287988068894, "loss": 4.839116096496582, "examples": 256}
+SSL CIFAR10/ResNet18/simclr seed=0: {"epoch": 1000, "steps": 1000, "lr": 0.2017374099815958, "loss": 4.202206611633301, "examples": 256}
+SSL CIFAR10/ResNet18/simclr seed=0: {"epoch": 1200, "steps": 1200, "lr": 0.1395199996844108, "loss": 3.958857536315918, "examples": 256}
+SSL CIFAR10/ResNet18/simclr seed=0: {"epoch": 1400, "steps": 1400, "lr": 0.08328790974397256, "loss": 3.7836785316467285, "examples": 256}
+SSL CIFAR10/ResNet18/simclr seed=0: {"epoch": 1600, "steps": 1600, "lr": 0.038606071887574034, "loss": 3.744051694869995, "examples": 256}
+SSL CIFAR10/ResNet18/simclr seed=0: {"epoch": 1800, "steps": 1800, "lr": 0.009896362972081475, "loss": 3.6197376251220703, "examples": 256}
+SSL CIFAR10/ResNet18/simclr seed=0: {"epoch": 2000, "steps": 2000, "lr": 0.0, "loss": 3.5810108184814453, "examples": 256}
+PROBE CIFAR10 lbl=1 seed=0: {'epoch': 10, 'lr': 0.09776754757575974, 'loss': 1.4272459678649903, 'train_accuracy_percent': 48.4}
+PROBE CIFAR10 lbl=1 seed=0: {'epoch': 20, 'lr': 0.09081878607071997, 'loss': 1.2899145374298095, 'train_accuracy_percent': 54.2}
+PROBE CIFAR10 lbl=1 seed=0: {'epoch': 30, 'lr': 0.0798344744144428, 'loss': 1.2887802724838258, 'train_accuracy_percent': 56.2}
+PROBE CIFAR10 lbl=1 seed=0: {'epoch': 40, 'lr': 0.06590057681196192, 'loss': 1.2495374898910523, 'train_accuracy_percent': 57.6}
+PROBE CIFAR10 lbl=1 seed=0: {'epoch': 50, 'lr': 0.05039466834548567, 'loss': 1.2140456762313843, 'train_accuracy_percent': 56.0}
+PROBE CIFAR10 lbl=1 seed=0: {'epoch': 60, 'lr': 0.03484974098465636, 'loss': 1.2108295917510987, 'train_accuracy_percent': 57.2}
+PROBE CIFAR10 lbl=1 seed=0: {'epoch': 70, 'lr': 0.020802644302934683, 'loss': 1.2019602146148682, 'train_accuracy_percent': 59.0}
+PROBE CIFAR10 lbl=1 seed=0: {'epoch': 80, 'lr': 0.00964214481190074, 'loss': 1.1742995862960814, 'train_accuracy_percent': 60.4}
+PROBE CIFAR10 lbl=1 seed=0: {'epoch': 90, 'lr': 0.0024716255306108607, 'loss': 1.2388386640548705, 'train_accuracy_percent': 56.4}
+PROBE CIFAR10 lbl=1 seed=0: {'epoch': 100, 'lr': 0.0, 'loss': 1.1354698343276977, 'train_accuracy_percent': 61.0}
+RESULT CIFAR10 lbl=1 seed=0: 48.1200
+PROBE CIFAR10 lbl=1 seed=1: {'epoch': 10, 'lr': 0.09776754757575974, 'loss': 1.441252555847168, 'train_accuracy_percent': 48.6}
+PROBE CIFAR10 lbl=1 seed=1: {'epoch': 20, 'lr': 0.09081878607071997, 'loss': 1.3831156177520751, 'train_accuracy_percent': 52.2}
+PROBE CIFAR10 lbl=1 seed=1: {'epoch': 30, 'lr': 0.0798344744144428, 'loss': 1.3072655267715454, 'train_accuracy_percent': 54.4}
+PROBE CIFAR10 lbl=1 seed=1: {'epoch': 40, 'lr': 0.06590057681196192, 'loss': 1.3573170385360718, 'train_accuracy_percent': 52.0}
+PROBE CIFAR10 lbl=1 seed=1: {'epoch': 50, 'lr': 0.05039466834548567, 'loss': 1.251508547782898, 'train_accuracy_percent': 55.2}
+PROBE CIFAR10 lbl=1 seed=1: {'epoch': 60, 'lr': 0.03484974098465636, 'loss': 1.2009278202056886, 'train_accuracy_percent': 58.8}
+PROBE CIFAR10 lbl=1 seed=1: {'epoch': 70, 'lr': 0.020802644302934683, 'loss': 1.2658279390335083, 'train_accuracy_percent': 54.2}
+PROBE CIFAR10 lbl=1 seed=1: {'epoch': 80, 'lr': 0.00964214481190074, 'loss': 1.1940512733459472, 'train_accuracy_percent': 59.4}
+PROBE CIFAR10 lbl=1 seed=1: {'epoch': 90, 'lr': 0.0024716255306108607, 'loss': 1.221327452659607, 'train_accuracy_percent': 58.4}
+PROBE CIFAR10 lbl=1 seed=1: {'epoch': 100, 'lr': 0.0, 'loss': 1.2079175643920899, 'train_accuracy_percent': 56.2}
+RESULT CIFAR10 lbl=1 seed=1: 48.0800
+PROBE CIFAR10 lbl=1 seed=2: {'epoch': 10, 'lr': 0.09776754757575974, 'loss': 1.4690114459991455, 'train_accuracy_percent': 52.8}
+PROBE CIFAR10 lbl=1 seed=2: {'epoch': 20, 'lr': 0.09081878607071997, 'loss': 1.3962603397369384, 'train_accuracy_percent': 50.0}
+PROBE CIFAR10 lbl=1 seed=2: {'epoch': 30, 'lr': 0.0798344744144428, 'loss': 1.3067837142944336, 'train_accuracy_percent': 56.2}
+PROBE CIFAR10 lbl=1 seed=2: {'epoch': 40, 'lr': 0.06590057681196192, 'loss': 1.2501962509155273, 'train_accuracy_percent': 59.6}
+PROBE CIFAR10 lbl=1 seed=2: {'epoch': 50, 'lr': 0.05039466834548567, 'loss': 1.258373550415039, 'train_accuracy_percent': 56.0}
+PROBE CIFAR10 lbl=1 seed=2: {'epoch': 60, 'lr': 0.03484974098465636, 'loss': 1.184170536994934, 'train_accuracy_percent': 60.8}
+PROBE CIFAR10 lbl=1 seed=2: {'epoch': 70, 'lr': 0.020802644302934683, 'loss': 1.3340845918655395, 'train_accuracy_percent': 52.6}
+PROBE CIFAR10 lbl=1 seed=2: {'epoch': 80, 'lr': 0.00964214481190074, 'loss': 1.2904756259918213, 'train_accuracy_percent': 56.8}
+PROBE CIFAR10 lbl=1 seed=2: {'epoch': 90, 'lr': 0.0024716255306108607, 'loss': 1.1991942348480225, 'train_accuracy_percent': 59.2}
+PROBE CIFAR10 lbl=1 seed=2: {'epoch': 100, 'lr': 0.0, 'loss': 1.217292592048645, 'train_accuracy_percent': 61.2}
+RESULT CIFAR10 lbl=1 seed=2: 49.0000
+PROBE CIFAR10 lbl=1 seed=3: {'epoch': 10, 'lr': 0.09776754757575974, 'loss': 1.493355938911438, 'train_accuracy_percent': 46.6}
+PROBE CIFAR10 lbl=1 seed=3: {'epoch': 20, 'lr': 0.09081878607071997, 'loss': 1.3543843050003053, 'train_accuracy_percent': 53.0}
+PROBE CIFAR10 lbl=1 seed=3: {'epoch': 30, 'lr': 0.0798344744144428, 'loss': 1.2752816562652587, 'train_accuracy_percent': 57.8}
+PROBE CIFAR10 lbl=1 seed=3: {'epoch': 40, 'lr': 0.06590057681196192, 'loss': 1.1888547897338868, 'train_accuracy_percent': 58.6}
+PROBE CIFAR10 lbl=1 seed=3: {'epoch': 50, 'lr': 0.05039466834548567, 'loss': 1.2431356019973754, 'train_accuracy_percent': 58.8}
+PROBE CIFAR10 lbl=1 seed=3: {'epoch': 60, 'lr': 0.03484974098465636, 'loss': 1.2596763525009156, 'train_accuracy_percent': 54.6}
+PROBE CIFAR10 lbl=1 seed=3: {'epoch': 70, 'lr': 0.020802644302934683, 'loss': 1.191964012145996, 'train_accuracy_percent': 59.2}
+PROBE CIFAR10 lbl=1 seed=3: {'epoch': 80, 'lr': 0.00964214481190074, 'loss': 1.1641465225219727, 'train_accuracy_percent': 58.8}
+PROBE CIFAR10 lbl=1 seed=3: {'epoch': 90, 'lr': 0.0024716255306108607, 'loss': 1.1780829429626465, 'train_accuracy_percent': 59.0}
+PROBE CIFAR10 lbl=1 seed=3: {'epoch': 100, 'lr': 0.0, 'loss': 1.1604924373626708, 'train_accuracy_percent': 60.6}
+RESULT CIFAR10 lbl=1 seed=3: 49.7900
+PROBE CIFAR10 lbl=1 seed=4: {'epoch': 10, 'lr': 0.09776754757575974, 'loss': 1.3496971588134765, 'train_accuracy_percent': 50.0}
+PROBE CIFAR10 lbl=1 seed=4: {'epoch': 20, 'lr': 0.09081878607071997, 'loss': 1.2970642700195312, 'train_accuracy_percent': 54.0}
+PROBE CIFAR10 lbl=1 seed=4: {'epoch': 30, 'lr': 0.0798344744144428, 'loss': 1.2518575401306153, 'train_accuracy_percent': 57.6}
+PROBE CIFAR10 lbl=1 seed=4: {'epoch': 40, 'lr': 0.06590057681196192, 'loss': 1.2290697345733643, 'train_accuracy_percent': 55.8}
+PROBE CIFAR10 lbl=1 seed=4: {'epoch': 50, 'lr': 0.05039466834548567, 'loss': 1.1431505336761474, 'train_accuracy_percent': 60.0}
+PROBE CIFAR10 lbl=1 seed=4: {'epoch': 60, 'lr': 0.03484974098465636, 'loss': 1.1402436408996581, 'train_accuracy_percent': 62.6}
+PROBE CIFAR10 lbl=1 seed=4: {'epoch': 70, 'lr': 0.020802644302934683, 'loss': 1.1995093221664428, 'train_accuracy_percent': 59.4}
+PROBE CIFAR10 lbl=1 seed=4: {'epoch': 80, 'lr': 0.00964214481190074, 'loss': 1.1853927268981934, 'train_accuracy_percent': 61.0}
+PROBE CIFAR10 lbl=1 seed=4: {'epoch': 90, 'lr': 0.0024716255306108607, 'loss': 1.132280424118042, 'train_accuracy_percent': 60.8}
+PROBE CIFAR10 lbl=1 seed=4: {'epoch': 100, 'lr': 0.0, 'loss': 1.1690991554260255, 'train_accuracy_percent': 59.4}
+RESULT CIFAR10 lbl=1 seed=4: 49.1700
+COMPLETE CELL: CIFAR10 1 CIFAR10 1 \dsacc{48.83}{0.73}
+PROBE CIFAR10 lbl=5 seed=0: {'epoch': 10, 'lr': 0.09759636527645632, 'loss': 1.4146194944381714, 'train_accuracy_percent': 51.2}
+PROBE CIFAR10 lbl=5 seed=0: {'epoch': 20, 'lr': 0.0905246588405146, 'loss': 1.3597719087600708, 'train_accuracy_percent': 52.44}
+PROBE CIFAR10 lbl=5 seed=0: {'epoch': 30, 'lr': 0.07947823644532198, 'loss': 1.3207554740905763, 'train_accuracy_percent': 53.48}
+PROBE CIFAR10 lbl=5 seed=0: {'epoch': 40, 'lr': 0.06554054685128856, 'loss': 1.2890258743286134, 'train_accuracy_percent': 54.36}
+PROBE CIFAR10 lbl=5 seed=0: {'epoch': 50, 'lr': 0.05007861840237923, 'loss': 1.3064512477874757, 'train_accuracy_percent': 53.88}
+PROBE CIFAR10 lbl=5 seed=0: {'epoch': 60, 'lr': 0.03460897894916861, 'loss': 1.2794542724609375, 'train_accuracy_percent': 53.72}
+PROBE CIFAR10 lbl=5 seed=0: {'epoch': 70, 'lr': 0.020648912648459073, 'loss': 1.2716292116165162, 'train_accuracy_percent': 55.44}
+PROBE CIFAR10 lbl=5 seed=0: {'epoch': 80, 'lr': 0.009567642583312259, 'loss': 1.2597445333480835, 'train_accuracy_percent': 55.72}
+PROBE CIFAR10 lbl=5 seed=0: {'epoch': 90, 'lr': 0.002452035422983734, 'loss': 1.234278489303589, 'train_accuracy_percent': 57.4}
+PROBE CIFAR10 lbl=5 seed=0: {'epoch': 100, 'lr': 0.0, 'loss': 1.2720443334579468, 'train_accuracy_percent': 55.16}
+RESULT CIFAR10 lbl=5 seed=0: 54.2600
+PROBE CIFAR10 lbl=5 seed=1: {'epoch': 10, 'lr': 0.09759636527645632, 'loss': 1.4162234760284425, 'train_accuracy_percent': 49.4}
+PROBE CIFAR10 lbl=5 seed=1: {'epoch': 20, 'lr': 0.0905246588405146, 'loss': 1.4062859563827514, 'train_accuracy_percent': 49.8}
+PROBE CIFAR10 lbl=5 seed=1: {'epoch': 30, 'lr': 0.07947823644532198, 'loss': 1.3681683137893677, 'train_accuracy_percent': 52.24}
+PROBE CIFAR10 lbl=5 seed=1: {'epoch': 40, 'lr': 0.06554054685128856, 'loss': 1.3266019729614258, 'train_accuracy_percent': 53.4}
+PROBE CIFAR10 lbl=5 seed=1: {'epoch': 50, 'lr': 0.05007861840237923, 'loss': 1.2939305154800416, 'train_accuracy_percent': 54.96}
+PROBE CIFAR10 lbl=5 seed=1: {'epoch': 60, 'lr': 0.03460897894916861, 'loss': 1.3074826889038087, 'train_accuracy_percent': 54.36}
+PROBE CIFAR10 lbl=5 seed=1: {'epoch': 70, 'lr': 0.020648912648459073, 'loss': 1.3070690900802613, 'train_accuracy_percent': 54.12}
+PROBE CIFAR10 lbl=5 seed=1: {'epoch': 80, 'lr': 0.009567642583312259, 'loss': 1.2885231790542602, 'train_accuracy_percent': 54.92}
+PROBE CIFAR10 lbl=5 seed=1: {'epoch': 90, 'lr': 0.002452035422983734, 'loss': 1.2727950353622437, 'train_accuracy_percent': 55.36}
+PROBE CIFAR10 lbl=5 seed=1: {'epoch': 100, 'lr': 0.0, 'loss': 1.2661282621383667, 'train_accuracy_percent': 56.28}
+RESULT CIFAR10 lbl=5 seed=1: 54.4500
+PROBE CIFAR10 lbl=5 seed=2: {'epoch': 10, 'lr': 0.09759636527645632, 'loss': 1.4110443618774413, 'train_accuracy_percent': 50.68}
+PROBE CIFAR10 lbl=5 seed=2: {'epoch': 20, 'lr': 0.0905246588405146, 'loss': 1.347774796295166, 'train_accuracy_percent': 52.48}
+PROBE CIFAR10 lbl=5 seed=2: {'epoch': 30, 'lr': 0.07947823644532198, 'loss': 1.328686067199707, 'train_accuracy_percent': 53.4}
+PROBE CIFAR10 lbl=5 seed=2: {'epoch': 40, 'lr': 0.06554054685128856, 'loss': 1.3199360189437865, 'train_accuracy_percent': 53.88}
+PROBE CIFAR10 lbl=5 seed=2: {'epoch': 50, 'lr': 0.05007861840237923, 'loss': 1.277865376663208, 'train_accuracy_percent': 56.04}
+PROBE CIFAR10 lbl=5 seed=2: {'epoch': 60, 'lr': 0.03460897894916861, 'loss': 1.2717401750564574, 'train_accuracy_percent': 56.36}
+PROBE CIFAR10 lbl=5 seed=2: {'epoch': 70, 'lr': 0.020648912648459073, 'loss': 1.2696124729156495, 'train_accuracy_percent': 56.08}
+PROBE CIFAR10 lbl=5 seed=2: {'epoch': 80, 'lr': 0.009567642583312259, 'loss': 1.285995313644409, 'train_accuracy_percent': 55.4}
+PROBE CIFAR10 lbl=5 seed=2: {'epoch': 90, 'lr': 0.002452035422983734, 'loss': 1.2597438314437865, 'train_accuracy_percent': 56.24}
+PROBE CIFAR10 lbl=5 seed=2: {'epoch': 100, 'lr': 0.0, 'loss': 1.2593229753494262, 'train_accuracy_percent': 55.76}
+RESULT CIFAR10 lbl=5 seed=2: 54.3400
+PROBE CIFAR10 lbl=5 seed=3: {'epoch': 10, 'lr': 0.09759636527645632, 'loss': 1.4027024560928345, 'train_accuracy_percent': 50.12}
+PROBE CIFAR10 lbl=5 seed=3: {'epoch': 20, 'lr': 0.0905246588405146, 'loss': 1.361293881416321, 'train_accuracy_percent': 50.6}
+PROBE CIFAR10 lbl=5 seed=3: {'epoch': 30, 'lr': 0.07947823644532198, 'loss': 1.357899901008606, 'train_accuracy_percent': 52.6}
+PROBE CIFAR10 lbl=5 seed=3: {'epoch': 40, 'lr': 0.06554054685128856, 'loss': 1.297392416381836, 'train_accuracy_percent': 54.92}
+PROBE CIFAR10 lbl=5 seed=3: {'epoch': 50, 'lr': 0.05007861840237923, 'loss': 1.2792221786499023, 'train_accuracy_percent': 55.68}
+PROBE CIFAR10 lbl=5 seed=3: {'epoch': 60, 'lr': 0.03460897894916861, 'loss': 1.2711913955688476, 'train_accuracy_percent': 55.32}
+PROBE CIFAR10 lbl=5 seed=3: {'epoch': 70, 'lr': 0.020648912648459073, 'loss': 1.2705711893081666, 'train_accuracy_percent': 55.24}
+PROBE CIFAR10 lbl=5 seed=3: {'epoch': 80, 'lr': 0.009567642583312259, 'loss': 1.2303204387664795, 'train_accuracy_percent': 57.72}
+PROBE CIFAR10 lbl=5 seed=3: {'epoch': 90, 'lr': 0.002452035422983734, 'loss': 1.2486067289352416, 'train_accuracy_percent': 56.96}
+PROBE CIFAR10 lbl=5 seed=3: {'epoch': 100, 'lr': 0.0, 'loss': 1.2273688108444214, 'train_accuracy_percent': 57.96}
+RESULT CIFAR10 lbl=5 seed=3: 54.9000
+PROBE CIFAR10 lbl=5 seed=4: {'epoch': 10, 'lr': 0.09759636527645632, 'loss': 1.3611465576171875, 'train_accuracy_percent': 52.56}
+PROBE CIFAR10 lbl=5 seed=4: {'epoch': 20, 'lr': 0.0905246588405146, 'loss': 1.3101851837158203, 'train_accuracy_percent': 53.24}
+PROBE CIFAR10 lbl=5 seed=4: {'epoch': 30, 'lr': 0.07947823644532198, 'loss': 1.3088842025756835, 'train_accuracy_percent': 53.36}
+PROBE CIFAR10 lbl=5 seed=4: {'epoch': 40, 'lr': 0.06554054685128856, 'loss': 1.310643960571289, 'train_accuracy_percent': 54.0}
+PROBE CIFAR10 lbl=5 seed=4: {'epoch': 50, 'lr': 0.05007861840237923, 'loss': 1.2419303800582886, 'train_accuracy_percent': 57.08}
+PROBE CIFAR10 lbl=5 seed=4: {'epoch': 60, 'lr': 0.03460897894916861, 'loss': 1.2476397735595703, 'train_accuracy_percent': 56.12}
+PROBE CIFAR10 lbl=5 seed=4: {'epoch': 70, 'lr': 0.020648912648459073, 'loss': 1.2414349758148193, 'train_accuracy_percent': 56.88}
+PROBE CIFAR10 lbl=5 seed=4: {'epoch': 80, 'lr': 0.009567642583312259, 'loss': 1.2434600498199462, 'train_accuracy_percent': 56.48}
+PROBE CIFAR10 lbl=5 seed=4: {'epoch': 90, 'lr': 0.002452035422983734, 'loss': 1.224929225730896, 'train_accuracy_percent': 56.4}
+PROBE CIFAR10 lbl=5 seed=4: {'epoch': 100, 'lr': 0.0, 'loss': 1.2287829914093018, 'train_accuracy_percent': 59.04}
+RESULT CIFAR10 lbl=5 seed=4: 54.2800
+COMPLETE CELL: CIFAR10 1 CIFAR10 5 \dsacc{54.45}{0.26}

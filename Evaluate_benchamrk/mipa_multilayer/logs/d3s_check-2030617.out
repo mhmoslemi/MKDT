@@ -1,0 +1,34 @@
+Loaded fixed teacher seed 0: /scratch/mmoslem3/MKDT/Evaluate_benchamrk/full_ssl_checkpoints_1000ep_3seeds/CIFAR10/ResNet18/full/pt100/simclr/seed_000/encoder.pt
+Calibrating middle-layer Gaussian KL on real training images for teacher seed 0...
+d3s calibration: ridge=[0.0013803361654281616, 0.0008761046528816223], KL scale=[2.378516454471439, 347.1618116919103]
+Initializing 100 synthetic images from the Random-baseline training images (seed=0)...
+Saved synthetic data to /tmp/mipa_d3s_timing_CIFAR10/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 0/75)
+Hyper-parameters: 
+ {'dataset': 'CIFAR10', 'percentage': 0.2, 'data_path': '/scratch/mmoslem3/data', 'device': 'cuda', 'seed': 0, 'init': 'random', 'single_channel': False, 'Iteration': 75, 'lr_img': 0.001, 'batch_real': 128, 'temperature': 0.2, 'similarity': 'd3s', 'feature_layers': 'all', 'd3s_weight': 1.0, 'd3s_reg': 0.001, 'mmd_sigma': 1.0, 'mmd_views': 2, 'dm_views': 2, 'energy_views': 2, 'sinkhorn_views': 2, 'sinkhorn_epsilon': 0.1, 'sinkhorn_iterations': 50, 'whitening_reg': 0.001, 'disp_weight': 0.0, 'pair_weight': 0.0, 'num_random_networks': 1, 'random_models': 'ResNet18BN', 'distill_aug_strategy': 'color_crop_cutout_flip_scale_rotate', 'dsa': True, 'distill_aug_mode': 'M', 'distill_aug_backend': 'dsa', 'simclr_compose_probability': 0.5, 'teacher_source': 'pretrained', 'teacher_seed': [0], 'teacher_ssl': 'simclr', 'teacher_path': '/scratch/mmoslem3/MKDT/Evaluate_benchamrk/full_ssl_checkpoints_1000ep_3seeds', 'model': 'ResNet18BN', 'ssl_method': 'simclr', 'eval_mode': 'S', 'num_eval': 0, 'epoch_eval_train': 10000, 'label_percentage': 1.0, 'lr_linear': 0.1, 'batch_linear': 256, 'save_path': '/tmp/mipa_d3s_timing_CIFAR10', 'resume': False, 'save_every': 500, 'feature_batch': 128}
+P_net support: ResNet18BN
+Objective: sum teacher losses (-MI + 0 * displacement + 0 * pair_similarity), averaged over 1 augmentation draw(s).
+[2026-10-30 08:11:58] distillation begins
+Saved synthetic data to /tmp/mipa_d3s_timing_CIFAR10/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 1/75)
+[2026-10-30 08:12:04] iter = 00025, neg_MI = -0.159897, displacement = 0.000222, pair_similarity = 0.000619, total_loss = -0.159897, pixel drift RMS = 0.50193/255
+[2026-10-30 08:12:07] iter = 00050, neg_MI = -0.136417, displacement = 0.000354, pair_similarity = 0.001681, total_loss = -0.136417, pixel drift RMS = 0.93775/255
+[2026-10-30 08:12:10] iter = 00075, neg_MI = -0.155853, displacement = 0.000450, pair_similarity = 0.003229, total_loss = -0.155853, pixel drift RMS = 1.33609/255
+Saved synthetic data to /tmp/mipa_d3s_timing_CIFAR10/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 75/75)
+DONE: /tmp/mipa_d3s_timing_CIFAR10/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt
+D3S GPU TIMING: CIFAR10 {"iteration_seconds_p95": 0.1336808868870139, "pre_loop_seconds": 6.108881013467908, "measured_intervals": [0.1336808868870139, 0.1309856553375721], "teacher_sha256": "978f0137ba4cea11161fc9c2f9c427aba1e61738621bcda01090fc38a8840b6f"}
+Loaded fixed teacher seed 0: /scratch/mmoslem3/MKDT/Evaluate_benchamrk/fashionmnist/full/checkpoints/FashionMNIST/ResNet18/full/pt100/simclr/seed_000/encoder.pt
+Calibrating middle-layer Gaussian KL on real training images for teacher seed 0...
+d3s calibration: ridge=[0.001208377480506897, 0.0005921324491500855], KL scale=[3.9519917819489327, 341.3485697931672]
+Initializing 120 synthetic images from the Random-baseline training images (seed=0)...
+Saved synthetic data to /tmp/mipa_d3s_timing_FashionMNIST/res_IIC_FashionMNIST_ResNet18BN_0.2percent_final.pt (iteration 0/75)
+Hyper-parameters: 
+ {'dataset': 'FashionMNIST', 'percentage': 0.2, 'data_path': '/scratch/mmoslem3/data', 'device': 'cuda', 'seed': 0, 'init': 'random', 'single_channel': True, 'Iteration': 75, 'lr_img': 0.001, 'batch_real': 128, 'temperature': 0.2, 'similarity': 'd3s', 'feature_layers': 'all', 'd3s_weight': 1.0, 'd3s_reg': 0.001, 'mmd_sigma': 1.0, 'mmd_views': 2, 'dm_views': 2, 'energy_views': 2, 'sinkhorn_views': 2, 'sinkhorn_epsilon': 0.1, 'sinkhorn_iterations': 50, 'whitening_reg': 0.001, 'disp_weight': 0.0, 'pair_weight': 0.0, 'num_random_networks': 1, 'random_models': 'ResNet18BN', 'distill_aug_strategy': 'color_crop_cutout_flip_scale_rotate', 'dsa': True, 'distill_aug_mode': 'M', 'distill_aug_backend': 'dsa', 'simclr_compose_probability': 0.5, 'teacher_source': 'pretrained', 'teacher_seed': [0], 'teacher_ssl': 'simclr', 'teacher_path': '/scratch/mmoslem3/MKDT/Evaluate_benchamrk/fashionmnist/full/checkpoints', 'model': 'ResNet18BN', 'ssl_method': 'simclr', 'eval_mode': 'S', 'num_eval': 0, 'epoch_eval_train': 10000, 'label_percentage': 1.0, 'lr_linear': 0.1, 'batch_linear': 256, 'save_path': '/tmp/mipa_d3s_timing_FashionMNIST', 'resume': False, 'save_every': 500, 'feature_batch': 128}
+P_net support: ResNet18BN
+Objective: sum teacher losses (-MI + 0 * displacement + 0 * pair_similarity), averaged over 1 augmentation draw(s).
+[2026-10-30 08:12:13] distillation begins
+Saved synthetic data to /tmp/mipa_d3s_timing_FashionMNIST/res_IIC_FashionMNIST_ResNet18BN_0.2percent_final.pt (iteration 1/75)
+[2026-10-30 08:12:17] iter = 00025, neg_MI = -0.563654, displacement = 0.000682, pair_similarity = 0.006119, total_loss = -0.563654, pixel drift RMS = 0.65471/255
+[2026-10-30 08:12:20] iter = 00050, neg_MI = -0.662213, displacement = 0.000691, pair_similarity = 0.002095, total_loss = -0.662213, pixel drift RMS = 1.14270/255
+[2026-10-30 08:12:24] iter = 00075, neg_MI = -0.732326, displacement = 0.000740, pair_similarity = 0.005012, total_loss = -0.732326, pixel drift RMS = 1.55683/255
+Saved synthetic data to /tmp/mipa_d3s_timing_FashionMNIST/res_IIC_FashionMNIST_ResNet18BN_0.2percent_final.pt (iteration 75/75)
+DONE: /tmp/mipa_d3s_timing_FashionMNIST/res_IIC_FashionMNIST_ResNet18BN_0.2percent_final.pt
+D3S GPU TIMING: FashionMNIST {"iteration_seconds_p95": 0.14216515854001044, "pre_loop_seconds": 2.6610169606283307, "measured_intervals": [0.14216515854001044, 0.14153287556022406], "teacher_sha256": "85faeac8a819523d9e0cbf38302a3ae524d1c2239053f0e6cc5c838b0625a434"}

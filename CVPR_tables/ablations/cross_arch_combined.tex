@@ -13,7 +13,7 @@
 \cmidrule(lr){5-7} \cmidrule(l){8-10}
 & & & & CIFAR10 & CIFAR100 & \shortstack{Tiny\\ImageNet} & CIFAR100 & CIFAR10 & \shortstack{Tiny\\ImageNet} \\
 \midrule
-\multirow{10}{*}{ResNet34} & \multirow{5}{*}{1\%} & 100 & Full Data & \cellcolor{gray!12} &  &  & \cellcolor{gray!12}\dsacc{49.60}{0.56} & \dsacc{66.70}{0.26} & \dsacc{14.95}{0.19} \\ % crossarch backbone=ResNet34 kind=full pt=100 lbl=1
+\multirow{10}{*}{ResNet34} & \multirow{5}{*}{1\%} & 100 & Full Data & \cellcolor{gray!12}\dsacc{88.66}{0.20} & \dsacc{24.06}{0.70} & \dsacc{12.14}{0.24} & \cellcolor{gray!12}\dsacc{49.60}{0.56} & \dsacc{66.70}{0.26} & \dsacc{14.95}{0.19} \\ % crossarch backbone=ResNet34 kind=full pt=100 lbl=1
 \cmidrule(lr){3-10}
  &  & \multirow{2}{*}{0.2} & Random & \cellcolor{gray!12}\dsacc{39.39}{1.77} & \dsacc{9.27}{0.57} & \dsacc{3.99}{0.29} & \cellcolor{gray!12}\dsacc{10.15}{0.36} & \bestacc{39.12}{0.67} & \dsacc{4.00}{0.13} \\ % crossarch backbone=ResNet34 kind=random pt=0.2 lbl=1
  &  &  & MIPA & \cellcolor{gray!12}\bestacc{43.54}{0.73} & \bestacc{9.46}{0.86} & \bestacc{4.27}{0.13} & \cellcolor{gray!12}\bestacc{10.65}{0.42} & \dsacc{38.40}{0.17} & \bestacc{4.09}{0.10} \\ % crossarch backbone=ResNet34 kind=ours pt=0.2 lbl=1
@@ -21,7 +21,7 @@
  &  & \multirow{2}{*}{1} & Random & \cellcolor{gray!12}\dsacc{47.20}{0.25} & \bestacc{11.39}{0.29} & \bestacc{4.71}{0.13} & \cellcolor{gray!12}\dsacc{12.48}{0.46} & \dsacc{41.98}{0.43} & \bestacc{4.92}{0.17} \\ % crossarch backbone=ResNet34 kind=random pt=1 lbl=1
  &  &  & MIPA & \cellcolor{gray!12}\bestacc{50.33}{0.29} & \dsacc{10.55}{0.47} & \dsacc{4.70}{0.18} & \cellcolor{gray!12}\bestacc{13.98}{0.37} & \bestacc{42.65}{0.48} & \dsacc{4.90}{0.07} \\ % crossarch backbone=ResNet34 kind=ours pt=1 lbl=1
 \cmidrule(lr){2-10}
- & \multirow{5}{*}{5\%} & 100 & Full Data & \cellcolor{gray!12} &  &  & \cellcolor{gray!12}\dsacc{58.09}{0.39} & \dsacc{74.22}{0.31} & \dsacc{24.57}{0.28} \\ % crossarch backbone=ResNet34 kind=full pt=100 lbl=5
+ & \multirow{5}{*}{5\%} & 100 & Full Data & \cellcolor{gray!12}\dsacc{90.39}{0.15} & \dsacc{37.95}{0.22} & \dsacc{20.73}{0.20} & \cellcolor{gray!12}\dsacc{58.09}{0.39} & \dsacc{74.22}{0.31} & \dsacc{24.57}{0.28} \\ % crossarch backbone=ResNet34 kind=full pt=100 lbl=5
 \cmidrule(lr){3-10}
  &  & \multirow{2}{*}{0.2} & Random & \cellcolor{gray!12}\dsacc{46.49}{1.38} & \dsacc{16.02}{0.44} & \dsacc{7.71}{0.23} & \cellcolor{gray!12}\bestacc{16.38}{0.38} & \dsacc{45.77}{0.43} & \dsacc{7.69}{0.21} \\ % crossarch backbone=ResNet34 kind=random pt=0.2 lbl=5
  &  &  & MIPA & \cellcolor{gray!12}\bestacc{49.85}{0.11} & \bestacc{16.28}{0.33} & \bestacc{7.89}{0.18} & \cellcolor{gray!12}\dsacc{16.29}{0.16} & \bestacc{45.84}{0.54} & \bestacc{7.77}{0.31} \\ % crossarch backbone=ResNet34 kind=ours pt=0.2 lbl=5

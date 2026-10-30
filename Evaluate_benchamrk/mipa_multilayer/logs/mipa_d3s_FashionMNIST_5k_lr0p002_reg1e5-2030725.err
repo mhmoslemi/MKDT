@@ -1,0 +1,18 @@
+Traceback (most recent call last):
+  File "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_multilayer/worker.py", line 159, in <module>
+    main()
+  File "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_multilayer/worker.py", line 97, in main
+    method.main()
+  File "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_multilayer/batches/FashionMNIST_20261030T143439Z_yRTj3j/method1.py", line 614, in main
+    d3s_stats.append(real_d3s_statistics(dst_train, teacher, args.device, args.feature_batch, args.d3s_reg))
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mmoslem3/ENV/lib/python3.11/site-packages/torch/utils/_contextlib.py", line 120, in decorate_context
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_multilayer/batches/FashionMNIST_20261030T143439Z_yRTj3j/method1.py", line 182, in real_d3s_statistics
+    distance = gaussian_kl(mean[:half], covariance[:half], mean[half:], covariance[half:], ridge)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_multilayer/batches/FashionMNIST_20261030T143439Z_yRTj3j/method1.py", line 148, in gaussian_kl
+    real_cholesky = torch.linalg.cholesky(real_covariance)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+torch._C._LinAlgError: linalg.cholesky: (Batch element 0): The factorization could not be completed because the input is not positive-definite (the leading minor of order 226 is not positive-definite).

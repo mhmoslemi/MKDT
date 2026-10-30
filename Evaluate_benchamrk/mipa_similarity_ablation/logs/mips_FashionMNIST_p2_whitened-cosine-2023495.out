@@ -1,0 +1,284 @@
+Loaded fixed teacher seed 0: /scratch/mmoslem3/MKDT/Evaluate_benchamrk/fashionmnist/full/checkpoints/FashionMNIST/ResNet18/full/pt100/simclr/seed_000/encoder.pt
+Computing fixed real-feature whitening for teacher seed 0...
+INITIALIZATION: exact saved Random seed-0 indices, 1200 images
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/FashionMNIST/ResNet18BN/pt2/whitened-cosine/res_IIC_FashionMNIST_ResNet18BN_2percent_final.pt (iteration 0/10000)
+Hyper-parameters: 
+ {'dataset': 'FashionMNIST', 'percentage': 2.0, 'data_path': '/scratch/mmoslem3/data', 'device': 'cuda', 'seed': 0, 'init': 'random', 'Iteration': 10000, 'lr_img': 0.002, 'batch_real': 128, 'temperature': 0.2, 'similarity': 'whitened-cosine', 'mmd_sigma': 1.0, 'mmd_views': 2, 'dm_views': 2, 'energy_views': 2, 'sinkhorn_views': 2, 'sinkhorn_epsilon': 0.1, 'sinkhorn_iterations': 50, 'whitening_reg': 0.001, 'disp_weight': 0.0, 'pair_weight': 0.0, 'num_random_networks': 1, 'random_models': 'ResNet18BN', 'distill_aug_strategy': 'color_crop_cutout_flip_scale_rotate', 'dsa': True, 'distill_aug_mode': 'M', 'teacher_source': 'pretrained', 'teacher_seed': [0], 'teacher_ssl': 'simclr', 'teacher_path': '/scratch/mmoslem3/MKDT/Evaluate_benchamrk/fashionmnist/full/checkpoints', 'model': 'ResNet18BN', 'ssl_method': 'simclr', 'eval_mode': 'S', 'num_eval': 0, 'epoch_eval_train': 10000, 'label_percentage': 1.0, 'lr_linear': 0.1, 'batch_linear': 256, 'save_path': '/scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/FashionMNIST/ResNet18BN/pt2/whitened-cosine', 'resume': True, 'save_every': 100, 'feature_batch': 128}
+P_net support: ResNet18BN
+Objective: sum teacher losses (-MI + 0 * displacement + 0 * pair_similarity), averaged over 1 augmentation draw(s).
+[2026-10-29 19:16:35] distillation begins
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/FashionMNIST/ResNet18BN/pt2/whitened-cosine/res_IIC_FashionMNIST_ResNet18BN_2percent_final.pt (iteration 1/10000)
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/FashionMNIST/ResNet18BN/pt2/whitened-cosine/res_IIC_FashionMNIST_ResNet18BN_2percent_final.pt (iteration 100/10000)
+[2026-10-29 19:17:21] iter = 00200, neg_MI = -0.042097, displacement = 0.000265, pair_similarity = 0.001066, total_loss = -0.042097, pixel drift RMS = 3.16640/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/FashionMNIST/ResNet18BN/pt2/whitened-cosine/res_IIC_FashionMNIST_ResNet18BN_2percent_final.pt (iteration 200/10000)
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/FashionMNIST/ResNet18BN/pt2/whitened-cosine/res_IIC_FashionMNIST_ResNet18BN_2percent_final.pt (iteration 300/10000)
+[2026-10-29 19:18:06] iter = 00400, neg_MI = -0.028363, displacement = 0.000524, pair_similarity = 0.005504, total_loss = -0.028363, pixel drift RMS = 4.86169/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/FashionMNIST/ResNet18BN/pt2/whitened-cosine/res_IIC_FashionMNIST_ResNet18BN_2percent_final.pt (iteration 400/10000)
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/FashionMNIST/ResNet18BN/pt2/whitened-cosine/res_IIC_FashionMNIST_ResNet18BN_2percent_final.pt (iteration 500/10000)
+[2026-10-29 19:18:51] iter = 00600, neg_MI = -0.000281, displacement = 0.000429, pair_similarity = 0.010215, total_loss = -0.000281, pixel drift RMS = 6.25927/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/FashionMNIST/ResNet18BN/pt2/whitened-cosine/res_IIC_FashionMNIST_ResNet18BN_2percent_final.pt (iteration 600/10000)
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/FashionMNIST/ResNet18BN/pt2/whitened-cosine/res_IIC_FashionMNIST_ResNet18BN_2percent_final.pt (iteration 700/10000)
+[2026-10-29 19:19:36] iter = 00800, neg_MI = -0.002094, displacement = 0.000891, pair_similarity = 0.038438, total_loss = -0.002094, pixel drift RMS = 7.45380/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/FashionMNIST/ResNet18BN/pt2/whitened-cosine/res_IIC_FashionMNIST_ResNet18BN_2percent_final.pt (iteration 800/10000)
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/FashionMNIST/ResNet18BN/pt2/whitened-cosine/res_IIC_FashionMNIST_ResNet18BN_2percent_final.pt (iteration 900/10000)
+[2026-10-29 19:20:22] iter = 01000, neg_MI = -0.001052, displacement = 0.000573, pair_similarity = 0.005204, total_loss = -0.001052, pixel drift RMS = 8.47301/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/FashionMNIST/ResNet18BN/pt2/whitened-cosine/res_IIC_FashionMNIST_ResNet18BN_2percent_final.pt (iteration 1000/10000)
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/FashionMNIST/ResNet18BN/pt2/whitened-cosine/res_IIC_FashionMNIST_ResNet18BN_2percent_final.pt (iteration 1100/10000)
+[2026-10-29 19:21:07] iter = 01200, neg_MI = -0.038008, displacement = 0.000399, pair_similarity = 0.001490, total_loss = -0.038008, pixel drift RMS = 9.37618/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/FashionMNIST/ResNet18BN/pt2/whitened-cosine/res_IIC_FashionMNIST_ResNet18BN_2percent_final.pt (iteration 1200/10000)
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/FashionMNIST/ResNet18BN/pt2/whitened-cosine/res_IIC_FashionMNIST_ResNet18BN_2percent_final.pt (iteration 1300/10000)
+[2026-10-29 19:21:52] iter = 01400, neg_MI = -0.032834, displacement = 0.001445, pair_similarity = 0.024905, total_loss = -0.032834, pixel drift RMS = 10.18638/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/FashionMNIST/ResNet18BN/pt2/whitened-cosine/res_IIC_FashionMNIST_ResNet18BN_2percent_final.pt (iteration 1400/10000)
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/FashionMNIST/ResNet18BN/pt2/whitened-cosine/res_IIC_FashionMNIST_ResNet18BN_2percent_final.pt (iteration 1500/10000)
+[2026-10-29 19:22:38] iter = 01600, neg_MI = -0.011617, displacement = 0.001473, pair_similarity = 0.055931, total_loss = -0.011617, pixel drift RMS = 11.01302/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/FashionMNIST/ResNet18BN/pt2/whitened-cosine/res_IIC_FashionMNIST_ResNet18BN_2percent_final.pt (iteration 1600/10000)
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/FashionMNIST/ResNet18BN/pt2/whitened-cosine/res_IIC_FashionMNIST_ResNet18BN_2percent_final.pt (iteration 1700/10000)
+[2026-10-29 19:23:23] iter = 01800, neg_MI = -0.004181, displacement = 0.001074, pair_similarity = 0.016939, total_loss = -0.004181, pixel drift RMS = 11.78663/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/FashionMNIST/ResNet18BN/pt2/whitened-cosine/res_IIC_FashionMNIST_ResNet18BN_2percent_final.pt (iteration 1800/10000)
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/FashionMNIST/ResNet18BN/pt2/whitened-cosine/res_IIC_FashionMNIST_ResNet18BN_2percent_final.pt (iteration 1900/10000)
+[2026-10-29 19:24:09] iter = 02000, neg_MI = -0.012166, displacement = 0.001102, pair_similarity = 0.048016, total_loss = -0.012166, pixel drift RMS = 12.52431/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/FashionMNIST/ResNet18BN/pt2/whitened-cosine/res_IIC_FashionMNIST_ResNet18BN_2percent_final.pt (iteration 2000/10000)
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/FashionMNIST/ResNet18BN/pt2/whitened-cosine/res_IIC_FashionMNIST_ResNet18BN_2percent_final.pt (iteration 2100/10000)
+[2026-10-29 19:24:54] iter = 02200, neg_MI = -0.070820, displacement = 0.000870, pair_similarity = 0.025377, total_loss = -0.070820, pixel drift RMS = 13.30860/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/FashionMNIST/ResNet18BN/pt2/whitened-cosine/res_IIC_FashionMNIST_ResNet18BN_2percent_final.pt (iteration 2200/10000)
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/FashionMNIST/ResNet18BN/pt2/whitened-cosine/res_IIC_FashionMNIST_ResNet18BN_2percent_final.pt (iteration 2300/10000)
+[2026-10-29 19:25:40] iter = 02400, neg_MI = -0.047694, displacement = 0.000416, pair_similarity = 0.001961, total_loss = -0.047694, pixel drift RMS = 13.89624/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/FashionMNIST/ResNet18BN/pt2/whitened-cosine/res_IIC_FashionMNIST_ResNet18BN_2percent_final.pt (iteration 2400/10000)
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/FashionMNIST/ResNet18BN/pt2/whitened-cosine/res_IIC_FashionMNIST_ResNet18BN_2percent_final.pt (iteration 2500/10000)
+[2026-10-29 19:26:26] iter = 02600, neg_MI = -0.001261, displacement = 0.000983, pair_similarity = 0.020819, total_loss = -0.001261, pixel drift RMS = 14.46415/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/FashionMNIST/ResNet18BN/pt2/whitened-cosine/res_IIC_FashionMNIST_ResNet18BN_2percent_final.pt (iteration 2600/10000)
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/FashionMNIST/ResNet18BN/pt2/whitened-cosine/res_IIC_FashionMNIST_ResNet18BN_2percent_final.pt (iteration 2700/10000)
+[2026-10-29 19:27:11] iter = 02800, neg_MI = -0.001390, displacement = 0.001044, pair_similarity = 0.016073, total_loss = -0.001390, pixel drift RMS = 14.95054/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/FashionMNIST/ResNet18BN/pt2/whitened-cosine/res_IIC_FashionMNIST_ResNet18BN_2percent_final.pt (iteration 2800/10000)
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/FashionMNIST/ResNet18BN/pt2/whitened-cosine/res_IIC_FashionMNIST_ResNet18BN_2percent_final.pt (iteration 2900/10000)
+[2026-10-29 19:27:57] iter = 03000, neg_MI = -0.003019, displacement = 0.001404, pair_similarity = 0.020139, total_loss = -0.003019, pixel drift RMS = 15.51791/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/FashionMNIST/ResNet18BN/pt2/whitened-cosine/res_IIC_FashionMNIST_ResNet18BN_2percent_final.pt (iteration 3000/10000)
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/FashionMNIST/ResNet18BN/pt2/whitened-cosine/res_IIC_FashionMNIST_ResNet18BN_2percent_final.pt (iteration 3100/10000)
+[2026-10-29 19:28:42] iter = 03200, neg_MI = -0.000342, displacement = 0.000564, pair_similarity = 0.006145, total_loss = -0.000342, pixel drift RMS = 16.01680/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/FashionMNIST/ResNet18BN/pt2/whitened-cosine/res_IIC_FashionMNIST_ResNet18BN_2percent_final.pt (iteration 3200/10000)
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/FashionMNIST/ResNet18BN/pt2/whitened-cosine/res_IIC_FashionMNIST_ResNet18BN_2percent_final.pt (iteration 3300/10000)
+[2026-10-29 19:29:27] iter = 03400, neg_MI = -0.010409, displacement = 0.001211, pair_similarity = 0.047526, total_loss = -0.010409, pixel drift RMS = 16.52481/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/FashionMNIST/ResNet18BN/pt2/whitened-cosine/res_IIC_FashionMNIST_ResNet18BN_2percent_final.pt (iteration 3400/10000)
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/FashionMNIST/ResNet18BN/pt2/whitened-cosine/res_IIC_FashionMNIST_ResNet18BN_2percent_final.pt (iteration 3500/10000)
+[2026-10-29 19:30:12] iter = 03600, neg_MI = -0.000992, displacement = 0.000613, pair_similarity = 0.012630, total_loss = -0.000992, pixel drift RMS = 16.94615/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/FashionMNIST/ResNet18BN/pt2/whitened-cosine/res_IIC_FashionMNIST_ResNet18BN_2percent_final.pt (iteration 3600/10000)
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/FashionMNIST/ResNet18BN/pt2/whitened-cosine/res_IIC_FashionMNIST_ResNet18BN_2percent_final.pt (iteration 3700/10000)
+[2026-10-29 19:30:57] iter = 03800, neg_MI = -0.002092, displacement = 0.000386, pair_similarity = 0.005062, total_loss = -0.002092, pixel drift RMS = 17.36195/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/FashionMNIST/ResNet18BN/pt2/whitened-cosine/res_IIC_FashionMNIST_ResNet18BN_2percent_final.pt (iteration 3800/10000)
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/FashionMNIST/ResNet18BN/pt2/whitened-cosine/res_IIC_FashionMNIST_ResNet18BN_2percent_final.pt (iteration 3900/10000)
+[2026-10-29 19:31:43] iter = 04000, neg_MI = -0.053955, displacement = 0.001088, pair_similarity = 0.020820, total_loss = -0.053955, pixel drift RMS = 17.87005/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/FashionMNIST/ResNet18BN/pt2/whitened-cosine/res_IIC_FashionMNIST_ResNet18BN_2percent_final.pt (iteration 4000/10000)
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/FashionMNIST/ResNet18BN/pt2/whitened-cosine/res_IIC_FashionMNIST_ResNet18BN_2percent_final.pt (iteration 4100/10000)
+[2026-10-29 19:32:28] iter = 04200, neg_MI = -0.161140, displacement = 0.000118, pair_similarity = 0.000314, total_loss = -0.161140, pixel drift RMS = 18.35510/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/FashionMNIST/ResNet18BN/pt2/whitened-cosine/res_IIC_FashionMNIST_ResNet18BN_2percent_final.pt (iteration 4200/10000)
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/FashionMNIST/ResNet18BN/pt2/whitened-cosine/res_IIC_FashionMNIST_ResNet18BN_2percent_final.pt (iteration 4300/10000)
+[2026-10-29 19:33:14] iter = 04400, neg_MI = -0.072398, displacement = 0.000391, pair_similarity = 0.001218, total_loss = -0.072398, pixel drift RMS = 18.70580/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/FashionMNIST/ResNet18BN/pt2/whitened-cosine/res_IIC_FashionMNIST_ResNet18BN_2percent_final.pt (iteration 4400/10000)
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/FashionMNIST/ResNet18BN/pt2/whitened-cosine/res_IIC_FashionMNIST_ResNet18BN_2percent_final.pt (iteration 4500/10000)
+[2026-10-29 19:34:00] iter = 04600, neg_MI = -0.166564, displacement = 0.000569, pair_similarity = 0.011436, total_loss = -0.166564, pixel drift RMS = 19.19215/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/FashionMNIST/ResNet18BN/pt2/whitened-cosine/res_IIC_FashionMNIST_ResNet18BN_2percent_final.pt (iteration 4600/10000)
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/FashionMNIST/ResNet18BN/pt2/whitened-cosine/res_IIC_FashionMNIST_ResNet18BN_2percent_final.pt (iteration 4700/10000)
+[2026-10-29 19:34:46] iter = 04800, neg_MI = -0.004057, displacement = 0.001305, pair_similarity = 0.041037, total_loss = -0.004057, pixel drift RMS = 19.64555/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/FashionMNIST/ResNet18BN/pt2/whitened-cosine/res_IIC_FashionMNIST_ResNet18BN_2percent_final.pt (iteration 4800/10000)
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/FashionMNIST/ResNet18BN/pt2/whitened-cosine/res_IIC_FashionMNIST_ResNet18BN_2percent_final.pt (iteration 4900/10000)
+[2026-10-29 19:35:31] iter = 05000, neg_MI = -0.002110, displacement = 0.000591, pair_similarity = 0.006729, total_loss = -0.002110, pixel drift RMS = 20.06281/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/FashionMNIST/ResNet18BN/pt2/whitened-cosine/res_IIC_FashionMNIST_ResNet18BN_2percent_final.pt (iteration 5000/10000)
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/FashionMNIST/ResNet18BN/pt2/whitened-cosine/res_IIC_FashionMNIST_ResNet18BN_2percent_final.pt (iteration 5100/10000)
+[2026-10-29 19:36:17] iter = 05200, neg_MI = -0.001496, displacement = 0.000818, pair_similarity = 0.013093, total_loss = -0.001496, pixel drift RMS = 20.43252/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/FashionMNIST/ResNet18BN/pt2/whitened-cosine/res_IIC_FashionMNIST_ResNet18BN_2percent_final.pt (iteration 5200/10000)
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/FashionMNIST/ResNet18BN/pt2/whitened-cosine/res_IIC_FashionMNIST_ResNet18BN_2percent_final.pt (iteration 5300/10000)
+[2026-10-29 19:37:02] iter = 05400, neg_MI = -0.006150, displacement = 0.001195, pair_similarity = 0.041697, total_loss = -0.006150, pixel drift RMS = 20.83603/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/FashionMNIST/ResNet18BN/pt2/whitened-cosine/res_IIC_FashionMNIST_ResNet18BN_2percent_final.pt (iteration 5400/10000)
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/FashionMNIST/ResNet18BN/pt2/whitened-cosine/res_IIC_FashionMNIST_ResNet18BN_2percent_final.pt (iteration 5500/10000)
+[2026-10-29 19:37:49] iter = 05600, neg_MI = -0.077307, displacement = 0.000855, pair_similarity = 0.025914, total_loss = -0.077307, pixel drift RMS = 21.21442/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/FashionMNIST/ResNet18BN/pt2/whitened-cosine/res_IIC_FashionMNIST_ResNet18BN_2percent_final.pt (iteration 5600/10000)
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/FashionMNIST/ResNet18BN/pt2/whitened-cosine/res_IIC_FashionMNIST_ResNet18BN_2percent_final.pt (iteration 5700/10000)
+[2026-10-29 19:38:34] iter = 05800, neg_MI = -0.000843, displacement = 0.000000, pair_similarity = 0.000000, total_loss = -0.000843, pixel drift RMS = 21.55192/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/FashionMNIST/ResNet18BN/pt2/whitened-cosine/res_IIC_FashionMNIST_ResNet18BN_2percent_final.pt (iteration 5800/10000)
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/FashionMNIST/ResNet18BN/pt2/whitened-cosine/res_IIC_FashionMNIST_ResNet18BN_2percent_final.pt (iteration 5900/10000)
+[2026-10-29 19:39:20] iter = 06000, neg_MI = -0.005752, displacement = 0.000982, pair_similarity = 0.021464, total_loss = -0.005752, pixel drift RMS = 21.91942/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/FashionMNIST/ResNet18BN/pt2/whitened-cosine/res_IIC_FashionMNIST_ResNet18BN_2percent_final.pt (iteration 6000/10000)
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/FashionMNIST/ResNet18BN/pt2/whitened-cosine/res_IIC_FashionMNIST_ResNet18BN_2percent_final.pt (iteration 6100/10000)
+[2026-10-29 19:40:05] iter = 06200, neg_MI = -0.003907, displacement = 0.000818, pair_similarity = 0.016680, total_loss = -0.003907, pixel drift RMS = 22.21602/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/FashionMNIST/ResNet18BN/pt2/whitened-cosine/res_IIC_FashionMNIST_ResNet18BN_2percent_final.pt (iteration 6200/10000)
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/FashionMNIST/ResNet18BN/pt2/whitened-cosine/res_IIC_FashionMNIST_ResNet18BN_2percent_final.pt (iteration 6300/10000)
+[2026-10-29 19:40:51] iter = 06400, neg_MI = -0.001895, displacement = 0.000670, pair_similarity = 0.012160, total_loss = -0.001895, pixel drift RMS = 22.57310/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/FashionMNIST/ResNet18BN/pt2/whitened-cosine/res_IIC_FashionMNIST_ResNet18BN_2percent_final.pt (iteration 6400/10000)
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/FashionMNIST/ResNet18BN/pt2/whitened-cosine/res_IIC_FashionMNIST_ResNet18BN_2percent_final.pt (iteration 6500/10000)
+[2026-10-29 19:41:37] iter = 06600, neg_MI = -0.011850, displacement = 0.001305, pair_similarity = 0.048980, total_loss = -0.011850, pixel drift RMS = 22.94343/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/FashionMNIST/ResNet18BN/pt2/whitened-cosine/res_IIC_FashionMNIST_ResNet18BN_2percent_final.pt (iteration 6600/10000)
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/FashionMNIST/ResNet18BN/pt2/whitened-cosine/res_IIC_FashionMNIST_ResNet18BN_2percent_final.pt (iteration 6700/10000)
+[2026-10-29 19:42:22] iter = 06800, neg_MI = -0.108812, displacement = 0.000550, pair_similarity = 0.015261, total_loss = -0.108812, pixel drift RMS = 23.19491/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/FashionMNIST/ResNet18BN/pt2/whitened-cosine/res_IIC_FashionMNIST_ResNet18BN_2percent_final.pt (iteration 6800/10000)
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/FashionMNIST/ResNet18BN/pt2/whitened-cosine/res_IIC_FashionMNIST_ResNet18BN_2percent_final.pt (iteration 6900/10000)
+[2026-10-29 19:43:08] iter = 07000, neg_MI = -0.012486, displacement = 0.000538, pair_similarity = 0.004810, total_loss = -0.012486, pixel drift RMS = 23.47705/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/FashionMNIST/ResNet18BN/pt2/whitened-cosine/res_IIC_FashionMNIST_ResNet18BN_2percent_final.pt (iteration 7000/10000)
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/FashionMNIST/ResNet18BN/pt2/whitened-cosine/res_IIC_FashionMNIST_ResNet18BN_2percent_final.pt (iteration 7100/10000)
+[2026-10-29 19:43:53] iter = 07200, neg_MI = -0.042718, displacement = 0.000492, pair_similarity = 0.004276, total_loss = -0.042718, pixel drift RMS = 23.71584/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/FashionMNIST/ResNet18BN/pt2/whitened-cosine/res_IIC_FashionMNIST_ResNet18BN_2percent_final.pt (iteration 7200/10000)
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/FashionMNIST/ResNet18BN/pt2/whitened-cosine/res_IIC_FashionMNIST_ResNet18BN_2percent_final.pt (iteration 7300/10000)
+[2026-10-29 19:44:38] iter = 07400, neg_MI = -0.073248, displacement = 0.000095, pair_similarity = 0.000262, total_loss = -0.073248, pixel drift RMS = 24.02504/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/FashionMNIST/ResNet18BN/pt2/whitened-cosine/res_IIC_FashionMNIST_ResNet18BN_2percent_final.pt (iteration 7400/10000)
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/FashionMNIST/ResNet18BN/pt2/whitened-cosine/res_IIC_FashionMNIST_ResNet18BN_2percent_final.pt (iteration 7500/10000)
+[2026-10-29 19:45:24] iter = 07600, neg_MI = -0.066657, displacement = 0.000565, pair_similarity = 0.005971, total_loss = -0.066657, pixel drift RMS = 24.34459/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/FashionMNIST/ResNet18BN/pt2/whitened-cosine/res_IIC_FashionMNIST_ResNet18BN_2percent_final.pt (iteration 7600/10000)
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/FashionMNIST/ResNet18BN/pt2/whitened-cosine/res_IIC_FashionMNIST_ResNet18BN_2percent_final.pt (iteration 7700/10000)
+[2026-10-29 19:46:09] iter = 07800, neg_MI = -0.055538, displacement = 0.000557, pair_similarity = 0.005113, total_loss = -0.055538, pixel drift RMS = 24.65173/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/FashionMNIST/ResNet18BN/pt2/whitened-cosine/res_IIC_FashionMNIST_ResNet18BN_2percent_final.pt (iteration 7800/10000)
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/FashionMNIST/ResNet18BN/pt2/whitened-cosine/res_IIC_FashionMNIST_ResNet18BN_2percent_final.pt (iteration 7900/10000)
+[2026-10-29 19:46:55] iter = 08000, neg_MI = -0.004206, displacement = 0.000804, pair_similarity = 0.033049, total_loss = -0.004206, pixel drift RMS = 24.99576/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/FashionMNIST/ResNet18BN/pt2/whitened-cosine/res_IIC_FashionMNIST_ResNet18BN_2percent_final.pt (iteration 8000/10000)
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/FashionMNIST/ResNet18BN/pt2/whitened-cosine/res_IIC_FashionMNIST_ResNet18BN_2percent_final.pt (iteration 8100/10000)
+[2026-10-29 19:47:40] iter = 08200, neg_MI = -0.014986, displacement = 0.000520, pair_similarity = 0.005948, total_loss = -0.014986, pixel drift RMS = 25.24213/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/FashionMNIST/ResNet18BN/pt2/whitened-cosine/res_IIC_FashionMNIST_ResNet18BN_2percent_final.pt (iteration 8200/10000)
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/FashionMNIST/ResNet18BN/pt2/whitened-cosine/res_IIC_FashionMNIST_ResNet18BN_2percent_final.pt (iteration 8300/10000)
+[2026-10-29 19:48:26] iter = 08400, neg_MI = -0.005133, displacement = 0.000856, pair_similarity = 0.008757, total_loss = -0.005133, pixel drift RMS = 25.52646/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/FashionMNIST/ResNet18BN/pt2/whitened-cosine/res_IIC_FashionMNIST_ResNet18BN_2percent_final.pt (iteration 8400/10000)
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/FashionMNIST/ResNet18BN/pt2/whitened-cosine/res_IIC_FashionMNIST_ResNet18BN_2percent_final.pt (iteration 8500/10000)
+[2026-10-29 19:49:11] iter = 08600, neg_MI = -0.000493, displacement = 0.000296, pair_similarity = 0.003350, total_loss = -0.000493, pixel drift RMS = 25.79088/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/FashionMNIST/ResNet18BN/pt2/whitened-cosine/res_IIC_FashionMNIST_ResNet18BN_2percent_final.pt (iteration 8600/10000)
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/FashionMNIST/ResNet18BN/pt2/whitened-cosine/res_IIC_FashionMNIST_ResNet18BN_2percent_final.pt (iteration 8700/10000)
+[2026-10-29 19:49:57] iter = 08800, neg_MI = -0.002100, displacement = 0.000000, pair_similarity = 0.000000, total_loss = -0.002100, pixel drift RMS = 25.99957/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/FashionMNIST/ResNet18BN/pt2/whitened-cosine/res_IIC_FashionMNIST_ResNet18BN_2percent_final.pt (iteration 8800/10000)
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/FashionMNIST/ResNet18BN/pt2/whitened-cosine/res_IIC_FashionMNIST_ResNet18BN_2percent_final.pt (iteration 8900/10000)
+[2026-10-29 19:50:42] iter = 09000, neg_MI = -0.008286, displacement = 0.000953, pair_similarity = 0.039355, total_loss = -0.008286, pixel drift RMS = 26.30798/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/FashionMNIST/ResNet18BN/pt2/whitened-cosine/res_IIC_FashionMNIST_ResNet18BN_2percent_final.pt (iteration 9000/10000)
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/FashionMNIST/ResNet18BN/pt2/whitened-cosine/res_IIC_FashionMNIST_ResNet18BN_2percent_final.pt (iteration 9100/10000)
+[2026-10-29 19:51:27] iter = 09200, neg_MI = -0.261725, displacement = 0.001205, pair_similarity = 0.023038, total_loss = -0.261725, pixel drift RMS = 26.52593/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/FashionMNIST/ResNet18BN/pt2/whitened-cosine/res_IIC_FashionMNIST_ResNet18BN_2percent_final.pt (iteration 9200/10000)
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/FashionMNIST/ResNet18BN/pt2/whitened-cosine/res_IIC_FashionMNIST_ResNet18BN_2percent_final.pt (iteration 9300/10000)
+[2026-10-29 19:52:13] iter = 09400, neg_MI = -0.005822, displacement = 0.000850, pair_similarity = 0.013877, total_loss = -0.005822, pixel drift RMS = 26.79336/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/FashionMNIST/ResNet18BN/pt2/whitened-cosine/res_IIC_FashionMNIST_ResNet18BN_2percent_final.pt (iteration 9400/10000)
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/FashionMNIST/ResNet18BN/pt2/whitened-cosine/res_IIC_FashionMNIST_ResNet18BN_2percent_final.pt (iteration 9500/10000)
+[2026-10-29 19:52:58] iter = 09600, neg_MI = -0.012057, displacement = 0.001090, pair_similarity = 0.075359, total_loss = -0.012057, pixel drift RMS = 27.04989/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/FashionMNIST/ResNet18BN/pt2/whitened-cosine/res_IIC_FashionMNIST_ResNet18BN_2percent_final.pt (iteration 9600/10000)
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/FashionMNIST/ResNet18BN/pt2/whitened-cosine/res_IIC_FashionMNIST_ResNet18BN_2percent_final.pt (iteration 9700/10000)
+[2026-10-29 19:53:44] iter = 09800, neg_MI = -0.004018, displacement = 0.000881, pair_similarity = 0.019319, total_loss = -0.004018, pixel drift RMS = 27.39401/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/FashionMNIST/ResNet18BN/pt2/whitened-cosine/res_IIC_FashionMNIST_ResNet18BN_2percent_final.pt (iteration 9800/10000)
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/FashionMNIST/ResNet18BN/pt2/whitened-cosine/res_IIC_FashionMNIST_ResNet18BN_2percent_final.pt (iteration 9900/10000)
+[2026-10-29 19:54:29] iter = 10000, neg_MI = -0.000760, displacement = 0.000339, pair_similarity = 0.001625, total_loss = -0.000760, pixel drift RMS = 27.60546/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/FashionMNIST/ResNet18BN/pt2/whitened-cosine/res_IIC_FashionMNIST_ResNet18BN_2percent_final.pt (iteration 10000/10000)
+DONE: /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_similarity_lr0p002_b128_i10k/FashionMNIST/ResNet18BN/pt2/whitened-cosine/res_IIC_FashionMNIST_ResNet18BN_2percent_final.pt
+SSL FashionMNIST/ResNet18/simclr seed=0: {"epoch": 1, "steps": 4, "lr": 0.030796923076923076, "loss": 6.199817180633545, "examples": 1024}
+SSL FashionMNIST/ResNet18/simclr seed=0: {"epoch": 200, "steps": 800, "lr": 0.39109127699720053, "loss": 3.89520800113678, "examples": 1024}
+SSL FashionMNIST/ResNet18/simclr seed=0: {"epoch": 400, "steps": 1600, "lr": 0.3633117929960533, "loss": 3.4302120208740234, "examples": 1024}
+SSL FashionMNIST/ResNet18/simclr seed=0: {"epoch": 600, "steps": 2400, "lr": 0.31938246138236015, "loss": 3.093897581100464, "examples": 1024}
+SSL FashionMNIST/ResNet18/simclr seed=0: {"epoch": 800, "steps": 3200, "lr": 0.26364743880437536, "loss": 2.97412371635437, "examples": 1024}
+SSL FashionMNIST/ResNet18/simclr seed=0: {"epoch": 1000, "steps": 4000, "lr": 0.2016183426707573, "loss": 2.825595498085022, "examples": 1024}
+SSL FashionMNIST/ResNet18/simclr seed=0: {"epoch": 1200, "steps": 4800, "lr": 0.13942920918136642, "loss": 2.6609031558036804, "examples": 1024}
+SSL FashionMNIST/ResNet18/simclr seed=0: {"epoch": 1400, "steps": 5600, "lr": 0.0832299005756933, "loss": 2.5121846199035645, "examples": 1024}
+SSL FashionMNIST/ResNet18/simclr seed=0: {"epoch": 1600, "steps": 6400, "lr": 0.038577947349615976, "loss": 2.458508789539337, "examples": 1024}
+SSL FashionMNIST/ResNet18/simclr seed=0: {"epoch": 1800, "steps": 7200, "lr": 0.0098889659566326, "loss": 2.3836475610733032, "examples": 1024}
+SSL FashionMNIST/ResNet18/simclr seed=0: {"epoch": 2000, "steps": 8000, "lr": 0.0, "loss": 2.310814082622528, "examples": 1024}
+PROBE FashionMNIST lbl=1 seed=0: {'epoch': 10, 'lr': 0.0976968053825168, 'loss': 0.9810780588785807, 'train_accuracy_percent': 72.66666666666667}
+PROBE FashionMNIST lbl=1 seed=0: {'epoch': 20, 'lr': 0.09069645216766208, 'loss': 0.7912470157941183, 'train_accuracy_percent': 74.33333333333333}
+PROBE FashionMNIST lbl=1 seed=0: {'epoch': 30, 'lr': 0.07968597695835844, 'loss': 0.7677387960751851, 'train_accuracy_percent': 75.5}
+PROBE FashionMNIST lbl=1 seed=0: {'epoch': 40, 'lr': 0.0657503231944974, 'loss': 0.6958407934506734, 'train_accuracy_percent': 77.83333333333333}
+PROBE FashionMNIST lbl=1 seed=0: {'epoch': 50, 'lr': 0.05026267376276531, 'loss': 0.6589765604337057, 'train_accuracy_percent': 78.16666666666667}
+PROBE FashionMNIST lbl=1 seed=0: {'epoch': 60, 'lr': 0.03474914114521912, 'loss': 0.6371436977386474, 'train_accuracy_percent': 79.0}
+PROBE FashionMNIST lbl=1 seed=0: {'epoch': 70, 'lr': 0.020738388285373534, 'loss': 0.665272076924642, 'train_accuracy_percent': 78.33333333333333}
+PROBE FashionMNIST lbl=1 seed=0: {'epoch': 80, 'lr': 0.009610998138484261, 'loss': 0.6065737271308899, 'train_accuracy_percent': 81.33333333333333}
+PROBE FashionMNIST lbl=1 seed=0: {'epoch': 90, 'lr': 0.002463434636714723, 'loss': 0.6428183396657308, 'train_accuracy_percent': 80.16666666666667}
+PROBE FashionMNIST lbl=1 seed=0: {'epoch': 100, 'lr': 0.0, 'loss': 0.612642011642456, 'train_accuracy_percent': 81.33333333333333}
+RESULT FashionMNIST lbl=1 seed=0: 78.4800
+PROBE FashionMNIST lbl=1 seed=1: {'epoch': 10, 'lr': 0.0976968053825168, 'loss': 1.0124333810806274, 'train_accuracy_percent': 72.83333333333333}
+PROBE FashionMNIST lbl=1 seed=1: {'epoch': 20, 'lr': 0.09069645216766208, 'loss': 0.8504487148920695, 'train_accuracy_percent': 73.16666666666667}
+PROBE FashionMNIST lbl=1 seed=1: {'epoch': 30, 'lr': 0.07968597695835844, 'loss': 0.7481341711680094, 'train_accuracy_percent': 76.5}
+PROBE FashionMNIST lbl=1 seed=1: {'epoch': 40, 'lr': 0.0657503231944974, 'loss': 0.6939610640207926, 'train_accuracy_percent': 76.66666666666667}
+PROBE FashionMNIST lbl=1 seed=1: {'epoch': 50, 'lr': 0.05026267376276531, 'loss': 0.7228139098485311, 'train_accuracy_percent': 76.16666666666667}
+PROBE FashionMNIST lbl=1 seed=1: {'epoch': 60, 'lr': 0.03474914114521912, 'loss': 0.6440978542963663, 'train_accuracy_percent': 79.16666666666667}
+PROBE FashionMNIST lbl=1 seed=1: {'epoch': 70, 'lr': 0.020738388285373534, 'loss': 0.6877829472223917, 'train_accuracy_percent': 75.83333333333333}
+PROBE FashionMNIST lbl=1 seed=1: {'epoch': 80, 'lr': 0.009610998138484261, 'loss': 0.6719057949384054, 'train_accuracy_percent': 75.33333333333333}
+PROBE FashionMNIST lbl=1 seed=1: {'epoch': 90, 'lr': 0.002463434636714723, 'loss': 0.6771243906021118, 'train_accuracy_percent': 78.66666666666667}
+PROBE FashionMNIST lbl=1 seed=1: {'epoch': 100, 'lr': 0.0, 'loss': 0.6477986359596253, 'train_accuracy_percent': 78.66666666666667}
+RESULT FashionMNIST lbl=1 seed=1: 78.1200
+PROBE FashionMNIST lbl=1 seed=2: {'epoch': 10, 'lr': 0.0976968053825168, 'loss': 0.9593560314178466, 'train_accuracy_percent': 73.0}
+PROBE FashionMNIST lbl=1 seed=2: {'epoch': 20, 'lr': 0.09069645216766208, 'loss': 0.7967565417289734, 'train_accuracy_percent': 75.33333333333333}
+PROBE FashionMNIST lbl=1 seed=2: {'epoch': 30, 'lr': 0.07968597695835844, 'loss': 0.676138927936554, 'train_accuracy_percent': 78.83333333333333}
+PROBE FashionMNIST lbl=1 seed=2: {'epoch': 40, 'lr': 0.0657503231944974, 'loss': 0.6532249609629314, 'train_accuracy_percent': 78.16666666666667}
+PROBE FashionMNIST lbl=1 seed=2: {'epoch': 50, 'lr': 0.05026267376276531, 'loss': 0.6339023049672444, 'train_accuracy_percent': 79.16666666666667}
+PROBE FashionMNIST lbl=1 seed=2: {'epoch': 60, 'lr': 0.03474914114521912, 'loss': 0.5986204433441162, 'train_accuracy_percent': 79.83333333333333}
+PROBE FashionMNIST lbl=1 seed=2: {'epoch': 70, 'lr': 0.020738388285373534, 'loss': 0.5877601830164592, 'train_accuracy_percent': 80.16666666666667}
+PROBE FashionMNIST lbl=1 seed=2: {'epoch': 80, 'lr': 0.009610998138484261, 'loss': 0.596829164425532, 'train_accuracy_percent': 80.0}
+PROBE FashionMNIST lbl=1 seed=2: {'epoch': 90, 'lr': 0.002463434636714723, 'loss': 0.6243945821126302, 'train_accuracy_percent': 78.83333333333333}
+PROBE FashionMNIST lbl=1 seed=2: {'epoch': 100, 'lr': 0.0, 'loss': 0.5873793176809947, 'train_accuracy_percent': 80.0}
+RESULT FashionMNIST lbl=1 seed=2: 78.7700
+PROBE FashionMNIST lbl=1 seed=3: {'epoch': 10, 'lr': 0.0976968053825168, 'loss': 0.9874929793675741, 'train_accuracy_percent': 72.0}
+PROBE FashionMNIST lbl=1 seed=3: {'epoch': 20, 'lr': 0.09069645216766208, 'loss': 0.7918189303080241, 'train_accuracy_percent': 76.5}
+PROBE FashionMNIST lbl=1 seed=3: {'epoch': 30, 'lr': 0.07968597695835844, 'loss': 0.7588282028834025, 'train_accuracy_percent': 74.33333333333333}
+PROBE FashionMNIST lbl=1 seed=3: {'epoch': 40, 'lr': 0.0657503231944974, 'loss': 0.684008355140686, 'train_accuracy_percent': 77.33333333333333}
+PROBE FashionMNIST lbl=1 seed=3: {'epoch': 50, 'lr': 0.05026267376276531, 'loss': 0.6844089285532633, 'train_accuracy_percent': 77.0}
+PROBE FashionMNIST lbl=1 seed=3: {'epoch': 60, 'lr': 0.03474914114521912, 'loss': 0.6633736038208008, 'train_accuracy_percent': 78.16666666666667}
+PROBE FashionMNIST lbl=1 seed=3: {'epoch': 70, 'lr': 0.020738388285373534, 'loss': 0.6605966838200887, 'train_accuracy_percent': 77.0}
+PROBE FashionMNIST lbl=1 seed=3: {'epoch': 80, 'lr': 0.009610998138484261, 'loss': 0.6145591672261556, 'train_accuracy_percent': 79.83333333333333}
+PROBE FashionMNIST lbl=1 seed=3: {'epoch': 90, 'lr': 0.002463434636714723, 'loss': 0.6357705211639404, 'train_accuracy_percent': 77.33333333333333}
+PROBE FashionMNIST lbl=1 seed=3: {'epoch': 100, 'lr': 0.0, 'loss': 0.5993459232648214, 'train_accuracy_percent': 79.5}
+RESULT FashionMNIST lbl=1 seed=3: 77.9000
+PROBE FashionMNIST lbl=1 seed=4: {'epoch': 10, 'lr': 0.0976968053825168, 'loss': 0.9551277526219686, 'train_accuracy_percent': 74.16666666666667}
+PROBE FashionMNIST lbl=1 seed=4: {'epoch': 20, 'lr': 0.09069645216766208, 'loss': 0.7725777141253154, 'train_accuracy_percent': 76.0}
+PROBE FashionMNIST lbl=1 seed=4: {'epoch': 30, 'lr': 0.07968597695835844, 'loss': 0.7080508454640706, 'train_accuracy_percent': 76.0}
+PROBE FashionMNIST lbl=1 seed=4: {'epoch': 40, 'lr': 0.0657503231944974, 'loss': 0.6591310127576192, 'train_accuracy_percent': 79.16666666666667}
+PROBE FashionMNIST lbl=1 seed=4: {'epoch': 50, 'lr': 0.05026267376276531, 'loss': 0.6417417494455974, 'train_accuracy_percent': 80.66666666666667}
+PROBE FashionMNIST lbl=1 seed=4: {'epoch': 60, 'lr': 0.03474914114521912, 'loss': 0.6276578744252522, 'train_accuracy_percent': 81.33333333333333}
+PROBE FashionMNIST lbl=1 seed=4: {'epoch': 70, 'lr': 0.020738388285373534, 'loss': 0.603553782304128, 'train_accuracy_percent': 80.16666666666667}
+PROBE FashionMNIST lbl=1 seed=4: {'epoch': 80, 'lr': 0.009610998138484261, 'loss': 0.6058672682444255, 'train_accuracy_percent': 81.66666666666667}
+PROBE FashionMNIST lbl=1 seed=4: {'epoch': 90, 'lr': 0.002463434636714723, 'loss': 0.6130639100074768, 'train_accuracy_percent': 79.83333333333333}
+PROBE FashionMNIST lbl=1 seed=4: {'epoch': 100, 'lr': 0.0, 'loss': 0.6223618992169698, 'train_accuracy_percent': 80.16666666666667}
+RESULT FashionMNIST lbl=1 seed=4: 78.1200
+COMPLETE CELL: FashionMNIST 2 FashionMNIST 1 \dsacc{78.28}{0.34}
+PROBE FashionMNIST lbl=5 seed=0: {'epoch': 10, 'lr': 0.09758912913234664, 'loss': 0.7499419312477111, 'train_accuracy_percent': 74.6}
+PROBE FashionMNIST lbl=5 seed=0: {'epoch': 20, 'lr': 0.09051236487138009, 'loss': 0.6704254814783732, 'train_accuracy_percent': 76.8}
+PROBE FashionMNIST lbl=5 seed=0: {'epoch': 30, 'lr': 0.07946340502054647, 'loss': 0.6470734210014343, 'train_accuracy_percent': 76.83333333333333}
+PROBE FashionMNIST lbl=5 seed=0: {'epoch': 40, 'lr': 0.06552558869696322, 'loss': 0.614582722345988, 'train_accuracy_percent': 77.8}
+PROBE FashionMNIST lbl=5 seed=0: {'epoch': 50, 'lr': 0.050065504415240214, 'loss': 0.6282497644424438, 'train_accuracy_percent': 77.4}
+PROBE FashionMNIST lbl=5 seed=0: {'epoch': 60, 'lr': 0.03459899749316631, 'loss': 0.604914876461029, 'train_accuracy_percent': 78.06666666666666}
+PROBE FashionMNIST lbl=5 seed=0: {'epoch': 70, 'lr': 0.020642542981792186, 'loss': 0.6154530693689982, 'train_accuracy_percent': 77.73333333333333}
+PROBE FashionMNIST lbl=5 seed=0: {'epoch': 80, 'lr': 0.009564556850816598, 'loss': 0.6018254763285319, 'train_accuracy_percent': 78.93333333333334}
+PROBE FashionMNIST lbl=5 seed=0: {'epoch': 90, 'lr': 0.0024512242141862873, 'loss': 0.600999870300293, 'train_accuracy_percent': 78.33333333333333}
+PROBE FashionMNIST lbl=5 seed=0: {'epoch': 100, 'lr': 0.0, 'loss': 0.6002887007395427, 'train_accuracy_percent': 78.8}
+RESULT FashionMNIST lbl=5 seed=0: 81.8200
+PROBE FashionMNIST lbl=5 seed=1: {'epoch': 10, 'lr': 0.09758912913234664, 'loss': 0.7560970409711202, 'train_accuracy_percent': 75.43333333333334}
+PROBE FashionMNIST lbl=5 seed=1: {'epoch': 20, 'lr': 0.09051236487138009, 'loss': 0.6893005636533102, 'train_accuracy_percent': 76.23333333333333}
+PROBE FashionMNIST lbl=5 seed=1: {'epoch': 30, 'lr': 0.07946340502054647, 'loss': 0.6400409228006999, 'train_accuracy_percent': 77.16666666666667}
+PROBE FashionMNIST lbl=5 seed=1: {'epoch': 40, 'lr': 0.06552558869696322, 'loss': 0.6169511024157206, 'train_accuracy_percent': 78.9}
+PROBE FashionMNIST lbl=5 seed=1: {'epoch': 50, 'lr': 0.050065504415240214, 'loss': 0.6135835723876953, 'train_accuracy_percent': 78.16666666666667}
+PROBE FashionMNIST lbl=5 seed=1: {'epoch': 60, 'lr': 0.03459899749316631, 'loss': 0.617533761660258, 'train_accuracy_percent': 78.7}
+PROBE FashionMNIST lbl=5 seed=1: {'epoch': 70, 'lr': 0.020642542981792186, 'loss': 0.6018270066579183, 'train_accuracy_percent': 78.86666666666666}
+PROBE FashionMNIST lbl=5 seed=1: {'epoch': 80, 'lr': 0.009564556850816598, 'loss': 0.5980668624242147, 'train_accuracy_percent': 77.83333333333333}
+PROBE FashionMNIST lbl=5 seed=1: {'epoch': 90, 'lr': 0.0024512242141862873, 'loss': 0.6013948219617208, 'train_accuracy_percent': 79.0}
+PROBE FashionMNIST lbl=5 seed=1: {'epoch': 100, 'lr': 0.0, 'loss': 0.6012771878242492, 'train_accuracy_percent': 78.5}
+RESULT FashionMNIST lbl=5 seed=1: 82.2000
+PROBE FashionMNIST lbl=5 seed=2: {'epoch': 10, 'lr': 0.09758912913234664, 'loss': 0.7366446115175883, 'train_accuracy_percent': 75.1}
+PROBE FashionMNIST lbl=5 seed=2: {'epoch': 20, 'lr': 0.09051236487138009, 'loss': 0.6792930534680685, 'train_accuracy_percent': 76.86666666666666}
+PROBE FashionMNIST lbl=5 seed=2: {'epoch': 30, 'lr': 0.07946340502054647, 'loss': 0.6520617456436157, 'train_accuracy_percent': 76.96666666666667}
+PROBE FashionMNIST lbl=5 seed=2: {'epoch': 40, 'lr': 0.06552558869696322, 'loss': 0.6298467016220093, 'train_accuracy_percent': 77.73333333333333}
+PROBE FashionMNIST lbl=5 seed=2: {'epoch': 50, 'lr': 0.050065504415240214, 'loss': 0.6070349698066712, 'train_accuracy_percent': 78.96666666666667}
+PROBE FashionMNIST lbl=5 seed=2: {'epoch': 60, 'lr': 0.03459899749316631, 'loss': 0.627389414469401, 'train_accuracy_percent': 78.6}
+PROBE FashionMNIST lbl=5 seed=2: {'epoch': 70, 'lr': 0.020642542981792186, 'loss': 0.6076708526611329, 'train_accuracy_percent': 78.83333333333333}
+PROBE FashionMNIST lbl=5 seed=2: {'epoch': 80, 'lr': 0.009564556850816598, 'loss': 0.6058433407147725, 'train_accuracy_percent': 79.03333333333333}
+PROBE FashionMNIST lbl=5 seed=2: {'epoch': 90, 'lr': 0.0024512242141862873, 'loss': 0.5907049878438314, 'train_accuracy_percent': 80.16666666666667}
+PROBE FashionMNIST lbl=5 seed=2: {'epoch': 100, 'lr': 0.0, 'loss': 0.6102248980204265, 'train_accuracy_percent': 78.86666666666666}
+RESULT FashionMNIST lbl=5 seed=2: 82.0700
+PROBE FashionMNIST lbl=5 seed=3: {'epoch': 10, 'lr': 0.09758912913234664, 'loss': 0.7419856915473938, 'train_accuracy_percent': 75.3}
+PROBE FashionMNIST lbl=5 seed=3: {'epoch': 20, 'lr': 0.09051236487138009, 'loss': 0.66903204981486, 'train_accuracy_percent': 76.76666666666667}
+PROBE FashionMNIST lbl=5 seed=3: {'epoch': 30, 'lr': 0.07946340502054647, 'loss': 0.6390026028951009, 'train_accuracy_percent': 78.83333333333333}
+PROBE FashionMNIST lbl=5 seed=3: {'epoch': 40, 'lr': 0.06552558869696322, 'loss': 0.620369823773702, 'train_accuracy_percent': 77.96666666666667}
+PROBE FashionMNIST lbl=5 seed=3: {'epoch': 50, 'lr': 0.050065504415240214, 'loss': 0.6366164248784383, 'train_accuracy_percent': 77.4}
+PROBE FashionMNIST lbl=5 seed=3: {'epoch': 60, 'lr': 0.03459899749316631, 'loss': 0.6154306734402974, 'train_accuracy_percent': 78.43333333333334}
+PROBE FashionMNIST lbl=5 seed=3: {'epoch': 70, 'lr': 0.020642542981792186, 'loss': 0.6043921848932902, 'train_accuracy_percent': 78.93333333333334}
+PROBE FashionMNIST lbl=5 seed=3: {'epoch': 80, 'lr': 0.009564556850816598, 'loss': 0.606733979066213, 'train_accuracy_percent': 79.26666666666667}
+PROBE FashionMNIST lbl=5 seed=3: {'epoch': 90, 'lr': 0.0024512242141862873, 'loss': 0.5847505348523457, 'train_accuracy_percent': 78.9}
+PROBE FashionMNIST lbl=5 seed=3: {'epoch': 100, 'lr': 0.0, 'loss': 0.6019970432917277, 'train_accuracy_percent': 79.1}
+RESULT FashionMNIST lbl=5 seed=3: 82.3000
+PROBE FashionMNIST lbl=5 seed=4: {'epoch': 10, 'lr': 0.09758912913234664, 'loss': 0.7543911588986715, 'train_accuracy_percent': 74.23333333333333}
+PROBE FashionMNIST lbl=5 seed=4: {'epoch': 20, 'lr': 0.09051236487138009, 'loss': 0.6650739390055339, 'train_accuracy_percent': 77.0}
+PROBE FashionMNIST lbl=5 seed=4: {'epoch': 30, 'lr': 0.07946340502054647, 'loss': 0.6358207971254984, 'train_accuracy_percent': 78.4}
+PROBE FashionMNIST lbl=5 seed=4: {'epoch': 40, 'lr': 0.06552558869696322, 'loss': 0.6219064122835795, 'train_accuracy_percent': 78.13333333333334}
+PROBE FashionMNIST lbl=5 seed=4: {'epoch': 50, 'lr': 0.050065504415240214, 'loss': 0.6176885943412781, 'train_accuracy_percent': 78.53333333333333}
+PROBE FashionMNIST lbl=5 seed=4: {'epoch': 60, 'lr': 0.03459899749316631, 'loss': 0.5975356383323669, 'train_accuracy_percent': 78.83333333333333}
+PROBE FashionMNIST lbl=5 seed=4: {'epoch': 70, 'lr': 0.020642542981792186, 'loss': 0.5968683530489604, 'train_accuracy_percent': 79.6}
+PROBE FashionMNIST lbl=5 seed=4: {'epoch': 80, 'lr': 0.009564556850816598, 'loss': 0.5972154402732849, 'train_accuracy_percent': 78.56666666666666}
+PROBE FashionMNIST lbl=5 seed=4: {'epoch': 90, 'lr': 0.0024512242141862873, 'loss': 0.5933901425997417, 'train_accuracy_percent': 78.7}
+PROBE FashionMNIST lbl=5 seed=4: {'epoch': 100, 'lr': 0.0, 'loss': 0.6063918561935425, 'train_accuracy_percent': 78.2}
+RESULT FashionMNIST lbl=5 seed=4: 81.9300
+COMPLETE CELL: FashionMNIST 2 FashionMNIST 5 \dsacc{82.06}{0.19}
