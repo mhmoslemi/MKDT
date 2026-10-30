@@ -457,7 +457,7 @@ def main():
     parser.add_argument('--temperature', type=float, default=0.2, help='Softmax temperature for prototype assignment')
     parser.add_argument('--assignment_filter', action='store_true', help='Exclude real images unless both branches pass the normalized KL-to-uniform threshold')
     parser.add_argument('--assignment_threshold', type=float, default=0.05, help='Minimum KL(assignment || uniform) / log(num_syn) in both branches, in [0,1]; ignored unless assignment_filter is enabled')
-    parser.add_argument('--similarity', choices=['cosine', 'l1', 'l2', 'mmd', 'mmd-dist', 'dm', 'energy', 'whitened-cosine', 'sinkhorn', 'd3s'], default='cosine', help='Similarity inside softmax assignments; d3s always uses middle-layer full Gaussian KL plus final cosine; every option keeps MI')
+    parser.add_argument('--similarity', choices=['cosine', 'l1', 'l2', 'mmd', 'mmd-dist', 'dm', 'energy', 'whitened-cosine', 'sinkhorn', 'd3s'], default='l1', help='Similarity inside softmax assignments; d3s always uses middle-layer full Gaussian KL plus final cosine; every option keeps MI')
     parser.add_argument('--feature_layers', choices=['last', 'all'], default='last', help='For non-d3s similarities: last uses existing final features; all adds separately normalized ResNet layer2/layer3 channel mean+std')
     parser.add_argument('--d3s_weight', type=nonnegative_float, default=1.0, help='Weight of real-calibrated middle-layer Gaussian KL inside d3s similarity; final cosine keeps weight 1')
     parser.add_argument('--d3s_reg', type=float, default=0.001, help='Covariance ridge as a fraction of real-training within-image mean variance, fixed per layer')
@@ -485,7 +485,7 @@ def main():
 
     # Teacher.
     parser.add_argument('--teacher_source', choices=['fresh', 'pretrained'], default='pretrained')
-    parser.add_argument('--teacher_seed', type=int, nargs='+', default=[0,1,2], help='Saved teacher seeds; their losses are summed')
+    parser.add_argument('--teacher_seed', type=int, nargs='+', default=[1], help='Saved teacher seeds; their losses are summed')
     parser.add_argument('--teacher_ssl', choices=['simclr', 'barlowtwins'], default='simclr')
     parser.add_argument('--teacher_path', default=None, help='Automatically selects the saved teacher directory for the dataset')
 
@@ -500,9 +500,9 @@ def main():
     parser.add_argument('--batch_linear', type=int, default=256)
 
     # Output.
-    parser.add_argument('--save_path', default='newdata')
+    parser.add_argument('--save_path', default='newdata_l1')
     parser.add_argument('--resume', action='store_true', help='Resume the checkpoint in save_path, or skip a completed run')
-    parser.add_argument('--save_every', type=int, default=100, help='Replace the single checkpoint every N iterations')
+    parser.add_argument('--save_every', type=int, default=500, help='Replace the single checkpoint every N iterations')
     parser.add_argument('--feature_batch', type=int, default=128, help='Frozen feature extraction chunk size')
 
     args = parser.parse_args()
