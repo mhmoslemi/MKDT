@@ -231,7 +231,7 @@ def main():
     parser.add_argument('--batch_real', type=int, default=256)
 
     parser.add_argument('--temperature', type=float, default=0.2, help='Softmax temperature for prototype assignment')
-    parser.add_argument('--similarity', choices=['cosine', 'l1', 'l2', 'mmd'], default='cosine', help='Pairwise feature score used for prototype assignments')
+    parser.add_argument('--similarity', choices=['cosine', 'l1', 'l2', 'mmd'], default='l1', help='Pairwise feature score used for prototype assignments')
     parser.add_argument('--mmd_sigma', type=float, default=1.0, help='RBF bandwidth for pairwise singleton MMD squared')
     parser.add_argument('--disp_weight', type=nonnegative_float, default=0.0, help='Weight for feature displacement matching')
     parser.add_argument('--pair_weight', type=nonnegative_float, default=0.0, help='Weight for view-pair similarity matching')
@@ -246,7 +246,7 @@ def main():
 
     # Teacher.
     parser.add_argument('--teacher_source', choices=['fresh', 'pretrained'], default='pretrained')
-    parser.add_argument('--teacher_seed', type=int, nargs='+', default=[0,1,2], help='Saved teacher seeds; their losses are summed')
+    parser.add_argument('--teacher_seed', type=int, nargs='+', default=[1], help='Saved teacher seeds; their losses are summed')
     parser.add_argument('--teacher_ssl', choices=['simclr', 'barlowtwins'], default='simclr')
     parser.add_argument('--teacher_path', default=None, help='Automatically selects the saved teacher directory for the dataset')
 
@@ -261,9 +261,9 @@ def main():
     parser.add_argument('--batch_linear', type=int, default=256)
 
     # Output.
-    parser.add_argument('--save_path', default='newdata')
+    parser.add_argument('--save_path', default='newdata_l1')
     parser.add_argument('--resume', action='store_true', help='Resume the checkpoint in save_path, or skip a completed run')
-    parser.add_argument('--save_every', type=int, default=100, help='Replace the single checkpoint every N iterations')
+    parser.add_argument('--save_every', type=int, default=500, help='Replace the single checkpoint every N iterations')
     parser.add_argument('--feature_batch', type=int, default=128, help='Frozen feature extraction chunk size')
 
     args = parser.parse_args()
