@@ -57,7 +57,8 @@ def run(output):
     assert cluster in ('vulcan', 'killarney')
     assert torch.cuda.is_available() and torch.cuda.device_count() == 1
     if cluster == 'killarney':
-        assert config['account'] == 'aip-boyuwang' and 'H100' in torch.cuda.get_device_name(0)
+        expected_gpu = 'H100' if config['account'] == 'aip-boyuwang' else 'L40S'
+        assert expected_gpu in torch.cuda.get_device_name(0)
     assert config['dataset'] == 'CIFAR100' and config['epochs'] == 100
     for file, sha in config['code_hashes'].items():
         assert file_hash(ROOT / file) == sha, 'Code changed: ' + file

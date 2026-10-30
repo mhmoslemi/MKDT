@@ -16,6 +16,11 @@ if [[ ${1:-} == --worker ]]; then
     cd "$bench"
     exec python -u "$worker" --output "$output"
 fi
+account=aip-boyuwang gpu=h100 label=Wang/H100 suffix=''
+if [[ ${1:-} == --lu-l40s ]]; then
+    shift
+    account=aip-yiweilu gpu=l40s label=Lu/L40S suffix=_lu_l40s
+fi
 [[ $# == 0 && -z ${SLURM_JOB_ID:-} ]] || exit 2
 bench=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)
 run="$bench/iic_init"
@@ -25,8 +30,8 @@ venv=${BENCH_VENV:-$HOME/ENV}
     echo 'Run this submitter on Killarney.' >&2; exit 2;
 }
 inventory=$(sinfo -h -o '%G' --Node | sort -u)
-[[ $inventory =~ gpu:h100: ]] || { echo 'Full H100 GRES not found on Killarney.' >&2; exit 2; }
-sacctmgr -nP show assoc "user=$(id -un)" format=Account | awk -F '|' '$1=="aip-boyuwang" {found=1} END {exit !found}'
+[[ $inventory == *"gpu:$gpu:"* ]] || { echo "Full $gpu GRES not found on Killarney." >&2; exit 2; }
+sacctmgr -nP show assoc "user=$(id -un)" format=Account | awk -F '|' -v account="$account" '$1==account {found=1} END {exit !found}'
 module spider python/3.11.5 >/dev/null 2>&1
 if ! command -v node >/dev/null; then
     module spider nodejs/20.16.0 >/dev/null 2>&1
@@ -43,14 +48,15 @@ for dataset in CIFAR10 CIFAR100; do
         folder=CIFAR100_ResNet18_e100_20261030T174140Z_OcY02E
         worker=iic_init/train_cifar100.py
     fi
-    name="iic_${dataset}_R18_frozen_e100"
+    name="iic_${dataset}_R18_frozen_e100${suffix}"
     active=$(squeue -h -u "$(id -un)" --name="$name" -o '%i')
     if [[ -n $active ]]; then printf 'Already queued: %s (%s)\n' "$dataset" "$active"; continue; fi
-    output="$run/runs/$folder"
+    output="$run/runs/$folder$suffix"
     mkdir -p "$output"
-    seconds=$(node - "$bench" "$output" "$dataset" "$worker" <<'JS'
+    seconds=$(node - "$bench" "$output" "$dataset" "$worker" "$account" <<'JS'
 const fs=require('fs'),p=require('path'),crypto=require('crypto'),assert=require('assert/strict');
-const [bench,output,dataset,worker]=process.argv.slice(2),root=p.dirname(bench);
+const [bench,output,dataset,worker,account]=process.argv.slice(2),root=p.dirname(bench);
+assert.ok(['aip-boyuwang','aip-yiweilu'].includes(account));
 const read=f=>JSON.parse(fs.readFileSync(f)),hash=f=>crypto.createHash('sha256').update(fs.readFileSync(f)).digest('hex');
 assert.ok(fs.realpathSync(output).startsWith(p.join(bench,'iic_init/runs')+p.sep));
 const path=p.join(bench,'full_ssl_checkpoints_1000ep_3seeds',dataset,'ResNet18/full/pt100/simclr/seed_000/encoder.pt');
@@ -66,7 +72,7 @@ const code_hashes=Object.fromEntries(files.map(f=>[f,hash(p.join(root,f))]));
 const times=fs.readFileSync(p.join(p.dirname(path),'ssl.jsonl'),'utf8').trim().split('\n').slice(-200).map(l=>JSON.parse(l).seconds).sort((a,b)=>a-b);
 assert.ok(times.length&&times.every(n=>n>0&&Number.isFinite(n)));
 const seconds=Math.ceil(times[Math.ceil(times.length*.95)-1]*103+60);
-const config={account:'aip-boyuwang',kind:'frozen_teacher_iic',dataset,epochs:100,batch_size:256,lr:.0001,seed:0,subheads:5,
+const config={account,kind:'frozen_teacher_iic',dataset,epochs:100,batch_size:256,lr:.0001,seed:0,subheads:5,
  cluster_counts:dataset==='CIFAR10'?{main:10,overcluster:70}:{main:100,overcluster:700},
  encoder_frozen:true,batchnorm_frozen:true,feature_normalization:'none',augmentations:'reference_simclr_two_views',schedule:'both_independent_head_families_per_full_training_pass',
  teacher:{path,file_sha256:hash(path),marker_sha256:hash(markerFile),encoder_sha256:marker.encoder_sha256},
@@ -90,13 +96,13 @@ console.log(seconds);
 JS
 )
     printf -v wall '%02d:%02d:%02d' "$((seconds/3600))" "$((seconds/60%60))" "$((seconds%60))"
-    job=$(sbatch --parsable --job-name="$name" --account=aip-boyuwang --nodes=1 --ntasks=1 \
-        --cpus-per-task=1 --mem=6G --gres=gpu:h100:1 --time="$wall" --chdir="$bench" \
+    job=$(sbatch --parsable --job-name="$name" --account="$account" --nodes=1 --ntasks=1 \
+        --cpus-per-task=1 --mem=6G --gres="gpu:$gpu:1" --time="$wall" --chdir="$bench" \
         --output="$run/logs/%x-%j.out" --error="$run/logs/%x-%j.err" \
         "$bench/submit_iic_both_wang_h100_killarney.sh" --worker "$bench" "$output" "$worker" "$venv")
     job=${job%%;*}
     [[ $job =~ ^[0-9]+$ ]] || exit 2
-    printf 'job\taccount\tgpu\twalltime\toutput\n%s\taip-boyuwang\th100\t%s\t%s\n' "$job" "$wall" "$output" > "$output/submitted_${job}.tsv"
-    printf 'Submitted %s: %s, Wang/H100, %s\nOutput: %s\nLog: %s/logs/%s-%s.out\n' "$job" "$dataset" "$wall" "$output" "$run" "$name" "$job"
+    printf 'job\taccount\tgpu\twalltime\toutput\n%s\t%s\t%s\t%s\t%s\n' "$job" "$account" "$gpu" "$wall" "$output" > "$output/submitted_${job}.tsv"
+    printf 'Submitted %s: %s, %s, %s\nOutput: %s\nLog: %s/logs/%s-%s.out\n' "$job" "$dataset" "$label" "$wall" "$output" "$run" "$name" "$job"
 done
 echo 'Rerun this same script to resume saved epochs and Adam state; teacher weights remain frozen.'
