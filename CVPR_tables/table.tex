@@ -2,8 +2,9 @@
 \centering
 \def\dsacc#1#2{$#1${\footnotesize$\pm #2$}}
 \def\bestacc#1#2{\textbf{\boldmath\dsacc{#1}{#2}}}
+% SVHN MIPA 0.2%: K=8, one 2k-epoch encoder, 10 probes per label budget; Evaluate_benchamrk/mipa_multilayer/batches/SVHN_cos8_pt0.2_20261030T163103Z_jBEyg6/results/SVHN/ResNet18BN/pt0.2/simclr/ssl_seed_000/summary_SVHN_lbl{1,5}_10probes.json
 % MIPA results: Evaluate_benchamrk/mipa_random128/results/ and Evaluate_benchamrk/ours_eval_results_simclr2k_barlow10k_2ssl3probes_main/.
-\caption{Main results with ResNet18 and SimCLR on CIFAR10, CIFAR100, Tiny ImageNet, SVHN, MNIST, and FashionMNIST.}
+\caption{Main results with ResNet18 and SimCLR on CIFAR10, CIFAR100, Tiny ImageNet, and SVHN.}
 \label{tab:resnet18-main-all}
 
 \setlength{\tabcolsep}{3pt}
@@ -27,17 +28,17 @@
  & 1 & \bestacc{7.18}{0.26} & \dsacc{6.62}{0.20} & \dsacc{5.76}{0.20} & \dsacc{6.66}{0.22} &  & \bestacc{13.90}{0.18} & \dsacc{13.49}{0.28} & \dsacc{11.20}{0.15} & \dsacc{13.06}{0.41} &  \\
  & 2 & \bestacc{10.87}{0.37} & \dsacc{10.37}{0.26} & \dsacc{5.73}{0.16} & \dsacc{8.95}{0.35} &  & \bestacc{18.21}{0.21} & \dsacc{17.91}{0.30} & \dsacc{11.63}{0.16} & \dsacc{15.62}{0.34} &  \\
 \midrule
-\multirow{3}{*}{SVHN} & 0.2 & \dsacc{30.60}{1.39} & \dsacc{26.75}{1.01} & \bestacc{32.73}{1.00} &  & \multirow{3}{*}{\dsacc{88.32}{0.39}} & \dsacc{39.85}{0.55} & \dsacc{35.49}{0.38} & \bestacc{44.72}{0.50} &  & \multirow{3}{*}{\dsacc{91.21}{0.33}} \\
+\multirow{3}{*}{SVHN} & 0.2 & \dsacc{30.60}{1.39} & \dsacc{26.75}{1.01} & \dsacc{32.73}{1.00} & \bestacc{34.36}{1.22} & \multirow{3}{*}{\dsacc{88.32}{0.39}} & \dsacc{39.85}{0.55} & \dsacc{35.49}{0.38} & \dsacc{40.72}{0.50} & \bestacc{42.80}{0.45} & \multirow{3}{*}{\dsacc{91.21}{0.33}} \\
  & 1 & \dsacc{62.22}{0.83} & \bestacc{64.93}{0.74} & \dsacc{48.37}{0.52} &  &  & \dsacc{68.00}{0.31} & \bestacc{70.08}{0.43} & \dsacc{56.93}{0.32} &  &  \\
  & 2 & \dsacc{67.36}{0.41} & \bestacc{68.86}{0.65} & \dsacc{52.38}{1.07} &  &  & \dsacc{71.96}{0.12} & \bestacc{73.02}{0.32} & \dsacc{59.72}{0.44} &  &  \\
-\midrule
-\multirow{3}{*}{MNIST} & 0.2 & \dsacc{88.22}{0.74} & \bestacc{88.82}{0.32} & \dsacc{84.13}{0.48} &  & \multirow{3}{*}{\dsacc{98.12}{0.14}} & \dsacc{91.48}{0.16} & \bestacc{91.58}{0.11} & \dsacc{89.60}{0.20} &  & \multirow{3}{*}{\dsacc{98.73}{0.06}} \\
- & 1 & \bestacc{93.31}{0.12} & \dsacc{92.55}{0.38} & \dsacc{72.54}{0.97} &  &  & \bestacc{95.26}{0.12} & \dsacc{94.56}{0.20} & \dsacc{80.96}{0.30} &  &  \\
- & 2 & \bestacc{93.65}{0.28} & \dsacc{93.05}{0.19} & \dsacc{92.41}{0.17} &  &  & \bestacc{95.90}{0.26} & \dsacc{95.01}{0.25} & \dsacc{94.74}{0.15} &  &  \\
-\midrule
-\multirow{3}{*}{FashionMNIST} & 0.2 & \bestacc{77.69}{0.32} & \dsacc{77.67}{0.36} & \dsacc{71.74}{1.07} &  & \multirow{3}{*}{\dsacc{88.41}{0.40}} & \bestacc{80.81}{0.21} & \dsacc{80.54}{0.16} & \dsacc{77.89}{0.20} &  & \multirow{3}{*}{\dsacc{90.83}{0.23}} \\
- & 1 & \dsacc{80.79}{0.49} & \bestacc{81.24}{0.18} & \dsacc{76.91}{0.50} &  &  & \bestacc{83.69}{0.20} & \dsacc{83.68}{0.21} & \dsacc{81.38}{0.14} &  &  \\
- & 2 & \dsacc{82.53}{0.35} & \bestacc{82.91}{0.21} & \dsacc{79.11}{0.24} &  &  & \dsacc{85.20}{0.19} & \bestacc{85.21}{0.23} & \dsacc{82.01}{0.37} &  &  \\
+% \midrule
+% \multirow{3}{*}{MNIST} & 0.2 & \dsacc{88.22}{0.74} & \bestacc{88.82}{0.32} & \dsacc{84.13}{0.48} &  & \multirow{3}{*}{\dsacc{98.12}{0.14}} & \dsacc{91.48}{0.16} & \bestacc{91.58}{0.11} & \dsacc{89.60}{0.20} &  & \multirow{3}{*}{\dsacc{98.73}{0.06}} \\
+%  & 1 & \bestacc{93.31}{0.12} & \dsacc{92.55}{0.38} & \dsacc{72.54}{0.97} &  &  & \bestacc{95.26}{0.12} & \dsacc{94.56}{0.20} & \dsacc{80.96}{0.30} &  &  \\
+%  & 2 & \bestacc{93.65}{0.28} & \dsacc{93.05}{0.19} & \dsacc{92.41}{0.17} &  &  & \bestacc{95.90}{0.26} & \dsacc{95.01}{0.25} & \dsacc{94.74}{0.15} &  &  \\
+% \midrule
+% \multirow{3}{*}{FashionMNIST} & 0.2 & \bestacc{77.69}{0.32} & \dsacc{77.67}{0.36} & \dsacc{71.74}{1.07} &  & \multirow{3}{*}{\dsacc{88.41}{0.40}} & \bestacc{80.81}{0.21} & \dsacc{80.54}{0.16} & \dsacc{77.89}{0.20} &  & \multirow{3}{*}{\dsacc{90.83}{0.23}} \\
+%  & 1 & \dsacc{80.79}{0.49} & \bestacc{81.24}{0.18} & \dsacc{76.91}{0.50} &  &  & \bestacc{83.69}{0.20} & \dsacc{83.68}{0.21} & \dsacc{81.38}{0.14} &  &  \\
+%  & 2 & \dsacc{82.53}{0.35} & \bestacc{82.91}{0.21} & \dsacc{79.11}{0.24} &  &  & \dsacc{85.20}{0.19} & \bestacc{85.21}{0.23} & \dsacc{82.01}{0.37} &  &  \\
 \bottomrule
 \end{tabular}%
 }
