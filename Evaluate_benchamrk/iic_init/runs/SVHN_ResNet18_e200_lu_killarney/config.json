@@ -1,0 +1,277 @@
+{
+  "account": "aip-yiweilu",
+  "kind": "frozen_teacher_iic",
+  "dataset": "SVHN",
+  "epochs": 200,
+  "batch_size": 256,
+  "lr": 0.0001,
+  "seed": 0,
+  "subheads": 5,
+  "cluster_counts": {
+    "main": 10,
+    "overcluster": 70
+  },
+  "encoder_frozen": true,
+  "batchnorm_frozen": true,
+  "feature_normalization": "none",
+  "augmentations": "reference_simclr_two_views",
+  "schedule": "both_independent_head_families_per_full_training_pass",
+  "teacher": {
+    "path": "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/digits_simclr/checkpoints/SVHN/ResNet18/full/pt100/simclr/seed_000/encoder.pt",
+    "seed": 0,
+    "file_sha256": "7618b2ed36312a9720562ae788b55e53a7a5a76f919b7aa8c1c7a6cf5755db3b",
+    "marker_sha256": "2b54c86e66d29fdc5f27fd9799ad14e2e277d264ee0fa18fd0f17223eb569b17",
+    "encoder_sha256": "5f2aa6d51eb69a3af77efa404e5fd52ae964794b7acd3f855f72ef84647602ac"
+  },
+  "train_count": 73257,
+  "source_fingerprint": "c72a6257f178560aa84fa4f5d2f07bb57175955c87740ab4c91b3cb77c428a1d",
+  "data_root": "/scratch/mmoslem3/data",
+  "protocol": {
+    "evaluation": {
+      "baseline": "frozen_random_encoder",
+      "batch_size": 256,
+      "checkpoint_selection": "final_epoch_no_test_selection",
+      "epochs": 100,
+      "full_data_sanity_label_percentage": 100,
+      "head_init_std": 0.01,
+      "label_percentages": [
+        1,
+        5
+      ],
+      "label_policy": "exact",
+      "lr": 0.1,
+      "momentum": 0.9,
+      "normalize_using": "source_statistics",
+      "optimizer": "sgd",
+      "schedule": "cosine_per_step",
+      "test_resize_ratio": 1.1428571428571428,
+      "test_transform": "resize_short_side_and_center_crop",
+      "train_transform": "random_resized_crop_and_flip",
+      "warmup_epochs": 0,
+      "weight_decay": 0
+    },
+    "full_seeds": [
+      0,
+      1,
+      2
+    ],
+    "input_size": {
+      "CIFAR10": 32,
+      "CIFAR100": 32,
+      "MNIST": 32,
+      "SVHN": 32,
+      "TinyImageNet": 64
+    },
+    "methods": {
+      "barlowtwins": {
+        "blur_probabilities": [
+          0,
+          0
+        ],
+        "color_jitter": [
+          0.4,
+          0.4,
+          0.2,
+          0.1
+        ],
+        "correlation_eps": 0.00001,
+        "lambda": 0.0051,
+        "loss_scale": 0.1,
+        "lr": 0.3,
+        "projector": [
+          2048,
+          2048,
+          2048
+        ],
+        "projector_batchnorm": true,
+        "projector_bias": true,
+        "solarize_probabilities": [
+          0,
+          0.2
+        ]
+      },
+      "simclr": {
+        "blur_probabilities": [
+          0.5,
+          0.5
+        ],
+        "color_jitter": [
+          0.8,
+          0.8,
+          0.8,
+          0.2
+        ],
+        "lr": 0.4,
+        "projector": [
+          2048,
+          256
+        ],
+        "projector_batchnorm": false,
+        "projector_bias": true,
+        "solarize_probabilities": [
+          0,
+          0
+        ],
+        "temperature": 0.2
+      }
+    },
+    "models": [
+      "ResNet18"
+    ],
+    "normalization": {
+      "CIFAR10": [
+        [
+          0.4914,
+          0.4822,
+          0.4465
+        ],
+        [
+          0.247,
+          0.2435,
+          0.2616
+        ]
+      ],
+      "CIFAR100": [
+        [
+          0.5071,
+          0.4865,
+          0.4409
+        ],
+        [
+          0.2673,
+          0.2564,
+          0.2762
+        ]
+      ],
+      "MNIST": [
+        [
+          0.13159641780279827,
+          0.13159641780279827,
+          0.13159641780279827
+        ],
+        [
+          0.2987921304522095,
+          0.2987921304522095,
+          0.2987921304522095
+        ]
+      ],
+      "SVHN": [
+        [
+          0.43768210460907253,
+          0.44376970456396875,
+          0.47280442222972685
+        ],
+        [
+          0.19803012447157153,
+          0.2010156247182884,
+          0.19703614172172385
+        ]
+      ],
+      "TinyImageNet": [
+        [
+          0.485,
+          0.456,
+          0.406
+        ],
+        [
+          0.229,
+          0.224,
+          0.225
+        ]
+      ]
+    },
+    "references": {
+      "barlow_official": "https://github.com/facebookresearch/barlowtwins",
+      "cifar_barlow": "https://github.com/vturrisi/solo-learn/blob/main/scripts/pretrain/cifar/barlow.yaml",
+      "cifar_simclr": "https://github.com/vturrisi/solo-learn/blob/main/scripts/pretrain/cifar/simclr.yaml",
+      "simclr_official": "https://github.com/google-research/simclr"
+    },
+    "selection": {
+      "batch_size": 256,
+      "distance_chunk_size": 1024,
+      "feature_model": "random_ConvNetGAP_BN",
+      "feature_normalization": "l2",
+      "feature_seed_offset": 2000,
+      "iterations": 50,
+      "method": "kmeans",
+      "unique_exemplars": true
+    },
+    "sources": [
+      "SVHN",
+      "MNIST"
+    ],
+    "ssl": {
+      "batch_size": 256,
+      "blur_sigma": [
+        0.1,
+        2
+      ],
+      "checkpoint_every_epochs": 50,
+      "color_probability": 0.8,
+      "crop_ratio": [
+        0.75,
+        1.3333333333333333
+      ],
+      "crop_scale": [
+        0.08,
+        1
+      ],
+      "exclude_bias_and_norm": true,
+      "flip_probability": 0.5,
+      "full_epochs": 1000,
+      "grayscale_probability": 0.2,
+      "interpolation": "bicubic",
+      "lars_clip": true,
+      "lars_eps": 1e-8,
+      "lars_eta": 0.02,
+      "minimum_lr": 0,
+      "momentum": 0.9,
+      "optimizer": "lars",
+      "precision": "float32",
+      "scale_lr_with_batch": true,
+      "schedule": "warmup_cosine_per_step",
+      "small_batch_policy": "min_dataset_size_no_replacement",
+      "subset_epochs": 2000,
+      "warmup_epochs": 10,
+      "warmup_start_lr": 0.00003,
+      "weight_decay": 0.0001
+    },
+    "subset_percentages": [
+      0.2,
+      1,
+      2,
+      5
+    ],
+    "subset_seeds": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9
+    ],
+    "version": "ssl_reference_v1"
+  },
+  "code_hashes": {
+    "networks.py": "0c15ff3ef11f21df752e2a9a17851ab8c8a52ddc3969380682ea8bfcec1968fc",
+    "benchmarks/downstream_data.py": "081fe26e5dc81c96ce8e8ffe5a412302663de4a9d095684c5b37e7c615b4a6fd",
+    "Evaluate_benchamrk/common.py": "67fcd33f581a34a7f764431b6761ac120cb080d4b2ea0d69b95074565a224f8b",
+    "Evaluate_benchamrk/data.py": "befcf535679e449b3544ae9b8578325e53f7995179591042315d8937cd55f6d9",
+    "Evaluate_benchamrk/digits_simclr/datasets.py": "5a0cd497de9ba86b4ffbaad1bb0bbe376490880b43a5c68e30fcfff0ea7648e4",
+    "Evaluate_benchamrk/iic_init/train_svhn_tiny_killarney.py": "a1c0e84925cd6269e6d399140bcc1532c2b4b9ec0853d1c6895cc06c6b0fb311",
+    "Evaluate_benchamrk/submit_iic_svhn_tiny_lu_killarney.sh": "b0aef6cf9af68246bc1049c03163fe1907738d4f93f55224af647366b0bb89bf"
+  },
+  "seconds": 22920,
+  "buffer_seconds": 60,
+  "timing": {
+    "approximate": true,
+    "basis": "Same limits as Vulcan jobs 2038429 and 2038430, based on measured IIC/full-SSL epoch timings",
+    "buffer_seconds": 60
+  },
+  "reference_loss": "https://github.com/xu-ji/IIC/blob/master/code/utils/cluster/IID_losses.py",
+  "adaptation": "Frozen pretrained encoder and RGB SimCLR views; same head-only adaptation as the CIFAR runs, not an original from-scratch IIC reproduction"
+}
