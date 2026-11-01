@@ -22,9 +22,9 @@ cluster=${MIPA_CVPR_CLUSTER:-vulcan}
 [[ $(scontrol show config | awk '$1=="ClusterName" {print $3}') == "$cluster" ]] || { echo "Run this launcher on $cluster." >&2; exit 2; }
 [[ $(sinfo -h -o '%G' --Node | sort -u) == *gpu:l40s:* ]] || exit 2
 accounts=$(sacctmgr -nP show assoc user=mmoslem3 format=Account)
-for account in aip-boyuwang; do
-    awk -F '|' -v account="$account" '$1==account {found=1} END {exit !found}' <<< "$accounts"
-done
+requested_account=aip-boyuwang
+[[ $cluster != killarney ]] || requested_account=aip-yiweilu
+awk -F '|' -v account="$requested_account" '$1==account {found=1} END {exit !found}' <<< "$accounts"
 module spider python/3.11.5 >/dev/null 2>&1
 if ! command -v node >/dev/null; then
     module spider nodejs/20.16.0 >/dev/null 2>&1
@@ -54,11 +54,14 @@ mkdir -p "$logs"
 exec 9>"$run/.submit.lock"
 flock -n 9 || exit 2
 plan=$(node "$run/plan.js")
-declare -A active=()
-while IFS='|' read -r name id; do active["$name"]=$id; done < <(squeue -h -u mmoslem3 -o '%j|%i')
+declare -A active=() active_account=()
+while IFS='|' read -r name id account; do active["$name"]=$id; active_account["$name"]=$account; done < <(squeue -h -u mmoslem3 -o '%j|%i|%a')
 submit() {
     local name=$1 account=$2 memory=$3 seconds=$4 manifest=$5 stage=$6 parent=${7:-} wall job
-    if [[ -n ${active[$name]:-} ]]; then REPLY=${active[$name]}; echo "ACTIVE $name: $REPLY"; return; fi
+    if [[ -n ${active[$name]:-} ]]; then
+        [[ ${active_account[$name]} == "$account" ]] || { echo "$name (${active[$name]}) is already queued under ${active_account[$name]}, not $account; existing job left untouched." >&2; exit 2; }
+        REPLY=${active[$name]}; echo "ACTIVE $name: $REPLY"; return
+    fi
     printf -v wall '%02d:%02d:%02d' "$((seconds/3600))" "$((seconds/60%60))" "$((seconds%60))"
     local dependency=()
     [[ -z $parent ]] || dependency=("--dependency=afterok:$parent" --kill-on-invalid-dep=yes)
@@ -70,6 +73,7 @@ submit() {
         printf '%s\t%s\t%s\t%s\t%s\t%s\n' "$name" "$job" "$account" "$wall" "$stage" "${parent:--}" >> "$receipt"
     fi
     active[$name]=$job
+    active_account[$name]=$account
     REPLY=$job
     echo "$name: $job, $account, $wall"
 }

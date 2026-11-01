@@ -48,12 +48,20 @@ const jobs = read(manifestFile).jobs;
 assert.equal(jobs.length,12);
 assert.equal(jobs.filter(j=>j.account==='aip-boyuwang').length,12);
 for (const job of jobs) {
-    const {manifest,...workerJob} = job;
-    assert.deepEqual(read(manifest),workerJob,'Worker manifest differs: '+manifest);
+    const {manifest:sourceManifest,...workerJob} = job;
+    assert.deepEqual(read(sourceManifest),workerJob,'Worker manifest differs: '+sourceManifest);
     for (const [file,expected] of Object.entries(job.code_hashes)) assert.equal(hash(file),expected,'Changed dependency: '+file);
     assert.equal(hash(job.teacher),job.teacher_sha256);
     const genDone = path.join(job.synthetic_dir,'complete.json'), evalDone = path.join(job.evaluation_dir,'complete.json');
     if (fs.existsSync(evalDone) && read(evalDone).complete) continue;
     const generationDone = fs.existsSync(genDone) && read(genDone).complete;
-    process.stdout.write([job.name,job.account,job.memory,generationDone?0:job.generation_seconds,job.evaluation_seconds,job.manifest].join('\t')+'\n');
+    let manifest = sourceManifest, account = job.account;
+    if (process.env.MIPA_CVPR_CLUSTER === 'killarney') {
+        account = 'aip-yiweilu';
+        manifest = path.join(path.dirname(sourceManifest),job.name+'_killarney_lu.json');
+        const config = {...workerJob,account};
+        if (fs.existsSync(manifest)) assert.deepEqual(read(manifest),config,'Worker manifest differs: '+manifest);
+        else fs.writeFileSync(manifest,JSON.stringify(config,null,2)+'\n',{flag:'wx'});
+    }
+    process.stdout.write([job.name,account,job.memory,generationDone?0:job.generation_seconds,job.evaluation_seconds,manifest].join('\t')+'\n');
 }
