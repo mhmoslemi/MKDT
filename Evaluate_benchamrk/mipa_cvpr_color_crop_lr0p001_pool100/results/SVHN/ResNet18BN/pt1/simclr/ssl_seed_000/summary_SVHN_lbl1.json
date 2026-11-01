@@ -1,0 +1,67 @@
+{
+  "complete": true,
+  "completed_probes": 5,
+  "expected_probes": 5,
+  "generation_args": {
+    "Iteration": 8000,
+    "batch_real": 128,
+    "beta": 1,
+    "dataset": "SVHN",
+    "distill_aug_strategy": "color_crop_cutout_scale",
+    "feature_batch": 128,
+    "lr_img": 0.001,
+    "percentage": 1,
+    "prototype_pool_size": 100,
+    "seed": 0,
+    "single_channel": false,
+    "temperature": 0.2
+  },
+  "identity": {
+    "seed": 0,
+    "selection_method": "ours",
+    "signature": "b372094ec1cb4956ad15a28df9b422ddf4d8815a4bbdfc09d2403e4e13af9ad5"
+  },
+  "labels": 1,
+  "linear_epochs": 100,
+  "mean_percent": 62.433159188690844,
+  "model": "ResNet18",
+  "samples": [
+    {
+      "accuracy_percent": 64.0019975414874,
+      "probe_seed": 0,
+      "result_file": "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_cvpr_color_crop_lr0p001_pool100/results/SVHN/ResNet18BN/pt1/simclr/ssl_seed_000/evaluations/SVHN_lbl1_probe0.json",
+      "ssl_seed": 0
+    },
+    {
+      "accuracy_percent": 61.40903503380455,
+      "probe_seed": 1,
+      "result_file": "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_cvpr_color_crop_lr0p001_pool100/results/SVHN/ResNet18BN/pt1/simclr/ssl_seed_000/evaluations/SVHN_lbl1_probe1.json",
+      "ssl_seed": 0
+    },
+    {
+      "accuracy_percent": 61.93915181315304,
+      "probe_seed": 2,
+      "result_file": "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_cvpr_color_crop_lr0p001_pool100/results/SVHN/ResNet18BN/pt1/simclr/ssl_seed_000/evaluations/SVHN_lbl1_probe2.json",
+      "ssl_seed": 0
+    },
+    {
+      "accuracy_percent": 62.49615857406269,
+      "probe_seed": 3,
+      "result_file": "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_cvpr_color_crop_lr0p001_pool100/results/SVHN/ResNet18BN/pt1/simclr/ssl_seed_000/evaluations/SVHN_lbl1_probe3.json",
+      "ssl_seed": 0
+    },
+    {
+      "accuracy_percent": 62.31945298094653,
+      "probe_seed": 4,
+      "result_file": "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_cvpr_color_crop_lr0p001_pool100/results/SVHN/ResNet18BN/pt1/simclr/ssl_seed_000/evaluations/SVHN_lbl1_probe4.json",
+      "ssl_seed": 0
+    }
+  ],
+  "source": "SVHN",
+  "ssl": "simclr",
+  "ssl_epochs": 2000,
+  "std_ddof": 1,
+  "std_percent": 0.9709564064814581,
+  "subset": 1,
+  "target": "SVHN"
+}
