@@ -1,37 +1,86 @@
+
+
 \begin{table*}[t]
 \centering
-\def\dsacc#1#2{$#1${\footnotesize$\pm #2$}}
-\def\bestacc#1#2{\textbf{\boldmath\dsacc{#1}{#2}}}
 \caption{Main and downstream evaluation of ResNet18 pretrained with Barlow Twins on CIFAR10 and CIFAR100.}
 \label{tab:ssl-methods-combined}
+
 \setlength{\tabcolsep}{2.5pt}
-\renewcommand{\arraystretch}{1.1}
+\renewcommand{\arraystretch}{1.15}
+\def\acc#1#2{#1{\scriptsize$\pm$#2}}
+\def\best#1#2{\textbf{#1}{\scriptsize$\pm$#2}}
+
+% Background extensions bridge the gaps without changing column spacing.
 \resizebox{\textwidth}{!}{%
-\begin{tabular}{@{}cccl*{3}{c}@{\hspace{9pt}}*{3}{c}@{}}
+\begin{tabular}{
+@{}cl
+cc>{\columncolor{white}[\tabcolsep][4.5pt]}c@{\hspace{7pt}}
+cc>{\columncolor{white}[\tabcolsep][9.5pt]}c@{\hspace{12pt}}
+cc>{\columncolor{white}[\tabcolsep][4.5pt]}c@{\hspace{7pt}}
+cc>{\columncolor{white}[\tabcolsep][0pt]}c@{}}
 \toprule
-\multirow{2}{*}{SSL method} & \multirow{2}{*}{\shortstack{Labeled\\(\%)}} & \multirow{2}{*}{\shortstack{Data size\\(\%)}} & \multirow{2}{*}{Method} & \multicolumn{3}{c}{CIFAR10 pretraining} & \multicolumn{3}{c}{CIFAR100 pretraining} \\
-\cmidrule(lr){5-7} \cmidrule(l){8-10}
-& & & & CIFAR10 & CIFAR100 & \shortstack{Tiny\\ImageNet} & CIFAR100 & CIFAR10 & \shortstack{Tiny\\ImageNet} \\
+\multirow{3}{*}{\shortstack{Data\\(\%)}}
+& \multirow{3}{*}{Method}
+& \multicolumn{6}{c}{\textbf{CIFAR-10 pretraining}}
+& \multicolumn{6}{c}{\textbf{CIFAR-100 pretraining}} \\
+\cmidrule(lr){3-8}\cmidrule(lr){9-14}
+& &
+\multicolumn{3}{c}{1\% labels} &
+\multicolumn{3}{c}{5\% labels} &
+\multicolumn{3}{c}{1\% labels} &
+\multicolumn{3}{c}{5\% labels} \\
+\cmidrule(lr){3-5}\cmidrule(lr){6-8}
+\cmidrule(lr){9-11}\cmidrule(lr){12-14}
+& &
+C10 & C100 & TIN &
+C10 & C100 & TIN &
+C10 & C100 & TIN &
+C10 & C100 & TIN \\
 \midrule
-\multirow{14}{*}{\shortstack{Barlow\\Twins}} & \multirow{7}{*}{1\%} & 100 & Full Data & \cellcolor{gray!12}\dsacc{87.44}{0.56} & \dsacc{26.99}{1.20} & \dsacc{12.89}{0.26} & \cellcolor{gray!12}\dsacc{49.68}{0.82} & \dsacc{69.79}{0.57} & \dsacc{15.35}{0.33} \\ % sslcompare method=barlowtwins kind=full pt=100 lbl=1
-\cmidrule(lr){3-10}
- &  & \multirow{3}{*}{0.2} & Random & \cellcolor{gray!12}\dsacc{39.92}{1.64} & \dsacc{10.40}{0.63} & \bestacc{4.93}{0.43} & \cellcolor{gray!12}\dsacc{10.03}{1.73} & \dsacc{37.67}{3.21} & \dsacc{4.51}{0.82} \\ % sslcompare method=barlowtwins kind=random pt=0.2 lbl=1
- &  &  & MKDT & \cellcolor{gray!12}\dsacc{36.38}{1.49} & \dsacc{8.56}{1.17} & \dsacc{4.00}{0.44} & \cellcolor{gray!12}\dsacc{10.18}{0.34} & \dsacc{37.52}{0.97} & \dsacc{4.58}{0.18} \\ % sslcompare method=barlowtwins kind=mkdt pt=0.2 lbl=1
- &  &  & MIPA & \cellcolor{gray!12}\bestacc{40.07}{0.78} & \bestacc{10.43}{0.59} & \dsacc{4.83}{0.28} & \cellcolor{gray!12}\bestacc{10.73}{1.44} & \bestacc{38.97}{3.29} & \bestacc{4.89}{0.68} \\ % sslcompare method=barlowtwins kind=ours pt=0.2 lbl=1
-\cmidrule(lr){3-10}
- &  & \multirow{3}{*}{1} & Random & \cellcolor{gray!12}\dsacc{49.34}{1.10} & \dsacc{14.20}{0.47} & \bestacc{7.20}{0.43} & \cellcolor{gray!12}\dsacc{15.09}{1.05} & \bestacc{46.47}{1.39} & \bestacc{7.17}{0.73} \\ % sslcompare method=barlowtwins kind=random pt=1 lbl=1
- &  &  & MKDT & \cellcolor{gray!12}\dsacc{43.32}{1.32} & \dsacc{11.60}{0.38} & \dsacc{5.86}{0.43} & \cellcolor{gray!12}\dsacc{12.03}{0.67} & \dsacc{42.41}{1.80} & \dsacc{6.01}{0.22} \\ % sslcompare method=barlowtwins kind=mkdt pt=1 lbl=1
- &  &  & MIPA & \cellcolor{gray!12}\bestacc{50.65}{1.25} & \bestacc{14.23}{0.93} & \dsacc{7.18}{0.27} & \cellcolor{gray!12}\bestacc{15.69}{0.59} & \dsacc{45.96}{1.15} & \dsacc{7.02}{0.14} \\ % sslcompare method=barlowtwins kind=ours pt=1 lbl=1
-\cmidrule(lr){2-10}
- & \multirow{7}{*}{5\%} & 100 & Full Data & \cellcolor{gray!12}\dsacc{89.76}{0.17} & \dsacc{41.77}{0.65} & \dsacc{22.45}{0.20} & \cellcolor{gray!12}\dsacc{58.96}{0.36} & \dsacc{76.79}{0.34} & \dsacc{25.70}{0.58} \\ % sslcompare method=barlowtwins kind=full pt=100 lbl=5
-\cmidrule(lr){3-10}
- &  & \multirow{3}{*}{0.2} & Random & \cellcolor{gray!12}\dsacc{46.84}{2.21} & \dsacc{18.54}{0.83} & \bestacc{9.19}{0.73} & \cellcolor{gray!12}\dsacc{17.26}{2.61} & \dsacc{44.06}{3.90} & \dsacc{8.41}{1.39} \\ % sslcompare method=barlowtwins kind=random pt=0.2 lbl=5
- &  &  & MKDT & \cellcolor{gray!12}\dsacc{42.64}{3.19} & \dsacc{16.11}{1.19} & \dsacc{7.72}{0.49} & \cellcolor{gray!12}\dsacc{18.18}{0.33} & \dsacc{44.94}{0.48} & \dsacc{8.73}{0.16} \\ % sslcompare method=barlowtwins kind=mkdt pt=0.2 lbl=5
- &  &  & MIPA & \cellcolor{gray!12}\bestacc{47.66}{0.84} & \bestacc{18.64}{0.80} & \dsacc{9.14}{0.47} & \cellcolor{gray!12}\bestacc{18.37}{2.34} & \bestacc{45.75}{3.85} & \bestacc{8.94}{1.06} \\ % sslcompare method=barlowtwins kind=ours pt=0.2 lbl=5
-\cmidrule(lr){3-10}
- &  & \multirow{3}{*}{1} & Random & \cellcolor{gray!12}\dsacc{56.46}{0.90} & \dsacc{23.90}{0.88} & \dsacc{13.19}{0.41} & \cellcolor{gray!12}\dsacc{24.78}{1.10} & \dsacc{54.36}{1.36} & \dsacc{13.09}{0.99} \\ % sslcompare method=barlowtwins kind=random pt=1 lbl=5
- &  &  & MKDT & \cellcolor{gray!12}\dsacc{51.77}{0.77} & \dsacc{20.75}{0.87} & \dsacc{11.01}{0.42} & \cellcolor{gray!12}\dsacc{21.21}{0.48} & \dsacc{50.75}{1.34} & \dsacc{10.91}{0.36} \\ % sslcompare method=barlowtwins kind=mkdt pt=1 lbl=5
- &  &  & MIPA & \cellcolor{gray!12}\bestacc{57.67}{0.68} & \bestacc{24.01}{0.24} & \bestacc{13.46}{0.23} & \cellcolor{gray!12}\bestacc{25.47}{0.21} & \bestacc{55.02}{0.58} & \bestacc{13.25}{0.23} \\ % sslcompare method=barlowtwins kind=ours pt=1 lbl=5
+
+\rowcolor{gray!8}
+\cellcolor{white}100 & \cellcolor{white}Full data
+& \acc{87.44}{0.56} & \acc{26.99}{1.20} & \acc{12.89}{0.26}
+& \acc{89.76}{0.17} & \acc{41.77}{0.65} & \acc{22.45}{0.20}
+& \acc{69.79}{0.57} & \acc{49.68}{0.82} & \acc{15.35}{0.33}
+& \acc{76.79}{0.34} & \acc{58.96}{0.36} & \acc{25.70}{0.58} \\
+
+\cmidrule(lr){1-14}
+\multirow{3}{*}{0.2}
+& Random
+& \acc{39.92}{1.64} & \acc{10.40}{0.63} & \best{4.93}{0.43}
+& \acc{46.84}{2.21} & \acc{18.54}{0.83} & \best{9.19}{0.73}
+& \acc{37.67}{3.21} & \acc{10.03}{1.73} & \acc{4.51}{0.82}
+& \acc{44.06}{3.90} & \acc{17.26}{2.61} & \acc{8.41}{1.39} \\
+& MKDT
+& \acc{36.38}{1.49} & \acc{8.56}{1.17} & \acc{4.00}{0.44}
+& \acc{42.64}{3.19} & \acc{16.11}{1.19} & \acc{7.72}{0.49}
+& \acc{37.52}{0.97} & \acc{10.18}{0.34} & \acc{4.58}{0.18}
+& \acc{44.94}{0.48} & \acc{18.18}{0.33} & \acc{8.73}{0.16} \\
+& MIPA
+& \best{40.07}{0.78} & \best{10.43}{0.59} & \acc{4.83}{0.28}
+& \best{47.66}{0.84} & \best{18.64}{0.80} & \acc{9.14}{0.47}
+& \best{38.97}{3.29} & \best{10.73}{1.44} & \best{4.89}{0.68}
+& \best{45.75}{3.85} & \best{18.37}{2.34} & \best{8.94}{1.06} \\
+
+\cmidrule(lr){1-14}
+\multirow{3}{*}{1}
+& Random
+& \acc{49.34}{1.10} & \acc{14.20}{0.47} & \best{7.20}{0.43}
+& \acc{56.46}{0.90} & \acc{23.90}{0.88} & \acc{13.19}{0.41}
+& \best{46.47}{1.39} & \acc{15.09}{1.05} & \best{7.17}{0.73}
+& \acc{54.36}{1.36} & \acc{24.78}{1.10} & \acc{13.09}{0.99} \\
+& MKDT
+& \acc{43.32}{1.32} & \acc{11.60}{0.38} & \acc{5.86}{0.43}
+& \acc{51.77}{0.77} & \acc{20.75}{0.87} & \acc{11.01}{0.42}
+& \acc{42.41}{1.80} & \acc{12.03}{0.67} & \acc{6.01}{0.22}
+& \acc{50.75}{1.34} & \acc{21.21}{0.48} & \acc{10.91}{0.36} \\
+& MIPA
+& \best{50.65}{1.25} & \best{14.23}{0.93} & \acc{7.18}{0.27}
+& \best{57.67}{0.68} & \best{24.01}{0.24} & \best{13.46}{0.23}
+& \acc{45.96}{1.15} & \best{15.69}{0.59} & \acc{7.02}{0.14}
+& \best{55.02}{0.58} & \best{25.47}{0.21} & \best{13.25}{0.23} \\
+
 \bottomrule
 \end{tabular}%
 }

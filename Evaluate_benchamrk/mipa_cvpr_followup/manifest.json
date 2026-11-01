@@ -1,0 +1,2227 @@
+{
+  "created": "2026-11-01T06:35:24.941Z",
+  "selected_batch": "mipa_cvpr_color_crop",
+  "ssl_encoders": 24,
+  "linear_probes": 496,
+  "shared": {
+    "account": "aip-yiweilu",
+    "memory": "6G",
+    "gpu": "l40s",
+    "data_root": "/scratch/mmoslem3/data",
+    "code_hashes": {
+      "Evaluate_benchamrk/common.py": "67fcd33f581a34a7f764431b6761ac120cb080d4b2ea0d69b95074565a224f8b",
+      "Evaluate_benchamrk/data.py": "befcf535679e449b3544ae9b8578325e53f7995179591042315d8937cd55f6d9",
+      "Evaluate_benchamrk/evaluate.py": "2b2162a56878f48ade39d2b80d4316511f20a72d29eaa2cf70fe023d88ad722f",
+      "Evaluate_benchamrk/plan.py": "c6d9bd33b36d1d235a2f6af291b3a0a82187b1eea3a10b90a7f57317d8eee83e",
+      "Evaluate_benchamrk/run.py": "1c2b8d29ab47966f1178c9f04b3e1b7c72bd2f55fb65a32c32c77c3730faf45b",
+      "Evaluate_benchamrk/test_protocol.py": "f018562437924ced1d890343a4e898f10e48c50a63920d337031194671c4e43d",
+      "Evaluate_benchamrk/train_ssl.py": "3670781eb0f0f838ced6cc7ca9775791d4d52683fe25e489239f012937dc1a79",
+      "networks.py": "0c15ff3ef11f21df752e2a9a17851ab8c8a52ddc3969380682ea8bfcec1968fc",
+      "benchmarks/downstream_data.py": "081fe26e5dc81c96ce8e8ffe5a412302663de4a9d095684c5b37e7c615b4a6fd",
+      "Evaluate_benchamrk/protocol.json": "088b30569317c167f7f2a77a1f889d593b620ea31bdc93c5120b183c71e4a570",
+      "Evaluate_benchamrk/cross_arch_ablation/models.py": "6b8463d3a52a9efa7e77b4f62db183bc859d8cd26b91afef8e9f0a18c933fc89",
+      "Evaluate_benchamrk/mipa_cvpr_followup/worker.py": "63154da29b5e6d61f87cac92863bee02374acc06a9d079c0e168ef5b874d1a31"
+    },
+    "benchmark_code_hashes": {
+      "Evaluate_benchamrk/common.py": "67fcd33f581a34a7f764431b6761ac120cb080d4b2ea0d69b95074565a224f8b",
+      "Evaluate_benchamrk/data.py": "befcf535679e449b3544ae9b8578325e53f7995179591042315d8937cd55f6d9",
+      "Evaluate_benchamrk/evaluate.py": "2b2162a56878f48ade39d2b80d4316511f20a72d29eaa2cf70fe023d88ad722f",
+      "Evaluate_benchamrk/plan.py": "c6d9bd33b36d1d235a2f6af291b3a0a82187b1eea3a10b90a7f57317d8eee83e",
+      "Evaluate_benchamrk/run.py": "1c2b8d29ab47966f1178c9f04b3e1b7c72bd2f55fb65a32c32c77c3730faf45b",
+      "Evaluate_benchamrk/test_protocol.py": "f018562437924ced1d890343a4e898f10e48c50a63920d337031194671c4e43d",
+      "Evaluate_benchamrk/train_ssl.py": "3670781eb0f0f838ced6cc7ca9775791d4d52683fe25e489239f012937dc1a79",
+      "networks.py": "0c15ff3ef11f21df752e2a9a17851ab8c8a52ddc3969380682ea8bfcec1968fc",
+      "benchmarks/downstream_data.py": "081fe26e5dc81c96ce8e8ffe5a412302663de4a9d095684c5b37e7c615b4a6fd"
+    }
+  },
+  "sets": {
+    "CIFAR10_pt0.2": {
+      "source": "CIFAR10",
+      "subset": 0.2,
+      "generation_args": {
+        "Iteration": 10000,
+        "batch_real": 128,
+        "beta": 1,
+        "dataset": "CIFAR10",
+        "distill_aug_strategy": "color_crop_cutout_scale",
+        "feature_batch": 128,
+        "lr_img": 0.0015,
+        "percentage": 0.2,
+        "prototype_pool_size": 0,
+        "seed": 0,
+        "single_channel": false,
+        "temperature": 0.2
+      },
+      "synthetic_file": "/scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_cvpr_color_crop/CIFAR10/ResNet18BN/pt0.2/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt",
+      "synthetic_sha256": "9a7f63d094eee3ffdc957fd6e9421d1644c2d0510958af89f633a0967586b75d",
+      "main_config": "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_cvpr_color_crop/results/CIFAR10/ResNet18BN/pt0.2/simclr/ssl_seed_000/config.json",
+      "main_config_sha256": "77323d5b54607510c8b0dbd0edff7f09ff8103b56e3fc074cbdef46b95cbca05",
+      "encoder_dir": "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_cvpr_color_crop/results/CIFAR10/ResNet18BN/pt0.2/simclr/ssl_seed_000",
+      "encoder_sha256": "db385eeaf5d52f75057ba9b4084fcadbe674f62a967993ae1e30a00ed9f17be4"
+    },
+    "CIFAR10_pt1": {
+      "source": "CIFAR10",
+      "subset": 1,
+      "generation_args": {
+        "Iteration": 8000,
+        "batch_real": 128,
+        "beta": 1,
+        "dataset": "CIFAR10",
+        "distill_aug_strategy": "color_crop_cutout_scale",
+        "feature_batch": 128,
+        "lr_img": 0.0015,
+        "percentage": 1,
+        "prototype_pool_size": 0,
+        "seed": 0,
+        "single_channel": false,
+        "temperature": 0.2
+      },
+      "synthetic_file": "/scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_cvpr_color_crop/CIFAR10/ResNet18BN/pt1/res_IIC_CIFAR10_ResNet18BN_1percent_final.pt",
+      "synthetic_sha256": "09b694c5c3b5ad122353891001235185d26d9e400ffaa047dc5c1ca1dec7fc87",
+      "main_config": "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_cvpr_color_crop/results/CIFAR10/ResNet18BN/pt1/simclr/ssl_seed_000/config.json",
+      "main_config_sha256": "130f533e1b63d71fdc7ffc3b85ed541d3f312e65f11a16f9e827c1eed8345f70",
+      "encoder_dir": "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_cvpr_color_crop/results/CIFAR10/ResNet18BN/pt1/simclr/ssl_seed_000",
+      "encoder_sha256": "c209899751b935a6c2408c0a7ad21d3d3876f283a81b9b2d557d86f2731416da"
+    },
+    "CIFAR100_pt0.2": {
+      "source": "CIFAR100",
+      "subset": 0.2,
+      "generation_args": {
+        "Iteration": 10000,
+        "batch_real": 128,
+        "beta": 1,
+        "dataset": "CIFAR100",
+        "distill_aug_strategy": "color_crop_cutout_scale",
+        "feature_batch": 128,
+        "lr_img": 0.0015,
+        "percentage": 0.2,
+        "prototype_pool_size": 0,
+        "seed": 0,
+        "single_channel": false,
+        "temperature": 0.2
+      },
+      "synthetic_file": "/scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_cvpr_color_crop/CIFAR100/ResNet18BN/pt0.2/res_IIC_CIFAR100_ResNet18BN_0.2percent_final.pt",
+      "synthetic_sha256": "62d27688fa8f1ce2c5ceb4cd875e2866e4bafa0f143dc9fc879ee1de0f943e78",
+      "main_config": "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_cvpr_color_crop/results/CIFAR100/ResNet18BN/pt0.2/simclr/ssl_seed_000/config.json",
+      "main_config_sha256": "e68aa7b11d3ad83f41e3b06983ecfd3e15927e82be43b740db4d0284a75ccee7",
+      "encoder_dir": "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_cvpr_color_crop/results/CIFAR100/ResNet18BN/pt0.2/simclr/ssl_seed_000",
+      "encoder_sha256": "71aea265ae1627a5e76da98a7c14d804b6a8dbf28024e274ac586256ad38fec6"
+    },
+    "CIFAR100_pt1": {
+      "source": "CIFAR100",
+      "subset": 1,
+      "generation_args": {
+        "Iteration": 8000,
+        "batch_real": 128,
+        "beta": 1,
+        "dataset": "CIFAR100",
+        "distill_aug_strategy": "color_crop_cutout_scale",
+        "feature_batch": 128,
+        "lr_img": 0.0015,
+        "percentage": 1,
+        "prototype_pool_size": 0,
+        "seed": 0,
+        "single_channel": false,
+        "temperature": 0.2
+      },
+      "synthetic_file": "/scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_cvpr_color_crop/CIFAR100/ResNet18BN/pt1/res_IIC_CIFAR100_ResNet18BN_1percent_final.pt",
+      "synthetic_sha256": "d690ecd5226d414390b61458c57a9524207d55b8fc790b23f18aeb5dd32d8e1b",
+      "main_config": "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_cvpr_color_crop/results/CIFAR100/ResNet18BN/pt1/simclr/ssl_seed_000/config.json",
+      "main_config_sha256": "c7acff1e0568ae06919462226df54bfdecedc18216d2c2ab758ada533ca8ca29",
+      "encoder_dir": "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_cvpr_color_crop/results/CIFAR100/ResNet18BN/pt1/simclr/ssl_seed_000",
+      "encoder_sha256": "9c5dd690237a54cd6acb7ad23ab63764efdeb43977d304fce7ce2070ea65f9c8"
+    }
+  },
+  "recipes": {
+    "barlow_CIFAR10_pt0.2_ResNet18": {
+      "recipe_file": "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/ours_eval_results_simclr2k_barlow10k_2ssl3probes_main/CIFAR10/ResNet18BN/pt0.2/barlowtwins/ssl_seed_000/config.json",
+      "recipe_sha256": "4871b3f269cdc8c2830de4a4eec22ff6b67f5e884ec74203cf5d3e75436d2811",
+      "epoch_seconds": 0.12946173921227455,
+      "protocol_id": "a4972f9d8364e52c991089980074e79dfbec5a7fb6730e287ccedfe6218af3c6"
+    },
+    "cross_arch_CIFAR10_pt0.2_ResNet34": {
+      "recipe_file": "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/cross_arch_ablation/results/CIFAR10/ResNet34/ours/pt0.2/simclr/ssl_seed_000/config.json",
+      "recipe_sha256": "55096a1461f5758c9acfc70aae0d818651f3c41bf433a4b2a9fcd506284a6356",
+      "epoch_seconds": 0.16152494307607412,
+      "protocol_id": "dc436a1feac3a8b657a5281770aa74e7b0878339b8a5a29adad8eacc873fbf82"
+    },
+    "cross_arch_CIFAR10_pt0.2_ResNet50": {
+      "recipe_file": "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/cross_arch_ablation/results/CIFAR10/ResNet50/ours/pt0.2/simclr/ssl_seed_000/config.json",
+      "recipe_sha256": "6d26381b2681bfe3ffa49121349d2d75f49603cf053c8a176907cdcbd4f0775d",
+      "epoch_seconds": 0.2264232700690627,
+      "protocol_id": "dc436a1feac3a8b657a5281770aa74e7b0878339b8a5a29adad8eacc873fbf82"
+    },
+    "barlow_CIFAR10_pt1_ResNet18": {
+      "recipe_file": "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_random128_barlow_p1/results/CIFAR10/ResNet18BN/pt1/barlowtwins/ssl_seed_000/config.json",
+      "recipe_sha256": "5f24ccfcc7f2a1c1e40c825d796f91f326f15e30c5906a666b810825e912869e",
+      "epoch_seconds": 0.31059079617261887,
+      "protocol_id": "a4972f9d8364e52c991089980074e79dfbec5a7fb6730e287ccedfe6218af3c6"
+    },
+    "cross_arch_CIFAR10_pt1_ResNet34": {
+      "recipe_file": "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/cross_arch_ablation/results/CIFAR10/ResNet34/ours/pt1/simclr/ssl_seed_000/config.json",
+      "recipe_sha256": "1462c07d7a876b790f568539394dfd4b70742fffc48fb19cb0ec5aead81b073b",
+      "epoch_seconds": 0.3872345546260476,
+      "protocol_id": "dc436a1feac3a8b657a5281770aa74e7b0878339b8a5a29adad8eacc873fbf82"
+    },
+    "cross_arch_CIFAR10_pt1_ResNet50": {
+      "recipe_file": "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/cross_arch_ablation/results/CIFAR10/ResNet50/ours/pt1/simclr/ssl_seed_000/config.json",
+      "recipe_sha256": "3afb235e9fe252b65cd0f7e715769d01d22afd0dfddd613fd116eed7cb1671a2",
+      "epoch_seconds": 0.5755269797518849,
+      "protocol_id": "dc436a1feac3a8b657a5281770aa74e7b0878339b8a5a29adad8eacc873fbf82"
+    },
+    "barlow_CIFAR100_pt0.2_ResNet18": {
+      "recipe_file": "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/ours_eval_results_simclr2k_barlow10k_2ssl3probes_main/CIFAR100/ResNet18BN/pt0.2/barlowtwins/ssl_seed_000/config.json",
+      "recipe_sha256": "2b64db461400e99d24663534c38e31eeb82936e19a6024d94a4d679b54520330",
+      "epoch_seconds": 0.12965308595448732,
+      "protocol_id": "a4972f9d8364e52c991089980074e79dfbec5a7fb6730e287ccedfe6218af3c6"
+    },
+    "cross_arch_CIFAR100_pt0.2_ResNet34": {
+      "recipe_file": "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/cross_arch_ablation/results/CIFAR100/ResNet34/ours/pt0.2/simclr/ssl_seed_000/config.json",
+      "recipe_sha256": "8bf161c7861a80fdf07558910b1fd790efbe86d5ff4c63a6efadcd4403afd746",
+      "epoch_seconds": 0.16203936375677586,
+      "protocol_id": "dc436a1feac3a8b657a5281770aa74e7b0878339b8a5a29adad8eacc873fbf82"
+    },
+    "cross_arch_CIFAR100_pt0.2_ResNet50": {
+      "recipe_file": "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/cross_arch_ablation/results/CIFAR100/ResNet50/ours/pt0.2/simclr/ssl_seed_000/config.json",
+      "recipe_sha256": "aefaf4e17bab2fdde618a9538e3531a3ffbdc1f957d256ed37aa34348330f3fa",
+      "epoch_seconds": 0.22711525857448578,
+      "protocol_id": "dc436a1feac3a8b657a5281770aa74e7b0878339b8a5a29adad8eacc873fbf82"
+    },
+    "barlow_CIFAR100_pt1_ResNet18": {
+      "recipe_file": "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_random128_barlow_p1/results/CIFAR100/ResNet18BN/pt1/barlowtwins/ssl_seed_000/config.json",
+      "recipe_sha256": "4c0f3ca0b222871a8fdf8c93b101997b488fd53b09b7b4d39b7a7ef9f94f7b10",
+      "epoch_seconds": 0.30676428694278,
+      "protocol_id": "a4972f9d8364e52c991089980074e79dfbec5a7fb6730e287ccedfe6218af3c6"
+    },
+    "cross_arch_CIFAR100_pt1_ResNet34": {
+      "recipe_file": "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/cross_arch_ablation/results/CIFAR100/ResNet34/ours/pt1/simclr/ssl_seed_000/config.json",
+      "recipe_sha256": "76ad170392f9edad818a2e4aa208455d0d3bad97861c5569257be00c61456f7d",
+      "epoch_seconds": 0.3864559233188629,
+      "protocol_id": "dc436a1feac3a8b657a5281770aa74e7b0878339b8a5a29adad8eacc873fbf82"
+    },
+    "cross_arch_CIFAR100_pt1_ResNet50": {
+      "recipe_file": "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/cross_arch_ablation/results/CIFAR100/ResNet50/ours/pt1/simclr/ssl_seed_000/config.json",
+      "recipe_sha256": "c5b4bdb4603db27bb3184a9cc7d7c9a72fe8ba0bc389ae76940d6a7e5700db62",
+      "epoch_seconds": 0.5804339488968253,
+      "protocol_id": "dc436a1feac3a8b657a5281770aa74e7b0878339b8a5a29adad8eacc873fbf82"
+    }
+  },
+  "protocols": {
+    "a4972f9d8364e52c991089980074e79dfbec5a7fb6730e287ccedfe6218af3c6": {
+      "evaluation": {
+        "baseline": "frozen_random_encoder",
+        "batch_size": 256,
+        "checkpoint_selection": "final_epoch_no_test_selection",
+        "epochs": 100,
+        "full_data_sanity_label_percentage": 100,
+        "head_init_std": 0.01,
+        "label_percentages": [
+          1,
+          5
+        ],
+        "label_policy": "exact",
+        "lr": 0.1,
+        "momentum": 0.9,
+        "normalize_using": "source_statistics",
+        "optimizer": "sgd",
+        "schedule": "cosine_per_step",
+        "test_resize_ratio": 1.1428571428571428,
+        "test_transform": "resize_short_side_and_center_crop",
+        "train_transform": "random_resized_crop_and_flip",
+        "warmup_epochs": 0,
+        "weight_decay": 0
+      },
+      "full_seeds": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "input_size": {
+        "CIFAR10": 32,
+        "CIFAR100": 32,
+        "TinyImageNet": 64
+      },
+      "methods": {
+        "barlowtwins": {
+          "blur_probabilities": [
+            0,
+            0
+          ],
+          "color_jitter": [
+            0.4,
+            0.4,
+            0.2,
+            0.1
+          ],
+          "correlation_eps": 0.00001,
+          "lambda": 0.0051,
+          "loss_scale": 0.1,
+          "lr": 0.3,
+          "projector": [
+            2048,
+            2048,
+            2048
+          ],
+          "projector_batchnorm": true,
+          "projector_bias": true,
+          "solarize_probabilities": [
+            0,
+            0.2
+          ]
+        },
+        "simclr": {
+          "blur_probabilities": [
+            0.5,
+            0.5
+          ],
+          "color_jitter": [
+            0.8,
+            0.8,
+            0.8,
+            0.2
+          ],
+          "lr": 0.4,
+          "projector": [
+            2048,
+            256
+          ],
+          "projector_batchnorm": false,
+          "projector_bias": true,
+          "solarize_probabilities": [
+            0,
+            0
+          ],
+          "temperature": 0.2
+        }
+      },
+      "models": [
+        "ConvNet",
+        "VGG11",
+        "ResNet18"
+      ],
+      "normalization": {
+        "CIFAR10": [
+          [
+            0.4914,
+            0.4822,
+            0.4465
+          ],
+          [
+            0.247,
+            0.2435,
+            0.2616
+          ]
+        ],
+        "CIFAR100": [
+          [
+            0.5071,
+            0.4865,
+            0.4409
+          ],
+          [
+            0.2673,
+            0.2564,
+            0.2762
+          ]
+        ],
+        "TinyImageNet": [
+          [
+            0.485,
+            0.456,
+            0.406
+          ],
+          [
+            0.229,
+            0.224,
+            0.225
+          ]
+        ]
+      },
+      "references": {
+        "barlow_official": "https://github.com/facebookresearch/barlowtwins",
+        "cifar_barlow": "https://github.com/vturrisi/solo-learn/blob/main/scripts/pretrain/cifar/barlow.yaml",
+        "cifar_simclr": "https://github.com/vturrisi/solo-learn/blob/main/scripts/pretrain/cifar/simclr.yaml",
+        "simclr_official": "https://github.com/google-research/simclr"
+      },
+      "selection": {
+        "batch_size": 256,
+        "distance_chunk_size": 1024,
+        "feature_model": "random_ConvNetGAP_BN",
+        "feature_normalization": "l2",
+        "feature_seed_offset": 2000,
+        "iterations": 50,
+        "method": "kmeans",
+        "unique_exemplars": true
+      },
+      "sources": [
+        "CIFAR10",
+        "CIFAR100",
+        "TinyImageNet"
+      ],
+      "ssl": {
+        "batch_size": 256,
+        "blur_sigma": [
+          0.1,
+          2
+        ],
+        "checkpoint_every_epochs": 100,
+        "color_probability": 0.8,
+        "crop_ratio": [
+          0.75,
+          1.3333333333333333
+        ],
+        "crop_scale": [
+          0.08,
+          1
+        ],
+        "exclude_bias_and_norm": true,
+        "flip_probability": 0.5,
+        "full_epochs": 1000,
+        "grayscale_probability": 0.2,
+        "interpolation": "bicubic",
+        "lars_clip": true,
+        "lars_eps": 1e-8,
+        "lars_eta": 0.02,
+        "minimum_lr": 0,
+        "momentum": 0.9,
+        "optimizer": "lars",
+        "precision": "float32",
+        "scale_lr_with_batch": true,
+        "schedule": "warmup_cosine_per_step",
+        "small_batch_policy": "min_dataset_size_no_replacement",
+        "subset_epochs": 10000,
+        "warmup_epochs": 10,
+        "warmup_start_lr": 0.00003,
+        "weight_decay": 0.0001
+      },
+      "subset_percentages": [
+        0.2,
+        1,
+        2,
+        5
+      ],
+      "subset_seeds": [
+        0,
+        1
+      ],
+      "version": "ssl_reference_v1"
+    },
+    "dc436a1feac3a8b657a5281770aa74e7b0878339b8a5a29adad8eacc873fbf82": {
+      "evaluation": {
+        "baseline": "frozen_random_encoder",
+        "batch_size": 256,
+        "checkpoint_selection": "final_epoch_no_test_selection",
+        "epochs": 100,
+        "full_data_sanity_label_percentage": 100,
+        "head_init_std": 0.01,
+        "label_percentages": [
+          1,
+          5
+        ],
+        "label_policy": "exact",
+        "lr": 0.1,
+        "momentum": 0.9,
+        "normalize_using": "source_statistics",
+        "optimizer": "sgd",
+        "schedule": "cosine_per_step",
+        "test_resize_ratio": 1.1428571428571428,
+        "test_transform": "resize_short_side_and_center_crop",
+        "train_transform": "random_resized_crop_and_flip",
+        "warmup_epochs": 0,
+        "weight_decay": 0
+      },
+      "full_seeds": [
+        0
+      ],
+      "input_size": {
+        "CIFAR10": 32,
+        "CIFAR100": 32,
+        "TinyImageNet": 64
+      },
+      "methods": {
+        "barlowtwins": {
+          "blur_probabilities": [
+            0,
+            0
+          ],
+          "color_jitter": [
+            0.4,
+            0.4,
+            0.2,
+            0.1
+          ],
+          "correlation_eps": 0.00001,
+          "lambda": 0.0051,
+          "loss_scale": 0.1,
+          "lr": 0.3,
+          "projector": [
+            2048,
+            2048,
+            2048
+          ],
+          "projector_batchnorm": true,
+          "projector_bias": true,
+          "solarize_probabilities": [
+            0,
+            0.2
+          ]
+        },
+        "simclr": {
+          "blur_probabilities": [
+            0.5,
+            0.5
+          ],
+          "color_jitter": [
+            0.8,
+            0.8,
+            0.8,
+            0.2
+          ],
+          "lr": 0.4,
+          "projector": [
+            2048,
+            256
+          ],
+          "projector_batchnorm": false,
+          "projector_bias": true,
+          "solarize_probabilities": [
+            0,
+            0
+          ],
+          "temperature": 0.2
+        }
+      },
+      "models": [
+        "ConvNet",
+        "VGG11",
+        "ResNet18"
+      ],
+      "normalization": {
+        "CIFAR10": [
+          [
+            0.4914,
+            0.4822,
+            0.4465
+          ],
+          [
+            0.247,
+            0.2435,
+            0.2616
+          ]
+        ],
+        "CIFAR100": [
+          [
+            0.5071,
+            0.4865,
+            0.4409
+          ],
+          [
+            0.2673,
+            0.2564,
+            0.2762
+          ]
+        ],
+        "TinyImageNet": [
+          [
+            0.485,
+            0.456,
+            0.406
+          ],
+          [
+            0.229,
+            0.224,
+            0.225
+          ]
+        ]
+      },
+      "references": {
+        "barlow_official": "https://github.com/facebookresearch/barlowtwins",
+        "cifar_barlow": "https://github.com/vturrisi/solo-learn/blob/main/scripts/pretrain/cifar/barlow.yaml",
+        "cifar_simclr": "https://github.com/vturrisi/solo-learn/blob/main/scripts/pretrain/cifar/simclr.yaml",
+        "simclr_official": "https://github.com/google-research/simclr"
+      },
+      "selection": {
+        "batch_size": 256,
+        "distance_chunk_size": 1024,
+        "feature_model": "random_ConvNetGAP_BN",
+        "feature_normalization": "l2",
+        "feature_seed_offset": 2000,
+        "iterations": 50,
+        "method": "kmeans",
+        "unique_exemplars": true
+      },
+      "sources": [
+        "CIFAR10",
+        "CIFAR100",
+        "TinyImageNet"
+      ],
+      "ssl": {
+        "batch_size": 256,
+        "blur_sigma": [
+          0.1,
+          2
+        ],
+        "checkpoint_every_epochs": 100,
+        "color_probability": 0.8,
+        "crop_ratio": [
+          0.75,
+          1.3333333333333333
+        ],
+        "crop_scale": [
+          0.08,
+          1
+        ],
+        "exclude_bias_and_norm": true,
+        "flip_probability": 0.5,
+        "full_epochs": 1000,
+        "grayscale_probability": 0.2,
+        "interpolation": "bicubic",
+        "lars_clip": true,
+        "lars_eps": 1e-8,
+        "lars_eta": 0.02,
+        "minimum_lr": 0,
+        "momentum": 0.9,
+        "optimizer": "lars",
+        "precision": "float32",
+        "scale_lr_with_batch": true,
+        "schedule": "warmup_cosine_per_step",
+        "small_batch_policy": "min_dataset_size_no_replacement",
+        "subset_epochs": 2000,
+        "warmup_epochs": 10,
+        "warmup_start_lr": 0.00003,
+        "weight_decay": 0.0001
+      },
+      "subset_percentages": [
+        0.2,
+        1,
+        2,
+        5
+      ],
+      "subset_seeds": [
+        0,
+        1
+      ],
+      "version": "ssl_reference_v1"
+    }
+  },
+  "jobs": [
+    {
+      "name": "cvbt_CIFAR10_p0p2_s0",
+      "stage": "barlow",
+      "model": "ResNet18",
+      "method": "barlowtwins",
+      "seed": 0,
+      "ssl_epochs": 10000,
+      "probe_seeds": [
+        0,
+        1,
+        2
+      ],
+      "targets": [
+        "CIFAR10",
+        "CIFAR100",
+        "TinyImageNet"
+      ],
+      "cells": [
+        {
+          "target": "CIFAR10",
+          "labels": 1
+        },
+        {
+          "target": "CIFAR10",
+          "labels": 5
+        },
+        {
+          "target": "CIFAR100",
+          "labels": 1
+        },
+        {
+          "target": "CIFAR100",
+          "labels": 5
+        },
+        {
+          "target": "TinyImageNet",
+          "labels": 1
+        },
+        {
+          "target": "TinyImageNet",
+          "labels": 5
+        }
+      ],
+      "output_dir": "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_cvpr_followup/results/barlow/CIFAR10/ResNet18/pt0.2/barlowtwins/ssl_seed_000",
+      "table": "CVPR_tables/ablations/ssl_methods_combined.tex",
+      "seconds": 3412,
+      "probe_seconds": 1386.3617133317166,
+      "set": "CIFAR10_pt0.2",
+      "recipe": "barlow_CIFAR10_pt0.2_ResNet18"
+    },
+    {
+      "name": "cvbt_CIFAR10_p0p2_s1",
+      "stage": "barlow",
+      "model": "ResNet18",
+      "method": "barlowtwins",
+      "seed": 1,
+      "ssl_epochs": 10000,
+      "probe_seeds": [
+        0,
+        1,
+        2
+      ],
+      "targets": [
+        "CIFAR10",
+        "CIFAR100",
+        "TinyImageNet"
+      ],
+      "cells": [
+        {
+          "target": "CIFAR10",
+          "labels": 1
+        },
+        {
+          "target": "CIFAR10",
+          "labels": 5
+        },
+        {
+          "target": "CIFAR100",
+          "labels": 1
+        },
+        {
+          "target": "CIFAR100",
+          "labels": 5
+        },
+        {
+          "target": "TinyImageNet",
+          "labels": 1
+        },
+        {
+          "target": "TinyImageNet",
+          "labels": 5
+        }
+      ],
+      "output_dir": "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_cvpr_followup/results/barlow/CIFAR10/ResNet18/pt0.2/barlowtwins/ssl_seed_001",
+      "table": "CVPR_tables/ablations/ssl_methods_combined.tex",
+      "seconds": 3412,
+      "probe_seconds": 1386.3617133317166,
+      "set": "CIFAR10_pt0.2",
+      "recipe": "barlow_CIFAR10_pt0.2_ResNet18"
+    },
+    {
+      "name": "cvxa_CIFAR10_ResNet34_p0p2_s0",
+      "stage": "cross_arch",
+      "model": "ResNet34",
+      "method": "simclr",
+      "seed": 0,
+      "ssl_epochs": 2000,
+      "probe_seeds": [
+        0,
+        1
+      ],
+      "targets": [
+        "CIFAR10",
+        "CIFAR100",
+        "TinyImageNet"
+      ],
+      "cells": [
+        {
+          "target": "CIFAR10",
+          "labels": 1
+        },
+        {
+          "target": "CIFAR10",
+          "labels": 5
+        },
+        {
+          "target": "CIFAR100",
+          "labels": 1
+        },
+        {
+          "target": "CIFAR100",
+          "labels": 5
+        },
+        {
+          "target": "TinyImageNet",
+          "labels": 1
+        },
+        {
+          "target": "TinyImageNet",
+          "labels": 5
+        }
+      ],
+      "output_dir": "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_cvpr_followup/results/cross_arch/CIFAR10/ResNet34/pt0.2/simclr/ssl_seed_000",
+      "table": "CVPR_tables/ablations/cross_arch_combined.tex",
+      "seconds": 1365,
+      "probe_seconds": 720.6079153977334,
+      "set": "CIFAR10_pt0.2",
+      "recipe": "cross_arch_CIFAR10_pt0.2_ResNet34"
+    },
+    {
+      "name": "cvxa_CIFAR10_ResNet34_p0p2_s1",
+      "stage": "cross_arch",
+      "model": "ResNet34",
+      "method": "simclr",
+      "seed": 1,
+      "ssl_epochs": 2000,
+      "probe_seeds": [
+        0,
+        1
+      ],
+      "targets": [
+        "CIFAR10",
+        "CIFAR100",
+        "TinyImageNet"
+      ],
+      "cells": [
+        {
+          "target": "CIFAR10",
+          "labels": 1
+        },
+        {
+          "target": "CIFAR10",
+          "labels": 5
+        },
+        {
+          "target": "CIFAR100",
+          "labels": 1
+        },
+        {
+          "target": "CIFAR100",
+          "labels": 5
+        },
+        {
+          "target": "TinyImageNet",
+          "labels": 1
+        },
+        {
+          "target": "TinyImageNet",
+          "labels": 5
+        }
+      ],
+      "output_dir": "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_cvpr_followup/results/cross_arch/CIFAR10/ResNet34/pt0.2/simclr/ssl_seed_001",
+      "table": "CVPR_tables/ablations/cross_arch_combined.tex",
+      "seconds": 1365,
+      "probe_seconds": 720.6079153977334,
+      "set": "CIFAR10_pt0.2",
+      "recipe": "cross_arch_CIFAR10_pt0.2_ResNet34"
+    },
+    {
+      "name": "cvxa_CIFAR10_ResNet50_p0p2_s0",
+      "stage": "cross_arch",
+      "model": "ResNet50",
+      "method": "simclr",
+      "seed": 0,
+      "ssl_epochs": 2000,
+      "probe_seeds": [
+        0,
+        1
+      ],
+      "targets": [
+        "CIFAR10",
+        "CIFAR100",
+        "TinyImageNet"
+      ],
+      "cells": [
+        {
+          "target": "CIFAR10",
+          "labels": 1
+        },
+        {
+          "target": "CIFAR10",
+          "labels": 5
+        },
+        {
+          "target": "CIFAR100",
+          "labels": 1
+        },
+        {
+          "target": "CIFAR100",
+          "labels": 5
+        },
+        {
+          "target": "TinyImageNet",
+          "labels": 1
+        },
+        {
+          "target": "TinyImageNet",
+          "labels": 5
+        }
+      ],
+      "output_dir": "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_cvpr_followup/results/cross_arch/CIFAR10/ResNet50/pt0.2/simclr/ssl_seed_000",
+      "table": "CVPR_tables/ablations/cross_arch_combined.tex",
+      "seconds": 1840,
+      "probe_seconds": 971.0705345869064,
+      "set": "CIFAR10_pt0.2",
+      "recipe": "cross_arch_CIFAR10_pt0.2_ResNet50"
+    },
+    {
+      "name": "cvxa_CIFAR10_ResNet50_p0p2_s1",
+      "stage": "cross_arch",
+      "model": "ResNet50",
+      "method": "simclr",
+      "seed": 1,
+      "ssl_epochs": 2000,
+      "probe_seeds": [
+        0,
+        1
+      ],
+      "targets": [
+        "CIFAR10",
+        "CIFAR100",
+        "TinyImageNet"
+      ],
+      "cells": [
+        {
+          "target": "CIFAR10",
+          "labels": 1
+        },
+        {
+          "target": "CIFAR10",
+          "labels": 5
+        },
+        {
+          "target": "CIFAR100",
+          "labels": 1
+        },
+        {
+          "target": "CIFAR100",
+          "labels": 5
+        },
+        {
+          "target": "TinyImageNet",
+          "labels": 1
+        },
+        {
+          "target": "TinyImageNet",
+          "labels": 5
+        }
+      ],
+      "output_dir": "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_cvpr_followup/results/cross_arch/CIFAR10/ResNet50/pt0.2/simclr/ssl_seed_001",
+      "table": "CVPR_tables/ablations/cross_arch_combined.tex",
+      "seconds": 1840,
+      "probe_seconds": 971.0705345869064,
+      "set": "CIFAR10_pt0.2",
+      "recipe": "cross_arch_CIFAR10_pt0.2_ResNet50"
+    },
+    {
+      "name": "cvdn_CIFAR10_p0p2_CIFAR100",
+      "stage": "downstream",
+      "model": "ResNet18",
+      "method": "simclr",
+      "seed": 0,
+      "ssl_epochs": 2000,
+      "probe_seeds": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "targets": [
+        "CIFAR100"
+      ],
+      "cells": [
+        {
+          "target": "CIFAR100",
+          "labels": 1
+        },
+        {
+          "target": "CIFAR100",
+          "labels": 5
+        }
+      ],
+      "output_dir": "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_cvpr_followup/results/downstream/CIFAR10/ResNet18/pt0.2/simclr/ssl_seed_000",
+      "table": "CVPR_tables/cifar_downstream.tex",
+      "seconds": 485,
+      "probe_seconds": 339.249065592885,
+      "set": "CIFAR10_pt0.2"
+    },
+    {
+      "name": "cvdn_CIFAR10_p0p2_TinyImageNet",
+      "stage": "downstream",
+      "model": "ResNet18",
+      "method": "simclr",
+      "seed": 0,
+      "ssl_epochs": 2000,
+      "probe_seeds": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "targets": [
+        "TinyImageNet"
+      ],
+      "cells": [
+        {
+          "target": "TinyImageNet",
+          "labels": 1
+        },
+        {
+          "target": "TinyImageNet",
+          "labels": 5
+        }
+      ],
+      "output_dir": "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_cvpr_followup/results/downstream/CIFAR10/ResNet18/pt0.2/simclr/ssl_seed_000",
+      "table": "CVPR_tables/cifar_downstream.tex",
+      "seconds": 1193,
+      "probe_seconds": 905.7569557148963,
+      "set": "CIFAR10_pt0.2"
+    },
+    {
+      "name": "cvdn_CIFAR10_p0p2_Aircraft_Dogs",
+      "stage": "downstream",
+      "model": "ResNet18",
+      "method": "simclr",
+      "seed": 0,
+      "ssl_epochs": 2000,
+      "probe_seeds": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "targets": [
+        "Aircraft",
+        "Dogs"
+      ],
+      "cells": [
+        {
+          "target": "Aircraft",
+          "labels": 1
+        },
+        {
+          "target": "Aircraft",
+          "labels": 5
+        },
+        {
+          "target": "Dogs",
+          "labels": 1
+        },
+        {
+          "target": "Dogs",
+          "labels": 5
+        }
+      ],
+      "output_dir": "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_cvpr_followup/results/downstream/CIFAR10/ResNet18/pt0.2/simclr/ssl_seed_000",
+      "table": "CVPR_tables/cifar_downstream.tex",
+      "seconds": 3634,
+      "probe_seconds": 2858.5736137768254,
+      "set": "CIFAR10_pt0.2"
+    },
+    {
+      "name": "cvbt_CIFAR10_p1_s0",
+      "stage": "barlow",
+      "model": "ResNet18",
+      "method": "barlowtwins",
+      "seed": 0,
+      "ssl_epochs": 10000,
+      "probe_seeds": [
+        0,
+        1,
+        2
+      ],
+      "targets": [
+        "CIFAR10",
+        "CIFAR100",
+        "TinyImageNet"
+      ],
+      "cells": [
+        {
+          "target": "CIFAR10",
+          "labels": 1
+        },
+        {
+          "target": "CIFAR10",
+          "labels": 5
+        },
+        {
+          "target": "CIFAR100",
+          "labels": 1
+        },
+        {
+          "target": "CIFAR100",
+          "labels": 5
+        },
+        {
+          "target": "TinyImageNet",
+          "labels": 1
+        },
+        {
+          "target": "TinyImageNet",
+          "labels": 5
+        }
+      ],
+      "output_dir": "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_cvpr_followup/results/barlow/CIFAR10/ResNet18/pt1/barlowtwins/ssl_seed_000",
+      "table": "CVPR_tables/ablations/ssl_methods_combined.tex",
+      "seconds": 5711,
+      "probe_seconds": 1414.6428051861003,
+      "set": "CIFAR10_pt1",
+      "recipe": "barlow_CIFAR10_pt1_ResNet18"
+    },
+    {
+      "name": "cvbt_CIFAR10_p1_s1",
+      "stage": "barlow",
+      "model": "ResNet18",
+      "method": "barlowtwins",
+      "seed": 1,
+      "ssl_epochs": 10000,
+      "probe_seeds": [
+        0,
+        1,
+        2
+      ],
+      "targets": [
+        "CIFAR10",
+        "CIFAR100",
+        "TinyImageNet"
+      ],
+      "cells": [
+        {
+          "target": "CIFAR10",
+          "labels": 1
+        },
+        {
+          "target": "CIFAR10",
+          "labels": 5
+        },
+        {
+          "target": "CIFAR100",
+          "labels": 1
+        },
+        {
+          "target": "CIFAR100",
+          "labels": 5
+        },
+        {
+          "target": "TinyImageNet",
+          "labels": 1
+        },
+        {
+          "target": "TinyImageNet",
+          "labels": 5
+        }
+      ],
+      "output_dir": "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_cvpr_followup/results/barlow/CIFAR10/ResNet18/pt1/barlowtwins/ssl_seed_001",
+      "table": "CVPR_tables/ablations/ssl_methods_combined.tex",
+      "seconds": 5711,
+      "probe_seconds": 1414.6428051861003,
+      "set": "CIFAR10_pt1",
+      "recipe": "barlow_CIFAR10_pt1_ResNet18"
+    },
+    {
+      "name": "cvxa_CIFAR10_ResNet34_p1_s0",
+      "stage": "cross_arch",
+      "model": "ResNet34",
+      "method": "simclr",
+      "seed": 0,
+      "ssl_epochs": 2000,
+      "probe_seeds": [
+        0,
+        1
+      ],
+      "targets": [
+        "CIFAR10",
+        "CIFAR100",
+        "TinyImageNet"
+      ],
+      "cells": [
+        {
+          "target": "CIFAR10",
+          "labels": 1
+        },
+        {
+          "target": "CIFAR10",
+          "labels": 5
+        },
+        {
+          "target": "CIFAR100",
+          "labels": 1
+        },
+        {
+          "target": "CIFAR100",
+          "labels": 5
+        },
+        {
+          "target": "TinyImageNet",
+          "labels": 1
+        },
+        {
+          "target": "TinyImageNet",
+          "labels": 5
+        }
+      ],
+      "output_dir": "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_cvpr_followup/results/cross_arch/CIFAR10/ResNet34/pt1/simclr/ssl_seed_000",
+      "table": "CVPR_tables/ablations/cross_arch_combined.tex",
+      "seconds": 1915,
+      "probe_seconds": 709.4415163621306,
+      "set": "CIFAR10_pt1",
+      "recipe": "cross_arch_CIFAR10_pt1_ResNet34"
+    },
+    {
+      "name": "cvxa_CIFAR10_ResNet34_p1_s1",
+      "stage": "cross_arch",
+      "model": "ResNet34",
+      "method": "simclr",
+      "seed": 1,
+      "ssl_epochs": 2000,
+      "probe_seeds": [
+        0,
+        1
+      ],
+      "targets": [
+        "CIFAR10",
+        "CIFAR100",
+        "TinyImageNet"
+      ],
+      "cells": [
+        {
+          "target": "CIFAR10",
+          "labels": 1
+        },
+        {
+          "target": "CIFAR10",
+          "labels": 5
+        },
+        {
+          "target": "CIFAR100",
+          "labels": 1
+        },
+        {
+          "target": "CIFAR100",
+          "labels": 5
+        },
+        {
+          "target": "TinyImageNet",
+          "labels": 1
+        },
+        {
+          "target": "TinyImageNet",
+          "labels": 5
+        }
+      ],
+      "output_dir": "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_cvpr_followup/results/cross_arch/CIFAR10/ResNet34/pt1/simclr/ssl_seed_001",
+      "table": "CVPR_tables/ablations/cross_arch_combined.tex",
+      "seconds": 1915,
+      "probe_seconds": 709.4415163621306,
+      "set": "CIFAR10_pt1",
+      "recipe": "cross_arch_CIFAR10_pt1_ResNet34"
+    },
+    {
+      "name": "cvxa_CIFAR10_ResNet50_p1_s0",
+      "stage": "cross_arch",
+      "model": "ResNet50",
+      "method": "simclr",
+      "seed": 0,
+      "ssl_epochs": 2000,
+      "probe_seeds": [
+        0,
+        1
+      ],
+      "targets": [
+        "CIFAR10",
+        "CIFAR100",
+        "TinyImageNet"
+      ],
+      "cells": [
+        {
+          "target": "CIFAR10",
+          "labels": 1
+        },
+        {
+          "target": "CIFAR10",
+          "labels": 5
+        },
+        {
+          "target": "CIFAR100",
+          "labels": 1
+        },
+        {
+          "target": "CIFAR100",
+          "labels": 5
+        },
+        {
+          "target": "TinyImageNet",
+          "labels": 1
+        },
+        {
+          "target": "TinyImageNet",
+          "labels": 5
+        }
+      ],
+      "output_dir": "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_cvpr_followup/results/cross_arch/CIFAR10/ResNet50/pt1/simclr/ssl_seed_000",
+      "table": "CVPR_tables/ablations/cross_arch_combined.tex",
+      "seconds": 2728,
+      "probe_seconds": 983.2266300041229,
+      "set": "CIFAR10_pt1",
+      "recipe": "cross_arch_CIFAR10_pt1_ResNet50"
+    },
+    {
+      "name": "cvxa_CIFAR10_ResNet50_p1_s1",
+      "stage": "cross_arch",
+      "model": "ResNet50",
+      "method": "simclr",
+      "seed": 1,
+      "ssl_epochs": 2000,
+      "probe_seeds": [
+        0,
+        1
+      ],
+      "targets": [
+        "CIFAR10",
+        "CIFAR100",
+        "TinyImageNet"
+      ],
+      "cells": [
+        {
+          "target": "CIFAR10",
+          "labels": 1
+        },
+        {
+          "target": "CIFAR10",
+          "labels": 5
+        },
+        {
+          "target": "CIFAR100",
+          "labels": 1
+        },
+        {
+          "target": "CIFAR100",
+          "labels": 5
+        },
+        {
+          "target": "TinyImageNet",
+          "labels": 1
+        },
+        {
+          "target": "TinyImageNet",
+          "labels": 5
+        }
+      ],
+      "output_dir": "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_cvpr_followup/results/cross_arch/CIFAR10/ResNet50/pt1/simclr/ssl_seed_001",
+      "table": "CVPR_tables/ablations/cross_arch_combined.tex",
+      "seconds": 2728,
+      "probe_seconds": 983.2266300041229,
+      "set": "CIFAR10_pt1",
+      "recipe": "cross_arch_CIFAR10_pt1_ResNet50"
+    },
+    {
+      "name": "cvdn_CIFAR10_p1_CIFAR100",
+      "stage": "downstream",
+      "model": "ResNet18",
+      "method": "simclr",
+      "seed": 0,
+      "ssl_epochs": 2000,
+      "probe_seeds": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "targets": [
+        "CIFAR100"
+      ],
+      "cells": [
+        {
+          "target": "CIFAR100",
+          "labels": 1
+        },
+        {
+          "target": "CIFAR100",
+          "labels": 5
+        }
+      ],
+      "output_dir": "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_cvpr_followup/results/downstream/CIFAR10/ResNet18/pt1/simclr/ssl_seed_000",
+      "table": "CVPR_tables/cifar_downstream.tex",
+      "seconds": 490,
+      "probe_seconds": 343.6613860120997,
+      "set": "CIFAR10_pt1"
+    },
+    {
+      "name": "cvdn_CIFAR10_p1_TinyImageNet",
+      "stage": "downstream",
+      "model": "ResNet18",
+      "method": "simclr",
+      "seed": 0,
+      "ssl_epochs": 2000,
+      "probe_seeds": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "targets": [
+        "TinyImageNet"
+      ],
+      "cells": [
+        {
+          "target": "TinyImageNet",
+          "labels": 1
+        },
+        {
+          "target": "TinyImageNet",
+          "labels": 5
+        }
+      ],
+      "output_dir": "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_cvpr_followup/results/downstream/CIFAR10/ResNet18/pt1/simclr/ssl_seed_000",
+      "table": "CVPR_tables/cifar_downstream.tex",
+      "seconds": 1185,
+      "probe_seconds": 899.8699362855405,
+      "set": "CIFAR10_pt1"
+    },
+    {
+      "name": "cvdn_CIFAR10_p1_Aircraft_Dogs",
+      "stage": "downstream",
+      "model": "ResNet18",
+      "method": "simclr",
+      "seed": 0,
+      "ssl_epochs": 2000,
+      "probe_seeds": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "targets": [
+        "Aircraft",
+        "Dogs"
+      ],
+      "cells": [
+        {
+          "target": "Aircraft",
+          "labels": 1
+        },
+        {
+          "target": "Aircraft",
+          "labels": 5
+        },
+        {
+          "target": "Dogs",
+          "labels": 1
+        },
+        {
+          "target": "Dogs",
+          "labels": 5
+        }
+      ],
+      "output_dir": "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_cvpr_followup/results/downstream/CIFAR10/ResNet18/pt1/simclr/ssl_seed_000",
+      "table": "CVPR_tables/cifar_downstream.tex",
+      "seconds": 3519,
+      "probe_seconds": 2766.4564824616536,
+      "set": "CIFAR10_pt1"
+    },
+    {
+      "name": "cvbt_CIFAR100_p0p2_s0",
+      "stage": "barlow",
+      "model": "ResNet18",
+      "method": "barlowtwins",
+      "seed": 0,
+      "ssl_epochs": 10000,
+      "probe_seeds": [
+        0,
+        1,
+        2
+      ],
+      "targets": [
+        "CIFAR100",
+        "CIFAR10",
+        "TinyImageNet"
+      ],
+      "cells": [
+        {
+          "target": "CIFAR100",
+          "labels": 1
+        },
+        {
+          "target": "CIFAR100",
+          "labels": 5
+        },
+        {
+          "target": "CIFAR10",
+          "labels": 1
+        },
+        {
+          "target": "CIFAR10",
+          "labels": 5
+        },
+        {
+          "target": "TinyImageNet",
+          "labels": 1
+        },
+        {
+          "target": "TinyImageNet",
+          "labels": 5
+        }
+      ],
+      "output_dir": "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_cvpr_followup/results/barlow/CIFAR100/ResNet18/pt0.2/barlowtwins/ssl_seed_000",
+      "table": "CVPR_tables/ablations/ssl_methods_combined.tex",
+      "seconds": 3444,
+      "probe_seconds": 1410.0537731955992,
+      "set": "CIFAR100_pt0.2",
+      "recipe": "barlow_CIFAR100_pt0.2_ResNet18"
+    },
+    {
+      "name": "cvbt_CIFAR100_p0p2_s1",
+      "stage": "barlow",
+      "model": "ResNet18",
+      "method": "barlowtwins",
+      "seed": 1,
+      "ssl_epochs": 10000,
+      "probe_seeds": [
+        0,
+        1,
+        2
+      ],
+      "targets": [
+        "CIFAR100",
+        "CIFAR10",
+        "TinyImageNet"
+      ],
+      "cells": [
+        {
+          "target": "CIFAR100",
+          "labels": 1
+        },
+        {
+          "target": "CIFAR100",
+          "labels": 5
+        },
+        {
+          "target": "CIFAR10",
+          "labels": 1
+        },
+        {
+          "target": "CIFAR10",
+          "labels": 5
+        },
+        {
+          "target": "TinyImageNet",
+          "labels": 1
+        },
+        {
+          "target": "TinyImageNet",
+          "labels": 5
+        }
+      ],
+      "output_dir": "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_cvpr_followup/results/barlow/CIFAR100/ResNet18/pt0.2/barlowtwins/ssl_seed_001",
+      "table": "CVPR_tables/ablations/ssl_methods_combined.tex",
+      "seconds": 3444,
+      "probe_seconds": 1410.0537731955992,
+      "set": "CIFAR100_pt0.2",
+      "recipe": "barlow_CIFAR100_pt0.2_ResNet18"
+    },
+    {
+      "name": "cvxa_CIFAR100_ResNet34_p0p2_s0",
+      "stage": "cross_arch",
+      "model": "ResNet34",
+      "method": "simclr",
+      "seed": 0,
+      "ssl_epochs": 2000,
+      "probe_seeds": [
+        0,
+        1
+      ],
+      "targets": [
+        "CIFAR100",
+        "CIFAR10",
+        "TinyImageNet"
+      ],
+      "cells": [
+        {
+          "target": "CIFAR100",
+          "labels": 1
+        },
+        {
+          "target": "CIFAR100",
+          "labels": 5
+        },
+        {
+          "target": "CIFAR10",
+          "labels": 1
+        },
+        {
+          "target": "CIFAR10",
+          "labels": 5
+        },
+        {
+          "target": "TinyImageNet",
+          "labels": 1
+        },
+        {
+          "target": "TinyImageNet",
+          "labels": 5
+        }
+      ],
+      "output_dir": "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_cvpr_followup/results/cross_arch/CIFAR100/ResNet34/pt0.2/simclr/ssl_seed_000",
+      "table": "CVPR_tables/ablations/cross_arch_combined.tex",
+      "seconds": 1359,
+      "probe_seconds": 714.5157768838108,
+      "set": "CIFAR100_pt0.2",
+      "recipe": "cross_arch_CIFAR100_pt0.2_ResNet34"
+    },
+    {
+      "name": "cvxa_CIFAR100_ResNet34_p0p2_s1",
+      "stage": "cross_arch",
+      "model": "ResNet34",
+      "method": "simclr",
+      "seed": 1,
+      "ssl_epochs": 2000,
+      "probe_seeds": [
+        0,
+        1
+      ],
+      "targets": [
+        "CIFAR100",
+        "CIFAR10",
+        "TinyImageNet"
+      ],
+      "cells": [
+        {
+          "target": "CIFAR100",
+          "labels": 1
+        },
+        {
+          "target": "CIFAR100",
+          "labels": 5
+        },
+        {
+          "target": "CIFAR10",
+          "labels": 1
+        },
+        {
+          "target": "CIFAR10",
+          "labels": 5
+        },
+        {
+          "target": "TinyImageNet",
+          "labels": 1
+        },
+        {
+          "target": "TinyImageNet",
+          "labels": 5
+        }
+      ],
+      "output_dir": "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_cvpr_followup/results/cross_arch/CIFAR100/ResNet34/pt0.2/simclr/ssl_seed_001",
+      "table": "CVPR_tables/ablations/cross_arch_combined.tex",
+      "seconds": 1359,
+      "probe_seconds": 714.5157768838108,
+      "set": "CIFAR100_pt0.2",
+      "recipe": "cross_arch_CIFAR100_pt0.2_ResNet34"
+    },
+    {
+      "name": "cvxa_CIFAR100_ResNet50_p0p2_s0",
+      "stage": "cross_arch",
+      "model": "ResNet50",
+      "method": "simclr",
+      "seed": 0,
+      "ssl_epochs": 2000,
+      "probe_seeds": [
+        0,
+        1
+      ],
+      "targets": [
+        "CIFAR100",
+        "CIFAR10",
+        "TinyImageNet"
+      ],
+      "cells": [
+        {
+          "target": "CIFAR100",
+          "labels": 1
+        },
+        {
+          "target": "CIFAR100",
+          "labels": 5
+        },
+        {
+          "target": "CIFAR10",
+          "labels": 1
+        },
+        {
+          "target": "CIFAR10",
+          "labels": 5
+        },
+        {
+          "target": "TinyImageNet",
+          "labels": 1
+        },
+        {
+          "target": "TinyImageNet",
+          "labels": 5
+        }
+      ],
+      "output_dir": "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_cvpr_followup/results/cross_arch/CIFAR100/ResNet50/pt0.2/simclr/ssl_seed_000",
+      "table": "CVPR_tables/ablations/cross_arch_combined.tex",
+      "seconds": 1850,
+      "probe_seconds": 977.1193189658225,
+      "set": "CIFAR100_pt0.2",
+      "recipe": "cross_arch_CIFAR100_pt0.2_ResNet50"
+    },
+    {
+      "name": "cvxa_CIFAR100_ResNet50_p0p2_s1",
+      "stage": "cross_arch",
+      "model": "ResNet50",
+      "method": "simclr",
+      "seed": 1,
+      "ssl_epochs": 2000,
+      "probe_seeds": [
+        0,
+        1
+      ],
+      "targets": [
+        "CIFAR100",
+        "CIFAR10",
+        "TinyImageNet"
+      ],
+      "cells": [
+        {
+          "target": "CIFAR100",
+          "labels": 1
+        },
+        {
+          "target": "CIFAR100",
+          "labels": 5
+        },
+        {
+          "target": "CIFAR10",
+          "labels": 1
+        },
+        {
+          "target": "CIFAR10",
+          "labels": 5
+        },
+        {
+          "target": "TinyImageNet",
+          "labels": 1
+        },
+        {
+          "target": "TinyImageNet",
+          "labels": 5
+        }
+      ],
+      "output_dir": "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_cvpr_followup/results/cross_arch/CIFAR100/ResNet50/pt0.2/simclr/ssl_seed_001",
+      "table": "CVPR_tables/ablations/cross_arch_combined.tex",
+      "seconds": 1850,
+      "probe_seconds": 977.1193189658225,
+      "set": "CIFAR100_pt0.2",
+      "recipe": "cross_arch_CIFAR100_pt0.2_ResNet50"
+    },
+    {
+      "name": "cvdn_CIFAR100_p0p2_CIFAR10",
+      "stage": "downstream",
+      "model": "ResNet18",
+      "method": "simclr",
+      "seed": 0,
+      "ssl_epochs": 2000,
+      "probe_seeds": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "targets": [
+        "CIFAR10"
+      ],
+      "cells": [
+        {
+          "target": "CIFAR10",
+          "labels": 1
+        },
+        {
+          "target": "CIFAR10",
+          "labels": 5
+        }
+      ],
+      "output_dir": "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_cvpr_followup/results/downstream/CIFAR100/ResNet18/pt0.2/simclr/ssl_seed_000",
+      "table": "CVPR_tables/cifar_downstream.tex",
+      "seconds": 472,
+      "probe_seconds": 329.2936027934775,
+      "set": "CIFAR100_pt0.2"
+    },
+    {
+      "name": "cvdn_CIFAR100_p0p2_TinyImageNet",
+      "stage": "downstream",
+      "model": "ResNet18",
+      "method": "simclr",
+      "seed": 0,
+      "ssl_epochs": 2000,
+      "probe_seeds": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "targets": [
+        "TinyImageNet"
+      ],
+      "cells": [
+        {
+          "target": "TinyImageNet",
+          "labels": 1
+        },
+        {
+          "target": "TinyImageNet",
+          "labels": 5
+        }
+      ],
+      "output_dir": "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_cvpr_followup/results/downstream/CIFAR100/ResNet18/pt0.2/simclr/ssl_seed_000",
+      "table": "CVPR_tables/cifar_downstream.tex",
+      "seconds": 1184,
+      "probe_seconds": 898.5161129990593,
+      "set": "CIFAR100_pt0.2"
+    },
+    {
+      "name": "cvdn_CIFAR100_p0p2_Aircraft_Dogs",
+      "stage": "downstream",
+      "model": "ResNet18",
+      "method": "simclr",
+      "seed": 0,
+      "ssl_epochs": 2000,
+      "probe_seeds": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "targets": [
+        "Aircraft",
+        "Dogs"
+      ],
+      "cells": [
+        {
+          "target": "Aircraft",
+          "labels": 1
+        },
+        {
+          "target": "Aircraft",
+          "labels": 5
+        },
+        {
+          "target": "Dogs",
+          "labels": 1
+        },
+        {
+          "target": "Dogs",
+          "labels": 5
+        }
+      ],
+      "output_dir": "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_cvpr_followup/results/downstream/CIFAR100/ResNet18/pt0.2/simclr/ssl_seed_000",
+      "table": "CVPR_tables/cifar_downstream.tex",
+      "seconds": 3583,
+      "probe_seconds": 2818.217831242364,
+      "set": "CIFAR100_pt0.2"
+    },
+    {
+      "name": "cvbt_CIFAR100_p1_s0",
+      "stage": "barlow",
+      "model": "ResNet18",
+      "method": "barlowtwins",
+      "seed": 0,
+      "ssl_epochs": 10000,
+      "probe_seeds": [
+        0,
+        1,
+        2
+      ],
+      "targets": [
+        "CIFAR100",
+        "CIFAR10",
+        "TinyImageNet"
+      ],
+      "cells": [
+        {
+          "target": "CIFAR100",
+          "labels": 1
+        },
+        {
+          "target": "CIFAR100",
+          "labels": 5
+        },
+        {
+          "target": "CIFAR10",
+          "labels": 1
+        },
+        {
+          "target": "CIFAR10",
+          "labels": 5
+        },
+        {
+          "target": "TinyImageNet",
+          "labels": 1
+        },
+        {
+          "target": "TinyImageNet",
+          "labels": 5
+        }
+      ],
+      "output_dir": "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_cvpr_followup/results/barlow/CIFAR100/ResNet18/pt1/barlowtwins/ssl_seed_000",
+      "table": "CVPR_tables/ablations/ssl_methods_combined.tex",
+      "seconds": 5645,
+      "probe_seconds": 1399.8305396167561,
+      "set": "CIFAR100_pt1",
+      "recipe": "barlow_CIFAR100_pt1_ResNet18"
+    },
+    {
+      "name": "cvbt_CIFAR100_p1_s1",
+      "stage": "barlow",
+      "model": "ResNet18",
+      "method": "barlowtwins",
+      "seed": 1,
+      "ssl_epochs": 10000,
+      "probe_seeds": [
+        0,
+        1,
+        2
+      ],
+      "targets": [
+        "CIFAR100",
+        "CIFAR10",
+        "TinyImageNet"
+      ],
+      "cells": [
+        {
+          "target": "CIFAR100",
+          "labels": 1
+        },
+        {
+          "target": "CIFAR100",
+          "labels": 5
+        },
+        {
+          "target": "CIFAR10",
+          "labels": 1
+        },
+        {
+          "target": "CIFAR10",
+          "labels": 5
+        },
+        {
+          "target": "TinyImageNet",
+          "labels": 1
+        },
+        {
+          "target": "TinyImageNet",
+          "labels": 5
+        }
+      ],
+      "output_dir": "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_cvpr_followup/results/barlow/CIFAR100/ResNet18/pt1/barlowtwins/ssl_seed_001",
+      "table": "CVPR_tables/ablations/ssl_methods_combined.tex",
+      "seconds": 5645,
+      "probe_seconds": 1399.8305396167561,
+      "set": "CIFAR100_pt1",
+      "recipe": "barlow_CIFAR100_pt1_ResNet18"
+    },
+    {
+      "name": "cvxa_CIFAR100_ResNet34_p1_s0",
+      "stage": "cross_arch",
+      "model": "ResNet34",
+      "method": "simclr",
+      "seed": 0,
+      "ssl_epochs": 2000,
+      "probe_seeds": [
+        0,
+        1
+      ],
+      "targets": [
+        "CIFAR100",
+        "CIFAR10",
+        "TinyImageNet"
+      ],
+      "cells": [
+        {
+          "target": "CIFAR100",
+          "labels": 1
+        },
+        {
+          "target": "CIFAR100",
+          "labels": 5
+        },
+        {
+          "target": "CIFAR10",
+          "labels": 1
+        },
+        {
+          "target": "CIFAR10",
+          "labels": 5
+        },
+        {
+          "target": "TinyImageNet",
+          "labels": 1
+        },
+        {
+          "target": "TinyImageNet",
+          "labels": 5
+        }
+      ],
+      "output_dir": "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_cvpr_followup/results/cross_arch/CIFAR100/ResNet34/pt1/simclr/ssl_seed_000",
+      "table": "CVPR_tables/ablations/cross_arch_combined.tex",
+      "seconds": 1907,
+      "probe_seconds": 704.4230086430907,
+      "set": "CIFAR100_pt1",
+      "recipe": "cross_arch_CIFAR100_pt1_ResNet34"
+    },
+    {
+      "name": "cvxa_CIFAR100_ResNet34_p1_s1",
+      "stage": "cross_arch",
+      "model": "ResNet34",
+      "method": "simclr",
+      "seed": 1,
+      "ssl_epochs": 2000,
+      "probe_seeds": [
+        0,
+        1
+      ],
+      "targets": [
+        "CIFAR100",
+        "CIFAR10",
+        "TinyImageNet"
+      ],
+      "cells": [
+        {
+          "target": "CIFAR100",
+          "labels": 1
+        },
+        {
+          "target": "CIFAR100",
+          "labels": 5
+        },
+        {
+          "target": "CIFAR10",
+          "labels": 1
+        },
+        {
+          "target": "CIFAR10",
+          "labels": 5
+        },
+        {
+          "target": "TinyImageNet",
+          "labels": 1
+        },
+        {
+          "target": "TinyImageNet",
+          "labels": 5
+        }
+      ],
+      "output_dir": "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_cvpr_followup/results/cross_arch/CIFAR100/ResNet34/pt1/simclr/ssl_seed_001",
+      "table": "CVPR_tables/ablations/cross_arch_combined.tex",
+      "seconds": 1907,
+      "probe_seconds": 704.4230086430907,
+      "set": "CIFAR100_pt1",
+      "recipe": "cross_arch_CIFAR100_pt1_ResNet34"
+    },
+    {
+      "name": "cvxa_CIFAR100_ResNet50_p1_s0",
+      "stage": "cross_arch",
+      "model": "ResNet50",
+      "method": "simclr",
+      "seed": 0,
+      "ssl_epochs": 2000,
+      "probe_seeds": [
+        0,
+        1
+      ],
+      "targets": [
+        "CIFAR100",
+        "CIFAR10",
+        "TinyImageNet"
+      ],
+      "cells": [
+        {
+          "target": "CIFAR100",
+          "labels": 1
+        },
+        {
+          "target": "CIFAR100",
+          "labels": 5
+        },
+        {
+          "target": "CIFAR10",
+          "labels": 1
+        },
+        {
+          "target": "CIFAR10",
+          "labels": 5
+        },
+        {
+          "target": "TinyImageNet",
+          "labels": 1
+        },
+        {
+          "target": "TinyImageNet",
+          "labels": 5
+        }
+      ],
+      "output_dir": "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_cvpr_followup/results/cross_arch/CIFAR100/ResNet50/pt1/simclr/ssl_seed_000",
+      "table": "CVPR_tables/ablations/cross_arch_combined.tex",
+      "seconds": 2737,
+      "probe_seconds": 980.6471958421171,
+      "set": "CIFAR100_pt1",
+      "recipe": "cross_arch_CIFAR100_pt1_ResNet50"
+    },
+    {
+      "name": "cvxa_CIFAR100_ResNet50_p1_s1",
+      "stage": "cross_arch",
+      "model": "ResNet50",
+      "method": "simclr",
+      "seed": 1,
+      "ssl_epochs": 2000,
+      "probe_seeds": [
+        0,
+        1
+      ],
+      "targets": [
+        "CIFAR100",
+        "CIFAR10",
+        "TinyImageNet"
+      ],
+      "cells": [
+        {
+          "target": "CIFAR100",
+          "labels": 1
+        },
+        {
+          "target": "CIFAR100",
+          "labels": 5
+        },
+        {
+          "target": "CIFAR10",
+          "labels": 1
+        },
+        {
+          "target": "CIFAR10",
+          "labels": 5
+        },
+        {
+          "target": "TinyImageNet",
+          "labels": 1
+        },
+        {
+          "target": "TinyImageNet",
+          "labels": 5
+        }
+      ],
+      "output_dir": "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_cvpr_followup/results/cross_arch/CIFAR100/ResNet50/pt1/simclr/ssl_seed_001",
+      "table": "CVPR_tables/ablations/cross_arch_combined.tex",
+      "seconds": 2737,
+      "probe_seconds": 980.6471958421171,
+      "set": "CIFAR100_pt1",
+      "recipe": "cross_arch_CIFAR100_pt1_ResNet50"
+    },
+    {
+      "name": "cvdn_CIFAR100_p1_CIFAR10",
+      "stage": "downstream",
+      "model": "ResNet18",
+      "method": "simclr",
+      "seed": 0,
+      "ssl_epochs": 2000,
+      "probe_seeds": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "targets": [
+        "CIFAR10"
+      ],
+      "cells": [
+        {
+          "target": "CIFAR10",
+          "labels": 1
+        },
+        {
+          "target": "CIFAR10",
+          "labels": 5
+        }
+      ],
+      "output_dir": "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_cvpr_followup/results/downstream/CIFAR100/ResNet18/pt1/simclr/ssl_seed_000",
+      "table": "CVPR_tables/cifar_downstream.tex",
+      "seconds": 479,
+      "probe_seconds": 334.49923103209585,
+      "set": "CIFAR100_pt1"
+    },
+    {
+      "name": "cvdn_CIFAR100_p1_TinyImageNet",
+      "stage": "downstream",
+      "model": "ResNet18",
+      "method": "simclr",
+      "seed": 0,
+      "ssl_epochs": 2000,
+      "probe_seeds": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "targets": [
+        "TinyImageNet"
+      ],
+      "cells": [
+        {
+          "target": "TinyImageNet",
+          "labels": 1
+        },
+        {
+          "target": "TinyImageNet",
+          "labels": 5
+        }
+      ],
+      "output_dir": "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_cvpr_followup/results/downstream/CIFAR100/ResNet18/pt1/simclr/ssl_seed_000",
+      "table": "CVPR_tables/cifar_downstream.tex",
+      "seconds": 1198,
+      "probe_seconds": 910.2657863078639,
+      "set": "CIFAR100_pt1"
+    },
+    {
+      "name": "cvdn_CIFAR100_p1_Aircraft_Dogs",
+      "stage": "downstream",
+      "model": "ResNet18",
+      "method": "simclr",
+      "seed": 0,
+      "ssl_epochs": 2000,
+      "probe_seeds": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "targets": [
+        "Aircraft",
+        "Dogs"
+      ],
+      "cells": [
+        {
+          "target": "Aircraft",
+          "labels": 1
+        },
+        {
+          "target": "Aircraft",
+          "labels": 5
+        },
+        {
+          "target": "Dogs",
+          "labels": 1
+        },
+        {
+          "target": "Dogs",
+          "labels": 5
+        }
+      ],
+      "output_dir": "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_cvpr_followup/results/downstream/CIFAR100/ResNet18/pt1/simclr/ssl_seed_000",
+      "table": "CVPR_tables/cifar_downstream.tex",
+      "seconds": 3617,
+      "probe_seconds": 2844.8222618503496,
+      "set": "CIFAR100_pt1"
+    }
+  ]
+}
