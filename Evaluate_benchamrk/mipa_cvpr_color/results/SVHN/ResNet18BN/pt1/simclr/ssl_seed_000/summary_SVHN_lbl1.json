@@ -1,0 +1,67 @@
+{
+  "complete": true,
+  "completed_probes": 5,
+  "expected_probes": 5,
+  "generation_args": {
+    "Iteration": 8000,
+    "batch_real": 128,
+    "beta": 1,
+    "dataset": "SVHN",
+    "distill_aug_strategy": "color_cutout_scale",
+    "feature_batch": 128,
+    "lr_img": 0.0015,
+    "percentage": 1,
+    "prototype_pool_size": 0,
+    "seed": 0,
+    "single_channel": false,
+    "temperature": 0.2
+  },
+  "identity": {
+    "seed": 0,
+    "selection_method": "ours",
+    "signature": "4946cc501f1d5d055bb195b7e3cbe8a3f62cf70da806f9bc3f9c14e7d27594b9"
+  },
+  "labels": 1,
+  "linear_epochs": 100,
+  "mean_percent": 64.45144437615242,
+  "model": "ResNet18",
+  "samples": [
+    {
+      "accuracy_percent": 65.62307928703135,
+      "probe_seed": 0,
+      "result_file": "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_cvpr_color/results/SVHN/ResNet18BN/pt1/simclr/ssl_seed_000/evaluations/SVHN_lbl1_probe0.json",
+      "ssl_seed": 0
+    },
+    {
+      "accuracy_percent": 63.710049170252,
+      "probe_seed": 1,
+      "result_file": "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_cvpr_color/results/SVHN/ResNet18BN/pt1/simclr/ssl_seed_000/evaluations/SVHN_lbl1_probe1.json",
+      "ssl_seed": 0
+    },
+    {
+      "accuracy_percent": 63.58328211432084,
+      "probe_seed": 2,
+      "result_file": "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_cvpr_color/results/SVHN/ResNet18BN/pt1/simclr/ssl_seed_000/evaluations/SVHN_lbl1_probe2.json",
+      "ssl_seed": 0
+    },
+    {
+      "accuracy_percent": 64.95851259987707,
+      "probe_seed": 3,
+      "result_file": "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_cvpr_color/results/SVHN/ResNet18BN/pt1/simclr/ssl_seed_000/evaluations/SVHN_lbl1_probe3.json",
+      "ssl_seed": 0
+    },
+    {
+      "accuracy_percent": 64.38229870928089,
+      "probe_seed": 4,
+      "result_file": "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_cvpr_color/results/SVHN/ResNet18BN/pt1/simclr/ssl_seed_000/evaluations/SVHN_lbl1_probe4.json",
+      "ssl_seed": 0
+    }
+  ],
+  "source": "SVHN",
+  "ssl": "simclr",
+  "ssl_epochs": 2000,
+  "std_ddof": 1,
+  "std_percent": 0.857029788768935,
+  "subset": 1,
+  "target": "SVHN"
+}
