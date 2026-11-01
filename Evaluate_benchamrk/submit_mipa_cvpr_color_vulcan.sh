@@ -1,7 +1,13 @@
 #!/bin/bash
 set -euo pipefail
 bench=/scratch/mmoslem3/MKDT/Evaluate_benchamrk
-run="$bench/mipa_cvpr_color"
+run_name=${MIPA_CVPR_RUN:-mipa_cvpr_color}
+[[ ${1:-} != --worker ]] || run_name=${4:-mipa_cvpr_color}
+[[ $run_name == mipa_cvpr_color || $run_name == mipa_cvpr_color_crop || $run_name == mipa_cvpr_color_crop_lr0p001 ]] || exit 2
+run="$bench/$run_name"
+prefix=cvpr
+[[ $run_name != mipa_cvpr_color_crop ]] || prefix=cvprcrop
+[[ $run_name != mipa_cvpr_color_crop_lr0p001 ]] || prefix=cvprc001
 if [[ ${1:-} == --worker ]]; then
     : "${SLURM_JOB_ID:?Submit through Slurm}"
     module --force purge
@@ -19,8 +25,13 @@ dry=0
 [[ ${1:-} != --dry-run ]] || dry=1
 cluster=${MIPA_CVPR_CLUSTER:-vulcan}
 [[ $cluster == vulcan || $cluster == killarney ]] || exit 2
+gpu=l40s
+if [[ $run_name == mipa_cvpr_color_crop_lr0p001 ]]; then
+    [[ $cluster == killarney ]] || { echo 'The LR 0.001 H100 batch is for Killarney.' >&2; exit 2; }
+    gpu=h100
+fi
 [[ $(scontrol show config | awk '$1=="ClusterName" {print $3}') == "$cluster" ]] || { echo "Run this launcher on $cluster." >&2; exit 2; }
-[[ $(sinfo -h -o '%G' --Node | sort -u) == *gpu:l40s:* ]] || exit 2
+[[ $(sinfo -h -o '%G' --Node | sort -u) == *"gpu:$gpu:"* ]] || { echo "Full $gpu GPU type not found on $cluster." >&2; exit 2; }
 accounts=$(sacctmgr -nP show assoc user=mmoslem3 format=Account)
 requested_account=aip-boyuwang
 [[ $cluster != killarney ]] || requested_account=aip-yiweilu
@@ -34,7 +45,7 @@ logs="$run/logs"
 receipt="$run/submitted.tsv"
 if [[ $cluster == killarney ]]; then
     for file in "$run/manifest.json" "$run/snapshot/method1_cvpr.py" "$run/snapshot/worker.py"; do
-        [[ -s $file ]] || { echo "Sync mipa_cvpr_color/manifest.json and mipa_cvpr_color/snapshot/ from Vulcan first: missing $file" >&2; exit 2; }
+        [[ -s $file ]] || { echo "Sync $run_name/manifest.json and $run_name/snapshot/ from Vulcan first: missing $file" >&2; exit 2; }
     done
     logs="$run/logs/killarney"
     receipt="$run/submitted_killarney.tsv"
@@ -67,7 +78,7 @@ submit() {
     [[ -z $parent ]] || dependency=("--dependency=afterok:$parent" --kill-on-invalid-dep=yes)
     job=DRY_RUN
     if (( ! dry )); then
-        job=$(sbatch --parsable --job-name="$name" --account="$account" --nodes=1 --ntasks=1 --cpus-per-task=1 --mem="$memory" --gres=gpu:l40s:1 --time="$wall" --chdir="$bench" --output="$logs/%x-%j.out" --error="$logs/%x-%j.err" "${dependency[@]}" "$bench/submit_mipa_cvpr_color_vulcan.sh" --worker "$manifest" "$stage")
+        job=$(sbatch --parsable --job-name="$name" --account="$account" --nodes=1 --ntasks=1 --cpus-per-task=1 --mem="$memory" --gres="gpu:$gpu:1" --time="$wall" --chdir="$bench" --output="$logs/%x-%j.out" --error="$logs/%x-%j.err" "${dependency[@]}" "$bench/submit_mipa_cvpr_color_vulcan.sh" --worker "$manifest" "$stage" "$run_name")
         job=${job%%;*}
         [[ $job =~ ^[0-9]+$ ]] || exit 2
         printf '%s\t%s\t%s\t%s\t%s\t%s\n' "$name" "$job" "$account" "$wall" "$stage" "${parent:--}" >> "$receipt"
@@ -81,9 +92,9 @@ while IFS=$'\t' read -r unit account memory generation_seconds evaluation_second
     [[ -n $unit ]] || continue
     parent=
     if (( generation_seconds > 0 )); then
-        submit "cvprg_$unit" "$account" "$memory" "$generation_seconds" "$manifest" generation
+        submit "${prefix}g_$unit" "$account" "$memory" "$generation_seconds" "$manifest" generation
         parent=$REPLY
     fi
-    submit "cvpre_$unit" "$account" "$memory" "$evaluation_seconds" "$manifest" evaluation "$parent"
+    submit "${prefix}e_$unit" "$account" "$memory" "$evaluation_seconds" "$manifest" evaluation "$parent"
 done <<< "$plan"
 echo "Receipt: $receipt"

@@ -186,7 +186,7 @@ def main():
     assert args.prototype_pool_size == 0 or args.prototype_pool_size >= 2, 'prototype_pool_size must be 0 or at least 2'
     if args.distill_aug_strategy is None:
         args.distill_aug_strategy = 'color_crop_cutout_scale' if args.dataset == 'SVHN' else 'color_crop_cutout_flip_scale_rotate'
-    args.distill_aug_strategy = 'color_cutout_scale'
+    args.distill_aug_strategy = 'color_crop_cutout_scale'
     teacher_folder = {'FashionMNIST': 'fashionmnist/full/checkpoints','SVHN': 'digits_simclr/checkpoints'}.get(args.dataset, 'full_ssl_checkpoints_1000ep_3seeds')
     teacher_path = ROOT / 'Evaluate_benchamrk' / teacher_folder
     teacher_seed = 1 if args.dataset == 'TinyImageNet' else 0

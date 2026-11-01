@@ -1,0 +1,67 @@
+{
+  "complete": true,
+  "completed_probes": 5,
+  "expected_probes": 5,
+  "generation_args": {
+    "Iteration": 8000,
+    "batch_real": 128,
+    "beta": 1,
+    "dataset": "CIFAR100",
+    "distill_aug_strategy": "color_crop_cutout_scale",
+    "feature_batch": 128,
+    "lr_img": 0.0015,
+    "percentage": 1,
+    "prototype_pool_size": 0,
+    "seed": 0,
+    "single_channel": false,
+    "temperature": 0.2
+  },
+  "identity": {
+    "seed": 0,
+    "selection_method": "ours",
+    "signature": "ef01a6e6133756ef14a75f14230797bd9e3cc527ee4e6c37ae8d44194101f1db"
+  },
+  "labels": 1,
+  "linear_epochs": 100,
+  "mean_percent": 13.76,
+  "model": "ResNet18",
+  "samples": [
+    {
+      "accuracy_percent": 14.23,
+      "probe_seed": 0,
+      "result_file": "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_cvpr_color_crop/results/CIFAR100/ResNet18BN/pt1/simclr/ssl_seed_000/evaluations/CIFAR100_lbl1_probe0.json",
+      "ssl_seed": 0
+    },
+    {
+      "accuracy_percent": 13.8,
+      "probe_seed": 1,
+      "result_file": "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_cvpr_color_crop/results/CIFAR100/ResNet18BN/pt1/simclr/ssl_seed_000/evaluations/CIFAR100_lbl1_probe1.json",
+      "ssl_seed": 0
+    },
+    {
+      "accuracy_percent": 13.37,
+      "probe_seed": 2,
+      "result_file": "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_cvpr_color_crop/results/CIFAR100/ResNet18BN/pt1/simclr/ssl_seed_000/evaluations/CIFAR100_lbl1_probe2.json",
+      "ssl_seed": 0
+    },
+    {
+      "accuracy_percent": 14.03,
+      "probe_seed": 3,
+      "result_file": "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_cvpr_color_crop/results/CIFAR100/ResNet18BN/pt1/simclr/ssl_seed_000/evaluations/CIFAR100_lbl1_probe3.json",
+      "ssl_seed": 0
+    },
+    {
+      "accuracy_percent": 13.37,
+      "probe_seed": 4,
+      "result_file": "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_cvpr_color_crop/results/CIFAR100/ResNet18BN/pt1/simclr/ssl_seed_000/evaluations/CIFAR100_lbl1_probe4.json",
+      "ssl_seed": 0
+    }
+  ],
+  "source": "CIFAR100",
+  "ssl": "simclr",
+  "ssl_epochs": 2000,
+  "std_ddof": 1,
+  "std_percent": 0.3871692136521192,
+  "subset": 1,
+  "target": "CIFAR100"
+}

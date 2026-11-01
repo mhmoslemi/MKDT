@@ -1,0 +1,24 @@
+Loaded fixed teacher seed 1: /scratch/mmoslem3/MKDT/Evaluate_benchamrk/full_ssl_checkpoints_1000ep_3seeds/TinyImageNet/ResNet18/full/pt100/simclr/seed_001/encoder.pt
+Initializing 2000 synthetic images from the Random-baseline training images (seed=0)...
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_cvpr_color_crop/TinyImageNet/ResNet18BN/pt2/res_IIC_TinyImageNet_ResNet18BN_2percent_final.pt (iteration 0/6000)
+Hyper-parameters: 
+ {'dataset': 'TinyImageNet', 'percentage': 2.0, 'data_path': '/scratch/mmoslem3/data', 'device': 'cuda', 'seed': 0, 'single_channel': False, 'Iteration': 6000, 'lr_img': 0.0015, 'batch_real': 128, 'temperature': 0.2, 'beta': 1.0, 'prototype_pool_size': 0, 'distill_aug_strategy': 'color_crop_cutout_scale', 'save_path': '/scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_cvpr_color_crop/TinyImageNet/ResNet18BN/pt2', 'resume': True, 'save_every': 500, 'feature_batch': 128}
+Objective: negative beta-weighted bipartite mutual information, beta=1, frozen teacher seed 1, pool sizes=[2000].
+[2026-10-31 21:50:07] distillation begins
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_cvpr_color_crop/TinyImageNet/ResNet18BN/pt2/res_IIC_TinyImageNet_ResNet18BN_2percent_final.pt (iteration 1/6000)
+[2026-10-31 21:53:16] iter = 00100, loss = -0.220624, pixel drift RMS = 2.07689/255
+[2026-10-31 21:56:21] iter = 00200, loss = -0.208668, pixel drift RMS = 3.29378/255
+[2026-10-31 21:59:25] iter = 00300, loss = -0.061469, pixel drift RMS = 4.12454/255
+[2026-10-31 22:02:30] iter = 00400, loss = -0.046522, pixel drift RMS = 4.79465/255
+[2026-10-31 22:05:35] iter = 00500, loss = -0.262976, pixel drift RMS = 5.34723/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_cvpr_color_crop/TinyImageNet/ResNet18BN/pt2/res_IIC_TinyImageNet_ResNet18BN_2percent_final.pt (iteration 500/6000)
+[2026-10-31 22:08:42] iter = 00600, loss = -0.273525, pixel drift RMS = 5.83464/255
+[2026-10-31 22:11:46] iter = 00700, loss = -0.293796, pixel drift RMS = 6.26960/255
+[2026-10-31 22:14:50] iter = 00800, loss = -0.282821, pixel drift RMS = 6.64369/255
+[2026-10-31 22:17:54] iter = 00900, loss = -0.080709, pixel drift RMS = 6.98022/255
+[2026-10-31 22:20:59] iter = 01000, loss = -0.180277, pixel drift RMS = 7.28879/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_cvpr_color_crop/TinyImageNet/ResNet18BN/pt2/res_IIC_TinyImageNet_ResNet18BN_2percent_final.pt (iteration 1000/6000)
+[2026-10-31 22:24:06] iter = 01100, loss = -0.055133, pixel drift RMS = 7.56976/255
+[2026-10-31 22:27:11] iter = 01200, loss = -0.564667, pixel drift RMS = 7.82882/255
+[2026-10-31 22:30:15] iter = 01300, loss = -0.429995, pixel drift RMS = 8.07856/255
+[2026-10-31 22:33:19] iter = 01400, loss = -0.281765, pixel drift RMS = 8.30999/255
