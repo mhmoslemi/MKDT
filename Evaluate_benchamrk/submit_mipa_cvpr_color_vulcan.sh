@@ -3,11 +3,12 @@ set -euo pipefail
 bench=/scratch/mmoslem3/MKDT/Evaluate_benchamrk
 run_name=${MIPA_CVPR_RUN:-mipa_cvpr_color}
 [[ ${1:-} != --worker ]] || run_name=${4:-mipa_cvpr_color}
-[[ $run_name == mipa_cvpr_color || $run_name == mipa_cvpr_color_crop || $run_name == mipa_cvpr_color_crop_lr0p001 ]] || exit 2
+[[ $run_name == mipa_cvpr_color || $run_name == mipa_cvpr_color_crop || $run_name == mipa_cvpr_color_crop_lr0p001 || $run_name == mipa_cvpr_color_crop_lr0p001_pool100 ]] || exit 2
 run="$bench/$run_name"
 prefix=cvpr
 [[ $run_name != mipa_cvpr_color_crop ]] || prefix=cvprcrop
 [[ $run_name != mipa_cvpr_color_crop_lr0p001 ]] || prefix=cvprc001
+[[ $run_name != mipa_cvpr_color_crop_lr0p001_pool100 ]] || prefix=cvprp100
 if [[ ${1:-} == --worker ]]; then
     : "${SLURM_JOB_ID:?Submit through Slurm}"
     module --force purge
@@ -26,7 +27,7 @@ dry=0
 cluster=${MIPA_CVPR_CLUSTER:-vulcan}
 [[ $cluster == vulcan || $cluster == killarney ]] || exit 2
 gpu=l40s
-if [[ $run_name == mipa_cvpr_color_crop_lr0p001 ]]; then
+if [[ $run_name == mipa_cvpr_color_crop_lr0p001 || $run_name == mipa_cvpr_color_crop_lr0p001_pool100 ]]; then
     [[ $cluster == killarney ]] || { echo 'The LR 0.001 H100 batch is for Killarney.' >&2; exit 2; }
     gpu=h100
 fi
