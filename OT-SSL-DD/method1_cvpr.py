@@ -135,6 +135,7 @@ def main():
         args.distill_aug_strategy = 'color_crop_cutout_scale' if args.dataset == 'SVHN' else 'color_crop_cutout_flip_scale_rotate'
     teacher_folder = {'FashionMNIST': 'fashionmnist/full/checkpoints','SVHN': 'digits_simclr/checkpoints'}.get(args.dataset, 'full_ssl_checkpoints_1000ep_3seeds')
     teacher_path = ROOT / 'Evaluate_benchamrk' / teacher_folder
+    teacher_seed = 1 if args.dataset == 'TinyImageNet' else 0
 
     output = Path(args.save_path)
     output.mkdir(parents=True, exist_ok=True)
@@ -144,7 +145,7 @@ def main():
     saved = None
     if args.resume and result_path.exists():
         saved = torch.load(result_path, map_location='cpu', weights_only=True)
-        assert (saved.get('init') == 'random' and saved.get('teacher_seed') == 0 and saved.get('run_args') == run_args), 'Incompatible resume checkpoint'
+        assert (saved.get('init') == 'random' and saved.get('teacher_seed') == teacher_seed and saved.get('run_args') == run_args), 'Incompatible resume checkpoint'
         assert 0 <= saved['iteration'] <= args.Iteration, 'Invalid saved iteration'
         if saved.get('complete'):
             print('SKIP completed: %s (iteration %d)' % (result_path, saved['iteration']), flush=True)
@@ -164,7 +165,7 @@ def main():
     channel, im_size = 3, ((64, 64) if args.dataset == 'TinyImageNet' else (32, 32))
     dst_train = data.ImageView(raw_train, transforms.Compose([transforms.ToTensor(), transforms.Normalize(mean, std)]))
     num_syn = int(len(dst_train) * args.percentage / 100)
-    teacher_args = argparse.Namespace(**vars(args), model='ResNet18BN', teacher_source='pretrained', teacher_seed=0, teacher_ssl='simclr', teacher_path=str(teacher_path))
+    teacher_args = argparse.Namespace(**vars(args), model='ResNet18BN', teacher_source='pretrained', teacher_seed=teacher_seed, teacher_ssl='simclr', teacher_path=str(teacher_path))
     teacher = load_teacher(teacher_args, mean, std, im_size)
     encoder = frozen_embedder(teacher)
 
@@ -231,7 +232,7 @@ def main():
             'rng': common.rng_state(), 'numpy_rng': (numpy_rng[0], numpy_rng[1].tolist(), *numpy_rng[2:]),
             'objective_rng': objective_rng.bit_generator.state, 'data_rng': data_rng.get_state(),
             'real_order': real_order, 'real_position': real_position,
-            'dsa': True, 'teacher_source': 'pretrained', 'teacher_seed': 0,
+            'dsa': True, 'teacher_source': 'pretrained', 'teacher_seed': teacher_seed,
             'seed': args.seed, 'model': 'ResNet18BN',
             'loss_history': torch.tensor(loss_history, dtype=torch.float64),
             'iic_params': {'tau': args.temperature,
@@ -247,7 +248,7 @@ def main():
     del saved
 
     print('Hyper-parameters: \n', args.__dict__)
-    print('Objective: negative beta-weighted bipartite mutual information, beta=%g, frozen teacher seed 0.' % args.beta, flush=True)
+    print('Objective: negative beta-weighted bipartite mutual information, beta=%g, frozen teacher seed %d.' % (args.beta, teacher_seed), flush=True)
     print('%s distillation begins' % get_time(), flush=True)
 
     for iteration in range(start_iteration + 1, args.Iteration + 1):
@@ -276,12 +277,13 @@ def main():
 
         with torch.no_grad():
             image_syn.copy_(torch.maximum(torch.minimum(image_syn, pixel_max), pixel_min))
-            drift = ((image_syn - image_syn_initial) * diag_std * 255).square().mean().sqrt().item()
 
         objective = loss.item()
         loss_history.append(objective)
         del loss, features_u_real, features_v_real, features_u_syn, features_v_syn
         if iteration % 25 == 0:
+            with torch.no_grad():
+                drift = ((image_syn - image_syn_initial) * diag_std * 255).square().mean().sqrt().item()
             print('%s iter = %05d, loss = %.6f, pixel drift RMS = %.5f/255' % (get_time(), iteration, objective, drift), flush=True)
         if iteration == 1 or iteration == args.Iteration:
             grid_path = output / (png_name % iteration)
