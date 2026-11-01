@@ -19,7 +19,7 @@ if (!fs.existsSync(manifestFile)) {
             return [replacement,hash(replacement)];
         }));
         const {manifest:oldManifest,...oldJob} = old;
-        const job = {...oldJob,account:'aip-yiweilu',gpu:'h100',generation_args,code_hashes,
+        const job = {...oldJob,account:'aip-yiweilu',gpu:'l40s',generation_args,code_hashes,
             synthetic_dir:path.join(root,'OT-SSL-DD/ours_syntehtic_cvpr_color_crop_lr0p001_pool100',dataset,'ResNet18BN','pt'+percentage),
             evaluation_dir:path.join(here,'results',dataset,'ResNet18BN','pt'+percentage,'simclr/ssl_seed_000')};
         assert.notEqual(job.synthetic_dir,old.synthetic_dir);
@@ -35,7 +35,7 @@ const jobs = read(manifestFile).jobs;
 assert.equal(jobs.length,12);
 for (const job of jobs) {
     assert.equal(job.account,'aip-yiweilu');
-    assert.equal(job.gpu,'h100');
+    assert.equal(job.gpu,'l40s');
     assert.equal(job.generation_args.lr_img,0.001);
     assert.equal(job.generation_args.prototype_pool_size,100);
     assert.equal(job.generation_args.distill_aug_strategy,'color_crop_cutout_scale');

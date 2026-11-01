@@ -28,8 +28,7 @@ cluster=${MIPA_CVPR_CLUSTER:-vulcan}
 [[ $cluster == vulcan || $cluster == killarney ]] || exit 2
 gpu=l40s
 if [[ $run_name == mipa_cvpr_color_crop_lr0p001 || $run_name == mipa_cvpr_color_crop_lr0p001_pool100 ]]; then
-    [[ $cluster == killarney ]] || { echo 'The LR 0.001 H100 batch is for Killarney.' >&2; exit 2; }
-    gpu=h100
+    [[ $cluster == killarney ]] || { echo 'The LR 0.001 L40S batches are for Killarney.' >&2; exit 2; }
 fi
 [[ $(scontrol show config | awk '$1=="ClusterName" {print $3}') == "$cluster" ]] || { echo "Run this launcher on $cluster." >&2; exit 2; }
 [[ $(sinfo -h -o '%G' --Node | sort -u) == *"gpu:$gpu:"* ]] || { echo "Full $gpu GPU type not found on $cluster." >&2; exit 2; }
@@ -91,6 +90,11 @@ submit() {
 }
 while IFS=$'\t' read -r unit account memory generation_seconds evaluation_seconds manifest; do
     [[ -n $unit ]] || continue
+    # Retain H100 chains 7078390 -> 7078391 and 7078402 -> 7078403; do not replace either stage.
+    if [[ $cluster == killarney && $run_name == mipa_cvpr_color_crop_lr0p001 && ( $unit == CIFAR10_pt0p2 || $unit == TinyImageNet_pt0p2 ) ]]; then
+        echo "KEEP existing H100 generation/evaluation: $unit"
+        continue
+    fi
     parent=
     if (( generation_seconds > 0 )); then
         submit "${prefix}g_$unit" "$account" "$memory" "$generation_seconds" "$manifest" generation
