@@ -455,7 +455,7 @@ def main():
     parser.add_argument('--batch_real', type=int, default=256)
 
     parser.add_argument('--temperature', type=float, default=0.2, help='Softmax temperature for prototype assignment')
-    parser.add_argument('--assignment_filter', action='store_true', help='Exclude real images unless both branches pass the normalized KL-to-uniform threshold')
+    parser.add_argument('-whats ', action='store_true', help='Exclude real images unless both branches pass the normalized KL-to-uniform threshold')
     parser.add_argument('--assignment_threshold', type=float, default=0.05, help='Minimum KL(assignment || uniform) / log(num_syn) in both branches, in [0,1]; ignored unless assignment_filter is enabled')
     parser.add_argument('--similarity', choices=['cosine', 'l1', 'l2', 'mmd', 'mmd-dist', 'dm', 'energy', 'whitened-cosine', 'sinkhorn', 'd3s'], default='cosine', help='Similarity inside softmax assignments; d3s always uses middle-layer full Gaussian KL plus final cosine; every option keeps MI')
     parser.add_argument('--feature_layers', choices=['last', 'all'], default='last', help='For non-d3s similarities: last uses existing final features; all adds separately normalized ResNet layer2/layer3 channel mean+std')

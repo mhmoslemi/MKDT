@@ -1,0 +1,60 @@
+{
+  "source": "CIFAR100",
+  "percentage": 0.2,
+  "account": "aip-yiweilu",
+  "iic_run": "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/iic_init/runs/CIFAR100_ResNet18_e150_lu_killarney",
+  "data_path": "/scratch/mmoslem3/data",
+  "save_path": "/scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_iic_main_aux_k4_10k",
+  "Iteration": 10000,
+  "cosine_views": 4,
+  "lr_img": 0.001,
+  "batch_real": 128,
+  "temperature": 0.2,
+  "teacher_seed": 0,
+  "ssl_epochs": 2000,
+  "ssl_seed": 0,
+  "probe_seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "labels": [
+    1,
+    5
+  ],
+  "linear_epochs": 100,
+  "code_hashes": {
+    "Evaluate_benchamrk/common.py": "67fcd33f581a34a7f764431b6761ac120cb080d4b2ea0d69b95074565a224f8b",
+    "Evaluate_benchamrk/data.py": "befcf535679e449b3544ae9b8578325e53f7995179591042315d8937cd55f6d9",
+    "Evaluate_benchamrk/evaluate.py": "2b2162a56878f48ade39d2b80d4316511f20a72d29eaa2cf70fe023d88ad722f",
+    "Evaluate_benchamrk/iic_init/distill_main_aux.py": "a09f53296b5c08185dba5fc01a9a90a07c5f20022e48279bcc2bfd5c77afa135",
+    "Evaluate_benchamrk/iic_init/main_aux_plan.js": "e37690c9215484a45b038e8e9045c8e4a907ababafbf59e034e652d8d5ace2d5",
+    "Evaluate_benchamrk/mipa_multilayer/worker.py": "f9382fe87dfeb40cfe7e7d34b4510d1fd22f781ae41036e7348ef37fd4142227",
+    "Evaluate_benchamrk/plan.py": "c6d9bd33b36d1d235a2f6af291b3a0a82187b1eea3a10b90a7f57317d8eee83e",
+    "Evaluate_benchamrk/protocol.json": "088b30569317c167f7f2a77a1f889d593b620ea31bdc93c5120b183c71e4a570",
+    "Evaluate_benchamrk/run.py": "1c2b8d29ab47966f1178c9f04b3e1b7c72bd2f55fb65a32c32c77c3730faf45b",
+    "Evaluate_benchamrk/submit_iic_main_aux_k4_vulcan.sh": "76106caf71e77e37f3b7893b202da56a71c23190d425a31c83431dd3cca72cc6",
+    "Evaluate_benchamrk/test_protocol.py": "f018562437924ced1d890343a4e898f10e48c50a63920d337031194671c4e43d",
+    "Evaluate_benchamrk/train_ssl.py": "3670781eb0f0f838ced6cc7ca9775791d4d52683fe25e489239f012937dc1a79",
+    "OT-SSL-DD/dd_teachers.py": "1ebc40b7633a29f8b2e30757b8edb1b9523ce7b93b33422e17d0c68fcca9fcff",
+    "OT-SSL-DD/dm_dsa.py": "6f2a8dfe7e303d947f66619a7ceca826182bf21ba0f2074a5e2b051c81e97884",
+    "OT-SSL-DD/eval.py": "470992ec49ca9a062d1f491434292319b61508e68618673a5aa7852a6fc3ca86",
+    "OT-SSL-DD/method1.py": "dda193b6768f500656b2fc3cef74603ff650646762ed3d3acec27778283e79f8",
+    "OT-SSL-DD/networks.py": "36fc42deb28aac8487b2cc2ea012e277691b56682cb2a7bcf0817976b6a3aa62",
+    "OT-SSL-DD/utils.py": "a6b914119f89c5ac26ee1b0b5e3f4f05f1a8f5665dab9c5f78f879a00380d0b1",
+    "benchmarks/downstream_data.py": "081fe26e5dc81c96ce8e8ffe5a412302663de4a9d095684c5b37e7c615b4a6fd",
+    "networks.py": "0c15ff3ef11f21df752e2a9a17851ab8c8a52ddc3969380682ea8bfcec1968fc"
+  },
+  "input_hashes": {
+    "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/iic_init/runs/CIFAR100_ResNet18_e150_lu_killarney/config.json": "8e27e11d200376a8b1766d8fe9538d2d0fccf631f62d3fd15805d1c8ad68b131",
+    "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/iic_init/runs/CIFAR100_ResNet18_e150_lu_killarney/complete.json": "e3b5d74e82a324c5fdac7a8b066e2299de3398de29c98ae5ad9ee5fffe0297cf",
+    "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/iic_init/runs/CIFAR100_ResNet18_e150_lu_killarney/clusters.pt": "d6c801683018d87656f365976d3535102641ec2a2788d7d29c542f35521c3ec2",
+    "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/full_ssl_checkpoints_1000ep_3seeds/CIFAR100/ResNet18/full/pt100/simclr/seed_000/encoder.pt": "d094e321a0d4c57b403044dad0969c2a63a3474e28e3586fc58551856a79018c",
+    "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/full_ssl_checkpoints_1000ep_3seeds/CIFAR100/ResNet18/full/pt100/simclr/seed_000/ssl_complete.json": "551cd953c7da8bb9dd51731307854330902c8550fa4cec8cf93016fe30652e12"
+  },
+  "generation_seconds": 1620,
+  "evaluation_seconds": 780,
+  "timing_basis": "Generation: four times measured one-view p95 update cost; evaluation: completed matching SSL/probe p95 times; each stage adds 120 seconds for setup/buffer"
+}

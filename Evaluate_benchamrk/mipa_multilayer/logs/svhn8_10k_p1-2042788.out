@@ -1,0 +1,313 @@
+Loaded fixed teacher seed 0: /scratch/mmoslem3/MKDT/Evaluate_benchamrk/digits_simclr/checkpoints/SVHN/ResNet18/full/pt100/simclr/seed_000/encoder.pt
+Initializing 732 synthetic images from the Random-baseline training images (seed=0)...
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_svhn_cosine8_10k/SVHN_cos8_10k_pt1_20261031T063558Z/SVHN/ResNet18BN/pt1/res_IIC_SVHN_ResNet18BN_1percent_final.pt (iteration 0/10000)
+Hyper-parameters: 
+ {'dataset': 'SVHN', 'percentage': 1.0, 'data_path': '/scratch/mmoslem3/data', 'device': 'cuda', 'seed': 0, 'init': 'random', 'single_channel': False, 'Iteration': 10000, 'lr_img': 0.001, 'batch_real': 128, 'temperature': 0.2, 'assignment_filter': False, 'assignment_threshold': 0.05, 'similarity': 'cosine', 'feature_layers': 'last', 'd3s_weight': 1.0, 'd3s_reg': 0.001, 'mmd_sigma': 1.0, 'cosine_views': 8, 'mmd_views': 2, 'dm_views': 2, 'energy_views': 2, 'sinkhorn_views': 2, 'sinkhorn_epsilon': 0.1, 'sinkhorn_iterations': 50, 'whitening_reg': 0.001, 'disp_weight': 0.0, 'pair_weight': 0.0, 'num_random_networks': 1, 'random_models': 'ResNet18BN', 'distill_aug_strategy': 'color_crop_cutout_flip_scale_rotate', 'dsa': True, 'distill_aug_mode': 'M', 'distill_aug_backend': 'dsa', 'simclr_compose_probability': 0.5, 'teacher_source': 'pretrained', 'teacher_seed': [0], 'teacher_ssl': 'simclr', 'teacher_path': '/scratch/mmoslem3/MKDT/Evaluate_benchamrk/digits_simclr/checkpoints', 'model': 'ResNet18BN', 'ssl_method': 'simclr', 'eval_mode': 'S', 'num_eval': 0, 'epoch_eval_train': 10000, 'label_percentage': 1.0, 'lr_linear': 0.1, 'batch_linear': 256, 'save_path': '/scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_svhn_cosine8_10k/SVHN_cos8_10k_pt1_20261031T063558Z/SVHN/ResNet18BN/pt1', 'resume': True, 'save_every': 500, 'feature_batch': 128}
+P_net support: ResNet18BN
+Objective: sum teacher losses (-MI + 0 * displacement + 0 * pair_similarity), averaged over 1 augmentation draw(s).
+[2026-10-31 00:41:18] distillation begins
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_svhn_cosine8_10k/SVHN_cos8_10k_pt1_20261031T063558Z/SVHN/ResNet18BN/pt1/res_IIC_SVHN_ResNet18BN_1percent_final.pt (iteration 1/10000)
+[2026-10-31 00:46:39] iter = 00200, neg_MI = -0.023799, displacement = 0.000038, pair_similarity = 0.000024, total_loss = -0.023799, pixel drift RMS = 2.30671/255
+[2026-10-31 00:51:57] iter = 00400, neg_MI = -0.036294, displacement = 0.000028, pair_similarity = 0.000021, total_loss = -0.036294, pixel drift RMS = 3.54724/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_svhn_cosine8_10k/SVHN_cos8_10k_pt1_20261031T063558Z/SVHN/ResNet18BN/pt1/res_IIC_SVHN_ResNet18BN_1percent_final.pt (iteration 500/10000)
+[2026-10-31 00:57:15] iter = 00600, neg_MI = -0.024848, displacement = 0.000074, pair_similarity = 0.000073, total_loss = -0.024848, pixel drift RMS = 4.45774/255
+[2026-10-31 01:02:34] iter = 00800, neg_MI = -0.049986, displacement = 0.000039, pair_similarity = 0.000031, total_loss = -0.049986, pixel drift RMS = 5.12287/255
+[2026-10-31 01:07:52] iter = 01000, neg_MI = -0.030577, displacement = 0.000025, pair_similarity = 0.000006, total_loss = -0.030577, pixel drift RMS = 5.65808/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_svhn_cosine8_10k/SVHN_cos8_10k_pt1_20261031T063558Z/SVHN/ResNet18BN/pt1/res_IIC_SVHN_ResNet18BN_1percent_final.pt (iteration 1000/10000)
+[2026-10-31 01:13:10] iter = 01200, neg_MI = -0.050505, displacement = 0.000026, pair_similarity = 0.000014, total_loss = -0.050505, pixel drift RMS = 6.12213/255
+[2026-10-31 01:18:27] iter = 01400, neg_MI = -0.039332, displacement = 0.000048, pair_similarity = 0.000017, total_loss = -0.039332, pixel drift RMS = 6.54094/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_svhn_cosine8_10k/SVHN_cos8_10k_pt1_20261031T063558Z/SVHN/ResNet18BN/pt1/res_IIC_SVHN_ResNet18BN_1percent_final.pt (iteration 1500/10000)
+[2026-10-31 01:23:44] iter = 01600, neg_MI = -0.041877, displacement = 0.000033, pair_similarity = 0.000025, total_loss = -0.041877, pixel drift RMS = 6.89638/255
+[2026-10-31 01:29:01] iter = 01800, neg_MI = -0.039434, displacement = 0.000067, pair_similarity = 0.000080, total_loss = -0.039434, pixel drift RMS = 7.21147/255
+[2026-10-31 01:34:17] iter = 02000, neg_MI = -0.037747, displacement = 0.000060, pair_similarity = 0.000058, total_loss = -0.037747, pixel drift RMS = 7.52175/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_svhn_cosine8_10k/SVHN_cos8_10k_pt1_20261031T063558Z/SVHN/ResNet18BN/pt1/res_IIC_SVHN_ResNet18BN_1percent_final.pt (iteration 2000/10000)
+[2026-10-31 01:39:37] iter = 02200, neg_MI = -0.035199, displacement = 0.000071, pair_similarity = 0.000142, total_loss = -0.035199, pixel drift RMS = 7.80767/255
+[2026-10-31 01:44:57] iter = 02400, neg_MI = -0.028181, displacement = 0.000073, pair_similarity = 0.000054, total_loss = -0.028181, pixel drift RMS = 8.07260/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_svhn_cosine8_10k/SVHN_cos8_10k_pt1_20261031T063558Z/SVHN/ResNet18BN/pt1/res_IIC_SVHN_ResNet18BN_1percent_final.pt (iteration 2500/10000)
+[2026-10-31 01:50:17] iter = 02600, neg_MI = -0.030886, displacement = 0.000040, pair_similarity = 0.000011, total_loss = -0.030886, pixel drift RMS = 8.31283/255
+[2026-10-31 01:55:37] iter = 02800, neg_MI = -0.051142, displacement = 0.000037, pair_similarity = 0.000034, total_loss = -0.051142, pixel drift RMS = 8.54933/255
+[2026-10-31 02:00:56] iter = 03000, neg_MI = -0.051564, displacement = 0.000019, pair_similarity = 0.000007, total_loss = -0.051564, pixel drift RMS = 8.76851/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_svhn_cosine8_10k/SVHN_cos8_10k_pt1_20261031T063558Z/SVHN/ResNet18BN/pt1/res_IIC_SVHN_ResNet18BN_1percent_final.pt (iteration 3000/10000)
+[2026-10-31 02:06:15] iter = 03200, neg_MI = -0.040172, displacement = 0.000063, pair_similarity = 0.000111, total_loss = -0.040172, pixel drift RMS = 8.97779/255
+[2026-10-31 02:11:35] iter = 03400, neg_MI = -0.034039, displacement = 0.000112, pair_similarity = 0.000200, total_loss = -0.034039, pixel drift RMS = 9.18184/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_svhn_cosine8_10k/SVHN_cos8_10k_pt1_20261031T063558Z/SVHN/ResNet18BN/pt1/res_IIC_SVHN_ResNet18BN_1percent_final.pt (iteration 3500/10000)
+[2026-10-31 02:16:58] iter = 03600, neg_MI = -0.034801, displacement = 0.000057, pair_similarity = 0.000066, total_loss = -0.034801, pixel drift RMS = 9.37232/255
+[2026-10-31 02:22:21] iter = 03800, neg_MI = -0.029866, displacement = 0.000069, pair_similarity = 0.000061, total_loss = -0.029866, pixel drift RMS = 9.55850/255
+[2026-10-31 02:27:44] iter = 04000, neg_MI = -0.041586, displacement = 0.000031, pair_similarity = 0.000005, total_loss = -0.041586, pixel drift RMS = 9.73629/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_svhn_cosine8_10k/SVHN_cos8_10k_pt1_20261031T063558Z/SVHN/ResNet18BN/pt1/res_IIC_SVHN_ResNet18BN_1percent_final.pt (iteration 4000/10000)
+[2026-10-31 02:33:04] iter = 04200, neg_MI = -0.056081, displacement = 0.000026, pair_similarity = 0.000029, total_loss = -0.056081, pixel drift RMS = 9.91178/255
+[2026-10-31 02:38:21] iter = 04400, neg_MI = -0.053316, displacement = 0.000026, pair_similarity = 0.000027, total_loss = -0.053316, pixel drift RMS = 10.07791/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_svhn_cosine8_10k/SVHN_cos8_10k_pt1_20261031T063558Z/SVHN/ResNet18BN/pt1/res_IIC_SVHN_ResNet18BN_1percent_final.pt (iteration 4500/10000)
+[2026-10-31 02:43:39] iter = 04600, neg_MI = -0.039865, displacement = 0.000034, pair_similarity = 0.000012, total_loss = -0.039865, pixel drift RMS = 10.23623/255
+[2026-10-31 02:48:57] iter = 04800, neg_MI = -0.038209, displacement = 0.000054, pair_similarity = 0.000037, total_loss = -0.038209, pixel drift RMS = 10.39171/255
+[2026-10-31 02:54:15] iter = 05000, neg_MI = -0.059764, displacement = 0.000031, pair_similarity = 0.000051, total_loss = -0.059764, pixel drift RMS = 10.54025/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_svhn_cosine8_10k/SVHN_cos8_10k_pt1_20261031T063558Z/SVHN/ResNet18BN/pt1/res_IIC_SVHN_ResNet18BN_1percent_final.pt (iteration 5000/10000)
+[2026-10-31 02:59:34] iter = 05200, neg_MI = -0.045139, displacement = 0.000052, pair_similarity = 0.000064, total_loss = -0.045139, pixel drift RMS = 10.69171/255
+[2026-10-31 03:04:51] iter = 05400, neg_MI = -0.037318, displacement = 0.000048, pair_similarity = 0.000055, total_loss = -0.037318, pixel drift RMS = 10.83303/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_svhn_cosine8_10k/SVHN_cos8_10k_pt1_20261031T063558Z/SVHN/ResNet18BN/pt1/res_IIC_SVHN_ResNet18BN_1percent_final.pt (iteration 5500/10000)
+[2026-10-31 03:10:09] iter = 05600, neg_MI = -0.031745, displacement = 0.000057, pair_similarity = 0.000043, total_loss = -0.031745, pixel drift RMS = 10.97510/255
+[2026-10-31 03:15:27] iter = 05800, neg_MI = -0.038744, displacement = 0.000060, pair_similarity = 0.000050, total_loss = -0.038744, pixel drift RMS = 11.11385/255
+[2026-10-31 03:20:45] iter = 06000, neg_MI = -0.042753, displacement = 0.000052, pair_similarity = 0.000056, total_loss = -0.042753, pixel drift RMS = 11.24919/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_svhn_cosine8_10k/SVHN_cos8_10k_pt1_20261031T063558Z/SVHN/ResNet18BN/pt1/res_IIC_SVHN_ResNet18BN_1percent_final.pt (iteration 6000/10000)
+[2026-10-31 03:26:03] iter = 06200, neg_MI = -0.043246, displacement = 0.000077, pair_similarity = 0.000113, total_loss = -0.043246, pixel drift RMS = 11.37321/255
+[2026-10-31 03:31:22] iter = 06400, neg_MI = -0.041958, displacement = 0.000021, pair_similarity = 0.000010, total_loss = -0.041958, pixel drift RMS = 11.50050/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_svhn_cosine8_10k/SVHN_cos8_10k_pt1_20261031T063558Z/SVHN/ResNet18BN/pt1/res_IIC_SVHN_ResNet18BN_1percent_final.pt (iteration 6500/10000)
+[2026-10-31 03:36:40] iter = 06600, neg_MI = -0.044457, displacement = 0.000037, pair_similarity = 0.000023, total_loss = -0.044457, pixel drift RMS = 11.62188/255
+[2026-10-31 03:41:58] iter = 06800, neg_MI = -0.037848, displacement = 0.000101, pair_similarity = 0.000440, total_loss = -0.037848, pixel drift RMS = 11.74306/255
+[2026-10-31 03:47:17] iter = 07000, neg_MI = -0.069096, displacement = 0.000040, pair_similarity = 0.000031, total_loss = -0.069096, pixel drift RMS = 11.85769/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_svhn_cosine8_10k/SVHN_cos8_10k_pt1_20261031T063558Z/SVHN/ResNet18BN/pt1/res_IIC_SVHN_ResNet18BN_1percent_final.pt (iteration 7000/10000)
+[2026-10-31 03:52:35] iter = 07200, neg_MI = -0.035934, displacement = 0.000053, pair_similarity = 0.000056, total_loss = -0.035934, pixel drift RMS = 11.97577/255
+[2026-10-31 03:57:53] iter = 07400, neg_MI = -0.030823, displacement = 0.000098, pair_similarity = 0.000325, total_loss = -0.030823, pixel drift RMS = 12.08699/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_svhn_cosine8_10k/SVHN_cos8_10k_pt1_20261031T063558Z/SVHN/ResNet18BN/pt1/res_IIC_SVHN_ResNet18BN_1percent_final.pt (iteration 7500/10000)
+[2026-10-31 04:03:10] iter = 07600, neg_MI = -0.036897, displacement = 0.000041, pair_similarity = 0.000022, total_loss = -0.036897, pixel drift RMS = 12.19615/255
+[2026-10-31 04:08:28] iter = 07800, neg_MI = -0.037685, displacement = 0.000023, pair_similarity = 0.000010, total_loss = -0.037685, pixel drift RMS = 12.31048/255
+[2026-10-31 04:13:46] iter = 08000, neg_MI = -0.036667, displacement = 0.000026, pair_similarity = 0.000012, total_loss = -0.036667, pixel drift RMS = 12.41831/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_svhn_cosine8_10k/SVHN_cos8_10k_pt1_20261031T063558Z/SVHN/ResNet18BN/pt1/res_IIC_SVHN_ResNet18BN_1percent_final.pt (iteration 8000/10000)
+[2026-10-31 04:19:05] iter = 08200, neg_MI = -0.022625, displacement = 0.000135, pair_similarity = 0.000164, total_loss = -0.022625, pixel drift RMS = 12.52480/255
+[2026-10-31 04:24:22] iter = 08400, neg_MI = -0.041134, displacement = 0.000035, pair_similarity = 0.000018, total_loss = -0.041134, pixel drift RMS = 12.62697/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_svhn_cosine8_10k/SVHN_cos8_10k_pt1_20261031T063558Z/SVHN/ResNet18BN/pt1/res_IIC_SVHN_ResNet18BN_1percent_final.pt (iteration 8500/10000)
+[2026-10-31 04:29:41] iter = 08600, neg_MI = -0.041791, displacement = 0.000066, pair_similarity = 0.000206, total_loss = -0.041791, pixel drift RMS = 12.72778/255
+[2026-10-31 04:34:59] iter = 08800, neg_MI = -0.060366, displacement = 0.000042, pair_similarity = 0.000047, total_loss = -0.060366, pixel drift RMS = 12.82905/255
+[2026-10-31 04:40:17] iter = 09000, neg_MI = -0.050994, displacement = 0.000023, pair_similarity = 0.000015, total_loss = -0.050994, pixel drift RMS = 12.92805/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_svhn_cosine8_10k/SVHN_cos8_10k_pt1_20261031T063558Z/SVHN/ResNet18BN/pt1/res_IIC_SVHN_ResNet18BN_1percent_final.pt (iteration 9000/10000)
+[2026-10-31 04:45:35] iter = 09200, neg_MI = -0.049906, displacement = 0.000030, pair_similarity = 0.000006, total_loss = -0.049906, pixel drift RMS = 13.02592/255
+[2026-10-31 04:50:53] iter = 09400, neg_MI = -0.061569, displacement = 0.000035, pair_similarity = 0.000057, total_loss = -0.061569, pixel drift RMS = 13.12368/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_svhn_cosine8_10k/SVHN_cos8_10k_pt1_20261031T063558Z/SVHN/ResNet18BN/pt1/res_IIC_SVHN_ResNet18BN_1percent_final.pt (iteration 9500/10000)
+[2026-10-31 04:56:12] iter = 09600, neg_MI = -0.056063, displacement = 0.000057, pair_similarity = 0.000116, total_loss = -0.056063, pixel drift RMS = 13.21677/255
+[2026-10-31 05:01:30] iter = 09800, neg_MI = -0.056319, displacement = 0.000019, pair_similarity = 0.000009, total_loss = -0.056319, pixel drift RMS = 13.31106/255
+[2026-10-31 05:06:49] iter = 10000, neg_MI = -0.047561, displacement = 0.000017, pair_similarity = 0.000008, total_loss = -0.047561, pixel drift RMS = 13.39728/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_svhn_cosine8_10k/SVHN_cos8_10k_pt1_20261031T063558Z/SVHN/ResNet18BN/pt1/res_IIC_SVHN_ResNet18BN_1percent_final.pt (iteration 10000/10000)
+DONE: /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_svhn_cosine8_10k/SVHN_cos8_10k_pt1_20261031T063558Z/SVHN/ResNet18BN/pt1/res_IIC_SVHN_ResNet18BN_1percent_final.pt
+SSL SVHN/ResNet18/simclr seed=0: {"epoch": 1, "steps": 2, "lr": 0.02108105263157895, "loss": 6.23431921005249, "examples": 512}
+SSL SVHN/ResNet18/simclr seed=0: {"epoch": 200, "steps": 400, "lr": 0.391112344622506, "loss": 5.7874674797058105, "examples": 512}
+SSL SVHN/ResNet18/simclr seed=0: {"epoch": 400, "steps": 800, "lr": 0.36334843446476356, "loss": 5.052257537841797, "examples": 512}
+SSL SVHN/ResNet18/simclr seed=0: {"epoch": 600, "steps": 1200, "lr": 0.31942702709716086, "loss": 4.135005712509155, "examples": 512}
+SSL SVHN/ResNet18/simclr seed=0: {"epoch": 800, "steps": 1600, "lr": 0.2636925780960277, "loss": 3.781142234802246, "examples": 512}
+SSL SVHN/ResNet18/simclr seed=0: {"epoch": 1000, "steps": 2000, "lr": 0.20165802186553888, "loss": 3.376042127609253, "examples": 512}
+SSL SVHN/ResNet18/simclr seed=0: {"epoch": 1200, "steps": 2400, "lr": 0.1394594635510748, "loss": 3.1735750436782837, "examples": 512}
+SSL SVHN/ResNet18/simclr seed=0: {"epoch": 1400, "steps": 2800, "lr": 0.0832492304505138, "loss": 2.946650981903076, "examples": 512}
+SSL SVHN/ResNet18/simclr seed=0: {"epoch": 1600, "steps": 3200, "lr": 0.03858731882255187, "loss": 2.890594720840454, "examples": 512}
+SSL SVHN/ResNet18/simclr seed=0: {"epoch": 1800, "steps": 3600, "lr": 0.009891430709331739, "loss": 2.729403257369995, "examples": 512}
+SSL SVHN/ResNet18/simclr seed=0: {"epoch": 2000, "steps": 4000, "lr": 0.0, "loss": 2.7210885286331177, "examples": 512}
+PROBE SVHN lbl=1 seed=0: {'epoch': 10, 'lr': 0.0976968053825168, 'loss': 1.3583680449939164, 'train_accuracy_percent': 59.83606557377049}
+PROBE SVHN lbl=1 seed=0: {'epoch': 20, 'lr': 0.09069645216766208, 'loss': 1.2283965596735804, 'train_accuracy_percent': 62.978142076502735}
+PROBE SVHN lbl=1 seed=0: {'epoch': 30, 'lr': 0.07968597695835844, 'loss': 1.203388058422693, 'train_accuracy_percent': 62.15846994535519}
+PROBE SVHN lbl=1 seed=0: {'epoch': 40, 'lr': 0.0657503231944974, 'loss': 1.1662661716586253, 'train_accuracy_percent': 62.84153005464481}
+PROBE SVHN lbl=1 seed=0: {'epoch': 50, 'lr': 0.05026267376276531, 'loss': 1.1646318715778206, 'train_accuracy_percent': 62.568306010928964}
+PROBE SVHN lbl=1 seed=0: {'epoch': 60, 'lr': 0.03474914114521912, 'loss': 1.0770585602098475, 'train_accuracy_percent': 66.39344262295081}
+PROBE SVHN lbl=1 seed=0: {'epoch': 70, 'lr': 0.020738388285373534, 'loss': 1.1216282922713483, 'train_accuracy_percent': 64.89071038251366}
+PROBE SVHN lbl=1 seed=0: {'epoch': 80, 'lr': 0.009610998138484261, 'loss': 1.0923903880874968, 'train_accuracy_percent': 65.98360655737704}
+PROBE SVHN lbl=1 seed=0: {'epoch': 90, 'lr': 0.002463434636714723, 'loss': 1.161085031723064, 'train_accuracy_percent': 62.978142076502735}
+PROBE SVHN lbl=1 seed=0: {'epoch': 100, 'lr': 0.0, 'loss': 1.1759112109252012, 'train_accuracy_percent': 63.52459016393443}
+RESULT SVHN lbl=1 seed=0: 62.2772
+PROBE SVHN lbl=1 seed=1: {'epoch': 10, 'lr': 0.0976968053825168, 'loss': 1.441473086675008, 'train_accuracy_percent': 53.68852459016394}
+PROBE SVHN lbl=1 seed=1: {'epoch': 20, 'lr': 0.09069645216766208, 'loss': 1.2772535150819788, 'train_accuracy_percent': 60.10928961748634}
+PROBE SVHN lbl=1 seed=1: {'epoch': 30, 'lr': 0.07968597695835844, 'loss': 1.2156597063189647, 'train_accuracy_percent': 60.65573770491803}
+PROBE SVHN lbl=1 seed=1: {'epoch': 40, 'lr': 0.0657503231944974, 'loss': 1.1138674320418978, 'train_accuracy_percent': 63.114754098360656}
+PROBE SVHN lbl=1 seed=1: {'epoch': 50, 'lr': 0.05026267376276531, 'loss': 1.1468744134642388, 'train_accuracy_percent': 64.75409836065573}
+PROBE SVHN lbl=1 seed=1: {'epoch': 60, 'lr': 0.03474914114521912, 'loss': 1.09093793168094, 'train_accuracy_percent': 65.02732240437159}
+PROBE SVHN lbl=1 seed=1: {'epoch': 70, 'lr': 0.020738388285373534, 'loss': 1.119340602817431, 'train_accuracy_percent': 63.25136612021858}
+PROBE SVHN lbl=1 seed=1: {'epoch': 80, 'lr': 0.009610998138484261, 'loss': 1.1157027886864916, 'train_accuracy_percent': 64.61748633879782}
+PROBE SVHN lbl=1 seed=1: {'epoch': 90, 'lr': 0.002463434636714723, 'loss': 1.12509302493653, 'train_accuracy_percent': 63.66120218579235}
+PROBE SVHN lbl=1 seed=1: {'epoch': 100, 'lr': 0.0, 'loss': 1.1038632874931793, 'train_accuracy_percent': 66.66666666666667}
+RESULT SVHN lbl=1 seed=1: 61.1824
+PROBE SVHN lbl=1 seed=2: {'epoch': 10, 'lr': 0.0976968053825168, 'loss': 1.3765435687831191, 'train_accuracy_percent': 56.967213114754095}
+PROBE SVHN lbl=1 seed=2: {'epoch': 20, 'lr': 0.09069645216766208, 'loss': 1.2642343904151292, 'train_accuracy_percent': 60.79234972677595}
+PROBE SVHN lbl=1 seed=2: {'epoch': 30, 'lr': 0.07968597695835844, 'loss': 1.1632423146826323, 'train_accuracy_percent': 64.48087431693989}
+PROBE SVHN lbl=1 seed=2: {'epoch': 40, 'lr': 0.0657503231944974, 'loss': 1.1666169733297629, 'train_accuracy_percent': 62.978142076502735}
+PROBE SVHN lbl=1 seed=2: {'epoch': 50, 'lr': 0.05026267376276531, 'loss': 1.1575532884545665, 'train_accuracy_percent': 62.431693989071036}
+PROBE SVHN lbl=1 seed=2: {'epoch': 60, 'lr': 0.03474914114521912, 'loss': 1.1220450681415413, 'train_accuracy_percent': 64.20765027322405}
+PROBE SVHN lbl=1 seed=2: {'epoch': 70, 'lr': 0.020738388285373534, 'loss': 1.1110228085127034, 'train_accuracy_percent': 64.89071038251366}
+PROBE SVHN lbl=1 seed=2: {'epoch': 80, 'lr': 0.009610998138484261, 'loss': 1.1359548444956378, 'train_accuracy_percent': 64.48087431693989}
+PROBE SVHN lbl=1 seed=2: {'epoch': 90, 'lr': 0.002463434636714723, 'loss': 1.095292251618182, 'train_accuracy_percent': 65.57377049180327}
+PROBE SVHN lbl=1 seed=2: {'epoch': 100, 'lr': 0.0, 'loss': 1.140675348010871, 'train_accuracy_percent': 64.07103825136612}
+RESULT SVHN lbl=1 seed=2: 60.5601
+PROBE SVHN lbl=1 seed=3: {'epoch': 10, 'lr': 0.0976968053825168, 'loss': 1.4021414993890648, 'train_accuracy_percent': 57.240437158469945}
+PROBE SVHN lbl=1 seed=3: {'epoch': 20, 'lr': 0.09069645216766208, 'loss': 1.2573406468323671, 'train_accuracy_percent': 60.10928961748634}
+PROBE SVHN lbl=1 seed=3: {'epoch': 30, 'lr': 0.07968597695835844, 'loss': 1.1780620272693738, 'train_accuracy_percent': 63.25136612021858}
+PROBE SVHN lbl=1 seed=3: {'epoch': 40, 'lr': 0.0657503231944974, 'loss': 1.2008638134419591, 'train_accuracy_percent': 63.25136612021858}
+PROBE SVHN lbl=1 seed=3: {'epoch': 50, 'lr': 0.05026267376276531, 'loss': 1.1318965173158488, 'train_accuracy_percent': 63.387978142076506}
+PROBE SVHN lbl=1 seed=3: {'epoch': 60, 'lr': 0.03474914114521912, 'loss': 1.152475018970302, 'train_accuracy_percent': 63.387978142076506}
+PROBE SVHN lbl=1 seed=3: {'epoch': 70, 'lr': 0.020738388285373534, 'loss': 1.1371075077786472, 'train_accuracy_percent': 63.9344262295082}
+PROBE SVHN lbl=1 seed=3: {'epoch': 80, 'lr': 0.009610998138484261, 'loss': 1.1169718230356935, 'train_accuracy_percent': 64.61748633879782}
+PROBE SVHN lbl=1 seed=3: {'epoch': 90, 'lr': 0.002463434636714723, 'loss': 1.1280520587671, 'train_accuracy_percent': 64.34426229508196}
+PROBE SVHN lbl=1 seed=3: {'epoch': 100, 'lr': 0.0, 'loss': 1.1143904696396791, 'train_accuracy_percent': 65.1639344262295}
+RESULT SVHN lbl=1 seed=3: 62.4501
+PROBE SVHN lbl=1 seed=4: {'epoch': 10, 'lr': 0.0976968053825168, 'loss': 1.3264461456100798, 'train_accuracy_percent': 59.56284153005465}
+PROBE SVHN lbl=1 seed=4: {'epoch': 20, 'lr': 0.09069645216766208, 'loss': 1.1869514073179068, 'train_accuracy_percent': 63.387978142076506}
+PROBE SVHN lbl=1 seed=4: {'epoch': 30, 'lr': 0.07968597695835844, 'loss': 1.138061350812026, 'train_accuracy_percent': 64.34426229508196}
+PROBE SVHN lbl=1 seed=4: {'epoch': 40, 'lr': 0.0657503231944974, 'loss': 1.1383276858616396, 'train_accuracy_percent': 63.66120218579235}
+PROBE SVHN lbl=1 seed=4: {'epoch': 50, 'lr': 0.05026267376276531, 'loss': 1.069260264354977, 'train_accuracy_percent': 66.93989071038251}
+PROBE SVHN lbl=1 seed=4: {'epoch': 60, 'lr': 0.03474914114521912, 'loss': 1.069259860150801, 'train_accuracy_percent': 66.2568306010929}
+PROBE SVHN lbl=1 seed=4: {'epoch': 70, 'lr': 0.020738388285373534, 'loss': 1.066163982198538, 'train_accuracy_percent': 66.2568306010929}
+PROBE SVHN lbl=1 seed=4: {'epoch': 80, 'lr': 0.009610998138484261, 'loss': 1.091812425623826, 'train_accuracy_percent': 65.1639344262295}
+PROBE SVHN lbl=1 seed=4: {'epoch': 90, 'lr': 0.002463434636714723, 'loss': 1.0667189828685073, 'train_accuracy_percent': 64.61748633879782}
+PROBE SVHN lbl=1 seed=4: {'epoch': 100, 'lr': 0.0, 'loss': 1.0540162865581408, 'train_accuracy_percent': 66.66666666666667}
+RESULT SVHN lbl=1 seed=4: 61.2439
+PROBE SVHN lbl=1 seed=5: {'epoch': 10, 'lr': 0.0976968053825168, 'loss': 1.427719858174767, 'train_accuracy_percent': 55.19125683060109}
+PROBE SVHN lbl=1 seed=5: {'epoch': 20, 'lr': 0.09069645216766208, 'loss': 1.2650544057126905, 'train_accuracy_percent': 58.60655737704918}
+PROBE SVHN lbl=1 seed=5: {'epoch': 30, 'lr': 0.07968597695835844, 'loss': 1.2220713988027938, 'train_accuracy_percent': 60.92896174863388}
+PROBE SVHN lbl=1 seed=5: {'epoch': 40, 'lr': 0.0657503231944974, 'loss': 1.158296901020196, 'train_accuracy_percent': 64.75409836065573}
+PROBE SVHN lbl=1 seed=5: {'epoch': 50, 'lr': 0.05026267376276531, 'loss': 1.1791540501547642, 'train_accuracy_percent': 63.25136612021858}
+PROBE SVHN lbl=1 seed=5: {'epoch': 60, 'lr': 0.03474914114521912, 'loss': 1.1885580703860423, 'train_accuracy_percent': 62.295081967213115}
+PROBE SVHN lbl=1 seed=5: {'epoch': 70, 'lr': 0.020738388285373534, 'loss': 1.1932735267232677, 'train_accuracy_percent': 62.431693989071036}
+PROBE SVHN lbl=1 seed=5: {'epoch': 80, 'lr': 0.009610998138484261, 'loss': 1.1753210252751418, 'train_accuracy_percent': 62.704918032786885}
+PROBE SVHN lbl=1 seed=5: {'epoch': 90, 'lr': 0.002463434636714723, 'loss': 1.1967795155738872, 'train_accuracy_percent': 62.431693989071036}
+PROBE SVHN lbl=1 seed=5: {'epoch': 100, 'lr': 0.0, 'loss': 1.168298318737843, 'train_accuracy_percent': 63.66120218579235}
+RESULT SVHN lbl=1 seed=5: 62.3233
+PROBE SVHN lbl=1 seed=6: {'epoch': 10, 'lr': 0.0976968053825168, 'loss': 1.418872867777048, 'train_accuracy_percent': 55.05464480874317}
+PROBE SVHN lbl=1 seed=6: {'epoch': 20, 'lr': 0.09069645216766208, 'loss': 1.2807183252657697, 'train_accuracy_percent': 58.87978142076503}
+PROBE SVHN lbl=1 seed=6: {'epoch': 30, 'lr': 0.07968597695835844, 'loss': 1.2848669010433342, 'train_accuracy_percent': 58.87978142076503}
+PROBE SVHN lbl=1 seed=6: {'epoch': 40, 'lr': 0.0657503231944974, 'loss': 1.1700623660791116, 'train_accuracy_percent': 62.15846994535519}
+PROBE SVHN lbl=1 seed=6: {'epoch': 50, 'lr': 0.05026267376276531, 'loss': 1.1714631130135125, 'train_accuracy_percent': 63.9344262295082}
+PROBE SVHN lbl=1 seed=6: {'epoch': 60, 'lr': 0.03474914114521912, 'loss': 1.2119574651040665, 'train_accuracy_percent': 60.65573770491803}
+PROBE SVHN lbl=1 seed=6: {'epoch': 70, 'lr': 0.020738388285373534, 'loss': 1.1701712797248298, 'train_accuracy_percent': 61.47540983606557}
+PROBE SVHN lbl=1 seed=6: {'epoch': 80, 'lr': 0.009610998138484261, 'loss': 1.1038738866972793, 'train_accuracy_percent': 66.39344262295081}
+PROBE SVHN lbl=1 seed=6: {'epoch': 90, 'lr': 0.002463434636714723, 'loss': 1.1203777438304463, 'train_accuracy_percent': 65.7103825136612}
+PROBE SVHN lbl=1 seed=6: {'epoch': 100, 'lr': 0.0, 'loss': 1.1834261000482111, 'train_accuracy_percent': 64.07103825136612}
+RESULT SVHN lbl=1 seed=6: 60.8597
+PROBE SVHN lbl=1 seed=7: {'epoch': 10, 'lr': 0.0976968053825168, 'loss': 1.346248323800134, 'train_accuracy_percent': 60.24590163934426}
+PROBE SVHN lbl=1 seed=7: {'epoch': 20, 'lr': 0.09069645216766208, 'loss': 1.202147808882708, 'train_accuracy_percent': 62.295081967213115}
+PROBE SVHN lbl=1 seed=7: {'epoch': 30, 'lr': 0.07968597695835844, 'loss': 1.2100728020641973, 'train_accuracy_percent': 62.431693989071036}
+PROBE SVHN lbl=1 seed=7: {'epoch': 40, 'lr': 0.0657503231944974, 'loss': 1.139836532822072, 'train_accuracy_percent': 65.30054644808743}
+PROBE SVHN lbl=1 seed=7: {'epoch': 50, 'lr': 0.05026267376276531, 'loss': 1.1399049628627755, 'train_accuracy_percent': 61.47540983606557}
+PROBE SVHN lbl=1 seed=7: {'epoch': 60, 'lr': 0.03474914114521912, 'loss': 1.0680901769731865, 'train_accuracy_percent': 67.48633879781421}
+PROBE SVHN lbl=1 seed=7: {'epoch': 70, 'lr': 0.020738388285373534, 'loss': 1.098579441263376, 'train_accuracy_percent': 67.21311475409836}
+PROBE SVHN lbl=1 seed=7: {'epoch': 80, 'lr': 0.009610998138484261, 'loss': 1.1559191303826422, 'train_accuracy_percent': 64.61748633879782}
+PROBE SVHN lbl=1 seed=7: {'epoch': 90, 'lr': 0.002463434636714723, 'loss': 1.0699179133430856, 'train_accuracy_percent': 68.30601092896175}
+PROBE SVHN lbl=1 seed=7: {'epoch': 100, 'lr': 0.0, 'loss': 1.1188003697681947, 'train_accuracy_percent': 64.89071038251366}
+RESULT SVHN lbl=1 seed=7: 61.1978
+PROBE SVHN lbl=1 seed=8: {'epoch': 10, 'lr': 0.0976968053825168, 'loss': 1.3662716638846475, 'train_accuracy_percent': 56.28415300546448}
+PROBE SVHN lbl=1 seed=8: {'epoch': 20, 'lr': 0.09069645216766208, 'loss': 1.2362060116939857, 'train_accuracy_percent': 60.24590163934426}
+PROBE SVHN lbl=1 seed=8: {'epoch': 30, 'lr': 0.07968597695835844, 'loss': 1.2177568876026759, 'train_accuracy_percent': 60.10928961748634}
+PROBE SVHN lbl=1 seed=8: {'epoch': 40, 'lr': 0.0657503231944974, 'loss': 1.1301347154085752, 'train_accuracy_percent': 65.57377049180327}
+PROBE SVHN lbl=1 seed=8: {'epoch': 50, 'lr': 0.05026267376276531, 'loss': 1.1647893079643041, 'train_accuracy_percent': 63.797814207650276}
+PROBE SVHN lbl=1 seed=8: {'epoch': 60, 'lr': 0.03474914114521912, 'loss': 1.094128015262833, 'train_accuracy_percent': 64.75409836065573}
+PROBE SVHN lbl=1 seed=8: {'epoch': 70, 'lr': 0.020738388285373534, 'loss': 1.0877045673099373, 'train_accuracy_percent': 65.7103825136612}
+PROBE SVHN lbl=1 seed=8: {'epoch': 80, 'lr': 0.009610998138484261, 'loss': 1.1406005718668952, 'train_accuracy_percent': 62.84153005464481}
+PROBE SVHN lbl=1 seed=8: {'epoch': 90, 'lr': 0.002463434636714723, 'loss': 1.1271275021339375, 'train_accuracy_percent': 63.9344262295082}
+PROBE SVHN lbl=1 seed=8: {'epoch': 100, 'lr': 0.0, 'loss': 1.1402111750482862, 'train_accuracy_percent': 63.797814207650276}
+RESULT SVHN lbl=1 seed=8: 61.4398
+PROBE SVHN lbl=1 seed=9: {'epoch': 10, 'lr': 0.0976968053825168, 'loss': 1.384784088108709, 'train_accuracy_percent': 58.743169398907106}
+PROBE SVHN lbl=1 seed=9: {'epoch': 20, 'lr': 0.09069645216766208, 'loss': 1.2554975083616913, 'train_accuracy_percent': 59.97267759562842}
+PROBE SVHN lbl=1 seed=9: {'epoch': 30, 'lr': 0.07968597695835844, 'loss': 1.1956959598051393, 'train_accuracy_percent': 62.84153005464481}
+PROBE SVHN lbl=1 seed=9: {'epoch': 40, 'lr': 0.0657503231944974, 'loss': 1.2172934168674907, 'train_accuracy_percent': 62.704918032786885}
+PROBE SVHN lbl=1 seed=9: {'epoch': 50, 'lr': 0.05026267376276531, 'loss': 1.1823272314227995, 'train_accuracy_percent': 63.66120218579235}
+PROBE SVHN lbl=1 seed=9: {'epoch': 60, 'lr': 0.03474914114521912, 'loss': 1.1517738331862486, 'train_accuracy_percent': 64.75409836065573}
+PROBE SVHN lbl=1 seed=9: {'epoch': 70, 'lr': 0.020738388285373534, 'loss': 1.1316074334858546, 'train_accuracy_percent': 63.114754098360656}
+PROBE SVHN lbl=1 seed=9: {'epoch': 80, 'lr': 0.009610998138484261, 'loss': 1.1730206051810843, 'train_accuracy_percent': 62.431693989071036}
+PROBE SVHN lbl=1 seed=9: {'epoch': 90, 'lr': 0.002463434636714723, 'loss': 1.1519959207440986, 'train_accuracy_percent': 64.20765027322405}
+PROBE SVHN lbl=1 seed=9: {'epoch': 100, 'lr': 0.0, 'loss': 1.2072717609301291, 'train_accuracy_percent': 62.431693989071036}
+RESULT SVHN lbl=1 seed=9: 60.9788
+COMPLETE CELL: SVHN lbl=1: 61.45 +/- 0.67
+PROBE SVHN lbl=5 seed=0: {'epoch': 10, 'lr': 0.09758188480043001, 'loss': 1.2274882373492098, 'train_accuracy_percent': 60.70453304205352}
+PROBE SVHN lbl=5 seed=0: {'epoch': 20, 'lr': 0.09050006787212979, 'loss': 1.166744897822615, 'train_accuracy_percent': 62.12452211906062}
+PROBE SVHN lbl=5 seed=0: {'epoch': 30, 'lr': 0.07944857457231415, 'loss': 1.1493723948492762, 'train_accuracy_percent': 63.18951392681595}
+PROBE SVHN lbl=5 seed=0: {'epoch': 40, 'lr': 0.06551063399483918, 'loss': 1.1231915544513014, 'train_accuracy_percent': 64.199890770071}
+PROBE SVHN lbl=5 seed=0: {'epoch': 50, 'lr': 0.05005239479784246, 'loss': 1.1187779682051087, 'train_accuracy_percent': 63.544511196067724}
+PROBE SVHN lbl=5 seed=0: {'epoch': 60, 'lr': 0.03458902004424265, 'loss': 1.1023135925498184, 'train_accuracy_percent': 64.99180775532496}
+PROBE SVHN lbl=5 seed=0: {'epoch': 70, 'lr': 0.020636176166428516, 'loss': 1.1342824046433395, 'train_accuracy_percent': 63.599126160568}
+PROBE SVHN lbl=5 seed=0: {'epoch': 80, 'lr': 0.009561472592415849, 'loss': 1.095324337905642, 'train_accuracy_percent': 65.26488257782633}
+PROBE SVHN lbl=5 seed=0: {'epoch': 90, 'lr': 0.002450413406743446, 'loss': 1.1089419161016858, 'train_accuracy_percent': 64.33642818132168}
+PROBE SVHN lbl=5 seed=0: {'epoch': 100, 'lr': 0.0, 'loss': 1.087789049440235, 'train_accuracy_percent': 65.6198798470781}
+RESULT SVHN lbl=5 seed=0: 67.1981
+PROBE SVHN lbl=5 seed=1: {'epoch': 10, 'lr': 0.09758188480043001, 'loss': 1.2204574209819525, 'train_accuracy_percent': 61.660294920808305}
+PROBE SVHN lbl=5 seed=1: {'epoch': 20, 'lr': 0.09050006787212979, 'loss': 1.20207744866105, 'train_accuracy_percent': 61.359912616056796}
+PROBE SVHN lbl=5 seed=1: {'epoch': 30, 'lr': 0.07944857457231415, 'loss': 1.1470560117994482, 'train_accuracy_percent': 62.97105406881486}
+PROBE SVHN lbl=5 seed=1: {'epoch': 40, 'lr': 0.06551063399483918, 'loss': 1.1247145487661898, 'train_accuracy_percent': 63.92681594756964}
+PROBE SVHN lbl=5 seed=1: {'epoch': 50, 'lr': 0.05005239479784246, 'loss': 1.0890993188470521, 'train_accuracy_percent': 64.85527034407427}
+PROBE SVHN lbl=5 seed=1: {'epoch': 60, 'lr': 0.03458902004424265, 'loss': 1.0956386553661737, 'train_accuracy_percent': 64.66411796832332}
+PROBE SVHN lbl=5 seed=1: {'epoch': 70, 'lr': 0.020636176166428516, 'loss': 1.1052108534954077, 'train_accuracy_percent': 64.60950300382305}
+PROBE SVHN lbl=5 seed=1: {'epoch': 80, 'lr': 0.009561472592415849, 'loss': 1.0918230051423994, 'train_accuracy_percent': 64.33642818132168}
+PROBE SVHN lbl=5 seed=1: {'epoch': 90, 'lr': 0.002450413406743446, 'loss': 1.062927621495587, 'train_accuracy_percent': 65.6198798470781}
+PROBE SVHN lbl=5 seed=1: {'epoch': 100, 'lr': 0.0, 'loss': 1.0788165044094422, 'train_accuracy_percent': 65.53795740032768}
+RESULT SVHN lbl=5 seed=1: 66.9330
+PROBE SVHN lbl=5 seed=2: {'epoch': 10, 'lr': 0.09758188480043001, 'loss': 1.2051773275071191, 'train_accuracy_percent': 60.89568541780448}
+PROBE SVHN lbl=5 seed=2: {'epoch': 20, 'lr': 0.09050006787212979, 'loss': 1.1930581087105134, 'train_accuracy_percent': 61.250682687056255}
+PROBE SVHN lbl=5 seed=2: {'epoch': 30, 'lr': 0.07944857457231415, 'loss': 1.1429956368186447, 'train_accuracy_percent': 63.24412889131622}
+PROBE SVHN lbl=5 seed=2: {'epoch': 40, 'lr': 0.06551063399483918, 'loss': 1.1358613668407396, 'train_accuracy_percent': 63.3806663025669}
+PROBE SVHN lbl=5 seed=2: {'epoch': 50, 'lr': 0.05005239479784246, 'loss': 1.0969122112415841, 'train_accuracy_percent': 65.15565264882578}
+PROBE SVHN lbl=5 seed=2: {'epoch': 60, 'lr': 0.03458902004424265, 'loss': 1.099323839518882, 'train_accuracy_percent': 65.29219006007646}
+PROBE SVHN lbl=5 seed=2: {'epoch': 70, 'lr': 0.020636176166428516, 'loss': 1.113247336291798, 'train_accuracy_percent': 63.81758601856909}
+PROBE SVHN lbl=5 seed=2: {'epoch': 80, 'lr': 0.009561472592415849, 'loss': 1.1056097235463473, 'train_accuracy_percent': 63.844893500819225}
+PROBE SVHN lbl=5 seed=2: {'epoch': 90, 'lr': 0.002450413406743446, 'loss': 1.0928256437792796, 'train_accuracy_percent': 65.34680502457674}
+PROBE SVHN lbl=5 seed=2: {'epoch': 100, 'lr': 0.0, 'loss': 1.0866254446351549, 'train_accuracy_percent': 65.67449481157837}
+RESULT SVHN lbl=5 seed=2: 67.5169
+PROBE SVHN lbl=5 seed=3: {'epoch': 10, 'lr': 0.09758188480043001, 'loss': 1.246775348742499, 'train_accuracy_percent': 59.393773894046966}
+PROBE SVHN lbl=5 seed=3: {'epoch': 20, 'lr': 0.09050006787212979, 'loss': 1.1690841760874966, 'train_accuracy_percent': 62.097214636810484}
+PROBE SVHN lbl=5 seed=3: {'epoch': 30, 'lr': 0.07944857457231415, 'loss': 1.1443227065970245, 'train_accuracy_percent': 63.134898962315674}
+PROBE SVHN lbl=5 seed=3: {'epoch': 40, 'lr': 0.06551063399483918, 'loss': 1.1348350863193697, 'train_accuracy_percent': 63.762971054068814}
+PROBE SVHN lbl=5 seed=3: {'epoch': 50, 'lr': 0.05005239479784246, 'loss': 1.1293520903339938, 'train_accuracy_percent': 64.22719825232113}
+PROBE SVHN lbl=5 seed=3: {'epoch': 60, 'lr': 0.03458902004424265, 'loss': 1.1324202754600396, 'train_accuracy_percent': 63.32605133806663}
+PROBE SVHN lbl=5 seed=3: {'epoch': 70, 'lr': 0.020636176166428516, 'loss': 1.1154129206971481, 'train_accuracy_percent': 64.1179683233206}
+PROBE SVHN lbl=5 seed=3: {'epoch': 80, 'lr': 0.009561472592415849, 'loss': 1.1009591397270357, 'train_accuracy_percent': 64.1179683233206}
+PROBE SVHN lbl=5 seed=3: {'epoch': 90, 'lr': 0.002450413406743446, 'loss': 1.1260365642920536, 'train_accuracy_percent': 63.48989623156745}
+PROBE SVHN lbl=5 seed=3: {'epoch': 100, 'lr': 0.0, 'loss': 1.1111656319958338, 'train_accuracy_percent': 64.90988530857454}
+RESULT SVHN lbl=5 seed=3: 66.5950
+PROBE SVHN lbl=5 seed=4: {'epoch': 10, 'lr': 0.09758188480043001, 'loss': 1.2037354440131778, 'train_accuracy_percent': 61.250682687056255}
+PROBE SVHN lbl=5 seed=4: {'epoch': 20, 'lr': 0.09050006787212979, 'loss': 1.1313323826818502, 'train_accuracy_percent': 63.73566357181868}
+PROBE SVHN lbl=5 seed=4: {'epoch': 30, 'lr': 0.07944857457231415, 'loss': 1.1140953977533796, 'train_accuracy_percent': 63.05297651556526}
+PROBE SVHN lbl=5 seed=4: {'epoch': 40, 'lr': 0.06551063399483918, 'loss': 1.1116221223223868, 'train_accuracy_percent': 63.48989623156745}
+PROBE SVHN lbl=5 seed=4: {'epoch': 50, 'lr': 0.05005239479784246, 'loss': 1.0621814379465508, 'train_accuracy_percent': 65.67449481157837}
+PROBE SVHN lbl=5 seed=4: {'epoch': 60, 'lr': 0.03458902004424265, 'loss': 1.0680402025767586, 'train_accuracy_percent': 65.9202621518296}
+PROBE SVHN lbl=5 seed=4: {'epoch': 70, 'lr': 0.020636176166428516, 'loss': 1.0869278168170455, 'train_accuracy_percent': 63.599126160568}
+PROBE SVHN lbl=5 seed=4: {'epoch': 80, 'lr': 0.009561472592415849, 'loss': 1.0763244545895958, 'train_accuracy_percent': 64.96450027307482}
+PROBE SVHN lbl=5 seed=4: {'epoch': 90, 'lr': 0.002450413406743446, 'loss': 1.0725623483152613, 'train_accuracy_percent': 64.47296559257236}
+PROBE SVHN lbl=5 seed=4: {'epoch': 100, 'lr': 0.0, 'loss': 1.0851432176185787, 'train_accuracy_percent': 65.45603495357729}
+RESULT SVHN lbl=5 seed=4: 67.2557
+PROBE SVHN lbl=5 seed=5: {'epoch': 10, 'lr': 0.09758188480043001, 'loss': 1.2325575466952905, 'train_accuracy_percent': 59.366466411796836}
+PROBE SVHN lbl=5 seed=5: {'epoch': 20, 'lr': 0.09050006787212979, 'loss': 1.1965046535092974, 'train_accuracy_percent': 61.44183506280721}
+PROBE SVHN lbl=5 seed=5: {'epoch': 30, 'lr': 0.07944857457231415, 'loss': 1.1505891890033615, 'train_accuracy_percent': 62.15182960131076}
+PROBE SVHN lbl=5 seed=5: {'epoch': 40, 'lr': 0.06551063399483918, 'loss': 1.1371384040050205, 'train_accuracy_percent': 63.10759148006554}
+PROBE SVHN lbl=5 seed=5: {'epoch': 50, 'lr': 0.05005239479784246, 'loss': 1.1440066940988887, 'train_accuracy_percent': 62.61605679956308}
+PROBE SVHN lbl=5 seed=5: {'epoch': 60, 'lr': 0.03458902004424265, 'loss': 1.113921918841674, 'train_accuracy_percent': 63.6810486073184}
+PROBE SVHN lbl=5 seed=5: {'epoch': 70, 'lr': 0.020636176166428516, 'loss': 1.1165539489815888, 'train_accuracy_percent': 63.16220644456581}
+PROBE SVHN lbl=5 seed=5: {'epoch': 80, 'lr': 0.009561472592415849, 'loss': 1.0764935961321753, 'train_accuracy_percent': 64.77334789732387}
+PROBE SVHN lbl=5 seed=5: {'epoch': 90, 'lr': 0.002450413406743446, 'loss': 1.1001973708817896, 'train_accuracy_percent': 63.981430912069904}
+PROBE SVHN lbl=5 seed=5: {'epoch': 100, 'lr': 0.0, 'loss': 1.1180878568385741, 'train_accuracy_percent': 63.87220098306936}
+RESULT SVHN lbl=5 seed=5: 67.0137
+PROBE SVHN lbl=5 seed=6: {'epoch': 10, 'lr': 0.09758188480043001, 'loss': 1.2177222027015582, 'train_accuracy_percent': 60.29492080830148}
+PROBE SVHN lbl=5 seed=6: {'epoch': 20, 'lr': 0.09050006787212979, 'loss': 1.172540282499979, 'train_accuracy_percent': 62.94374658656472}
+PROBE SVHN lbl=5 seed=6: {'epoch': 30, 'lr': 0.07944857457231415, 'loss': 1.1328783569148433, 'train_accuracy_percent': 62.99836155106499}
+PROBE SVHN lbl=5 seed=6: {'epoch': 40, 'lr': 0.06551063399483918, 'loss': 1.1392444523223302, 'train_accuracy_percent': 63.435281267067175}
+PROBE SVHN lbl=5 seed=6: {'epoch': 50, 'lr': 0.05005239479784246, 'loss': 1.1268177534438821, 'train_accuracy_percent': 63.844893500819225}
+PROBE SVHN lbl=5 seed=6: {'epoch': 60, 'lr': 0.03458902004424265, 'loss': 1.1017703685130271, 'train_accuracy_percent': 64.44565811032223}
+PROBE SVHN lbl=5 seed=6: {'epoch': 70, 'lr': 0.020636176166428516, 'loss': 1.112181410250411, 'train_accuracy_percent': 63.40797378481704}
+PROBE SVHN lbl=5 seed=6: {'epoch': 80, 'lr': 0.009561472592415849, 'loss': 1.0968570338449213, 'train_accuracy_percent': 64.77334789732387}
+PROBE SVHN lbl=5 seed=6: {'epoch': 90, 'lr': 0.002450413406743446, 'loss': 1.0947305359910708, 'train_accuracy_percent': 64.88257782632441}
+PROBE SVHN lbl=5 seed=6: {'epoch': 100, 'lr': 0.0, 'loss': 1.0825950377368978, 'train_accuracy_percent': 65.72910977607864}
+RESULT SVHN lbl=5 seed=6: 67.2518
+PROBE SVHN lbl=5 seed=7: {'epoch': 10, 'lr': 0.09758188480043001, 'loss': 1.240056533295232, 'train_accuracy_percent': 59.6395412342982}
+PROBE SVHN lbl=5 seed=7: {'epoch': 20, 'lr': 0.09050006787212979, 'loss': 1.1591214015795064, 'train_accuracy_percent': 62.64336428181322}
+PROBE SVHN lbl=5 seed=7: {'epoch': 30, 'lr': 0.07944857457231415, 'loss': 1.144775066656991, 'train_accuracy_percent': 62.86182413981431}
+PROBE SVHN lbl=5 seed=7: {'epoch': 40, 'lr': 0.06551063399483918, 'loss': 1.1410412463511619, 'train_accuracy_percent': 62.26105953031131}
+PROBE SVHN lbl=5 seed=7: {'epoch': 50, 'lr': 0.05005239479784246, 'loss': 1.1195125464596167, 'train_accuracy_percent': 63.87220098306936}
+PROBE SVHN lbl=5 seed=7: {'epoch': 60, 'lr': 0.03458902004424265, 'loss': 1.0914508051588392, 'train_accuracy_percent': 64.47296559257236}
+PROBE SVHN lbl=5 seed=7: {'epoch': 70, 'lr': 0.020636176166428516, 'loss': 1.094510584565084, 'train_accuracy_percent': 64.00873839432005}
+PROBE SVHN lbl=5 seed=7: {'epoch': 80, 'lr': 0.009561472592415849, 'loss': 1.1061898118351927, 'train_accuracy_percent': 63.57181867831786}
+PROBE SVHN lbl=5 seed=7: {'epoch': 90, 'lr': 0.002450413406743446, 'loss': 1.104410850760847, 'train_accuracy_percent': 64.63681048607319}
+PROBE SVHN lbl=5 seed=7: {'epoch': 100, 'lr': 0.0, 'loss': 1.1079397417039314, 'train_accuracy_percent': 63.32605133806663}
+RESULT SVHN lbl=5 seed=7: 67.7090
+PROBE SVHN lbl=5 seed=8: {'epoch': 10, 'lr': 0.09758188480043001, 'loss': 1.2227700364713392, 'train_accuracy_percent': 59.994538503549975}
+PROBE SVHN lbl=5 seed=8: {'epoch': 20, 'lr': 0.09050006787212979, 'loss': 1.1606541530868513, 'train_accuracy_percent': 62.69797924631349}
+PROBE SVHN lbl=5 seed=8: {'epoch': 30, 'lr': 0.07944857457231415, 'loss': 1.169742314363685, 'train_accuracy_percent': 62.06990715456035}
+PROBE SVHN lbl=5 seed=8: {'epoch': 40, 'lr': 0.06551063399483918, 'loss': 1.1412126673563525, 'train_accuracy_percent': 63.48989623156745}
+PROBE SVHN lbl=5 seed=8: {'epoch': 50, 'lr': 0.05005239479784246, 'loss': 1.115480140152686, 'train_accuracy_percent': 64.60950300382305}
+PROBE SVHN lbl=5 seed=8: {'epoch': 60, 'lr': 0.03458902004424265, 'loss': 1.1025730175505826, 'train_accuracy_percent': 64.90988530857454}
+PROBE SVHN lbl=5 seed=8: {'epoch': 70, 'lr': 0.020636176166428516, 'loss': 1.0989697670949605, 'train_accuracy_percent': 64.58219552157291}
+PROBE SVHN lbl=5 seed=8: {'epoch': 80, 'lr': 0.009561472592415849, 'loss': 1.108808282227675, 'train_accuracy_percent': 63.599126160568}
+PROBE SVHN lbl=5 seed=8: {'epoch': 90, 'lr': 0.002450413406743446, 'loss': 1.0851030038524234, 'train_accuracy_percent': 64.99180775532496}
+PROBE SVHN lbl=5 seed=8: {'epoch': 100, 'lr': 0.0, 'loss': 1.0997165356224057, 'train_accuracy_percent': 65.51064991807755}
+RESULT SVHN lbl=5 seed=8: 67.2019
+PROBE SVHN lbl=5 seed=9: {'epoch': 10, 'lr': 0.09758188480043001, 'loss': 1.2619728977598172, 'train_accuracy_percent': 59.4210813762971}
+PROBE SVHN lbl=5 seed=9: {'epoch': 20, 'lr': 0.09050006787212979, 'loss': 1.1670049242736342, 'train_accuracy_percent': 62.31567449481158}
+PROBE SVHN lbl=5 seed=9: {'epoch': 30, 'lr': 0.07944857457231415, 'loss': 1.1730120053127253, 'train_accuracy_percent': 62.42490442381212}
+PROBE SVHN lbl=5 seed=9: {'epoch': 40, 'lr': 0.06551063399483918, 'loss': 1.154742439674719, 'train_accuracy_percent': 63.10759148006554}
+PROBE SVHN lbl=5 seed=9: {'epoch': 50, 'lr': 0.05005239479784246, 'loss': 1.1304522455226913, 'train_accuracy_percent': 63.18951392681595}
+PROBE SVHN lbl=5 seed=9: {'epoch': 60, 'lr': 0.03458902004424265, 'loss': 1.1371241499985716, 'train_accuracy_percent': 63.48989623156745}
+PROBE SVHN lbl=5 seed=9: {'epoch': 70, 'lr': 0.020636176166428516, 'loss': 1.1178584691932592, 'train_accuracy_percent': 64.5002730748225}
+PROBE SVHN lbl=5 seed=9: {'epoch': 80, 'lr': 0.009561472592415849, 'loss': 1.1157758532815263, 'train_accuracy_percent': 63.79027853631895}
+PROBE SVHN lbl=5 seed=9: {'epoch': 90, 'lr': 0.002450413406743446, 'loss': 1.1093757968988007, 'train_accuracy_percent': 64.52758055707264}
+PROBE SVHN lbl=5 seed=9: {'epoch': 100, 'lr': 0.0, 'loss': 1.1152627220054847, 'train_accuracy_percent': 63.844893500819225}
+RESULT SVHN lbl=5 seed=9: 67.3056
+COMPLETE CELL: SVHN lbl=5: 67.20 +/- 0.31
