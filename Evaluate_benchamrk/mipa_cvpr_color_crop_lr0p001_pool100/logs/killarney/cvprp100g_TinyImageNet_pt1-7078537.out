@@ -1,0 +1,17 @@
+Loaded fixed teacher seed 1: /scratch/mmoslem3/MKDT/Evaluate_benchamrk/full_ssl_checkpoints_1000ep_3seeds/TinyImageNet/ResNet18/full/pt100/simclr/seed_001/encoder.pt
+Initializing 1000 synthetic images from the Random-baseline training images (seed=0)...
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_cvpr_color_crop_lr0p001_pool100/TinyImageNet/ResNet18BN/pt1/res_IIC_TinyImageNet_ResNet18BN_1percent_final.pt (iteration 0/8000)
+Hyper-parameters: 
+ {'dataset': 'TinyImageNet', 'percentage': 1.0, 'data_path': '/scratch/mmoslem3/data', 'device': 'cuda', 'seed': 0, 'single_channel': False, 'Iteration': 8000, 'lr_img': 0.001, 'batch_real': 128, 'temperature': 0.2, 'beta': 1.0, 'prototype_pool_size': 100, 'distill_aug_strategy': 'color_crop_cutout_scale', 'save_path': '/scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_cvpr_color_crop_lr0p001_pool100/TinyImageNet/ResNet18BN/pt1', 'resume': True, 'save_every': 500, 'feature_batch': 128}
+Objective: negative beta-weighted bipartite mutual information, beta=1, frozen teacher seed 1, pool sizes=[100, 100, 100, 100, 100, 100, 100, 100, 100, 100].
+[2026-11-01 00:43:37] distillation begins
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_cvpr_color_crop_lr0p001_pool100/TinyImageNet/ResNet18BN/pt1/res_IIC_TinyImageNet_ResNet18BN_1percent_final.pt (iteration 1/8000)
+[2026-11-01 00:45:13] iter = 00100, loss = -0.014960, pixel drift RMS = 1.84849/255
+[2026-11-01 00:46:48] iter = 00200, loss = -0.020258, pixel drift RMS = 3.21886/255
+[2026-11-01 00:48:22] iter = 00300, loss = -0.010322, pixel drift RMS = 4.23173/255
+[2026-11-01 00:49:56] iter = 00400, loss = -0.008056, pixel drift RMS = 5.04481/255
+[2026-11-01 00:51:30] iter = 00500, loss = -0.026942, pixel drift RMS = 5.71029/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_cvpr_color_crop_lr0p001_pool100/TinyImageNet/ResNet18BN/pt1/res_IIC_TinyImageNet_ResNet18BN_1percent_final.pt (iteration 500/8000)
+[2026-11-01 00:53:05] iter = 00600, loss = -0.024278, pixel drift RMS = 6.31466/255
+[2026-11-01 00:54:39] iter = 00700, loss = -0.033435, pixel drift RMS = 6.85341/255
+[2026-11-01 00:56:13] iter = 00800, loss = -0.030165, pixel drift RMS = 7.30516/255
