@@ -1,0 +1,67 @@
+{
+  "complete": true,
+  "completed_probes": 5,
+  "expected_probes": 5,
+  "generation_args": {
+    "Iteration": 6000,
+    "batch_real": 128,
+    "beta": 1,
+    "dataset": "CIFAR10",
+    "distill_aug_strategy": "color_crop_cutout_scale",
+    "feature_batch": 128,
+    "lr_img": 0.001,
+    "percentage": 2,
+    "prototype_pool_size": 0,
+    "seed": 0,
+    "single_channel": false,
+    "temperature": 0.2
+  },
+  "identity": {
+    "seed": 0,
+    "selection_method": "ours",
+    "signature": "b20b266d50d14464abad82f53504db0ad9ebe876641c174d3401c4ad4e24dd4d"
+  },
+  "labels": 1,
+  "linear_epochs": 100,
+  "mean_percent": 58.392,
+  "model": "ResNet18",
+  "samples": [
+    {
+      "accuracy_percent": 57.5,
+      "probe_seed": 0,
+      "result_file": "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_cvpr_color_crop_lr0p001/results/CIFAR10/ResNet18BN/pt2/simclr/ssl_seed_000/evaluations/CIFAR10_lbl1_probe0.json",
+      "ssl_seed": 0
+    },
+    {
+      "accuracy_percent": 58.61,
+      "probe_seed": 1,
+      "result_file": "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_cvpr_color_crop_lr0p001/results/CIFAR10/ResNet18BN/pt2/simclr/ssl_seed_000/evaluations/CIFAR10_lbl1_probe1.json",
+      "ssl_seed": 0
+    },
+    {
+      "accuracy_percent": 58.75,
+      "probe_seed": 2,
+      "result_file": "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_cvpr_color_crop_lr0p001/results/CIFAR10/ResNet18BN/pt2/simclr/ssl_seed_000/evaluations/CIFAR10_lbl1_probe2.json",
+      "ssl_seed": 0
+    },
+    {
+      "accuracy_percent": 58.25,
+      "probe_seed": 3,
+      "result_file": "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_cvpr_color_crop_lr0p001/results/CIFAR10/ResNet18BN/pt2/simclr/ssl_seed_000/evaluations/CIFAR10_lbl1_probe3.json",
+      "ssl_seed": 0
+    },
+    {
+      "accuracy_percent": 58.85,
+      "probe_seed": 4,
+      "result_file": "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_cvpr_color_crop_lr0p001/results/CIFAR10/ResNet18BN/pt2/simclr/ssl_seed_000/evaluations/CIFAR10_lbl1_probe4.json",
+      "ssl_seed": 0
+    }
+  ],
+  "source": "CIFAR10",
+  "ssl": "simclr",
+  "ssl_epochs": 2000,
+  "std_ddof": 1,
+  "std_percent": 0.5480145983457012,
+  "subset": 2,
+  "target": "CIFAR10"
+}
