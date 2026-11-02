@@ -1,0 +1,67 @@
+{
+  "complete": true,
+  "completed_probes": 5,
+  "expected_probes": 5,
+  "generation_args": {
+    "Iteration": 6000,
+    "batch_real": 128,
+    "beta": 1,
+    "dataset": "TinyImageNet",
+    "distill_aug_strategy": "color_crop_cutout_scale",
+    "feature_batch": 128,
+    "lr_img": 0.001,
+    "percentage": 2,
+    "prototype_pool_size": 100,
+    "seed": 0,
+    "single_channel": false,
+    "temperature": 0.2
+  },
+  "identity": {
+    "seed": 0,
+    "selection_method": "ours",
+    "signature": "a0f7e949919a2593671555e6b646d8d3ffea0f689ec0d39c714b77e727649f66"
+  },
+  "labels": 1,
+  "linear_epochs": 100,
+  "mean_percent": 8.82,
+  "model": "ResNet18",
+  "samples": [
+    {
+      "accuracy_percent": 8.94,
+      "probe_seed": 0,
+      "result_file": "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_cvpr_color_crop_lr0p001_pool100/results/TinyImageNet/ResNet18BN/pt2/simclr/ssl_seed_000/evaluations/TinyImageNet_lbl1_probe0.json",
+      "ssl_seed": 0
+    },
+    {
+      "accuracy_percent": 8.56,
+      "probe_seed": 1,
+      "result_file": "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_cvpr_color_crop_lr0p001_pool100/results/TinyImageNet/ResNet18BN/pt2/simclr/ssl_seed_000/evaluations/TinyImageNet_lbl1_probe1.json",
+      "ssl_seed": 0
+    },
+    {
+      "accuracy_percent": 8.93,
+      "probe_seed": 2,
+      "result_file": "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_cvpr_color_crop_lr0p001_pool100/results/TinyImageNet/ResNet18BN/pt2/simclr/ssl_seed_000/evaluations/TinyImageNet_lbl1_probe2.json",
+      "ssl_seed": 0
+    },
+    {
+      "accuracy_percent": 9.02,
+      "probe_seed": 3,
+      "result_file": "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_cvpr_color_crop_lr0p001_pool100/results/TinyImageNet/ResNet18BN/pt2/simclr/ssl_seed_000/evaluations/TinyImageNet_lbl1_probe3.json",
+      "ssl_seed": 0
+    },
+    {
+      "accuracy_percent": 8.65,
+      "probe_seed": 4,
+      "result_file": "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_cvpr_color_crop_lr0p001_pool100/results/TinyImageNet/ResNet18BN/pt2/simclr/ssl_seed_000/evaluations/TinyImageNet_lbl1_probe4.json",
+      "ssl_seed": 0
+    }
+  ],
+  "source": "TinyImageNet",
+  "ssl": "simclr",
+  "ssl_epochs": 2000,
+  "std_ddof": 1,
+  "std_percent": 0.20186629238186304,
+  "subset": 2,
+  "target": "TinyImageNet"
+}
