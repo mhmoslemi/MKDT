@@ -1,11 +1,10 @@
 
-\begin{table*}[t]
+\begin{table*}[b]
 \centering
 \caption{Cross-architecture evaluation with SimCLR.
 Synthetic data are generated with ResNet18.}
 \label{tab:cross-arch-combined}
 % MIPA: Evaluate_benchamrk/mipa_cvpr_followup/results/cross_arch/; selected crop/LR 0.0015 sets, two SSL seeds and two probes per seed.
-% CIFAR10/ResNet34/1% retains the previous six cells while the replacement SSL seed is incomplete.
 
 \setlength{\tabcolsep}{2.5pt}
 \renewcommand{\arraystretch}{1.15}
@@ -69,13 +68,13 @@ C10 & C100 & TIN \\
 
 \cmidrule(lr){2-15}
 & \multirow{2}{*}{1} & Random
-& \acc{47.20}{0.25} & \best{11.39}{0.29} & \best{4.71}{0.13}
+& \acc{47.20}{0.25} & \best{11.39}{0.29} & \acc{4.71}{0.13}
 & \acc{53.54}{0.17} & \best{18.59}{0.39} & \best{9.15}{0.26}
 & \acc{41.98}{0.43} & \acc{12.48}{0.46} & \acc{4.92}{0.17}
 & \acc{49.52}{0.24} & \acc{19.37}{0.24} & \acc{9.21}{0.24} \\
 & & MIPA
-& \best{50.33}{0.29} & \acc{10.55}{0.47} & \acc{4.70}{0.18}
-& \best{55.65}{0.36} & \acc{17.97}{0.52} & \acc{8.91}{0.36}
+& \best{51.61}{0.56} & \acc{10.86}{0.32} & \best{4.91}{0.25}
+& \best{56.95}{0.20} & \acc{18.55}{0.15} & \acc{8.96}{0.23}
 & \best{42.64}{0.61} & \best{14.56}{0.14} & \best{5.30}{0.13}
 & \best{50.11}{0.17} & \best{21.32}{0.52} & \best{9.61}{0.35} \\
 

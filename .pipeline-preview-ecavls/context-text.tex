@@ -1,0 +1,19 @@
+% Draft excerpts for inspecting the figure against two-column CVPR text.
+\section{Self-Supervised Dataset Distillation}
+We propose Mutual Information Prototype Alignment (MIPA). The method uses a frozen encoder pre-trained on the full dataset to represent real and synthetic images in the same feature space. The synthetic images serve as prototypes, and each augmented real image is assigned to them based on feature similarity. These prototypes are then optimized by maximizing the mutual information between assignments from two augmented views of each real image. Figure~\ref{fig:ssl-dd-pipeline} provides an overview of the method.
+
+\subsection{Synthetic Images as Prototypes}
+Let $f_{\theta_{\mathcal{T}}}$ denote the encoder pre-trained on $\mathcal{T}$, whose parameters remain fixed during distillation. For an augmentation $a\sim\mathcal{A}$, its normalized representation is $\psi_a(x)=f_{\theta_{\mathcal{T}}}(a(x))/\|f_{\theta_{\mathcal{T}}}(a(x))\|_2$. Each synthetic image defines a prototype through its representation. A real image is assigned to these prototypes according to cosine similarity.
+
+For each batch, two transformations are sampled independently. Within each view, the same transformation and its sampled parameters are applied to all real and synthetic images. This compares images and prototypes under matched augmentations. In particular, when a synthetic prototype coincides with a real image, their normalized features coincide and the cosine similarity is one. Independent transformations can reduce this similarity even for identical images.
+
+\subsection{Mutual Information Maximization}
+To encourage both cross-view predictability and diverse prototype usage, we maximize the mutual information between paired assignments. For each view $v$, let $Q_v\in\mathbb{R}^{B\times m}$ contain the assignment vectors as rows. The empirical joint probability matrix is $J=B^{-1}Q_1^\top Q_2$, and its symmetrization is $P=(J+J^\top)/2$.
+
+Lower conditional entropy makes the assignment in one view more predictable from the other while higher marginal entropy encourages the use of multiple prototypes. A constant assignment shared by all images and both views gives zero mutual information.
+
+\paragraph{Distillation objective.}
+The synthetic images determine the prototype features and consequently the assignments. We optimize these images to maximize mutual information between paired assignments. Gradients update the synthetic pixels through the prototype features, without training an encoder on the synthetic dataset.
+
+\paragraph{Evaluation setup.}
+To evaluate the quality of the distilled datasets, we pre-train a ResNet18 encoder from scratch on each reduced dataset using SimCLR. The encoder is then frozen, and a linear classifier is trained on its representations using a subset of the labeled training data from each downstream task.

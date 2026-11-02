@@ -1,9 +1,3 @@
-% Random initialization: Evaluate_benchamrk/mipa_cvpr_color_crop/results/CIFAR10/ResNet18BN/pt{0.2,1}/simclr/ssl_seed_000/summary_CIFAR10_lbl{1,5}.json
-% Other initializations: Evaluate_benchamrk/mipa_table_initialization/runs/{kmeans100,iic,noise1x,noise3x,noise10x}/pt{0.2,1}/evaluation/summary_CIFAR10_lbl{1,5}.json
-% Matched distillation: lr_img=0.0015, batch_real=128, temperature=0.2 (existing budget scaling), beta=1, one augmentation pair, color_crop_cutout_scale; 10k/8k iterations.
-% K-means uses random ResNet18 features and a 100-iteration budget; IIC reuses saved epoch-150 main/auxiliary selections. Completed cells have five probes; bold marks the highest completed mean in each column.
-% Noise starts from N(0,I) in normalized image space, clipped to valid pixels; seed 0 gives identical starts for the 1x and 3x runs at each budget. Noise (3x) uses 30k/24k distillation iterations; its evaluation remains 2k-epoch SimCLR.
-% Noise (10x) continues the existing 3x checkpoint to 100k/80k total iterations, preserving Adam and RNG state; cosine LR is rephased to the extended total horizon. It is a continuation, not a fresh 10x-schedule run.
 \begin{table}[h]
 \centering
 \caption{CIFAR10 initialization ablation for MIPA. Noise variants use the stated multiple of the main-table distillation budget; $10\times$ resumes the $3\times$ checkpoint with an extended cosine schedule. Accuracy is mean $\pm$ sample SD over five linear probes of one 2k-epoch SimCLR encoder.}
@@ -22,7 +16,7 @@ K-means (100 iter.) & $43.72\pm0.28$ & $49.52\pm0.38$ & $50.73\pm0.98$ & $56.60\
 IIC & $43.32\pm0.54$ & $49.59\pm0.35$ & $50.15\pm0.51$ & $55.91\pm0.14$ \\
 Gaussian noise & $39.18\pm0.74$ & $44.62\pm0.72$ & $38.13\pm0.71$ & $44.00\pm0.37$ \\
 Gaussian noise ($3\times$ iter.) & $41.98\pm0.56$ & $47.74\pm0.37$ & $42.82\pm0.73$ & $48.02\pm0.30$ \\
-Gaussian noise ($10\times$ iter.) & Pending & Pending & Pending & Pending \\
+Gaussian noise ($10\times$ iter.) & $42.62\pm0.36$ & $47.48\pm0.32$ & $43.13\pm0.30$ & $48.82\pm0.34$ \\
 \bottomrule
 \end{tabular}%
 }

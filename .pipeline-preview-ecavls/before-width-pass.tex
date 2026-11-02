@@ -1,0 +1,204 @@
+
+\begin{figure*}[t!]
+\centering
+\resizebox{\textwidth}{!}{%
+\begin{tikzpicture}[x=0.80cm,y=0.80cm,
+    >=Latex,
+    line cap=round,line join=round,
+    every node/.style={inner sep=0pt},
+    stage/.style={font=\normalfont\small},
+    textlabel/.style={font=\normalfont\small},
+    note/.style={font=\normalfont\footnotesize,text=ddgray}]
+
+% Colors follow the paper-style blue / red / purple / green palette.
+\definecolor{ddblue}{RGB}{91,132,180}
+\definecolor{ddbluefill}{RGB}{217,230,244}
+\definecolor{ddred}{RGB}{199,106,100}
+\definecolor{ddredfill}{RGB}{248,222,218}
+\definecolor{ddpurple}{RGB}{169,154,187}
+\definecolor{ddpurplefill}{RGB}{250,247,252}
+\definecolor{ddgreen}{RGB}{102,142,120}
+\definecolor{ddgreenfill}{RGB}{247,250,243}
+\definecolor{ddgray}{RGB}{91,101,111}
+
+% Column headings.
+\node[stage] at (5.47,7.02) {Shared augmentation};
+\node[note] at (5.47,6.62) {within each view};
+\node[stage] at (9.52,7.02) {Frozen encoder};
+\node[font=\footnotesize,text=ddgray] at (9.52,6.62) {$f_{\theta_{\mathcal{T}}}$};
+
+% Real and synthetic image stacks.
+\node[textlabel,text=ddblue] at (1.77,6.62) {Real batch};
+\foreach \xx/\yy in {1.43/5.19,1.32/5.08,1.21/4.97,1.10/4.86}{%
+  \draw[fill=ddbluefill,draw=ddblue,line width=.70pt]
+    (\xx,\yy) rectangle ++(1.02,1.01);
+}
+\node[font=\small,text=ddblue] at (1.61,5.365) {$\mathcal{B}$};
+\node[textlabel,text=ddred] at (1.77,3.91) {Synthetic set};
+
+\foreach \xx/\yy in {1.43/2.48,1.32/2.37,1.21/2.26,1.10/2.15}{%
+  \draw[fill=ddredfill,draw=ddred,line width=.70pt]
+    (\xx,\yy) rectangle ++(1.02,1.01);
+}
+\node[font=\small,text=ddred] at (1.61,2.655) {$\mathcal{S}$};
+
+% Branch arrows: the same real and synthetic images feed both views.
+\draw[->,draw=ddblue,line width=.95pt] (2.48,5.26)--(4.23,5.26);
+\draw[draw=ddblue,line width=.95pt] (3.31,5.26)--(3.31,2.48);
+\draw[->,draw=ddblue,line width=.95pt] (3.31,2.48)--(4.23,2.48);
+\fill[ddblue] (3.31,5.26) circle (.050);
+
+\draw[draw=ddred,line width=.95pt] (2.51,2.66)--(3.68,2.66);
+\draw[draw=ddred,line width=.95pt] (3.68,1.87)--(3.68,4.62);
+\draw[->,draw=ddred,line width=.95pt] (3.68,4.62)--(4.23,4.62);
+\draw[->,draw=ddred,line width=.95pt] (3.68,1.87)--(4.23,1.87);
+\fill[ddred] (3.68,2.66) circle (.050);
+
+% View 1 and view 2 augmentation boxes.
+\foreach \by/\v in {4.19/1,1.40/2}{%
+  \draw[rounded corners=.17cm,draw=ddpurple,line width=.8pt,fill=ddpurplefill]
+    (4.27,\by) rectangle (6.68,\by+2.07);
+  \node[textlabel,text=ddgray] at (5.47,\by+1.73)
+    {View \v: $a^{(\v)}$};
+  \draw[rounded corners=.055cm,draw=ddblue,line width=.55pt,fill=ddbluefill]
+    (4.53,\by+.82) rectangle (6.40,\by+1.36);
+  \node[font=\footnotesize,text=ddblue] at (5.47,\by+1.09)
+    {$a^{(\v)}(\mathcal{B})$};
+  \draw[rounded corners=.055cm,draw=ddred,line width=.55pt,fill=ddredfill]
+    (4.53,\by+.17) rectangle (6.40,\by+.71);
+  \node[font=\footnotesize,text=ddred] at (5.47,\by+.44)
+    {$a^{(\v)}(\mathcal{S})$};
+}
+\node[note] at (5.47,1.00) {Independent views};
+
+% Arrows from the augmented inputs to the frozen feature network.
+\foreach \yy in {5.26,2.48}{\draw[->,ddblue,line width=.95pt] (6.68,\yy)--(7.79,\yy);}
+\foreach \yy in {4.62,1.87}{\draw[->,ddred,line width=.95pt] (6.68,\yy)--(7.79,\yy);}
+
+% Shared encoder enclosure.
+\begin{scope}[xshift=1.2mm]
+\draw[rounded corners=.16cm,draw=ddgray!70,fill=black!2,line width=.75pt]
+  (7.64,1.38) rectangle (11.10,6.26);
+
+% Two views of the same fixed network; all connections and nodes editable.
+\foreach \cy in {5.06,2.26}{%
+  \foreach \ya in {-.43,0,.43}{%
+    \foreach \yb in {-.63,-.21,.21,.63}{%
+      \draw[ddgray!85,line width=.27pt] (7.98,\cy+\ya)--(8.49,\cy+\yb);
+    }
+  }
+  \foreach \yb in {-.63,-.21,.21,.63}{%
+    \foreach \yc in {-.29,.29}{%
+      \draw[ddgray!85,line width=.27pt] (8.49,\cy+\yb)--(9.05,\cy+\yc);
+    }
+  }
+  \foreach \ya in {-.43,0,.43}{\draw[fill=black!3,draw=ddgray,line width=.55pt] (7.98,\cy+\ya) circle (.11);}
+  \foreach \yb in {-.63,-.21,.21,.63}{\draw[fill=black!3,draw=ddgray,line width=.55pt] (8.49,\cy+\yb) circle (.11);}
+  \foreach \yc in {-.29,.29}{\draw[fill=black!3,draw=ddgray,line width=.55pt] (9.05,\cy+\yc) circle (.11);}
+  \draw[->,draw=ddgray,line width=.7pt] (9.24,\cy)--(9.62,\cy);
+  % Upper (real) feature bar.
+  \foreach \k/\shade in {0/20,1/55,2/16,3/44,4/68}{%
+    \fill[ddblue!\shade!white] (9.74+\k*.24,\cy+.07) rectangle ++(.235,.30);
+  }
+  \draw[draw=ddblue,line width=.55pt] (9.74,\cy+.07) rectangle (10.94,\cy+.37);
+  % Lower (synthetic) feature bar.
+  \foreach \k/\shade in {0/55,1/13,2/29,3/10,4/41}{%
+    \fill[ddred!\shade!white] (9.74+\k*.24,\cy-.57) rectangle ++(.235,.30);
+  }
+  \draw[draw=ddred,line width=.55pt] (9.74,\cy-.57) rectangle (10.94,\cy-.27);
+}
+\node[note] at (9.37,3.79) {shared weights};
+\node[note] at (9.37,1.00) {$\ell_2$-normalized features};
+\end{scope}
+
+% Stage headings share a baseline and align with their visual blocks.
+\node[stage] at (13.92,7.02) {Prototype assignments};
+\node[note] at (13.92,6.62) {cosine similarity + softmax};
+\node[stage] at (19.33,7.02) {Joint distribution};
+\node[stage] at (22.65,7.02) {Information objective};
+
+% Encoder outputs enter two sparse, bipartite assignment diagrams.
+\draw[->,ddgray,line width=.9pt] (11.26,5.08)--(12.11,5.08);
+\draw[->,ddgray,line width=.9pt] (11.26,2.29)--(12.11,2.29);
+
+% Instead of Q heatmaps, the two views use bipartite graphs.
+% Blue circles are real examples; red squares are synthetic prototypes.
+% Edge darkness indicates an illustrative soft assignment weight.
+\begin{scope}[xshift=2.4mm]
+\foreach \v/\by in {1/4.13,2/1.35}{%
+  \draw[rounded corners=.15cm,fill=ddpurplefill,draw=ddpurple!80,
+       line width=.70pt] (11.94,\by+.15) rectangle (15.29,\by+1.98);
+  \foreach \ra in {.48,1.05,1.61}{%
+    \foreach \pr in {.46,.86,1.27,1.67}{%
+      \draw[ddpurple!26,line width=.34pt]
+        (12.35,\by+\ra)--(14.85,\by+\pr);
+    }
+  }
+  % Illustrative soft assignments differ in both strength and preferred prototype.
+  \ifnum\v=1
+    \draw[ddpurple!95,line width=1.58pt] (12.35,\by+1.61)--(14.85,\by+1.67);
+    \draw[ddpurple!82,line width=1.42pt] (12.35,\by+1.05)--(14.85,\by+.86);
+    \draw[ddpurple!86,line width=1.48pt] (12.35,\by+.48)--(14.85,\by+.46);
+    \draw[ddpurple!57,line width=.84pt] (12.35,\by+1.05)--(14.85,\by+1.27);
+    \draw[ddpurple!52,line width=.76pt] (12.35,\by+.48)--(14.85,\by+.86);
+  \else
+    \draw[ddpurple!88,line width=1.46pt] (12.35,\by+1.61)--(14.85,\by+1.27);
+    \draw[ddpurple!95,line width=1.58pt] (12.35,\by+1.05)--(14.85,\by+1.67);
+    \draw[ddpurple!82,line width=1.40pt] (12.35,\by+.48)--(14.85,\by+.86);
+    \draw[ddpurple!61,line width=.90pt] (12.35,\by+1.61)--(14.85,\by+1.67);
+    \draw[ddpurple!48,line width=.70pt] (12.35,\by+.48)--(14.85,\by+.46);
+  \fi
+  % The nodes sit above the links for a clean outline.
+  \foreach \ra in {.48,1.05,1.61}{%
+     \draw[fill=ddbluefill,draw=ddblue,line width=.77pt]
+          (12.35,\by+\ra) circle (.115);
+  }
+  \foreach \pr in {.46,.86,1.27,1.67}{%
+     \draw[fill=ddredfill,draw=ddred,line width=.78pt,rounded corners=.018cm]
+          (14.74,\by+\pr-.105) rectangle (14.95,\by+\pr+.105);
+  }
+  \node[font=\footnotesize] at (13.62,\by-.20)
+       {$Q_{\v}\in\mathbb{R}^{B\times m}$};
+}
+\end{scope}
+
+% All four right-side arrows span 1.00 unit horizontally.
+\draw[->,ddgray,line width=.90pt] (15.59,5.17) -- (16.59,4.1034);
+\draw[->,ddgray,line width=.90pt] (15.59,2.39) -- (16.59,3.5366);
+\fill[white] (16.90,3.82) circle (.42);
+\draw[draw=ddpurple,line width=.94pt] (16.90,3.82) circle (.42);
+\node[font=\large,text=ddpurple!90!black] at (16.90,3.82) {$\times$};
+\draw[->,ddgray,line width=.90pt] (17.32,3.82) -- (18.32,3.82);
+
+% Center the joint matrix on the connecting arrows.
+% Symmetric colors make the structure of P visually explicit.
+\foreach \rowidx in {0,1,2,3}{%
+  \foreach \colidx in {0,1,2,3}{%
+    \pgfmathtruncatemacro{\sep}{abs(\rowidx+\colidx-3)}
+    \pgfmathtruncatemacro{\shade}{max(12,84-29*\sep-2*abs(\rowidx-\colidx))}
+    \fill[ddgreen!\shade!white]
+       (18.37+\colidx*.48,2.86+\rowidx*.48) rectangle ++(.48,.48);
+    \draw[white,line width=.45pt]
+       (18.37+\colidx*.48,2.86+\rowidx*.48) rectangle ++(.48,.48);
+  }
+}
+\draw[draw=ddgreen!82,line width=.88pt] (18.37,2.86) rectangle (20.29,4.78);
+\node[font=\small] at (19.33,2.29) {$J=\frac{1}{B}Q_1^\top Q_2$};
+\node[font=\small] at (19.33,1.50) {$P=\frac{1}{2}(J+J^\top)$};
+\draw[->,ddgray,line width=.90pt] (20.34,3.82) -- (21.34,3.82);
+  
+\node[textlabel,align=center] (objective) at (22.65,3.82)
+  {Maximize\\[3pt]$I_P(C_1;C_2)$};
+
+% Keep the existing feedback: only synthetic pixels are updated.
+\draw[draw=ddred,dashed,line width=1.00pt,->,shorten <=4pt]
+  (objective.south)--(22.65,.52)--(1.75,.52)--(1.75,2);
+\node[note,text=ddred,fill=white,inner xsep=5pt] at (12.28,.52)
+  {Update synthetic pixels};
+
+\end{tikzpicture}%
+}
+\caption{Overview of MIPA (Mutual Information Prototype Alignment)
+for self-supervised dataset distillation.}
+\label{fig:ssl-dd-pipeline}
+\end{figure*}

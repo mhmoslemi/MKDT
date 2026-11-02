@@ -1,0 +1,67 @@
+{
+  "complete": true,
+  "completed_probes": 5,
+  "expected_probes": 5,
+  "generation_args": {
+    "Iteration": 80000,
+    "batch_real": 128,
+    "beta": 1,
+    "dataset": "CIFAR10",
+    "distill_aug_strategy": "color_crop_cutout_scale",
+    "feature_batch": 128,
+    "lr_img": 0.0015,
+    "percentage": 1,
+    "prototype_pool_size": 0,
+    "seed": 0,
+    "single_channel": false,
+    "temperature": 0.2
+  },
+  "identity": {
+    "seed": 0,
+    "selection_method": "ours",
+    "signature": "20a1f7313102f67a981eeaf809d31564949272cb306115e741ac73e747ccdf99"
+  },
+  "labels": 1,
+  "linear_epochs": 100,
+  "mean_percent": 43.128,
+  "model": "ResNet18",
+  "samples": [
+    {
+      "accuracy_percent": 42.78,
+      "probe_seed": 0,
+      "result_file": "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt1/evaluation/evaluations/CIFAR10_lbl1_probe0.json",
+      "ssl_seed": 0
+    },
+    {
+      "accuracy_percent": 42.97,
+      "probe_seed": 1,
+      "result_file": "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt1/evaluation/evaluations/CIFAR10_lbl1_probe1.json",
+      "ssl_seed": 0
+    },
+    {
+      "accuracy_percent": 43.59,
+      "probe_seed": 2,
+      "result_file": "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt1/evaluation/evaluations/CIFAR10_lbl1_probe2.json",
+      "ssl_seed": 0
+    },
+    {
+      "accuracy_percent": 43.2,
+      "probe_seed": 3,
+      "result_file": "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt1/evaluation/evaluations/CIFAR10_lbl1_probe3.json",
+      "ssl_seed": 0
+    },
+    {
+      "accuracy_percent": 43.1,
+      "probe_seed": 4,
+      "result_file": "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt1/evaluation/evaluations/CIFAR10_lbl1_probe4.json",
+      "ssl_seed": 0
+    }
+  ],
+  "source": "CIFAR10",
+  "ssl": "simclr",
+  "ssl_epochs": 2000,
+  "std_ddof": 1,
+  "std_percent": 0.3022747094945271,
+  "subset": 1,
+  "target": "CIFAR10"
+}
