@@ -1,0 +1,36 @@
+{
+  "ablation": {
+    "adaptive_temperature": false,
+    "column_temperature": 0.2,
+    "column_weight": 0.1,
+    "columns": "assignment probabilities, centered over real images, L2 normalization with eps=1e-6",
+    "duplicate_penalty": false,
+    "objective": "negative_MI + column_weight * symmetric_column_cross_entropy",
+    "positive": "same prototype across the two existing views"
+  },
+  "accuracies": [
+    47.66,
+    46.62,
+    46.57,
+    47.47,
+    46.97
+  ],
+  "baseline_mean_percent": 50.58,
+  "baseline_std_percent": 0.4743416490252575,
+  "baseline_summary": "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_cvpr_color_crop/results/CIFAR10/ResNet18BN/pt0.2/simclr/ssl_seed_000/summary_CIFAR10_lbl5.json",
+  "complete": true,
+  "completed_probes": 5,
+  "difference_pp": -3.5219999999999985,
+  "expected_probes": 5,
+  "identity": {
+    "seed": 0,
+    "selection_method": "ours",
+    "signature": "2d49415673217f20fd260bcf26580c374f3584cb62921065e9807d56d1f707cc"
+  },
+  "labels": 5,
+  "linear_epochs": 100,
+  "mean_percent": 47.058,
+  "ssl_epochs": 2000,
+  "std_ddof": 1,
+  "std_percent": 0.49241242876271846
+}

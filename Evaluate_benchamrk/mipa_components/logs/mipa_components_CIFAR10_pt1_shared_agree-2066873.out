@@ -1,0 +1,16 @@
+COMPONENT: {"objective": "Eq7: mean_i(sum_j((q1_ij-q2_ij)^2))/2", "real_synthetic_augmentations": "shared"}
+Loaded fixed teacher seed 0: /scratch/mmoslem3/MKDT/Evaluate_benchamrk/full_ssl_checkpoints_1000ep_3seeds/CIFAR10/ResNet18/full/pt100/simclr/seed_000/encoder.pt
+Initializing 500 synthetic images from the Random-baseline training images (seed=0)...
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_components/runs/pt1/shared_agree/synthetic/res_IIC_CIFAR10_ResNet18BN_1percent_final.pt (iteration 0/8000)
+Hyper-parameters: 
+ {'dataset': 'CIFAR10', 'percentage': 1.0, 'data_path': '/scratch/mmoslem3/data', 'device': 'cuda', 'seed': 0, 'single_channel': False, 'Iteration': 8000, 'lr_img': 0.0015, 'batch_real': 128, 'temperature': 0.2, 'beta': 1.0, 'prototype_pool_size': 0, 'distill_aug_strategy': 'color_crop_cutout_scale', 'save_path': '/scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_components/runs/pt1/shared_agree/synthetic', 'resume': True, 'save_every': 500, 'feature_batch': 128}
+Objective: Eq. 7 assignment disagreement only; shared real/synthetic augmentations.
+[2026-11-01 13:57:57] distillation begins
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_components/runs/pt1/shared_agree/synthetic/res_IIC_CIFAR10_ResNet18BN_1percent_final.pt (iteration 1/8000)
+[2026-11-01 13:58:12] iter = 00100, loss = 0.000305, pixel drift RMS = 1.14661/255
+[2026-11-01 13:58:27] iter = 00200, loss = 0.000761, pixel drift RMS = 1.77219/255
+[2026-11-01 13:58:41] iter = 00300, loss = 0.001542, pixel drift RMS = 2.21483/255
+[2026-11-01 13:58:56] iter = 00400, loss = 0.000613, pixel drift RMS = 2.60932/255
+[2026-11-01 13:59:10] iter = 00500, loss = 0.000286, pixel drift RMS = 2.97734/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_components/runs/pt1/shared_agree/synthetic/res_IIC_CIFAR10_ResNet18BN_1percent_final.pt (iteration 500/8000)
+[2026-11-01 13:59:25] iter = 00600, loss = 0.000248, pixel drift RMS = 3.25891/255

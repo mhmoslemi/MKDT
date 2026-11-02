@@ -1,0 +1,33 @@
+{
+  "checkpoint": "/scratch/mmoslem3/MKDT/OT-SSL-DD/ours_syntehtic_cvpr_color_crop/CIFAR100/ResNet18BN/pt1/res_IIC_CIFAR100_ResNet18BN_1percent_final.pt",
+  "checkpoint_sha256": "d690ecd5226d414390b61458c57a9524207d55b8fc790b23f18aeb5dd32d8e1b",
+  "count": 500,
+  "dataset": "CIFAR100",
+  "feature_space": "L2-normalized frozen full-data SimCLR encoder, last layer, no augmentation",
+  "generation_args": {
+    "Iteration": 8000,
+    "batch_real": 128,
+    "beta": 1,
+    "dataset": "CIFAR100",
+    "distill_aug_strategy": "color_crop_cutout_scale",
+    "feature_batch": 128,
+    "lr_img": 0.0015,
+    "percentage": 1,
+    "prototype_pool_size": 0,
+    "seed": 0,
+    "single_channel": false,
+    "temperature": 0.2
+  },
+  "initial_pixels_verified": true,
+  "iteration": 8000,
+  "labels_used_for_embedding": false,
+  "percentage": 1,
+  "pixel_policy": "Denormalize saved float pixels and clamp to [0, 1]; no enhancement",
+  "random_seed": 0,
+  "random_selection_rng_seed": 1000,
+  "real_features_sha256": "6c09a188914ce95c614a921c6930549e78373160396a258666c65f0bd28c5f41",
+  "teacher": "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/full_ssl_checkpoints_1000ep_3seeds/CIFAR100/ResNet18/full/pt100/simclr/seed_000/encoder.pt",
+  "teacher_seed": 0,
+  "teacher_sha256": "d094e321a0d4c57b403044dad0969c2a63a3474e28e3586fc58551856a79018c",
+  "train_fingerprint": "091c775676ae5172a0a29eaf9c37f6a6b601efefc7376b95ef622082ae2a9c14"
+}

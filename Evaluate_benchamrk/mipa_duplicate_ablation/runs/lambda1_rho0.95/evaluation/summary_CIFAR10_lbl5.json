@@ -1,0 +1,29 @@
+{
+  "ablation": {
+    "coverage_weight": 0.0,
+    "duplicate_threshold": 0.95,
+    "duplicate_weight": 1.0,
+    "penalty": "mean_j relu(max_{k!=j} cosine(z_j,z_k)-rho)^2",
+    "views": "Mean penalty across the two existing augmented synthetic views"
+  },
+  "accuracies": [
+    50.65,
+    49.77,
+    50.17,
+    50.5,
+    50.04
+  ],
+  "baseline_mean_percent": 50.58,
+  "baseline_std_percent": 0.4743416490252575,
+  "baseline_summary": "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_cvpr_color_crop/results/CIFAR10/ResNet18BN/pt0.2/simclr/ssl_seed_000/summary_CIFAR10_lbl5.json",
+  "complete": true,
+  "completed_probes": 5,
+  "difference_pp": -0.3539999999999992,
+  "expected_probes": 5,
+  "labels": 5,
+  "linear_epochs": 100,
+  "mean_percent": 50.226,
+  "ssl_epochs": 2000,
+  "std_ddof": 1,
+  "std_percent": 0.35373719058080255
+}

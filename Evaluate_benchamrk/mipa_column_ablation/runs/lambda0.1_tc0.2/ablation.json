@@ -1,0 +1,27 @@
+{
+  "ablation": {
+    "adaptive_temperature": false,
+    "column_temperature": 0.2,
+    "column_weight": 0.1,
+    "columns": "assignment probabilities, centered over real images, L2 normalization with eps=1e-6",
+    "duplicate_penalty": false,
+    "objective": "negative_MI + column_weight * symmetric_column_cross_entropy",
+    "positive": "same prototype across the two existing views"
+  },
+  "baseline_config": "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_cvpr_color_crop/results/CIFAR10/ResNet18BN/pt0.2/simclr/ssl_seed_000/config.json",
+  "generation_args": {
+    "Iteration": 10000,
+    "batch_real": 128,
+    "beta": 1,
+    "dataset": "CIFAR10",
+    "distill_aug_strategy": "color_crop_cutout_scale",
+    "feature_batch": 128,
+    "lr_img": 0.0015,
+    "percentage": 0.2,
+    "prototype_pool_size": 0,
+    "seed": 0,
+    "single_channel": false,
+    "temperature": 0.2
+  },
+  "implementation_sha256": "def1b6722b404121040d76a2157e35be71135280285535526897ec18eee6eeac"
+}

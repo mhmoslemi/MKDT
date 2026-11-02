@@ -1,33 +1,22 @@
+
 \begin{table}[t]
 \centering
-\caption{MIPA components on CIFAR10 with ResNet18. Within each synthetic-data budget, distilled rows use the same randomly selected real-image initialization, teacher, and optimization settings, with accuracy reported as mean $\pm$ sample SD over five linear probes after one 2k-epoch SimCLR training. Random subset uses no distillation; its reference values are copied from the main table. Sharing couples augmentation parameters between real and synthetic images within each view; the two views remain independently sampled.}
+\caption{CIFAR10 component ablation.}
 \label{tab:mipa-components}
 \footnotesize
-\setlength{\tabcolsep}{3pt}
-\begin{tabular*}{\columnwidth}{@{\extracolsep{\fill}}llcc@{}}
+\setlength{\tabcolsep}{2pt}
+
+\resizebox{\columnwidth}{!}{%
+\begin{tabular}{@{}lcccc@{}}
 \toprule
-Setting & Objective & 1\% labels & 5\% labels \\
+Method & \multicolumn{2}{c}{0.2\% data} & \multicolumn{2}{c}{1\% data} \\
+\cmidrule(lr){2-3}\cmidrule(l){4-5}
+ & 1\% labels & 5\% labels & 1\% labels & 5\% labels \\
 \midrule
-\multicolumn{4}{l}{\textit{0.2\% synthetic data (100 images)}} \\
-\addlinespace[2pt]
-Random subset & None & $40.04\pm0.45$ & $46.20\pm0.27$ \\
-Independent & $\mathcal{L}_{\mathrm{agree}}$ & $36.69\pm0.81$ & $43.34\pm0.49$ \\
-Shared & $\mathcal{L}_{\mathrm{agree}}$ & $37.60\pm0.82$ & $43.53\pm0.62$ \\
-Shared & $-I_P(C_1;C_2)$ & $\mathbf{45.18\pm0.41}$ & $\mathbf{50.58\pm0.47}$ \\
-\midrule
-\multicolumn{4}{l}{\textit{1\% synthetic data (500 images)}} \\
-\addlinespace[2pt]
-Random subset & None & $48.34\pm0.63$ & $52.05\pm1.00$ \\
-Independent & $\mathcal{L}_{\mathrm{agree}}$ & -- & -- \\
-Shared & $\mathcal{L}_{\mathrm{agree}}$ & -- & -- \\
-Shared & $-I_P(C_1;C_2)$ & $52.26\pm0.55$ & $57.36\pm0.16$ \\
+Random subset & $40.04\pm0.45$ & $46.20\pm0.27$ & $48.34\pm0.63$ & $52.05\pm1.00$ \\
+Agreement only & $37.60\pm0.82$ & $43.53\pm0.62$ & $40.69\pm0.82$ & $47.65\pm0.21$ \\
+Full MIPA & $\mathbf{45.18\pm0.41}$ & $\mathbf{50.58\pm0.47}$ & $\mathbf{52.26\pm0.55}$ & $\mathbf{57.36\pm0.16}$ \\
 \bottomrule
-\end{tabular*}
-% Random-subset reference values: CVPR_tables/table.tex (CIFAR10, ResNet18, SimCLR).
-% Full-MIPA sources: Evaluate_benchamrk/mipa_cvpr_color_crop/results/CIFAR10/ResNet18BN/pt{0.2,1}/simclr/ssl_seed_000/.
-% Agreement controls use Eq. 7 exactly: sum_i ||q_i^1-q_i^2||_2^2/(2B), with no MI or marginal-entropy term.
-% 0.2% controls: Evaluate_benchamrk/mipa_components/runs/{independent_agree,shared_agree}/evaluation/.
-% 1% controls: Evaluate_benchamrk/mipa_components/runs/pt1/{independent_agree,shared_agree}/evaluation/.
-% Matched distillation: 10k iterations at 0.2%, 8k at 1%; lr_img=0.0015, batch_real=128, base temperature=0.2, color_crop_cutout_scale.
-% Missing entries are pending measurements, not measured zeros.
+\end{tabular}%
+}
 \end{table}

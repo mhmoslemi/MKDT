@@ -1,0 +1,305 @@
+PASS: entropy targets, scale/permutation invariance, implicit-gradient checks, bounds/ties, unchanged MI, synthetic gradients
+ABLATION: {"perplexity": 5, "entropy_target_nats": 1.6094379124341003, "temperature_bounds": [0.001, 1.0], "search_steps": 24, "temperature_gradient": "implicit for interior roots; constant at bounds", "view_rule": "Per-image temperature solved separately in each of the two existing views", "objective": "Unchanged negative MI; no auxiliary losses", "fixed_temperature_ignored": true}
+Loaded fixed teacher seed 0: /scratch/mmoslem3/MKDT/Evaluate_benchamrk/full_ssl_checkpoints_1000ep_3seeds/CIFAR10/ResNet18/full/pt100/simclr/seed_000/encoder.pt
+Initializing 100 synthetic images from the Random-baseline training images (seed=0)...
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_adaptive_temperature/runs/K5/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 0/10000)
+Hyper-parameters: 
+ {'dataset': 'CIFAR10', 'percentage': 0.2, 'data_path': '/scratch/mmoslem3/data', 'device': 'cuda', 'seed': 0, 'single_channel': False, 'Iteration': 10000, 'lr_img': 0.0015, 'batch_real': 128, 'temperature': 0.2, 'beta': 1.0, 'prototype_pool_size': 0, 'distill_aug_strategy': 'color_crop_cutout_scale', 'save_path': '/scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_adaptive_temperature/runs/K5/synthetic', 'resume': True, 'save_every': 500, 'feature_batch': 128}
+Objective: negative beta-weighted bipartite mutual information, beta=1, frozen teacher seed 0, pool sizes=[100].
+[2026-11-01 19:02:39] distillation begins
+ADAPTIVE LOSS: {"iteration": 1, "negative_mi": -1.7601127624511719, "target_perplexity": 5, "achieved_perplexity_mean": 5.000000476837158, "entropy_error_max": 1.6689300537109375e-06, "target_missed_fraction": 0.0, "tau_min": 0.010045832023024559, "tau_mean": 0.05936518684029579, "tau_max": 0.14347755908966064, "lower_bound_fraction": 0.0, "upper_bound_fraction": 0.0, "hard_used_prototypes": 72, "effective_used_prototypes": 77.99075317382812}
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_adaptive_temperature/runs/K5/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 1/10000)
+[2026-11-01 19:02:44] iter = 00100, loss = -1.850379, pixel drift RMS = 1.18963/255
+ADAPTIVE LOSS: {"iteration": 200, "negative_mi": -1.70005464553833, "target_perplexity": 5, "achieved_perplexity_mean": 5.000000476837158, "entropy_error_max": 2.384185791015625e-06, "target_missed_fraction": 0.0, "tau_min": 0.008212888613343239, "tau_mean": 0.052189718931913376, "tau_max": 0.1256905496120453, "lower_bound_fraction": 0.0, "upper_bound_fraction": 0.0, "hard_used_prototypes": 81, "effective_used_prototypes": 84.06990814208984}
+[2026-11-01 19:02:48] iter = 00200, loss = -1.700055, pixel drift RMS = 1.87881/255
+[2026-11-01 19:02:52] iter = 00300, loss = -1.573322, pixel drift RMS = 2.47532/255
+ADAPTIVE LOSS: {"iteration": 400, "negative_mi": -1.9029746055603027, "target_perplexity": 5, "achieved_perplexity_mean": 5.0, "entropy_error_max": 1.6689300537109375e-06, "target_missed_fraction": 0.0, "tau_min": 0.015315582975745201, "tau_mean": 0.0581674724817276, "tau_max": 0.13731591403484344, "lower_bound_fraction": 0.0, "upper_bound_fraction": 0.0, "hard_used_prototypes": 83, "effective_used_prototypes": 86.39139556884766}
+[2026-11-01 19:02:56] iter = 00400, loss = -1.902975, pixel drift RMS = 2.98292/255
+[2026-11-01 19:03:00] iter = 00500, loss = -1.949801, pixel drift RMS = 3.44078/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_adaptive_temperature/runs/K5/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 500/10000)
+ADAPTIVE LOSS: {"iteration": 600, "negative_mi": -1.9551448822021484, "target_perplexity": 5, "achieved_perplexity_mean": 5.000000953674316, "entropy_error_max": 1.430511474609375e-06, "target_missed_fraction": 0.0, "tau_min": 0.011720018461346626, "tau_mean": 0.054117824882268906, "tau_max": 0.11588072776794434, "lower_bound_fraction": 0.0, "upper_bound_fraction": 0.0, "hard_used_prototypes": 80, "effective_used_prototypes": 86.71041870117188}
+[2026-11-01 19:03:04] iter = 00600, loss = -1.955145, pixel drift RMS = 3.84318/255
+[2026-11-01 19:03:07] iter = 00700, loss = -1.957409, pixel drift RMS = 4.21289/255
+ADAPTIVE LOSS: {"iteration": 800, "negative_mi": -1.8198537826538086, "target_perplexity": 5, "achieved_perplexity_mean": 5.000000476837158, "entropy_error_max": 1.5497207641601562e-06, "target_missed_fraction": 0.0, "tau_min": 0.005947118625044823, "tau_mean": 0.04985736683011055, "tau_max": 0.12598161399364471, "lower_bound_fraction": 0.0, "upper_bound_fraction": 0.0, "hard_used_prototypes": 84, "effective_used_prototypes": 83.87979125976562}
+[2026-11-01 19:03:11] iter = 00800, loss = -1.819854, pixel drift RMS = 4.57521/255
+[2026-11-01 19:03:15] iter = 00900, loss = -1.865124, pixel drift RMS = 4.90745/255
+ADAPTIVE LOSS: {"iteration": 1000, "negative_mi": -1.558866024017334, "target_perplexity": 5, "achieved_perplexity_mean": 5.000000953674316, "entropy_error_max": 2.6226043701171875e-06, "target_missed_fraction": 0.0, "tau_min": 0.004938362631946802, "tau_mean": 0.03759829327464104, "tau_max": 0.10637056827545166, "lower_bound_fraction": 0.0, "upper_bound_fraction": 0.0, "hard_used_prototypes": 86, "effective_used_prototypes": 89.12987518310547}
+[2026-11-01 19:03:19] iter = 01000, loss = -1.558866, pixel drift RMS = 5.22727/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_adaptive_temperature/runs/K5/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 1000/10000)
+[2026-11-01 19:03:23] iter = 01100, loss = -1.626360, pixel drift RMS = 5.51635/255
+ADAPTIVE LOSS: {"iteration": 1200, "negative_mi": -2.1387014389038086, "target_perplexity": 5, "achieved_perplexity_mean": 5.000000953674316, "entropy_error_max": 2.384185791015625e-06, "target_missed_fraction": 0.0, "tau_min": 0.006721715442836285, "tau_mean": 0.053271714597940445, "tau_max": 0.11157425493001938, "lower_bound_fraction": 0.0, "upper_bound_fraction": 0.0, "hard_used_prototypes": 73, "effective_used_prototypes": 84.90528869628906}
+[2026-11-01 19:03:27] iter = 01200, loss = -2.138701, pixel drift RMS = 5.80691/255
+[2026-11-01 19:03:30] iter = 01300, loss = -2.095922, pixel drift RMS = 6.06119/255
+ADAPTIVE LOSS: {"iteration": 1400, "negative_mi": -1.3420310020446777, "target_perplexity": 5, "achieved_perplexity_mean": 5.000000953674316, "entropy_error_max": 4.291534423828125e-06, "target_missed_fraction": 0.0, "tau_min": 0.0057817683555185795, "tau_mean": 0.038693346083164215, "tau_max": 0.09905661642551422, "lower_bound_fraction": 0.0, "upper_bound_fraction": 0.0, "hard_used_prototypes": 90, "effective_used_prototypes": 88.5352554321289}
+[2026-11-01 19:03:34] iter = 01400, loss = -1.342031, pixel drift RMS = 6.32371/255
+[2026-11-01 19:03:38] iter = 01500, loss = -2.130870, pixel drift RMS = 6.56567/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_adaptive_temperature/runs/K5/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 1500/10000)
+ADAPTIVE LOSS: {"iteration": 1600, "negative_mi": -1.6508269309997559, "target_perplexity": 5, "achieved_perplexity_mean": 5.000000953674316, "entropy_error_max": 1.5497207641601562e-06, "target_missed_fraction": 0.0, "tau_min": 0.009956995025277138, "tau_mean": 0.045193735510110855, "tau_max": 0.11842837184667587, "lower_bound_fraction": 0.0, "upper_bound_fraction": 0.0, "hard_used_prototypes": 87, "effective_used_prototypes": 89.81827545166016}
+[2026-11-01 19:03:42] iter = 01600, loss = -1.650827, pixel drift RMS = 6.79620/255
+[2026-11-01 19:03:46] iter = 01700, loss = -2.284134, pixel drift RMS = 7.01070/255
+ADAPTIVE LOSS: {"iteration": 1800, "negative_mi": -2.1776046752929688, "target_perplexity": 5, "achieved_perplexity_mean": 5.000000476837158, "entropy_error_max": 1.430511474609375e-06, "target_missed_fraction": 0.0, "tau_min": 0.006801604758948088, "tau_mean": 0.05191746726632118, "tau_max": 0.12826792895793915, "lower_bound_fraction": 0.0, "upper_bound_fraction": 0.0, "hard_used_prototypes": 82, "effective_used_prototypes": 89.00735473632812}
+[2026-11-01 19:03:49] iter = 01800, loss = -2.177605, pixel drift RMS = 7.22045/255
+[2026-11-01 19:03:53] iter = 01900, loss = -2.197680, pixel drift RMS = 7.40764/255
+ADAPTIVE LOSS: {"iteration": 2000, "negative_mi": -2.1071133613586426, "target_perplexity": 5, "achieved_perplexity_mean": 5.000000953674316, "entropy_error_max": 1.430511474609375e-06, "target_missed_fraction": 0.0, "tau_min": 0.004928059410303831, "tau_mean": 0.047113869339227676, "tau_max": 0.11229181289672852, "lower_bound_fraction": 0.0, "upper_bound_fraction": 0.0, "hard_used_prototypes": 82, "effective_used_prototypes": 87.70516967773438}
+[2026-11-01 19:03:57] iter = 02000, loss = -2.107113, pixel drift RMS = 7.60707/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_adaptive_temperature/runs/K5/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 2000/10000)
+[2026-11-01 19:04:01] iter = 02100, loss = -2.087859, pixel drift RMS = 7.79489/255
+ADAPTIVE LOSS: {"iteration": 2200, "negative_mi": -2.197566032409668, "target_perplexity": 5, "achieved_perplexity_mean": 5.000000953674316, "entropy_error_max": 1.9073486328125e-06, "target_missed_fraction": 0.0, "tau_min": 0.0081257876008749, "tau_mean": 0.048253003507852554, "tau_max": 0.11852046102285385, "lower_bound_fraction": 0.0, "upper_bound_fraction": 0.0, "hard_used_prototypes": 82, "effective_used_prototypes": 89.6474609375}
+[2026-11-01 19:04:05] iter = 02200, loss = -2.197566, pixel drift RMS = 7.96515/255
+[2026-11-01 19:04:09] iter = 02300, loss = -1.711244, pixel drift RMS = 8.13784/255
+ADAPTIVE LOSS: {"iteration": 2400, "negative_mi": -2.2395763397216797, "target_perplexity": 5, "achieved_perplexity_mean": 5.000000953674316, "entropy_error_max": 1.9073486328125e-06, "target_missed_fraction": 0.0, "tau_min": 0.008049913682043552, "tau_mean": 0.048983730375766754, "tau_max": 0.11553768068552017, "lower_bound_fraction": 0.0, "upper_bound_fraction": 0.0, "hard_used_prototypes": 79, "effective_used_prototypes": 88.01280212402344}
+[2026-11-01 19:04:12] iter = 02400, loss = -2.239576, pixel drift RMS = 8.30600/255
+[2026-11-01 19:04:16] iter = 02500, loss = -2.211349, pixel drift RMS = 8.48014/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_adaptive_temperature/runs/K5/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 2500/10000)
+ADAPTIVE LOSS: {"iteration": 2600, "negative_mi": -1.2520813941955566, "target_perplexity": 5, "achieved_perplexity_mean": 5.000000476837158, "entropy_error_max": 2.6226043701171875e-06, "target_missed_fraction": 0.0, "tau_min": 0.0033488296903669834, "tau_mean": 0.034154653549194336, "tau_max": 0.10059510916471481, "lower_bound_fraction": 0.0, "upper_bound_fraction": 0.0, "hard_used_prototypes": 90, "effective_used_prototypes": 88.0145263671875}
+[2026-11-01 19:04:20] iter = 02600, loss = -1.252081, pixel drift RMS = 8.65411/255
+[2026-11-01 19:04:24] iter = 02700, loss = -2.110197, pixel drift RMS = 8.81091/255
+ADAPTIVE LOSS: {"iteration": 2800, "negative_mi": -2.2464752197265625, "target_perplexity": 5, "achieved_perplexity_mean": 5.000000953674316, "entropy_error_max": 1.1920928955078125e-06, "target_missed_fraction": 0.0, "tau_min": 0.00924647692590952, "tau_mean": 0.04698032885789871, "tau_max": 0.09953399747610092, "lower_bound_fraction": 0.0, "upper_bound_fraction": 0.0, "hard_used_prototypes": 86, "effective_used_prototypes": 88.12290954589844}
+[2026-11-01 19:04:28] iter = 02800, loss = -2.246475, pixel drift RMS = 8.95541/255
+[2026-11-01 19:04:32] iter = 02900, loss = -2.310545, pixel drift RMS = 9.10591/255
+ADAPTIVE LOSS: {"iteration": 3000, "negative_mi": -2.048008441925049, "target_perplexity": 5, "achieved_perplexity_mean": 5.000000953674316, "entropy_error_max": 2.384185791015625e-06, "target_missed_fraction": 0.0, "tau_min": 0.007322291377931833, "tau_mean": 0.0446808896958828, "tau_max": 0.10243228822946548, "lower_bound_fraction": 0.0, "upper_bound_fraction": 0.0, "hard_used_prototypes": 78, "effective_used_prototypes": 85.5624008178711}
+[2026-11-01 19:04:35] iter = 03000, loss = -2.048008, pixel drift RMS = 9.24054/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_adaptive_temperature/runs/K5/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 3000/10000)
+[2026-11-01 19:04:39] iter = 03100, loss = -2.209861, pixel drift RMS = 9.37638/255
+ADAPTIVE LOSS: {"iteration": 3200, "negative_mi": -1.601541519165039, "target_perplexity": 5, "achieved_perplexity_mean": 5.000000476837158, "entropy_error_max": 1.6689300537109375e-06, "target_missed_fraction": 0.0, "tau_min": 0.008355670608580112, "tau_mean": 0.036914605647325516, "tau_max": 0.10015545040369034, "lower_bound_fraction": 0.0, "upper_bound_fraction": 0.0, "hard_used_prototypes": 81, "effective_used_prototypes": 85.31038665771484}
+[2026-11-01 19:04:43] iter = 03200, loss = -1.601542, pixel drift RMS = 9.51109/255
+[2026-11-01 19:04:47] iter = 03300, loss = -1.805929, pixel drift RMS = 9.64212/255
+ADAPTIVE LOSS: {"iteration": 3400, "negative_mi": -1.142838478088379, "target_perplexity": 5, "achieved_perplexity_mean": 5.000000953674316, "entropy_error_max": 2.7418136596679688e-06, "target_missed_fraction": 0.0, "tau_min": 0.0075706071220338345, "tau_mean": 0.03619145229458809, "tau_max": 0.10564816743135452, "lower_bound_fraction": 0.0, "upper_bound_fraction": 0.0, "hard_used_prototypes": 87, "effective_used_prototypes": 87.51609802246094}
+[2026-11-01 19:04:51] iter = 03400, loss = -1.142838, pixel drift RMS = 9.75676/255
+[2026-11-01 19:04:55] iter = 03500, loss = -2.250827, pixel drift RMS = 9.86630/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_adaptive_temperature/runs/K5/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 3500/10000)
+ADAPTIVE LOSS: {"iteration": 3600, "negative_mi": -1.3840341567993164, "target_perplexity": 5, "achieved_perplexity_mean": 5.000000476837158, "entropy_error_max": 3.0994415283203125e-06, "target_missed_fraction": 0.0, "tau_min": 0.0071047148667275906, "tau_mean": 0.03394990414381027, "tau_max": 0.10312023758888245, "lower_bound_fraction": 0.0, "upper_bound_fraction": 0.0, "hard_used_prototypes": 88, "effective_used_prototypes": 84.36748504638672}
+[2026-11-01 19:04:58] iter = 03600, loss = -1.384034, pixel drift RMS = 9.96695/255
+[2026-11-01 19:05:02] iter = 03700, loss = -2.011089, pixel drift RMS = 10.06790/255
+ADAPTIVE LOSS: {"iteration": 3800, "negative_mi": -2.2699594497680664, "target_perplexity": 5, "achieved_perplexity_mean": 5.0, "entropy_error_max": 1.430511474609375e-06, "target_missed_fraction": 0.0, "tau_min": 0.002282923785969615, "tau_mean": 0.04485870152711868, "tau_max": 0.12499324232339859, "lower_bound_fraction": 0.0, "upper_bound_fraction": 0.0, "hard_used_prototypes": 89, "effective_used_prototypes": 91.6272201538086}
+[2026-11-01 19:05:06] iter = 03800, loss = -2.269959, pixel drift RMS = 10.17573/255
+[2026-11-01 19:05:10] iter = 03900, loss = -2.136499, pixel drift RMS = 10.26890/255
+ADAPTIVE LOSS: {"iteration": 4000, "negative_mi": -2.2540154457092285, "target_perplexity": 5, "achieved_perplexity_mean": 5.000000953674316, "entropy_error_max": 2.1457672119140625e-06, "target_missed_fraction": 0.0, "tau_min": 0.006203849334269762, "tau_mean": 0.04372291639447212, "tau_max": 0.1348431259393692, "lower_bound_fraction": 0.0, "upper_bound_fraction": 0.0, "hard_used_prototypes": 83, "effective_used_prototypes": 90.31594848632812}
+[2026-11-01 19:05:14] iter = 04000, loss = -2.254015, pixel drift RMS = 10.35957/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_adaptive_temperature/runs/K5/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 4000/10000)
+[2026-11-01 19:05:18] iter = 04100, loss = -2.374669, pixel drift RMS = 10.45525/255
+ADAPTIVE LOSS: {"iteration": 4200, "negative_mi": -2.298407554626465, "target_perplexity": 5, "achieved_perplexity_mean": 5.000000953674316, "entropy_error_max": 1.9073486328125e-06, "target_missed_fraction": 0.0, "tau_min": 0.005639701150357723, "tau_mean": 0.04326494410634041, "tau_max": 0.10737653821706772, "lower_bound_fraction": 0.0, "upper_bound_fraction": 0.0, "hard_used_prototypes": 79, "effective_used_prototypes": 83.92167663574219}
+[2026-11-01 19:05:21] iter = 04200, loss = -2.298408, pixel drift RMS = 10.54162/255
+[2026-11-01 19:05:25] iter = 04300, loss = -2.370337, pixel drift RMS = 10.61949/255
+ADAPTIVE LOSS: {"iteration": 4400, "negative_mi": -2.258366584777832, "target_perplexity": 5, "achieved_perplexity_mean": 5.000000476837158, "entropy_error_max": 1.9073486328125e-06, "target_missed_fraction": 0.0, "tau_min": 0.0024900799617171288, "tau_mean": 0.043038830161094666, "tau_max": 0.11632492393255234, "lower_bound_fraction": 0.0, "upper_bound_fraction": 0.0, "hard_used_prototypes": 82, "effective_used_prototypes": 89.02305603027344}
+[2026-11-01 19:05:29] iter = 04400, loss = -2.258367, pixel drift RMS = 10.69789/255
+[2026-11-01 19:05:33] iter = 04500, loss = -2.257396, pixel drift RMS = 10.77204/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_adaptive_temperature/runs/K5/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 4500/10000)
+ADAPTIVE LOSS: {"iteration": 4600, "negative_mi": -2.3502373695373535, "target_perplexity": 5, "achieved_perplexity_mean": 5.000000953674316, "entropy_error_max": 1.3113021850585938e-06, "target_missed_fraction": 0.0, "tau_min": 0.004609095863997936, "tau_mean": 0.0453551709651947, "tau_max": 0.09871784597635269, "lower_bound_fraction": 0.0, "upper_bound_fraction": 0.0, "hard_used_prototypes": 87, "effective_used_prototypes": 85.3175048828125}
+[2026-11-01 19:05:37] iter = 04600, loss = -2.350237, pixel drift RMS = 10.84507/255
+[2026-11-01 19:05:41] iter = 04700, loss = -2.073467, pixel drift RMS = 10.91677/255
+ADAPTIVE LOSS: {"iteration": 4800, "negative_mi": -2.187161445617676, "target_perplexity": 5, "achieved_perplexity_mean": 5.000000953674316, "entropy_error_max": 1.6689300537109375e-06, "target_missed_fraction": 0.0, "tau_min": 0.004801975097507238, "tau_mean": 0.03810968995094299, "tau_max": 0.11083442717790604, "lower_bound_fraction": 0.0, "upper_bound_fraction": 0.0, "hard_used_prototypes": 88, "effective_used_prototypes": 89.38170623779297}
+[2026-11-01 19:05:44] iter = 04800, loss = -2.187161, pixel drift RMS = 10.97183/255
+[2026-11-01 19:05:48] iter = 04900, loss = -2.053534, pixel drift RMS = 11.02914/255
+ADAPTIVE LOSS: {"iteration": 5000, "negative_mi": -2.3435616493225098, "target_perplexity": 5, "achieved_perplexity_mean": 5.000000953674316, "entropy_error_max": 1.5497207641601562e-06, "target_missed_fraction": 0.0, "tau_min": 0.008619913831353188, "tau_mean": 0.04227164015173912, "tau_max": 0.10308481007814407, "lower_bound_fraction": 0.0, "upper_bound_fraction": 0.0, "hard_used_prototypes": 83, "effective_used_prototypes": 87.45343780517578}
+[2026-11-01 19:05:52] iter = 05000, loss = -2.343562, pixel drift RMS = 11.09364/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_adaptive_temperature/runs/K5/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 5000/10000)
+[2026-11-01 19:05:56] iter = 05100, loss = -2.375360, pixel drift RMS = 11.15104/255
+ADAPTIVE LOSS: {"iteration": 5200, "negative_mi": -2.26082181930542, "target_perplexity": 5, "achieved_perplexity_mean": 5.000000953674316, "entropy_error_max": 1.1920928955078125e-06, "target_missed_fraction": 0.0, "tau_min": 0.005739893764257431, "tau_mean": 0.04231170937418938, "tau_max": 0.09905172884464264, "lower_bound_fraction": 0.0, "upper_bound_fraction": 0.0, "hard_used_prototypes": 80, "effective_used_prototypes": 81.97079467773438}
+[2026-11-01 19:06:00] iter = 05200, loss = -2.260822, pixel drift RMS = 11.20260/255
+[2026-11-01 19:06:03] iter = 05300, loss = -2.274447, pixel drift RMS = 11.25858/255
+ADAPTIVE LOSS: {"iteration": 5400, "negative_mi": -2.275486946105957, "target_perplexity": 5, "achieved_perplexity_mean": 5.000000476837158, "entropy_error_max": 1.7881393432617188e-06, "target_missed_fraction": 0.0, "tau_min": 0.0054554990492761135, "tau_mean": 0.04142852872610092, "tau_max": 0.1225227639079094, "lower_bound_fraction": 0.0, "upper_bound_fraction": 0.0, "hard_used_prototypes": 89, "effective_used_prototypes": 88.7852783203125}
+[2026-11-01 19:06:07] iter = 05400, loss = -2.275487, pixel drift RMS = 11.30707/255
+[2026-11-01 19:06:11] iter = 05500, loss = -2.277419, pixel drift RMS = 11.35155/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_adaptive_temperature/runs/K5/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 5500/10000)
+ADAPTIVE LOSS: {"iteration": 5600, "negative_mi": -2.366518974304199, "target_perplexity": 5, "achieved_perplexity_mean": 5.000000953674316, "entropy_error_max": 1.3113021850585938e-06, "target_missed_fraction": 0.0, "tau_min": 0.006963351275771856, "tau_mean": 0.04270783066749573, "tau_max": 0.11898966133594513, "lower_bound_fraction": 0.0, "upper_bound_fraction": 0.0, "hard_used_prototypes": 86, "effective_used_prototypes": 88.67709350585938}
+[2026-11-01 19:06:15] iter = 05600, loss = -2.366519, pixel drift RMS = 11.39505/255
+[2026-11-01 19:06:19] iter = 05700, loss = -2.372801, pixel drift RMS = 11.43130/255
+ADAPTIVE LOSS: {"iteration": 5800, "negative_mi": -2.1984500885009766, "target_perplexity": 5, "achieved_perplexity_mean": 5.000000953674316, "entropy_error_max": 2.1457672119140625e-06, "target_missed_fraction": 0.0, "tau_min": 0.004975287243723869, "tau_mean": 0.03792743384838104, "tau_max": 0.11090905964374542, "lower_bound_fraction": 0.0, "upper_bound_fraction": 0.0, "hard_used_prototypes": 87, "effective_used_prototypes": 89.59122467041016}
+[2026-11-01 19:06:22] iter = 05800, loss = -2.198450, pixel drift RMS = 11.47011/255
+[2026-11-01 19:06:26] iter = 05900, loss = -2.338078, pixel drift RMS = 11.50549/255
+ADAPTIVE LOSS: {"iteration": 6000, "negative_mi": -1.4299983978271484, "target_perplexity": 5, "achieved_perplexity_mean": 5.0, "entropy_error_max": 2.86102294921875e-06, "target_missed_fraction": 0.0, "tau_min": 0.006247678771615028, "tau_mean": 0.03414565324783325, "tau_max": 0.09342136234045029, "lower_bound_fraction": 0.0, "upper_bound_fraction": 0.0, "hard_used_prototypes": 87, "effective_used_prototypes": 87.97222900390625}
+[2026-11-01 19:06:30] iter = 06000, loss = -1.429998, pixel drift RMS = 11.54376/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_adaptive_temperature/runs/K5/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 6000/10000)
+[2026-11-01 19:06:34] iter = 06100, loss = -2.193937, pixel drift RMS = 11.57626/255
+ADAPTIVE LOSS: {"iteration": 6200, "negative_mi": -2.217217445373535, "target_perplexity": 5, "achieved_perplexity_mean": 5.000000476837158, "entropy_error_max": 1.430511474609375e-06, "target_missed_fraction": 0.0, "tau_min": 0.0051680998876690865, "tau_mean": 0.03721318021416664, "tau_max": 0.11118877679109573, "lower_bound_fraction": 0.0, "upper_bound_fraction": 0.0, "hard_used_prototypes": 84, "effective_used_prototypes": 87.07710266113281}
+[2026-11-01 19:06:38] iter = 06200, loss = -2.217217, pixel drift RMS = 11.60924/255
+[2026-11-01 19:06:42] iter = 06300, loss = -1.727777, pixel drift RMS = 11.63768/255
+ADAPTIVE LOSS: {"iteration": 6400, "negative_mi": -2.036808967590332, "target_perplexity": 5, "achieved_perplexity_mean": 5.000000476837158, "entropy_error_max": 1.9073486328125e-06, "target_missed_fraction": 0.0, "tau_min": 0.0018878404516726732, "tau_mean": 0.037785500288009644, "tau_max": 0.10441148281097412, "lower_bound_fraction": 0.0, "upper_bound_fraction": 0.0, "hard_used_prototypes": 79, "effective_used_prototypes": 87.0751953125}
+[2026-11-01 19:06:45] iter = 06400, loss = -2.036809, pixel drift RMS = 11.67025/255
+[2026-11-01 19:06:49] iter = 06500, loss = -2.250590, pixel drift RMS = 11.69896/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_adaptive_temperature/runs/K5/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 6500/10000)
+ADAPTIVE LOSS: {"iteration": 6600, "negative_mi": -2.262510299682617, "target_perplexity": 5, "achieved_perplexity_mean": 5.000000476837158, "entropy_error_max": 1.6689300537109375e-06, "target_missed_fraction": 0.0, "tau_min": 0.006538275629281998, "tau_mean": 0.04389093071222305, "tau_max": 0.11833330988883972, "lower_bound_fraction": 0.0, "upper_bound_fraction": 0.0, "hard_used_prototypes": 86, "effective_used_prototypes": 89.28437805175781}
+[2026-11-01 19:06:53] iter = 06600, loss = -2.262510, pixel drift RMS = 11.72741/255
+[2026-11-01 19:06:57] iter = 06700, loss = -2.455203, pixel drift RMS = 11.75287/255
+ADAPTIVE LOSS: {"iteration": 6800, "negative_mi": -2.268385887145996, "target_perplexity": 5, "achieved_perplexity_mean": 5.000000953674316, "entropy_error_max": 2.384185791015625e-06, "target_missed_fraction": 0.0, "tau_min": 0.004061655607074499, "tau_mean": 0.039724964648485184, "tau_max": 0.11222483962774277, "lower_bound_fraction": 0.0, "upper_bound_fraction": 0.0, "hard_used_prototypes": 87, "effective_used_prototypes": 88.31595611572266}
+[2026-11-01 19:07:01] iter = 06800, loss = -2.268386, pixel drift RMS = 11.77637/255
+[2026-11-01 19:07:04] iter = 06900, loss = -2.330469, pixel drift RMS = 11.80048/255
+ADAPTIVE LOSS: {"iteration": 7000, "negative_mi": -2.367659568786621, "target_perplexity": 5, "achieved_perplexity_mean": 5.000000476837158, "entropy_error_max": 1.1920928955078125e-06, "target_missed_fraction": 0.0, "tau_min": 0.005559423938393593, "tau_mean": 0.04483291506767273, "tau_max": 0.11231901496648788, "lower_bound_fraction": 0.0, "upper_bound_fraction": 0.0, "hard_used_prototypes": 82, "effective_used_prototypes": 91.318359375}
+[2026-11-01 19:07:08] iter = 07000, loss = -2.367660, pixel drift RMS = 11.81956/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_adaptive_temperature/runs/K5/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 7000/10000)
+[2026-11-01 19:07:12] iter = 07100, loss = -2.349710, pixel drift RMS = 11.83872/255
+ADAPTIVE LOSS: {"iteration": 7200, "negative_mi": -2.253533363342285, "target_perplexity": 5, "achieved_perplexity_mean": 5.000000953674316, "entropy_error_max": 1.9073486328125e-06, "target_missed_fraction": 0.0, "tau_min": 0.006445558741688728, "tau_mean": 0.03850739449262619, "tau_max": 0.1171531155705452, "lower_bound_fraction": 0.0, "upper_bound_fraction": 0.0, "hard_used_prototypes": 85, "effective_used_prototypes": 87.12789916992188}
+[2026-11-01 19:07:16] iter = 07200, loss = -2.253533, pixel drift RMS = 11.85723/255
+[2026-11-01 19:07:20] iter = 07300, loss = -1.425191, pixel drift RMS = 11.87349/255
+ADAPTIVE LOSS: {"iteration": 7400, "negative_mi": -2.312178611755371, "target_perplexity": 5, "achieved_perplexity_mean": 5.000000953674316, "entropy_error_max": 1.6689300537109375e-06, "target_missed_fraction": 0.0, "tau_min": 0.008462070487439632, "tau_mean": 0.04198041930794716, "tau_max": 0.11458500474691391, "lower_bound_fraction": 0.0, "upper_bound_fraction": 0.0, "hard_used_prototypes": 90, "effective_used_prototypes": 87.96853637695312}
+[2026-11-01 19:07:24] iter = 07400, loss = -2.312179, pixel drift RMS = 11.89067/255
+[2026-11-01 19:07:27] iter = 07500, loss = -2.374452, pixel drift RMS = 11.90454/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_adaptive_temperature/runs/K5/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 7500/10000)
+ADAPTIVE LOSS: {"iteration": 7600, "negative_mi": -2.126326560974121, "target_perplexity": 5, "achieved_perplexity_mean": 5.000000953674316, "entropy_error_max": 1.6689300537109375e-06, "target_missed_fraction": 0.0, "tau_min": 0.006926149595528841, "tau_mean": 0.041961781680583954, "tau_max": 0.11699133366346359, "lower_bound_fraction": 0.0, "upper_bound_fraction": 0.0, "hard_used_prototypes": 84, "effective_used_prototypes": 86.33308410644531}
+[2026-11-01 19:07:31] iter = 07600, loss = -2.126327, pixel drift RMS = 11.91989/255
+[2026-11-01 19:07:35] iter = 07700, loss = -2.261207, pixel drift RMS = 11.93190/255
+ADAPTIVE LOSS: {"iteration": 7800, "negative_mi": -2.3439583778381348, "target_perplexity": 5, "achieved_perplexity_mean": 5.000000953674316, "entropy_error_max": 1.5497207641601562e-06, "target_missed_fraction": 0.0, "tau_min": 0.005429609678685665, "tau_mean": 0.04011108726263046, "tau_max": 0.10847629606723785, "lower_bound_fraction": 0.0, "upper_bound_fraction": 0.0, "hard_used_prototypes": 86, "effective_used_prototypes": 87.80802917480469}
+[2026-11-01 19:07:39] iter = 07800, loss = -2.343958, pixel drift RMS = 11.94367/255
+[2026-11-01 19:07:43] iter = 07900, loss = -2.250237, pixel drift RMS = 11.95523/255
+ADAPTIVE LOSS: {"iteration": 8000, "negative_mi": -2.1333961486816406, "target_perplexity": 5, "achieved_perplexity_mean": 5.000000953674316, "entropy_error_max": 1.430511474609375e-06, "target_missed_fraction": 0.0, "tau_min": 0.005383673589676619, "tau_mean": 0.03985757753252983, "tau_max": 0.09935096651315689, "lower_bound_fraction": 0.0, "upper_bound_fraction": 0.0, "hard_used_prototypes": 85, "effective_used_prototypes": 90.74737548828125}
+[2026-11-01 19:07:46] iter = 08000, loss = -2.133396, pixel drift RMS = 11.96504/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_adaptive_temperature/runs/K5/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 8000/10000)
+[2026-11-01 19:07:50] iter = 08100, loss = -2.266493, pixel drift RMS = 11.97435/255
+ADAPTIVE LOSS: {"iteration": 8200, "negative_mi": -2.339728355407715, "target_perplexity": 5, "achieved_perplexity_mean": 5.000000953674316, "entropy_error_max": 1.3113021850585938e-06, "target_missed_fraction": 0.0, "tau_min": 0.005260701756924391, "tau_mean": 0.03775991499423981, "tau_max": 0.08766007423400879, "lower_bound_fraction": 0.0, "upper_bound_fraction": 0.0, "hard_used_prototypes": 81, "effective_used_prototypes": 89.93952178955078}
+[2026-11-01 19:07:54] iter = 08200, loss = -2.339728, pixel drift RMS = 11.98290/255
+[2026-11-01 19:07:58] iter = 08300, loss = -2.440145, pixel drift RMS = 11.98963/255
+ADAPTIVE LOSS: {"iteration": 8400, "negative_mi": -2.2617878913879395, "target_perplexity": 5, "achieved_perplexity_mean": 5.000000953674316, "entropy_error_max": 1.5497207641601562e-06, "target_missed_fraction": 0.0, "tau_min": 0.004100568126887083, "tau_mean": 0.0399283803999424, "tau_max": 0.11849036812782288, "lower_bound_fraction": 0.0, "upper_bound_fraction": 0.0, "hard_used_prototypes": 82, "effective_used_prototypes": 87.0119400024414}
+[2026-11-01 19:08:02] iter = 08400, loss = -2.261788, pixel drift RMS = 11.99722/255
+[2026-11-01 19:08:06] iter = 08500, loss = -1.752505, pixel drift RMS = 12.00251/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_adaptive_temperature/runs/K5/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 8500/10000)
+ADAPTIVE LOSS: {"iteration": 8600, "negative_mi": -2.2471494674682617, "target_perplexity": 5, "achieved_perplexity_mean": 5.000000953674316, "entropy_error_max": 1.6689300537109375e-06, "target_missed_fraction": 0.0, "tau_min": 0.006495324894785881, "tau_mean": 0.03927766531705856, "tau_max": 0.10264994949102402, "lower_bound_fraction": 0.0, "upper_bound_fraction": 0.0, "hard_used_prototypes": 89, "effective_used_prototypes": 88.43222045898438}
+[2026-11-01 19:08:09] iter = 08600, loss = -2.247149, pixel drift RMS = 12.00787/255
+[2026-11-01 19:08:13] iter = 08700, loss = -1.716020, pixel drift RMS = 12.01270/255
+ADAPTIVE LOSS: {"iteration": 8800, "negative_mi": -1.5692086219787598, "target_perplexity": 5, "achieved_perplexity_mean": 5.000000953674316, "entropy_error_max": 2.5033950805664062e-06, "target_missed_fraction": 0.0, "tau_min": 0.008145393803715706, "tau_mean": 0.03522682189941406, "tau_max": 0.0885605588555336, "lower_bound_fraction": 0.0, "upper_bound_fraction": 0.0, "hard_used_prototypes": 84, "effective_used_prototypes": 86.87956237792969}
+[2026-11-01 19:08:17] iter = 08800, loss = -1.569209, pixel drift RMS = 12.01620/255
+[2026-11-01 19:08:21] iter = 08900, loss = -1.939457, pixel drift RMS = 12.01968/255
+ADAPTIVE LOSS: {"iteration": 9000, "negative_mi": -2.357205390930176, "target_perplexity": 5, "achieved_perplexity_mean": 5.000000953674316, "entropy_error_max": 1.430511474609375e-06, "target_missed_fraction": 0.0, "tau_min": 0.007116316817700863, "tau_mean": 0.041974812746047974, "tau_max": 0.09957577288150787, "lower_bound_fraction": 0.0, "upper_bound_fraction": 0.0, "hard_used_prototypes": 85, "effective_used_prototypes": 87.63021850585938}
+[2026-11-01 19:08:25] iter = 09000, loss = -2.357205, pixel drift RMS = 12.02264/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_adaptive_temperature/runs/K5/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 9000/10000)
+[2026-11-01 19:08:28] iter = 09100, loss = -1.873874, pixel drift RMS = 12.02559/255
+ADAPTIVE LOSS: {"iteration": 9200, "negative_mi": -2.301548957824707, "target_perplexity": 5, "achieved_perplexity_mean": 5.000000476837158, "entropy_error_max": 2.6226043701171875e-06, "target_missed_fraction": 0.0, "tau_min": 0.0060842158272862434, "tau_mean": 0.04148285463452339, "tau_max": 0.12676818668842316, "lower_bound_fraction": 0.0, "upper_bound_fraction": 0.0, "hard_used_prototypes": 82, "effective_used_prototypes": 90.39840698242188}
+[2026-11-01 19:08:32] iter = 09200, loss = -2.301549, pixel drift RMS = 12.02818/255
+[2026-11-01 19:08:36] iter = 09300, loss = -2.347281, pixel drift RMS = 12.03042/255
+ADAPTIVE LOSS: {"iteration": 9400, "negative_mi": -1.5457491874694824, "target_perplexity": 5, "achieved_perplexity_mean": 5.000000476837158, "entropy_error_max": 2.384185791015625e-06, "target_missed_fraction": 0.0, "tau_min": 0.003336540423333645, "tau_mean": 0.032837919890880585, "tau_max": 0.11140573024749756, "lower_bound_fraction": 0.0, "upper_bound_fraction": 0.0, "hard_used_prototypes": 90, "effective_used_prototypes": 88.96458435058594}
+[2026-11-01 19:08:40] iter = 09400, loss = -1.545749, pixel drift RMS = 12.03238/255
+[2026-11-01 19:08:44] iter = 09500, loss = -1.847561, pixel drift RMS = 12.03412/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_adaptive_temperature/runs/K5/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 9500/10000)
+ADAPTIVE LOSS: {"iteration": 9600, "negative_mi": -2.171783447265625, "target_perplexity": 5, "achieved_perplexity_mean": 5.000000476837158, "entropy_error_max": 1.6689300537109375e-06, "target_missed_fraction": 0.0, "tau_min": 0.004712866153568029, "tau_mean": 0.04276915267109871, "tau_max": 0.11281777918338776, "lower_bound_fraction": 0.0, "upper_bound_fraction": 0.0, "hard_used_prototypes": 86, "effective_used_prototypes": 87.45944213867188}
+[2026-11-01 19:08:48] iter = 09600, loss = -2.171783, pixel drift RMS = 12.03551/255
+[2026-11-01 19:08:51] iter = 09700, loss = -2.224814, pixel drift RMS = 12.03645/255
+ADAPTIVE LOSS: {"iteration": 9800, "negative_mi": -2.2886176109313965, "target_perplexity": 5, "achieved_perplexity_mean": 5.000000953674316, "entropy_error_max": 1.430511474609375e-06, "target_missed_fraction": 0.0, "tau_min": 0.008426105603575706, "tau_mean": 0.03731875866651535, "tau_max": 0.11063893139362335, "lower_bound_fraction": 0.0, "upper_bound_fraction": 0.0, "hard_used_prototypes": 85, "effective_used_prototypes": 90.23157501220703}
+[2026-11-01 19:08:55] iter = 09800, loss = -2.288618, pixel drift RMS = 12.03731/255
+[2026-11-01 19:08:59] iter = 09900, loss = -2.210816, pixel drift RMS = 12.03816/255
+ADAPTIVE LOSS: {"iteration": 10000, "negative_mi": -2.322964668273926, "target_perplexity": 5, "achieved_perplexity_mean": 5.000000476837158, "entropy_error_max": 1.5497207641601562e-06, "target_missed_fraction": 0.0, "tau_min": 0.006635793950408697, "tau_mean": 0.04121287912130356, "tau_max": 0.1164383590221405, "lower_bound_fraction": 0.0, "upper_bound_fraction": 0.0, "hard_used_prototypes": 82, "effective_used_prototypes": 86.41084289550781}
+[2026-11-01 19:09:03] iter = 10000, loss = -2.322965, pixel drift RMS = 12.03899/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_adaptive_temperature/runs/K5/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 10000/10000)
+DONE: /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_adaptive_temperature/runs/K5/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt
+SSL CIFAR10/ResNet18/simclr seed=0: {"epoch": 1, "steps": 1, "lr": 3e-05, "loss": 5.249861240386963, "examples": 100}
+SSL CIFAR10/ResNet18/simclr seed=0: {"epoch": 200, "steps": 200, "lr": 0.15279469632432452, "loss": 4.9877729415893555, "examples": 100}
+SSL CIFAR10/ResNet18/simclr seed=0: {"epoch": 400, "steps": 400, "lr": 0.1419615998508841, "loss": 4.978169918060303, "examples": 100}
+SSL CIFAR10/ResNet18/simclr seed=0: {"epoch": 600, "steps": 600, "lr": 0.12481100174716497, "loss": 4.553846836090088, "examples": 100}
+SSL CIFAR10/ResNet18/simclr seed=0: {"epoch": 800, "steps": 800, "lr": 0.10304018745339412, "loss": 4.318019866943359, "examples": 100}
+SSL CIFAR10/ResNet18/simclr seed=0: {"epoch": 1000, "steps": 1000, "lr": 0.07880367577406086, "loss": 4.128070831298828, "examples": 100}
+SSL CIFAR10/ResNet18/simclr seed=0: {"epoch": 1200, "steps": 1200, "lr": 0.054499999876722965, "loss": 3.6934421062469482, "examples": 100}
+SSL CIFAR10/ResNet18/simclr seed=0: {"epoch": 1400, "steps": 1400, "lr": 0.03253433974373928, "loss": 3.3908603191375732, "examples": 100}
+SSL CIFAR10/ResNet18/simclr seed=0: {"epoch": 1600, "steps": 1600, "lr": 0.015080496831083607, "loss": 3.1162164211273193, "examples": 100}
+SSL CIFAR10/ResNet18/simclr seed=0: {"epoch": 1800, "steps": 1800, "lr": 0.0038657667859693257, "loss": 2.981253147125244, "examples": 100}
+SSL CIFAR10/ResNet18/simclr seed=0: {"epoch": 2000, "steps": 2000, "lr": 0.0, "loss": 3.043760299682617, "examples": 100}
+PROBE CIFAR10 lbl=1 seed=0: {'epoch': 10, 'lr': 0.09776754757575974, 'loss': 1.6739363565444947, 'train_accuracy_percent': 41.0}
+PROBE CIFAR10 lbl=1 seed=0: {'epoch': 20, 'lr': 0.09081878607071997, 'loss': 1.5638431959152221, 'train_accuracy_percent': 44.0}
+PROBE CIFAR10 lbl=1 seed=0: {'epoch': 30, 'lr': 0.0798344744144428, 'loss': 1.506520938873291, 'train_accuracy_percent': 48.2}
+PROBE CIFAR10 lbl=1 seed=0: {'epoch': 40, 'lr': 0.06590057681196192, 'loss': 1.5014798755645753, 'train_accuracy_percent': 47.4}
+PROBE CIFAR10 lbl=1 seed=0: {'epoch': 50, 'lr': 0.05039466834548567, 'loss': 1.4560906600952148, 'train_accuracy_percent': 48.2}
+PROBE CIFAR10 lbl=1 seed=0: {'epoch': 60, 'lr': 0.03484974098465636, 'loss': 1.497759931564331, 'train_accuracy_percent': 48.0}
+PROBE CIFAR10 lbl=1 seed=0: {'epoch': 70, 'lr': 0.020802644302934683, 'loss': 1.4608142290115356, 'train_accuracy_percent': 52.0}
+PROBE CIFAR10 lbl=1 seed=0: {'epoch': 80, 'lr': 0.00964214481190074, 'loss': 1.428928394317627, 'train_accuracy_percent': 49.4}
+PROBE CIFAR10 lbl=1 seed=0: {'epoch': 90, 'lr': 0.0024716255306108607, 'loss': 1.4699204301834106, 'train_accuracy_percent': 50.0}
+PROBE CIFAR10 lbl=1 seed=0: {'epoch': 100, 'lr': 0.0, 'loss': 1.3801202850341796, 'train_accuracy_percent': 54.2}
+RESULT CIFAR10 lbl=1 seed=0: 41.2800
+PROBE CIFAR10 lbl=1 seed=1: {'epoch': 10, 'lr': 0.09776754757575974, 'loss': 1.7319800281524658, 'train_accuracy_percent': 39.0}
+PROBE CIFAR10 lbl=1 seed=1: {'epoch': 20, 'lr': 0.09081878607071997, 'loss': 1.6023558626174927, 'train_accuracy_percent': 43.0}
+PROBE CIFAR10 lbl=1 seed=1: {'epoch': 30, 'lr': 0.0798344744144428, 'loss': 1.5612625150680541, 'train_accuracy_percent': 47.0}
+PROBE CIFAR10 lbl=1 seed=1: {'epoch': 40, 'lr': 0.06590057681196192, 'loss': 1.5192648029327394, 'train_accuracy_percent': 48.2}
+PROBE CIFAR10 lbl=1 seed=1: {'epoch': 50, 'lr': 0.05039466834548567, 'loss': 1.493434928894043, 'train_accuracy_percent': 49.2}
+PROBE CIFAR10 lbl=1 seed=1: {'epoch': 60, 'lr': 0.03484974098465636, 'loss': 1.436858242034912, 'train_accuracy_percent': 50.0}
+PROBE CIFAR10 lbl=1 seed=1: {'epoch': 70, 'lr': 0.020802644302934683, 'loss': 1.5111601543426514, 'train_accuracy_percent': 47.8}
+PROBE CIFAR10 lbl=1 seed=1: {'epoch': 80, 'lr': 0.00964214481190074, 'loss': 1.4601680250167848, 'train_accuracy_percent': 50.0}
+PROBE CIFAR10 lbl=1 seed=1: {'epoch': 90, 'lr': 0.0024716255306108607, 'loss': 1.4356307220458984, 'train_accuracy_percent': 50.6}
+PROBE CIFAR10 lbl=1 seed=1: {'epoch': 100, 'lr': 0.0, 'loss': 1.458771505355835, 'train_accuracy_percent': 48.6}
+RESULT CIFAR10 lbl=1 seed=1: 41.0400
+PROBE CIFAR10 lbl=1 seed=2: {'epoch': 10, 'lr': 0.09776754757575974, 'loss': 1.695596824645996, 'train_accuracy_percent': 41.4}
+PROBE CIFAR10 lbl=1 seed=2: {'epoch': 20, 'lr': 0.09081878607071997, 'loss': 1.5445310564041137, 'train_accuracy_percent': 44.0}
+PROBE CIFAR10 lbl=1 seed=2: {'epoch': 30, 'lr': 0.0798344744144428, 'loss': 1.546367057800293, 'train_accuracy_percent': 44.2}
+PROBE CIFAR10 lbl=1 seed=2: {'epoch': 40, 'lr': 0.06590057681196192, 'loss': 1.4900136728286744, 'train_accuracy_percent': 50.6}
+PROBE CIFAR10 lbl=1 seed=2: {'epoch': 50, 'lr': 0.05039466834548567, 'loss': 1.4970887947082518, 'train_accuracy_percent': 49.4}
+PROBE CIFAR10 lbl=1 seed=2: {'epoch': 60, 'lr': 0.03484974098465636, 'loss': 1.426458002090454, 'train_accuracy_percent': 50.4}
+PROBE CIFAR10 lbl=1 seed=2: {'epoch': 70, 'lr': 0.020802644302934683, 'loss': 1.5233801250457764, 'train_accuracy_percent': 47.4}
+PROBE CIFAR10 lbl=1 seed=2: {'epoch': 80, 'lr': 0.00964214481190074, 'loss': 1.5145159587860106, 'train_accuracy_percent': 48.0}
+PROBE CIFAR10 lbl=1 seed=2: {'epoch': 90, 'lr': 0.0024716255306108607, 'loss': 1.4196778106689454, 'train_accuracy_percent': 52.2}
+PROBE CIFAR10 lbl=1 seed=2: {'epoch': 100, 'lr': 0.0, 'loss': 1.4512920961380005, 'train_accuracy_percent': 49.8}
+RESULT CIFAR10 lbl=1 seed=2: 41.8700
+PROBE CIFAR10 lbl=1 seed=3: {'epoch': 10, 'lr': 0.09776754757575974, 'loss': 1.734478994369507, 'train_accuracy_percent': 35.2}
+PROBE CIFAR10 lbl=1 seed=3: {'epoch': 20, 'lr': 0.09081878607071997, 'loss': 1.5955397510528564, 'train_accuracy_percent': 42.2}
+PROBE CIFAR10 lbl=1 seed=3: {'epoch': 30, 'lr': 0.0798344744144428, 'loss': 1.5441873025894166, 'train_accuracy_percent': 44.6}
+PROBE CIFAR10 lbl=1 seed=3: {'epoch': 40, 'lr': 0.06590057681196192, 'loss': 1.45251220703125, 'train_accuracy_percent': 47.2}
+PROBE CIFAR10 lbl=1 seed=3: {'epoch': 50, 'lr': 0.05039466834548567, 'loss': 1.4562139978408815, 'train_accuracy_percent': 47.0}
+PROBE CIFAR10 lbl=1 seed=3: {'epoch': 60, 'lr': 0.03484974098465636, 'loss': 1.5022633237838745, 'train_accuracy_percent': 47.6}
+PROBE CIFAR10 lbl=1 seed=3: {'epoch': 70, 'lr': 0.020802644302934683, 'loss': 1.4395961837768554, 'train_accuracy_percent': 47.4}
+PROBE CIFAR10 lbl=1 seed=3: {'epoch': 80, 'lr': 0.00964214481190074, 'loss': 1.4216017246246337, 'train_accuracy_percent': 50.2}
+PROBE CIFAR10 lbl=1 seed=3: {'epoch': 90, 'lr': 0.0024716255306108607, 'loss': 1.4391153984069824, 'train_accuracy_percent': 47.6}
+PROBE CIFAR10 lbl=1 seed=3: {'epoch': 100, 'lr': 0.0, 'loss': 1.4251580152511596, 'train_accuracy_percent': 48.8}
+RESULT CIFAR10 lbl=1 seed=3: 41.5400
+PROBE CIFAR10 lbl=1 seed=4: {'epoch': 10, 'lr': 0.09776754757575974, 'loss': 1.5994773273468017, 'train_accuracy_percent': 39.2}
+PROBE CIFAR10 lbl=1 seed=4: {'epoch': 20, 'lr': 0.09081878607071997, 'loss': 1.500844358444214, 'train_accuracy_percent': 46.6}
+PROBE CIFAR10 lbl=1 seed=4: {'epoch': 30, 'lr': 0.0798344744144428, 'loss': 1.4319441270828248, 'train_accuracy_percent': 47.0}
+PROBE CIFAR10 lbl=1 seed=4: {'epoch': 40, 'lr': 0.06590057681196192, 'loss': 1.4317105045318603, 'train_accuracy_percent': 48.8}
+PROBE CIFAR10 lbl=1 seed=4: {'epoch': 50, 'lr': 0.05039466834548567, 'loss': 1.3789523429870605, 'train_accuracy_percent': 50.4}
+PROBE CIFAR10 lbl=1 seed=4: {'epoch': 60, 'lr': 0.03484974098465636, 'loss': 1.3664735546112061, 'train_accuracy_percent': 54.6}
+PROBE CIFAR10 lbl=1 seed=4: {'epoch': 70, 'lr': 0.020802644302934683, 'loss': 1.3887016248703004, 'train_accuracy_percent': 50.0}
+PROBE CIFAR10 lbl=1 seed=4: {'epoch': 80, 'lr': 0.00964214481190074, 'loss': 1.3700284385681152, 'train_accuracy_percent': 50.8}
+PROBE CIFAR10 lbl=1 seed=4: {'epoch': 90, 'lr': 0.0024716255306108607, 'loss': 1.330065496444702, 'train_accuracy_percent': 54.0}
+PROBE CIFAR10 lbl=1 seed=4: {'epoch': 100, 'lr': 0.0, 'loss': 1.3638438901901244, 'train_accuracy_percent': 49.8}
+RESULT CIFAR10 lbl=1 seed=4: 41.3300
+COMPLETE: {"complete": true, "ablation": {"perplexity": 5, "entropy_target_nats": 1.6094379124341003, "temperature_bounds": [0.001, 1.0], "search_steps": 24, "temperature_gradient": "implicit for interior roots; constant at bounds", "view_rule": "Per-image temperature solved separately in each of the two existing views", "objective": "Unchanged negative MI; no auxiliary losses", "fixed_temperature_ignored": true}, "identity": {"signature": "3df89cd370f19dce2cc832e14135613913dca3c4a7c81810f5ca5cb342016c9d", "seed": 0, "selection_method": "ours"}, "labels": 1, "ssl_epochs": 2000, "linear_epochs": 100, "completed_probes": 5, "expected_probes": 5, "std_ddof": 1, "accuracies": [41.28, 41.04, 41.87, 41.54, 41.33], "mean_percent": 41.412, "std_percent": 0.31172102912700567, "baseline_summary": "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_cvpr_color_crop/results/CIFAR10/ResNet18BN/pt0.2/simclr/ssl_seed_000/summary_CIFAR10_lbl1.json", "baseline_mean_percent": 45.184, "baseline_std_percent": 0.4067308692489421, "difference_pp": -3.7719999999999985}
+PROBE CIFAR10 lbl=5 seed=0: {'epoch': 10, 'lr': 0.09759636527645632, 'loss': 1.6473701416015625, 'train_accuracy_percent': 40.76}
+PROBE CIFAR10 lbl=5 seed=0: {'epoch': 20, 'lr': 0.0905246588405146, 'loss': 1.6145861965179444, 'train_accuracy_percent': 41.96}
+PROBE CIFAR10 lbl=5 seed=0: {'epoch': 30, 'lr': 0.07947823644532198, 'loss': 1.568259631729126, 'train_accuracy_percent': 43.2}
+PROBE CIFAR10 lbl=5 seed=0: {'epoch': 40, 'lr': 0.06554054685128856, 'loss': 1.5236538608551025, 'train_accuracy_percent': 45.0}
+PROBE CIFAR10 lbl=5 seed=0: {'epoch': 50, 'lr': 0.05007861840237923, 'loss': 1.5419309955596925, 'train_accuracy_percent': 45.12}
+PROBE CIFAR10 lbl=5 seed=0: {'epoch': 60, 'lr': 0.03460897894916861, 'loss': 1.5003016328811645, 'train_accuracy_percent': 46.16}
+PROBE CIFAR10 lbl=5 seed=0: {'epoch': 70, 'lr': 0.020648912648459073, 'loss': 1.4844612148284912, 'train_accuracy_percent': 47.6}
+PROBE CIFAR10 lbl=5 seed=0: {'epoch': 80, 'lr': 0.009567642583312259, 'loss': 1.4674918062210083, 'train_accuracy_percent': 48.52}
+PROBE CIFAR10 lbl=5 seed=0: {'epoch': 90, 'lr': 0.002452035422983734, 'loss': 1.473849454689026, 'train_accuracy_percent': 48.32}
+PROBE CIFAR10 lbl=5 seed=0: {'epoch': 100, 'lr': 0.0, 'loss': 1.4763034685134888, 'train_accuracy_percent': 47.76}
+RESULT CIFAR10 lbl=5 seed=0: 46.9800
+PROBE CIFAR10 lbl=5 seed=1: {'epoch': 10, 'lr': 0.09759636527645632, 'loss': 1.6332954561233521, 'train_accuracy_percent': 40.28}
+PROBE CIFAR10 lbl=5 seed=1: {'epoch': 20, 'lr': 0.0905246588405146, 'loss': 1.7262991191864014, 'train_accuracy_percent': 39.72}
+PROBE CIFAR10 lbl=5 seed=1: {'epoch': 30, 'lr': 0.07947823644532198, 'loss': 1.564464651298523, 'train_accuracy_percent': 44.28}
+PROBE CIFAR10 lbl=5 seed=1: {'epoch': 40, 'lr': 0.06554054685128856, 'loss': 1.5902442350387573, 'train_accuracy_percent': 41.92}
+PROBE CIFAR10 lbl=5 seed=1: {'epoch': 50, 'lr': 0.05007861840237923, 'loss': 1.5225057773590087, 'train_accuracy_percent': 47.24}
+PROBE CIFAR10 lbl=5 seed=1: {'epoch': 60, 'lr': 0.03460897894916861, 'loss': 1.5112610229492187, 'train_accuracy_percent': 45.84}
+PROBE CIFAR10 lbl=5 seed=1: {'epoch': 70, 'lr': 0.020648912648459073, 'loss': 1.5109679765701294, 'train_accuracy_percent': 46.6}
+PROBE CIFAR10 lbl=5 seed=1: {'epoch': 80, 'lr': 0.009567642583312259, 'loss': 1.490961768913269, 'train_accuracy_percent': 47.84}
+PROBE CIFAR10 lbl=5 seed=1: {'epoch': 90, 'lr': 0.002452035422983734, 'loss': 1.4783656457901, 'train_accuracy_percent': 47.8}
+PROBE CIFAR10 lbl=5 seed=1: {'epoch': 100, 'lr': 0.0, 'loss': 1.4637056999206544, 'train_accuracy_percent': 49.16}
+RESULT CIFAR10 lbl=5 seed=1: 46.0400
+PROBE CIFAR10 lbl=5 seed=2: {'epoch': 10, 'lr': 0.09759636527645632, 'loss': 1.6712875749588012, 'train_accuracy_percent': 39.24}
+PROBE CIFAR10 lbl=5 seed=2: {'epoch': 20, 'lr': 0.0905246588405146, 'loss': 1.5837101680755614, 'train_accuracy_percent': 43.88}
+PROBE CIFAR10 lbl=5 seed=2: {'epoch': 30, 'lr': 0.07947823644532198, 'loss': 1.5474397583007813, 'train_accuracy_percent': 44.52}
+PROBE CIFAR10 lbl=5 seed=2: {'epoch': 40, 'lr': 0.06554054685128856, 'loss': 1.5182409410476685, 'train_accuracy_percent': 45.24}
+PROBE CIFAR10 lbl=5 seed=2: {'epoch': 50, 'lr': 0.05007861840237923, 'loss': 1.4948599618911744, 'train_accuracy_percent': 46.68}
+PROBE CIFAR10 lbl=5 seed=2: {'epoch': 60, 'lr': 0.03460897894916861, 'loss': 1.4882421432495117, 'train_accuracy_percent': 46.96}
+PROBE CIFAR10 lbl=5 seed=2: {'epoch': 70, 'lr': 0.020648912648459073, 'loss': 1.49184464969635, 'train_accuracy_percent': 47.28}
+PROBE CIFAR10 lbl=5 seed=2: {'epoch': 80, 'lr': 0.009567642583312259, 'loss': 1.4871291149139405, 'train_accuracy_percent': 48.0}
+PROBE CIFAR10 lbl=5 seed=2: {'epoch': 90, 'lr': 0.002452035422983734, 'loss': 1.4753591897964478, 'train_accuracy_percent': 47.92}
+PROBE CIFAR10 lbl=5 seed=2: {'epoch': 100, 'lr': 0.0, 'loss': 1.4669027254104614, 'train_accuracy_percent': 47.56}
+RESULT CIFAR10 lbl=5 seed=2: 47.0100
+PROBE CIFAR10 lbl=5 seed=3: {'epoch': 10, 'lr': 0.09759636527645632, 'loss': 1.6144837802886962, 'train_accuracy_percent': 42.44}
+PROBE CIFAR10 lbl=5 seed=3: {'epoch': 20, 'lr': 0.0905246588405146, 'loss': 1.57828547000885, 'train_accuracy_percent': 42.48}
+PROBE CIFAR10 lbl=5 seed=3: {'epoch': 30, 'lr': 0.07947823644532198, 'loss': 1.6102176971435547, 'train_accuracy_percent': 41.96}
+PROBE CIFAR10 lbl=5 seed=3: {'epoch': 40, 'lr': 0.06554054685128856, 'loss': 1.5358028831481934, 'train_accuracy_percent': 43.68}
+PROBE CIFAR10 lbl=5 seed=3: {'epoch': 50, 'lr': 0.05007861840237923, 'loss': 1.5081249843597413, 'train_accuracy_percent': 45.68}
+PROBE CIFAR10 lbl=5 seed=3: {'epoch': 60, 'lr': 0.03460897894916861, 'loss': 1.5022395498275758, 'train_accuracy_percent': 46.04}
+PROBE CIFAR10 lbl=5 seed=3: {'epoch': 70, 'lr': 0.020648912648459073, 'loss': 1.5027002523422242, 'train_accuracy_percent': 46.64}
+PROBE CIFAR10 lbl=5 seed=3: {'epoch': 80, 'lr': 0.009567642583312259, 'loss': 1.4562305551528931, 'train_accuracy_percent': 48.32}
+PROBE CIFAR10 lbl=5 seed=3: {'epoch': 90, 'lr': 0.002452035422983734, 'loss': 1.466064309501648, 'train_accuracy_percent': 48.76}
+PROBE CIFAR10 lbl=5 seed=3: {'epoch': 100, 'lr': 0.0, 'loss': 1.439926438522339, 'train_accuracy_percent': 47.96}
+RESULT CIFAR10 lbl=5 seed=3: 46.8200
+PROBE CIFAR10 lbl=5 seed=4: {'epoch': 10, 'lr': 0.09759636527645632, 'loss': 1.6534479831695557, 'train_accuracy_percent': 40.84}
+PROBE CIFAR10 lbl=5 seed=4: {'epoch': 20, 'lr': 0.0905246588405146, 'loss': 1.6072923782348634, 'train_accuracy_percent': 42.44}
+PROBE CIFAR10 lbl=5 seed=4: {'epoch': 30, 'lr': 0.07947823644532198, 'loss': 1.5585136457443238, 'train_accuracy_percent': 46.64}
+PROBE CIFAR10 lbl=5 seed=4: {'epoch': 40, 'lr': 0.06554054685128856, 'loss': 1.5671252038955688, 'train_accuracy_percent': 43.88}
+PROBE CIFAR10 lbl=5 seed=4: {'epoch': 50, 'lr': 0.05007861840237923, 'loss': 1.4905313987731934, 'train_accuracy_percent': 46.44}
+PROBE CIFAR10 lbl=5 seed=4: {'epoch': 60, 'lr': 0.03460897894916861, 'loss': 1.4793383544921874, 'train_accuracy_percent': 47.04}
+PROBE CIFAR10 lbl=5 seed=4: {'epoch': 70, 'lr': 0.020648912648459073, 'loss': 1.4606367040634156, 'train_accuracy_percent': 48.64}
+PROBE CIFAR10 lbl=5 seed=4: {'epoch': 80, 'lr': 0.009567642583312259, 'loss': 1.4562319961547852, 'train_accuracy_percent': 48.4}
+PROBE CIFAR10 lbl=5 seed=4: {'epoch': 90, 'lr': 0.002452035422983734, 'loss': 1.425437230682373, 'train_accuracy_percent': 49.36}
+PROBE CIFAR10 lbl=5 seed=4: {'epoch': 100, 'lr': 0.0, 'loss': 1.4666594720840453, 'train_accuracy_percent': 49.36}
+RESULT CIFAR10 lbl=5 seed=4: 47.0100
+COMPLETE: {"complete": true, "ablation": {"perplexity": 5, "entropy_target_nats": 1.6094379124341003, "temperature_bounds": [0.001, 1.0], "search_steps": 24, "temperature_gradient": "implicit for interior roots; constant at bounds", "view_rule": "Per-image temperature solved separately in each of the two existing views", "objective": "Unchanged negative MI; no auxiliary losses", "fixed_temperature_ignored": true}, "identity": {"signature": "3df89cd370f19dce2cc832e14135613913dca3c4a7c81810f5ca5cb342016c9d", "seed": 0, "selection_method": "ours"}, "labels": 5, "ssl_epochs": 2000, "linear_epochs": 100, "completed_probes": 5, "expected_probes": 5, "std_ddof": 1, "accuracies": [46.98, 46.04, 47.01, 46.82, 47.01], "mean_percent": 46.772, "std_percent": 0.41673732734181557, "baseline_summary": "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_cvpr_color_crop/results/CIFAR10/ResNet18BN/pt0.2/simclr/ssl_seed_000/summary_CIFAR10_lbl5.json", "baseline_mean_percent": 50.58, "baseline_std_percent": 0.4743416490252575, "difference_pp": -3.808}

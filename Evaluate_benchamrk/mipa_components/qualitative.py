@@ -21,26 +21,59 @@ from common import ROOT, atomic_json, file_hash, load_encoder, state_hash
 from data import RawDataset
 
 
-def selected_examples(cleaner=False):
+def selected_examples(cleaner=False, cifar100=False, percentage=0.2):
     from PIL import Image
 
     assert os.environ.get('SLURM_JOB_ID')
-    output = ROOT / 'CVPR_tables/ablations/figures/mipa_components_cifar10'
+    output = ROOT / 'CVPR_tables/ablations/figures' / ('mipa_components_cifar100' if cifar100 else 'mipa_components_cifar10')
+    count = 500 if cifar100 and percentage == 1 else 100
+    if count == 500:
+        output = output.with_name(output.name + '_pt1')
+    if cifar100:
+        torch.set_num_threads(int(os.environ.get('SLURM_CPUS_PER_TASK', '1')))
+        plan = json.loads((ROOT / 'Evaluate_benchamrk/mipa_cvpr_color_crop/manifest.json').read_text())
+        job = next(value for value in plan['jobs'] if value['name'] == ('CIFAR100_pt1' if count == 500 else 'CIFAR100_pt0p2'))
+        checkpoint = Path(job['synthetic_dir']) / ('res_IIC_CIFAR100_ResNet18BN_%gpercent_final.pt' % percentage)
+        checkpoint_hash = file_hash(checkpoint)
+        saved = torch.load(checkpoint, map_location='cpu', weights_only=True)
+        assert saved['complete'] and saved['iteration'] == job['generation_args']['Iteration'] and saved['run_args'] == job['generation_args']
+        assert saved['teacher_seed'] == 0 and saved['init'] == 'random'
+        dataset = RawDataset(job['data_root'], 'CIFAR100', True)
+        indices = np.random.default_rng(1000).permutation(len(dataset))[:count]
+        labels = np.asarray(dataset.targets)[indices]
+        classes = [name.replace('_', ' ').capitalize() for name in dataset.base.classes]
+        mean, std = (torch.tensor(values).view(1, 3, 1, 1) for values in saved['normalization'])
+        initial = (saved['initial_data'] * std + mean).clamp(0, 1)
+        final = (saved['data'] * std + mean).clamp(0, 1)
+        original = torch.from_numpy(dataset.base.data[indices].copy()).permute(0, 3, 1, 2).float() / 255
+        assert initial.shape == final.shape == (count, 3, 32, 32) and torch.isfinite(final).all()
+        assert torch.allclose(initial, original, atol=1e-6)
+        output.mkdir(parents=True, exist_ok=True)
+        save_image(initial, output / 'initial_all.png', nrow=10)
+        save_image(final, output / 'final_all.png', nrow=10)
+        assert file_hash(checkpoint) == checkpoint_hash
+        atomic_json(output / 'inputs.json', dict(checkpoint=str(checkpoint), checkpoint_sha256=checkpoint_hash,
+                    generation_args=saved['run_args'], iteration=saved['iteration'],
+                    initialization_indices=indices.tolist(), initial_labels=labels.tolist(),
+                    initial_pixels_verified_against_real_data=True, classes=classes))
     paths = [output / 'initial_all.png', output / 'final_all.png']
     grids = [Image.open(path).convert('RGB') for path in paths]
-    assert all(grid.size == (342, 342) for grid in grids)
+    assert all(grid.size == (342, 2 + 34 * (count // 10)) for grid in grids)
     selected = [31, 70, 67, 53, 58, 60]
     candidates = [7, 16, 25, 31, 38, 41, 46, 53, 58, 60, 67, 70, 76, 87, 91, 93]
     if cleaner:
-        selected = [20, 49, 66, 19, 60]
-        candidates = list(range(100))
-    stem = 'cleaner_examples' if cleaner else 'selected_examples'
-    indices = np.load(output / 'features_and_indices.npz', allow_pickle=False)['initialization_indices']
-    labels = np.load(ROOT / 'Evaluate_benchamrk/iic_init/tsne/comparison_iaTEXR/CIFAR10/labels.npy', allow_pickle=False)[indices]
-    classes = ('Airplane', 'Car', 'Bird', 'Cat', 'Deer', 'Dog', 'Frog', 'Horse', 'Ship', 'Truck')
-    assert indices.shape == labels.shape == (100,) and np.all((labels >= 0) & (labels < len(classes)))
+        selected = [3, 31, 67, 56, 60]
+        candidates = list(range(count))
+    if cifar100:
+        selected = [64, 192, 279, 22, 332, 376, 453, 483] if count == 500 else [1, 37, 65, 74, 99]
+    stem = 'paper_examples' if cleaner else 'selected_examples'
+    if not cifar100:
+        indices = np.load(output / 'features_and_indices.npz', allow_pickle=False)['initialization_indices']
+        labels = np.load(ROOT / 'Evaluate_benchamrk/iic_init/tsne/comparison_iaTEXR/CIFAR10/labels.npy', allow_pickle=False)[indices]
+        classes = ('Airplane', 'Car', 'Bird', 'Cat', 'Deer', 'Dog', 'Frog', 'Horse', 'Ship', 'Truck')
+    assert indices.shape == labels.shape == (count,) and np.all((labels >= 0) & (labels < len(classes)))
     if cleaner:
-        assert len(selected) == len(set(labels[selected])) == 5
+        assert len(selected) == len(set(labels[selected])) == (8 if count == 500 else 5)
 
     def tile(grid, index):
         left, top = 2 + 34 * (index % 10), 2 + 34 * (index // 10)
@@ -50,35 +83,42 @@ def selected_examples(cleaner=False):
 
     assert len(set(selected)) == len(selected) and set(selected).issubset(candidates)
     plt.rcParams.update({'font.family': 'DejaVu Sans', 'font.size': 8, 'pdf.fonttype': 42, 'savefig.facecolor': 'white'})
-    figure, axes = plt.subplots(2, len(selected), figsize=(3.35, 1.55 if cleaner else 1.15))
+    columns = 4 if count == 500 else len(selected)
+    rows = 4 if count == 500 else 2
+    figure, axes = plt.subplots(rows, columns, figsize=(3.35, 2.7 if count == 500 else (1.28 if cleaner else 1.15)))
     for row, grid in enumerate(grids):
-        for column, index in enumerate(selected):
-            axes[row, column].imshow(tile(grid, index), interpolation='nearest')
-            axes[row, column].set_axis_off()
+        for position, index in enumerate(selected):
+            block, column = divmod(position, columns)
+            axis = axes[2 * block + row, column]
+            axis.imshow(tile(grid, index), interpolation='nearest')
+            axis.set_axis_off()
             if cleaner and row == 0:
-                axes[row, column].set_title(classes[labels[index]], fontsize=8)
-    figure.subplots_adjust(left=.13, right=1, top=.98, bottom=.02, wspace=.06, hspace=.08)
-    figure.text(.005, .74, 'Before', va='center', fontsize=8)
-    figure.text(.005, .26, 'After', va='center', fontsize=8)
+                axis.set_title(classes[labels[index]], fontsize=7, pad=3)
+    figure.subplots_adjust(left=.13, right=1, top=.93 if count == 500 else (.88 if cleaner else .98), bottom=.02, wspace=.05, hspace=.30 if count == 500 else .06)
+    for row, title in enumerate(('Before', 'After') * (rows // 2)):
+        position = axes[row, 0].get_position()
+        figure.text(.005, (position.y0 + position.y1) / 2, title, va='center', fontsize=7)
     for extension in ('png', 'pdf'):
         figure.savefig(output / (stem + '.' + extension), dpi=600, bbox_inches='tight')
     plt.close(figure)
 
-    for start in range(0, len(candidates), 16):
-        figure, axes = plt.subplots(4, 8, figsize=(10, 5.7))
+    page_size = 50 if count == 500 else 16
+    for start in range(0, len(candidates), page_size):
+        figure, axes = plt.subplots(10 if count == 500 else 4, 10 if count == 500 else 8,
+                                    figsize=(12, 13) if count == 500 else (10, 7.2 if cifar100 else 5.7))
         for axis in axes.flat:
             axis.set_axis_off()
-        for position, index in enumerate(candidates[start:start + 16]):
-            row, column = divmod(position, 4)
+        for position, index in enumerate(candidates[start:start + page_size]):
+            row, column = divmod(position, 5 if count == 500 else 4)
             for version, grid in enumerate(grids):
                 axis = axes[row, 2 * column + version]
                 axis.imshow(tile(grid, index), interpolation='nearest')
-                axis.set_title('#%d %s\n%s' % (index, classes[labels[index]], 'before' if version == 0 else 'after'), fontsize=8)
+                axis.set_title('#%d %s\n%s' % (index, classes[labels[index]], 'before' if version == 0 else 'after'), fontsize=6 if count == 500 else 8)
         figure.tight_layout(pad=.4, w_pad=.35, h_pad=.6)
         name = 'cleaner_candidate_pairs' if cleaner else 'candidate_pairs'
         if start:
-            name += '_%d' % (start // 16 + 1)
-        figure.savefig(output / (name + '.png'), dpi=200, bbox_inches='tight')
+            name += '_%d' % (start // page_size + 1)
+        figure.savefig(output / (name + '.png'), dpi=120 if count == 500 else 200, bbox_inches='tight')
         plt.close(figure)
     drift = {str(index): float(np.sqrt(np.mean((tile(grids[1], index).astype(float) - tile(grids[0], index)) ** 2))) for index in selected}
     atomic_json(output / (stem + '.json'), dict(indices_zero_based=selected, candidate_indices_zero_based=candidates,
@@ -211,8 +251,11 @@ if __name__ == '__main__':
     group = parser.add_mutually_exclusive_group()
     group.add_argument('--examples', action='store_true', help='Make selected before/after panels from the existing saved grids; no feature extraction or training')
     group.add_argument('--cleaner-examples', action='store_true', help='Show the less-speckled alternative shortlist without modifying the saved pixels')
+    group.add_argument('--cifar100-examples', action='store_true', help='Inspect CIFAR100 original and distilled saved pixels on CPU')
+    group.add_argument('--cifar100-one-percent', action='store_true', help='Inspect all 500 CIFAR100 1% pairs and render eight selected examples')
     args = parser.parse_args()
-    if args.examples or args.cleaner_examples:
-        selected_examples(cleaner=args.cleaner_examples)
+    if args.examples or args.cleaner_examples or args.cifar100_examples or args.cifar100_one_percent:
+        selected_examples(cleaner=args.cleaner_examples or args.cifar100_examples or args.cifar100_one_percent,
+                          cifar100=args.cifar100_examples or args.cifar100_one_percent, percentage=1 if args.cifar100_one_percent else 0.2)
     else:
         main()
