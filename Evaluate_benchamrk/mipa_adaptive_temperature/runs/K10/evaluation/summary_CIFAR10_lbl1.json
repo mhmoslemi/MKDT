@@ -1,0 +1,40 @@
+{
+  "ablation": {
+    "entropy_target_nats": 2.302585092994046,
+    "fixed_temperature_ignored": true,
+    "objective": "Unchanged negative MI; no auxiliary losses",
+    "perplexity": 10,
+    "search_steps": 24,
+    "temperature_bounds": [
+      0.001,
+      1.0
+    ],
+    "temperature_gradient": "implicit for interior roots; constant at bounds",
+    "view_rule": "Per-image temperature solved separately in each of the two existing views"
+  },
+  "accuracies": [
+    41.78,
+    42.11,
+    42.61,
+    42.34,
+    41.23
+  ],
+  "baseline_mean_percent": 45.184,
+  "baseline_std_percent": 0.4067308692489421,
+  "baseline_summary": "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_cvpr_color_crop/results/CIFAR10/ResNet18BN/pt0.2/simclr/ssl_seed_000/summary_CIFAR10_lbl1.json",
+  "complete": true,
+  "completed_probes": 5,
+  "difference_pp": -3.1699999999999946,
+  "expected_probes": 5,
+  "identity": {
+    "seed": 0,
+    "selection_method": "ours",
+    "signature": "c7d6c557cfb33020f9a2246388ef84e55defd9244c4ad520aba8839c07508f30"
+  },
+  "labels": 1,
+  "linear_epochs": 100,
+  "mean_percent": 42.014,
+  "ssl_epochs": 2000,
+  "std_ddof": 1,
+  "std_percent": 0.5338820094365434
+}

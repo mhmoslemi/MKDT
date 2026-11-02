@@ -1,0 +1,17 @@
+{
+  "ablation": {
+    "adaptive_temperature": false,
+    "column_temperature": 0.2,
+    "column_weight": 0.1,
+    "columns": "assignment probabilities, centered over real images, L2 normalization with eps=1e-6",
+    "duplicate_penalty": false,
+    "objective": "negative_MI + column_weight * symmetric_column_cross_entropy",
+    "positive": "same prototype across the two existing views"
+  },
+  "complete": true,
+  "identity": {
+    "seed": 0,
+    "selection_method": "ours",
+    "signature": "2d49415673217f20fd260bcf26580c374f3584cb62921065e9807d56d1f707cc"
+  }
+}

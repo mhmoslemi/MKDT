@@ -1,0 +1,623 @@
+FORKED NOISE CONTINUATION: {"parent_checkpoint": "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise3x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt", "parent_sha256": "c109c5ff6f2bcc628a5c625f83e3b788ba1fcb71ff9d5dfc07bcfae182e0886f", "from_iteration": 30000, "parent_target_iteration": 30000, "target_iteration": 100000, "preserved": "pixels, initial pixels, Adam moments/steps, histories, sampling and all RNG states", "scheduler": "cosine phase recalculated at current iteration using the 10x total horizon", "parent_lrs": [1.5e-05], "continuation_lrs": [0.0011939305498271614]}
+PASS: unchanged source state, preserved Adam/pixels/RNG, extended cosine phase and final learning rate
+MATCHED TABLE CONFIG: {"dataset": "CIFAR10", "percentage": 0.2, "seed": 0, "Iteration": 100000, "lr_img": 0.0015, "batch_real": 128, "temperature": 0.2, "beta": 1, "prototype_pool_size": 0, "distill_aug_strategy": "color_crop_cutout_scale", "feature_batch": 128, "single_channel": false}
+Loaded fixed teacher seed 0: /scratch/mmoslem3/MKDT/Evaluate_benchamrk/full_ssl_checkpoints_1000ep_3seeds/CIFAR10/ResNet18/full/pt100/simclr/seed_000/encoder.pt
+RESUME iteration 30000 -> 100000, including Adam, sampling and RNG state: /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt
+Hyper-parameters: 
+ {'dataset': 'CIFAR10', 'percentage': 0.2, 'data_path': '/scratch/mmoslem3/data', 'device': 'cuda', 'seed': 0, 'single_channel': False, 'Iteration': 100000, 'lr_img': 0.0015, 'batch_real': 128, 'temperature': 0.2, 'beta': 1.0, 'prototype_pool_size': 0, 'distill_aug_strategy': 'color_crop_cutout_scale', 'save_path': '/scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic', 'resume': True, 'save_every': 500, 'feature_batch': 128}
+Objective: negative beta-weighted bipartite mutual information, beta=1, frozen teacher seed 0, pool sizes=[100].
+[2026-11-01 23:07:54] distillation begins
+[2026-11-01 23:08:02] iter = 30200, loss = -0.058712, pixel drift RMS = 51.58116/255
+[2026-11-01 23:08:10] iter = 30400, loss = -0.040044, pixel drift RMS = 51.67311/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 30500/100000)
+[2026-11-01 23:08:17] iter = 30600, loss = -0.055614, pixel drift RMS = 51.77229/255
+[2026-11-01 23:08:24] iter = 30800, loss = -0.045131, pixel drift RMS = 51.87807/255
+[2026-11-01 23:08:31] iter = 31000, loss = -0.071518, pixel drift RMS = 51.97388/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 31000/100000)
+[2026-11-01 23:08:39] iter = 31200, loss = -0.033621, pixel drift RMS = 52.07475/255
+[2026-11-01 23:08:46] iter = 31400, loss = -0.068764, pixel drift RMS = 52.17426/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 31500/100000)
+[2026-11-01 23:08:53] iter = 31600, loss = -0.056301, pixel drift RMS = 52.27841/255
+[2026-11-01 23:09:00] iter = 31800, loss = -0.025562, pixel drift RMS = 52.36922/255
+[2026-11-01 23:09:08] iter = 32000, loss = -0.028521, pixel drift RMS = 52.45350/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 32000/100000)
+[2026-11-01 23:09:15] iter = 32200, loss = -0.044035, pixel drift RMS = 52.54734/255
+[2026-11-01 23:09:22] iter = 32400, loss = -0.071776, pixel drift RMS = 52.63955/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 32500/100000)
+[2026-11-01 23:09:30] iter = 32600, loss = -0.012794, pixel drift RMS = 52.71827/255
+[2026-11-01 23:09:37] iter = 32800, loss = -0.060873, pixel drift RMS = 52.80581/255
+[2026-11-01 23:09:44] iter = 33000, loss = -0.046843, pixel drift RMS = 52.88044/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 33000/100000)
+[2026-11-01 23:09:51] iter = 33200, loss = -0.050055, pixel drift RMS = 52.97184/255
+[2026-11-01 23:09:59] iter = 33400, loss = -0.016311, pixel drift RMS = 53.05658/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 33500/100000)
+[2026-11-01 23:10:06] iter = 33600, loss = -0.018267, pixel drift RMS = 53.15068/255
+[2026-11-01 23:10:13] iter = 33800, loss = -0.059450, pixel drift RMS = 53.23393/255
+[2026-11-01 23:10:20] iter = 34000, loss = -0.035757, pixel drift RMS = 53.31251/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 34000/100000)
+[2026-11-01 23:10:28] iter = 34200, loss = -0.059685, pixel drift RMS = 53.39729/255
+[2026-11-01 23:10:35] iter = 34400, loss = -0.021680, pixel drift RMS = 53.47831/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 34500/100000)
+[2026-11-01 23:10:42] iter = 34600, loss = -0.056697, pixel drift RMS = 53.55988/255
+[2026-11-01 23:10:49] iter = 34800, loss = -0.027350, pixel drift RMS = 53.64040/255
+[2026-11-01 23:10:57] iter = 35000, loss = -0.043552, pixel drift RMS = 53.72033/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 35000/100000)
+[2026-11-01 23:11:04] iter = 35200, loss = -0.080110, pixel drift RMS = 53.80498/255
+[2026-11-01 23:11:11] iter = 35400, loss = -0.093580, pixel drift RMS = 53.88702/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 35500/100000)
+[2026-11-01 23:11:19] iter = 35600, loss = -0.033062, pixel drift RMS = 53.97309/255
+[2026-11-01 23:11:26] iter = 35800, loss = -0.026899, pixel drift RMS = 54.05522/255
+[2026-11-01 23:11:34] iter = 36000, loss = -0.035583, pixel drift RMS = 54.12476/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 36000/100000)
+[2026-11-01 23:11:42] iter = 36200, loss = -0.068157, pixel drift RMS = 54.20488/255
+[2026-11-01 23:11:49] iter = 36400, loss = -0.059503, pixel drift RMS = 54.28112/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 36500/100000)
+[2026-11-01 23:11:56] iter = 36600, loss = -0.011457, pixel drift RMS = 54.34653/255
+[2026-11-01 23:12:04] iter = 36800, loss = -0.067187, pixel drift RMS = 54.41347/255
+[2026-11-01 23:12:11] iter = 37000, loss = -0.032956, pixel drift RMS = 54.48425/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 37000/100000)
+[2026-11-01 23:12:19] iter = 37200, loss = -0.047139, pixel drift RMS = 54.54950/255
+[2026-11-01 23:12:26] iter = 37400, loss = -0.040122, pixel drift RMS = 54.61810/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 37500/100000)
+[2026-11-01 23:12:33] iter = 37600, loss = -0.079045, pixel drift RMS = 54.68362/255
+[2026-11-01 23:12:41] iter = 37800, loss = -0.072291, pixel drift RMS = 54.74209/255
+[2026-11-01 23:12:48] iter = 38000, loss = -0.066843, pixel drift RMS = 54.80693/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 38000/100000)
+[2026-11-01 23:12:56] iter = 38200, loss = -0.014254, pixel drift RMS = 54.86745/255
+[2026-11-01 23:13:03] iter = 38400, loss = -0.074993, pixel drift RMS = 54.93373/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 38500/100000)
+[2026-11-01 23:13:11] iter = 38600, loss = -0.055307, pixel drift RMS = 54.99166/255
+[2026-11-01 23:13:18] iter = 38800, loss = -0.027694, pixel drift RMS = 55.06433/255
+[2026-11-01 23:13:26] iter = 39000, loss = -0.066257, pixel drift RMS = 55.12564/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 39000/100000)
+[2026-11-01 23:13:33] iter = 39200, loss = -0.014999, pixel drift RMS = 55.18866/255
+[2026-11-01 23:13:41] iter = 39400, loss = -0.013096, pixel drift RMS = 55.24535/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 39500/100000)
+[2026-11-01 23:13:48] iter = 39600, loss = -0.043181, pixel drift RMS = 55.30521/255
+[2026-11-01 23:13:56] iter = 39800, loss = -0.091328, pixel drift RMS = 55.35637/255
+[2026-11-01 23:14:03] iter = 40000, loss = -0.037301, pixel drift RMS = 55.42041/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 40000/100000)
+[2026-11-01 23:14:10] iter = 40200, loss = -0.065343, pixel drift RMS = 55.47709/255
+[2026-11-01 23:14:18] iter = 40400, loss = -0.096897, pixel drift RMS = 55.53368/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 40500/100000)
+[2026-11-01 23:14:25] iter = 40600, loss = -0.066681, pixel drift RMS = 55.58954/255
+[2026-11-01 23:14:32] iter = 40800, loss = -0.096226, pixel drift RMS = 55.64525/255
+[2026-11-01 23:14:40] iter = 41000, loss = -0.075079, pixel drift RMS = 55.70182/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 41000/100000)
+[2026-11-01 23:14:47] iter = 41200, loss = -0.066353, pixel drift RMS = 55.75310/255
+[2026-11-01 23:14:55] iter = 41400, loss = -0.012493, pixel drift RMS = 55.80723/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 41500/100000)
+[2026-11-01 23:15:02] iter = 41600, loss = -0.065033, pixel drift RMS = 55.85567/255
+[2026-11-01 23:15:09] iter = 41800, loss = -0.058468, pixel drift RMS = 55.91911/255
+[2026-11-01 23:15:16] iter = 42000, loss = -0.032401, pixel drift RMS = 55.96893/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 42000/100000)
+[2026-11-01 23:15:24] iter = 42200, loss = -0.039200, pixel drift RMS = 56.01519/255
+[2026-11-01 23:15:31] iter = 42400, loss = -0.066753, pixel drift RMS = 56.06648/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 42500/100000)
+[2026-11-01 23:15:38] iter = 42600, loss = -0.087045, pixel drift RMS = 56.11526/255
+[2026-11-01 23:15:45] iter = 42800, loss = -0.052050, pixel drift RMS = 56.16831/255
+[2026-11-01 23:15:53] iter = 43000, loss = -0.045243, pixel drift RMS = 56.22174/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 43000/100000)
+[2026-11-01 23:16:00] iter = 43200, loss = -0.019772, pixel drift RMS = 56.26859/255
+[2026-11-01 23:16:07] iter = 43400, loss = -0.035673, pixel drift RMS = 56.33043/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 43500/100000)
+[2026-11-01 23:16:14] iter = 43600, loss = -0.048948, pixel drift RMS = 56.37344/255
+[2026-11-01 23:16:22] iter = 43800, loss = -0.083590, pixel drift RMS = 56.41100/255
+[2026-11-01 23:16:29] iter = 44000, loss = -0.023111, pixel drift RMS = 56.45772/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 44000/100000)
+[2026-11-01 23:16:36] iter = 44200, loss = -0.052736, pixel drift RMS = 56.50889/255
+[2026-11-01 23:16:43] iter = 44400, loss = -0.057060, pixel drift RMS = 56.55806/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 44500/100000)
+[2026-11-01 23:16:51] iter = 44600, loss = -0.065713, pixel drift RMS = 56.60163/255
+[2026-11-01 23:16:58] iter = 44800, loss = -0.064718, pixel drift RMS = 56.64933/255
+[2026-11-01 23:17:05] iter = 45000, loss = -0.053705, pixel drift RMS = 56.68816/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 45000/100000)
+[2026-11-01 23:17:12] iter = 45200, loss = -0.061158, pixel drift RMS = 56.73902/255
+[2026-11-01 23:17:20] iter = 45400, loss = -0.074455, pixel drift RMS = 56.78019/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 45500/100000)
+[2026-11-01 23:17:27] iter = 45600, loss = -0.073982, pixel drift RMS = 56.82419/255
+[2026-11-01 23:17:34] iter = 45800, loss = -0.058931, pixel drift RMS = 56.86253/255
+[2026-11-01 23:17:41] iter = 46000, loss = -0.078728, pixel drift RMS = 56.91066/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 46000/100000)
+[2026-11-01 23:17:48] iter = 46200, loss = -0.091261, pixel drift RMS = 56.94415/255
+[2026-11-01 23:17:56] iter = 46400, loss = -0.053229, pixel drift RMS = 56.97981/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 46500/100000)
+[2026-11-01 23:18:03] iter = 46600, loss = -0.085536, pixel drift RMS = 57.02403/255
+[2026-11-01 23:18:10] iter = 46800, loss = -0.063075, pixel drift RMS = 57.07175/255
+[2026-11-01 23:18:17] iter = 47000, loss = -0.074355, pixel drift RMS = 57.11241/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 47000/100000)
+[2026-11-01 23:18:25] iter = 47200, loss = -0.055179, pixel drift RMS = 57.15688/255
+[2026-11-01 23:18:32] iter = 47400, loss = -0.057481, pixel drift RMS = 57.18582/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 47500/100000)
+[2026-11-01 23:18:39] iter = 47600, loss = -0.026862, pixel drift RMS = 57.22326/255
+[2026-11-01 23:18:46] iter = 47800, loss = -0.071108, pixel drift RMS = 57.26165/255
+[2026-11-01 23:18:54] iter = 48000, loss = -0.047263, pixel drift RMS = 57.29635/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 48000/100000)
+[2026-11-01 23:19:01] iter = 48200, loss = -0.085067, pixel drift RMS = 57.32857/255
+[2026-11-01 23:19:08] iter = 48400, loss = -0.034338, pixel drift RMS = 57.37168/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 48500/100000)
+[2026-11-01 23:19:15] iter = 48600, loss = -0.047458, pixel drift RMS = 57.40579/255
+[2026-11-01 23:19:23] iter = 48800, loss = -0.056627, pixel drift RMS = 57.45038/255
+[2026-11-01 23:19:30] iter = 49000, loss = -0.048229, pixel drift RMS = 57.47898/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 49000/100000)
+[2026-11-01 23:19:37] iter = 49200, loss = -0.061454, pixel drift RMS = 57.51717/255
+[2026-11-01 23:19:44] iter = 49400, loss = -0.044687, pixel drift RMS = 57.55004/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 49500/100000)
+[2026-11-01 23:19:52] iter = 49600, loss = -0.041741, pixel drift RMS = 57.58075/255
+[2026-11-01 23:19:59] iter = 49800, loss = -0.084531, pixel drift RMS = 57.61277/255
+[2026-11-01 23:20:06] iter = 50000, loss = -0.050457, pixel drift RMS = 57.64406/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 50000/100000)
+[2026-11-01 23:20:13] iter = 50200, loss = -0.068800, pixel drift RMS = 57.67361/255
+[2026-11-01 23:20:20] iter = 50400, loss = -0.054213, pixel drift RMS = 57.70380/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 50500/100000)
+[2026-11-01 23:20:28] iter = 50600, loss = -0.095738, pixel drift RMS = 57.73615/255
+[2026-11-01 23:20:35] iter = 50800, loss = -0.055583, pixel drift RMS = 57.76745/255
+[2026-11-01 23:20:42] iter = 51000, loss = -0.063250, pixel drift RMS = 57.80577/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 51000/100000)
+[2026-11-01 23:20:49] iter = 51200, loss = -0.051731, pixel drift RMS = 57.83679/255
+[2026-11-01 23:20:57] iter = 51400, loss = -0.058307, pixel drift RMS = 57.86405/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 51500/100000)
+[2026-11-01 23:21:04] iter = 51600, loss = -0.060822, pixel drift RMS = 57.89783/255
+[2026-11-01 23:21:11] iter = 51800, loss = -0.070942, pixel drift RMS = 57.92714/255
+[2026-11-01 23:21:18] iter = 52000, loss = -0.059703, pixel drift RMS = 57.95295/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 52000/100000)
+[2026-11-01 23:21:26] iter = 52200, loss = -0.051468, pixel drift RMS = 57.98264/255
+[2026-11-01 23:21:33] iter = 52400, loss = -0.065132, pixel drift RMS = 58.00821/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 52500/100000)
+[2026-11-01 23:21:40] iter = 52600, loss = -0.028664, pixel drift RMS = 58.04236/255
+[2026-11-01 23:21:47] iter = 52800, loss = -0.071235, pixel drift RMS = 58.07099/255
+[2026-11-01 23:21:55] iter = 53000, loss = -0.073035, pixel drift RMS = 58.09492/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 53000/100000)
+[2026-11-01 23:22:02] iter = 53200, loss = -0.025654, pixel drift RMS = 58.12518/255
+[2026-11-01 23:22:09] iter = 53400, loss = -0.046973, pixel drift RMS = 58.15269/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 53500/100000)
+[2026-11-01 23:22:16] iter = 53600, loss = -0.063981, pixel drift RMS = 58.17963/255
+[2026-11-01 23:22:23] iter = 53800, loss = -0.035228, pixel drift RMS = 58.20718/255
+[2026-11-01 23:22:31] iter = 54000, loss = -0.075317, pixel drift RMS = 58.23866/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 54000/100000)
+[2026-11-01 23:22:38] iter = 54200, loss = -0.063295, pixel drift RMS = 58.26721/255
+[2026-11-01 23:22:45] iter = 54400, loss = -0.039846, pixel drift RMS = 58.29330/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 54500/100000)
+[2026-11-01 23:22:52] iter = 54600, loss = -0.020456, pixel drift RMS = 58.31647/255
+[2026-11-01 23:23:00] iter = 54800, loss = -0.050175, pixel drift RMS = 58.34192/255
+[2026-11-01 23:23:07] iter = 55000, loss = -0.080671, pixel drift RMS = 58.36911/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 55000/100000)
+[2026-11-01 23:23:14] iter = 55200, loss = -0.038528, pixel drift RMS = 58.39222/255
+[2026-11-01 23:23:21] iter = 55400, loss = -0.077635, pixel drift RMS = 58.41776/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 55500/100000)
+[2026-11-01 23:23:29] iter = 55600, loss = -0.081865, pixel drift RMS = 58.44141/255
+[2026-11-01 23:23:36] iter = 55800, loss = -0.063038, pixel drift RMS = 58.46810/255
+[2026-11-01 23:23:43] iter = 56000, loss = -0.070560, pixel drift RMS = 58.48998/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 56000/100000)
+[2026-11-01 23:23:50] iter = 56200, loss = -0.071657, pixel drift RMS = 58.50744/255
+[2026-11-01 23:23:57] iter = 56400, loss = -0.080968, pixel drift RMS = 58.53369/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 56500/100000)
+[2026-11-01 23:24:05] iter = 56600, loss = -0.059688, pixel drift RMS = 58.55070/255
+[2026-11-01 23:24:12] iter = 56800, loss = -0.033629, pixel drift RMS = 58.57614/255
+[2026-11-01 23:24:19] iter = 57000, loss = -0.024001, pixel drift RMS = 58.60075/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 57000/100000)
+[2026-11-01 23:24:27] iter = 57200, loss = -0.078447, pixel drift RMS = 58.62032/255
+[2026-11-01 23:24:34] iter = 57400, loss = -0.060150, pixel drift RMS = 58.63774/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 57500/100000)
+[2026-11-01 23:24:41] iter = 57600, loss = -0.053901, pixel drift RMS = 58.66204/255
+[2026-11-01 23:24:48] iter = 57800, loss = -0.067624, pixel drift RMS = 58.68801/255
+[2026-11-01 23:24:55] iter = 58000, loss = -0.027346, pixel drift RMS = 58.71261/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 58000/100000)
+[2026-11-01 23:25:03] iter = 58200, loss = -0.072151, pixel drift RMS = 58.73010/255
+[2026-11-01 23:25:10] iter = 58400, loss = -0.053545, pixel drift RMS = 58.75294/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 58500/100000)
+[2026-11-01 23:25:17] iter = 58600, loss = -0.063482, pixel drift RMS = 58.77102/255
+[2026-11-01 23:25:24] iter = 58800, loss = -0.055262, pixel drift RMS = 58.78727/255
+[2026-11-01 23:25:32] iter = 59000, loss = -0.054294, pixel drift RMS = 58.81079/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 59000/100000)
+[2026-11-01 23:25:39] iter = 59200, loss = -0.063767, pixel drift RMS = 58.83281/255
+[2026-11-01 23:25:46] iter = 59400, loss = -0.079739, pixel drift RMS = 58.85241/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 59500/100000)
+[2026-11-01 23:25:54] iter = 59600, loss = -0.080078, pixel drift RMS = 58.87090/255
+[2026-11-01 23:26:01] iter = 59800, loss = -0.075011, pixel drift RMS = 58.89194/255
+[2026-11-01 23:26:08] iter = 60000, loss = -0.065606, pixel drift RMS = 58.91156/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 60000/100000)
+[2026-11-01 23:26:15] iter = 60200, loss = -0.037634, pixel drift RMS = 58.92966/255
+[2026-11-01 23:26:23] iter = 60400, loss = -0.045153, pixel drift RMS = 58.94763/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 60500/100000)
+[2026-11-01 23:26:30] iter = 60600, loss = -0.066253, pixel drift RMS = 58.96934/255
+[2026-11-01 23:26:37] iter = 60800, loss = -0.066181, pixel drift RMS = 58.98672/255
+[2026-11-01 23:26:44] iter = 61000, loss = -0.060318, pixel drift RMS = 59.00674/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 61000/100000)
+[2026-11-01 23:26:52] iter = 61200, loss = -0.086807, pixel drift RMS = 59.02170/255
+[2026-11-01 23:26:59] iter = 61400, loss = -0.030082, pixel drift RMS = 59.04139/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 61500/100000)
+[2026-11-01 23:27:06] iter = 61600, loss = -0.013950, pixel drift RMS = 59.05804/255
+[2026-11-01 23:27:13] iter = 61800, loss = -0.038055, pixel drift RMS = 59.07668/255
+[2026-11-01 23:27:21] iter = 62000, loss = -0.061714, pixel drift RMS = 59.09341/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 62000/100000)
+[2026-11-01 23:27:28] iter = 62200, loss = -0.080252, pixel drift RMS = 59.11233/255
+[2026-11-01 23:27:35] iter = 62400, loss = -0.061274, pixel drift RMS = 59.12515/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 62500/100000)
+[2026-11-01 23:27:42] iter = 62600, loss = -0.032635, pixel drift RMS = 59.13602/255
+[2026-11-01 23:27:50] iter = 62800, loss = -0.011252, pixel drift RMS = 59.15173/255
+[2026-11-01 23:27:57] iter = 63000, loss = -0.087736, pixel drift RMS = 59.16578/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 63000/100000)
+[2026-11-01 23:28:04] iter = 63200, loss = -0.052751, pixel drift RMS = 59.18026/255
+[2026-11-01 23:28:11] iter = 63400, loss = -0.064447, pixel drift RMS = 59.19556/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 63500/100000)
+[2026-11-01 23:28:19] iter = 63600, loss = -0.072447, pixel drift RMS = 59.21206/255
+[2026-11-01 23:28:26] iter = 63800, loss = -0.066515, pixel drift RMS = 59.22471/255
+[2026-11-01 23:28:33] iter = 64000, loss = -0.076158, pixel drift RMS = 59.24274/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 64000/100000)
+[2026-11-01 23:28:40] iter = 64200, loss = -0.061562, pixel drift RMS = 59.25467/255
+[2026-11-01 23:28:48] iter = 64400, loss = -0.041404, pixel drift RMS = 59.27219/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 64500/100000)
+[2026-11-01 23:28:55] iter = 64600, loss = -0.074698, pixel drift RMS = 59.29027/255
+[2026-11-01 23:29:02] iter = 64800, loss = -0.053675, pixel drift RMS = 59.30281/255
+[2026-11-01 23:29:09] iter = 65000, loss = -0.052658, pixel drift RMS = 59.31567/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 65000/100000)
+[2026-11-01 23:29:17] iter = 65200, loss = -0.071726, pixel drift RMS = 59.32802/255
+[2026-11-01 23:29:24] iter = 65400, loss = -0.055510, pixel drift RMS = 59.34367/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 65500/100000)
+[2026-11-01 23:29:31] iter = 65600, loss = -0.043140, pixel drift RMS = 59.35818/255
+[2026-11-01 23:29:38] iter = 65800, loss = -0.086414, pixel drift RMS = 59.37018/255
+[2026-11-01 23:29:46] iter = 66000, loss = -0.048934, pixel drift RMS = 59.38295/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 66000/100000)
+[2026-11-01 23:29:53] iter = 66200, loss = -0.079979, pixel drift RMS = 59.39497/255
+[2026-11-01 23:30:00] iter = 66400, loss = -0.056577, pixel drift RMS = 59.40981/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 66500/100000)
+[2026-11-01 23:30:07] iter = 66600, loss = -0.076794, pixel drift RMS = 59.42221/255
+[2026-11-01 23:30:14] iter = 66800, loss = -0.092196, pixel drift RMS = 59.43377/255
+[2026-11-01 23:30:22] iter = 67000, loss = -0.062433, pixel drift RMS = 59.44692/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 67000/100000)
+[2026-11-01 23:30:29] iter = 67200, loss = -0.061389, pixel drift RMS = 59.45641/255
+[2026-11-01 23:30:36] iter = 67400, loss = -0.066161, pixel drift RMS = 59.46838/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 67500/100000)
+[2026-11-01 23:30:43] iter = 67600, loss = -0.059299, pixel drift RMS = 59.48453/255
+[2026-11-01 23:30:51] iter = 67800, loss = -0.056123, pixel drift RMS = 59.49296/255
+[2026-11-01 23:30:58] iter = 68000, loss = -0.096959, pixel drift RMS = 59.50496/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 68000/100000)
+[2026-11-01 23:31:05] iter = 68200, loss = -0.048885, pixel drift RMS = 59.51695/255
+[2026-11-01 23:31:12] iter = 68400, loss = -0.048857, pixel drift RMS = 59.52776/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 68500/100000)
+[2026-11-01 23:31:20] iter = 68600, loss = -0.059031, pixel drift RMS = 59.53733/255
+[2026-11-01 23:31:27] iter = 68800, loss = -0.039710, pixel drift RMS = 59.54965/255
+[2026-11-01 23:31:34] iter = 69000, loss = -0.071430, pixel drift RMS = 59.56347/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 69000/100000)
+[2026-11-01 23:31:41] iter = 69200, loss = -0.075438, pixel drift RMS = 59.57330/255
+[2026-11-01 23:31:49] iter = 69400, loss = -0.031260, pixel drift RMS = 59.58187/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 69500/100000)
+[2026-11-01 23:31:56] iter = 69600, loss = -0.072440, pixel drift RMS = 59.59429/255
+[2026-11-01 23:32:03] iter = 69800, loss = -0.044476, pixel drift RMS = 59.60507/255
+[2026-11-01 23:32:10] iter = 70000, loss = -0.079180, pixel drift RMS = 59.61499/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 70000/100000)
+[2026-11-01 23:32:18] iter = 70200, loss = -0.041851, pixel drift RMS = 59.62531/255
+[2026-11-01 23:32:25] iter = 70400, loss = -0.074589, pixel drift RMS = 59.63355/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 70500/100000)
+[2026-11-01 23:32:32] iter = 70600, loss = -0.078886, pixel drift RMS = 59.64617/255
+[2026-11-01 23:32:39] iter = 70800, loss = -0.078308, pixel drift RMS = 59.65689/255
+[2026-11-01 23:32:47] iter = 71000, loss = -0.079266, pixel drift RMS = 59.66653/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 71000/100000)
+[2026-11-01 23:32:54] iter = 71200, loss = -0.021036, pixel drift RMS = 59.67714/255
+[2026-11-01 23:33:01] iter = 71400, loss = -0.071198, pixel drift RMS = 59.68720/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 71500/100000)
+[2026-11-01 23:33:08] iter = 71600, loss = -0.035704, pixel drift RMS = 59.69558/255
+[2026-11-01 23:33:16] iter = 71800, loss = -0.037781, pixel drift RMS = 59.70420/255
+[2026-11-01 23:33:23] iter = 72000, loss = -0.031409, pixel drift RMS = 59.71207/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 72000/100000)
+[2026-11-01 23:33:30] iter = 72200, loss = -0.085550, pixel drift RMS = 59.72268/255
+[2026-11-01 23:33:37] iter = 72400, loss = -0.060375, pixel drift RMS = 59.73298/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 72500/100000)
+[2026-11-01 23:33:45] iter = 72600, loss = -0.057999, pixel drift RMS = 59.74232/255
+[2026-11-01 23:33:52] iter = 72800, loss = -0.073349, pixel drift RMS = 59.75102/255
+[2026-11-01 23:33:59] iter = 73000, loss = -0.054099, pixel drift RMS = 59.75855/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 73000/100000)
+[2026-11-01 23:34:06] iter = 73200, loss = -0.062518, pixel drift RMS = 59.76602/255
+[2026-11-01 23:34:14] iter = 73400, loss = -0.049920, pixel drift RMS = 59.77378/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 73500/100000)
+[2026-11-01 23:34:21] iter = 73600, loss = -0.074111, pixel drift RMS = 59.78326/255
+[2026-11-01 23:34:28] iter = 73800, loss = -0.046526, pixel drift RMS = 59.79047/255
+[2026-11-01 23:34:35] iter = 74000, loss = -0.060548, pixel drift RMS = 59.79990/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 74000/100000)
+[2026-11-01 23:34:43] iter = 74200, loss = -0.079472, pixel drift RMS = 59.80581/255
+[2026-11-01 23:34:50] iter = 74400, loss = -0.070000, pixel drift RMS = 59.81119/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 74500/100000)
+[2026-11-01 23:34:57] iter = 74600, loss = -0.025591, pixel drift RMS = 59.81809/255
+[2026-11-01 23:35:04] iter = 74800, loss = -0.064881, pixel drift RMS = 59.82519/255
+[2026-11-01 23:35:12] iter = 75000, loss = -0.071552, pixel drift RMS = 59.83107/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 75000/100000)
+[2026-11-01 23:35:19] iter = 75200, loss = -0.019053, pixel drift RMS = 59.83944/255
+[2026-11-01 23:35:26] iter = 75400, loss = -0.055394, pixel drift RMS = 59.84580/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 75500/100000)
+[2026-11-01 23:35:33] iter = 75600, loss = -0.021605, pixel drift RMS = 59.85326/255
+[2026-11-01 23:35:41] iter = 75800, loss = -0.041885, pixel drift RMS = 59.86158/255
+[2026-11-01 23:35:48] iter = 76000, loss = -0.050905, pixel drift RMS = 59.86656/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 76000/100000)
+[2026-11-01 23:35:55] iter = 76200, loss = -0.070617, pixel drift RMS = 59.87252/255
+[2026-11-01 23:36:02] iter = 76400, loss = -0.085691, pixel drift RMS = 59.88118/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 76500/100000)
+[2026-11-01 23:36:10] iter = 76600, loss = -0.072371, pixel drift RMS = 59.88705/255
+[2026-11-01 23:36:17] iter = 76800, loss = -0.061748, pixel drift RMS = 59.89370/255
+[2026-11-01 23:36:24] iter = 77000, loss = -0.020070, pixel drift RMS = 59.89977/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 77000/100000)
+[2026-11-01 23:36:32] iter = 77200, loss = -0.019269, pixel drift RMS = 59.90546/255
+[2026-11-01 23:36:39] iter = 77400, loss = -0.060373, pixel drift RMS = 59.91096/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 77500/100000)
+[2026-11-01 23:36:46] iter = 77600, loss = -0.056170, pixel drift RMS = 59.91442/255
+[2026-11-01 23:36:53] iter = 77800, loss = -0.037612, pixel drift RMS = 59.92169/255
+[2026-11-01 23:37:01] iter = 78000, loss = -0.052576, pixel drift RMS = 59.92563/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 78000/100000)
+[2026-11-01 23:37:08] iter = 78200, loss = -0.081730, pixel drift RMS = 59.93102/255
+[2026-11-01 23:37:15] iter = 78400, loss = -0.047997, pixel drift RMS = 59.93676/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 78500/100000)
+[2026-11-01 23:37:22] iter = 78600, loss = -0.080111, pixel drift RMS = 59.94189/255
+[2026-11-01 23:37:29] iter = 78800, loss = -0.043595, pixel drift RMS = 59.94583/255
+[2026-11-01 23:37:37] iter = 79000, loss = -0.059580, pixel drift RMS = 59.95082/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 79000/100000)
+[2026-11-01 23:37:44] iter = 79200, loss = -0.065128, pixel drift RMS = 59.95672/255
+[2026-11-01 23:37:51] iter = 79400, loss = -0.061440, pixel drift RMS = 59.96414/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 79500/100000)
+[2026-11-01 23:37:59] iter = 79600, loss = -0.042010, pixel drift RMS = 59.96936/255
+[2026-11-01 23:38:06] iter = 79800, loss = -0.064659, pixel drift RMS = 59.97319/255
+[2026-11-01 23:38:13] iter = 80000, loss = -0.069200, pixel drift RMS = 59.97745/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 80000/100000)
+[2026-11-01 23:38:20] iter = 80200, loss = -0.072853, pixel drift RMS = 59.98033/255
+[2026-11-01 23:38:27] iter = 80400, loss = -0.072918, pixel drift RMS = 59.98435/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 80500/100000)
+[2026-11-01 23:38:35] iter = 80600, loss = -0.059975, pixel drift RMS = 59.98856/255
+[2026-11-01 23:38:42] iter = 80800, loss = -0.060727, pixel drift RMS = 59.99292/255
+[2026-11-01 23:38:49] iter = 81000, loss = -0.065716, pixel drift RMS = 59.99779/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 81000/100000)
+[2026-11-01 23:38:57] iter = 81200, loss = -0.067587, pixel drift RMS = 60.00144/255
+[2026-11-01 23:39:04] iter = 81400, loss = -0.051002, pixel drift RMS = 60.00498/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 81500/100000)
+[2026-11-01 23:39:11] iter = 81600, loss = -0.059968, pixel drift RMS = 60.00901/255
+[2026-11-01 23:39:18] iter = 81800, loss = -0.019985, pixel drift RMS = 60.01244/255
+[2026-11-01 23:39:26] iter = 82000, loss = -0.060064, pixel drift RMS = 60.01607/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 82000/100000)
+[2026-11-01 23:39:33] iter = 82200, loss = -0.076509, pixel drift RMS = 60.02089/255
+[2026-11-01 23:39:40] iter = 82400, loss = -0.063837, pixel drift RMS = 60.02377/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 82500/100000)
+[2026-11-01 23:39:47] iter = 82600, loss = -0.032647, pixel drift RMS = 60.02787/255
+[2026-11-01 23:39:55] iter = 82800, loss = -0.027259, pixel drift RMS = 60.03041/255
+[2026-11-01 23:40:02] iter = 83000, loss = -0.049338, pixel drift RMS = 60.03382/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 83000/100000)
+[2026-11-01 23:40:09] iter = 83200, loss = -0.064884, pixel drift RMS = 60.03726/255
+[2026-11-01 23:40:16] iter = 83400, loss = -0.057695, pixel drift RMS = 60.04014/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 83500/100000)
+[2026-11-01 23:40:24] iter = 83600, loss = -0.076501, pixel drift RMS = 60.04344/255
+[2026-11-01 23:40:31] iter = 83800, loss = -0.034910, pixel drift RMS = 60.04709/255
+[2026-11-01 23:40:38] iter = 84000, loss = -0.041061, pixel drift RMS = 60.05078/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 84000/100000)
+[2026-11-01 23:40:45] iter = 84200, loss = -0.018112, pixel drift RMS = 60.05342/255
+[2026-11-01 23:40:53] iter = 84400, loss = -0.067935, pixel drift RMS = 60.05628/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 84500/100000)
+[2026-11-01 23:41:00] iter = 84600, loss = -0.010006, pixel drift RMS = 60.05893/255
+[2026-11-01 23:41:07] iter = 84800, loss = -0.041408, pixel drift RMS = 60.06229/255
+[2026-11-01 23:41:14] iter = 85000, loss = -0.093451, pixel drift RMS = 60.06497/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 85000/100000)
+[2026-11-01 23:41:22] iter = 85200, loss = -0.053396, pixel drift RMS = 60.06716/255
+[2026-11-01 23:41:29] iter = 85400, loss = -0.087075, pixel drift RMS = 60.07008/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 85500/100000)
+[2026-11-01 23:41:36] iter = 85600, loss = -0.069719, pixel drift RMS = 60.07230/255
+[2026-11-01 23:41:43] iter = 85800, loss = -0.039965, pixel drift RMS = 60.07554/255
+[2026-11-01 23:41:51] iter = 86000, loss = -0.082349, pixel drift RMS = 60.07864/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 86000/100000)
+[2026-11-01 23:41:58] iter = 86200, loss = -0.072256, pixel drift RMS = 60.07993/255
+[2026-11-01 23:42:05] iter = 86400, loss = -0.047331, pixel drift RMS = 60.08256/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 86500/100000)
+[2026-11-01 23:42:12] iter = 86600, loss = -0.019281, pixel drift RMS = 60.08508/255
+[2026-11-01 23:42:20] iter = 86800, loss = -0.061488, pixel drift RMS = 60.08680/255
+[2026-11-01 23:42:27] iter = 87000, loss = -0.070079, pixel drift RMS = 60.08913/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 87000/100000)
+[2026-11-01 23:42:34] iter = 87200, loss = -0.016552, pixel drift RMS = 60.09104/255
+[2026-11-01 23:42:41] iter = 87400, loss = -0.078181, pixel drift RMS = 60.09355/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 87500/100000)
+[2026-11-01 23:42:48] iter = 87600, loss = -0.030365, pixel drift RMS = 60.09531/255
+[2026-11-01 23:42:56] iter = 87800, loss = -0.079109, pixel drift RMS = 60.09719/255
+[2026-11-01 23:43:03] iter = 88000, loss = -0.041934, pixel drift RMS = 60.09874/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 88000/100000)
+[2026-11-01 23:43:10] iter = 88200, loss = -0.061714, pixel drift RMS = 60.10044/255
+[2026-11-01 23:43:17] iter = 88400, loss = -0.073552, pixel drift RMS = 60.10211/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 88500/100000)
+[2026-11-01 23:43:25] iter = 88600, loss = -0.092524, pixel drift RMS = 60.10365/255
+[2026-11-01 23:43:32] iter = 88800, loss = -0.010086, pixel drift RMS = 60.10590/255
+[2026-11-01 23:43:39] iter = 89000, loss = -0.043694, pixel drift RMS = 60.10805/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 89000/100000)
+[2026-11-01 23:43:47] iter = 89200, loss = -0.086994, pixel drift RMS = 60.10963/255
+[2026-11-01 23:43:54] iter = 89400, loss = -0.051956, pixel drift RMS = 60.11095/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 89500/100000)
+[2026-11-01 23:44:01] iter = 89600, loss = -0.064777, pixel drift RMS = 60.11297/255
+[2026-11-01 23:44:08] iter = 89800, loss = -0.062967, pixel drift RMS = 60.11425/255
+[2026-11-01 23:44:16] iter = 90000, loss = -0.060532, pixel drift RMS = 60.11590/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 90000/100000)
+[2026-11-01 23:44:23] iter = 90200, loss = -0.075060, pixel drift RMS = 60.11692/255
+[2026-11-01 23:44:30] iter = 90400, loss = -0.022690, pixel drift RMS = 60.11877/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 90500/100000)
+[2026-11-01 23:44:37] iter = 90600, loss = -0.084275, pixel drift RMS = 60.12022/255
+[2026-11-01 23:44:45] iter = 90800, loss = -0.054029, pixel drift RMS = 60.12147/255
+[2026-11-01 23:44:52] iter = 91000, loss = -0.064227, pixel drift RMS = 60.12278/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 91000/100000)
+[2026-11-01 23:44:59] iter = 91200, loss = -0.092151, pixel drift RMS = 60.12431/255
+[2026-11-01 23:45:07] iter = 91400, loss = -0.076415, pixel drift RMS = 60.12524/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 91500/100000)
+[2026-11-01 23:45:14] iter = 91600, loss = -0.049471, pixel drift RMS = 60.12651/255
+[2026-11-01 23:45:21] iter = 91800, loss = -0.066151, pixel drift RMS = 60.12806/255
+[2026-11-01 23:45:28] iter = 92000, loss = -0.077839, pixel drift RMS = 60.12926/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 92000/100000)
+[2026-11-01 23:45:36] iter = 92200, loss = -0.097400, pixel drift RMS = 60.13029/255
+[2026-11-01 23:45:43] iter = 92400, loss = -0.042135, pixel drift RMS = 60.13128/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 92500/100000)
+[2026-11-01 23:45:50] iter = 92600, loss = -0.064322, pixel drift RMS = 60.13222/255
+[2026-11-01 23:45:57] iter = 92800, loss = -0.080003, pixel drift RMS = 60.13284/255
+[2026-11-01 23:46:05] iter = 93000, loss = -0.097065, pixel drift RMS = 60.13414/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 93000/100000)
+[2026-11-01 23:46:12] iter = 93200, loss = -0.066962, pixel drift RMS = 60.13526/255
+[2026-11-01 23:46:19] iter = 93400, loss = -0.051392, pixel drift RMS = 60.13618/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 93500/100000)
+[2026-11-01 23:46:27] iter = 93600, loss = -0.041800, pixel drift RMS = 60.13744/255
+[2026-11-01 23:46:34] iter = 93800, loss = -0.026288, pixel drift RMS = 60.13824/255
+[2026-11-01 23:46:41] iter = 94000, loss = -0.080044, pixel drift RMS = 60.13897/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 94000/100000)
+[2026-11-01 23:46:48] iter = 94200, loss = -0.043621, pixel drift RMS = 60.13962/255
+[2026-11-01 23:46:55] iter = 94400, loss = -0.089041, pixel drift RMS = 60.14062/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 94500/100000)
+[2026-11-01 23:47:03] iter = 94600, loss = -0.082575, pixel drift RMS = 60.14165/255
+[2026-11-01 23:47:10] iter = 94800, loss = -0.049583, pixel drift RMS = 60.14254/255
+[2026-11-01 23:47:17] iter = 95000, loss = -0.072640, pixel drift RMS = 60.14305/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 95000/100000)
+[2026-11-01 23:47:25] iter = 95200, loss = -0.055847, pixel drift RMS = 60.14357/255
+[2026-11-01 23:47:32] iter = 95400, loss = -0.059392, pixel drift RMS = 60.14415/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 95500/100000)
+[2026-11-01 23:47:39] iter = 95600, loss = -0.029722, pixel drift RMS = 60.14487/255
+[2026-11-01 23:47:46] iter = 95800, loss = -0.057653, pixel drift RMS = 60.14568/255
+[2026-11-01 23:47:54] iter = 96000, loss = -0.039313, pixel drift RMS = 60.14646/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 96000/100000)
+[2026-11-01 23:48:01] iter = 96200, loss = -0.055572, pixel drift RMS = 60.14698/255
+[2026-11-01 23:48:08] iter = 96400, loss = -0.056005, pixel drift RMS = 60.14762/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 96500/100000)
+[2026-11-01 23:48:15] iter = 96600, loss = -0.069126, pixel drift RMS = 60.14837/255
+[2026-11-01 23:48:22] iter = 96800, loss = -0.074142, pixel drift RMS = 60.14882/255
+[2026-11-01 23:48:30] iter = 97000, loss = -0.075775, pixel drift RMS = 60.14941/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 97000/100000)
+[2026-11-01 23:48:37] iter = 97200, loss = -0.034499, pixel drift RMS = 60.14992/255
+[2026-11-01 23:48:44] iter = 97400, loss = -0.061031, pixel drift RMS = 60.15041/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 97500/100000)
+[2026-11-01 23:48:51] iter = 97600, loss = -0.051956, pixel drift RMS = 60.15101/255
+[2026-11-01 23:48:59] iter = 97800, loss = -0.050868, pixel drift RMS = 60.15137/255
+[2026-11-01 23:49:06] iter = 98000, loss = -0.008897, pixel drift RMS = 60.15195/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 98000/100000)
+[2026-11-01 23:49:13] iter = 98200, loss = -0.085456, pixel drift RMS = 60.15244/255
+[2026-11-01 23:49:21] iter = 98400, loss = -0.067353, pixel drift RMS = 60.15284/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 98500/100000)
+[2026-11-01 23:49:28] iter = 98600, loss = -0.064838, pixel drift RMS = 60.15341/255
+[2026-11-01 23:49:35] iter = 98800, loss = -0.066370, pixel drift RMS = 60.15388/255
+[2026-11-01 23:49:42] iter = 99000, loss = -0.092391, pixel drift RMS = 60.15427/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 99000/100000)
+[2026-11-01 23:49:50] iter = 99200, loss = -0.039109, pixel drift RMS = 60.15470/255
+[2026-11-01 23:49:57] iter = 99400, loss = -0.052665, pixel drift RMS = 60.15499/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 99500/100000)
+[2026-11-01 23:50:04] iter = 99600, loss = -0.063954, pixel drift RMS = 60.15537/255
+[2026-11-01 23:50:11] iter = 99800, loss = -0.049036, pixel drift RMS = 60.15588/255
+[2026-11-01 23:50:19] iter = 100000, loss = -0.031771, pixel drift RMS = 60.15622/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 100000/100000)
+DONE: /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/noise10x/pt0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt
+SSL CIFAR10/ResNet18/simclr seed=0: {"epoch": 1, "steps": 1, "lr": 3e-05, "loss": 5.3865065574646, "examples": 100}
+SSL CIFAR10/ResNet18/simclr seed=0: {"epoch": 200, "steps": 200, "lr": 0.15279469632432452, "loss": 5.0330986976623535, "examples": 100}
+SSL CIFAR10/ResNet18/simclr seed=0: {"epoch": 400, "steps": 400, "lr": 0.1419615998508841, "loss": 4.881124019622803, "examples": 100}
+SSL CIFAR10/ResNet18/simclr seed=0: {"epoch": 600, "steps": 600, "lr": 0.12481100174716497, "loss": 4.744143009185791, "examples": 100}
+SSL CIFAR10/ResNet18/simclr seed=0: {"epoch": 800, "steps": 800, "lr": 0.10304018745339412, "loss": 4.555532932281494, "examples": 100}
+SSL CIFAR10/ResNet18/simclr seed=0: {"epoch": 1000, "steps": 1000, "lr": 0.07880367577406086, "loss": 4.1636762619018555, "examples": 100}
+SSL CIFAR10/ResNet18/simclr seed=0: {"epoch": 1200, "steps": 1200, "lr": 0.054499999876722965, "loss": 3.9012157917022705, "examples": 100}
+SSL CIFAR10/ResNet18/simclr seed=0: {"epoch": 1400, "steps": 1400, "lr": 0.03253433974373928, "loss": 3.5516653060913086, "examples": 100}
+SSL CIFAR10/ResNet18/simclr seed=0: {"epoch": 1600, "steps": 1600, "lr": 0.015080496831083607, "loss": 3.4842617511749268, "examples": 100}
+SSL CIFAR10/ResNet18/simclr seed=0: {"epoch": 1800, "steps": 1800, "lr": 0.0038657667859693257, "loss": 3.3087267875671387, "examples": 100}
+SSL CIFAR10/ResNet18/simclr seed=0: {"epoch": 2000, "steps": 2000, "lr": 0.0, "loss": 3.0944550037384033, "examples": 100}
+PROBE CIFAR10 lbl=1 seed=0: {'epoch': 10, 'lr': 0.09776754757575974, 'loss': 1.7405940465927123, 'train_accuracy_percent': 36.2}
+PROBE CIFAR10 lbl=1 seed=0: {'epoch': 20, 'lr': 0.09081878607071997, 'loss': 1.614469832420349, 'train_accuracy_percent': 41.4}
+PROBE CIFAR10 lbl=1 seed=0: {'epoch': 30, 'lr': 0.0798344744144428, 'loss': 1.5594880409240723, 'train_accuracy_percent': 44.0}
+PROBE CIFAR10 lbl=1 seed=0: {'epoch': 40, 'lr': 0.06590057681196192, 'loss': 1.5549904804229737, 'train_accuracy_percent': 44.8}
+PROBE CIFAR10 lbl=1 seed=0: {'epoch': 50, 'lr': 0.05039466834548567, 'loss': 1.5003290872573853, 'train_accuracy_percent': 46.8}
+PROBE CIFAR10 lbl=1 seed=0: {'epoch': 60, 'lr': 0.03484974098465636, 'loss': 1.4714401960372925, 'train_accuracy_percent': 50.0}
+PROBE CIFAR10 lbl=1 seed=0: {'epoch': 70, 'lr': 0.020802644302934683, 'loss': 1.4836135883331298, 'train_accuracy_percent': 51.2}
+PROBE CIFAR10 lbl=1 seed=0: {'epoch': 80, 'lr': 0.00964214481190074, 'loss': 1.460005877494812, 'train_accuracy_percent': 50.4}
+PROBE CIFAR10 lbl=1 seed=0: {'epoch': 90, 'lr': 0.0024716255306108607, 'loss': 1.5122629661560059, 'train_accuracy_percent': 46.2}
+PROBE CIFAR10 lbl=1 seed=0: {'epoch': 100, 'lr': 0.0, 'loss': 1.4352141704559327, 'train_accuracy_percent': 49.2}
+RESULT CIFAR10 lbl=1 seed=0: 42.2600
+PROBE CIFAR10 lbl=1 seed=1: {'epoch': 10, 'lr': 0.09776754757575974, 'loss': 1.7704056005477906, 'train_accuracy_percent': 40.0}
+PROBE CIFAR10 lbl=1 seed=1: {'epoch': 20, 'lr': 0.09081878607071997, 'loss': 1.6908731679916382, 'train_accuracy_percent': 40.0}
+PROBE CIFAR10 lbl=1 seed=1: {'epoch': 30, 'lr': 0.0798344744144428, 'loss': 1.582749737739563, 'train_accuracy_percent': 46.8}
+PROBE CIFAR10 lbl=1 seed=1: {'epoch': 40, 'lr': 0.06590057681196192, 'loss': 1.5835079460144044, 'train_accuracy_percent': 43.4}
+PROBE CIFAR10 lbl=1 seed=1: {'epoch': 50, 'lr': 0.05039466834548567, 'loss': 1.5298690423965453, 'train_accuracy_percent': 47.6}
+PROBE CIFAR10 lbl=1 seed=1: {'epoch': 60, 'lr': 0.03484974098465636, 'loss': 1.521402837753296, 'train_accuracy_percent': 47.6}
+PROBE CIFAR10 lbl=1 seed=1: {'epoch': 70, 'lr': 0.020802644302934683, 'loss': 1.5590005111694336, 'train_accuracy_percent': 44.2}
+PROBE CIFAR10 lbl=1 seed=1: {'epoch': 80, 'lr': 0.00964214481190074, 'loss': 1.4736490926742554, 'train_accuracy_percent': 49.0}
+PROBE CIFAR10 lbl=1 seed=1: {'epoch': 90, 'lr': 0.0024716255306108607, 'loss': 1.466676851272583, 'train_accuracy_percent': 50.4}
+PROBE CIFAR10 lbl=1 seed=1: {'epoch': 100, 'lr': 0.0, 'loss': 1.4943154792785645, 'train_accuracy_percent': 48.0}
+RESULT CIFAR10 lbl=1 seed=1: 42.1900
+PROBE CIFAR10 lbl=1 seed=2: {'epoch': 10, 'lr': 0.09776754757575974, 'loss': 1.7340384445190429, 'train_accuracy_percent': 38.4}
+PROBE CIFAR10 lbl=1 seed=2: {'epoch': 20, 'lr': 0.09081878607071997, 'loss': 1.6294482688903809, 'train_accuracy_percent': 39.8}
+PROBE CIFAR10 lbl=1 seed=2: {'epoch': 30, 'lr': 0.0798344744144428, 'loss': 1.5746411848068238, 'train_accuracy_percent': 45.2}
+PROBE CIFAR10 lbl=1 seed=2: {'epoch': 40, 'lr': 0.06590057681196192, 'loss': 1.5404773149490356, 'train_accuracy_percent': 47.0}
+PROBE CIFAR10 lbl=1 seed=2: {'epoch': 50, 'lr': 0.05039466834548567, 'loss': 1.5425755252838136, 'train_accuracy_percent': 44.8}
+PROBE CIFAR10 lbl=1 seed=2: {'epoch': 60, 'lr': 0.03484974098465636, 'loss': 1.4614111347198486, 'train_accuracy_percent': 49.6}
+PROBE CIFAR10 lbl=1 seed=2: {'epoch': 70, 'lr': 0.020802644302934683, 'loss': 1.5514753761291504, 'train_accuracy_percent': 44.0}
+PROBE CIFAR10 lbl=1 seed=2: {'epoch': 80, 'lr': 0.00964214481190074, 'loss': 1.5228058080673217, 'train_accuracy_percent': 46.0}
+PROBE CIFAR10 lbl=1 seed=2: {'epoch': 90, 'lr': 0.0024716255306108607, 'loss': 1.5060136661529542, 'train_accuracy_percent': 48.8}
+PROBE CIFAR10 lbl=1 seed=2: {'epoch': 100, 'lr': 0.0, 'loss': 1.4861148595809937, 'train_accuracy_percent': 51.8}
+RESULT CIFAR10 lbl=1 seed=2: 42.9300
+PROBE CIFAR10 lbl=1 seed=3: {'epoch': 10, 'lr': 0.09776754757575974, 'loss': 1.7753890943527222, 'train_accuracy_percent': 37.8}
+PROBE CIFAR10 lbl=1 seed=3: {'epoch': 20, 'lr': 0.09081878607071997, 'loss': 1.6231212711334229, 'train_accuracy_percent': 44.2}
+PROBE CIFAR10 lbl=1 seed=3: {'epoch': 30, 'lr': 0.0798344744144428, 'loss': 1.5539895725250243, 'train_accuracy_percent': 45.2}
+PROBE CIFAR10 lbl=1 seed=3: {'epoch': 40, 'lr': 0.06590057681196192, 'loss': 1.5006589860916137, 'train_accuracy_percent': 45.0}
+PROBE CIFAR10 lbl=1 seed=3: {'epoch': 50, 'lr': 0.05039466834548567, 'loss': 1.5105024547576904, 'train_accuracy_percent': 44.2}
+PROBE CIFAR10 lbl=1 seed=3: {'epoch': 60, 'lr': 0.03484974098465636, 'loss': 1.5238087606430053, 'train_accuracy_percent': 47.2}
+PROBE CIFAR10 lbl=1 seed=3: {'epoch': 70, 'lr': 0.020802644302934683, 'loss': 1.4607223930358886, 'train_accuracy_percent': 49.6}
+PROBE CIFAR10 lbl=1 seed=3: {'epoch': 80, 'lr': 0.00964214481190074, 'loss': 1.4592096643447876, 'train_accuracy_percent': 50.2}
+PROBE CIFAR10 lbl=1 seed=3: {'epoch': 90, 'lr': 0.0024716255306108607, 'loss': 1.4473560695648193, 'train_accuracy_percent': 48.2}
+PROBE CIFAR10 lbl=1 seed=3: {'epoch': 100, 'lr': 0.0, 'loss': 1.4379631204605103, 'train_accuracy_percent': 50.4}
+RESULT CIFAR10 lbl=1 seed=3: 42.8500
+PROBE CIFAR10 lbl=1 seed=4: {'epoch': 10, 'lr': 0.09776754757575974, 'loss': 1.636336269378662, 'train_accuracy_percent': 38.0}
+PROBE CIFAR10 lbl=1 seed=4: {'epoch': 20, 'lr': 0.09081878607071997, 'loss': 1.5846020841598512, 'train_accuracy_percent': 45.2}
+PROBE CIFAR10 lbl=1 seed=4: {'epoch': 30, 'lr': 0.0798344744144428, 'loss': 1.5185423831939697, 'train_accuracy_percent': 44.2}
+PROBE CIFAR10 lbl=1 seed=4: {'epoch': 40, 'lr': 0.06590057681196192, 'loss': 1.4983275690078734, 'train_accuracy_percent': 43.8}
+PROBE CIFAR10 lbl=1 seed=4: {'epoch': 50, 'lr': 0.05039466834548567, 'loss': 1.4191213541030885, 'train_accuracy_percent': 45.6}
+PROBE CIFAR10 lbl=1 seed=4: {'epoch': 60, 'lr': 0.03484974098465636, 'loss': 1.4069713659286498, 'train_accuracy_percent': 49.8}
+PROBE CIFAR10 lbl=1 seed=4: {'epoch': 70, 'lr': 0.020802644302934683, 'loss': 1.4083403387069702, 'train_accuracy_percent': 50.4}
+PROBE CIFAR10 lbl=1 seed=4: {'epoch': 80, 'lr': 0.00964214481190074, 'loss': 1.431358642578125, 'train_accuracy_percent': 49.2}
+PROBE CIFAR10 lbl=1 seed=4: {'epoch': 90, 'lr': 0.0024716255306108607, 'loss': 1.405011176109314, 'train_accuracy_percent': 50.4}
+PROBE CIFAR10 lbl=1 seed=4: {'epoch': 100, 'lr': 0.0, 'loss': 1.4094932994842528, 'train_accuracy_percent': 52.8}
+RESULT CIFAR10 lbl=1 seed=4: 42.8600
+COMPLETE CELL: CIFAR10 pt=0.2 lbl=1: 42.62 +/- 0.36
+PROBE CIFAR10 lbl=5 seed=0: {'epoch': 10, 'lr': 0.09759636527645632, 'loss': 1.6890043600082398, 'train_accuracy_percent': 38.6}
+PROBE CIFAR10 lbl=5 seed=0: {'epoch': 20, 'lr': 0.0905246588405146, 'loss': 1.6332196266174317, 'train_accuracy_percent': 42.56}
+PROBE CIFAR10 lbl=5 seed=0: {'epoch': 30, 'lr': 0.07947823644532198, 'loss': 1.6446481294631958, 'train_accuracy_percent': 40.04}
+PROBE CIFAR10 lbl=5 seed=0: {'epoch': 40, 'lr': 0.06554054685128856, 'loss': 1.5577357578277589, 'train_accuracy_percent': 43.48}
+PROBE CIFAR10 lbl=5 seed=0: {'epoch': 50, 'lr': 0.05007861840237923, 'loss': 1.5818826280593872, 'train_accuracy_percent': 42.96}
+PROBE CIFAR10 lbl=5 seed=0: {'epoch': 60, 'lr': 0.03460897894916861, 'loss': 1.5341683740615846, 'train_accuracy_percent': 46.36}
+PROBE CIFAR10 lbl=5 seed=0: {'epoch': 70, 'lr': 0.020648912648459073, 'loss': 1.5086585289001464, 'train_accuracy_percent': 46.24}
+PROBE CIFAR10 lbl=5 seed=0: {'epoch': 80, 'lr': 0.009567642583312259, 'loss': 1.5023155681610108, 'train_accuracy_percent': 46.96}
+PROBE CIFAR10 lbl=5 seed=0: {'epoch': 90, 'lr': 0.002452035422983734, 'loss': 1.4874579099655152, 'train_accuracy_percent': 47.56}
+PROBE CIFAR10 lbl=5 seed=0: {'epoch': 100, 'lr': 0.0, 'loss': 1.4950628377914428, 'train_accuracy_percent': 46.76}
+RESULT CIFAR10 lbl=5 seed=0: 47.1000
+PROBE CIFAR10 lbl=5 seed=1: {'epoch': 10, 'lr': 0.09759636527645632, 'loss': 1.738345518875122, 'train_accuracy_percent': 38.52}
+PROBE CIFAR10 lbl=5 seed=1: {'epoch': 20, 'lr': 0.0905246588405146, 'loss': 1.633706997680664, 'train_accuracy_percent': 41.56}
+PROBE CIFAR10 lbl=5 seed=1: {'epoch': 30, 'lr': 0.07947823644532198, 'loss': 1.5978080404281616, 'train_accuracy_percent': 42.68}
+PROBE CIFAR10 lbl=5 seed=1: {'epoch': 40, 'lr': 0.06554054685128856, 'loss': 1.5944100549697875, 'train_accuracy_percent': 43.8}
+PROBE CIFAR10 lbl=5 seed=1: {'epoch': 50, 'lr': 0.05007861840237923, 'loss': 1.5542399448394775, 'train_accuracy_percent': 45.2}
+PROBE CIFAR10 lbl=5 seed=1: {'epoch': 60, 'lr': 0.03460897894916861, 'loss': 1.5483011394500732, 'train_accuracy_percent': 44.44}
+PROBE CIFAR10 lbl=5 seed=1: {'epoch': 70, 'lr': 0.020648912648459073, 'loss': 1.5286513799667358, 'train_accuracy_percent': 46.08}
+PROBE CIFAR10 lbl=5 seed=1: {'epoch': 80, 'lr': 0.009567642583312259, 'loss': 1.5129619394302367, 'train_accuracy_percent': 46.8}
+PROBE CIFAR10 lbl=5 seed=1: {'epoch': 90, 'lr': 0.002452035422983734, 'loss': 1.5119118120193482, 'train_accuracy_percent': 47.4}
+PROBE CIFAR10 lbl=5 seed=1: {'epoch': 100, 'lr': 0.0, 'loss': 1.4776105737686158, 'train_accuracy_percent': 48.88}
+RESULT CIFAR10 lbl=5 seed=1: 47.3200
+PROBE CIFAR10 lbl=5 seed=2: {'epoch': 10, 'lr': 0.09759636527645632, 'loss': 1.6866791858673096, 'train_accuracy_percent': 40.12}
+PROBE CIFAR10 lbl=5 seed=2: {'epoch': 20, 'lr': 0.0905246588405146, 'loss': 1.6003650297164917, 'train_accuracy_percent': 43.48}
+PROBE CIFAR10 lbl=5 seed=2: {'epoch': 30, 'lr': 0.07947823644532198, 'loss': 1.602611647415161, 'train_accuracy_percent': 43.68}
+PROBE CIFAR10 lbl=5 seed=2: {'epoch': 40, 'lr': 0.06554054685128856, 'loss': 1.5948351705551147, 'train_accuracy_percent': 41.88}
+PROBE CIFAR10 lbl=5 seed=2: {'epoch': 50, 'lr': 0.05007861840237923, 'loss': 1.5374174156188964, 'train_accuracy_percent': 45.6}
+PROBE CIFAR10 lbl=5 seed=2: {'epoch': 60, 'lr': 0.03460897894916861, 'loss': 1.5284068321228028, 'train_accuracy_percent': 44.96}
+PROBE CIFAR10 lbl=5 seed=2: {'epoch': 70, 'lr': 0.020648912648459073, 'loss': 1.5186631135940551, 'train_accuracy_percent': 45.92}
+PROBE CIFAR10 lbl=5 seed=2: {'epoch': 80, 'lr': 0.009567642583312259, 'loss': 1.5134341033935548, 'train_accuracy_percent': 46.12}
+PROBE CIFAR10 lbl=5 seed=2: {'epoch': 90, 'lr': 0.002452035422983734, 'loss': 1.501136961364746, 'train_accuracy_percent': 46.28}
+PROBE CIFAR10 lbl=5 seed=2: {'epoch': 100, 'lr': 0.0, 'loss': 1.4886785625457764, 'train_accuracy_percent': 46.56}
+RESULT CIFAR10 lbl=5 seed=2: 47.5700
+PROBE CIFAR10 lbl=5 seed=3: {'epoch': 10, 'lr': 0.09759636527645632, 'loss': 1.6894819061279296, 'train_accuracy_percent': 40.76}
+PROBE CIFAR10 lbl=5 seed=3: {'epoch': 20, 'lr': 0.0905246588405146, 'loss': 1.5919276281356811, 'train_accuracy_percent': 42.6}
+PROBE CIFAR10 lbl=5 seed=3: {'epoch': 30, 'lr': 0.07947823644532198, 'loss': 1.6364095623016357, 'train_accuracy_percent': 42.0}
+PROBE CIFAR10 lbl=5 seed=3: {'epoch': 40, 'lr': 0.06554054685128856, 'loss': 1.5410579509735107, 'train_accuracy_percent': 45.08}
+PROBE CIFAR10 lbl=5 seed=3: {'epoch': 50, 'lr': 0.05007861840237923, 'loss': 1.5199585247039795, 'train_accuracy_percent': 45.92}
+PROBE CIFAR10 lbl=5 seed=3: {'epoch': 60, 'lr': 0.03460897894916861, 'loss': 1.5200693336486817, 'train_accuracy_percent': 45.96}
+PROBE CIFAR10 lbl=5 seed=3: {'epoch': 70, 'lr': 0.020648912648459073, 'loss': 1.5076603610992432, 'train_accuracy_percent': 46.92}
+PROBE CIFAR10 lbl=5 seed=3: {'epoch': 80, 'lr': 0.009567642583312259, 'loss': 1.4603655563354492, 'train_accuracy_percent': 47.96}
+PROBE CIFAR10 lbl=5 seed=3: {'epoch': 90, 'lr': 0.002452035422983734, 'loss': 1.4666126605987548, 'train_accuracy_percent': 48.44}
+PROBE CIFAR10 lbl=5 seed=3: {'epoch': 100, 'lr': 0.0, 'loss': 1.4677652378082275, 'train_accuracy_percent': 48.84}
+RESULT CIFAR10 lbl=5 seed=3: 47.4600
+PROBE CIFAR10 lbl=5 seed=4: {'epoch': 10, 'lr': 0.09759636527645632, 'loss': 1.674848952293396, 'train_accuracy_percent': 40.04}
+PROBE CIFAR10 lbl=5 seed=4: {'epoch': 20, 'lr': 0.0905246588405146, 'loss': 1.6394884071350098, 'train_accuracy_percent': 41.84}
+PROBE CIFAR10 lbl=5 seed=4: {'epoch': 30, 'lr': 0.07947823644532198, 'loss': 1.590052213859558, 'train_accuracy_percent': 43.28}
+PROBE CIFAR10 lbl=5 seed=4: {'epoch': 40, 'lr': 0.06554054685128856, 'loss': 1.6078220348358154, 'train_accuracy_percent': 42.88}
+PROBE CIFAR10 lbl=5 seed=4: {'epoch': 50, 'lr': 0.05007861840237923, 'loss': 1.5404007453918458, 'train_accuracy_percent': 44.48}
+PROBE CIFAR10 lbl=5 seed=4: {'epoch': 60, 'lr': 0.03460897894916861, 'loss': 1.5125963544845582, 'train_accuracy_percent': 46.76}
+PROBE CIFAR10 lbl=5 seed=4: {'epoch': 70, 'lr': 0.020648912648459073, 'loss': 1.5077852949142456, 'train_accuracy_percent': 46.44}
+PROBE CIFAR10 lbl=5 seed=4: {'epoch': 80, 'lr': 0.009567642583312259, 'loss': 1.4685097190856933, 'train_accuracy_percent': 47.4}
+PROBE CIFAR10 lbl=5 seed=4: {'epoch': 90, 'lr': 0.002452035422983734, 'loss': 1.4651229360580444, 'train_accuracy_percent': 48.68}
+PROBE CIFAR10 lbl=5 seed=4: {'epoch': 100, 'lr': 0.0, 'loss': 1.4755435432434083, 'train_accuracy_percent': 48.8}
+RESULT CIFAR10 lbl=5 seed=4: 47.9500
+COMPLETE CELL: CIFAR10 pt=0.2 lbl=5: 47.48 +/- 0.32

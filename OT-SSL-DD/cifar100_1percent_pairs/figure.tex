@@ -1,0 +1,46 @@
+% Requires \usepackage{graphicx} in the manuscript preamble.
+% Copy this entire folder beside your manuscript's main .tex file, then use:
+% \input{cifar100_1percent_pairs/figure}
+\begin{figure}[t]
+\centering
+\begingroup
+\setlength{\tabcolsep}{0.5pt}
+\renewcommand{\arraystretch}{0}
+\begin{tabular}{@{}*{10}{c}@{}}
+\includegraphics[width=0.095\columnwidth]{cifar100_1percent_pairs/original_01_bowl.png} &
+\includegraphics[width=0.095\columnwidth]{cifar100_1percent_pairs/original_02_telephone.png} &
+\includegraphics[width=0.095\columnwidth]{cifar100_1percent_pairs/original_03_turtle.png} &
+\includegraphics[width=0.095\columnwidth]{cifar100_1percent_pairs/original_04_sweet_pepper.png} &
+\includegraphics[width=0.095\columnwidth]{cifar100_1percent_pairs/original_05_worm.png} &
+\includegraphics[width=0.095\columnwidth]{cifar100_1percent_pairs/original_06_rose.png} &
+\includegraphics[width=0.095\columnwidth]{cifar100_1percent_pairs/original_07_orchid.png} &
+\includegraphics[width=0.095\columnwidth]{cifar100_1percent_pairs/original_08_lizard.png} &
+\includegraphics[width=0.095\columnwidth]{cifar100_1percent_pairs/original_09_lamp.png} &
+\includegraphics[width=0.095\columnwidth]{cifar100_1percent_pairs/original_10_bridge.png} \\[2pt]
+\includegraphics[width=0.095\columnwidth]{cifar100_1percent_pairs/distilled_01_bowl.png} &
+\includegraphics[width=0.095\columnwidth]{cifar100_1percent_pairs/distilled_02_telephone.png} &
+\includegraphics[width=0.095\columnwidth]{cifar100_1percent_pairs/distilled_03_turtle.png} &
+\includegraphics[width=0.095\columnwidth]{cifar100_1percent_pairs/distilled_04_sweet_pepper.png} &
+\includegraphics[width=0.095\columnwidth]{cifar100_1percent_pairs/distilled_05_worm.png} &
+\includegraphics[width=0.095\columnwidth]{cifar100_1percent_pairs/distilled_06_rose.png} &
+\includegraphics[width=0.095\columnwidth]{cifar100_1percent_pairs/distilled_07_orchid.png} &
+\includegraphics[width=0.095\columnwidth]{cifar100_1percent_pairs/distilled_08_lizard.png} &
+\includegraphics[width=0.095\columnwidth]{cifar100_1percent_pairs/distilled_09_lamp.png} &
+\includegraphics[width=0.095\columnwidth]{cifar100_1percent_pairs/distilled_10_bridge.png} \\[2pt]
+\IfFileExists{cifar100_1percent_pairs/noise_10.png}{%
+\includegraphics[width=0.095\columnwidth]{cifar100_1percent_pairs/noise_01.png} &
+\includegraphics[width=0.095\columnwidth]{cifar100_1percent_pairs/noise_02.png} &
+\includegraphics[width=0.095\columnwidth]{cifar100_1percent_pairs/noise_03.png} &
+\includegraphics[width=0.095\columnwidth]{cifar100_1percent_pairs/noise_04.png} &
+\includegraphics[width=0.095\columnwidth]{cifar100_1percent_pairs/noise_05.png} &
+\includegraphics[width=0.095\columnwidth]{cifar100_1percent_pairs/noise_06.png} &
+\includegraphics[width=0.095\columnwidth]{cifar100_1percent_pairs/noise_07.png} &
+\includegraphics[width=0.095\columnwidth]{cifar100_1percent_pairs/noise_08.png} &
+\includegraphics[width=0.095\columnwidth]{cifar100_1percent_pairs/noise_09.png} &
+\includegraphics[width=0.095\columnwidth]{cifar100_1percent_pairs/noise_10.png}%
+}{\multicolumn{10}{c}{\footnotesize Noise-initialized prototypes pending}}
+\end{tabular}
+\endgroup
+\caption{CIFAR100 prototype examples. Top: original training images used for initialization at the 1\% data budget. Middle: corresponding prototypes after 8,000 MIPA iterations. Bottom: independent Gaussian-noise-initialized prototypes at the 0.2\% data budget after 50,000 iterations ($5\times$ the standard budget); these do not correspond to the images above. Images are shown without enhancement.}
+\label{fig:cifar100-prototype-evolution}
+\end{figure}

@@ -23,4 +23,12 @@ if [[ $1 == cleaner_examples ]]; then
     [[ $# == 1 ]]
     exec python -u Evaluate_benchamrk/mipa_components/qualitative.py --cleaner-examples
 fi
+if [[ $1 == cifar100_examples ]]; then
+  [[ $# == 1 ]]
+  exec python -u Evaluate_benchamrk/mipa_components/qualitative.py --cifar100-examples
+fi
+if [[ $1 == cifar100_one_percent ]]; then
+  [[ $# == 1 ]]
+  exec python -u Evaluate_benchamrk/mipa_components/qualitative.py --cifar100-one-percent
+fi
 exec python -u Evaluate_benchamrk/mipa_components/worker.py "$@"

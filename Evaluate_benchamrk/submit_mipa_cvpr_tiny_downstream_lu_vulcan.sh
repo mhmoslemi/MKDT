@@ -2,6 +2,8 @@
 set -euo pipefail
 bench=/scratch/mmoslem3/MKDT/Evaluate_benchamrk
 run="$bench/mipa_cvpr_followup"
+subset=${MIPA_TINY_SUBSET:-0.2}
+[[ $subset == 0.2 || $subset == 1 ]] || exit 2
 if [[ ${1:-} == --worker ]]; then
     : "${SLURM_JOB_ID:?Submit through Slurm}"
     module --force purge
@@ -12,7 +14,7 @@ if [[ ${1:-} == --worker ]]; then
     export XDG_CACHE_HOME="$run/cache/xdg" TORCH_HOME="$run/cache/torch" HF_HOME="$run/cache/hf"
     export TMPDIR="${SLURM_TMPDIR:?}"
     cd "$bench"
-    exec python -u - "$2" "$3" "$4" "$5" <<'PY'
+    exec python -u - "$2" "$3" "$4" "$5" "${6:-0.2}" <<'PY'
 import fcntl
 import os
 from pathlib import Path
@@ -22,7 +24,9 @@ bench = Path('/scratch/mmoslem3/MKDT/Evaluate_benchamrk')
 sys.path[:0] = [str(bench / 'mipa_cvpr_followup'), str(bench)]
 import worker as followup
 
-group, config_sha, encoder_sha, helper_sha = sys.argv[1:]
+group, config_sha, encoder_sha, helper_sha, subset = sys.argv[1:]
+subset = float(subset)
+assert subset in (0.2, 1)
 assert os.environ.get('SLURM_JOB_ACCOUNT') == 'aip-yiweilu'
 assert os.environ.get('SLURM_CLUSTER_NAME', os.environ.get('CC_CLUSTER')) == 'vulcan'
 assert followup.torch.cuda.is_available() and followup.torch.cuda.device_count() == 1
@@ -32,9 +36,9 @@ followup.torch.set_num_interop_threads(1)
 followup.torch.backends.cuda.matmul.allow_tf32 = False
 followup.torch.backends.cudnn.allow_tf32 = False
 targets = {'CIFAR10': ['CIFAR10'], 'CIFAR100': ['CIFAR100'], 'Aircraft_Dogs': ['Aircraft', 'Dogs']}[group]
-encoder_dir = bench / 'mipa_cvpr_color_crop/results/TinyImageNet/ResNet18BN/pt0.2/simclr/ssl_seed_000'
-folder = bench / 'mipa_cvpr_followup/results/downstream/TinyImageNet/ResNet18/pt0.2/simclr/ssl_seed_000'
-name = 'cvdn_TinyImageNet_p0p2_' + group
+encoder_dir = bench / ('mipa_cvpr_color_crop/results/TinyImageNet/ResNet18BN/pt%g/simclr/ssl_seed_000' % subset)
+folder = bench / ('mipa_cvpr_followup/results/downstream/TinyImageNet/ResNet18/pt%g/simclr/ssl_seed_000' % subset)
+name = 'cvdn_TinyImageNet_p%s_%s' % (('%g' % subset).replace('.', 'p'), group)
 with (encoder_dir / '.lock').open('a') as lock:
     fcntl.flock(lock, fcntl.LOCK_SH | fcntl.LOCK_NB)
     assert followup.common.file_hash(encoder_dir / 'config.json') == config_sha
@@ -45,10 +49,10 @@ with (encoder_dir / '.lock').open('a') as lock:
     assert followup.common.digest_json(signature) == config['identity']['signature']
     assert marker['complete'] and marker['epochs'] == 2000 and marker['identity'] == config['identity']
     assert marker['checkpoint_file_sha256'] == encoder_sha
-    assert [signature['source'], signature['subset'], signature['model'], signature['ssl']] == ['TinyImageNet', 0.2, 'ResNet18', 'simclr']
+    assert [signature['source'], signature['subset'], signature['model'], signature['ssl']] == ['TinyImageNet', subset, 'ResNet18', 'simclr']
     assert signature['protocol']['evaluation'] == followup.read(bench / 'protocol.json')['evaluation']
     assert followup.common.file_hash(signature['synthetic_path']) == signature['synthetic_sha256']
-    job = dict(source='TinyImageNet', subset=0.2, model='ResNet18', method='simclr', ssl_epochs=2000, seed=0,
+    job = dict(source='TinyImageNet', subset=subset, model='ResNet18', method='simclr', ssl_epochs=2000, seed=0,
         data_root='/scratch/mmoslem3/data', probe_seeds=list(range(5)), synthetic_file=signature['synthetic_path'],
         synthetic_sha256=signature['synthetic_sha256'], table='CVPR_tables/cifar_downstream.tex',
         cells=[dict(target=target, labels=labels) for target in targets for labels in (1, 5)])
@@ -65,22 +69,24 @@ dry=0
 accounts=$(sacctmgr -nP show assoc user=mmoslem3 format=Account)
 awk -F '|' '$1=="aip-yiweilu" {found=1} END {exit !found}' <<< "$accounts"
 module spider python/3.11.5 >/dev/null 2>&1
-plan=$(node - "$bench" <<'JS'
+plan=$(node - "$bench" "$subset" <<'JS'
 const fs=require('fs'),path=require('path'),crypto=require('crypto'),assert=require('assert/strict');
 const bench=process.argv[2],read=p=>JSON.parse(fs.readFileSync(p,'utf8'));
+const subset=Number(process.argv[3]);assert([0.2,1].includes(subset));
 const hash=p=>crypto.createHash('sha256').update(fs.readFileSync(p)).digest('hex');
-const input=path.join(bench,'mipa_cvpr_color_crop/results/TinyImageNet/ResNet18BN/pt0.2/simclr/ssl_seed_000');
-const output=path.join(bench,'mipa_cvpr_followup/results/downstream/TinyImageNet/ResNet18/pt0.2/simclr/ssl_seed_000');
+const input=path.join(bench,`mipa_cvpr_color_crop/results/TinyImageNet/ResNet18BN/pt${subset}/simclr/ssl_seed_000`);
+const output=path.join(bench,`mipa_cvpr_followup/results/downstream/TinyImageNet/ResNet18/pt${subset}/simclr/ssl_seed_000`);
 const config=read(path.join(input,'config.json')),marker=read(path.join(input,'ssl_complete.json'));
 assert(read(path.join(input,'complete.json')).complete);assert(marker.complete&&marker.epochs===2000);
 assert.deepEqual(marker.identity,config.identity);assert.equal(config.signature.generation_args.lr_img,.0015);
+assert.equal(config.signature.subset,subset);
 assert.equal(config.signature.generation_args.prototype_pool_size,0);
 const config_sha=hash(path.join(input,'config.json')),encoder_sha=hash(path.join(input,'encoder.pt'));
 assert.equal(encoder_sha,marker.checkpoint_file_sha256);
 const helper_sha=hash(path.join(bench,'mipa_cvpr_followup/worker.py'));
-const reference=path.join(bench,'mipa_random128/results/TinyImageNet/ResNet18BN/pt0.2/simclr/ssl_seed_000/evaluations');
+const reference=path.join(bench,`mipa_random128/results/TinyImageNet/ResNet18BN/pt${subset}/simclr/ssl_seed_000/evaluations`);
 for(const targets of [['CIFAR10'],['CIFAR100'],['Aircraft','Dogs']]){
-    const group=targets.join('_'),name='cvdn_TinyImageNet_p0p2_'+group;
+    const group=targets.join('_'),name='cvdn_TinyImageNet_p'+String(subset).replace('.','p')+'_'+group;
     const markerFile=path.join(output,'complete_'+name+'.json');if(fs.existsSync(markerFile)&&read(markerFile).complete)continue;
     let seconds=0;
     for(const target of targets)for(const labels of [1,5]){
@@ -102,7 +108,7 @@ while IFS=$'\t' read -r name group seconds config_sha encoder_sha helper_sha; do
     printf -v wall '%02d:%02d:%02d' "$((seconds/3600))" "$((seconds/60%60))" "$((seconds%60))"
     job=DRY_RUN
     if (( ! dry )); then
-        job=$(sbatch --parsable --job-name="$name" --account=aip-yiweilu --nodes=1 --ntasks=1 --cpus-per-task=1 --mem=6G --gres=gpu:l40s:1 --time="$wall" --chdir="$bench" --output="$run/logs/%x-%j.out" --error="$run/logs/%x-%j.err" "$bench/submit_mipa_cvpr_tiny_downstream_lu_vulcan.sh" --worker "$group" "$config_sha" "$encoder_sha" "$helper_sha")
+        job=$(sbatch --parsable --job-name="$name" --account=aip-yiweilu --nodes=1 --ntasks=1 --cpus-per-task=1 --mem=6G --gres=gpu:l40s:1 --time="$wall" --chdir="$bench" --output="$run/logs/%x-%j.out" --error="$run/logs/%x-%j.err" "$bench/submit_mipa_cvpr_tiny_downstream_lu_vulcan.sh" --worker "$group" "$config_sha" "$encoder_sha" "$helper_sha" "$subset")
         job=${job%%;*}
         [[ $job =~ ^[0-9]+$ ]] || exit 2
         printf '%s\t%s\taip-yiweilu\t%s\n' "$name" "$job" "$wall" >> "$run/submitted_tiny.tsv"

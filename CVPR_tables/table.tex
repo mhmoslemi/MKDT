@@ -2,11 +2,6 @@
 \centering
 \def\dsacc#1#2{$#1${\footnotesize$\pm #2$}}
 \def\bestacc#1#2{\textbf{\boldmath\dsacc{#1}{#2}}}
-% SVHN MIPA 0.2%: K=8, one 2k-epoch encoder, 10 probes per label budget; Evaluate_benchamrk/mipa_multilayer/batches/SVHN_cos8_pt0.2_20261030T163103Z_jBEyg6/results/SVHN/ResNet18BN/pt0.2/simclr/ssl_seed_000/summary_SVHN_lbl{1,5}_10probes.json
-% CIFAR10/CIFAR100 MIPA: Evaluate_benchamrk/mipa_cvpr_color_crop/results/; color_crop_cutout_scale, lr_img=0.0015, batch_real=128, prototype_pool_size=0.
-% CIFAR configuration selection: highest mean across both label budgets among complete five-probe pairs; both budgets use the same synthetic set and SSL encoder.
-% TinyImageNet MIPA (all sizes): Evaluate_benchamrk/mipa_cvpr_color_crop/results/TinyImageNet/ResNet18BN/; color_crop_cutout_scale, lr_img=0.0015, batch_real=128, prototype_pool_size=0; five probes per label budget from the same encoder.
-% Other MIPA results: Evaluate_benchamrk/mipa_random128/results/ and Evaluate_benchamrk/ours_eval_results_simclr2k_barlow10k_2ssl3probes_main/.
 \caption{Main results with ResNet18 and SimCLR on CIFAR10, CIFAR100, Tiny ImageNet, and SVHN.}
 \label{tab:resnet18-main-all}
 
@@ -29,11 +24,11 @@
 \midrule
 \multirow{3}{*}{Tiny ImageNet} & 0.2 & \dsacc{5.46}{0.20} & \dsacc{5.00}{0.30} & \dsacc{5.33}{0.26} & \bestacc{5.98}{0.27} & \multirow{3}{*}{\dsacc{28.78}{0.57}} & \dsacc{9.88}{0.07} & \dsacc{9.23}{0.27} & \dsacc{10.14}{0.31} & \bestacc{10.49}{0.30} & \multirow{3}{*}{\dsacc{39.81}{0.68}} \\
  & 1 & \dsacc{7.18}{0.26} & \dsacc{6.62}{0.20} & \dsacc{5.76}{0.20} & \bestacc{8.63}{0.17} &  & \dsacc{13.90}{0.18} & \dsacc{13.49}{0.28} & \dsacc{11.20}{0.15} & \bestacc{15.11}{0.20} &  \\
- & 2 & \dsacc{10.87}{0.37} & \dsacc{10.37}{0.26} & \dsacc{5.73}{0.16} & \bestacc{11.60}{0.14} &  & \dsacc{18.21}{0.21} & \dsacc{17.91}{0.30} & \dsacc{11.63}{0.16} & \bestacc{18.50}{0.28} &  \\
-\midrule
-\multirow{3}{*}{SVHN} & 0.2 & \dsacc{30.60}{1.39} & \dsacc{26.75}{1.01} & \dsacc{32.73}{1.00} & \bestacc{34.36}{1.22} & \multirow{3}{*}{\dsacc{88.32}{0.39}} & \dsacc{39.85}{0.55} & \dsacc{35.49}{0.38} & \dsacc{40.72}{0.50} & \bestacc{42.80}{0.45} & \multirow{3}{*}{\dsacc{91.21}{0.33}} \\
- & 1 & \dsacc{62.22}{0.83} & \bestacc{64.93}{0.74} & \dsacc{48.37}{0.52} &  &  & \dsacc{68.00}{0.31} & \bestacc{70.08}{0.43} & \dsacc{56.93}{0.32} &  &  \\
- & 2 & \dsacc{67.36}{0.41} & \bestacc{68.86}{0.65} & \dsacc{52.38}{1.07} &  &  & \dsacc{71.96}{0.12} & \bestacc{73.02}{0.32} & \dsacc{59.72}{0.44} &  &  \\
+ & 2 & \dsacc{10.87}{0.37} & \dsacc{10.37}{0.26} & \dsacc{5.73}{0.16} & \bestacc{11.77}{0.06} &  & \dsacc{18.21}{0.21} & \dsacc{17.91}{0.30} & \dsacc{11.63}{0.16} & \bestacc{19.10}{0.22} &  \\
+% \midrule
+% \multirow{3}{*}{SVHN} & 0.2 & \dsacc{30.60}{1.39} & \dsacc{26.75}{1.01} & \dsacc{32.73}{1.00} & \bestacc{34.36}{1.22} & \multirow{3}{*}{\dsacc{88.32}{0.39}} & \dsacc{39.85}{0.55} & \dsacc{35.49}{0.38} & \dsacc{40.72}{0.50} & \bestacc{42.80}{0.45} & \multirow{3}{*}{\dsacc{91.21}{0.33}} \\
+%  & 1 & \dsacc{62.22}{0.83} & \bestacc{64.93}{0.74} & \dsacc{48.37}{0.52} &  &  & \dsacc{68.00}{0.31} & \bestacc{70.08}{0.43} & \dsacc{56.93}{0.32} &  &  \\
+%  & 2 & \dsacc{67.36}{0.41} & \bestacc{68.86}{0.65} & \dsacc{52.38}{1.07} &  &  & \dsacc{71.96}{0.12} & \bestacc{73.02}{0.32} & \dsacc{59.72}{0.44} &  &  \\
 % \midrule
 % \multirow{3}{*}{MNIST} & 0.2 & \dsacc{88.22}{0.74} & \bestacc{88.82}{0.32} & \dsacc{84.13}{0.48} &  & \multirow{3}{*}{\dsacc{98.12}{0.14}} & \dsacc{91.48}{0.16} & \bestacc{91.58}{0.11} & \dsacc{89.60}{0.20} &  & \multirow{3}{*}{\dsacc{98.73}{0.06}} \\
 %  & 1 & \bestacc{93.31}{0.12} & \dsacc{92.55}{0.38} & \dsacc{72.54}{0.97} &  &  & \bestacc{95.26}{0.12} & \dsacc{94.56}{0.20} & \dsacc{80.96}{0.30} &  &  \\

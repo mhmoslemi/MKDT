@@ -1,0 +1,255 @@
+PASS: analytic column loss, matching identity, view/permutation symmetry, flat columns, gradcheck, unchanged assignments/MI, synthetic gradients
+ABLATION: {"column_weight": 0.1, "column_temperature": 0.2, "objective": "negative_MI + column_weight * symmetric_column_cross_entropy", "columns": "assignment probabilities, centered over real images, L2 normalization with eps=1e-6", "positive": "same prototype across the two existing views", "adaptive_temperature": false, "duplicate_penalty": false}
+Loaded fixed teacher seed 0: /scratch/mmoslem3/MKDT/Evaluate_benchamrk/full_ssl_checkpoints_1000ep_3seeds/CIFAR10/ResNet18/full/pt100/simclr/seed_000/encoder.pt
+Initializing 100 synthetic images from the Random-baseline training images (seed=0)...
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_column_ablation/runs/lambda0.1_tc0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 0/10000)
+Hyper-parameters: 
+ {'dataset': 'CIFAR10', 'percentage': 0.2, 'data_path': '/scratch/mmoslem3/data', 'device': 'cuda', 'seed': 0, 'single_channel': False, 'Iteration': 10000, 'lr_img': 0.0015, 'batch_real': 128, 'temperature': 0.2, 'beta': 1.0, 'prototype_pool_size': 0, 'distill_aug_strategy': 'color_crop_cutout_scale', 'save_path': '/scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_column_ablation/runs/lambda0.1_tc0.2/synthetic', 'resume': True, 'save_every': 500, 'feature_batch': 128}
+Objective: negative beta-weighted bipartite mutual information, beta=1, frozen teacher seed 0, pool sizes=[100].
+[2026-11-01 19:25:18] distillation begins
+ABLATION LOSS: {"iteration": 1, "negative_mi": -0.01630878448486328, "column_loss": 0.9909242987632751, "weighted_column_loss": 0.09909243136644363, "total": 0.08278364688158035, "matching_correlation_mean": 0.9595041275024414, "other_correlation_mean": -0.0021160058677196503, "column_identification_accuracy": 1.0, "near_constant_column_fraction": 0.0}
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_column_ablation/runs/lambda0.1_tc0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 1/10000)
+ABLATION LOSS: {"iteration": 200, "negative_mi": -0.010274887084960938, "column_loss": 1.1751794815063477, "weighted_column_loss": 0.11751794815063477, "total": 0.10724306106567383, "matching_correlation_mean": 0.8732011318206787, "other_correlation_mean": -0.0004939527716487646, "column_identification_accuracy": 0.9649999737739563, "near_constant_column_fraction": 0.0}
+[2026-11-01 19:25:26] iter = 00200, loss = 0.107243, pixel drift RMS = 2.15067/255
+ABLATION LOSS: {"iteration": 400, "negative_mi": -0.02388763427734375, "column_loss": 1.0510973930358887, "weighted_column_loss": 0.10510974377393723, "total": 0.08122210949659348, "matching_correlation_mean": 0.9136580228805542, "other_correlation_mean": 0.004249371122568846, "column_identification_accuracy": 0.9799999594688416, "near_constant_column_fraction": 0.0}
+[2026-11-01 19:25:34] iter = 00400, loss = 0.081222, pixel drift RMS = 3.31149/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_column_ablation/runs/lambda0.1_tc0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 500/10000)
+ABLATION LOSS: {"iteration": 600, "negative_mi": -0.021691322326660156, "column_loss": 0.9437780380249023, "weighted_column_loss": 0.09437780827283859, "total": 0.07268648594617844, "matching_correlation_mean": 0.9439488053321838, "other_correlation_mean": 0.0007879964541643858, "column_identification_accuracy": 0.9899999499320984, "near_constant_column_fraction": 0.0}
+[2026-11-01 19:25:41] iter = 00600, loss = 0.072686, pixel drift RMS = 4.25418/255
+ABLATION LOSS: {"iteration": 800, "negative_mi": -0.016826629638671875, "column_loss": 0.9859305620193481, "weighted_column_loss": 0.09859305620193481, "total": 0.08176642656326294, "matching_correlation_mean": 0.9307178854942322, "other_correlation_mean": 0.0033509472850710154, "column_identification_accuracy": 0.9849999845027924, "near_constant_column_fraction": 0.0}
+[2026-11-01 19:25:49] iter = 00800, loss = 0.081766, pixel drift RMS = 5.03287/255
+ABLATION LOSS: {"iteration": 1000, "negative_mi": -0.00565338134765625, "column_loss": 1.5442297458648682, "weighted_column_loss": 0.15442298352718353, "total": 0.14876960217952728, "matching_correlation_mean": 0.7641814947128296, "other_correlation_mean": -0.00394283514469862, "column_identification_accuracy": 0.879999965429306, "near_constant_column_fraction": 0.0}
+[2026-11-01 19:25:56] iter = 01000, loss = 0.148770, pixel drift RMS = 5.72544/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_column_ablation/runs/lambda0.1_tc0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 1000/10000)
+ABLATION LOSS: {"iteration": 1200, "negative_mi": -0.03130054473876953, "column_loss": 0.7922751903533936, "weighted_column_loss": 0.0792275220155716, "total": 0.04792697727680206, "matching_correlation_mean": 0.9856308698654175, "other_correlation_mean": 0.0042951833456754684, "column_identification_accuracy": 1.0, "near_constant_column_fraction": 0.0}
+[2026-11-01 19:26:04] iter = 01200, loss = 0.047927, pixel drift RMS = 6.35698/255
+ABLATION LOSS: {"iteration": 1400, "negative_mi": -0.0040225982666015625, "column_loss": 2.4606802463531494, "weighted_column_loss": 0.24606803059577942, "total": 0.24204543232917786, "matching_correlation_mean": 0.5348024368286133, "other_correlation_mean": -0.004219937603920698, "column_identification_accuracy": 0.5949999988079071, "near_constant_column_fraction": 0.0}
+[2026-11-01 19:26:11] iter = 01400, loss = 0.242045, pixel drift RMS = 6.91995/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_column_ablation/runs/lambda0.1_tc0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 1500/10000)
+ABLATION LOSS: {"iteration": 1600, "negative_mi": -0.0094757080078125, "column_loss": 1.4750757217407227, "weighted_column_loss": 0.14750757813453674, "total": 0.13803187012672424, "matching_correlation_mean": 0.7752473950386047, "other_correlation_mean": -0.0033180322498083115, "column_identification_accuracy": 0.8749999701976776, "near_constant_column_fraction": 0.0}
+[2026-11-01 19:26:19] iter = 01600, loss = 0.138032, pixel drift RMS = 7.42786/255
+ABLATION LOSS: {"iteration": 1800, "negative_mi": -0.028797149658203125, "column_loss": 0.8762790560722351, "weighted_column_loss": 0.08762791007757187, "total": 0.058830760419368744, "matching_correlation_mean": 0.954943835735321, "other_correlation_mean": -0.00031693605706095695, "column_identification_accuracy": 1.0, "near_constant_column_fraction": 0.0}
+[2026-11-01 19:26:26] iter = 01800, loss = 0.058831, pixel drift RMS = 7.89639/255
+ABLATION LOSS: {"iteration": 2000, "negative_mi": -0.031752586364746094, "column_loss": 0.8632611036300659, "weighted_column_loss": 0.08632611483335495, "total": 0.054573528468608856, "matching_correlation_mean": 0.9631410837173462, "other_correlation_mean": 0.003562804078683257, "column_identification_accuracy": 0.9949999749660492, "near_constant_column_fraction": 0.0}
+[2026-11-01 19:26:34] iter = 02000, loss = 0.054574, pixel drift RMS = 8.32545/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_column_ablation/runs/lambda0.1_tc0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 2000/10000)
+ABLATION LOSS: {"iteration": 2200, "negative_mi": -0.03453540802001953, "column_loss": 0.7840040922164917, "weighted_column_loss": 0.07840041071176529, "total": 0.04386500269174576, "matching_correlation_mean": 0.9773043394088745, "other_correlation_mean": -0.0017330300761386752, "column_identification_accuracy": 1.0, "near_constant_column_fraction": 0.0}
+[2026-11-01 19:26:41] iter = 02200, loss = 0.043865, pixel drift RMS = 8.72406/255
+ABLATION LOSS: {"iteration": 2400, "negative_mi": -0.03923606872558594, "column_loss": 0.8667723536491394, "weighted_column_loss": 0.08667723834514618, "total": 0.04744116961956024, "matching_correlation_mean": 0.9639356136322021, "other_correlation_mean": 0.005974295549094677, "column_identification_accuracy": 0.9949999749660492, "near_constant_column_fraction": 0.0}
+[2026-11-01 19:26:49] iter = 02400, loss = 0.047441, pixel drift RMS = 9.08354/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_column_ablation/runs/lambda0.1_tc0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 2500/10000)
+ABLATION LOSS: {"iteration": 2600, "negative_mi": -0.0053844451904296875, "column_loss": 2.7257771492004395, "weighted_column_loss": 0.2725777328014374, "total": 0.2671932876110077, "matching_correlation_mean": 0.4665144383907318, "other_correlation_mean": -0.001506755012087524, "column_identification_accuracy": 0.48999999463558197, "near_constant_column_fraction": 0.0}
+[2026-11-01 19:26:56] iter = 02600, loss = 0.267193, pixel drift RMS = 9.42859/255
+ABLATION LOSS: {"iteration": 2800, "negative_mi": -0.03706550598144531, "column_loss": 0.8488714098930359, "weighted_column_loss": 0.08488713949918747, "total": 0.04782163351774216, "matching_correlation_mean": 0.9618343710899353, "other_correlation_mean": 0.003362164134159684, "column_identification_accuracy": 0.9899999797344208, "near_constant_column_fraction": 0.0}
+[2026-11-01 19:27:04] iter = 02800, loss = 0.047822, pixel drift RMS = 9.73585/255
+ABLATION LOSS: {"iteration": 3000, "negative_mi": -0.019924163818359375, "column_loss": 1.122041940689087, "weighted_column_loss": 0.11220419406890869, "total": 0.09228003025054932, "matching_correlation_mean": 0.8886057734489441, "other_correlation_mean": 0.003385743126273155, "column_identification_accuracy": 0.9599999785423279, "near_constant_column_fraction": 0.0}
+[2026-11-01 19:27:11] iter = 03000, loss = 0.092280, pixel drift RMS = 10.02026/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_column_ablation/runs/lambda0.1_tc0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 3000/10000)
+ABLATION LOSS: {"iteration": 3200, "negative_mi": -0.012437820434570312, "column_loss": 1.6170308589935303, "weighted_column_loss": 0.16170309484004974, "total": 0.14926527440547943, "matching_correlation_mean": 0.7499321699142456, "other_correlation_mean": 0.0013036290183663368, "column_identification_accuracy": 0.8249999582767487, "near_constant_column_fraction": 0.0}
+[2026-11-01 19:27:19] iter = 03200, loss = 0.149265, pixel drift RMS = 10.29990/255
+ABLATION LOSS: {"iteration": 3400, "negative_mi": -0.004557609558105469, "column_loss": 2.4835362434387207, "weighted_column_loss": 0.24835363030433655, "total": 0.24379602074623108, "matching_correlation_mean": 0.5123623013496399, "other_correlation_mean": -0.0032193942461162806, "column_identification_accuracy": 0.5949999690055847, "near_constant_column_fraction": 0.0}
+[2026-11-01 19:27:26] iter = 03400, loss = 0.243796, pixel drift RMS = 10.55411/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_column_ablation/runs/lambda0.1_tc0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 3500/10000)
+ABLATION LOSS: {"iteration": 3600, "negative_mi": -0.00659942626953125, "column_loss": 2.2288150787353516, "weighted_column_loss": 0.2228815108537674, "total": 0.21628208458423615, "matching_correlation_mean": 0.5919279456138611, "other_correlation_mean": -0.00238754041492939, "column_identification_accuracy": 0.6699999868869781, "near_constant_column_fraction": 0.0}
+[2026-11-01 19:27:34] iter = 03600, loss = 0.216282, pixel drift RMS = 10.80171/255
+ABLATION LOSS: {"iteration": 3800, "negative_mi": -0.037087440490722656, "column_loss": 0.8765204548835754, "weighted_column_loss": 0.0876520499587059, "total": 0.050564609467983246, "matching_correlation_mean": 0.9603593349456787, "other_correlation_mean": 0.004220783710479736, "column_identification_accuracy": 1.0, "near_constant_column_fraction": 0.0}
+[2026-11-01 19:27:41] iter = 03800, loss = 0.050565, pixel drift RMS = 11.02360/255
+ABLATION LOSS: {"iteration": 4000, "negative_mi": -0.042217254638671875, "column_loss": 0.8229209184646606, "weighted_column_loss": 0.0822920948266983, "total": 0.04007484018802643, "matching_correlation_mean": 0.9636691212654114, "other_correlation_mean": 0.0033704901579767466, "column_identification_accuracy": 1.0, "near_constant_column_fraction": 0.0}
+[2026-11-01 19:27:49] iter = 04000, loss = 0.040075, pixel drift RMS = 11.23708/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_column_ablation/runs/lambda0.1_tc0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 4000/10000)
+ABLATION LOSS: {"iteration": 4200, "negative_mi": -0.04038715362548828, "column_loss": 0.7686290740966797, "weighted_column_loss": 0.07686290889978409, "total": 0.03647575527429581, "matching_correlation_mean": 0.9824944734573364, "other_correlation_mean": 0.0008171247318387032, "column_identification_accuracy": 1.0, "near_constant_column_fraction": 0.0}
+[2026-11-01 19:27:56] iter = 04200, loss = 0.036476, pixel drift RMS = 11.44035/255
+ABLATION LOSS: {"iteration": 4400, "negative_mi": -0.03724956512451172, "column_loss": 0.8386216759681702, "weighted_column_loss": 0.08386217057704926, "total": 0.04661260545253754, "matching_correlation_mean": 0.9705857634544373, "other_correlation_mean": 0.0010640553664416075, "column_identification_accuracy": 0.9899999797344208, "near_constant_column_fraction": 0.0}
+[2026-11-01 19:28:03] iter = 04400, loss = 0.046613, pixel drift RMS = 11.62576/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_column_ablation/runs/lambda0.1_tc0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 4500/10000)
+ABLATION LOSS: {"iteration": 4600, "negative_mi": -0.04663848876953125, "column_loss": 0.7931650876998901, "weighted_column_loss": 0.07931651175022125, "total": 0.03267802298069, "matching_correlation_mean": 0.9794771075248718, "other_correlation_mean": 0.003706335322931409, "column_identification_accuracy": 1.0, "near_constant_column_fraction": 0.0}
+[2026-11-01 19:28:11] iter = 04600, loss = 0.032678, pixel drift RMS = 11.78907/255
+ABLATION LOSS: {"iteration": 4800, "negative_mi": -0.03359699249267578, "column_loss": 0.8786939978599548, "weighted_column_loss": 0.08786939829587936, "total": 0.05427240580320358, "matching_correlation_mean": 0.9531499743461609, "other_correlation_mean": 0.0021526936907321215, "column_identification_accuracy": 0.9899999499320984, "near_constant_column_fraction": 0.0}
+[2026-11-01 19:28:18] iter = 04800, loss = 0.054272, pixel drift RMS = 11.94585/255
+ABLATION LOSS: {"iteration": 5000, "negative_mi": -0.04384899139404297, "column_loss": 0.8170768618583679, "weighted_column_loss": 0.08170768618583679, "total": 0.03785869479179382, "matching_correlation_mean": 0.9784121513366699, "other_correlation_mean": 0.0009652539738453925, "column_identification_accuracy": 1.0, "near_constant_column_fraction": 0.0}
+[2026-11-01 19:28:26] iter = 05000, loss = 0.037859, pixel drift RMS = 12.08001/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_column_ablation/runs/lambda0.1_tc0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 5000/10000)
+ABLATION LOSS: {"iteration": 5200, "negative_mi": -0.052817344665527344, "column_loss": 0.871306836605072, "weighted_column_loss": 0.08713068813085556, "total": 0.03431334346532822, "matching_correlation_mean": 0.9677917957305908, "other_correlation_mean": 0.008540628477931023, "column_identification_accuracy": 0.9949999749660492, "near_constant_column_fraction": 0.0}
+[2026-11-01 19:28:33] iter = 05200, loss = 0.034313, pixel drift RMS = 12.21298/255
+ABLATION LOSS: {"iteration": 5400, "negative_mi": -0.04222679138183594, "column_loss": 0.8625423908233643, "weighted_column_loss": 0.08625423908233643, "total": 0.04402744770050049, "matching_correlation_mean": 0.960891604423523, "other_correlation_mean": 0.00435628741979599, "column_identification_accuracy": 1.0, "near_constant_column_fraction": 0.0}
+[2026-11-01 19:28:41] iter = 05400, loss = 0.044027, pixel drift RMS = 12.33951/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_column_ablation/runs/lambda0.1_tc0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 5500/10000)
+ABLATION LOSS: {"iteration": 5600, "negative_mi": -0.05683135986328125, "column_loss": 0.8016141057014465, "weighted_column_loss": 0.08016141504049301, "total": 0.02333005517721176, "matching_correlation_mean": 0.97406005859375, "other_correlation_mean": 0.003777417354285717, "column_identification_accuracy": 1.0, "near_constant_column_fraction": 0.0}
+[2026-11-01 19:28:48] iter = 05600, loss = 0.023330, pixel drift RMS = 12.45452/255
+ABLATION LOSS: {"iteration": 5800, "negative_mi": -0.034880638122558594, "column_loss": 0.856100857257843, "weighted_column_loss": 0.08561008423566818, "total": 0.05072944611310959, "matching_correlation_mean": 0.9560887813568115, "other_correlation_mean": 0.0004145214334130287, "column_identification_accuracy": 0.9949999749660492, "near_constant_column_fraction": 0.0}
+[2026-11-01 19:28:56] iter = 05800, loss = 0.050729, pixel drift RMS = 12.55760/255
+ABLATION LOSS: {"iteration": 6000, "negative_mi": -0.007167816162109375, "column_loss": 2.2066922187805176, "weighted_column_loss": 0.220669224858284, "total": 0.21350140869617462, "matching_correlation_mean": 0.5988425016403198, "other_correlation_mean": -0.0029754983261227608, "column_identification_accuracy": 0.5949999690055847, "near_constant_column_fraction": 0.0}
+[2026-11-01 19:29:03] iter = 06000, loss = 0.213501, pixel drift RMS = 12.65275/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_column_ablation/runs/lambda0.1_tc0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 6000/10000)
+ABLATION LOSS: {"iteration": 6200, "negative_mi": -0.03261375427246094, "column_loss": 0.8475110530853271, "weighted_column_loss": 0.08475110679864883, "total": 0.0521373525261879, "matching_correlation_mean": 0.9632207751274109, "other_correlation_mean": 0.0022200767416507006, "column_identification_accuracy": 0.9899999797344208, "near_constant_column_fraction": 0.0}
+[2026-11-01 19:29:11] iter = 06200, loss = 0.052137, pixel drift RMS = 12.74286/255
+ABLATION LOSS: {"iteration": 6400, "negative_mi": -0.02158355712890625, "column_loss": 1.0813210010528564, "weighted_column_loss": 0.10813210159540176, "total": 0.08654854446649551, "matching_correlation_mean": 0.8877335786819458, "other_correlation_mean": -0.0011417712084949017, "column_identification_accuracy": 0.9699999690055847, "near_constant_column_fraction": 0.0}
+[2026-11-01 19:29:18] iter = 06400, loss = 0.086549, pixel drift RMS = 12.82453/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_column_ablation/runs/lambda0.1_tc0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 6500/10000)
+ABLATION LOSS: {"iteration": 6600, "negative_mi": -0.04255867004394531, "column_loss": 0.9235497713088989, "weighted_column_loss": 0.09235497564077377, "total": 0.04979630559682846, "matching_correlation_mean": 0.9369085431098938, "other_correlation_mean": 0.00040617899503558874, "column_identification_accuracy": 0.9949999749660492, "near_constant_column_fraction": 0.0}
+[2026-11-01 19:29:25] iter = 06600, loss = 0.049796, pixel drift RMS = 12.89408/255
+ABLATION LOSS: {"iteration": 6800, "negative_mi": -0.03774452209472656, "column_loss": 0.8979599475860596, "weighted_column_loss": 0.08979599922895432, "total": 0.05205147713422775, "matching_correlation_mean": 0.957139253616333, "other_correlation_mean": 0.003981643822044134, "column_identification_accuracy": 1.0, "near_constant_column_fraction": 0.0}
+[2026-11-01 19:29:33] iter = 06800, loss = 0.052051, pixel drift RMS = 12.96172/255
+ABLATION LOSS: {"iteration": 7000, "negative_mi": -0.03857231140136719, "column_loss": 0.7417651414871216, "weighted_column_loss": 0.07417651265859604, "total": 0.03560420125722885, "matching_correlation_mean": 0.9925135374069214, "other_correlation_mean": 0.0004416440788190812, "column_identification_accuracy": 1.0, "near_constant_column_fraction": 0.0}
+[2026-11-01 19:29:40] iter = 07000, loss = 0.035604, pixel drift RMS = 13.01702/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_column_ablation/runs/lambda0.1_tc0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 7000/10000)
+ABLATION LOSS: {"iteration": 7200, "negative_mi": -0.04798412322998047, "column_loss": 0.8256052136421204, "weighted_column_loss": 0.08256052434444427, "total": 0.034576401114463806, "matching_correlation_mean": 0.9751147031784058, "other_correlation_mean": 0.0063984510488808155, "column_identification_accuracy": 1.0, "near_constant_column_fraction": 0.0}
+[2026-11-01 19:29:48] iter = 07200, loss = 0.034576, pixel drift RMS = 13.06382/255
+ABLATION LOSS: {"iteration": 7400, "negative_mi": -0.035739898681640625, "column_loss": 0.8651368618011475, "weighted_column_loss": 0.0865136906504631, "total": 0.05077379196882248, "matching_correlation_mean": 0.9518758654594421, "other_correlation_mean": -0.00023999398399610072, "column_identification_accuracy": 0.9899999797344208, "near_constant_column_fraction": 0.0}
+[2026-11-01 19:29:55] iter = 07400, loss = 0.050774, pixel drift RMS = 13.10751/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_column_ablation/runs/lambda0.1_tc0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 7500/10000)
+ABLATION LOSS: {"iteration": 7600, "negative_mi": -0.03155040740966797, "column_loss": 0.9819362759590149, "weighted_column_loss": 0.09819363057613373, "total": 0.06664322316646576, "matching_correlation_mean": 0.9297167658805847, "other_correlation_mean": 0.003388569923117757, "column_identification_accuracy": 0.9899999499320984, "near_constant_column_fraction": 0.0}
+[2026-11-01 19:30:03] iter = 07600, loss = 0.066643, pixel drift RMS = 13.14533/255
+ABLATION LOSS: {"iteration": 7800, "negative_mi": -0.04697608947753906, "column_loss": 0.8302252888679504, "weighted_column_loss": 0.08302252739667892, "total": 0.03604643791913986, "matching_correlation_mean": 0.9830663204193115, "other_correlation_mean": 0.004079991951584816, "column_identification_accuracy": 1.0, "near_constant_column_fraction": 0.0}
+[2026-11-01 19:30:10] iter = 07800, loss = 0.036046, pixel drift RMS = 13.17824/255
+ABLATION LOSS: {"iteration": 8000, "negative_mi": -0.020181655883789062, "column_loss": 1.0025627613067627, "weighted_column_loss": 0.10025627911090851, "total": 0.08007462322711945, "matching_correlation_mean": 0.9116165041923523, "other_correlation_mean": -0.001590448315255344, "column_identification_accuracy": 0.9799999594688416, "near_constant_column_fraction": 0.0}
+[2026-11-01 19:30:18] iter = 08000, loss = 0.080075, pixel drift RMS = 13.20452/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_column_ablation/runs/lambda0.1_tc0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 8000/10000)
+ABLATION LOSS: {"iteration": 8200, "negative_mi": -0.03566551208496094, "column_loss": 0.7823870182037354, "weighted_column_loss": 0.07823870331048965, "total": 0.04257319122552872, "matching_correlation_mean": 0.9887826442718506, "other_correlation_mean": -3.964053394156508e-05, "column_identification_accuracy": 1.0, "near_constant_column_fraction": 0.0}
+[2026-11-01 19:30:25] iter = 08200, loss = 0.042573, pixel drift RMS = 13.22709/255
+ABLATION LOSS: {"iteration": 8400, "negative_mi": -0.03678417205810547, "column_loss": 0.8700471520423889, "weighted_column_loss": 0.08700471371412277, "total": 0.0502205416560173, "matching_correlation_mean": 0.9682011008262634, "other_correlation_mean": 0.00381899019703269, "column_identification_accuracy": 1.0, "near_constant_column_fraction": 0.0}
+[2026-11-01 19:30:33] iter = 08400, loss = 0.050221, pixel drift RMS = 13.24643/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_column_ablation/runs/lambda0.1_tc0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 8500/10000)
+ABLATION LOSS: {"iteration": 8600, "negative_mi": -0.04137229919433594, "column_loss": 0.9562854170799255, "weighted_column_loss": 0.09562854468822479, "total": 0.054256245493888855, "matching_correlation_mean": 0.9345256090164185, "other_correlation_mean": 0.007790002040565014, "column_identification_accuracy": 0.9899999499320984, "near_constant_column_fraction": 0.0}
+[2026-11-01 19:30:40] iter = 08600, loss = 0.054256, pixel drift RMS = 13.26117/255
+ABLATION LOSS: {"iteration": 8800, "negative_mi": -0.010837554931640625, "column_loss": 1.6429766416549683, "weighted_column_loss": 0.1642976701259613, "total": 0.15346011519432068, "matching_correlation_mean": 0.734831690788269, "other_correlation_mean": -0.0019748357590287924, "column_identification_accuracy": 0.8499999642372131, "near_constant_column_fraction": 0.0}
+[2026-11-01 19:30:48] iter = 08800, loss = 0.153460, pixel drift RMS = 13.27278/255
+ABLATION LOSS: {"iteration": 9000, "negative_mi": -0.041090965270996094, "column_loss": 0.8626008033752441, "weighted_column_loss": 0.08626008033752441, "total": 0.04516911506652832, "matching_correlation_mean": 0.9690295457839966, "other_correlation_mean": 0.006300870329141617, "column_identification_accuracy": 1.0, "near_constant_column_fraction": 0.0}
+[2026-11-01 19:30:55] iter = 09000, loss = 0.045169, pixel drift RMS = 13.28146/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_column_ablation/runs/lambda0.1_tc0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 9000/10000)
+ABLATION LOSS: {"iteration": 9200, "negative_mi": -0.041396141052246094, "column_loss": 0.8389946222305298, "weighted_column_loss": 0.08389946073293686, "total": 0.042503319680690765, "matching_correlation_mean": 0.9699633717536926, "other_correlation_mean": 0.0018828903557732701, "column_identification_accuracy": 0.9949999749660492, "near_constant_column_fraction": 0.0}
+[2026-11-01 19:31:03] iter = 09200, loss = 0.042503, pixel drift RMS = 13.28818/255
+ABLATION LOSS: {"iteration": 9400, "negative_mi": -0.009305000305175781, "column_loss": 1.887845754623413, "weighted_column_loss": 0.18878458440303802, "total": 0.17947958409786224, "matching_correlation_mean": 0.6750295758247375, "other_correlation_mean": 0.00043926347279921174, "column_identification_accuracy": 0.7349999845027924, "near_constant_column_fraction": 0.0}
+[2026-11-01 19:31:10] iter = 09400, loss = 0.179480, pixel drift RMS = 13.29333/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_column_ablation/runs/lambda0.1_tc0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 9500/10000)
+ABLATION LOSS: {"iteration": 9600, "negative_mi": -0.03298473358154297, "column_loss": 1.0608916282653809, "weighted_column_loss": 0.10608916729688644, "total": 0.07310443371534348, "matching_correlation_mean": 0.90302973985672, "other_correlation_mean": 0.0005864849081262946, "column_identification_accuracy": 0.98499995470047, "near_constant_column_fraction": 0.0}
+[2026-11-01 19:31:18] iter = 09600, loss = 0.073104, pixel drift RMS = 13.29693/255
+ABLATION LOSS: {"iteration": 9800, "negative_mi": -0.03848838806152344, "column_loss": 0.8622382879257202, "weighted_column_loss": 0.08622383326292038, "total": 0.04773544520139694, "matching_correlation_mean": 0.9616918563842773, "other_correlation_mean": 0.000528469739947468, "column_identification_accuracy": 0.9899999797344208, "near_constant_column_fraction": 0.0}
+[2026-11-01 19:31:25] iter = 09800, loss = 0.047735, pixel drift RMS = 13.30000/255
+ABLATION LOSS: {"iteration": 10000, "negative_mi": -0.04526996612548828, "column_loss": 0.8757381439208984, "weighted_column_loss": 0.0875738188624382, "total": 0.04230385273694992, "matching_correlation_mean": 0.9637752175331116, "other_correlation_mean": 0.0038587742019444704, "column_identification_accuracy": 1.0, "near_constant_column_fraction": 0.0}
+[2026-11-01 19:31:32] iter = 10000, loss = 0.042304, pixel drift RMS = 13.30232/255
+Saved synthetic data to /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_column_ablation/runs/lambda0.1_tc0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt (iteration 10000/10000)
+DONE: /scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_column_ablation/runs/lambda0.1_tc0.2/synthetic/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt
+SSL CIFAR10/ResNet18/simclr seed=0: {"epoch": 1, "steps": 1, "lr": 3e-05, "loss": 5.248088359832764, "examples": 100}
+SSL CIFAR10/ResNet18/simclr seed=0: {"epoch": 200, "steps": 200, "lr": 0.15279469632432452, "loss": 4.963482856750488, "examples": 100}
+SSL CIFAR10/ResNet18/simclr seed=0: {"epoch": 400, "steps": 400, "lr": 0.1419615998508841, "loss": 4.929755210876465, "examples": 100}
+SSL CIFAR10/ResNet18/simclr seed=0: {"epoch": 600, "steps": 600, "lr": 0.12481100174716497, "loss": 4.566997528076172, "examples": 100}
+SSL CIFAR10/ResNet18/simclr seed=0: {"epoch": 800, "steps": 800, "lr": 0.10304018745339412, "loss": 4.218811511993408, "examples": 100}
+SSL CIFAR10/ResNet18/simclr seed=0: {"epoch": 1000, "steps": 1000, "lr": 0.07880367577406086, "loss": 3.8987033367156982, "examples": 100}
+SSL CIFAR10/ResNet18/simclr seed=0: {"epoch": 1200, "steps": 1200, "lr": 0.054499999876722965, "loss": 3.2841637134552, "examples": 100}
+SSL CIFAR10/ResNet18/simclr seed=0: {"epoch": 1400, "steps": 1400, "lr": 0.03253433974373928, "loss": 3.0981240272521973, "examples": 100}
+SSL CIFAR10/ResNet18/simclr seed=0: {"epoch": 1600, "steps": 1600, "lr": 0.015080496831083607, "loss": 2.727463722229004, "examples": 100}
+SSL CIFAR10/ResNet18/simclr seed=0: {"epoch": 1800, "steps": 1800, "lr": 0.0038657667859693257, "loss": 2.672490119934082, "examples": 100}
+SSL CIFAR10/ResNet18/simclr seed=0: {"epoch": 2000, "steps": 2000, "lr": 0.0, "loss": 2.6981921195983887, "examples": 100}
+PROBE CIFAR10 lbl=1 seed=0: {'epoch': 10, 'lr': 0.09776754757575974, 'loss': 1.6475202503204345, 'train_accuracy_percent': 40.2}
+PROBE CIFAR10 lbl=1 seed=0: {'epoch': 20, 'lr': 0.09081878607071997, 'loss': 1.5118160362243653, 'train_accuracy_percent': 45.4}
+PROBE CIFAR10 lbl=1 seed=0: {'epoch': 30, 'lr': 0.0798344744144428, 'loss': 1.4743483200073242, 'train_accuracy_percent': 47.8}
+PROBE CIFAR10 lbl=1 seed=0: {'epoch': 40, 'lr': 0.06590057681196192, 'loss': 1.4632199039459228, 'train_accuracy_percent': 52.2}
+PROBE CIFAR10 lbl=1 seed=0: {'epoch': 50, 'lr': 0.05039466834548567, 'loss': 1.4219511785507202, 'train_accuracy_percent': 49.6}
+PROBE CIFAR10 lbl=1 seed=0: {'epoch': 60, 'lr': 0.03484974098465636, 'loss': 1.416533829689026, 'train_accuracy_percent': 49.2}
+PROBE CIFAR10 lbl=1 seed=0: {'epoch': 70, 'lr': 0.020802644302934683, 'loss': 1.4164425659179687, 'train_accuracy_percent': 53.8}
+PROBE CIFAR10 lbl=1 seed=0: {'epoch': 80, 'lr': 0.00964214481190074, 'loss': 1.3907380266189575, 'train_accuracy_percent': 53.0}
+PROBE CIFAR10 lbl=1 seed=0: {'epoch': 90, 'lr': 0.0024716255306108607, 'loss': 1.4292174739837646, 'train_accuracy_percent': 50.2}
+PROBE CIFAR10 lbl=1 seed=0: {'epoch': 100, 'lr': 0.0, 'loss': 1.3477632322311401, 'train_accuracy_percent': 52.4}
+RESULT CIFAR10 lbl=1 seed=0: 41.2500
+PROBE CIFAR10 lbl=1 seed=1: {'epoch': 10, 'lr': 0.09776754757575974, 'loss': 1.6780119800567628, 'train_accuracy_percent': 40.6}
+PROBE CIFAR10 lbl=1 seed=1: {'epoch': 20, 'lr': 0.09081878607071997, 'loss': 1.5847850112915038, 'train_accuracy_percent': 44.6}
+PROBE CIFAR10 lbl=1 seed=1: {'epoch': 30, 'lr': 0.0798344744144428, 'loss': 1.533962522506714, 'train_accuracy_percent': 46.2}
+PROBE CIFAR10 lbl=1 seed=1: {'epoch': 40, 'lr': 0.06590057681196192, 'loss': 1.5183561811447144, 'train_accuracy_percent': 47.4}
+PROBE CIFAR10 lbl=1 seed=1: {'epoch': 50, 'lr': 0.05039466834548567, 'loss': 1.4619568099975586, 'train_accuracy_percent': 51.2}
+PROBE CIFAR10 lbl=1 seed=1: {'epoch': 60, 'lr': 0.03484974098465636, 'loss': 1.4179863080978394, 'train_accuracy_percent': 50.8}
+PROBE CIFAR10 lbl=1 seed=1: {'epoch': 70, 'lr': 0.020802644302934683, 'loss': 1.4689224939346313, 'train_accuracy_percent': 47.4}
+PROBE CIFAR10 lbl=1 seed=1: {'epoch': 80, 'lr': 0.00964214481190074, 'loss': 1.4367376766204834, 'train_accuracy_percent': 50.8}
+PROBE CIFAR10 lbl=1 seed=1: {'epoch': 90, 'lr': 0.0024716255306108607, 'loss': 1.4067120342254638, 'train_accuracy_percent': 51.2}
+PROBE CIFAR10 lbl=1 seed=1: {'epoch': 100, 'lr': 0.0, 'loss': 1.4352214374542236, 'train_accuracy_percent': 50.8}
+RESULT CIFAR10 lbl=1 seed=1: 40.9600
+PROBE CIFAR10 lbl=1 seed=2: {'epoch': 10, 'lr': 0.09776754757575974, 'loss': 1.6687555179595948, 'train_accuracy_percent': 41.0}
+PROBE CIFAR10 lbl=1 seed=2: {'epoch': 20, 'lr': 0.09081878607071997, 'loss': 1.5416786060333252, 'train_accuracy_percent': 44.6}
+PROBE CIFAR10 lbl=1 seed=2: {'epoch': 30, 'lr': 0.0798344744144428, 'loss': 1.5153843851089477, 'train_accuracy_percent': 46.6}
+PROBE CIFAR10 lbl=1 seed=2: {'epoch': 40, 'lr': 0.06590057681196192, 'loss': 1.4840304527282715, 'train_accuracy_percent': 48.4}
+PROBE CIFAR10 lbl=1 seed=2: {'epoch': 50, 'lr': 0.05039466834548567, 'loss': 1.4712491130828858, 'train_accuracy_percent': 50.0}
+PROBE CIFAR10 lbl=1 seed=2: {'epoch': 60, 'lr': 0.03484974098465636, 'loss': 1.367809781074524, 'train_accuracy_percent': 54.2}
+PROBE CIFAR10 lbl=1 seed=2: {'epoch': 70, 'lr': 0.020802644302934683, 'loss': 1.4578571338653565, 'train_accuracy_percent': 49.0}
+PROBE CIFAR10 lbl=1 seed=2: {'epoch': 80, 'lr': 0.00964214481190074, 'loss': 1.4990136032104493, 'train_accuracy_percent': 48.0}
+PROBE CIFAR10 lbl=1 seed=2: {'epoch': 90, 'lr': 0.0024716255306108607, 'loss': 1.4159583988189697, 'train_accuracy_percent': 52.0}
+PROBE CIFAR10 lbl=1 seed=2: {'epoch': 100, 'lr': 0.0, 'loss': 1.4226404886245727, 'train_accuracy_percent': 50.2}
+RESULT CIFAR10 lbl=1 seed=2: 41.6500
+PROBE CIFAR10 lbl=1 seed=3: {'epoch': 10, 'lr': 0.09776754757575974, 'loss': 1.69307159614563, 'train_accuracy_percent': 37.8}
+PROBE CIFAR10 lbl=1 seed=3: {'epoch': 20, 'lr': 0.09081878607071997, 'loss': 1.5491103496551513, 'train_accuracy_percent': 45.8}
+PROBE CIFAR10 lbl=1 seed=3: {'epoch': 30, 'lr': 0.0798344744144428, 'loss': 1.5042238941192627, 'train_accuracy_percent': 45.2}
+PROBE CIFAR10 lbl=1 seed=3: {'epoch': 40, 'lr': 0.06590057681196192, 'loss': 1.4265920629501343, 'train_accuracy_percent': 48.2}
+PROBE CIFAR10 lbl=1 seed=3: {'epoch': 50, 'lr': 0.05039466834548567, 'loss': 1.4283109407424928, 'train_accuracy_percent': 47.0}
+PROBE CIFAR10 lbl=1 seed=3: {'epoch': 60, 'lr': 0.03484974098465636, 'loss': 1.421745746612549, 'train_accuracy_percent': 50.4}
+PROBE CIFAR10 lbl=1 seed=3: {'epoch': 70, 'lr': 0.020802644302934683, 'loss': 1.394705286026001, 'train_accuracy_percent': 50.4}
+PROBE CIFAR10 lbl=1 seed=3: {'epoch': 80, 'lr': 0.00964214481190074, 'loss': 1.3787455987930297, 'train_accuracy_percent': 51.2}
+PROBE CIFAR10 lbl=1 seed=3: {'epoch': 90, 'lr': 0.0024716255306108607, 'loss': 1.3881931200027466, 'train_accuracy_percent': 53.4}
+PROBE CIFAR10 lbl=1 seed=3: {'epoch': 100, 'lr': 0.0, 'loss': 1.3792373905181885, 'train_accuracy_percent': 51.6}
+RESULT CIFAR10 lbl=1 seed=3: 41.4700
+PROBE CIFAR10 lbl=1 seed=4: {'epoch': 10, 'lr': 0.09776754757575974, 'loss': 1.5674289197921754, 'train_accuracy_percent': 43.4}
+PROBE CIFAR10 lbl=1 seed=4: {'epoch': 20, 'lr': 0.09081878607071997, 'loss': 1.4956106119155883, 'train_accuracy_percent': 48.4}
+PROBE CIFAR10 lbl=1 seed=4: {'epoch': 30, 'lr': 0.0798344744144428, 'loss': 1.4447974643707275, 'train_accuracy_percent': 48.0}
+PROBE CIFAR10 lbl=1 seed=4: {'epoch': 40, 'lr': 0.06590057681196192, 'loss': 1.409528244972229, 'train_accuracy_percent': 52.0}
+PROBE CIFAR10 lbl=1 seed=4: {'epoch': 50, 'lr': 0.05039466834548567, 'loss': 1.3511516914367676, 'train_accuracy_percent': 52.8}
+PROBE CIFAR10 lbl=1 seed=4: {'epoch': 60, 'lr': 0.03484974098465636, 'loss': 1.343358980178833, 'train_accuracy_percent': 55.0}
+PROBE CIFAR10 lbl=1 seed=4: {'epoch': 70, 'lr': 0.020802644302934683, 'loss': 1.3312361335754395, 'train_accuracy_percent': 52.8}
+PROBE CIFAR10 lbl=1 seed=4: {'epoch': 80, 'lr': 0.00964214481190074, 'loss': 1.3096151084899903, 'train_accuracy_percent': 55.2}
+PROBE CIFAR10 lbl=1 seed=4: {'epoch': 90, 'lr': 0.0024716255306108607, 'loss': 1.325833664894104, 'train_accuracy_percent': 53.6}
+PROBE CIFAR10 lbl=1 seed=4: {'epoch': 100, 'lr': 0.0, 'loss': 1.306859704017639, 'train_accuracy_percent': 55.2}
+RESULT CIFAR10 lbl=1 seed=4: 41.5100
+COMPLETE: {"complete": true, "identity": {"signature": "2d49415673217f20fd260bcf26580c374f3584cb62921065e9807d56d1f707cc", "seed": 0, "selection_method": "ours"}, "ablation": {"column_weight": 0.1, "column_temperature": 0.2, "objective": "negative_MI + column_weight * symmetric_column_cross_entropy", "columns": "assignment probabilities, centered over real images, L2 normalization with eps=1e-6", "positive": "same prototype across the two existing views", "adaptive_temperature": false, "duplicate_penalty": false}, "labels": 1, "ssl_epochs": 2000, "linear_epochs": 100, "completed_probes": 5, "expected_probes": 5, "std_ddof": 1, "accuracies": [41.25, 40.96, 41.65, 41.47, 41.51], "mean_percent": 41.368, "std_percent": 0.26948098263142695, "baseline_summary": "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_cvpr_color_crop/results/CIFAR10/ResNet18BN/pt0.2/simclr/ssl_seed_000/summary_CIFAR10_lbl1.json", "baseline_mean_percent": 45.184, "baseline_std_percent": 0.4067308692489421, "difference_pp": -3.8159999999999954}
+PROBE CIFAR10 lbl=5 seed=0: {'epoch': 10, 'lr': 0.09759636527645632, 'loss': 1.6492568210601806, 'train_accuracy_percent': 41.56}
+PROBE CIFAR10 lbl=5 seed=0: {'epoch': 20, 'lr': 0.0905246588405146, 'loss': 1.5704522129058838, 'train_accuracy_percent': 44.2}
+PROBE CIFAR10 lbl=5 seed=0: {'epoch': 30, 'lr': 0.07947823644532198, 'loss': 1.5635996677398682, 'train_accuracy_percent': 43.32}
+PROBE CIFAR10 lbl=5 seed=0: {'epoch': 40, 'lr': 0.06554054685128856, 'loss': 1.4917541788101196, 'train_accuracy_percent': 46.04}
+PROBE CIFAR10 lbl=5 seed=0: {'epoch': 50, 'lr': 0.05007861840237923, 'loss': 1.5147925533294677, 'train_accuracy_percent': 46.68}
+PROBE CIFAR10 lbl=5 seed=0: {'epoch': 60, 'lr': 0.03460897894916861, 'loss': 1.4866832509994508, 'train_accuracy_percent': 47.4}
+PROBE CIFAR10 lbl=5 seed=0: {'epoch': 70, 'lr': 0.020648912648459073, 'loss': 1.4557089233398437, 'train_accuracy_percent': 49.08}
+PROBE CIFAR10 lbl=5 seed=0: {'epoch': 80, 'lr': 0.009567642583312259, 'loss': 1.4516969436645508, 'train_accuracy_percent': 49.68}
+PROBE CIFAR10 lbl=5 seed=0: {'epoch': 90, 'lr': 0.002452035422983734, 'loss': 1.455325541496277, 'train_accuracy_percent': 49.52}
+PROBE CIFAR10 lbl=5 seed=0: {'epoch': 100, 'lr': 0.0, 'loss': 1.4649763040542603, 'train_accuracy_percent': 48.88}
+RESULT CIFAR10 lbl=5 seed=0: 47.6600
+PROBE CIFAR10 lbl=5 seed=1: {'epoch': 10, 'lr': 0.09759636527645632, 'loss': 1.6119661237716674, 'train_accuracy_percent': 41.44}
+PROBE CIFAR10 lbl=5 seed=1: {'epoch': 20, 'lr': 0.0905246588405146, 'loss': 1.6756323320388793, 'train_accuracy_percent': 40.36}
+PROBE CIFAR10 lbl=5 seed=1: {'epoch': 30, 'lr': 0.07947823644532198, 'loss': 1.5648370893478394, 'train_accuracy_percent': 45.0}
+PROBE CIFAR10 lbl=5 seed=1: {'epoch': 40, 'lr': 0.06554054685128856, 'loss': 1.5494965070724487, 'train_accuracy_percent': 43.64}
+PROBE CIFAR10 lbl=5 seed=1: {'epoch': 50, 'lr': 0.05007861840237923, 'loss': 1.514149644470215, 'train_accuracy_percent': 47.32}
+PROBE CIFAR10 lbl=5 seed=1: {'epoch': 60, 'lr': 0.03460897894916861, 'loss': 1.507643798828125, 'train_accuracy_percent': 46.56}
+PROBE CIFAR10 lbl=5 seed=1: {'epoch': 70, 'lr': 0.020648912648459073, 'loss': 1.4939459703445435, 'train_accuracy_percent': 47.44}
+PROBE CIFAR10 lbl=5 seed=1: {'epoch': 80, 'lr': 0.009567642583312259, 'loss': 1.476001899909973, 'train_accuracy_percent': 48.12}
+PROBE CIFAR10 lbl=5 seed=1: {'epoch': 90, 'lr': 0.002452035422983734, 'loss': 1.4710997417449951, 'train_accuracy_percent': 48.16}
+PROBE CIFAR10 lbl=5 seed=1: {'epoch': 100, 'lr': 0.0, 'loss': 1.4501369859695434, 'train_accuracy_percent': 49.28}
+RESULT CIFAR10 lbl=5 seed=1: 46.6200
+PROBE CIFAR10 lbl=5 seed=2: {'epoch': 10, 'lr': 0.09759636527645632, 'loss': 1.6104656826019288, 'train_accuracy_percent': 41.28}
+PROBE CIFAR10 lbl=5 seed=2: {'epoch': 20, 'lr': 0.0905246588405146, 'loss': 1.5546968730926514, 'train_accuracy_percent': 44.44}
+PROBE CIFAR10 lbl=5 seed=2: {'epoch': 30, 'lr': 0.07947823644532198, 'loss': 1.507150923538208, 'train_accuracy_percent': 44.92}
+PROBE CIFAR10 lbl=5 seed=2: {'epoch': 40, 'lr': 0.06554054685128856, 'loss': 1.4971655229568481, 'train_accuracy_percent': 46.08}
+PROBE CIFAR10 lbl=5 seed=2: {'epoch': 50, 'lr': 0.05007861840237923, 'loss': 1.4732164100646972, 'train_accuracy_percent': 48.2}
+PROBE CIFAR10 lbl=5 seed=2: {'epoch': 60, 'lr': 0.03460897894916861, 'loss': 1.4432314420700074, 'train_accuracy_percent': 48.96}
+PROBE CIFAR10 lbl=5 seed=2: {'epoch': 70, 'lr': 0.020648912648459073, 'loss': 1.4693978227615356, 'train_accuracy_percent': 48.48}
+PROBE CIFAR10 lbl=5 seed=2: {'epoch': 80, 'lr': 0.009567642583312259, 'loss': 1.469133016204834, 'train_accuracy_percent': 48.72}
+PROBE CIFAR10 lbl=5 seed=2: {'epoch': 90, 'lr': 0.002452035422983734, 'loss': 1.453804048728943, 'train_accuracy_percent': 48.04}
+PROBE CIFAR10 lbl=5 seed=2: {'epoch': 100, 'lr': 0.0, 'loss': 1.445636464881897, 'train_accuracy_percent': 48.4}
+RESULT CIFAR10 lbl=5 seed=2: 46.5700
+PROBE CIFAR10 lbl=5 seed=3: {'epoch': 10, 'lr': 0.09759636527645632, 'loss': 1.5833357885360717, 'train_accuracy_percent': 44.12}
+PROBE CIFAR10 lbl=5 seed=3: {'epoch': 20, 'lr': 0.0905246588405146, 'loss': 1.54891801776886, 'train_accuracy_percent': 44.28}
+PROBE CIFAR10 lbl=5 seed=3: {'epoch': 30, 'lr': 0.07947823644532198, 'loss': 1.5685084619522094, 'train_accuracy_percent': 43.88}
+PROBE CIFAR10 lbl=5 seed=3: {'epoch': 40, 'lr': 0.06554054685128856, 'loss': 1.514109565925598, 'train_accuracy_percent': 45.76}
+PROBE CIFAR10 lbl=5 seed=3: {'epoch': 50, 'lr': 0.05007861840237923, 'loss': 1.4776940320968628, 'train_accuracy_percent': 47.24}
+PROBE CIFAR10 lbl=5 seed=3: {'epoch': 60, 'lr': 0.03460897894916861, 'loss': 1.4681262935638428, 'train_accuracy_percent': 49.08}
+PROBE CIFAR10 lbl=5 seed=3: {'epoch': 70, 'lr': 0.020648912648459073, 'loss': 1.4653722749710083, 'train_accuracy_percent': 48.2}
+PROBE CIFAR10 lbl=5 seed=3: {'epoch': 80, 'lr': 0.009567642583312259, 'loss': 1.4327207439422607, 'train_accuracy_percent': 49.8}
+PROBE CIFAR10 lbl=5 seed=3: {'epoch': 90, 'lr': 0.002452035422983734, 'loss': 1.429503636932373, 'train_accuracy_percent': 49.76}
+PROBE CIFAR10 lbl=5 seed=3: {'epoch': 100, 'lr': 0.0, 'loss': 1.4222174118041992, 'train_accuracy_percent': 49.88}
+RESULT CIFAR10 lbl=5 seed=3: 47.4700
+PROBE CIFAR10 lbl=5 seed=4: {'epoch': 10, 'lr': 0.09759636527645632, 'loss': 1.6232045051574706, 'train_accuracy_percent': 41.64}
+PROBE CIFAR10 lbl=5 seed=4: {'epoch': 20, 'lr': 0.0905246588405146, 'loss': 1.5637489749908446, 'train_accuracy_percent': 44.64}
+PROBE CIFAR10 lbl=5 seed=4: {'epoch': 30, 'lr': 0.07947823644532198, 'loss': 1.5229237188339233, 'train_accuracy_percent': 45.68}
+PROBE CIFAR10 lbl=5 seed=4: {'epoch': 40, 'lr': 0.06554054685128856, 'loss': 1.5326664148330689, 'train_accuracy_percent': 44.72}
+PROBE CIFAR10 lbl=5 seed=4: {'epoch': 50, 'lr': 0.05007861840237923, 'loss': 1.452592525291443, 'train_accuracy_percent': 47.88}
+PROBE CIFAR10 lbl=5 seed=4: {'epoch': 60, 'lr': 0.03460897894916861, 'loss': 1.4588956903457642, 'train_accuracy_percent': 47.88}
+PROBE CIFAR10 lbl=5 seed=4: {'epoch': 70, 'lr': 0.020648912648459073, 'loss': 1.442880477142334, 'train_accuracy_percent': 50.0}
+PROBE CIFAR10 lbl=5 seed=4: {'epoch': 80, 'lr': 0.009567642583312259, 'loss': 1.4349332731246949, 'train_accuracy_percent': 49.52}
+PROBE CIFAR10 lbl=5 seed=4: {'epoch': 90, 'lr': 0.002452035422983734, 'loss': 1.427119369506836, 'train_accuracy_percent': 50.08}
+PROBE CIFAR10 lbl=5 seed=4: {'epoch': 100, 'lr': 0.0, 'loss': 1.437348072052002, 'train_accuracy_percent': 49.84}
+RESULT CIFAR10 lbl=5 seed=4: 46.9700
+COMPLETE: {"complete": true, "identity": {"signature": "2d49415673217f20fd260bcf26580c374f3584cb62921065e9807d56d1f707cc", "seed": 0, "selection_method": "ours"}, "ablation": {"column_weight": 0.1, "column_temperature": 0.2, "objective": "negative_MI + column_weight * symmetric_column_cross_entropy", "columns": "assignment probabilities, centered over real images, L2 normalization with eps=1e-6", "positive": "same prototype across the two existing views", "adaptive_temperature": false, "duplicate_penalty": false}, "labels": 5, "ssl_epochs": 2000, "linear_epochs": 100, "completed_probes": 5, "expected_probes": 5, "std_ddof": 1, "accuracies": [47.66, 46.62, 46.57, 47.47, 46.97], "mean_percent": 47.058, "std_percent": 0.49241242876271846, "baseline_summary": "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_cvpr_color_crop/results/CIFAR10/ResNet18BN/pt0.2/simclr/ssl_seed_000/summary_CIFAR10_lbl5.json", "baseline_mean_percent": 50.58, "baseline_std_percent": 0.4743416490252575, "difference_pp": -3.5219999999999985}

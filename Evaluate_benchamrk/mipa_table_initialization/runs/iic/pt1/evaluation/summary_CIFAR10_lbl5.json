@@ -1,0 +1,67 @@
+{
+  "complete": true,
+  "completed_probes": 5,
+  "expected_probes": 5,
+  "generation_args": {
+    "Iteration": 8000,
+    "batch_real": 128,
+    "beta": 1,
+    "dataset": "CIFAR10",
+    "distill_aug_strategy": "color_crop_cutout_scale",
+    "feature_batch": 128,
+    "lr_img": 0.0015,
+    "percentage": 1,
+    "prototype_pool_size": 0,
+    "seed": 0,
+    "single_channel": false,
+    "temperature": 0.2
+  },
+  "identity": {
+    "seed": 0,
+    "selection_method": "ours",
+    "signature": "e8143a47301aaeea9906af44b846a21a665c7278381a80a361270b8edaaacd0e"
+  },
+  "labels": 5,
+  "linear_epochs": 100,
+  "mean_percent": 55.912,
+  "model": "ResNet18",
+  "samples": [
+    {
+      "accuracy_percent": 56.13,
+      "probe_seed": 0,
+      "result_file": "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/iic/pt1/evaluation/evaluations/CIFAR10_lbl5_probe0.json",
+      "ssl_seed": 0
+    },
+    {
+      "accuracy_percent": 55.86,
+      "probe_seed": 1,
+      "result_file": "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/iic/pt1/evaluation/evaluations/CIFAR10_lbl5_probe1.json",
+      "ssl_seed": 0
+    },
+    {
+      "accuracy_percent": 55.91,
+      "probe_seed": 2,
+      "result_file": "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/iic/pt1/evaluation/evaluations/CIFAR10_lbl5_probe2.json",
+      "ssl_seed": 0
+    },
+    {
+      "accuracy_percent": 55.75,
+      "probe_seed": 3,
+      "result_file": "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/iic/pt1/evaluation/evaluations/CIFAR10_lbl5_probe3.json",
+      "ssl_seed": 0
+    },
+    {
+      "accuracy_percent": 55.91,
+      "probe_seed": 4,
+      "result_file": "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_table_initialization/runs/iic/pt1/evaluation/evaluations/CIFAR10_lbl5_probe4.json",
+      "ssl_seed": 0
+    }
+  ],
+  "source": "CIFAR10",
+  "ssl": "simclr",
+  "ssl_epochs": 2000,
+  "std_ddof": 1,
+  "std_percent": 0.13827508813954992,
+  "subset": 1,
+  "target": "CIFAR10"
+}
