@@ -1,0 +1,67 @@
+{
+  "complete": true,
+  "completed_probes": 5,
+  "expected_probes": 5,
+  "generation_args": {
+    "Iteration": 6000,
+    "batch_real": 128,
+    "beta": 1,
+    "dataset": "CIFAR10",
+    "distill_aug_strategy": "color_crop_cutout_scale",
+    "feature_batch": 128,
+    "lr_img": 0.0015,
+    "percentage": 2,
+    "prototype_pool_size": 0,
+    "seed": 0,
+    "single_channel": false,
+    "temperature": 0.2
+  },
+  "identity": {
+    "seed": 0,
+    "selection_method": "ours",
+    "signature": "9694658503f80c40e3f79ec4691033beea922a3022d8bb0020173efa032f21fe"
+  },
+  "labels": 5,
+  "linear_epochs": 100,
+  "mean_percent": 58.622,
+  "model": "ResNet18",
+  "samples": [
+    {
+      "accuracy_percent": 58.77,
+      "probe_seed": 0,
+      "result_file": "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_selection_init_lu/runs/sas/pt2/evaluation/evaluations/CIFAR10_lbl5_probe0.json",
+      "ssl_seed": 0
+    },
+    {
+      "accuracy_percent": 58.56,
+      "probe_seed": 1,
+      "result_file": "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_selection_init_lu/runs/sas/pt2/evaluation/evaluations/CIFAR10_lbl5_probe1.json",
+      "ssl_seed": 0
+    },
+    {
+      "accuracy_percent": 58.66,
+      "probe_seed": 2,
+      "result_file": "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_selection_init_lu/runs/sas/pt2/evaluation/evaluations/CIFAR10_lbl5_probe2.json",
+      "ssl_seed": 0
+    },
+    {
+      "accuracy_percent": 58.61,
+      "probe_seed": 3,
+      "result_file": "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_selection_init_lu/runs/sas/pt2/evaluation/evaluations/CIFAR10_lbl5_probe3.json",
+      "ssl_seed": 0
+    },
+    {
+      "accuracy_percent": 58.51,
+      "probe_seed": 4,
+      "result_file": "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/mipa_selection_init_lu/runs/sas/pt2/evaluation/evaluations/CIFAR10_lbl5_probe4.json",
+      "ssl_seed": 0
+    }
+  ],
+  "source": "CIFAR10",
+  "ssl": "simclr",
+  "ssl_epochs": 2000,
+  "std_ddof": 1,
+  "std_percent": 0.09984988733093399,
+  "subset": 2,
+  "target": "CIFAR10"
+}

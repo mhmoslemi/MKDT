@@ -1,0 +1,19 @@
+SAS subsets: CIFAR10/CIFAR100, nominal 0.2%, 1%, 2%.
+Use the completed standalone selections exactly, without top-up or resampling.
+Actual CIFAR10 sizes: 95, 496, 995. Actual CIFAR100 sizes: 56, 452, 950.
+One freshly initialized ResNet18 SimCLR encoder per subset; SSL seed 0, 2000 epochs.
+Shared unchanged trainer: ../train_ssl.py; existing random-baseline protocol.
+LARS, base LR .4 scaled by effective batch / 256, temperature .2, weight decay .0001,
+10 warmup epochs then cosine schedule; batch=min(subset size,256), drop_last=True.
+Checkpoint every 500 epochs; an interrupted SSL job can resume via the shared trainer.
+After SSL, freeze the final encoder and run the shared ../evaluate.py linear_probe.
+100 epochs, SGD .1, momentum .9, cosine schedule, weight decay 0, batch 256.
+Label budgets 1% (500) and 5% (2500) of the full training split, probe seeds 0..4.
+Report mean and sample standard deviation across five probes separately per label budget.
+Only same-dataset evaluation. One dependent job bundles all ten probes per subset.
+Lu account aip-yiweilu, 1 CPU, 1 full L40S, 6G RAM, existing /home/mmoslem3/ENV.
+All six selection jobs had completed successfully before this evaluation was prepared.
+Runtime limits derive from the actual prior random-subset epoch/probe logs plus 10% and startup allowance.
+Each training job validates index bounds/uniqueness/checksums, official floor-per-class counts,
+dataset fingerprint and exact equality with the prior 2k training/probe configuration.
+Results live in results/<dataset>/pt<percentage>/, including config, encoder and two summaries.

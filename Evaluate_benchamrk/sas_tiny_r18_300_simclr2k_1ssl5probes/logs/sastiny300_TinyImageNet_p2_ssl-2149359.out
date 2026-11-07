@@ -1,0 +1,8 @@
+/home/mmoslem3/ENV/lib/python3.11/site-packages/torch/cuda/__init__.py:182: UserWarning: CUDA initialization: CUDA unknown error - this may be due to an incorrectly set up environment, e.g. changing env variable CUDA_VISIBLE_DEVICES after program start. Setting the available devices to be zero. (Triggered internally at /tmp/build_wheels_tmp.5164/python-3.11/torch/c10/cuda/CUDAFunctions.cpp:119.)
+  return torch._C._cuda_getDeviceCount() > 0
+Traceback (most recent call last):
+  File "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/sas_tiny_r18_300_simclr2k_1ssl5probes/worker.py", line 163, in <module>
+    run(args.stage, args.source, args.percentage)
+  File "/scratch/mmoslem3/MKDT/Evaluate_benchamrk/sas_tiny_r18_300_simclr2k_1ssl5probes/worker.py", line 99, in run
+    assert os.environ.get('SLURM_JOB_ID') and torch.cuda.is_available()
+AssertionError

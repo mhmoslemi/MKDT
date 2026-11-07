@@ -1,0 +1,102 @@
+% Standalone square panel; set \MIPAView to 1 or 2 before input.
+% Values: mapping_tau0025_flip/assignments.json, tau=0.025, normalized over10 prototypes.
+\usetikzlibrary{calc}
+\begingroup
+\def\MIPAPrototypeData{%
+  prototype-01/7.8/5.7,
+  prototype-02/4.5/5.8,
+  prototype-03/6.1/19.9,
+  prototype-04/2.7/5.1,
+  prototype-05/10.5/10.7,
+  prototype-06/33.5/22.5,
+  prototype-07/10.2/10.2,
+  prototype-08/11.5/7.8,
+  prototype-09/4.6/3.3,
+  prototype-10/8.6/8.9%
+}
+\definecolor{MIPAReal}{RGB}{91,132,180}
+\definecolor{MIPASynthetic}{RGB}{199,106,100}
+\definecolor{MIPABlueFill}{RGB}{217,230,244}
+\definecolor{MIPARedFill}{RGB}{248,222,218}
+\definecolor{MIPAText}{RGB}{40,44,49}
+\definecolor{MIPAMuted}{RGB}{91,101,111}
+\colorlet{MIPAGrid}{MIPAMuted!17!white}
+\colorlet{MIPAFrame}{MIPAMuted!28!white}
+\ifnum\MIPAView=1
+  \colorlet{MIPAAccent}{MIPAReal}
+  \colorlet{MIPABarFill}{MIPABlueFill}
+\else
+  \colorlet{MIPAAccent}{MIPASynthetic}
+  \colorlet{MIPABarFill}{MIPARedFill}
+\fi
+\edef\MIPAImageDirectory{images/view\MIPAView}
+\begin{tikzpicture}[x=1bp,y=1bp,inner sep=0pt,outer sep=0pt,
+  every node/.style={font=\rmfamily\upshape}]
+  \path[use as bounding box] (-126,-126) rectangle (126,126);
+  \fill[white] (-126,-126) rectangle (126,126);
+  \foreach \MIPARadius in {71,86} {
+    \draw[MIPAGrid,line width=.3bp,dash pattern=on .7bp off 2bp]
+      (0,0) circle[radius=\MIPARadius bp];
+  }
+  \foreach \MIPAFile/\MIPAFirst/\MIPASecond
+    [count=\MIPAIndex from 0] in \MIPAPrototypeData {
+    \ifnum\MIPAView=1\let\MIPAProbability\MIPAFirst
+    \else\let\MIPAProbability\MIPASecond\fi
+    \pgfmathsetmacro{\MIPAAngle}{90-36*\MIPAIndex}
+    \pgfmathsetmacro{\MIPAStart}{\MIPAAngle-12}
+    \pgfmathsetmacro{\MIPAEnd}{\MIPAAngle+12}
+    % Uniform inner sections hold labels; extensions from r56 encode 0--35 percent.
+    \pgfmathsetmacro{\MIPAOuter}{56+30*\MIPAProbability/35}
+    \draw[MIPAGrid,line width=.3bp] (\MIPAAngle:\MIPAOuter) -- (\MIPAAngle:88);
+    \path[fill=MIPABarFill!65!white]
+      (\MIPAStart:24) -- (\MIPAStart:56)
+      arc[start angle=\MIPAStart,end angle=\MIPAEnd,radius=56bp]
+      -- (\MIPAEnd:24)
+      arc[start angle=\MIPAEnd,end angle=\MIPAStart,radius=24bp] -- cycle;
+    \path[fill=MIPABarFill]
+      (\MIPAStart:56) -- (\MIPAStart:\MIPAOuter)
+      arc[start angle=\MIPAStart,end angle=\MIPAEnd,radius=\MIPAOuter bp]
+      -- (\MIPAEnd:56)
+      arc[start angle=\MIPAEnd,end angle=\MIPAStart,radius=56bp] -- cycle;
+    \path[draw=MIPAAccent!80!white,line width=.4bp,line join=round]
+      (\MIPAStart:24) -- (\MIPAStart:\MIPAOuter)
+      arc[start angle=\MIPAStart,end angle=\MIPAEnd,radius=\MIPAOuter bp]
+      -- (\MIPAEnd:24)
+      arc[start angle=\MIPAEnd,end angle=\MIPAStart,radius=24bp] -- cycle;
+    \pgfmathsetmacro{\MIPALabelAngle}{\MIPAAngle}
+    \ifdim\MIPALabelAngle pt>90pt
+      \pgfmathsetmacro{\MIPALabelAngle}{\MIPALabelAngle-180}
+    \fi
+    \ifdim\MIPALabelAngle pt<-90pt
+      \pgfmathsetmacro{\MIPALabelAngle}{\MIPALabelAngle+180}
+    \fi
+    \node[rotate=\MIPALabelAngle,text=MIPAText,inner sep=.5bp,
+      font=\rmfamily\bfseries\upshape\fontsize{10.5bp}{11bp}\selectfont]
+      (MIPALabel-\MIPAIndex) at (\MIPAAngle:40) {\MIPAProbability\%};
+    \path let \p1=(MIPALabel-\MIPAIndex.east), \p2=(MIPALabel-\MIPAIndex.west),
+      \p3=(MIPALabel-\MIPAIndex.north), \p4=(MIPALabel-\MIPAIndex.south),
+      \n1={veclen(\x1-\x2,\y1-\y2)}, \n2={veclen(\x3-\x4,\y3-\y4)}
+      in \pgfextra{\typeout{MIPA_LABEL:\MIPAView:\MIPAIndex:\n1:\n2:0pt}};
+  }
+  \draw[MIPAMuted!45!white,line width=.4bp,dash pattern=on 1bp off 1.5bp]
+    (0,0) circle[radius=56bp];
+  \filldraw[fill=white,draw=MIPAMuted!24!white,line width=.4bp]
+    (0,0) circle[radius=24bp];
+  \draw[MIPAReal,line width=.55bp] (-14.7,-14.7) rectangle (14.7,14.7);
+  \node at (0,0) {\includegraphics[width=28bp,height=28bp]{\MIPAImageDirectory/real.png}};
+  \foreach \MIPAFile/\MIPAFirst/\MIPASecond
+    [count=\MIPAIndex from 0] in \MIPAPrototypeData {
+    \ifnum\MIPAView=1\let\MIPAProbability\MIPAFirst
+    \else\let\MIPAProbability\MIPASecond\fi
+    \pgfmathsetmacro{\MIPAAngle}{90-36*\MIPAIndex}
+    \colorlet{MIPABorder}{MIPAFrame}\def\MIPABorderWidth{.4bp}
+    \ifdim\MIPAProbability pt>20pt
+      \colorlet{MIPABorder}{MIPAAccent}\def\MIPABorderWidth{.65bp}
+    \fi
+    \begin{scope}[shift={(\MIPAAngle:110)}]
+      \draw[MIPABorder,line width=\MIPABorderWidth] (-14.7,-14.7) rectangle (14.7,14.7);
+      \node at (0,0) {\includegraphics[width=28bp,height=28bp]{\MIPAImageDirectory/\MIPAFile.png}};
+    \end{scope}
+  }
+\end{tikzpicture}
+\endgroup

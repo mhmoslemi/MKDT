@@ -1,0 +1,211 @@
+{
+  "created_utc": "2026-10-28T21:10:46.670978+00:00",
+  "dataset": "CIFAR10",
+  "subset_percent": 1,
+  "synthetic_images": 500,
+  "model": "ResNet18",
+  "labels_percent": 1,
+  "distillation_iterations": 8000,
+  "generation_lr": 0.001,
+  "baseline": {
+    "method": "Random",
+    "batch": null,
+    "mean_percent": 48.34,
+    "std_percent": 0.6284902544988265,
+    "probe_count": 5,
+    "ssl_seed": 0,
+    "ssl_epochs": 2000,
+    "linear_epochs": 100,
+    "labels": 1,
+    "scores": [
+      47.77,
+      47.99,
+      49.15,
+      48.88,
+      47.91
+    ],
+    "config_file": "Evaluate_benchamrk/cifar_small_simclr2k_1ssl5probes/results/CIFAR10/ResNet18/random/pt1/simclr/ssl_seed_000/config.json",
+    "probe_files": [
+      "Evaluate_benchamrk/cifar_small_simclr2k_1ssl5probes/results/CIFAR10/ResNet18/random/pt1/simclr/ssl_seed_000/evaluations/CIFAR10_lbl1_probe0.json",
+      "Evaluate_benchamrk/cifar_small_simclr2k_1ssl5probes/results/CIFAR10/ResNet18/random/pt1/simclr/ssl_seed_000/evaluations/CIFAR10_lbl1_probe1.json",
+      "Evaluate_benchamrk/cifar_small_simclr2k_1ssl5probes/results/CIFAR10/ResNet18/random/pt1/simclr/ssl_seed_000/evaluations/CIFAR10_lbl1_probe2.json",
+      "Evaluate_benchamrk/cifar_small_simclr2k_1ssl5probes/results/CIFAR10/ResNet18/random/pt1/simclr/ssl_seed_000/evaluations/CIFAR10_lbl1_probe3.json",
+      "Evaluate_benchamrk/cifar_small_simclr2k_1ssl5probes/results/CIFAR10/ResNet18/random/pt1/simclr/ssl_seed_000/evaluations/CIFAR10_lbl1_probe4.json"
+    ]
+  },
+  "completed_mipa": [
+    {
+      "method": "MIPA",
+      "batch": 128,
+      "mean_percent": 50.93,
+      "std_percent": 0.48979587585034046,
+      "probe_count": 5,
+      "ssl_seed": 0,
+      "ssl_epochs": 2000,
+      "linear_epochs": 100,
+      "labels": 1,
+      "scores": [
+        50.4,
+        50.73,
+        51.7,
+        51.06,
+        50.76
+      ],
+      "config_file": "Evaluate_benchamrk/mipa_batch_ablation/results/batch_128/simclr/ssl_seed_000/config.json",
+      "probe_files": [
+        "Evaluate_benchamrk/mipa_batch_ablation/results/batch_128/simclr/ssl_seed_000/evaluations/CIFAR10_lbl1_probe0.json",
+        "Evaluate_benchamrk/mipa_batch_ablation/results/batch_128/simclr/ssl_seed_000/evaluations/CIFAR10_lbl1_probe1.json",
+        "Evaluate_benchamrk/mipa_batch_ablation/results/batch_128/simclr/ssl_seed_000/evaluations/CIFAR10_lbl1_probe2.json",
+        "Evaluate_benchamrk/mipa_batch_ablation/results/batch_128/simclr/ssl_seed_000/evaluations/CIFAR10_lbl1_probe3.json",
+        "Evaluate_benchamrk/mipa_batch_ablation/results/batch_128/simclr/ssl_seed_000/evaluations/CIFAR10_lbl1_probe4.json"
+      ],
+      "existing_run": false
+    },
+    {
+      "method": "MIPA",
+      "batch": 256,
+      "mean_percent": 50.78,
+      "std_percent": 0.5811626278418118,
+      "probe_count": 5,
+      "ssl_seed": 0,
+      "ssl_epochs": 2000,
+      "linear_epochs": 100,
+      "labels": 1,
+      "scores": [
+        50.06,
+        50.37,
+        51.18,
+        51.49,
+        50.8
+      ],
+      "config_file": "Evaluate_benchamrk/mipa_batch_ablation/results/batch_256/simclr/ssl_seed_000/config.json",
+      "probe_files": [
+        "Evaluate_benchamrk/mipa_batch_ablation/results/batch_256/simclr/ssl_seed_000/evaluations/CIFAR10_lbl1_probe0.json",
+        "Evaluate_benchamrk/mipa_batch_ablation/results/batch_256/simclr/ssl_seed_000/evaluations/CIFAR10_lbl1_probe1.json",
+        "Evaluate_benchamrk/mipa_batch_ablation/results/batch_256/simclr/ssl_seed_000/evaluations/CIFAR10_lbl1_probe2.json",
+        "Evaluate_benchamrk/mipa_batch_ablation/results/batch_256/simclr/ssl_seed_000/evaluations/CIFAR10_lbl1_probe3.json",
+        "Evaluate_benchamrk/mipa_batch_ablation/results/batch_256/simclr/ssl_seed_000/evaluations/CIFAR10_lbl1_probe4.json"
+      ],
+      "existing_run": false
+    },
+    {
+      "method": "MIPA",
+      "batch": 512,
+      "mean_percent": 50.168,
+      "std_percent": 0.5761683781673549,
+      "probe_count": 5,
+      "ssl_seed": 0,
+      "ssl_epochs": 2000,
+      "linear_epochs": 100,
+      "labels": 1,
+      "scores": [
+        49.26,
+        50.25,
+        50.83,
+        50.4,
+        50.1
+      ],
+      "config_file": "Evaluate_benchamrk/mipa_batch_ablation/results/batch_512/simclr/ssl_seed_000/config.json",
+      "probe_files": [
+        "Evaluate_benchamrk/mipa_batch_ablation/results/batch_512/simclr/ssl_seed_000/evaluations/CIFAR10_lbl1_probe0.json",
+        "Evaluate_benchamrk/mipa_batch_ablation/results/batch_512/simclr/ssl_seed_000/evaluations/CIFAR10_lbl1_probe1.json",
+        "Evaluate_benchamrk/mipa_batch_ablation/results/batch_512/simclr/ssl_seed_000/evaluations/CIFAR10_lbl1_probe2.json",
+        "Evaluate_benchamrk/mipa_batch_ablation/results/batch_512/simclr/ssl_seed_000/evaluations/CIFAR10_lbl1_probe3.json",
+        "Evaluate_benchamrk/mipa_batch_ablation/results/batch_512/simclr/ssl_seed_000/evaluations/CIFAR10_lbl1_probe4.json"
+      ],
+      "existing_run": false
+    },
+    {
+      "method": "MIPA",
+      "batch": 1024,
+      "mean_percent": 50.306666666666665,
+      "std_percent": 0.145716619962629,
+      "probe_count": 3,
+      "ssl_seed": 0,
+      "ssl_epochs": 2000,
+      "linear_epochs": 100,
+      "labels": 1,
+      "scores": [
+        50.17,
+        50.29,
+        50.46
+      ],
+      "config_file": "Evaluate_benchamrk/ours_eval_results_simclr2k_barlow10k_2ssl3probes_main/CIFAR10/ResNet18BN/pt1/simclr/ssl_seed_000/config.json",
+      "probe_files": [
+        "Evaluate_benchamrk/ours_eval_results_simclr2k_barlow10k_2ssl3probes_main/CIFAR10/ResNet18BN/pt1/simclr/ssl_seed_000/evaluations/CIFAR10_lbl1_probe0.json",
+        "Evaluate_benchamrk/ours_eval_results_simclr2k_barlow10k_2ssl3probes_main/CIFAR10/ResNet18BN/pt1/simclr/ssl_seed_000/evaluations/CIFAR10_lbl1_probe1.json",
+        "Evaluate_benchamrk/ours_eval_results_simclr2k_barlow10k_2ssl3probes_main/CIFAR10/ResNet18BN/pt1/simclr/ssl_seed_000/evaluations/CIFAR10_lbl1_probe2.json"
+      ],
+      "existing_run": true
+    },
+    {
+      "method": "MIPA",
+      "batch": 2048,
+      "mean_percent": 50.296,
+      "std_percent": 0.5471105921109545,
+      "probe_count": 5,
+      "ssl_seed": 0,
+      "ssl_epochs": 2000,
+      "linear_epochs": 100,
+      "labels": 1,
+      "scores": [
+        49.54,
+        50.2,
+        50.91,
+        50.74,
+        50.09
+      ],
+      "config_file": "Evaluate_benchamrk/mipa_batch_ablation/results/batch_2048/simclr/ssl_seed_000/config.json",
+      "probe_files": [
+        "Evaluate_benchamrk/mipa_batch_ablation/results/batch_2048/simclr/ssl_seed_000/evaluations/CIFAR10_lbl1_probe0.json",
+        "Evaluate_benchamrk/mipa_batch_ablation/results/batch_2048/simclr/ssl_seed_000/evaluations/CIFAR10_lbl1_probe1.json",
+        "Evaluate_benchamrk/mipa_batch_ablation/results/batch_2048/simclr/ssl_seed_000/evaluations/CIFAR10_lbl1_probe2.json",
+        "Evaluate_benchamrk/mipa_batch_ablation/results/batch_2048/simclr/ssl_seed_000/evaluations/CIFAR10_lbl1_probe3.json",
+        "Evaluate_benchamrk/mipa_batch_ablation/results/batch_2048/simclr/ssl_seed_000/evaluations/CIFAR10_lbl1_probe4.json"
+      ],
+      "existing_run": false
+    },
+    {
+      "method": "MIPA",
+      "batch": 4096,
+      "mean_percent": 49.916000000000004,
+      "std_percent": 0.6700223876856655,
+      "probe_count": 5,
+      "ssl_seed": 0,
+      "ssl_epochs": 2000,
+      "linear_epochs": 100,
+      "labels": 1,
+      "scores": [
+        48.82,
+        50.6,
+        50.19,
+        49.84,
+        50.13
+      ],
+      "config_file": "Evaluate_benchamrk/mipa_batch_ablation/results/batch_4096/simclr/ssl_seed_000/config.json",
+      "probe_files": [
+        "Evaluate_benchamrk/mipa_batch_ablation/results/batch_4096/simclr/ssl_seed_000/evaluations/CIFAR10_lbl1_probe0.json",
+        "Evaluate_benchamrk/mipa_batch_ablation/results/batch_4096/simclr/ssl_seed_000/evaluations/CIFAR10_lbl1_probe1.json",
+        "Evaluate_benchamrk/mipa_batch_ablation/results/batch_4096/simclr/ssl_seed_000/evaluations/CIFAR10_lbl1_probe2.json",
+        "Evaluate_benchamrk/mipa_batch_ablation/results/batch_4096/simclr/ssl_seed_000/evaluations/CIFAR10_lbl1_probe3.json",
+        "Evaluate_benchamrk/mipa_batch_ablation/results/batch_4096/simclr/ssl_seed_000/evaluations/CIFAR10_lbl1_probe4.json"
+      ],
+      "existing_run": false
+    }
+  ],
+  "unfinished_batches": [],
+  "excluded_batches": [
+    8192
+  ],
+  "plotted_statistic": "mean accuracy with plus/minus one sample standard deviation",
+  "uncertainty": "sample standard deviation over linear probes; one SSL encoder per point",
+  "existing_batch_1024_note": "Existing SSL seed 0 and its three completed probes; no rerun",
+  "ylim": [
+    47.563178300287206,
+    51.56812732106431
+  ],
+  "colors": {
+    "Random": "#1f77b4",
+    "MIPA": "#ff7f0e"
+  }
+}

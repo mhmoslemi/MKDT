@@ -146,27 +146,33 @@ def save_plot(snapshot, output, variable, xlabel, ticks):
         writer.writeheader()
         writer.writerows([baseline] + completed)
 
-    plt.rcParams.update({'font.family': 'DejaVu Sans', 'font.size': 8,
-                         'axes.labelsize': 8.5, 'axes.linewidth': 0.65,
-                         'xtick.labelsize': 7, 'ytick.labelsize': 7.5,
-                         'xtick.major.width': 0.6, 'ytick.major.width': 0.6,
-                         'xtick.major.size': 2.5, 'ytick.major.size': 2.5,
+    plt.rcParams.update({'font.family': 'DejaVu Sans', 'font.size': 10,
+                         'axes.labelsize': 11.5, 'axes.linewidth': 0.75,
+                         'axes.labelcolor': '#24343B', 'text.color': '#24343B',
+                         'xtick.color': '#46555D', 'ytick.color': '#46555D',
+                         'xtick.labelsize': 9.5, 'ytick.labelsize': 10,
+                         'xtick.major.width': 0.7, 'ytick.major.width': 0.7,
+                         'xtick.major.size': 3, 'ytick.major.size': 3,
+                         'mathtext.fontset': 'dejavusans',
                          'pdf.fonttype': 42, 'ps.fonttype': 42})
-    fig, ax = plt.subplots(figsize=(3.4, 2.55))
-    blue = '#1f77b4'
-    color = '#2ca02c' if variable == 'temperature' else '#ff7f0e'
+    fig, ax = plt.subplots(figsize=(3.5, 2.8))
+    baseline_color = '#C47760'
+    color = '#007F86'
     ax.set_xscale('log', base=2)
     xs = [row[variable] for row in completed]
     ys = [row['mean_percent'] for row in completed]
     deviations = [row['std_percent'] for row in completed]
-    ax.plot([min(xs), max(xs)], [baseline['mean_percent']] * 2,
-            color=blue, linewidth=1.3, label='Random')
-    for sign in (-1, 1):
-        ax.plot([min(xs), max(xs)], [baseline['mean_percent'] + sign * baseline['std_percent']] * 2,
-                color=blue, linewidth=0.7, linestyle=':', alpha=0.8)
-    ax.errorbar(xs, ys, yerr=deviations, color=color, linewidth=1.3,
-                marker='o', markersize=2.8, markeredgewidth=0,
-                elinewidth=0.8, capsize=2.2, capthick=0.8, label='MIPA', zorder=3)
+    ax.fill_between([min(xs), max(xs)],
+                    baseline['mean_percent'] - baseline['std_percent'],
+                    baseline['mean_percent'] + baseline['std_percent'],
+                    color=baseline_color, alpha=0.12, linewidth=0, zorder=1)
+    random_line, = ax.plot([min(xs), max(xs)], [baseline['mean_percent']] * 2,
+                           color=baseline_color, linewidth=1.5,
+                           linestyle=(0, (4, 2.5)), label='Random', zorder=2)
+    mipa_line = ax.errorbar(xs, ys, yerr=deviations, color=color, linewidth=1.8,
+                           marker='o', markersize=4.8, markerfacecolor='white',
+                           markeredgewidth=1.2, elinewidth=1.1,
+                           capsize=3, capthick=1.1, label='MIPA', zorder=3)
     ax.set_xlim(min(xs) / 1.12, max(xs) * 1.12)
     lower = min([baseline['mean_percent'] - baseline['std_percent']] +
                 [row['mean_percent'] - row['std_percent'] for row in completed])
@@ -178,21 +184,23 @@ def save_plot(snapshot, output, variable, xlabel, ticks):
     ax.xaxis.set_major_locator(FixedLocator(ticks))
     ax.xaxis.set_major_formatter(FixedFormatter([str(batch) for batch in ticks]))
     ax.yaxis.set_major_locator(MultipleLocator(1))
-    ax.set_xlabel(xlabel, labelpad=3)
-    ax.set_ylabel('Accuracy (%)', labelpad=3)
-    ax.grid(which='major', axis='both', color='#dddddd', linewidth=0.45)
+    ax.minorticks_off()
+    ax.set_xlabel(xlabel, labelpad=5)
+    ax.set_ylabel('Accuracy (%)', labelpad=5)
+    ax.grid(which='major', axis='y', color='#E1E6E9', linewidth=0.55)
     ax.set_axisbelow(True)
-    for spine in ax.spines.values():
-        spine.set_color('#777777')
-    legend = ax.legend(loc='upper right', frameon=True, fancybox=False, fontsize=7.5,
-                       handlelength=1.8, borderpad=0.35, labelspacing=0.3,
-                       framealpha=0.92, edgecolor='#cccccc')
-    legend.get_frame().set_linewidth(0.45)
-    fig.subplots_adjust(left=0.16, right=0.975, bottom=0.19, top=0.975)
+    ax.spines[['top', 'right']].set_visible(False)
+    for side in ('left', 'bottom'):
+        ax.spines[side].set_color('#A3AEB5')
+    ax.legend(handles=[mipa_line, random_line], loc='upper right',
+              frameon=True, fancybox=False, framealpha=0.97, fontsize=9,
+              facecolor='white', edgecolor='#C5CED3', borderpad=0.25,
+              handlelength=1.6, handletextpad=0.6, labelspacing=0.15, borderaxespad=0.25)
+    fig.subplots_adjust(left=0.16, right=0.97, bottom=0.18, top=0.985)
     fig.savefig(output.with_suffix('.png'), dpi=600, facecolor='white')
     fig.savefig(output.with_suffix('.pdf'), facecolor='white')
     snapshot['ylim'] = list(ax.get_ylim())
-    snapshot['colors'] = dict(Random=blue, MIPA=color)
+    snapshot['colors'] = dict(Random=baseline_color, MIPA=color)
     plt.close(fig)
     output.with_suffix('.json').write_text(json.dumps(snapshot, indent=2) + '\n')
     print(json.dumps(snapshot, indent=2))

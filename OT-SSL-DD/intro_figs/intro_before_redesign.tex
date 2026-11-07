@@ -1,0 +1,183 @@
+% Preamble requirements in your MAIN .tex file:
+%   \usepackage{graphicx}
+%   \usepackage{tikz}
+% Then put \input{method} where the figure should appear.
+% PNG paths below are relative to the MAIN .tex file.
+
+\begin{figure}[t]
+\centering
+\begingroup
+
+% ---------- EDIT YOUR IMAGE PATHS AND PROBABILITIES HERE ----------
+% Supply original, unaugmented PNGs. Both views are made automatically.
+\def\MIPAImageDirectory{images}
+\def\MIPACenterImage{\MIPAImageDirectory/real.png}
+
+% Filename stem / view-1 percentage / view-2 percentage.
+% The list runs CLOCKWISE from the TOP of each circle.
+% Each percentage column should add up to 100.
+\def\MIPAPrototypeData{%
+  prototype-01/3/3,
+  prototype-02/2/2,
+  prototype-03/27/30,
+  prototype-04/3/2,
+  prototype-05/38/34,
+  prototype-06/6/6,
+  prototype-07/4/4,
+  prototype-08/2/2,
+  prototype-09/3/3,
+  prototype-10/12/14%
+}
+% Common radial scale. Set this at least as high as your largest percentage.
+\def\MIPAMaxPercent{40}
+\def\MIPAZoom{1.3}
+\def\MIPAFirstTitle{(a) $90^{\circ}$ rotation}
+\def\MIPASecondTitle{(b) Horizontal flip + zoom}
+\def\MIPALegend{Real image at center\quad\(\cdot\)\quad
+  Synthetic prototypes on rim\quad\(\cdot\)\quad
+  Bar length shows illustrative assignment probability}
+% ---------------------------------------------------------------
+
+\definecolor{MIPABlue}{HTML}{316393}
+\definecolor{MIPABlueStrong}{HTML}{5E8DB9}
+\definecolor{MIPABlueLight}{HTML}{BFD6EA}
+\definecolor{MIPAOrange}{HTML}{A95437}
+\definecolor{MIPAOrangeStrong}{HTML}{CB8668}
+\definecolor{MIPAOrangeLight}{HTML}{F1C8B6}
+\definecolor{MIPAGrid}{HTML}{C8D1D5}
+\definecolor{MIPARim}{HTML}{AEB9BE}
+\definecolor{MIPAText}{HTML}{1F2428}
+\definecolor{MIPAFrame}{HTML}{8E9A9E}
+
+% Arguments: PNG path, center x, center y, square side in bp, view number.
+% Rectangular images are center-cropped to square with their aspect ratio kept.
+\newsavebox{\MIPAImageBox}
+\newcommand{\MIPAImage}[5]{%
+  \begin{scope}[shift={(#2,#3)}]
+    \pgfmathsetmacro{\MIPAHalf}{#4/2}
+    \clip (-\MIPAHalf,-\MIPAHalf) rectangle (\MIPAHalf,\MIPAHalf);
+    \pgfmathsetlengthmacro{\MIPASide}{#4*1bp}
+    \ifnum#5=2\relax
+      \pgfmathsetlengthmacro{\MIPASide}{#4*\MIPAZoom*1bp}
+    \fi
+    \sbox{\MIPAImageBox}{\includegraphics{#1}}%
+    \ifdim\wd\MIPAImageBox>\ht\MIPAImageBox
+      \sbox{\MIPAImageBox}{\includegraphics[height=\MIPASide]{#1}}%
+    \else
+      \sbox{\MIPAImageBox}{\includegraphics[width=\MIPASide]{#1}}%
+    \fi
+    \ifnum#5=1\relax
+      \node[rotate=-90,transform shape,inner sep=0pt,outer sep=0pt]
+        at (0,0) {\usebox{\MIPAImageBox}};
+    \else
+      \node[xscale=-1,transform shape,inner sep=0pt,outer sep=0pt]
+        at (0,0) {\usebox{\MIPAImageBox}};
+    \fi
+  \end{scope}%
+}
+
+\resizebox{\linewidth}{!}{%
+\begin{tikzpicture}[x=1bp,y=1bp,inner sep=0pt,outer sep=0pt]
+  \path[use as bounding box] (0,-250) rectangle (504,0);
+  \fill[white] (0,-250) rectangle (504,0);
+
+  \foreach \MIPAView/\MIPACenterX in {1/129,2/375} {
+    \ifnum\MIPAView=1
+      \colorlet{MIPAAccent}{MIPABlue}
+      \colorlet{MIPAStrong}{MIPABlueStrong}
+      \colorlet{MIPALight}{MIPABlueLight}
+      \let\MIPATitle\MIPAFirstTitle
+    \else
+      \colorlet{MIPAAccent}{MIPAOrange}
+      \colorlet{MIPAStrong}{MIPAOrangeStrong}
+      \colorlet{MIPALight}{MIPAOrangeLight}
+      \let\MIPATitle\MIPASecondTitle
+    \fi
+    \node[anchor=base,text=MIPAText,
+      font=\rmfamily\bfseries\fontsize{12bp}{14bp}\selectfont]
+      at (\MIPACenterX,-14) {\MIPATitle};
+
+    \begin{scope}[shift={(\MIPACenterX,-123)}]
+      \draw[MIPARim,line width=.55bp] (0,0) circle[radius=88bp];
+      \foreach \MIPAFraction in {.25,.5,.75,1} {
+        \pgfmathsetmacro{\MIPARadius}{34.5+39*\MIPAFraction}
+        \draw[MIPAGrid,line width=.42bp,dash pattern=on 1.25bp off 1.5bp]
+          (0,0) circle[radius=\MIPARadius bp];
+      }
+
+      % Spokes and annular bars, behind the images.
+      \foreach \MIPAFile/\MIPAFirst/\MIPASecond
+        [count=\MIPAIndex from 0] in \MIPAPrototypeData {
+        \ifnum\MIPAView=1
+          \let\MIPAProbability\MIPAFirst
+        \else
+          \let\MIPAProbability\MIPASecond
+        \fi
+        \pgfmathsetmacro{\MIPAAngle}{90-36*\MIPAIndex}
+        \pgfmathsetmacro{\MIPAStart}{\MIPAAngle-12.5}
+        \pgfmathsetmacro{\MIPAEnd}{\MIPAAngle+12.5}
+        \pgfmathsetmacro{\MIPAOuter}{34.5+39*\MIPAProbability/\MIPAMaxPercent}
+        \colorlet{MIPABar}{MIPALight}
+        \ifdim\MIPAProbability pt<20pt\else
+          \colorlet{MIPABar}{MIPAStrong}
+        \fi
+        \draw[MIPAGrid,line width=.48bp]
+          (\MIPAAngle:34.5) -- (\MIPAAngle:88);
+        \path[fill=MIPABar,draw=MIPAAccent,line width=.48bp]
+          (\MIPAStart:34.5) -- (\MIPAStart:\MIPAOuter)
+          arc[start angle=\MIPAStart,end angle=\MIPAEnd,radius=\MIPAOuter bp]
+          -- (\MIPAEnd:34.5)
+          arc[start angle=\MIPAEnd,end angle=\MIPAStart,radius=34.5bp]
+          -- cycle;
+      }
+
+      \filldraw[fill=white,draw=MIPARim,line width=.6bp]
+        (0,0) circle[radius=34.5bp];
+      \filldraw[fill=white,draw=MIPAText,line width=.8bp]
+        (-24.35,-24.35) rectangle (24.35,24.35);
+      \MIPAImage{\MIPACenterImage}{0}{0}{47}{\MIPAView}
+
+      % Prototype thumbnails and percentage labels.
+      \foreach \MIPAFile/\MIPAFirst/\MIPASecond
+        [count=\MIPAIndex from 0] in \MIPAPrototypeData {
+        \ifnum\MIPAView=1
+          \let\MIPAProbability\MIPAFirst
+        \else
+          \let\MIPAProbability\MIPASecond
+        \fi
+        \pgfmathsetmacro{\MIPAAngle}{90-36*\MIPAIndex}
+        \colorlet{MIPABorder}{MIPAFrame}
+        \colorlet{MIPALabel}{MIPAText}
+        \def\MIPABorderWidth{.55bp}
+        \let\MIPAWeight\mdseries
+        \ifdim\MIPAProbability pt<20pt\else
+          \colorlet{MIPABorder}{MIPAAccent}
+          \colorlet{MIPALabel}{MIPAAccent}
+          \def\MIPABorderWidth{1.1bp}
+          \let\MIPAWeight\bfseries
+        \fi
+        \begin{scope}[shift={(\MIPAAngle:88)}]
+          \fill[white] (-14,-14) rectangle (14,14);
+          \filldraw[fill=white,draw=MIPABorder,line width=\MIPABorderWidth]
+            (-12.7,-12.7) rectangle (12.7,12.7);
+          \MIPAImage{\MIPAImageDirectory/\MIPAFile.png}{0}{0}{24}{\MIPAView}
+          \fill[white] (-9.1,-21.8) rectangle (9.1,-13.5);
+          \node[anchor=base,text=MIPALabel,
+            font=\sffamily\MIPAWeight\fontsize{8.1bp}{9bp}\selectfont]
+            at (0,-20.4) {\MIPAProbability\%};
+        \end{scope}
+      }
+    \end{scope}
+  }
+
+  \node[anchor=base,text=MIPAText,
+    font=\rmfamily\fontsize{9.2bp}{11bp}\selectfont]
+    at (252,-245.6) {\MIPALegend};
+\end{tikzpicture}%
+}
+\endgroup
+\caption{Two augmented views of the same real image induce soft assignments
+over the same ten synthetic prototypes. Bar length encodes assignment
+probability on a shared scale. The probabilities shown are illustrative.}
+\label{fig:prototype-assignments}
+\end{figure}

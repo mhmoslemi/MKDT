@@ -1,0 +1,136 @@
+{
+  "experiment": "sas_author_recipe",
+  "account": "aip-yiweilu",
+  "data_root": "/scratch/mmoslem3/data",
+  "sas_revision": "5e5741884c2e5dcdea65467989b1ab0720430eca",
+  "clip_revision": "d05afc436d78f1c48dc0dbf8e5980a9d471f35f6",
+  "rankings": {
+    "CIFAR10": {
+      "path": "upstream/sas/final_subsets/cifar10-cl-core-idx.pkl",
+      "sha256": "d6a6101c138ee04fa6a270b3b4a6cc5abf330d0c654da864df28822d04a1f7a2",
+      "verified_prefixes": {
+        "500": {
+          "path": "Evaluate_benchamrk/sas_mkdt_indices/indices/cifar10-cl-core-idx_500.pkl",
+          "sha256": "c562b75ac0fdd47efd066e2782a83b62dca420ee4832be797079fc4d17eb6b94"
+        },
+        "1000": {
+          "path": "Evaluate_benchamrk/sas_mkdt_indices/indices/cifar10-cl-core-idx_1000.pkl",
+          "sha256": "8eee5cad2402cba7940f21b44d126f476e62663ea0b4bb3acaca6018c0dfd0ea"
+        }
+      }
+    },
+    "CIFAR100": {
+      "path": "upstream/sas/final_subsets/cifar100-cl-core-idx.pkl",
+      "sha256": "f468c11d142a40218df9c61d633043954792fbc2dddcb5f3cb642cdce2b14de4",
+      "verified_prefixes": {
+        "500": {
+          "path": "Evaluate_benchamrk/sas_mkdt_indices/indices/cifar100-cl-core-idx_500.pkl",
+          "sha256": "4361a51372304ba2c267ac1eab50e3693d94a2e6c47fdef7584376a13ae65668"
+        },
+        "1000": {
+          "path": "Evaluate_benchamrk/sas_mkdt_indices/indices/cifar100-cl-core-idx_1000.pkl",
+          "sha256": "305de9309159e7cf865c983bdc67dcbb7aed935074850e6ec53fb107cfe205a6"
+        }
+      }
+    }
+  },
+  "code_hashes": {
+    "Evaluate_benchamrk/common.py": "67fcd33f581a34a7f764431b6761ac120cb080d4b2ea0d69b95074565a224f8b",
+    "Evaluate_benchamrk/data.py": "befcf535679e449b3544ae9b8578325e53f7995179591042315d8937cd55f6d9",
+    "Evaluate_benchamrk/evaluate.py": "2b2162a56878f48ade39d2b80d4316511f20a72d29eaa2cf70fe023d88ad722f",
+    "Evaluate_benchamrk/plan.py": "c6d9bd33b36d1d235a2f6af291b3a0a82187b1eea3a10b90a7f57317d8eee83e",
+    "Evaluate_benchamrk/run.py": "1c2b8d29ab47966f1178c9f04b3e1b7c72bd2f55fb65a32c32c77c3730faf45b",
+    "Evaluate_benchamrk/test_protocol.py": "f018562437924ced1d890343a4e898f10e48c50a63920d337031194671c4e43d",
+    "Evaluate_benchamrk/train_ssl.py": "3670781eb0f0f838ced6cc7ca9775791d4d52683fe25e489239f012937dc1a79",
+    "Evaluate_benchamrk/protocol.json": "088b30569317c167f7f2a77a1f889d593b620ea31bdc93c5120b183c71e4a570",
+    "networks.py": "0c15ff3ef11f21df752e2a9a17851ab8c8a52ddc3969380682ea8bfcec1968fc",
+    "benchmarks/downstream_data.py": "081fe26e5dc81c96ce8e8ffe5a412302663de4a9d095684c5b37e7c615b4a6fd",
+    "Evaluate_benchamrk/selection_baselines/worker.py": "ead4abc4e6af9770d9570465440ebf6dafaac46fa6cd435a4369a09be06a875d",
+    "Evaluate_benchamrk/selection_baselines/selection.py": "379aaf2be4642ea526df31b4581c9bd8cf449911228e1913d3626cd2c9763b45",
+    "Evaluate_benchamrk/selection_baselines/test_selection.py": "1dbf4a116070539af23e0afbbd448c2657d2052b82b1e5c8fb8d54dc24e61439",
+    "Evaluate_benchamrk/selection_baselines/submit_lu.sh": "91e67e120782c94663f591f823c5bb4c5a787d1dfd9568fd613bedc5927401ae",
+    "Evaluate_benchamrk/selection_baselines/upstream/sas/submodular_maximization.py": "9037e9a54725a50ca14322eab4a0bd821a43587652b20408c03bd9ba8ed042f1",
+    "Evaluate_benchamrk/selection_baselines/upstream/sas/subset_dataset.py": "445165aae885cc918732a262b2178796e2f9ffc95e71e15eeb5a7e8d3fafbdeb",
+    "Evaluate_benchamrk/sas_author_recipe/worker.py": "21c83b3503f461f4ced9762ed15918036c9392abf236b8060df26189e4b663f5",
+    "Evaluate_benchamrk/sas_author_recipe/train_proxy.py": "a968126a379b00afe62043ccf0cda18a50938c8d6f54be4d4fa696c47035f278",
+    "Evaluate_benchamrk/sas_author_recipe/select_tiny.py": "df2b1473b9ba1a2955a9a3faa1eb7537cd7a90a84a1335297992260e0a18c6f0",
+    "Evaluate_benchamrk/sas_author_recipe/job.sh": "557294b109c04c6f2dd49c7754f18a83b4d927ecbe1aaf1763f39ec39cd79d15",
+    "Evaluate_benchamrk/sas_mkdt_indices/worker.py": "52a5c79f8b9223b091e95b807b51268bf3698bf331c4a260e42b6a7f61434da0",
+    "Evaluate_benchamrk/sas_author_recipe/upstream/clip/clip/__init__.py": "d7930eb290ebed432116795c91473200d098451a94c0aedd4ae0f934f97955e8",
+    "Evaluate_benchamrk/sas_author_recipe/upstream/clip/clip/clip.py": "9540f200fbf8145479fa655382a56dab048d238cc698b9cbd8df3b6d86d3f1b6",
+    "Evaluate_benchamrk/sas_author_recipe/upstream/clip/clip/model.py": "9902cbe5ee90a1da2aa3e6f043e8a23dc1f8831193b963785c9af03d5c7bef2c",
+    "Evaluate_benchamrk/sas_author_recipe/upstream/clip/clip/simple_tokenizer.py": "d1b09f10ed3d1e2c343619cb98cbfacb92363dd8607526a43aa7fe2d60d15bad",
+    "Evaluate_benchamrk/sas_author_recipe/upstream/clip/hubconf.py": "0641946610c17a743ebcc3f6e85cffff1400337bb9a99766740c40b01d9a3e14",
+    "Evaluate_benchamrk/sas_author_recipe/upstream/clip/setup.py": "6a913890284a988293f7b0b3ca017de29c65ce2bdce9fdd09cb481fc6bd5a636",
+    "Evaluate_benchamrk/sas_author_recipe/upstream/clip/tests/test_consistency.py": "342f84e4814143e1117dbc14baa6cf2a2ec01f61542e3952edc91e68f5eed206",
+    "Evaluate_benchamrk/sas_author_recipe/upstream/sas/configs.py": "1630832925edf44608f89f3846f64ec8a006f413d61e97ddeecfed81167493bb",
+    "Evaluate_benchamrk/sas_author_recipe/upstream/sas/data_proc/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "Evaluate_benchamrk/sas_author_recipe/upstream/sas/data_proc/augmentation.py": "d31ea6e81874c36acd2223dd0ff34e0afafe83410027bda4a69941b0bce3163b",
+    "Evaluate_benchamrk/sas_author_recipe/upstream/sas/data_proc/dataset.py": "73868a629b4810a1886200f2f4dab3cf84d7e79aad949b9e6b159b8255e393ca",
+    "Evaluate_benchamrk/sas_author_recipe/upstream/sas/evaluate/__init__.py": "18f7c1e5bc9f7e80a7af3e5254dfd451c7643f64cec39cb70e664763898b9a16",
+    "Evaluate_benchamrk/sas_author_recipe/upstream/sas/evaluate/checkpoint.py": "4f87d217bbed36be6ecc0eca1a883cd9fb6e406afc3daf28025481cd36da1fcb",
+    "Evaluate_benchamrk/sas_author_recipe/upstream/sas/evaluate/lbfgs.py": "0174a8dbf17d5b461cb153372ba7b7b92f520555b34b84c5924f4fa60bdc4faa",
+    "Evaluate_benchamrk/sas_author_recipe/upstream/sas/linear_probe.py": "c535137bf5c1b54b9dddf45e193814a2b10807f6a09b3b904e8019b91e58edbf",
+    "Evaluate_benchamrk/sas_author_recipe/upstream/sas/projection_heads/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "Evaluate_benchamrk/sas_author_recipe/upstream/sas/projection_heads/critic.py": "a11583c984d2922348f0e18cad11de26f88f26e75be75ec7a7bb82a48cfb6d7a",
+    "Evaluate_benchamrk/sas_author_recipe/upstream/sas/projection_heads/gradient_linear_clf.py": "510937b4772d4cec9c052b99924039cf7cdc1163fa71ac1d2ccbda4b803e0262",
+    "Evaluate_benchamrk/sas_author_recipe/upstream/sas/projection_heads/lbfgs_linear_clf.py": "4f884f22ef89e56242c1546db83df764ac7da966b86f57289ab782b079faf0f4",
+    "Evaluate_benchamrk/sas_author_recipe/upstream/sas/resnet.py": "5eef559a91835ee7d649b6efc52bc5025cf52d68c6cd522ec99ad931f73b3f3f",
+    "Evaluate_benchamrk/sas_author_recipe/upstream/sas/sas-pip/sas/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "Evaluate_benchamrk/sas_author_recipe/upstream/sas/sas-pip/sas/approx_latent_classes.py": "6757131db078ea17dabb9c746f8eeb9751e6dc4eca35b0ce3ff34161fbaf8a9c",
+    "Evaluate_benchamrk/sas_author_recipe/upstream/sas/sas-pip/sas/submodular_maximization.py": "0f7594af4f1f367fc7422137891202a440082399861c2f1dc6fa205690e3c1de",
+    "Evaluate_benchamrk/sas_author_recipe/upstream/sas/sas-pip/sas/subset_dataset.py": "445165aae885cc918732a262b2178796e2f9ffc95e71e15eeb5a7e8d3fafbdeb",
+    "Evaluate_benchamrk/sas_author_recipe/upstream/sas/sas-pip/setup.py": "6b22c7c8623bc801fce8e35c643f5123a35f86e178ef74006f1e2743b1b6746e",
+    "Evaluate_benchamrk/sas_author_recipe/upstream/sas/simclr.py": "410c9077ac28cd7418e8187e0f4f26fc499f574283a0711ab0697780cc427f4c",
+    "Evaluate_benchamrk/sas_author_recipe/upstream/sas/trainer.py": "684358f251eba8cb1b88456aef32f1cfa45b157920b74eb13061adb0f7261419",
+    "Evaluate_benchamrk/sas_author_recipe/upstream/sas/util.py": "3951975a15b8f84d4fd4712079d5802f9fe07733c57a65f67681bc87ea666832"
+  },
+  "tiny_recipe": {
+    "requested_extension": "CIFAR10_SAS_recipe_on_TinyImageNet_user_approved",
+    "proxy": "authors_ResNet50_StemCIFAR_with_128d_projection",
+    "proxy_epochs": 400,
+    "global_batch_size": 512,
+    "optimizer": "Adam",
+    "lr": 0.001,
+    "weight_decay": 0.000001,
+    "temperature": 0.5,
+    "schedule": "constant_as_released_SAS",
+    "gpus": 4,
+    "precision": "float32",
+    "normalization": [
+      [
+        0.485,
+        0.456,
+        0.406
+      ],
+      [
+        0.229,
+        0.224,
+        0.225
+      ]
+    ],
+    "grouping": "authors_clip_approx",
+    "clip": "ViT-B/32",
+    "training_label_fraction": 0.01,
+    "grouping_lbfgs_steps": 500,
+    "grouping_l2_regularization": 0.001,
+    "similarity_threshold": 0.5,
+    "selection_transform": "ToTensor_only_as_released_notebook",
+    "budget_rounding": "official_per_group_floor"
+  },
+  "ssl_epochs": 2000,
+  "ssl_seeds": [
+    0
+  ],
+  "probe_seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "labels": [
+    1,
+    5
+  ]
+}

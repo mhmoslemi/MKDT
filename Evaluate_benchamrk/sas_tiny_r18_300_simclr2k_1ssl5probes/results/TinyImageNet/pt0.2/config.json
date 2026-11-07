@@ -1,0 +1,398 @@
+{
+  "identity": {
+    "seed": 0,
+    "selection": {
+      "actual": 107,
+      "indices": [
+        92189,
+        86,
+        61796,
+        71553,
+        77566,
+        81782,
+        45830,
+        84293,
+        75226,
+        84469,
+        20118,
+        85424,
+        54745,
+        30129,
+        19879,
+        59617,
+        64463,
+        84791,
+        23716,
+        45457,
+        28975,
+        77934,
+        38218,
+        91246,
+        43066,
+        59708,
+        59604,
+        9188,
+        80523,
+        23345,
+        12266,
+        12156,
+        48897,
+        27371,
+        44120,
+        72971,
+        24216,
+        24924,
+        82815,
+        12980,
+        10701,
+        54437,
+        44394,
+        4721,
+        96234,
+        26062,
+        96359,
+        4530,
+        49280,
+        60253,
+        37537,
+        39149,
+        34086,
+        51442,
+        12575,
+        70311,
+        52199,
+        5618,
+        2520,
+        32541,
+        83125,
+        40000,
+        38710,
+        26645,
+        18384,
+        95466,
+        42292,
+        82244,
+        80463,
+        4831,
+        62498,
+        16422,
+        95969,
+        95792,
+        99173,
+        27278,
+        64635,
+        86591,
+        82258,
+        58215,
+        83736,
+        53349,
+        3051,
+        78904,
+        98461,
+        13136,
+        13086,
+        97072,
+        46466,
+        78063,
+        48243,
+        46725,
+        69264,
+        65469,
+        61452,
+        58957,
+        34796,
+        8615,
+        59890,
+        36335,
+        27209,
+        15773,
+        79000,
+        8171,
+        38661,
+        71442,
+        74524
+      ],
+      "nominal": 200
+    },
+    "selection_method": "sas",
+    "signature": "fe0753c8a4ae9be063a43957804f5a1de06731010b2682e271f04bfb9eeda2df"
+  },
+  "signature": {
+    "code_hashes": {
+      "Evaluate_benchamrk/common.py": "67fcd33f581a34a7f764431b6761ac120cb080d4b2ea0d69b95074565a224f8b",
+      "Evaluate_benchamrk/data.py": "befcf535679e449b3544ae9b8578325e53f7995179591042315d8937cd55f6d9",
+      "Evaluate_benchamrk/evaluate.py": "2b2162a56878f48ade39d2b80d4316511f20a72d29eaa2cf70fe023d88ad722f",
+      "Evaluate_benchamrk/plan.py": "c6d9bd33b36d1d235a2f6af291b3a0a82187b1eea3a10b90a7f57317d8eee83e",
+      "Evaluate_benchamrk/run.py": "1c2b8d29ab47966f1178c9f04b3e1b7c72bd2f55fb65a32c32c77c3730faf45b",
+      "Evaluate_benchamrk/test_protocol.py": "f018562437924ced1d890343a4e898f10e48c50a63920d337031194671c4e43d",
+      "Evaluate_benchamrk/train_ssl.py": "3670781eb0f0f838ced6cc7ca9775791d4d52683fe25e489239f012937dc1a79",
+      "benchmarks/downstream_data.py": "081fe26e5dc81c96ce8e8ffe5a412302663de4a9d095684c5b37e7c615b4a6fd",
+      "networks.py": "0c15ff3ef11f21df752e2a9a17851ab8c8a52ddc3969380682ea8bfcec1968fc"
+    },
+    "experiment": "sas_tiny_r18_300_simclr2k_1ssl5probes",
+    "model": "ResNet18",
+    "probe_seeds": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ],
+    "protocol": {
+      "evaluation": {
+        "baseline": "frozen_random_encoder",
+        "batch_size": 256,
+        "checkpoint_selection": "final_epoch_no_test_selection",
+        "epochs": 100,
+        "full_data_sanity_label_percentage": 100,
+        "head_init_std": 0.01,
+        "label_percentages": [
+          1,
+          5
+        ],
+        "label_policy": "exact",
+        "lr": 0.1,
+        "momentum": 0.9,
+        "normalize_using": "source_statistics",
+        "optimizer": "sgd",
+        "schedule": "cosine_per_step",
+        "test_resize_ratio": 1.1428571428571428,
+        "test_transform": "resize_short_side_and_center_crop",
+        "train_transform": "random_resized_crop_and_flip",
+        "warmup_epochs": 0,
+        "weight_decay": 0.0
+      },
+      "full_seeds": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "input_size": {
+        "CIFAR10": 32,
+        "CIFAR100": 32,
+        "TinyImageNet": 64
+      },
+      "methods": {
+        "barlowtwins": {
+          "blur_probabilities": [
+            0.0,
+            0.0
+          ],
+          "color_jitter": [
+            0.4,
+            0.4,
+            0.2,
+            0.1
+          ],
+          "correlation_eps": 1e-05,
+          "lambda": 0.0051,
+          "loss_scale": 0.1,
+          "lr": 0.3,
+          "projector": [
+            2048,
+            2048,
+            2048
+          ],
+          "projector_batchnorm": true,
+          "projector_bias": true,
+          "solarize_probabilities": [
+            0.0,
+            0.2
+          ]
+        },
+        "simclr": {
+          "blur_probabilities": [
+            0.5,
+            0.5
+          ],
+          "color_jitter": [
+            0.8,
+            0.8,
+            0.8,
+            0.2
+          ],
+          "lr": 0.4,
+          "projector": [
+            2048,
+            256
+          ],
+          "projector_batchnorm": false,
+          "projector_bias": true,
+          "solarize_probabilities": [
+            0.0,
+            0.0
+          ],
+          "temperature": 0.2
+        }
+      },
+      "models": [
+        "ConvNet",
+        "VGG11",
+        "ResNet18"
+      ],
+      "normalization": {
+        "CIFAR10": [
+          [
+            0.4914,
+            0.4822,
+            0.4465
+          ],
+          [
+            0.247,
+            0.2435,
+            0.2616
+          ]
+        ],
+        "CIFAR100": [
+          [
+            0.5071,
+            0.4865,
+            0.4409
+          ],
+          [
+            0.2673,
+            0.2564,
+            0.2762
+          ]
+        ],
+        "TinyImageNet": [
+          [
+            0.485,
+            0.456,
+            0.406
+          ],
+          [
+            0.229,
+            0.224,
+            0.225
+          ]
+        ]
+      },
+      "references": {
+        "barlow_official": "https://github.com/facebookresearch/barlowtwins",
+        "cifar_barlow": "https://github.com/vturrisi/solo-learn/blob/main/scripts/pretrain/cifar/barlow.yaml",
+        "cifar_simclr": "https://github.com/vturrisi/solo-learn/blob/main/scripts/pretrain/cifar/simclr.yaml",
+        "simclr_official": "https://github.com/google-research/simclr"
+      },
+      "selection": {
+        "batch_size": 256,
+        "distance_chunk_size": 1024,
+        "feature_model": "random_ConvNetGAP_BN",
+        "feature_normalization": "l2",
+        "feature_seed_offset": 2000,
+        "iterations": 50,
+        "method": "kmeans",
+        "unique_exemplars": true
+      },
+      "sources": [
+        "CIFAR10",
+        "CIFAR100",
+        "TinyImageNet"
+      ],
+      "ssl": {
+        "batch_size": 256,
+        "blur_sigma": [
+          0.1,
+          2.0
+        ],
+        "checkpoint_every_epochs": 500,
+        "color_probability": 0.8,
+        "crop_ratio": [
+          0.75,
+          1.3333333333333333
+        ],
+        "crop_scale": [
+          0.08,
+          1.0
+        ],
+        "exclude_bias_and_norm": true,
+        "flip_probability": 0.5,
+        "full_epochs": 1000,
+        "grayscale_probability": 0.2,
+        "interpolation": "bicubic",
+        "lars_clip": true,
+        "lars_eps": 1e-08,
+        "lars_eta": 0.02,
+        "minimum_lr": 0.0,
+        "momentum": 0.9,
+        "optimizer": "lars",
+        "precision": "float32",
+        "scale_lr_with_batch": true,
+        "schedule": "warmup_cosine_per_step",
+        "small_batch_policy": "min_dataset_size_no_replacement",
+        "subset_epochs": 2000,
+        "warmup_epochs": 10,
+        "warmup_start_lr": 3e-05,
+        "weight_decay": 0.0001
+      },
+      "subset_percentages": [
+        0.2,
+        1,
+        2,
+        5
+      ],
+      "subset_seeds": [
+        0
+      ],
+      "version": "ssl_reference_v1"
+    },
+    "selection_method": "sas",
+    "selection_origin": {
+      "actual": 107,
+      "complete": "/scratch/mmoslem3/sas_official_standalone/tiny_r18_300/selections/tinyimagenet/0.2pct/complete.json",
+      "complete_sha256": "b3e94b3d6b7bd5b39b0b39e61740379f51599922bdb391e34d8e75a9b9ee0a67",
+      "indices": "/scratch/mmoslem3/sas_official_standalone/tiny_r18_300/selections/tinyimagenet/0.2pct/tinyimagenet_0.2pct_indices.pkl",
+      "indices_sha256": "4edb34dc86ced15410be7c2589eecfd7e4cd029b851520b4f516cfd4fb2018cf",
+      "nominal": 200,
+      "recipe": {
+        "dataset": "tinyimagenet",
+        "helper_sha256": "59148eaf73caf31afe732df69204ef384d59892b9e58ab27b727de2ad458190e",
+        "partition_labels": 1000,
+        "partition_model": "ViT-B/32",
+        "percentage": "0.2",
+        "proxy": {
+          "architecture": "ResNet18_GroupNorm",
+          "checkpoint": "/scratch/mmoslem3/MKDT/benchmarks/cross_downstream/results/batch_20261009T171449Z_o91BKP/encoders/tinyimagenet_ResNet18_simclr_full_size100/seed_000.pt",
+          "epochs": 300,
+          "features": "encoder_512_without_classifier_or_projection_head",
+          "mode": "eval",
+          "network_file": "/scratch/mmoslem3/MKDT/benchmarks/cross_downstream/results/batch_20261009T171449Z_o91BKP/code/OT-SSL-DD/networks.py",
+          "network_sha256": "36fc42deb28aac8487b2cc2ea012e277691b56682cb2a7bcf0817976b6a3aa62",
+          "normalization": [
+            [
+              0.485,
+              0.456,
+              0.406
+            ],
+            [
+              0.229,
+              0.224,
+              0.225
+            ]
+          ],
+          "preprocessing": "PIL_LANCZOS_32x32_ToTensor_Normalize",
+          "proxy_training_dataset": "TinyImageNet",
+          "seed": 0,
+          "sha256": "d5f7e6a8eb0d1404d01f3476be1a5ed43b895bfa353898c6d149262e50c9add9",
+          "training_recipe": "saved_full_data_legacy_SimCLR_not_authors_proxy_recipe"
+        },
+        "rounding": "floor_per_predicted_class_no_topup",
+        "seed": 0,
+        "selection_batch": 1024,
+        "selection_driver_sha256": "0f46763a059e0a7307ae897f8b87e9f37da7435c3de45cf64f4768ce36de7579",
+        "selector": "unmodified_official_SAS",
+        "source_fingerprint": "d453fd72512babeda053741d8722e13920c20383ed5a205b93e3830c6b68fed5",
+        "threshold": 0.0,
+        "upstream_commit": "5e5741884c2e5dcdea65467989b1ab0720430eca",
+        "workers": 0
+      }
+    },
+    "source": "TinyImageNet",
+    "source_fingerprint": "d453fd72512babeda053741d8722e13920c20383ed5a205b93e3830c6b68fed5",
+    "ssl": "simclr",
+    "subset": 0.2,
+    "worker_sha256": "94da8e6f16b638ab5c1a9393eeb1eda9426fff94b0b1436db0056497ab80fc54"
+  }
+}

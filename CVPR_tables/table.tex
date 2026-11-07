@@ -1,42 +1,159 @@
+
 \begin{table*}[t]
 \centering
-\def\dsacc#1#2{$#1${\footnotesize$\pm #2$}}
-\def\bestacc#1#2{\textbf{\boldmath\dsacc{#1}{#2}}}
-\caption{Main results with ResNet18 and SimCLR on CIFAR10, CIFAR100, Tiny ImageNet, and SVHN.}
+\caption{\textbf{Data Size (\%)} denotes the fraction of the full training set used for pre-training. \textbf{Labeled Data} denotes the percentage of labeled data available for training the downstream linear probe. \textbf{\textsc{Full Data}} refers to SSL pre-training on the full training set and serves as a performance ceiling. Results are reported as the mean $\pm$ standard deviation across five runs, with the best values highlighted in \textbf{bold}.}
+\vspace{-0.6em}
+% Results are mean $\pm$ standard deviation over five runs. Bold indicates the best reduced-data result.}
 \label{tab:resnet18-main-all}
-
+\mipatable
 \setlength{\tabcolsep}{3pt}
-\renewcommand{\arraystretch}{1}
+
 \resizebox{\textwidth}{!}{%
-\begin{tabular}{@{}cc*{10}{c}@{}}
+\begin{tabular}{@{}lc*{6}{r}@{\hspace{7pt}}*{6}{r}@{}}
 \toprule
-\multirow{2}{*}{Dataset} & \multirow{2}{*}{\shortstack{Data size\\(\%)}} & \multicolumn{5}{c}{1\% labeled data} & \multicolumn{5}{c}{5\% labeled data} \\
-\cmidrule(lr){3-7} \cmidrule(l){8-12}
- &  & Random & K-means & MKDT & MIPA & Full Data & Random & K-means & MKDT & MIPA & Full Data \\
+\multirow{2}{*}[-2.5pt]{Dataset}
+& \multirow{2}{*}[-2.5pt]{Data Size (\%)}
+& \multicolumn{6}{c}{{1\% labeled data}}
+& \multicolumn{6}{c}{{5\% labeled data}} \\
+\cmidrule(lr){3-8}\cmidrule(l){9-14}
+& & \multicolumn{1}{c}{\textsc{Random}}
+& \multicolumn{1}{c}{\textsc{K-means}}
+& \multicolumn{1}{c}{\textsc{SAS}}
+& \multicolumn{1}{c}{\textsc{MKDT}}
+& \multicolumn{1}{c}{\textbf{\textsc{MIPA}}}
+& \multicolumn{1}{c@{\hspace{7pt}}}{\textsc{Full Data}}
+& \multicolumn{1}{c}{\textsc{Random}}
+& \multicolumn{1}{c}{\textsc{K-means}}
+& \multicolumn{1}{c}{\textsc{SAS}}
+& \multicolumn{1}{c}{\textsc{MKDT}}
+& \multicolumn{1}{c}{\textbf{\textsc{MIPA}}}
+& \multicolumn{1}{c@{}}{\textsc{Full Data}} \\
 \midrule
-\multirow{3}{*}{CIFAR10} & 0.2 & \dsacc{40.04}{0.45} & \dsacc{38.77}{0.95} & \dsacc{40.12}{0.67} & \bestacc{45.18}{0.41} & \multirow{3}{*}{\dsacc{87.23}{0.69}} & \dsacc{46.20}{0.27} & \dsacc{45.19}{0.41} & \dsacc{46.76}{0.40} & \bestacc{50.58}{0.47} & \multirow{3}{*}{\dsacc{89.03}{0.26}} \\ % Table updater key: \multirow{3}{*}{CIFAR-10}
- & 1 & \dsacc{48.34}{0.63} & \dsacc{46.10}{0.68} & \dsacc{40.29}{0.99} & \bestacc{52.26}{0.55} &  & \dsacc{52.05}{1.00} & \dsacc{51.80}{0.93} & \dsacc{46.66}{0.67} & \bestacc{57.36}{0.16} &  \\
- & 2 & \dsacc{54.10}{0.38} & \dsacc{52.98}{0.57} & \dsacc{40.56}{0.92} & \bestacc{59.31}{0.40} &  & \dsacc{58.24}{0.12} & \dsacc{57.77}{0.37} & \dsacc{46.55}{0.86} & \bestacc{62.53}{0.15} &  \\
+
+\multirow{3}{*}{CIFAR10} & 0.2
+& \mipaacc{40.04}{0.45}
+& \mipaacc{38.77}{0.95}
+& \mipaacc{37.91}{0.79}
+& \mipaacc{40.12}{0.67}
+& \mipabest{45.18}{0.41}
+& \multirow{3}{*}{\mipaacc{87.23}{0.69}}
+& \mipaacc{46.20}{0.27}
+& \mipaacc{45.19}{0.41}
+& \mipaacc{44.39}{0.63}
+& \mipaacc{46.76}{0.40}
+& \mipabest{50.58}{0.47}
+& \multirow{3}{*}{\mipaacc{89.03}{0.26}} \\
+% Table updater key: \multirow{3}{*}{CIFAR10}
+& 1
+& \mipaacc{48.34}{0.63}
+& \mipaacc{46.10}{0.68}
+& \mipaacc{44.56}{0.44}
+& \mipaacc{40.29}{0.99}
+& \mipabest{52.26}{0.55}
+&
+& \mipaacc{52.05}{1.00}
+& \mipaacc{51.80}{0.93}
+& \mipaacc{52.17}{0.30}
+& \mipaacc{46.66}{0.67}
+& \mipabest{57.36}{0.16}
+& \\
+& 2
+& \mipaacc{54.10}{0.38}
+& \mipaacc{52.98}{0.57}
+& \mipaacc{49.87}{0.81}
+& \mipaacc{40.56}{0.92}
+& \mipabest{59.31}{0.40}
+&
+& \mipaacc{58.24}{0.12}
+& \mipaacc{57.77}{0.37}
+& \mipaacc{55.49}{0.26}
+& \mipaacc{46.55}{0.86}
+& \mipabest{62.53}{0.15}
+& \\
 \midrule
-\multirow{3}{*}{CIFAR100} & 0.2 & \dsacc{9.91}{0.54} & \dsacc{8.51}{0.65} & \dsacc{9.43}{0.81} & \bestacc{10.65}{0.46} & \multirow{3}{*}{\dsacc{48.12}{0.86}} & \dsacc{16.87}{0.33} & \dsacc{15.25}{0.24} & \dsacc{16.11}{0.31} & \bestacc{17.17}{0.07} & \multirow{3}{*}{\dsacc{57.01}{0.41}} \\ % Table updater key: \multirow{3}{*}{CIFAR-100}
- & 1 & \dsacc{12.45}{0.25} & \dsacc{11.79}{0.48} & \dsacc{10.72}{0.61} & \bestacc{13.76}{0.39} &  & \dsacc{20.50}{0.24} & \dsacc{19.50}{0.34} & \dsacc{18.20}{0.65} & \bestacc{21.70}{0.36} &  \\
- & 2 & \dsacc{14.42}{0.95} & \dsacc{15.00}{0.96} & \dsacc{7.53}{0.39} & \bestacc{19.15}{0.78} &  & \dsacc{23.15}{0.47} & \dsacc{24.07}{0.31} & \dsacc{14.14}{0.57} & \bestacc{27.58}{0.18} &  \\
+
+\multirow{3}{*}{CIFAR100} & 0.2
+& \mipaacc{9.91}{0.54}
+& \mipaacc{8.51}{0.65}
+& \mipaacc{10.41}{0.57}
+& \mipaacc{9.43}{0.81}
+& \mipabest{10.65}{0.46}
+& \multirow{3}{*}{\mipaacc{48.12}{0.86}}
+& \mipaacc{16.87}{0.33}
+& \mipaacc{15.25}{0.24}
+& \mipaacc{17.12}{0.08}
+& \mipaacc{16.11}{0.31}
+& \mipabest{17.17}{0.07}
+& \multirow{3}{*}{\mipaacc{57.01}{0.41}} \\
+% Table updater key: \multirow{3}{*}{CIFAR100}
+& 1
+& \mipaacc{12.45}{0.25}
+& \mipaacc{11.79}{0.48}
+& \mipaacc{13.29}{0.70}
+& \mipaacc{10.72}{0.61}
+& \mipabest{13.76}{0.39}
+&
+& \mipaacc{20.50}{0.24}
+& \mipaacc{19.50}{0.34}
+& \mipaacc{20.39}{0.28}
+& \mipaacc{18.20}{0.65}
+& \mipabest{21.70}{0.36}
+& \\
+& 2
+& \mipaacc{14.42}{0.95}
+& \mipaacc{15.00}{0.96}
+& \mipaacc{16.01}{1.02}
+& \mipaacc{7.53}{0.39}
+& \mipabest{19.15}{0.78}
+&
+& \mipaacc{23.15}{0.47}
+& \mipaacc{24.07}{0.31}
+& \mipaacc{24.68}{0.21}
+& \mipaacc{14.14}{0.57}
+& \mipabest{27.58}{0.18}
+& \\
 \midrule
-\multirow{3}{*}{Tiny ImageNet} & 0.2 & \dsacc{5.46}{0.20} & \dsacc{5.00}{0.30} & \dsacc{5.33}{0.26} & \bestacc{5.98}{0.27} & \multirow{3}{*}{\dsacc{28.78}{0.57}} & \dsacc{9.88}{0.07} & \dsacc{9.23}{0.27} & \dsacc{10.14}{0.31} & \bestacc{10.49}{0.30} & \multirow{3}{*}{\dsacc{39.81}{0.68}} \\
- & 1 & \dsacc{7.18}{0.26} & \dsacc{6.62}{0.20} & \dsacc{5.76}{0.20} & \bestacc{8.63}{0.17} &  & \dsacc{13.90}{0.18} & \dsacc{13.49}{0.28} & \dsacc{11.20}{0.15} & \bestacc{15.11}{0.20} &  \\
- & 2 & \dsacc{10.87}{0.37} & \dsacc{10.37}{0.26} & \dsacc{5.73}{0.16} & \bestacc{11.77}{0.06} &  & \dsacc{18.21}{0.21} & \dsacc{17.91}{0.30} & \dsacc{11.63}{0.16} & \bestacc{19.10}{0.22} &  \\
-% \midrule
-% \multirow{3}{*}{SVHN} & 0.2 & \dsacc{30.60}{1.39} & \dsacc{26.75}{1.01} & \dsacc{32.73}{1.00} & \bestacc{34.36}{1.22} & \multirow{3}{*}{\dsacc{88.32}{0.39}} & \dsacc{39.85}{0.55} & \dsacc{35.49}{0.38} & \dsacc{40.72}{0.50} & \bestacc{42.80}{0.45} & \multirow{3}{*}{\dsacc{91.21}{0.33}} \\
-%  & 1 & \dsacc{62.22}{0.83} & \bestacc{64.93}{0.74} & \dsacc{48.37}{0.52} &  &  & \dsacc{68.00}{0.31} & \bestacc{70.08}{0.43} & \dsacc{56.93}{0.32} &  &  \\
-%  & 2 & \dsacc{67.36}{0.41} & \bestacc{68.86}{0.65} & \dsacc{52.38}{1.07} &  &  & \dsacc{71.96}{0.12} & \bestacc{73.02}{0.32} & \dsacc{59.72}{0.44} &  &  \\
-% \midrule
-% \multirow{3}{*}{MNIST} & 0.2 & \dsacc{88.22}{0.74} & \bestacc{88.82}{0.32} & \dsacc{84.13}{0.48} &  & \multirow{3}{*}{\dsacc{98.12}{0.14}} & \dsacc{91.48}{0.16} & \bestacc{91.58}{0.11} & \dsacc{89.60}{0.20} &  & \multirow{3}{*}{\dsacc{98.73}{0.06}} \\
-%  & 1 & \bestacc{93.31}{0.12} & \dsacc{92.55}{0.38} & \dsacc{72.54}{0.97} &  &  & \bestacc{95.26}{0.12} & \dsacc{94.56}{0.20} & \dsacc{80.96}{0.30} &  &  \\
-%  & 2 & \bestacc{93.65}{0.28} & \dsacc{93.05}{0.19} & \dsacc{92.41}{0.17} &  &  & \bestacc{95.90}{0.26} & \dsacc{95.01}{0.25} & \dsacc{94.74}{0.15} &  &  \\
-% \midrule
-% \multirow{3}{*}{FashionMNIST} & 0.2 & \bestacc{77.69}{0.32} & \dsacc{77.67}{0.36} & \dsacc{71.74}{1.07} &  & \multirow{3}{*}{\dsacc{88.41}{0.40}} & \bestacc{80.81}{0.21} & \dsacc{80.54}{0.16} & \dsacc{77.89}{0.20} &  & \multirow{3}{*}{\dsacc{90.83}{0.23}} \\
-%  & 1 & \dsacc{80.79}{0.49} & \bestacc{81.24}{0.18} & \dsacc{76.91}{0.50} &  &  & \bestacc{83.69}{0.20} & \dsacc{83.68}{0.21} & \dsacc{81.38}{0.14} &  &  \\
-%  & 2 & \dsacc{82.53}{0.35} & \bestacc{82.91}{0.21} & \dsacc{79.11}{0.24} &  &  & \dsacc{85.20}{0.19} & \bestacc{85.21}{0.23} & \dsacc{82.01}{0.37} &  &  \\
+
+\multirow{3}{*}{Tiny ImageNet} & 0.2
+& \mipaacc{5.46}{0.20}
+& \mipaacc{5.00}{0.30}
+& \mipaacc{5.42}{0.22}
+& \mipaacc{5.33}{0.26}
+& \mipabest{5.98}{0.27}
+& \multirow{3}{*}{\mipaacc{28.78}{0.57}}
+& \mipaacc{9.88}{0.07}
+& \mipaacc{9.23}{0.27}
+& \mipaacc{9.54}{0.22}
+& \mipaacc{10.14}{0.31}
+& \mipabest{10.49}{0.30}
+& \multirow{3}{*}{\mipaacc{39.81}{0.68}} \\
+& 1
+& \mipaacc{7.18}{0.26}
+& \mipaacc{6.62}{0.20}
+& \mipaacc{7.23}{0.30}
+& \mipaacc{5.76}{0.20}
+& \mipabest{8.63}{0.17}
+&
+& \mipaacc{13.90}{0.18}
+& \mipaacc{13.49}{0.28}
+& \mipaacc{13.42}{0.20}
+& \mipaacc{11.20}{0.15}
+& \mipabest{15.11}{0.20}
+& \\
+& 2
+& \mipaacc{10.87}{0.37}
+& \mipaacc{10.37}{0.26}
+& \mipaacc{10.85}{0.27}
+& \mipaacc{5.73}{0.16}
+& \mipabest{11.77}{0.06}
+&
+& \mipaacc{18.21}{0.21}
+& \mipaacc{17.91}{0.30}
+& \mipaacc{18.08}{0.13}
+& \mipaacc{11.63}{0.16}
+& \mipabest{19.10}{0.22}
+& \\
+
 \bottomrule
 \end{tabular}%
 }

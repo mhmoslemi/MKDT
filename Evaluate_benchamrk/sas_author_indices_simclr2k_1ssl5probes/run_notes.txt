@@ -1,0 +1,19 @@
+Author-supplied ordered-index evaluation, CIFAR10 and CIFAR100.
+Source: https://github.com/BigML-CS-UCLA/sas-data-efficient-contrastive-learning
+Commit: 5e5741884c2e5dcdea65467989b1ab0720430eca
+Files: final_subsets/cifar10-cl-core-idx.pkl and cifar100-cl-core-idx.pkl.
+Both files contain a full permutation of 0..49999 under key indices.
+All four published example subsets for each dataset exactly match their list prefixes.
+Validated by read-only CPU inspection job2148214; repeated before actual SSL training.
+Use ordered[:100], ordered[:500], ordered[:1000] for 0.2%,1%,2%, respectively.
+These small budgets extend the supplied ordering; they are not separately published subsets.
+No proxy checkpoint, CLIP grouping, or fresh SAS selection is used in this experiment.
+Full author-file SHA256 pinned in worker.py. Chosen indices and provenance saved in config.json.
+Evaluation: unchanged shared random-baseline trainer/probes, fresh ResNet18,
+2000 SimCLR epochs, SSL seed0, checkpoints each500epochs, workers0.
+Five frozen linear probes (seeds0..4),100epochs, at each of1% and5% label budgets.
+Data: /scratch/mmoslem3/data; environment: /home/mmoslem3/ENV/bin/activate.
+Lu aip-yiweilu; each job1CPU,1fullL40S,6G RAM.
+Log-based SSL walltime6/13/35minutes for0.2/1/2%; probe bundles8minutes.
+Each probe bundle depends afterok on its SSL predecessor; no selection dependency.
+Previous experiments and their results are retained separately.

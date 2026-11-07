@@ -1,0 +1,100 @@
+{
+  "dataset": "CIFAR10",
+  "data_percent": 0.2,
+  "labels_percent": 1,
+  "synthetic_images": 100,
+  "ssl_epochs": 2000,
+  "probe_epochs": 100,
+  "rows": [
+    {
+      "method": "MKDT",
+      "accuracy_percent": 40.123333333333335,
+      "std_percent": 0.6727158885195638,
+      "probes": 6,
+      "ssl_seeds": [
+        0,
+        1
+      ],
+      "optimization_seconds": 2869,
+      "iterations": 5000,
+      "seconds_per_iteration": 0.5738,
+      "summary": {
+        "path": "Evaluate_benchamrk/partial_probe_results/mkdt_CIFAR10_p0p2_simclr/CIFAR10_lbl1/summary.json",
+        "sha256": "05b7438fe0bca489c1ccdb517fb894b7fa7c2512b1897ace07133e7d13acd3d8"
+      },
+      "synthetic": {
+        "path": "benchmarks/mkdt_multidataset/results/batch_20261010T160046Z_Y6dqZS/synthetic/generated/ConvNet/CIFAR10/CIFAR10_0.2pct/images_5000.pt",
+        "sha256": "f9e4aa00d685037608c0153b21ac5747f7a0e26aac16c11e24ecbe3ccaff2858"
+      },
+      "timing_logs": [
+        {
+          "path": "Evaluate_benchamrk/mkdt_02_jobs/runs/logs/mk02_CIFAR10_dist_1000-1943540.err",
+          "sha256": "850b8a62f624d4e6e7308486ea4a765b4f8df1f5351c48ba6a08fe70f824485d"
+        },
+        {
+          "path": "Evaluate_benchamrk/mkdt_02_jobs/runs/logs/mk02_CIFAR10_dist_2000-1943541.err",
+          "sha256": "2a54318266ea4268efa95b7e36d90ebf07283aae427d7e8846f5ec1b35c1fa68"
+        },
+        {
+          "path": "Evaluate_benchamrk/mkdt_02_jobs/runs/logs/mk02_CIFAR10_dist_3000-1943542.err",
+          "sha256": "7863be23eea723b7625c7c6171c9b150fbb803043bf2872e52661fbd4439f4c9"
+        },
+        {
+          "path": "Evaluate_benchamrk/mkdt_02_jobs/runs/logs/mk02_CIFAR10_dist_4000-1943543.err",
+          "sha256": "6044bc855d0c88309b1beb8f6016a795cb2997b0c2c0e8c9b3c80cb87cce6f76"
+        },
+        {
+          "path": "Evaluate_benchamrk/mkdt_02_jobs/runs/logs/mk02_CIFAR10_dist_5000-1943544.err",
+          "sha256": "7220835f143bee1f8b450c358d4bb9096f5d2bc1b7dfb2ea2b1b98191b8f58c7"
+        }
+      ]
+    },
+    {
+      "method": "MIPA",
+      "accuracy_percent": 45.184,
+      "std_percent": 0.4067308692489421,
+      "probes": 5,
+      "ssl_seeds": [
+        0
+      ],
+      "optimization_seconds": 365.0,
+      "iterations": 10000,
+      "seconds_per_iteration": 0.0365,
+      "summary": {
+        "path": "Evaluate_benchamrk/mipa_cvpr_color_crop/results/CIFAR10/ResNet18BN/pt0.2/simclr/ssl_seed_000/summary_CIFAR10_lbl1.json",
+        "sha256": "f07c9cd2fc67eb03cb0a3d8a9e27e94c434e7473a8a9051a039dd14b0db497f7"
+      },
+      "synthetic": {
+        "path": "OT-SSL-DD/ours_syntehtic_cvpr_color_crop/CIFAR10/ResNet18BN/pt0.2/res_IIC_CIFAR10_ResNet18BN_0.2percent_final.pt",
+        "sha256": "9a7f63d094eee3ffdc957fd6e9421d1644c2d0510958af89f633a0967586b75d"
+      },
+      "timing_logs": [
+        {
+          "path": "Evaluate_benchamrk/mipa_cvpr_color_crop/logs/cvprcropg_CIFAR10_pt0p2-2054186.out",
+          "sha256": "68f1e0c8f553bca7611bf37f0f98fa2f120453d1dca979cc178fa79dc1009883"
+        }
+      ]
+    }
+  ],
+  "per_iteration_speedup": 15.72054794520548,
+  "total_optimization_speedup": 7.86027397260274,
+  "accuracy_gain_pp": 5.060666666666663,
+  "hardware": "Historical Vulcan runs, each allocated one L40S, one CPU, and 6G RAM.",
+  "timing_definition": "Observed optimization elapsed / completed updates; MKDT sums five sequential chunks.",
+  "exclusions": [
+    "initialization",
+    "teacher/expert preparation",
+    "queue gaps",
+    "downstream SSL and probes"
+  ],
+  "uncertainty": "Error bars are sample SD across probes: MKDT 2 SSL seeds x 3 probes; MIPA 1 SSL seed x 5 probes.",
+  "limitation": "Historical runs on different nodes/dates; no repeated controlled runtime benchmark.",
+  "hardware_source": {
+    "path": "OT-SSL-DD/intro_figs/mipa_mkdt_cifar10_p0p2_lbl1/hardware.psv",
+    "sha256": "4f90e853c671655c5fc4bb9a6133d2ed6e376ea090bef702446f508c8a79f6b3"
+  },
+  "plot_source": {
+    "path": "OT-SSL-DD/intro_figs/mipa_mkdt_cifar10_p0p2_lbl1/plot.py",
+    "sha256": "0b0c9ca724cf5a3e5dd73fdce0b5633798997cbe8f6aebdcd77423a341e6a40c"
+  }
+}

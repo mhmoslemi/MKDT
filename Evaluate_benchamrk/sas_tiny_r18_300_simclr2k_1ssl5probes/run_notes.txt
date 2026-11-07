@@ -1,0 +1,23 @@
+TinyImageNet SAS with user-selected existing300epoch proxy,seed0.
+Proxy: benchmarks/cross_downstream/results/batch_20261009T171449Z_o91BKP/encoders/tinyimagenet_ResNet18_simclr_full_size100/seed_000.pt
+Full-data SimCLR,GroupNormResNet18,PIL LANCZOS32x32,ImageNet normalization.
+Use512-D encoder features excluding classifier; no saved projection head exists.
+Pinned proxy/source-code hashes,strict loading required. This reuses the older local
+training recipe,not an exact reproduction of the authors' proxy training recipe.
+Native data:/scratch/mmoslem3/data/tinyimagenet.pt,100000train64x64 images,200classes.
+Validate full legacy/native label ordering and16 pixel anchors at32x32.
+SAS source:/scratch/mmoslem3/sas_official_standalone/upstream,commit5e5741884c2e5dcdea65467989b1ab0720430eca.
+Grouping:official CLIP ViT-B/32+1000random labeled train examples(1%),seed0.
+Selection:official per-class greedy SAS,cosine similarity,threshold0,classwise floors.
+Sizes0.2%,1%,2% nominal200/1000/2000; actual counts may be lower due to floors.
+One separate selection job per size,no proxy training. Share read-only mmap archive
+when official CLIP copies the dataset to replace its image transform.
+Each selection -> fresh native64x64 BNResNet18 SimCLR2000epochs,seed0 -> five100epoch
+frozen probes at each1%/5% label budget. Exact previous TinyImageNet random2k protocol
+and shared-code hashes verified. Checks repeated inside actual jobs.
+Every job:Lu aip-yiweilu,1CPU,1L40S,6G,workers0,current /home/mmoslem3/ENV.
+Log-based walltimes:selection8min; SSL25/90/210min; ten-probe bundle30min.
+Selection allowance based on CIFAR10050k selection1m34-1m42,doubled data plus native
+preprocessing/512-D proxy overhead. This is not measured Tiny selection runtime.
+Tiny random2k last100epoch means0.5460/2.0529/4.8950sec for0.2/1/2%.
+Previous Tiny0.2 ten-probe total1456.47sec. No timing jobs submitted.

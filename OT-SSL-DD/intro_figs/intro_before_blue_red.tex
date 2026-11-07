@@ -1,0 +1,140 @@
+% Main document: graphicx and tikz; serif typography follows the main document.
+% The same augmentations are applied to the real image and prototype thumbnails.
+\begin{figure*}[t]
+\centering
+\begingroup
+\def\MIPAImageDirectory{images}
+\def\MIPACenterImage{\MIPAImageDirectory/real.png}
+% Clockwise from top: filename / first-view probability / second-view probability.
+% Illustrative probabilities; each column sums to 100.
+\def\MIPAPrototypeData{%
+  prototype-01/3/3,
+  prototype-02/2/2,
+  prototype-03/27/30,
+  prototype-04/3/2,
+  prototype-05/38/34,
+  prototype-06/6/6,
+  prototype-07/4/4,
+  prototype-08/2/2,
+  prototype-09/3/3,
+  prototype-10/12/14%
+}
+\def\MIPAMaxPercent{40}
+\def\MIPAZoom{1.3}
+\definecolor{MIPAReal}{RGB}{91,132,180}
+\definecolor{MIPASynthetic}{RGB}{199,106,100}
+\definecolor{MIPAPurple}{RGB}{169,154,187}
+\definecolor{MIPAText}{RGB}{40,44,49}
+\definecolor{MIPAMuted}{RGB}{91,101,111}
+\colorlet{MIPAGrid}{MIPAMuted!17!white}
+\colorlet{MIPARim}{MIPAMuted!30!white}
+\colorlet{MIPAFrame}{MIPASynthetic!60!white}
+\colorlet{MIPALow}{MIPAPurple!16!white}
+% Arguments: PNG path, center x, center y, square side in bp, view number.
+% Rectangular images are center-cropped to square with their aspect ratio kept.
+\newsavebox{\MIPAImageBox}
+\newcommand{\MIPAImage}[5]{%
+  \begin{scope}[shift={(#2,#3)}]
+    \pgfmathsetmacro{\MIPAHalf}{#4/2}
+    \clip (-\MIPAHalf,-\MIPAHalf) rectangle (\MIPAHalf,\MIPAHalf);
+    \pgfmathsetlengthmacro{\MIPASide}{#4*1bp}
+    \ifnum#5=2\relax
+      \pgfmathsetlengthmacro{\MIPASide}{#4*\MIPAZoom*1bp}
+    \fi
+    \sbox{\MIPAImageBox}{\includegraphics{#1}}%
+    \ifdim\wd\MIPAImageBox>\ht\MIPAImageBox
+      \sbox{\MIPAImageBox}{\includegraphics[height=\MIPASide]{#1}}%
+    \else
+      \sbox{\MIPAImageBox}{\includegraphics[width=\MIPASide]{#1}}%
+    \fi
+    \ifnum#5=1\relax
+      \node[rotate=-90,transform shape,inner sep=0pt,outer sep=0pt]
+        at (0,0) {\usebox{\MIPAImageBox}};
+    \else
+      \node[xscale=-1,transform shape,inner sep=0pt,outer sep=0pt]
+        at (0,0) {\usebox{\MIPAImageBox}};
+    \fi
+  \end{scope}%
+}
+
+\resizebox{\linewidth}{!}{%
+\begin{tikzpicture}[x=1bp,y=1bp,inner sep=0pt,outer sep=0pt,
+  every node/.style={font=\rmfamily}]
+  \path[use as bounding box] (0,-268) rectangle (504,0);
+  \fill[white] (0,-268) rectangle (504,0);
+  \foreach \MIPAView/\MIPACenterX in {1/126,2/378} {
+    \ifnum\MIPAView=1
+      \def\MIPAPanel{a}\def\MIPATitle{Rotated view}
+      \def\MIPASubtitle{$90^{\circ}$ clockwise}
+    \else
+      \def\MIPAPanel{b}\def\MIPATitle{Flipped and cropped view}
+      \def\MIPASubtitle{Horizontal flip, $1.3\!\times$ zoom}
+    \fi
+    \node[anchor=base,text=MIPAText,font=\rmfamily\bfseries\fontsize{10.5bp}{12bp}\selectfont]
+      at (\MIPACenterX,-12) {(\MIPAPanel)\enspace\MIPATitle};
+    \node[anchor=base,text=MIPAMuted,font=\rmfamily\fontsize{8.5bp}{10bp}\selectfont]
+      at (\MIPACenterX,-26) {\MIPASubtitle};
+    \begin{scope}[shift={(\MIPACenterX,-143)}]
+      % Keep the common radial scale, but quiet the scaffolding.
+      \draw[MIPARim,line width=.45bp] (0,0) circle[radius=90bp];
+      \foreach \MIPAFraction in {.5,1} {
+        \pgfmathsetmacro{\MIPARadius}{38+37*\MIPAFraction}
+        \draw[MIPAGrid,line width=.4bp,dash pattern=on 1bp off 2bp]
+          (0,0) circle[radius=\MIPARadius bp];
+      }
+      \foreach \MIPAFile/\MIPAFirst/\MIPASecond
+        [count=\MIPAIndex from 0] in \MIPAPrototypeData {
+        \ifnum\MIPAView=1\let\MIPAProbability\MIPAFirst
+        \else\let\MIPAProbability\MIPASecond\fi
+        \pgfmathsetmacro{\MIPAAngle}{90-36*\MIPAIndex}
+        \pgfmathsetmacro{\MIPAStart}{\MIPAAngle-7}
+        \pgfmathsetmacro{\MIPAEnd}{\MIPAAngle+7}
+        \pgfmathsetmacro{\MIPAOuter}{38+37*\MIPAProbability/\MIPAMaxPercent}
+        \colorlet{MIPABar}{MIPALow}
+        \colorlet{MIPABarEdge}{MIPAPurple!55!white}
+        \ifdim\MIPAProbability pt>20pt
+          \colorlet{MIPABar}{MIPAPurple!60!white}\colorlet{MIPABarEdge}{MIPAPurple}
+        \fi
+        \draw[MIPAGrid,line width=.35bp] (\MIPAAngle:38) -- (\MIPAAngle:90);
+        \path[fill=MIPABar,draw=MIPABarEdge,line width=.35bp]
+          (\MIPAStart:38) -- (\MIPAStart:\MIPAOuter)
+          arc[start angle=\MIPAStart,end angle=\MIPAEnd,radius=\MIPAOuter bp]
+          -- (\MIPAEnd:38)
+          arc[start angle=\MIPAEnd,end angle=\MIPAStart,radius=38bp] -- cycle;
+      }
+      \filldraw[fill=white,draw=MIPARim,line width=.6bp] (0,0) circle[radius=38bp];
+      \filldraw[fill=white,draw=MIPAReal,line width=.8bp]
+        (-26.6,-26.6) rectangle (26.6,26.6);
+      \MIPAImage{\MIPACenterImage}{0}{0}{52}{\MIPAView}
+      \foreach \MIPAFile/\MIPAFirst/\MIPASecond
+        [count=\MIPAIndex from 0] in \MIPAPrototypeData {
+        \ifnum\MIPAView=1\let\MIPAProbability\MIPAFirst
+        \else\let\MIPAProbability\MIPASecond\fi
+        \pgfmathsetmacro{\MIPAAngle}{90-36*\MIPAIndex}
+        \colorlet{MIPABorder}{MIPAFrame}\colorlet{MIPALabel}{MIPAMuted}
+        \def\MIPABorderWidth{.5bp}\let\MIPAWeight\mdseries
+        \ifdim\MIPAProbability pt>20pt
+          \colorlet{MIPABorder}{MIPAPurple}\colorlet{MIPALabel}{MIPAText}
+          \def\MIPABorderWidth{.85bp}\let\MIPAWeight\bfseries
+        \fi
+        \begin{scope}[shift={(\MIPAAngle:90)}]
+          \fill[white] (-18,-18) rectangle (18,18);
+          \filldraw[fill=white,draw=MIPABorder,line width=\MIPABorderWidth]
+            (-16.7,-16.7) rectangle (16.7,16.7);
+          \MIPAImage{\MIPAImageDirectory/\MIPAFile.png}{0}{0}{32}{\MIPAView}
+          \node[anchor=north,fill=white,inner xsep=2bp,inner ysep=1.3bp,
+            text=MIPALabel,font=\rmfamily\MIPAWeight\fontsize{9bp}{10bp}\selectfont]
+            at (0,-18.1) {\MIPAProbability\%};
+        \end{scope}
+      }
+    \end{scope}
+  }
+\end{tikzpicture}%
+}
+\endgroup
+\caption{\textbf{Illustrative soft assignments across views.} Two augmented views
+of one real image (center) are compared with the same ten synthetic prototypes
+(rim). Purple bars encode assignment probability on a shared 0--40\% scale.
+All probabilities are illustrative.}
+\label{fig:prototype-assignments}
+\end{figure*}

@@ -1,0 +1,379 @@
+{
+  "identity": {
+    "seed": 0,
+    "selection": {
+      "actual": 95,
+      "indices": [
+        25678,
+        17603,
+        49210,
+        11150,
+        10273,
+        11412,
+        38572,
+        39909,
+        6537,
+        34679,
+        34542,
+        18000,
+        29507,
+        19355,
+        43131,
+        3858,
+        28390,
+        36734,
+        26655,
+        6727,
+        49864,
+        13681,
+        27313,
+        34229,
+        27050,
+        38755,
+        29419,
+        23421,
+        47144,
+        12727,
+        1287,
+        11645,
+        13526,
+        35694,
+        36736,
+        30362,
+        32294,
+        26180,
+        2582,
+        24670,
+        37111,
+        12720,
+        49156,
+        48530,
+        16053,
+        10433,
+        49800,
+        28856,
+        18481,
+        28101,
+        6827,
+        2493,
+        595,
+        32433,
+        38057,
+        11741,
+        44858,
+        30691,
+        49465,
+        38264,
+        27655,
+        23049,
+        39298,
+        18055,
+        30514,
+        4807,
+        29050,
+        43497,
+        14234,
+        48657,
+        49872,
+        26408,
+        30386,
+        10320,
+        24538,
+        36503,
+        27943,
+        47357,
+        41743,
+        48828,
+        31180,
+        31309,
+        13679,
+        17009,
+        38846,
+        16965,
+        22991,
+        23659,
+        41345,
+        43160,
+        29160,
+        11661,
+        47143,
+        40150,
+        25615
+      ],
+      "nominal": 100
+    },
+    "selection_method": "sas",
+    "signature": "280f6caaf28a3ea4ea24f7a7083e0a6faa8a20bb15c11404439381ad237a43b0"
+  },
+  "signature": {
+    "code_hashes": {
+      "Evaluate_benchamrk/common.py": "67fcd33f581a34a7f764431b6761ac120cb080d4b2ea0d69b95074565a224f8b",
+      "Evaluate_benchamrk/data.py": "befcf535679e449b3544ae9b8578325e53f7995179591042315d8937cd55f6d9",
+      "Evaluate_benchamrk/evaluate.py": "2b2162a56878f48ade39d2b80d4316511f20a72d29eaa2cf70fe023d88ad722f",
+      "Evaluate_benchamrk/plan.py": "c6d9bd33b36d1d235a2f6af291b3a0a82187b1eea3a10b90a7f57317d8eee83e",
+      "Evaluate_benchamrk/run.py": "1c2b8d29ab47966f1178c9f04b3e1b7c72bd2f55fb65a32c32c77c3730faf45b",
+      "Evaluate_benchamrk/test_protocol.py": "f018562437924ced1d890343a4e898f10e48c50a63920d337031194671c4e43d",
+      "Evaluate_benchamrk/train_ssl.py": "3670781eb0f0f838ced6cc7ca9775791d4d52683fe25e489239f012937dc1a79",
+      "benchmarks/downstream_data.py": "081fe26e5dc81c96ce8e8ffe5a412302663de4a9d095684c5b37e7c615b4a6fd",
+      "networks.py": "0c15ff3ef11f21df752e2a9a17851ab8c8a52ddc3969380682ea8bfcec1968fc"
+    },
+    "experiment": "sas_simclr2k_1ssl5probes",
+    "model": "ResNet18",
+    "probe_seeds": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ],
+    "protocol": {
+      "evaluation": {
+        "baseline": "frozen_random_encoder",
+        "batch_size": 256,
+        "checkpoint_selection": "final_epoch_no_test_selection",
+        "epochs": 100,
+        "full_data_sanity_label_percentage": 100,
+        "head_init_std": 0.01,
+        "label_percentages": [
+          1,
+          5
+        ],
+        "label_policy": "exact",
+        "lr": 0.1,
+        "momentum": 0.9,
+        "normalize_using": "source_statistics",
+        "optimizer": "sgd",
+        "schedule": "cosine_per_step",
+        "test_resize_ratio": 1.1428571428571428,
+        "test_transform": "resize_short_side_and_center_crop",
+        "train_transform": "random_resized_crop_and_flip",
+        "warmup_epochs": 0,
+        "weight_decay": 0.0
+      },
+      "full_seeds": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "input_size": {
+        "CIFAR10": 32,
+        "CIFAR100": 32,
+        "TinyImageNet": 64
+      },
+      "methods": {
+        "barlowtwins": {
+          "blur_probabilities": [
+            0.0,
+            0.0
+          ],
+          "color_jitter": [
+            0.4,
+            0.4,
+            0.2,
+            0.1
+          ],
+          "correlation_eps": 1e-05,
+          "lambda": 0.0051,
+          "loss_scale": 0.1,
+          "lr": 0.3,
+          "projector": [
+            2048,
+            2048,
+            2048
+          ],
+          "projector_batchnorm": true,
+          "projector_bias": true,
+          "solarize_probabilities": [
+            0.0,
+            0.2
+          ]
+        },
+        "simclr": {
+          "blur_probabilities": [
+            0.5,
+            0.5
+          ],
+          "color_jitter": [
+            0.8,
+            0.8,
+            0.8,
+            0.2
+          ],
+          "lr": 0.4,
+          "projector": [
+            2048,
+            256
+          ],
+          "projector_batchnorm": false,
+          "projector_bias": true,
+          "solarize_probabilities": [
+            0.0,
+            0.0
+          ],
+          "temperature": 0.2
+        }
+      },
+      "models": [
+        "ConvNet",
+        "VGG11",
+        "ResNet18"
+      ],
+      "normalization": {
+        "CIFAR10": [
+          [
+            0.4914,
+            0.4822,
+            0.4465
+          ],
+          [
+            0.247,
+            0.2435,
+            0.2616
+          ]
+        ],
+        "CIFAR100": [
+          [
+            0.5071,
+            0.4865,
+            0.4409
+          ],
+          [
+            0.2673,
+            0.2564,
+            0.2762
+          ]
+        ],
+        "TinyImageNet": [
+          [
+            0.485,
+            0.456,
+            0.406
+          ],
+          [
+            0.229,
+            0.224,
+            0.225
+          ]
+        ]
+      },
+      "references": {
+        "barlow_official": "https://github.com/facebookresearch/barlowtwins",
+        "cifar_barlow": "https://github.com/vturrisi/solo-learn/blob/main/scripts/pretrain/cifar/barlow.yaml",
+        "cifar_simclr": "https://github.com/vturrisi/solo-learn/blob/main/scripts/pretrain/cifar/simclr.yaml",
+        "simclr_official": "https://github.com/google-research/simclr"
+      },
+      "selection": {
+        "batch_size": 256,
+        "distance_chunk_size": 1024,
+        "feature_model": "random_ConvNetGAP_BN",
+        "feature_normalization": "l2",
+        "feature_seed_offset": 2000,
+        "iterations": 50,
+        "method": "kmeans",
+        "unique_exemplars": true
+      },
+      "sources": [
+        "CIFAR10",
+        "CIFAR100",
+        "TinyImageNet"
+      ],
+      "ssl": {
+        "batch_size": 256,
+        "blur_sigma": [
+          0.1,
+          2.0
+        ],
+        "checkpoint_every_epochs": 500,
+        "color_probability": 0.8,
+        "crop_ratio": [
+          0.75,
+          1.3333333333333333
+        ],
+        "crop_scale": [
+          0.08,
+          1.0
+        ],
+        "exclude_bias_and_norm": true,
+        "flip_probability": 0.5,
+        "full_epochs": 1000,
+        "grayscale_probability": 0.2,
+        "interpolation": "bicubic",
+        "lars_clip": true,
+        "lars_eps": 1e-08,
+        "lars_eta": 0.02,
+        "minimum_lr": 0.0,
+        "momentum": 0.9,
+        "optimizer": "lars",
+        "precision": "float32",
+        "scale_lr_with_batch": true,
+        "schedule": "warmup_cosine_per_step",
+        "small_batch_policy": "min_dataset_size_no_replacement",
+        "subset_epochs": 2000,
+        "warmup_epochs": 10,
+        "warmup_start_lr": 3e-05,
+        "weight_decay": 0.0001
+      },
+      "subset_percentages": [
+        0.2,
+        1,
+        2,
+        5
+      ],
+      "subset_seeds": [
+        0
+      ],
+      "version": "ssl_reference_v1"
+    },
+    "selection_method": "sas",
+    "selection_origin": {
+      "actual": 95,
+      "complete": "/scratch/mmoslem3/sas_official_standalone/reused_results/cifar10/0.2pct/complete.json",
+      "complete_sha256": "75bf7d965c956c509763411b48ea787ebbc2f81e3c243827da7259438ac025e3",
+      "indices": "/scratch/mmoslem3/sas_official_standalone/reused_results/cifar10/0.2pct/cifar10_0.2pct_indices.pkl",
+      "indices_sha256": "aaf7b3ebc21e36c52f3a7d4bc71ed72a450a7654d3b19fdaf6fff66ce281d544",
+      "nominal": 100,
+      "recipe": {
+        "dataset": "cifar10",
+        "helper_sha256": "59148eaf73caf31afe732df69204ef384d59892b9e58ab27b727de2ad458190e",
+        "partition_labels": 500,
+        "partition_model": "ViT-B/32",
+        "percentage": "0.2",
+        "proxy": {
+          "checkpoint": "/scratch/mmoslem3/sas_official_standalone/reused_proxies/cifar10.pt",
+          "epochs": 1000,
+          "features": "encoder_2048_without_projection_head",
+          "model_mode": "eval",
+          "normalization": [
+            [
+              0.4914,
+              0.4822,
+              0.4465
+            ],
+            [
+              0.247,
+              0.2435,
+              0.2616
+            ]
+          ],
+          "sha256": "7153969d7b5062f8ea63a833819dc0faefba6368b5465aebacf49bb9640e661e",
+          "training_recipe": "existing_full_data_LARS_SimCLR"
+        },
+        "rounding": "floor_per_predicted_class_no_topup",
+        "seed": 0,
+        "selection_batch": 1024,
+        "selection_driver_sha256": "81f3eb59b172c561a0db622b6e15c8c5ee9b5601d859b4df38f953361c4e6d5e",
+        "selector": "unmodified_official_SAS",
+        "threshold": 0.5,
+        "upstream_commit": "5e5741884c2e5dcdea65467989b1ab0720430eca",
+        "workers": 0
+      }
+    },
+    "source": "CIFAR10",
+    "source_fingerprint": "47c1a4816becad3cadf1c29ae31c86712d7a51b264ec33e791d79661adfffef5",
+    "ssl": "simclr",
+    "subset": 0.2,
+    "worker_sha256": "1702edcb4ee32d35d72e55c908ea099f2e34ddde0d8eac79d14c06262c16ea8c"
+  }
+}

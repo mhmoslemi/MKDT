@@ -1,0 +1,9 @@
+2149355	TinyImageNet	0.2	ssl	00:25:00	--dependency=afterok:2149352 --kill-on-invalid-dep=yes
+2149356	TinyImageNet	0.2	probe	00:30:00	--dependency=afterok:2149355 --kill-on-invalid-dep=yes
+2149357	TinyImageNet	1	ssl	01:30:00	--dependency=afterok:2149353 --kill-on-invalid-dep=yes
+2149358	TinyImageNet	1	probe	00:30:00	--dependency=afterok:2149357 --kill-on-invalid-dep=yes
+2149359	TinyImageNet	2	ssl	03:30:00	--dependency=afterok:2149354 --kill-on-invalid-dep=yes
+2149360	TinyImageNet	2	probe	00:30:00	--dependency=afterok:2149359 --kill-on-invalid-dep=yes
+2151489	TinyImageNet	0.2	probe	01:00:00	-
+2151490	TinyImageNet	2	ssl	03:30:00	-
+2151491	TinyImageNet	2	probe	01:30:00	--dependency=afterok:2151490 --kill-on-invalid-dep=yes

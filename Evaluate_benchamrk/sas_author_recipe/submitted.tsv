@@ -1,0 +1,9 @@
+stage	source	percentage	job	account	walltime	gpus	dependency
+evaluate	CIFAR10	0.2	2145490	aip-yiweilu	00:18:00	1	-
+evaluate	CIFAR100	0.2	2145491	aip-yiweilu	00:18:00	1	-
+groups	TinyImageNet	-	2145492	aip-yiweilu	01:00:00	1	-
+proxy	TinyImageNet	-	2145493	aip-yiweilu	1-12:00:00	4	2145492
+select	TinyImageNet	all	2145494	aip-yiweilu	01:00:00	1	2145493
+evaluate	TinyImageNet	0.2	2145495	aip-yiweilu	01:00:00	1	2145494
+evaluate	TinyImageNet	1	2145496	aip-yiweilu	02:00:00	1	2145494
+evaluate	TinyImageNet	2	2145497	aip-yiweilu	04:00:00	1	2145494

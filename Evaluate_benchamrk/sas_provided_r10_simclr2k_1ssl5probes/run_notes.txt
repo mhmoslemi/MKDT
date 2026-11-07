@@ -1,0 +1,26 @@
+Author-supplied CIFAR100 ResNet10 encoder and critic, epoch index399 = 400 epochs.
+Official repository commit 5e5741884c2e5dcdea65467989b1ab0720430eca.
+Local binaries verified against the current GitHub tree via git hash-object:
+encoder 66cd02ece676c9147a05b63d728620db326b7394
+critic 4e77d23f3e7e91a65c867f48a407c221dec48779
+SHA256 pinned in provided_cifar100.json and checked inside each real selection job.
+Preserve saved encoder eval / critic train modes; use critic.project(net(images)).
+Official selection, ToTensor, CLIP ViT-B/32 with 500 labels, seed0, classwise floors.
+Fractions 0.2%, 1%, 2%; no new proxy training.
+CIFAR10 is awaiting user decision: authors publish only CIFAR100 weights.
+Lu aip-yiweilu, one CPU, one L40S, 6G memory, workers0 throughout.
+Existing log-based limits: selection3m; SSL6/13/35m; probes8m. No timing jobs.
+Fresh downstream ResNet18 SimCLR2000 epochs seed0; five frozen linear probes
+at each of 1% and 5% labels, 100epochs. Shared evaluation code unchanged.
+
+Update: user chose local CIFAR10 proxy training, not cross-dataset weight reuse.
+CIFAR10 uses official ResNet10, 400 full-data epochs, seed0, batch512, Adam .001,
+wd1e-6, temperature .5, official augmentations and 128-D critic; workers0.
+Original official Trainer.train and configs.get_datasets; test-frequency0.
+Save optimizer and RNG states each epoch for exact resume.
+CIFAR10 loader is selection_cifar10.py; existing CIFAR100 selector is unchanged.
+CIFAR10 proxy walltime7h: prior full-data CIFAR10 ResNet18 SimCLR logs seed0..2
+last100epoch means58.31/59.19/59.08sec; 400*59.19sec=6h35m, plus25min margin.
+This is a log-based allowance with different architecture/batch, not measured R10 runtime.
+References: MKDT/Evaluate_benchamrk/full_ssl_checkpoints_1000ep_3seeds/CIFAR10/ResNet18/full/pt100/simclr/seed_00{0,1,2}/ssl.jsonl.
+Chain: CIFAR10 proxy -> three selections -> three fresh SSL jobs -> three probe bundles.
