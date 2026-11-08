@@ -15,7 +15,7 @@ if not (HERE/'figures/downstream_results.csv').is_file():
 DATA = HERE/'figures/downstream_results.csv'
 OUT = HERE/'figures/individual'
 FIGSIZE = (1.65, 1.35)  # Native width in the four-column CVPR figure; do not crop tightly.
-FONT_FAMILY = 'Liberation Sans'  # Helvetica-compatible font installed in the current environment.
+FONT_FAMILY = 'DejaVu Sans'  # Bundled with Matplotlib.
 TICK_SIZE = 8
 TITLE_SIZE = 9
 GROUP_SIZE = 8

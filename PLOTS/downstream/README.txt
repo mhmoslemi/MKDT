@@ -12,8 +12,8 @@ and the right y-axis. The logarithmic limits are independent and include every
 SD whisker with a small margin. Heights across the two budgets use different
 scales. Colors and filled circle/square/triangle/diamond markers are preserved.
 
-The first code cell contains editable settings. The Helvetica-compatible
-Liberation Sans font is installed in the current environment. Numeric ticks and
+The first code cell contains editable settings. DejaVu Sans is bundled with
+Matplotlib, so no system font installation is needed. Numeric ticks and
 label-budget headers are 8 pt; downstream titles are 9 pt. The compact headers
 above the two groups read 5% and 1%; the figure caption defines these as labeled
 data budgets. PDFs are saved

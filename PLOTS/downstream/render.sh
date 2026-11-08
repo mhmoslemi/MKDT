@@ -75,7 +75,7 @@ import xml.etree.ElementTree as ET
 path = Path('PLOTS/downstream/cvpr_test/cvpr_layout.pdf')
 xml = subprocess.check_output(['pdftohtml', '-xml', '-zoom', '1', '-hidden', '-stdout', str(path)], text=True)
 root = ET.fromstring(xml)
-sizes = {int(f.attrib['size']) for f in root.iter('fontspec') if 'LiberationSans' in f.attrib.get('family', '')}
+sizes = {int(f.attrib['size']) for f in root.iter('fontspec') if 'DejaVuSans' in f.attrib.get('family', '')}
 assert {8, 9} <= sizes, sizes
 assert len([t for t in root.iter('text') if ''.join(t.itertext()) in ('Aircraft', 'Dogs')]) == 6
 print('PASS: compiled CVPR layout preserves 8/9 pt panel fonts and all twelve downstream panels.')
