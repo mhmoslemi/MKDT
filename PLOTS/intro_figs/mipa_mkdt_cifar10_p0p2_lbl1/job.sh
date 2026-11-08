@@ -4,8 +4,8 @@
 #SBATCH --cpus-per-task=1
 #SBATCH --mem=6G
 #SBATCH --time=00:01:00
-#SBATCH --chdir=/scratch/mmoslem3/MKDT/PLOTS/intro_figs/mipa_mkdt_cifar10_p0p2_lbl1
-#SBATCH --output=/scratch/mmoslem3/MKDT/PLOTS/intro_figs/mipa_mkdt_cifar10_p0p2_lbl1/render-%j.out
+#SBATCH --chdir=/scratch/mmoslem3/MKDT/PLOTS/time_storage
+#SBATCH --output=/scratch/mmoslem3/MKDT/PLOTS/time_storage/render-%j.out
 set -euo pipefail
 module --force purge
 module load StdEnv/2023 python/3.11.5

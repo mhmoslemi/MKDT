@@ -21,7 +21,7 @@ from matplotlib.transforms import Bbox
 from PIL import Image
 
 HERE = Path(__file__).resolve().parent
-ROOT = HERE.parents[2]
+ROOT = HERE.parents[1]
 BENCH = ROOT/'Evaluate_benchamrk'
 MIPA = BENCH/'mipa_cvpr_color_crop/results/CIFAR10/ResNet18BN/pt0.2/simclr/ssl_seed_000/summary_CIFAR10_lbl1.json'
 MKDT = BENCH/'partial_probe_results/mkdt_CIFAR10_p0p2_simclr/CIFAR10_lbl1/summary.json'
@@ -177,9 +177,9 @@ assert len(set(sizes)) == 1, f'Panel sizes differ: {sizes}'
 plt.close(fig)
 (HERE/'figure.tex').write_text(r'''\begin{figure*}[t]
 \centering
-\includegraphics[width=.32\linewidth]{PLOTS/intro_figs/mipa_mkdt_cifar10_p0p2_lbl1/time.pdf}\hfill
-\includegraphics[width=.32\linewidth]{PLOTS/intro_figs/mipa_mkdt_cifar10_p0p2_lbl1/storage.pdf}\hfill
-\includegraphics[width=.32\linewidth]{PLOTS/intro_figs/mipa_mkdt_cifar10_p0p2_lbl1/accuracy.pdf}
+\includegraphics[width=.32\linewidth]{PLOTS/time_storage/time.pdf}\hfill
+\includegraphics[width=.32\linewidth]{PLOTS/time_storage/storage.pdf}\hfill
+\includegraphics[width=.32\linewidth]{PLOTS/time_storage/accuracy.pdf}
 \caption{\textbf{MIPA versus MKDT on CIFAR-10 (0.2\% data, 1\% labels).} Left and middle: total distillation time and auxiliary storage from the reported cost table; times exclude initialization and teacher training, and storage denotes retained auxiliary files, not GPU memory. Right: current 2k-epoch SimCLR ResNet-18 accuracy (mean and sample SD); the accuracy baseline is 38\%, with the upper limit fitted to the data. MKDT pools six probes from two SSL seeds; MIPA uses five probes from one SSL seed. Cost and accuracy panels use their respective reported MIPA configurations.}
 \label{fig:mipa-mkdt-cifar10-efficiency}
 \end{figure*}
