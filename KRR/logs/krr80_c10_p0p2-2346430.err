@@ -1,0 +1,9 @@
+Traceback (most recent call last):
+  File "/scratch/mmoslem3/MKDT/KRR/selfsup_dd/train.py", line 219, in <module>
+    main(args)
+  File "/scratch/mmoslem3/MKDT/KRR/selfsup_dd/train.py", line 63, in main
+    target_model.load_state_dict(torch.load(Path(args.teacher_dir) / teacher_name, map_location="cpu"))
+  File "/home/mmoslem3/ENV/lib/python3.11/site-packages/torch/nn/modules/module.py", line 2629, in load_state_dict
+    raise RuntimeError(
+RuntimeError: Error(s) in loading state_dict for ResNet:
+	Unexpected key(s) in state_dict: "fc.weight", "fc.bias". 

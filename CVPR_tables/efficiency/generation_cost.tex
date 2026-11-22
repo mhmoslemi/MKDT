@@ -2,30 +2,37 @@
 
 
 % One-column CVPR table. Measurement definitions: generation_cost_sources.json.
-\begin{table}[t]
+\begin{table}[h]
 \centering
-\caption{Data distillation costs. Times exclude initialization and teacher training.}
+\caption{Distillation costs excluding teacher training and initialization. Image optimization time is reported by synthetic budget, with expert trajectory generation measured separately. Storage covers intermediate distillation data. Dashes denote unavailable generation measurements for released KRR-ST data.}
+\vspace{-0.6em}
 \label{tab:generation-cost}
-\footnotesize
-\setlength{\tabcolsep}{2pt}
-\renewcommand{\arraystretch}{1}
-\begin{tabular*}{\columnwidth}{@{\extracolsep{\fill}}llrrrrr@{}}
+\mipatable
+\setlength{\tabcolsep}{1.4pt}
+\begin{tabular*}{\columnwidth}{@{\extracolsep{\fill}}ll*{5}{r}@{}}
 \toprule
-\multirow{2}{*}{Dataset} & \multirow{2}{*}{Method} & \multicolumn{3}{c}{Time (min)} & \multirow{2}{*}{\shortstack{Experts\\(GPU-h)}} & \multirow{2}{*}{\shortstack{Storage\\(GiB)}} \\
+\multirow{2}{*}[-2.5pt]{Dataset} & \multirow{2}{*}[-2.5pt]{Method} & \multicolumn{3}{c}{Time (min)} & \multirow{2}{*}[-2.5pt]{\shortstack{Experts\\(GPU-h)}} & \multirow{2}{*}[-2.5pt]{\shortstack{Storage\\(GiB)}} \\
 \cmidrule(lr){3-5}
-& & 0.2\% & 1\% & 2\% & & \\
+ &  & 0.2\% & 1\% & 2\% &  &  \\
 \midrule
-\multirow{2}{*}{CIFAR10} & MKDT & 47.82 & 112.90 & 112.83 & 1.01 & 10.65 \\
-& MIPA & \textbf{6.43} & \textbf{14.07} & \textbf{19.48} & -- & \textbf{0.042} \\
+
+\multirow{3}{*}{CIFAR-10} & \textsc{MKDT} & 47.82 & 112.90 & 112.83 & 1.01 & 10.65 \\
+& \textsc{KRR-ST} & 223.91 & 248.07 & 348.26 & -- & \textbf{0.042} \\
+& \textsc{MIPA} & \textbf{6.43} & \textbf{14.07} & \textbf{19.48} & -- & \textbf{0.042} \\
 \midrule
-\multirow{2}{*}{CIFAR100} & MKDT & 47.98 & 112.95 & 114.40 & 0.98 & 10.65 \\
-& MIPA & \textbf{6.38} & \textbf{14.12} & \textbf{19.50} & -- & \textbf{0.042} \\
+\multirow{3}{*}{CIFAR-100} & \textsc{MKDT} & 47.98 & 112.95 & 114.40 & 0.98 & 10.65 \\
+& \textsc{KRR-ST} & -- & -- & -- & -- & \textbf{0.042} \\
+& \textsc{MIPA} & \textbf{6.38} & \textbf{14.12} & \textbf{19.50} & -- & \textbf{0.042} \\
 \midrule
-\multirow{2}{*}{Tiny ImageNet} & MKDT & 200.62 & 232.43 & 230.62 & 7.13 & 11.91 \\
-& MIPA & \textbf{39.15} & \textbf{128.58} & \textbf{192.68} & -- & \textbf{0.042} \\
+\multirow{3}{*}{\shortstack[l]{Tiny\\ImageNet}} & \textsc{MKDT} & 200.62 & 232.43 & 230.62 & 7.13 & 11.91 \\
+& \textsc{KRR-ST} & -- & -- & -- & -- & \textbf{0.042} \\
+& \textsc{MIPA} & \textbf{39.15} & \textbf{128.58} & \textbf{192.68} & -- & \textbf{0.042} \\
 \bottomrule
 \end{tabular*}
 \end{table}
+
+
+
 
 \begin{table}[t]
 \centering

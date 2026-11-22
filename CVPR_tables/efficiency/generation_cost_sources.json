@@ -1,8 +1,8 @@
 {
-  "scope": "Costs for exact-Random-initialized batch-128 MIPA at 0.2%/1%/2% and unchanged MKDT runs, using ResNet18 for MIPA generation; one set per dataset and budget, not an average over repeated generation runs.",
-  "runtime_definition": "Ours: sum of bracketed local-time distillation-start to retained-iteration timestamps. MKDT: completed tqdm optimization elapsed times, summed over sequential chunks when necessary. Neither is end-to-end generation time.",
+  "scope": "Costs for exact-Random-initialized batch-128 MIPA at 0.2%/1%/2%, unchanged MKDT runs, and completed 80k-step CIFAR10 KRR-ST runs; one set per dataset and budget, not an average over repeated generation runs.",
+  "runtime_definition": "MIPA and KRR-ST: sum of bracketed local-time distillation-start to retained-iteration timestamps. MKDT: completed tqdm optimization elapsed times, summed over sequential chunks when necessary. None is end-to-end generation time.",
   "runtime_exclusions": ["Dataset loading", "Initialization and clustering", "Teacher training", "Teacher-feature extraction", "Expert-bank construction and ranking", "Queue and interruption gaps", "Repeated work discarded before a resume checkpoint", "Downstream SSL and linear probing"],
-  "hardware_limit": "Historical Vulcan/Killarney runs, not a controlled hardware-matched comparison. Accounting confirms NVIDIA L40S for the listed Vulcan MKDT jobs. MIPA generation logs do not record a GPU model.",
+  "hardware_limit": "Historical Vulcan/Killarney runs, not a controlled hardware-matched comparison. Accounting confirms NVIDIA L40S for the listed Vulcan MKDT and KRR-ST jobs. MIPA generation logs do not record a GPU model.",
   "random": {
     "selection_seconds": null,
     "reason": "Selection latency was not recorded. Do not substitute zero for unmeasured selection time.",
@@ -51,6 +51,36 @@
           "1": {"seconds": 7715, "log": "Evaluate_benchamrk/mipa_random128/logs/r128_TinyImageNet_p1_gen-1997069.out", "segments": [[0, 8000, "2026-10-28 15:05:07", "2026-10-28 17:13:42"]], "generation_state": "OT-SSL-DD/ours_syntehtic_random128/TinyImageNet/ResNet18BN/pt1/generation_state.json"},
           "2": {"seconds": 11561, "log": "Evaluate_benchamrk/mipa_random128/logs/r128_TinyImageNet_p2_gen-1997079.out", "segments": [[0, 6000, "2026-10-28 14:59:03", "2026-10-28 18:11:44"]], "generation_state": "OT-SSL-DD/ours_syntehtic_random128/TinyImageNet/ResNet18BN/pt2/generation_state.json"}
         }
+      }
+    }
+  },
+  "krr_st": {
+    "implementation": "KRR/selfsup_dd",
+    "iterations": 80000,
+    "teacher_method": "barlow_twins",
+    "runtime_definition": "Sum of the final local elapsed timestamp from every retained optimization segment. Excludes setup, checkpoint I/O, queue gaps, downstream SSL, and linear probing.",
+    "storage_definition": "One dataset-specific frozen teacher checkpoint. Generated images and optimizer/resume checkpoints are excluded, matching the table's existing auxiliary-data convention.",
+    "datasets": {
+      "CIFAR10": {
+        "teacher_checkpoint": "KRR/teacher_ckpt.zip:teacher_ckpt/teacher_cifar10.pt",
+        "teacher_checkpoint_bytes": 44775213,
+        "generation": {
+          "0.2": {"seconds": 13434.605984, "logs": ["KRR/logs/krr80_c10_p0p2-2346592.out"], "segments": [[0, 80000, 13434.605984]]},
+          "1": {"seconds": 14884.268176, "logs": ["KRR/logs/krr80_c10_p1-2346431.out"], "segments": [[0, 80000, 14884.268176]]},
+          "2": {"seconds": 20895.374022, "logs": ["KRR/logs/krr80_c10_p2a-2350308.out", "KRR/logs/krr80_c10_p2b-2351118.out", "KRR/logs/krr80_c10_p2c-2351119.out", "KRR/logs/krr80_c10_p2d-2351120.out"], "segments": [[0, 8000, 2002.760906], [8000, 32000, 6344.782999], [32000, 56000, 6267.068088], [56000, 80000, 6280.762029]]}
+        }
+      },
+      "CIFAR100": {
+        "teacher_checkpoint": "KRR/teacher_ckpt.zip:teacher_ckpt/barlow_twins_resnet18_cifar100.pt",
+        "teacher_checkpoint_bytes": 44754375,
+        "generation": null,
+        "reason": "The 2% synthetic set was released by the KRR-ST authors; local 1% and 0.2% sets are reproducible subsets of it, so no distillation runtime was measured."
+      },
+      "TinyImageNet": {
+        "teacher_checkpoint": "KRR/teacher_ckpt.zip:teacher_ckpt/barlow_twins_resnet18_tinyimagenet.pt",
+        "teacher_checkpoint_bytes": 44754863,
+        "generation": null,
+        "reason": "The 2% synthetic set was released by the KRR-ST authors; local 1% and 0.2% sets are reproducible subsets of it, so no distillation runtime was measured."
       }
     }
   },
